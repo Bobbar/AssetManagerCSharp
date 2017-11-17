@@ -523,6 +523,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             using (results)
             {
                 SetStatusBar("Building Grid...");
+                ResultGrid.SuspendLayout();
+                ResultGrid.ScrollBars = ScrollBars.None;
                 bolGridFilling = true;
                 if (CurrentTransaction != null)
                 {
@@ -532,10 +534,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     GridFunctions.PopulateGrid(ResultGrid, results, ResultGridColumns());
                 }
+
                 ResultGrid.ClearSelection();
                 ResultGrid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
                 bolGridFilling = false;
                 DisplayRecords(ResultGrid.Rows.Count);
+                ResultGrid.ScrollBars = ScrollBars.Both;
+                ResultGrid.ResumeLayout();
             }
         }
 
@@ -572,11 +577,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     var Results = await Task.Run(() =>
                     {
                         LastCommand = QryCommand;
-                        // If CurrentTransaction IsNot Nothing Then
                         return DBFactory.GetDatabase().DataTableFromCommand(QryCommand, CurrentTransaction);
-                        //Else
-                        //    Return DBFactory.GetDatabase().DataTableFromCommand(QryCommand)
-                        //End If
                     });
                     QryCommand.Dispose();
                     SendToGrid(ref Results);
@@ -1074,6 +1075,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #endregion "Methods"
 
-      
+
     }
 }
