@@ -24,6 +24,7 @@ Public Class GKUpdaterLibClass : Implements IDisposable
     Private Progress As New ProgressCounter
     Private bolCreateMissingDirectory As Boolean = True
     Private bolPaused As Boolean = False
+    Private PushTypeMessage As String = "GK Update"
 
 #End Region
 
@@ -43,6 +44,7 @@ Public Class GKUpdaterLibClass : Implements IDisposable
         DestinationPath = DestPath
         ClientHostName = HostName
         ClientPath = "\\" & HostName & "\c$"
+        PushTypeMessage = "File Push"
         InitWorker()
         InitializeTimer()
     End Sub
@@ -142,8 +144,8 @@ Public Class GKUpdaterLibClass : Implements IDisposable
             Exit Sub
         End If
         GKLog("------------------------------------------------")
-        GKLog("Starting GK Update to: " & ClientHostName)
-        GKLog("Starting Update...")
+        GKLog("Starting " & PushTypeMessage & " to: " & ClientHostName)
+        GKLog("Starting " & PushTypeMessage & "...")
         ErrList.Clear()
         Dim WorkArgs As New Worker_Args
         WorkArgs.StartIndex = 0
