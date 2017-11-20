@@ -986,15 +986,14 @@ namespace AssetManager.UserInterface.Forms.Attachments
         private bool VerifyAttachment(Attachment attachment)
         {
             SetStatusBar("Verifying data...");
-            var FileResultHash = SecurityTools.GetMD5OfStream((MemoryStream)attachment.DataStream); //GetHashOfIOStream(DirectCast(attachment.DataStream, MemoryStream))
-            if (FileResultHash == attachment.MD5)
+            if (attachment.VerifyAttachment())
             {
                 return true;
             }
             else
             {
                 //something is very wrong
-                Logging.Logger("FILE VERIFICATION FAILURE: Device:" + attachment.FolderGUID + "  FileUID: " + attachment.FileUID + " | Expected hash:" + attachment.MD5 + " Result hash:" + FileResultHash);
+                Logging.Logger("FILE VERIFICATION FAILURE: FolderUID:" + attachment.FolderGUID + "  FileUID: " + attachment.FileUID + " | Expected hash:" + attachment.MD5 + " Result hash:" + attachment.ComputedMD5);
                 OtherFunctions.Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Hash Value Mismatch", this);
                 attachment.Dispose();
                 OtherFunctions.PurgeTempDir();

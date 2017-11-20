@@ -13,6 +13,7 @@ namespace AssetManager
         private string _folderName;
         private string _folderGUID;
         private string _MD5;
+        private string _computedMD5;
         private string _fileUID;
         private AttachmentsBaseCols _attachTable;
 
@@ -27,6 +28,7 @@ namespace AssetManager
             _folderName = null;
             _folderGUID = null;
             _MD5 = null;
+            _computedMD5 = null;
             _fileUID = null;
             _attachTable = null;
             _dataStream = null;
@@ -43,6 +45,7 @@ namespace AssetManager
             _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
             _fileUID = Guid.NewGuid().ToString();
             _MD5 = null;
+            _computedMD5 = null;
             _fileSize = Convert.ToInt32(_fileInfo.Length);
             _extention = _fileInfo.Extension;
             _folderName = string.Empty;
@@ -57,6 +60,7 @@ namespace AssetManager
             _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
             _fileUID = Guid.NewGuid().ToString();
             _MD5 = null;
+            _computedMD5 = null;
             _fileSize = Convert.ToInt32(_fileInfo.Length);
             _extention = _fileInfo.Extension;
             _folderName = string.Empty;
@@ -71,10 +75,10 @@ namespace AssetManager
             _fileInfo = null;
             _dataStream = null;
             _attachTable = attachTable;
-
             _fileName = TableRow[attachTable.FileName].ToString();
             _fileUID = TableRow[attachTable.FileUID].ToString();
             _MD5 = TableRow[attachTable.FileHash].ToString();
+            _computedMD5 = null;
             _fileSize = Convert.ToInt32(TableRow[attachTable.FileSize]);
             _extention = TableRow[attachTable.FileType].ToString();
             _folderName = TableRow[attachTable.Folder].ToString();
@@ -87,6 +91,7 @@ namespace AssetManager
             _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
             _fileUID = Guid.NewGuid().ToString();
             _MD5 = null;
+            _computedMD5 = null;
             _fileSize = Convert.ToInt32(_fileInfo.Length);
             _extention = _fileInfo.Extension;
             _folderName = selectedFolder;
@@ -104,6 +109,7 @@ namespace AssetManager
             _fileName = TableRow[attachTable.FileName].ToString();
             _fileUID = TableRow[attachTable.FileUID].ToString();
             _MD5 = TableRow[attachTable.FileHash].ToString();
+            _computedMD5 = null;
             _fileSize = Convert.ToInt32(TableRow[attachTable.FileSize]);
             _extention = TableRow[attachTable.FileType].ToString();
             _folderName = TableRow[attachTable.Folder].ToString();
@@ -196,6 +202,14 @@ namespace AssetManager
             }
         }
 
+        public string ComputedMD5
+        {
+            get
+            {
+                return _computedMD5;
+            }
+        }
+
         public string FolderName
         {
             get { return _folderName; }
@@ -225,6 +239,20 @@ namespace AssetManager
                 return SecurityTools.GetMD5OfStream(HashStream);
             }
         }
+
+        public bool VerifyAttachment()
+        {
+            if (this.DataStream != null)
+            {
+                _computedMD5 = SecurityTools.GetMD5OfStream((MemoryStream)this.DataStream);
+                if (_computedMD5 == this.MD5)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         #region "IDisposable Support"
 
