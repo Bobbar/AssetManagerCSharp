@@ -108,26 +108,6 @@ namespace AssetManager
                     pbox.Image = img;
                 }
             }
-
-            //switch (true)
-            //{
-            //    case object.ReferenceEquals(ctl.GetType(), typeof(Button)):
-            //        var but = (Button)ctl;
-            //        if (but.BackgroundImage != null)
-            //        {
-            //            var img = ImageCache(but.Name, but.BackgroundImage);
-            //            but.BackgroundImage = img;
-            //        }
-            //        break;
-            //    case object.ReferenceEquals(ctl.GetType(), typeof(PictureBox)):
-            //        var pbox = (PictureBox)ctl;
-            //        if (pbox.Image != null)
-            //        {
-            //            var img = ImageCache(pbox.Name, pbox.Image);
-            //            pbox.Image = img;
-            //        }
-            //        break;
-            //}
         }
     }
 }

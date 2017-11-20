@@ -126,7 +126,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.RemoteTrackingPanel = new System.Windows.Forms.Panel();
             this.ToolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.tsTracking = new System.Windows.Forms.ToolStrip();
-            this.ToolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.TrackingDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.CheckOutTool = new System.Windows.Forms.ToolStripMenuItem();
             this.CheckInTool = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -138,7 +138,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.AttachmentTool = new System.Windows.Forms.ToolStripButton();
             this.ToolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            this.ToolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.AssetControlDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmAssetInputForm = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmAssetTransferForm = new System.Windows.Forms.ToolStripMenuItem();
             this.AssetDisposalForm = new System.Windows.Forms.ToolStripMenuItem();
@@ -660,8 +660,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // TabControl1
             // 
-            this.TabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.TabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TabControl1.Controls.Add(this.HistoryTab);
             this.TabControl1.Controls.Add(this.TrackingTab);
@@ -999,7 +999,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // FieldsPanel
             // 
-            this.FieldsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.FieldsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FieldsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.FieldsPanel.Controls.Add(this.InfoDataSplitter);
@@ -1278,7 +1278,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.tsTracking.Dock = System.Windows.Forms.DockStyle.None;
             this.tsTracking.ImageScalingSize = new System.Drawing.Size(25, 25);
             this.tsTracking.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripDropDownButton1,
+            this.TrackingDropDownButton,
             this.ToolStripSeparator4});
             this.tsTracking.Location = new System.Drawing.Point(16, 37);
             this.tsTracking.Name = "tsTracking";
@@ -1286,26 +1286,26 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.tsTracking.Size = new System.Drawing.Size(134, 37);
             this.tsTracking.TabIndex = 46;
             // 
-            // ToolStripDropDownButton1
+            // TrackingDropDownButton
             // 
-            this.ToolStripDropDownButton1.AutoSize = false;
-            this.ToolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TrackingDropDownButton.AutoSize = false;
+            this.TrackingDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CheckOutTool,
             this.CheckInTool});
-            this.ToolStripDropDownButton1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ToolStripDropDownButton1.Image = global::AssetManager.Properties.Resources.CheckOutIcon;
-            this.ToolStripDropDownButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1";
-            this.ToolStripDropDownButton1.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.ToolStripDropDownButton1.Size = new System.Drawing.Size(116, 34);
-            this.ToolStripDropDownButton1.Text = "Tracking";
+            this.TrackingDropDownButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TrackingDropDownButton.Image = global::AssetManager.Properties.Resources.CheckOutIcon;
+            this.TrackingDropDownButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.TrackingDropDownButton.Name = "TrackingDropDownButton";
+            this.TrackingDropDownButton.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.TrackingDropDownButton.Size = new System.Drawing.Size(116, 34);
+            this.TrackingDropDownButton.Text = "Tracking";
             // 
             // CheckOutTool
             // 
             this.CheckOutTool.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CheckOutTool.Image = global::AssetManager.Properties.Resources.CheckedBoxRedIcon;
             this.CheckOutTool.Name = "CheckOutTool";
-            this.CheckOutTool.Size = new System.Drawing.Size(135, 22);
+            this.CheckOutTool.Size = new System.Drawing.Size(161, 32);
             this.CheckOutTool.Text = "Check Out";
             this.CheckOutTool.Click += new System.EventHandler(this.CheckOutTool_Click);
             // 
@@ -1314,7 +1314,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.CheckInTool.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CheckInTool.Image = global::AssetManager.Properties.Resources.CheckedBoxGreenIcon;
             this.CheckInTool.Name = "CheckInTool";
-            this.CheckInTool.Size = new System.Drawing.Size(135, 22);
+            this.CheckInTool.Size = new System.Drawing.Size(161, 32);
             this.CheckInTool.Text = "Check In";
             this.CheckInTool.Click += new System.EventHandler(this.CheckInTool_Click);
             // 
@@ -1337,12 +1337,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolStripSeparator1,
             this.AttachmentTool,
             this.ToolStripSeparator7,
-            this.ToolStripDropDownButton2,
+            this.AssetControlDropDownButton,
             this.ToolStripSeparator9});
             this.ToolStrip1.Location = new System.Drawing.Point(3, 74);
             this.ToolStrip1.Name = "ToolStrip1";
             this.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.ToolStrip1.Size = new System.Drawing.Size(404, 37);
+            this.ToolStrip1.Size = new System.Drawing.Size(435, 37);
             this.ToolStrip1.TabIndex = 45;
             this.ToolStrip1.Text = "MyToolStrip1";
             // 
@@ -1406,16 +1406,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolStripSeparator7.Name = "ToolStripSeparator7";
             this.ToolStripSeparator7.Size = new System.Drawing.Size(6, 37);
             // 
-            // ToolStripDropDownButton2
+            // AssetControlDropDownButton
             // 
-            this.ToolStripDropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AssetControlDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmAssetInputForm,
             this.tsmAssetTransferForm,
             this.AssetDisposalForm});
-            this.ToolStripDropDownButton2.Image = global::AssetManager.Properties.Resources.FormIcon;
-            this.ToolStripDropDownButton2.Name = "ToolStripDropDownButton2";
-            this.ToolStripDropDownButton2.Size = new System.Drawing.Size(189, 34);
-            this.ToolStripDropDownButton2.Text = "Asset Control Forms";
+            this.AssetControlDropDownButton.Image = global::AssetManager.Properties.Resources.FormIcon;
+            this.AssetControlDropDownButton.Name = "AssetControlDropDownButton";
+            this.AssetControlDropDownButton.Size = new System.Drawing.Size(189, 34);
+            this.AssetControlDropDownButton.Text = "Asset Control Forms";
             // 
             // tsmAssetInputForm
             // 
@@ -1576,14 +1576,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal ToolStripButton tsbDeleteDevice;
         internal ToolStripButton AttachmentTool;
         internal ToolStripSeparator ToolStripSeparator7;
-        internal ToolStripDropDownButton ToolStripDropDownButton2;
+        internal ToolStripDropDownButton AssetControlDropDownButton;
         internal ToolStripMenuItem tsmAssetInputForm;
         internal ToolStripMenuItem tsmAssetTransferForm;
         internal ToolStripMenuItem AssetDisposalForm;
         internal ToolStripSeparator ToolStripSeparator9;
         internal ToolStripSeparator ToolStripSeparator1;
         internal ToolStrip tsTracking;
-        internal ToolStripDropDownButton ToolStripDropDownButton1;
+        internal ToolStripDropDownButton TrackingDropDownButton;
         internal ToolStripMenuItem CheckOutTool;
         internal ToolStripMenuItem CheckInTool;
         internal ToolStripSeparator ToolStripSeparator2;

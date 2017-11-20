@@ -1,36 +1,19 @@
+using AssetManager.UserInterface.Forms.Sibi;
 using System;
 using System.Windows.Forms;
-using AssetManager.UserInterface.Forms.Sibi;
 
 namespace AssetManager.UserInterface.CustomControls
 {
     public class WindowList : IDisposable
     {
-
         #region "Fields"
 
-        private Timer withEventsField_RefreshTimer;
-        private Timer RefreshTimer
-        {
-            get { return withEventsField_RefreshTimer; }
-            set
-            {
-                if (withEventsField_RefreshTimer != null)
-                {
-                    withEventsField_RefreshTimer.Tick -= RefreshTimer_Tick;
-                }
-                withEventsField_RefreshTimer = value;
-                if (withEventsField_RefreshTimer != null)
-                {
-                    withEventsField_RefreshTimer.Tick += RefreshTimer_Tick;
-                }
-            }
-        }
+        private Timer RefreshTimer;
         private ToolStripDropDownButton DropDownControl = new ToolStripDropDownButton();
         private int intFormCount;
-
         private ExtendedForm MyParentForm;
-        #endregion
+
+        #endregion "Fields"
 
         #region "Constructors"
 
@@ -39,7 +22,7 @@ namespace AssetManager.UserInterface.CustomControls
             MyParentForm = parentForm;
         }
 
-        #endregion
+        #endregion "Constructors"
 
         #region "Methods"
 
@@ -158,6 +141,7 @@ namespace AssetManager.UserInterface.CustomControls
             DropDownControl.Visible = false;
             DropDownControl.Font = targetToolStrip.Font;
             DropDownControl.Text = "Select Window";
+            DropDownControl.Name = "WindowList";
             DropDownControl.Image = Properties.Resources.CascadeIcon;
             AddParentMenu();
             targetToolStrip.Items.Insert(targetToolStrip.Items.Count, DropDownControl);
@@ -168,6 +152,7 @@ namespace AssetManager.UserInterface.CustomControls
             RefreshTimer = new Timer();
             RefreshTimer.Interval = 500;
             RefreshTimer.Enabled = true;
+            RefreshTimer.Tick += RefreshTimer_Tick;
         }
 
         private ToolStripMenuItem NewMenuItem(Form frm)
@@ -257,7 +242,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        #endregion
+        #endregion "Methods"
 
         #region "IDisposable Support"
 
@@ -298,7 +283,6 @@ namespace AssetManager.UserInterface.CustomControls
         //    MyBase.Finalize()
         //End Sub
 
-        #endregion
-
+        #endregion "IDisposable Support"
     }
 }
