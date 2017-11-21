@@ -259,33 +259,6 @@ namespace AssetManager
                     FrmSetData.MunisUser = new MunisEmployeeStruct(SelectedText, SelectedValue);
                 }
             }
-
-
-
-            //switch (CurrentLiveBoxArgs.Type)
-            //{
-            //    case LiveBoxType.DynamicSearch:
-            //        CurrentLiveBoxArgs.Control.Text = SelectedText;
-            //        MainForm.DynamicSearch();
-            //    case LiveBoxType.InstaLoad:
-            //        CurrentLiveBoxArgs.Control.Text = "";
-            //        MainForm.LoadDevice(SelectedValue);
-            //    case LiveBoxType.SelectValue:
-            //        CurrentLiveBoxArgs.Control.Text = SelectedText;
-            //    case LiveBoxType.UserSelect:
-            //        CurrentLiveBoxArgs.Control.Text = SelectedText;
-            //        if (CurrentLiveBoxArgs.Control.FindForm is ViewDeviceForm)
-            //        {
-            //            ViewDeviceForm FrmSetData = (ViewDeviceForm)CurrentLiveBoxArgs.Control.FindForm;
-            //            FrmSetData.MunisUser.Name = SelectedText;
-            //            FrmSetData.MunisUser.Number = SelectedValue;
-            //        }
-            //        else if (CurrentLiveBoxArgs.Control.FindForm is NewDeviceForm)
-            //        {
-            //            NewDeviceForm FrmSetData = (NewDeviceForm)CurrentLiveBoxArgs.Control.FindForm;
-            //            FrmSetData.MunisUser = new MunisEmployeeStruct(SelectedText, SelectedValue);
-            //        }
-            //}
         }
 
         private void PosistionLiveBox()

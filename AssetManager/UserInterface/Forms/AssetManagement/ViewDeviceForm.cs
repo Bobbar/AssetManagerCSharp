@@ -420,45 +420,33 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private int DeleteHistoryEntry(string strGUID)
-        {
-            try
-            {
-                int rows = 0;
-                string DeleteEntryQuery = "DELETE FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + strGUID + "'";
-                rows = DBFactory.GetDatabase().ExecuteQuery(DeleteEntryQuery);
-                return rows;
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-                return 0;
-            }
-        }
-
         private void DeleteSelectedHistoricalEntry()
         {
             if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice))
             {
                 return;
             }
-            string strGUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
-            DeviceObject Info = default(DeviceObject);
-            var strQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + strGUID + "'";
-            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQry))
+            try
             {
-                Info = new DeviceObject(results);
+                string strGUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
+                DeviceObject Info = default(DeviceObject);
+                var strQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + strGUID + "'";
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQry))
+                {
+                    Info = new DeviceObject(results);
+                }
+                var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + Info.Historical.ActionDateTime + " - " + AttribIndexFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, Info.Historical.ChangeType) + " - " + strGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
+                if (blah == DialogResult.Yes)
+                {
+                    string DeleteEntryQuery = "DELETE FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + strGUID + "'";
+                    DBFactory.GetDatabase().ExecuteQuery(DeleteEntryQuery);
+                    SetStatusBar("Entry deleted successfully.");
+                    RefreshData();
+                }
             }
-
-            var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + Info.Historical.ActionDateTime + " - " + AttribIndexFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, Info.Historical.ChangeType) + " - " + strGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "WARNING", this);
-            if (blah == DialogResult.Yes)
+            catch (Exception ex)
             {
-                OtherFunctions.Message(DeleteHistoryEntry(strGUID) + " rows affected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Deletion Results", this);
-                LoadDevice();//(CurrentViewDevice.GUID);
-            }
-            else
-            {
-                return;
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
             }
         }
 
@@ -831,7 +819,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 CurrentHash = GetHash(CurrentViewDevice.PopulatingTable, HistoricalResults);
                 DataParser.FillDBFields(CurrentViewDevice.PopulatingTable);
                 SetMunisEmpStatus();
-                SendToHistGrid(DataGridHistory, HistoricalResults);
+                SendToHistGrid(HistoricalResults);
                 SetAttachCount();
                 SetADInfo();
             }
@@ -845,7 +833,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 if (Results.Rows.Count > 0)
                 {
                     CollectCurrentTracking(Results);
-                    SendToTrackGrid(TrackingGrid, Results);
+                    SendToTrackGrid(Results);
                     DisableSorting(TrackingGrid);
                 }
                 else
@@ -987,7 +975,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return string.Empty;
         }
 
-        private void SendToHistGrid(DataGridView Grid, DataTable results)
+        private void SendToHistGrid(DataTable results)
         {
             try
             {
@@ -995,11 +983,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     if (results.Rows.Count > 0)
                     {
-                        GridFunctions.PopulateGrid(Grid, results, HistoricalGridColumns());
+                        GridFunctions.PopulateGrid(DataGridHistory, results, HistoricalGridColumns());
                     }
                     else
                     {
-                        Grid.DataSource = null;
+                        DataGridHistory.DataSource = null;
                     }
                 }
 
@@ -1010,7 +998,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void SendToTrackGrid(DataGridView Grid, DataTable results)
+        private void SendToTrackGrid(DataTable results)
         {
             try
             {
@@ -1018,11 +1006,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     if (results.Rows.Count > 0)
                     {
-                        GridFunctions.PopulateGrid(Grid, results, TrackingGridColumns());
+                        GridFunctions.PopulateGrid(TrackingGrid, results, TrackingGridColumns());
                     }
                     else
                     {
-                        Grid.DataSource = null;
+                        TrackingGrid.DataSource = null;
                     }
                 }
 
@@ -1183,7 +1171,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         {
                             trans.Commit();
                             RefreshData();
-                            //OtherFunctions.Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
                             SetStatusBar("Update successful!");
                         }
                         else
@@ -1213,7 +1200,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
-                AttachmentsForm NewAttachments = new AttachmentsForm(this, new DeviceAttachmentsCols(), CurrentViewDevice);
+                AttachmentsForm NewAttachments = new AttachmentsForm(this, new DeviceAttachmentsCols(), CurrentViewDevice, SetAttachCount);
             }
         }
         private void Waiting()

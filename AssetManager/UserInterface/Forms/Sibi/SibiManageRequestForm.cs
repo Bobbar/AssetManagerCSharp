@@ -514,7 +514,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (CurrentRequest.GUID != "" && !IsNewRequest)
                 {
-                    AttachmentsForm NewAttach = new AttachmentsForm(this, new SibiAttachmentsCols(), CurrentRequest);
+                    AttachmentsForm NewAttach = new AttachmentsForm(this, new SibiAttachmentsCols(), CurrentRequest, SetAttachCount);
                 }
             }
         }

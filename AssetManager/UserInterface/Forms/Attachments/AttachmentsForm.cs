@@ -32,6 +32,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
         private CancellationTokenSource taskCancelTokenSource;
         private bool TransferTaskRunning = false;
         private DataObject dragDropDataObj = new DataObject();
+        private Action RefreshParentAttachCount;
 
         /// <summary>
         /// "ftp://  strServerIP  /attachments/  CurrentDB  /"
@@ -75,11 +76,12 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         #region Constructors
 
-        public AttachmentsForm(ExtendedForm ParentForm, AttachmentsBaseCols AttachTable, object attachDataObject = null) : base(ParentForm)
+        public AttachmentsForm(ExtendedForm ParentForm, AttachmentsBaseCols AttachTable, object attachDataObject = null, Action refreshAction = null) : base(ParentForm)
         {
             FTPUri = "ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/";
 
             InitializeComponent();
+            RefreshParentAttachCount = refreshAction;
             ImageCaching.CacheControlImages(this);
             AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
             ExtendedMethods.DoubleBufferedDataGrid(AttachGrid, true);
@@ -688,16 +690,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         private void RefreshAttachCount()
         {
-            if (Tag is ViewDeviceForm)
-            {
-                ViewDeviceForm vw = (ViewDeviceForm)Tag;
-                vw.SetAttachCount();
-            }
-            else if (Tag is SibiManageRequestForm)
-            {
-                SibiManageRequestForm req = (SibiManageRequestForm)Tag;
-                req.SetAttachCount();
-            }
+            RefreshParentAttachCount();
         }
 
         private void UpdateDbAttachementName(string AttachUID, string NewFileName)
