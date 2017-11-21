@@ -25,7 +25,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private string CurrentHash;
         private DeviceObject CurrentViewDevice = new DeviceObject();
         private DBControlParser DataParser;
-        private string DeviceHostname = null;
         private bool EditMode = false;
         private int intFailedPings = 0;
         private LiveBox MyLiveBox;
@@ -44,21 +43,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #region Constructors
 
-        public ViewDeviceForm(ExtendedForm parentForm, string deviceGUID)
+        public ViewDeviceForm(ExtendedForm parentForm, DataMappingObject device) : base(parentForm, device)
         {
-
+            InitializeComponent();
             DataParser = new DBControlParser(this);
             MyLiveBox = new LiveBox(this);
             MyMunisToolBar = new MunisToolBar(this);
             MyWindowList = new WindowList(this);
-
-            this.ParentForm = parentForm;
-            FormUID = deviceGUID;
-            InitializeComponent();
-
+            CurrentViewDevice = (DeviceObject)device;
             StatusSlider = new SliderLabel();
             StatusStrip1.Items.Add(StatusSlider.ToToolStripControl(StatusStrip1));
-
             MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6);
             ImageCaching.CacheControlImages(this);
             MyWindowList.InsertWindowList(ToolStrip1);
@@ -69,38 +63,33 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             RemoteToolsBox.Visible = false;
             ExtendedMethods.DoubleBufferedDataGrid(DataGridHistory, true);
             ExtendedMethods.DoubleBufferedDataGrid(TrackingGrid, true);
-            LoadDevice(deviceGUID);
+            DefaultFormTitle = this.Text;
+            DisableControls();
+            LoadDevice();
         }
 
         #endregion
 
         #region Methods
 
-        public void LoadDevice(string deviceGUID)
+        public void LoadDevice()
         {
             try
             {
                 Waiting();
                 bolGridFilling = true;
-                if (LoadHistoryAndFields(deviceGUID))
+                LoadHistoryAndFields();
+                if (CurrentViewDevice.IsTrackable)
                 {
-                    if (CurrentViewDevice.IsTrackable)
-                    {
-                        LoadTracking(CurrentViewDevice.GUID);
-                    }
-                    SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut);
-                    this.Text = this.Text + FormTitle(CurrentViewDevice);
-                    DeviceHostname = CurrentViewDevice.HostName + "." + NetworkInfo.CurrentDomain;
-                    CheckRDP();
-                    tmr_RDPRefresher.Enabled = true;
-                    this.Show();
-                    DataGridHistory.ClearSelection();
-                    bolGridFilling = false;
+                    LoadTracking(CurrentViewDevice.GUID);
                 }
-                else
-                {
-                    this.Dispose();
-                }
+                SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut);
+                this.Text = this.DefaultFormTitle + FormTitle(CurrentViewDevice);
+                CheckRDP();
+                tmr_RDPRefresher.Enabled = true;
+                this.Show();
+                DataGridHistory.ClearSelection();
+                bolGridFilling = false;
             }
             catch (Exception ex)
             {
@@ -141,7 +130,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     MyPingVis.Dispose();
                     MyPingVis = null;
                 }
-                LoadDevice(CurrentViewDevice.GUID);
+                CurrentViewDevice = new DeviceObject(CurrentViewDevice.GUID);
+                LoadDevice();
             }
         }
 
@@ -281,7 +271,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     fieldErrorIcon.Clear();
                     DisableControls();
                     ResetBackColors();
-                    this.Refresh();
                     RefreshData();
                     return true;
                 }
@@ -355,7 +344,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     if (ReferenceEquals(MyPingVis, null))
                     {
-                        MyPingVis = new PingVis((Control)cmdShowIP, DeviceHostname);
+                        MyPingVis = new PingVis((Control)cmdShowIP, CurrentViewDevice.HostName + "." + NetworkInfo.CurrentDomain);
                     }
                     if (MyPingVis.CurrentResult != null)
                     {
@@ -465,7 +454,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (blah == DialogResult.Yes)
             {
                 OtherFunctions.Message(DeleteHistoryEntry(strGUID) + " rows affected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Deletion Results", this);
-                LoadDevice(CurrentViewDevice.GUID);
+                LoadDevice();//(CurrentViewDevice.GUID);
             }
             else
             {
@@ -555,7 +544,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DisableControlsRecursive(this);
             pnlOtherFunctions.Visible = true;
             cmdMunisSearch.Visible = false;
-            this.Text = "View";
+            this.Text = DefaultFormTitle;
             tsSaveModify.Visible = false;
             tsTracking.Visible = false;
         }
@@ -727,7 +716,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private DataTable GetHistoricalTable(string deviceUID)
         {
-            return DBFactory.GetDatabase().DataTableFromQueryString("Select * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.DeviceUID + " = '" + deviceUID + "' ORDER BY " + HistoricalDevicesCols.ActionDateTime + " DESC");
+            var results = DBFactory.GetDatabase().DataTableFromQueryString("Select * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.DeviceUID + " = '" + deviceUID + "' ORDER BY " + HistoricalDevicesCols.ActionDateTime + " DESC");
+            results.TableName = HistoricalDevicesCols.TableName;
+            return results;
         }
 
         private DataTable GetInsertTable(string selectQuery, DeviceUpdateInfoStruct UpdateInfo)
@@ -833,40 +824,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         }
 
-        private bool LoadHistoryAndFields(string deviceUID)
+        private void LoadHistoryAndFields()
         {
-            try
+            using (var HistoricalResults = GetHistoricalTable(CurrentViewDevice.GUID))
             {
-                using (var DeviceResults = GetDevicesTable(deviceUID))
-                {
-                    using (var HistoricalResults = GetHistoricalTable(deviceUID))
-                    {
-                        DeviceResults.TableName = DevicesCols.TableName;
-                        HistoricalResults.TableName = HistoricalDevicesCols.TableName;
-                        if (DeviceResults.Rows.Count < 1)
-                        {
-                            Helpers.ChildFormControl.CloseChildren(this);
-                            CurrentViewDevice = null;
-                            OtherFunctions.Message("That device was not found!  It may have been deleted.  Re-execute your search.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Not Found", this);
-                            return false;
-                        }
-                        CurrentHash = GetHash(DeviceResults, HistoricalResults);
-                        CurrentViewDevice = new DeviceObject(DeviceResults);
-                        DataParser.FillDBFields(DeviceResults);
-                        SetMunisEmpStatus();
-                        SendToHistGrid(DataGridHistory, HistoricalResults);
-                        DisableControls();
-                        SetAttachCount();
-                        SetADInfo();
-                        return true;
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-                return false;
+                CurrentHash = GetHash(CurrentViewDevice.PopulatingTable, HistoricalResults);
+                DataParser.FillDBFields(CurrentViewDevice.PopulatingTable);
+                SetMunisEmpStatus();
+                SendToHistGrid(DataGridHistory, HistoricalResults);
+                SetAttachCount();
+                SetADInfo();
             }
         }
 
@@ -1199,6 +1166,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void UpdateDevice(DeviceUpdateInfoStruct UpdateInfo)
         {
+            DisableControls();
             int rows = 0;
             string SelectQry = "SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + "='" + CurrentViewDevice.GUID + "'";
             string InsertQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " LIMIT 0";
@@ -1214,14 +1182,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         if (rows == 2)
                         {
                             trans.Commit();
-                            LoadDevice(CurrentViewDevice.GUID);
+                            RefreshData();
                             //OtherFunctions.Message("Update Added.", vbOKOnly + vbInformation, "Success", Me)
                             SetStatusBar("Update successful!");
                         }
                         else
                         {
                             trans.Rollback();
-                            LoadDevice(CurrentViewDevice.GUID);
+                            RefreshData();
                             OtherFunctions.Message("Unsuccessful! The number of affected rows was not what was expected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Unexpected Result", this);
                         }
                     }
@@ -1230,7 +1198,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         trans.Rollback();
                         if (ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()))
                         {
-                            LoadDevice(CurrentViewDevice.GUID);
+                            RefreshData();
                         }
                     }
                 }
@@ -1390,8 +1358,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (blah == DialogResult.Yes)
             {
                 string IP = MyPingVis.CurrentResult.Address.ToString();
-                string DeviceName = CurrentViewDevice.HostName;
-                var RestartOutput = await SendRestart(IP, DeviceName);
+                var RestartOutput = await SendRestart(IP, CurrentViewDevice.HostName);
                 if ((string)RestartOutput == "")
                 {
                     OtherFunctions.Message("Success", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Restart Device", this);
@@ -1497,7 +1464,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                TrackingGrid.Columns[TrackablesCols.CheckType].DefaultCellStyle.Font = new Font(TrackingGrid.Font, FontStyle.Bold);
+                if (TrackingGrid.Rows.Count > 0)
+                {
+                    TrackingGrid.Columns[TrackablesCols.CheckType].DefaultCellStyle.Font = new Font(TrackingGrid.Font, FontStyle.Bold);
+                }
             }
             catch
             {
@@ -1661,6 +1631,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             MyWindowList.Dispose();
             MyLiveBox.Dispose();
             MyMunisToolBar.Dispose();
+            CurrentViewDevice.Dispose();
             Helpers.ChildFormControl.CloseChildren(this);
             if (MyPingVis != null)
             {

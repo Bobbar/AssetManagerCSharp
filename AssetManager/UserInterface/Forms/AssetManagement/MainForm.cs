@@ -146,11 +146,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public void LoadDevice(string deviceGUID)
         {
-            if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewDeviceForm), deviceGUID))
+            try
             {
-                Waiting();
-                ViewDeviceForm NewView = new ViewDeviceForm(this, deviceGUID);
-                DoneWaiting();
+                if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewDeviceForm), deviceGUID))
+                {
+                    Waiting();
+                    ViewDeviceForm NewView = new ViewDeviceForm(this, new DeviceObject(deviceGUID));
+                    DoneWaiting();
+                }
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                OtherFunctions.Message("That device was not found!  It may have been deleted.  Re-execute your search.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Not Found", this);
             }
         }
 

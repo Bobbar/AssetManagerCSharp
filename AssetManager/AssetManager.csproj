@@ -169,7 +169,7 @@
   <ItemGroup>
     <Compile Include="Business\PDFFormFilling.cs" />
     <Compile Include="Data\DataClasses\DataClassMapping\ColumnNameAttribute.cs" />
-    <Compile Include="Data\DataClasses\DataClassMapping\DataMapper.cs" />
+    <Compile Include="Data\DataClasses\DataClassMapping\DataMapObject.cs" />
     <Compile Include="Data\DataClasses\DataClassMapping\MappableClasses.cs" />
     <Compile Include="Data\DataClasses\DataStructures.cs" />
     <Compile Include="Data\DataComms\AssetManager\DBFactory.cs" />

@@ -23,6 +23,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private ExtendedForm myParentForm;
 
+        public string DefaultFormTitle { get; set; }
+
         /// <summary>
         /// Unique identifying string used to locate specific instances of this form.
         /// </summary>
@@ -65,6 +67,12 @@ namespace AssetManager.UserInterface.CustomControls
         {
             this.ParentForm = parentForm;
             SetTheme(parentForm);
+        }
+
+        public ExtendedForm(ExtendedForm parentForm, DataMappingObject currentObject)
+        {
+            ParentForm = parentForm;
+            FormUID = currentObject.GUID;
         }
 
         public ExtendedForm(ExtendedForm parentForm, bool inheritTheme = true)

@@ -19,7 +19,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ClearAll();
             SetDates();
             SetGroups();
-            GetCurrentTracking(CurrentTrackingDevice.GUID);
             LoadTracking();
             Show();
         }
@@ -62,7 +61,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             CheckData.UseLocation = txtUseLocation.Text.Trim().ToUpper();
             CheckData.UseReason = txtUseReason.Text.Trim().ToUpper();
             CheckData.CheckinNotes = txtCheckInNotes.Text.Trim().ToUpper();
-            CheckData.DeviceGUID = CurrentTrackingDevice.GUID;
+            CheckData.GUID = CurrentTrackingDevice.GUID;
             CheckData.CheckoutUser = GlobalConstants.LocalDomainUser;
             CheckData.CheckinTime = dtCheckIn.Value; //.ToString(strDBDateTimeFormat)
             CheckData.CheckinUser = GlobalConstants.LocalDomainUser;
@@ -150,7 +149,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         CheckOutParams.Add(new DBParameter(TrackablesCols.CheckoutUser, CheckData.CheckoutUser));
                         CheckOutParams.Add(new DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation));
                         CheckOutParams.Add(new DBParameter(TrackablesCols.Notes, CheckData.UseReason));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID));
+                        CheckOutParams.Add(new DBParameter(TrackablesCols.DeviceUID, CheckData.GUID));
                         rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans);
 
                         if (rows == 2)
@@ -203,7 +202,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         CheckOutParams.Add(new DBParameter(TrackablesCols.CheckinUser, CheckData.CheckinUser));
                         CheckOutParams.Add(new DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation));
                         CheckOutParams.Add(new DBParameter(TrackablesCols.Notes, CheckData.CheckinNotes));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.DeviceUID, CheckData.DeviceGUID));
+                        CheckOutParams.Add(new DBParameter(TrackablesCols.DeviceUID, CheckData.GUID));
                         rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans);
 
                         if (rows == 2)

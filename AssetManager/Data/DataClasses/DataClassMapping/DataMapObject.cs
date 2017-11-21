@@ -3,40 +3,92 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+
 namespace AssetManager
 {
     /// <summary>
     /// Data mapper for classes tagged with <see cref="DataColumnNameAttribute"/>
     /// </summary>
-    public class DataMapping
+    public abstract class DataMappingObject : IDisposable
     {
+        #region Fields
+
+        private DataTable populatingTable;
+
+        #endregion Fields
+
+        #region Properties
+
+        public abstract string GUID { get; set; }
+
+        /// <summary>
+        /// DataTable that was used to populate this object.
+        /// </summary>
+        public DataTable PopulatingTable
+        {
+            get
+            {
+                return populatingTable;
+            }
+            set
+            {
+                populatingTable = value;
+                populatingTable.TableName = TableName;
+            }
+        }
+
+        public abstract string TableName { get; set; }
+
+        #endregion Properties
+
+        #region Constructors
+
+        public DataMappingObject()
+        {
+        }
+
+        public DataMappingObject(object data)
+        {
+            MapClassProperties(data);
+        }
+
+        #endregion Constructors
+
+        #region Methods
+
+        public void MapClassProperties(object data)
+        {
+            MapProperty(this, data);
+        }
 
         public void MapClassProperties(object obj, object data)
         {
+            MapProperty(obj, data);
+        }
+
+        /// <summary>
+        /// Uses reflection to recursively populate/map class properties that are marked with a <see cref="DataColumnNameAttribute"/>.
+        /// </summary>
+        /// <param name="obj">Object to be populated.</param>
+        /// <param name="data">DataRow or DataTable with columns matching the <see cref="DataColumnNameAttribute"/> in the objects properties.</param>
+        private void MapProperty(object obj, object data)
+        {
             if (data is DataTable)
             {
+                PopulatingTable = (DataTable)data;
                 var row = ((DataTable)data).Rows[0];
                 MapProperty(obj, row);
             }
             else if (data is DataRow)
             {
-                MapProperty(obj, (DataRow)data);
+                var row = (DataRow)data;
+                PopulatingTable = row.Table;
+                MapProperty(obj, row);
             }
             else
             {
                 throw new Exception("Invalid data object type.");
             }
-        }
-
-        public void MapClassProperties(object obj, DataRow row)
-        {
-            MapProperty(obj, row);
-        }
-
-        public void MapClassProperties(object obj, DataTable data)
-        {
-            var row = data.Rows[0];
-            MapProperty(obj, row);
         }
 
         /// <summary>
@@ -53,7 +105,6 @@ namespace AssetManager
 
             foreach (System.Reflection.PropertyInfo prop in Props)
             {
-
                 //Check if the property contains a target attribute.
 
                 if (prop.GetCustomAttributes(typeof(DataColumnNameAttribute), true).Length > 0)
@@ -102,8 +153,7 @@ namespace AssetManager
                 }
                 else
                 {
-
-                    if (typeof(DataMapping).IsAssignableFrom(prop.PropertyType))
+                    if (typeof(DataMappingObject).IsAssignableFrom(prop.PropertyType))
                     {
                         //Recurse with nested DataMapping properties.
                         var nestObject = prop.GetValue(obj, null);
@@ -114,5 +164,43 @@ namespace AssetManager
             }
         }
 
+        #region IDisposable Support
+
+        private bool disposedValue = false; // To detect redundant calls
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                    PopulatingTable.Dispose();
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~DataMappingObject() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+        #endregion IDisposable Support
+
+        #endregion Methods
     }
 }

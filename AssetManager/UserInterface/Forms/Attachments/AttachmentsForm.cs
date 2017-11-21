@@ -75,22 +75,21 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         #region Constructors
 
-        public AttachmentsForm(ExtendedForm ParentForm, AttachmentsBaseCols AttachTable, object AttachInfo = null)
+        public AttachmentsForm(ExtendedForm ParentForm, AttachmentsBaseCols AttachTable, object attachDataObject = null) : base(ParentForm)
         {
             FTPUri = "ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/";
 
             InitializeComponent();
             ImageCaching.CacheControlImages(this);
-            this.ParentForm = ParentForm;
             AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
             ExtendedMethods.DoubleBufferedDataGrid(AttachGrid, true);
             SetStatusBar("Idle...");
             _attachTable = AttachTable;
-            if (!ReferenceEquals(AttachInfo, null))
+            if (!ReferenceEquals(attachDataObject, null))
             {
-                if (AttachInfo is RequestObject)
+                if (attachDataObject is RequestObject)
                 {
-                    AttachRequest = (RequestObject)AttachInfo;
+                    AttachRequest = (RequestObject)attachDataObject;
                     AttachFolderUID = AttachRequest.GUID;
                     FormUID = AttachFolderUID;
                     this.Text = "Sibi Attachments";
@@ -98,9 +97,9 @@ namespace AssetManager.UserInterface.Forms.Attachments
                     SibiGroup.Dock = DockStyle.Top;
                     FillSibiInfo();
                 }
-                else if (AttachInfo is DeviceObject)
+                else if (attachDataObject is DeviceObject)
                 {
-                    AttachDevice = (DeviceObject)AttachInfo;
+                    AttachDevice = (DeviceObject)attachDataObject;
                     AttachFolderUID = AttachDevice.GUID;
                     FormUID = AttachFolderUID;
                     this.Text = "Device Attachments";
