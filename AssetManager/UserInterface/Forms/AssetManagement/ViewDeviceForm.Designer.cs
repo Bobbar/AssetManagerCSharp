@@ -1380,7 +1380,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.RefreshToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.RefreshToolStripButton.Image = global::AssetManager.Properties.Resources.RefreshIcon;
-            this.RefreshToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.RefreshToolStripButton.Name = "RefreshToolStripButton";
             this.RefreshToolStripButton.Size = new System.Drawing.Size(29, 34);
             this.RefreshToolStripButton.Text = "ToolStripButton1";

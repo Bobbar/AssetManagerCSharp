@@ -49,7 +49,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             this.AttachContainer = new System.Windows.Forms.SplitContainer();
             this.FolderListView = new System.Windows.Forms.ListView();
             this.ColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.folderImageList = new System.Windows.Forms.ImageList(this.components);
             this.AttachGrid = new System.Windows.Forms.DataGridView();
             this.AllowDragCheckBox = new System.Windows.Forms.CheckBox();
             this.SibiGroup = new System.Windows.Forms.GroupBox();
@@ -254,7 +254,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             this.FolderListView.MultiSelect = false;
             this.FolderListView.Name = "FolderListView";
             this.FolderListView.Size = new System.Drawing.Size(122, 386);
-            this.FolderListView.StateImageList = this.imageList1;
+            this.FolderListView.StateImageList = this.folderImageList;
             this.FolderListView.TabIndex = 0;
             this.FolderListView.UseCompatibleStateImageBehavior = false;
             this.FolderListView.View = System.Windows.Forms.View.Details;
@@ -269,12 +269,11 @@ namespace AssetManager.UserInterface.Forms.Attachments
             this.ColumnHeader1.Text = "Folder";
             this.ColumnHeader1.Width = 115;
             // 
-            // imageList1
+            // folderImageList
             // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "icons8-Folder-48.png");
-            this.imageList1.Images.SetKeyName(1, "icons8-Open-48.png");
+            this.folderImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("folderImageList.ImageStream")));
+            this.folderImageList.Images.SetKeyName(0, "icons8-Folder-48.png");
+            this.folderImageList.Images.SetKeyName(1, "icons8-Open-48.png");
             // 
             // AttachGrid
             // 
@@ -687,7 +686,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
         internal SplitContainer AttachContainer;
         internal ListView FolderListView;
         internal ColumnHeader ColumnHeader1;
-        internal ImageList imageList1;
+        internal ImageList folderImageList;
         internal ToolStripMenuItem NewFolderMenuItem;
 
     }

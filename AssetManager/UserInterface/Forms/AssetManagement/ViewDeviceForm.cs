@@ -76,7 +76,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                Waiting();
+              //  Waiting();
                 bolGridFilling = true;
                 LoadHistoryAndFields();
                 if (CurrentViewDevice.IsTrackable)
@@ -97,7 +97,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             finally
             {
-                DoneWaiting();
+                //DoneWaiting();
             }
         }
 

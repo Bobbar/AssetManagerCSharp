@@ -41,7 +41,6 @@ namespace AssetManager.UserInterface.Forms
             //Version
             //
             this.Version.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Version.BackColor = System.Drawing.Color.Transparent;
             this.Version.Font = new System.Drawing.Font("Microsoft Sans Serif", 9f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, Convert.ToByte(0));
             this.Version.Location = new System.Drawing.Point(5, 196);
             this.Version.Name = "Version";
@@ -53,7 +52,6 @@ namespace AssetManager.UserInterface.Forms
             //Copyright
             //
             this.Copyright.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Copyright.BackColor = System.Drawing.Color.Transparent;
             this.Copyright.Font = new System.Drawing.Font("Microsoft Sans Serif", 9f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, Convert.ToByte(0));
             this.Copyright.Location = new System.Drawing.Point(5, 216);
             this.Copyright.Name = "Copyright";
