@@ -10,8 +10,6 @@ namespace AssetManager.UserInterface.Forms.AdminTools
     public partial class UserManagerForm : ExtendedForm
     {
         private List<AccessGroupObject> ModuleIndex = new List<AccessGroupObject>();
-        private string UserDataQuery = "SELECT * FROM " + UsersCols.TableName;
-
         private int SelectedRow;
 
         public UserManagerForm(ExtendedForm parentForm)
@@ -43,7 +41,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 
         private void SendToGrid()
         {
-            UserGrid.DataSource = DBFactory.GetDatabase().DataTableFromQueryString(UserDataQuery);
+            UserGrid.DataSource = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectUsersTable);
             UserGrid.Columns[UsersCols.UID].ReadOnly = true;
         }
 
@@ -72,7 +70,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         public List<AccessGroupObject> BuildModuleIndex()
         {
             List<AccessGroupObject> tmpList = new List<AccessGroupObject>();
-            using (DataTable ModuleTable = DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + SecurityCols.TableName + " ORDER BY " + SecurityCols.AccessLevel + ""))
+            using (DataTable ModuleTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSecurityTable))
             {
                 foreach (DataRow row in ModuleTable.Rows)
                 {
@@ -132,7 +130,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                 {
                     UserGrid.EndEdit();
                     AddGUIDs();
-                    DBFactory.GetDatabase().UpdateTable(UserDataQuery, (DataTable)UserGrid.DataSource);
+                    DBFactory.GetDatabase().UpdateTable(Queries.SelectUsersTable, (DataTable)UserGrid.DataSource);
                     ListUsers();
                     SecurityTools.GetUserAccess();
                 }

@@ -61,8 +61,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             OtherFunctions.SetWaitCursor(true, this);
             try
             {
-                var strQry = "Select * FROM " + HistoricalDevicesCols.TableName + " WHERE  " + HistoricalDevicesCols.HistoryEntryUID + " = '" + EntryUID + "'";
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQry))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(EntryUID)))
                 {
                     HighlightChangedFields(results);
                     FillControls(results);
@@ -90,8 +89,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             List<Control> ChangedControls = new List<Control>();
             System.DateTime CurrentTimeStamp = (System.DateTime)currentData.Rows[0][HistoricalDevicesCols.ActionDateTime];
             //Query for all rows with a timestamp older than the current historical entry.
-            string Query = "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.DeviceUID + " = '" + _DeviceGUID + "' AND " + HistoricalDevicesCols.ActionDateTime + " < '" + CurrentTimeStamp.ToString(DataConsistency.strDBDateTimeFormat) + "' ORDER BY " + HistoricalDevicesCols.ActionDateTime + " DESC";
-            using (DataTable olderData = DBFactory.GetDatabase().DataTableFromQueryString(Query))
+            using (DataTable olderData = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevHistoricalEntriesOlderThan(_DeviceGUID, CurrentTimeStamp)))
             {
                 if (olderData.Rows.Count > 0)
                 {

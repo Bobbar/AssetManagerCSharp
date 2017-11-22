@@ -90,7 +90,7 @@ namespace AssetManager
 
         private DataTable GetDeviceDataFromGUID(string GUID)
         {
-            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + " = '" + GUID + "'"))
+            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGUID(GUID)))
             {
                 return results;
             }

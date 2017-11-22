@@ -231,8 +231,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void SetDisplayYears()
         {
             bolRebuildingCombo = true;
-            string strQRY = "SELECT DISTINCT " + SibiRequestCols.DateStamp + " FROM " + SibiRequestCols.TableName + " ORDER BY " + SibiRequestCols.DateStamp + " DESC";
-            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQRY))
+            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiDisplayYears))
             {
                 List<string> Years = new List<string>();
                 Years.Add("All");
@@ -257,14 +256,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
             if (Year == "All")
             {
                 DbCommand newCommand;
-                newCommand = DBFactory.GetDatabase().GetCommand("SELECT * FROM " + SibiRequestCols.TableName + " ORDER BY " + SibiRequestCols.RequestNumber + " DESC");
-                ExecuteCmd(ref newCommand);//DBFactory.GetDatabase().GetCommand("SELECT * FROM " + SibiRequestCols.TableName + " ORDER BY " + SibiRequestCols.RequestNumber + " DESC"));
+                newCommand = DBFactory.GetDatabase().GetCommand(Queries.SelectSibiRequestsTable);
+                ExecuteCmd(ref newCommand);
             }
             else
             {
                 DbCommand newCommand;
-                newCommand = DBFactory.GetDatabase().GetCommand("SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.DateStamp + " LIKE '%" + Year + "%' ORDER BY " + SibiRequestCols.RequestNumber + " DESC");
-                ExecuteCmd(ref newCommand);//DBFactory.GetDatabase().GetCommand("SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.DateStamp + " LIKE '%" + Year + "%' ORDER BY " + SibiRequestCols.RequestNumber + " DESC"));
+                newCommand = DBFactory.GetDatabase().GetCommand(Queries.SelectSibiRequestsByYear(Year));
+                ExecuteCmd(ref newCommand);
             }
         }
 

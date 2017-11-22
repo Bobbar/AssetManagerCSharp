@@ -92,8 +92,7 @@ namespace AssetManager
         {
             try
             {
-                var strQRY = "SELECT * FROM " + codeType + " LEFT OUTER JOIN munis_codes on " + codeType + ".db_value = munis_codes.asset_man_code WHERE type_name ='" + typeName + "' ORDER BY " + ComboCodesBaseCols.DisplayValue + "";
-                using (DataTable results = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(strQRY))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectAttributeCodes(codeType, typeName)))
                 {
                     List<AttributeDataStruct> tmpArray = new List<AttributeDataStruct>();
                     foreach (DataRow r in results.Rows)

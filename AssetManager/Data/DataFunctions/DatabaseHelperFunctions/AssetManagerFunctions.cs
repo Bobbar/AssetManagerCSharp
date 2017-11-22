@@ -195,11 +195,11 @@ namespace AssetManager
                 switch (type)
                 {
                     case EntryType.Device:
-                        DeleteQuery = "DELETE FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + "='" + sqlGUID + "'";
+                        DeleteQuery = Queries.DeleteDeviceByGUID(sqlGUID);
                         break;
 
                     case EntryType.Sibi:
-                        DeleteQuery = "DELETE FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.UID + "='" + sqlGUID + "'";
+                        DeleteQuery = Queries.DeleteSibiRequestByGUID(sqlGUID);
                         break;
                 }
                 if (AssetManager.DBFactory.GetDatabase().ExecuteQuery(DeleteQuery) > 0)
@@ -317,8 +317,7 @@ namespace AssetManager
                             {
                                 foreach (DataRow r in EmpList.Rows)
                                 {
-                                    string strQRY = "SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.MunisEmpNum + "='" + r["a_employee_number"].ToString() + "'";
-                                    using (DataTable tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(strQRY))
+                                    using (DataTable tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevicesByEmpNum(r["a_employee_number"].ToString())))
                                     {
                                         DeviceList.Merge(tmpTable);
                                     }
@@ -360,13 +359,13 @@ namespace AssetManager
                 {
                     List<DBQueryParameter> Params = new List<DBQueryParameter>();
                     Params.Add(new DBQueryParameter(DevicesCols.AssetTag, searchVal, true));
-                    return new DeviceObject(AssetManager.DBFactory.GetDatabase().DataTableFromParameters("SELECT * FROM " + DevicesCols.TableName + " WHERE ", Params));
+                    return new DeviceObject(AssetManager.DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));//"SELECT * FROM " + DevicesCols.TableName + " WHERE ", Params));
                 }
                 else if (type == FindDevType.Serial)
                 {
                     List<DBQueryParameter> Params = new List<DBQueryParameter>();
                     Params.Add(new DBQueryParameter(DevicesCols.Serial, searchVal, true));
-                    return new DeviceObject(AssetManager.DBFactory.GetDatabase().DataTableFromParameters("SELECT * FROM " + DevicesCols.TableName + " WHERE ", Params));
+                    return new DeviceObject(AssetManager.DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));
                 }
                 return null;
             }
@@ -379,17 +378,17 @@ namespace AssetManager
 
         public string GetTVApiToken()
         {
-            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString("SELECT apitoken FROM teamviewer_info"))
+            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTVApiToken))
             {
                 var token = results.Rows[0]["apitoken"].ToString();
                 return token;
             }
         }
 
-        public DeviceObject GetDeviceInfoFromGUID(string deviceGUID)
-        {
-            return new DeviceObject(AssetManager.DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + "='" + deviceGUID + "'"));
-        }
+        //public DeviceObject GetDeviceInfoFromGUID(string deviceGUID)
+        //{
+        //    return new DeviceObject(AssetManager.DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + "='" + deviceGUID + "'"));
+        //}
 
         public string GetMunisCodeFromAssetCode(string assetCode)
         {

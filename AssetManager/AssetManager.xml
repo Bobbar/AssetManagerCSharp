@@ -123,6 +123,39 @@
             <param name="params"></param>
             <returns></returns>
         </member>
+        <member name="M:AssetManager.Queries.SelectHistoricalDeviceEntry(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.HistoricalDevicesCols.TableName"/> WHERE <see cref="F:AssetManager.HistoricalDevicesCols.HistoryEntryUID"/> = <paramref name="entryGUID"/>
+            </summary>
+            <param name="entryGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.SelectDeviceByGUID(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.DevicesCols.TableName"/> WHERE <see cref="F:AssetManager.DevicesCols.TableName"/> = <paramref name="deviceGUID"/>
+            </summary>
+            <param name="deviceGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.Queries.SelectEmptyHistoricalTable">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.HistoricalDevicesCols.TableName"/> LIMIT 0
+            </summary>
+        </member>
+        <member name="M:AssetManager.Queries.SelectTrackingByDevGUID(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.TrackablesCols.TableName"/> WHERE <see cref="F:AssetManager.TrackablesCols.DeviceUID"/> = <paramref name="deviceGUID"/> ORDER BY <see cref="F:AssetManager.TrackablesCols.DateStamp"/> DESC
+            </summary>
+            <param name="deviceGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.SelectDeviceHistoricalTable(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.HistoricalDevicesCols.TableName"/> WHERE <see cref="F:AssetManager.DevicesBaseCols.DeviceUID"/> = <paramref name="deviceGUID"/> ORDER BY <see cref="F:AssetManager.HistoricalDevicesCols.ActionDateTime"/> DESC
+            </summary>
+            <param name="deviceGUID"></param>
+            <returns></returns>
+        </member>
         <member name="M:AssetManager.SQLiteDatabase.ConvertStatement(System.String)">
             <summary>
             Converts MySQL Create statement into a SQL compatible one.

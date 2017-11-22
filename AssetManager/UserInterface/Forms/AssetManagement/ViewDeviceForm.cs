@@ -76,7 +76,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-              //  Waiting();
+                //  Waiting();
                 bolGridFilling = true;
                 LoadHistoryAndFields();
                 if (CurrentViewDevice.IsTrackable)
@@ -428,18 +428,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             try
             {
-                string strGUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
+                string entryGUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
                 DeviceObject Info = default(DeviceObject);
-                var strQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + strGUID + "'";
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQry))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGUID)))
                 {
                     Info = new DeviceObject(results);
                 }
-                var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + Info.Historical.ActionDateTime + " - " + AttribIndexFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, Info.Historical.ChangeType) + " - " + strGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
+                var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + Info.Historical.ActionDateTime + " - " + AttribIndexFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, Info.Historical.ChangeType) + " - " + entryGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
                 if (blah == DialogResult.Yes)
                 {
-                    string DeleteEntryQuery = "DELETE FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + strGUID + "'";
-                    DBFactory.GetDatabase().ExecuteQuery(DeleteEntryQuery);
+                    DBFactory.GetDatabase().ExecuteQuery(Queries.DeleteHistoricalEntryByGUID(entryGUID));
                     SetStatusBar("Entry deleted successfully.");
                     RefreshData();
                 }
@@ -694,7 +692,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private DataTable GetDevicesTable(string deviceUID)
         {
-            return DBFactory.GetDatabase().DataTableFromQueryString("Select * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + " = '" + deviceUID + "'");
+            return DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGUID(deviceUID));
         }
 
         private string GetHash(DataTable deviceTable, DataTable historicalTable)
@@ -704,7 +702,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private DataTable GetHistoricalTable(string deviceUID)
         {
-            var results = DBFactory.GetDatabase().DataTableFromQueryString("Select * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.DeviceUID + " = '" + deviceUID + "' ORDER BY " + HistoricalDevicesCols.ActionDateTime + " DESC");
+            var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceHistoricalTable(deviceUID));
             results.TableName = HistoricalDevicesCols.TableName;
             return results;
         }
@@ -825,10 +823,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void LoadTracking(string strGUID)
+        private void LoadTracking(string deviceGUID)
         {
-            var strQry = "Select * FROM " + TrackablesCols.TableName + ", " + DevicesCols.TableName + " WHERE " + TrackablesCols.DeviceUID + " = " + DevicesCols.DeviceUID + " And " + TrackablesCols.DeviceUID + " = '" + strGUID + "' ORDER BY " + TrackablesCols.DateStamp + " DESC";
-            using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(strQry))
+            using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTrackingByDevGUID(deviceGUID)))
             {
                 if (Results.Rows.Count > 0)
                 {
@@ -1156,8 +1153,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             DisableControls();
             int rows = 0;
-            string SelectQry = "SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + "='" + CurrentViewDevice.GUID + "'";
-            string InsertQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " LIMIT 0";
+            string SelectQry = Queries.SelectDeviceByGUID(CurrentViewDevice.GUID);
+            string InsertQry = Queries.SelectEmptyHistoricalTable;
             using (var trans = DBFactory.GetDatabase().StartTransaction())
             {
                 using (var conn = trans.Connection)

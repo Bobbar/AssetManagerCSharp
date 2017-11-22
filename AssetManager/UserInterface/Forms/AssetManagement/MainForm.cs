@@ -18,7 +18,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
     {
         #region "Fields"
 
-        private const string strShowAllQry = "SELECT * FROM " + DevicesCols.TableName + " ORDER BY " + DevicesCols.InputDateTime + " DESC";
         private bool bolGridFilling = false;
         private DbCommand LastCommand;
 
@@ -98,7 +97,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (CurrentTransaction != null)
             {
-                DBFactory.GetDatabase().UpdateTable(strShowAllQry, (DataTable)ResultGrid.DataSource, CurrentTransaction);
+                DBFactory.GetDatabase().UpdateTable(Queries.SelectDevicesTable, (DataTable)ResultGrid.DataSource, CurrentTransaction);
                 RefreshData();
                 DoneWaiting();
             }
@@ -351,11 +350,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 foreach (var row in Rows)
                 {
                     string DevUID = ResultGrid[DevicesCols.DeviceUID, row].Value.ToString();
-                    SelectedDevices.Add(GlobalInstances.AssetFunc.GetDeviceInfoFromGUID(DevUID));
+                    SelectedDevices.Add(new DeviceObject(DevUID));
                 }
 
                 Helpers.ChildFormControl.GKUpdaterInstance().AddMultipleUpdates(SelectedDevices);
-
             }
         }
 
@@ -553,7 +551,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ShowAll()
         {
-            var cmd = DBFactory.GetDatabase().GetCommand(strShowAllQry);
+            var cmd = DBFactory.GetDatabase().GetCommand(Queries.SelectDevicesTable);
             StartBigQuery(cmd);
         }
 
@@ -946,7 +944,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-
         private void ResultGrid_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -1037,6 +1034,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             LoadProgram();
             Application.DoEvents();
         }
+
         private void MainForm_Shown(object sender, EventArgs e)
         {
             Helpers.ChildFormControl.SplashScreenInstance().Dispose();
@@ -1077,11 +1075,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             OtherFunctions.EndProgram();
         }
 
-
         #endregion "Control Event Methods"
 
         #endregion "Methods"
-
-
     }
 }

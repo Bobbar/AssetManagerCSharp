@@ -68,17 +68,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return true;
         }
 
-        private void GetCurrentTracking(string strGUID)
-        {
-            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + TrackablesCols.TableName + " WHERE " + TrackablesCols.DeviceUID + "='" + strGUID + "' ORDER BY " + TrackablesCols.DateStamp + " DESC LIMIT 1")) //ds.Tables(0)
-            {
-                if (results.Rows.Count > 0)
-                {
-                    CurrentTrackingDevice.MapClassProperties(CurrentTrackingDevice, results);
-                }
-            }
-        }
-
         private void LoadTracking()
         {
             txtAssetTag.Text = CurrentTrackingDevice.AssetTag;

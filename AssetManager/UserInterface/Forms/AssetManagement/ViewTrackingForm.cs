@@ -20,8 +20,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             try
             {
                 OtherFunctions.SetWaitCursor(true, this);
-                var strQry = "Select * FROM " + TrackablesCols.TableName + " WHERE  " + TrackablesCols.UID + " = '" + entryUID + "'";
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQry))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTrackingEntryByGUID(entryUID)))
                 {
                     foreach (DataRow r in results.Rows)
                     {

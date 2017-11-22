@@ -133,8 +133,7 @@ namespace AssetManager
         {
             try
             {
-                string strQRY = "SELECT * FROM " + UsersCols.TableName + " WHERE " + UsersCols.UserName + "='" + GlobalConstants.LocalDomainUser + "' LIMIT 1";
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQRY))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectUserByName(GlobalConstants.LocalDomainUser)))
                 {
                     if (results.Rows.Count > 0)
                     {
@@ -160,8 +159,7 @@ namespace AssetManager
         {
             try
             {
-                string strQRY = "SELECT * FROM " + SecurityCols.TableName + " ORDER BY " + SecurityCols.AccessLevel + "";
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQRY))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSecurityTable))
                 {
                     foreach (DataRow row in results.Rows)
                     {

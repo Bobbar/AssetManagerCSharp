@@ -50,7 +50,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public void ImportFromSibi(string itemUID)
         {
-            string itemQuery = "SELECT * FROM " + SibiRequestItemsCols.TableName + " INNER JOIN " + SibiRequestCols.TableName + " ON " + SibiRequestItemsCols.RequestUID + " = " + SibiRequestCols.UID + " WHERE " + SibiRequestItemsCols.ItemUID + "='" + itemUID + "'";
+            string itemQuery = Queries.SelectSibiRequestAndItemByItemGUID(itemUID);
             DateTime POPurchaseDate = default(DateTime);
             using (var results = DBFactory.GetDatabase().DataTableFromQueryString(itemQuery))
             {

@@ -180,6 +180,7 @@
     <Compile Include="Data\DataComms\AssetManager\SQL\DataInterface.cs" />
     <Compile Include="Data\DataComms\AssetManager\SQL\MySQL\MySQLComms.cs" />
     <Compile Include="Data\DataComms\AssetManager\SQL\MySQL\NoPingException.cs" />
+    <Compile Include="Data\DataComms\AssetManager\SQL\Queries.cs" />
     <Compile Include="Data\DataComms\AssetManager\SQL\SQLite\SQLiteComms.cs" />
     <Compile Include="Data\DataComms\Munis\MunisComms.cs" />
     <Compile Include="Data\DataComms\NetDriveMapper\NetworkConnection.cs" />

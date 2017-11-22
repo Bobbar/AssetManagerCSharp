@@ -133,7 +133,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 this.FormUID = CurrentRequest.GUID;
                 IsModifying = true;
                 //Set the datasource to a new empty DB table.
-                var EmptyTable = DBFactory.GetDatabase().DataTableFromQueryString("SELECT " + GridFunctions.ColumnsString(RequestItemsColumns()) + " FROM " + SibiRequestItemsCols.TableName + " LIMIT 0");
+                var EmptyTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectEmptySibiItemsTable(GridFunctions.ColumnsString(RequestItemsColumns())));
                 GridFunctions.PopulateGrid(RequestItemsGrid, EmptyTable, RequestItemsColumns());
                 EnableControls();
                 pnlCreate.Visible = true;
@@ -155,11 +155,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             OtherFunctions.SetWaitCursor(true, this);
             try
             {
-                string strRequestQRY = "SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.UID + "='" + RequestUID + "'";
-                string strRequestItemsQRY = "SELECT " + GridFunctions.ColumnsString(RequestItemsColumns()) + " FROM " + SibiRequestItemsCols.TableName + " WHERE " + SibiRequestItemsCols.RequestUID + "='" + RequestUID + "' ORDER BY " + SibiRequestItemsCols.Timestamp;
-                using (DataTable RequestResults = DBFactory.GetDatabase().DataTableFromQueryString(strRequestQRY))
+                using (DataTable RequestResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(RequestUID)))
                 {
-                    using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromQueryString(strRequestItemsQRY))
+                    using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), RequestUID)))
                     {
                         RequestResults.TableName = SibiRequestCols.TableName;
                         RequestItemsResults.TableName = SibiRequestItemsCols.TableName;
@@ -203,9 +201,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                using (var RequestTable = DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.UID + "='" + CurrentRequest.GUID + "'"))
+                using (var RequestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID)))
                 {
-                    using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString("SELECT " + GridFunctions.ColumnsString(RequestItemsColumns()) + " FROM " + SibiRequestItemsCols.TableName + " WHERE " + SibiRequestItemsCols.RequestUID + "='" + CurrentRequest.GUID + "' ORDER BY " + SibiRequestItemsCols.Timestamp))
+                    using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
                     {
                         RequestTable.TableName = SibiRequestCols.TableName;
                         ItemTable.TableName = SibiRequestItemsCols.TableName;
@@ -293,8 +291,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     try
                     {
-                        string InsertRequestQry = "SELECT * FROM " + SibiRequestCols.TableName + " LIMIT 0";
-                        string InsertRequestItemsQry = "SELECT " + GridFunctions.ColumnsString(RequestItemsColumns()) + " FROM " + SibiRequestItemsCols.TableName + " LIMIT 0";
+                        string InsertRequestQry = Queries.SelectEmptySibiRequestTable;
+                        string InsertRequestItemsQry = Queries.SelectEmptySibiItemsTable(GridFunctions.ColumnsString(RequestItemsColumns()));
                         DBFactory.GetDatabase().UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID), trans);
                         DBFactory.GetDatabase().UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, trans);
                         pnlCreate.Visible = false;
@@ -600,7 +598,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     string NoteUID = GridFunctions.GetCurrentCellValue(dgvNotes, SibiNotesCols.NoteUID);
                     if (!string.IsNullOrEmpty(NoteUID))
                     {
-                        OtherFunctions.Message(DeleteItem_FromSQL(NoteUID, SibiNotesCols.NoteUID, SibiNotesCols.TableName) + " Rows affected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Delete Item", this);
+                        OtherFunctions.Message(DeleteNote(NoteUID) + " Rows affected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Delete Item", this);
                         OpenRequest(CurrentRequest.GUID);
                     }
                 }
@@ -715,14 +713,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private int DeleteItem_FromSQL(string ItemUID, string ItemColumnName, string Table)
+        private int DeleteNote(string noteUID)
         {
             try
             {
-                int rows = 0;
-                string DeleteItemQuery = "DELETE FROM " + Table + " WHERE " + ItemColumnName + "='" + ItemUID + "'";
-                rows = DBFactory.GetDatabase().ExecuteQuery(DeleteItemQuery);
-                return rows;
+                return DBFactory.GetDatabase().ExecuteQuery(Queries.DeleteSibiNote(noteUID));
             }
             catch (Exception ex)
             {
@@ -967,13 +962,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                string NotesQry = "SELECT * FROM " + SibiNotesCols.TableName + " WHERE " + SibiNotesCols.RequestUID + "='" + RequestUID + "' ORDER BY " + SibiNotesCols.DateStamp + " DESC";
-                using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(NotesQry))
+                using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiNotes(RequestUID)))
                 {
                     GridFunctions.PopulateGrid(dgvNotes, Results, NotesGridColumns());
                 }
-
-
                 dgvNotes.ClearSelection();
             }
             catch (Exception ex)
@@ -1616,8 +1608,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         {
                             return;
                         }
-                        string RequestUpdateQry = "SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.UID + " = '" + CurrentRequest.GUID + "'";
-                        string RequestItemsUpdateQry = "SELECT " + GridFunctions.ColumnsString(RequestItemsColumns()) + " FROM " + SibiRequestItemsCols.TableName + " WHERE " + SibiRequestItemsCols.RequestUID + " = '" + CurrentRequest.GUID + "'";
+                        string RequestUpdateQry = Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID);
+                        string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID);
 
                         DBFactory.GetDatabase().UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans);
                         DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans);
