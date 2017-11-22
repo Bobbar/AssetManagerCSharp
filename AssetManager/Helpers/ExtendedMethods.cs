@@ -2,6 +2,9 @@ using System;
 using System.Windows.Forms;
 using System.Data.Common;
 using System.Reflection;
+using System.Data;
+using System.Linq;
+
 namespace AssetManager
 {
 
@@ -70,6 +73,50 @@ namespace AssetManager
             parameter.ParameterName = parameterName;
             parameter.Value = parameterValue;
             command.Parameters.Add(parameter);
+        }
+
+        /// <summary>
+        /// Provides much faster column resizing than the built-in AutoResizeColumns method.
+        /// </summary>
+        /// <param name="targetGrid"></param>
+        public static void FastAutoSizeColumns(this DataGridView targetGrid)
+        {
+            // Cast out a DataTable from the target grid datasource.
+            // We need to iterate through all the data in the grid, and a DataTable supports enumeration.
+            var gridTable = (DataTable)targetGrid.DataSource;
+
+            // Create a graphics object from the target grid. Used for measuring text size.
+            using (var gfx = targetGrid.CreateGraphics())
+            {
+                // Iterate through the columns.
+                for (int i = 0; i < gridTable.Columns.Count; i++)
+                {
+                    // Leverage Linq enumerators to rapidly collect all the rows into a string array. Making sure to exclude null values.
+                    string[] colStringCollection = gridTable.AsEnumerable().Where(r => r.Field<object>(i) != null).Select(r => r.Field<object>(i).ToString()).ToArray();
+
+                    // Sort the string array by string lengths.
+                    string[] colStringSorted = colStringCollection.OrderBy((x) => x.Length).ThenBy((x) => x).ToArray();
+
+                    // Get the last and longest string in the array.
+                    string longestColString = colStringSorted.Last();
+
+                    // Use the graphics object to measure the string size.
+                    var colWidth = gfx.MeasureString(longestColString, targetGrid.Font);
+
+                    // If the calulated width is longer than the column header width, set the new column width.
+                    if (colWidth.Width > targetGrid.Columns[i].HeaderCell.Size.Width)
+                    {
+                        targetGrid.Columns[gridTable.Columns[i].ColumnName].Width = (int)colWidth.Width;
+                    }
+                    else // Otherwise, set the column width to the header width.
+                    {
+                        targetGrid.Columns[gridTable.Columns[i].ColumnName].Width = targetGrid.Columns[i].HeaderCell.Size.Width;
+                    }
+                }
+            }
+
+
+
         }
 
     }

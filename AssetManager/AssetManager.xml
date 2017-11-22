@@ -137,6 +137,18 @@
             <param name="deviceGUID"></param>
             <returns></returns>
         </member>
+        <member name="P:AssetManager.Queries.SelectDevicesTable">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.DevicesCols.TableName"/> ORDER BY <see cref="F:AssetManager.DevicesCols.InputDateTime"/> DESC
+            </summary>
+        </member>
+        <member name="M:AssetManager.Queries.SelectDevicesByEmpNum(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.DevicesCols.TableName"/> WHERE <see cref="F:AssetManager.DevicesCols.MunisEmpNum"/> = <paramref name="empNum"/>
+            </summary>
+            <param name="empNum"></param>
+            <returns></returns>
+        </member>
         <member name="P:AssetManager.Queries.SelectEmptyHistoricalTable">
             <summary>
             SELECT * FROM <see cref="F:AssetManager.HistoricalDevicesCols.TableName"/> LIMIT 0
@@ -149,12 +161,147 @@
             <param name="deviceGUID"></param>
             <returns></returns>
         </member>
+        <member name="M:AssetManager.Queries.SelectTrackingEntryByGUID(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.TrackablesCols.TableName"/> WHERE <see cref="F:AssetManager.TrackablesCols.UID"/> = <paramref name="entryGUID"/>
+            </summary>
+            <param name="entryGUID"></param>
+            <returns></returns>
+        </member>
         <member name="M:AssetManager.Queries.SelectDeviceHistoricalTable(System.String)">
             <summary>
             SELECT * FROM <see cref="F:AssetManager.HistoricalDevicesCols.TableName"/> WHERE <see cref="F:AssetManager.DevicesBaseCols.DeviceUID"/> = <paramref name="deviceGUID"/> ORDER BY <see cref="F:AssetManager.HistoricalDevicesCols.ActionDateTime"/> DESC
             </summary>
             <param name="deviceGUID"></param>
             <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.SelectDevHistoricalEntriesOlderThan(System.String,System.DateTime)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.HistoricalDevicesCols.TableName"/> WHERE <see cref="F:AssetManager.DevicesBaseCols.DeviceUID"/> = <paramref name="deviceGUID"/> AND <see cref="F:AssetManager.HistoricalDevicesCols.ActionDateTime"/> "LESS THAN" <paramref name="startDate"/> ORDER BY <see cref="F:AssetManager.HistoricalDevicesCols.ActionDateTime"/> DESC
+            </summary>
+            <param name="startDate"></param>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.Queries.SelectDevicesPartial">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.DevicesCols.TableName"/> WHERE
+            </summary>
+        </member>
+        <member name="M:AssetManager.Queries.DeleteDeviceByGUID(System.String)">
+            <summary>
+            "DELETE FROM <see cref="F:AssetManager.DevicesCols.TableName"/> WHERE <see cref="!:DevicesCols.DeviceUID"/> = <paramref name="deviceGUID"/>
+            </summary>
+            <param name="deviceGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.DeleteHistoricalEntryByGUID(System.String)">
+            <summary>
+            "DELETE FROM <see cref="F:AssetManager.HistoricalDevicesCols.TableName"/> WHERE <see cref="F:AssetManager.HistoricalDevicesCols.HistoryEntryUID"/> = <paramref name="entryGUID"/>
+            </summary>
+            <param name="entryGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.SelectSibiRequestAndItemByItemGUID(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.SibiRequestItemsCols.TableName"/> INNER JOIN <see cref="F:AssetManager.SibiRequestCols.TableName"/> ON <see cref="F:AssetManager.SibiRequestItemsCols.RequestUID"/> = <see cref="F:AssetManager.SibiRequestCols.UID"/> WHERE <see cref="F:AssetManager.SibiRequestItemsCols.ItemUID"/> = <paramref name="itemGUID"/>
+            </summary>
+            <param name="itemGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.Queries.SelectSibiDisplayYears">
+            <summary>
+            SELECT DISTINCT <see cref="F:AssetManager.SibiRequestCols.DateStamp"/> FROM <see cref="F:AssetManager.SibiRequestCols.TableName"/> ORDER BY <see cref="F:AssetManager.SibiRequestCols.DateStamp"/> DESC
+            </summary>
+        </member>
+        <member name="P:AssetManager.Queries.SelectSibiRequestsTable">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.SibiRequestCols.TableName"/> FROM <see cref="F:AssetManager.SibiRequestCols.TableName"/> ORDER BY <see cref="F:AssetManager.SibiRequestCols.RequestNumber"/> DESC
+            </summary>
+        </member>
+        <member name="M:AssetManager.Queries.SelectSibiRequestsByYear(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.SibiRequestCols.TableName"/> WHERE <see cref="F:AssetManager.SibiRequestCols.DateStamp"/> LIKE '% <paramref name="year"/> %' ORDER BY <see cref="F:AssetManager.SibiRequestCols.RequestNumber"/> DESC
+            </summary>
+            <param name="year"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.SelectSibiRequestsByGUID(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.SibiRequestCols.TableName"/> WHERE <see cref="F:AssetManager.SibiRequestCols.UID"/> = <see cref="!:requestGUID"/>
+            </summary>
+            <param name="requestGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.SelectEmptySibiItemsTable(System.String)">
+            <summary>
+            SELECT <paramref name="columnsString"/> FROM <see cref="F:AssetManager.SibiRequestItemsCols.TableName"/> LIMIT 0
+            </summary>
+            <param name="columnsString"></param>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.Queries.SelectEmptySibiRequestTable">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.SibiRequestCols.TableName"/> LIMIT 0
+            </summary>
+        </member>
+        <member name="M:AssetManager.Queries.SelectSibiRequestItems(System.String,System.String)">
+            <summary>
+            SELECT <paramref name="columnsString"/> FROM <see cref="F:AssetManager.SibiRequestItemsCols.TableName"/> WHERE <see cref="F:AssetManager.SibiRequestItemsCols.RequestUID"/> = <paramref name="requestGUID"/> ORDER BY <see cref="F:AssetManager.SibiRequestItemsCols.Timestamp"/>
+            </summary>
+            <param name="columnsString"></param>
+            <param name="requestGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.SelectSibiNotes(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.SibiNotesCols.TableName"/> WHERE <see cref="F:AssetManager.SibiNotesCols.RequestUID"/> = <paramref name="noteGUID"/> ORDER BY <see cref="F:AssetManager.SibiNotesCols.DateStamp"/> DESC
+            </summary>
+            <param name="noteGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.DeleteSibiNote(System.String)">
+            <summary>
+            DELETE FROM <see cref="F:AssetManager.SibiNotesCols.TableName"/> WHERE <see cref="F:AssetManager.SibiNotesCols.NoteUID"/> = <paramref name="noteGUID"/>
+            </summary>
+            <param name="noteGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.DeleteSibiRequestByGUID(System.String)">
+            <summary>
+            DELETE FROM <see cref="F:AssetManager.SibiRequestCols.TableName"/> WHERE <see cref="F:AssetManager.SibiRequestCols.UID"/> = <paramref name="requestGUID"/>
+            </summary>
+            <param name="requestGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.SelectAttributeCodes(System.String,System.String)">
+            <summary>
+            SELECT * FROM <paramref name="attribTable"/> LEFT OUTER JOIN munis_codes on <paramref name="attribName"/>.db_value = munis_codes.asset_man_code WHERE type_name ='<paramref name="attribName"/>' ORDER BY <see cref="F:AssetManager.ComboCodesBaseCols.DisplayValue"/>
+            </summary>
+            <param name="attribTable"></param>
+            <param name="attribName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.SelectUserByName(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.UsersCols.TableName"/> WHERE <see cref="F:AssetManager.UsersCols.UserName"/> = <paramref name="username"/>
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.Queries.SelectUsersTable">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.UsersCols.TableName"/>
+            </summary>
+        </member>
+        <member name="P:AssetManager.Queries.SelectSecurityTable">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.SecurityCols.TableName"/> ORDER BY <see cref="F:AssetManager.SecurityCols.AccessLevel"/>
+            </summary>
+        </member>
+        <member name="P:AssetManager.Queries.SelectTVApiToken">
+            <summary>
+            SELECT apitoken FROM teamviewer_info
+            </summary>
         </member>
         <member name="M:AssetManager.SQLiteDatabase.ConvertStatement(System.String)">
             <summary>
@@ -392,6 +539,12 @@
             </param>
             <remarks>
             </remarks>
+        </member>
+        <member name="M:AssetManager.ExtendedMethods.FastAutoSizeColumns(System.Windows.Forms.DataGridView)">
+            <summary>
+            Provides much faster column resizing than the built-in AutoResizeColumns method.
+            </summary>
+            <param name="targetGrid"></param>
         </member>
         <member name="T:AssetManager.Properties.Resources">
             <summary>

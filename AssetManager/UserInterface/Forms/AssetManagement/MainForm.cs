@@ -46,6 +46,39 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         public MainForm()
         {
             InitializeComponent();
+            ShowAll();
+            MyLiveBox = new LiveBox(this);
+            MyMunisToolBar = new CustomControls.MunisToolBar(this);
+            MyWindowList = new CustomControls.WindowList(this);
+
+            DateTimeLabel.Text = DateTime.Now.ToString();
+            ToolStrip1.BackColor = Colors.AssetToolBarColor;
+            ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, true);
+            if (SecurityTools.CanAccess(SecurityTools.AccessGroup.IsAdmin))
+            {
+                AdminDropDown.Visible = true;
+            }
+            else
+            {
+                AdminDropDown.Visible = false;
+            }
+            GetGridStyles();
+
+            WatchDog = new ConnectionWatchdog(GlobalSwitches.CachedMode);
+            WatchDog.StatusChanged += WatchDogStatusChanged;
+            WatchDog.RebuildCache += WatchDogRebuildCache;
+            WatchDog.WatcherTick += WatchDogTick;
+            WatchDog.StartWatcher();
+
+            MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 2);
+            MyWindowList.InsertWindowList(ToolStrip1);
+            ImageCaching.CacheControlImages(this);
+            InitLiveBox();
+
+            InitDBControls();
+            Clear_All();
+            ShowTestDBWarning();
+            InitDBCombo();
         }
 
         private void StartTransaction()
@@ -412,50 +445,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DatabaseToolCombo.SelectedIndex = (int)ServerInfo.CurrentDataBase;
         }
 
-        private void LoadProgram()
-        {
-            try
-            {
-                MyLiveBox = new LiveBox(this);
-                MyMunisToolBar = new CustomControls.MunisToolBar(this);
-                MyWindowList = new CustomControls.WindowList(this);
-
-                ShowAll();
-                DateTimeLabel.Text = DateTime.Now.ToString();
-                ToolStrip1.BackColor = Colors.AssetToolBarColor;
-                ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, true);
-                if (SecurityTools.CanAccess(SecurityTools.AccessGroup.IsAdmin))
-                {
-                    AdminDropDown.Visible = true;
-                }
-                else
-                {
-                    AdminDropDown.Visible = false;
-                }
-                GetGridStyles();
-
-                WatchDog = new ConnectionWatchdog(GlobalSwitches.CachedMode);
-                WatchDog.StatusChanged += WatchDogStatusChanged;
-                WatchDog.RebuildCache += WatchDogRebuildCache;
-                WatchDog.WatcherTick += WatchDogTick;
-                WatchDog.StartWatcher();
-
-                MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 2);
-                MyWindowList.InsertWindowList(ToolStrip1);
-                ImageCaching.CacheControlImages(this);
-                InitLiveBox();
-                InitDBControls();
-                Clear_All();
-                ShowTestDBWarning();
-                InitDBCombo();
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-                OtherFunctions.EndProgram();
-            }
-        }
-
         private void NewTextCrypterForm()
         {
             if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin))
@@ -530,6 +519,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 SetStatusBar("Building Grid...");
                 ResultGrid.SuspendLayout();
                 ResultGrid.ScrollBars = ScrollBars.None;
+                ResultGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
                 bolGridFilling = true;
                 if (CurrentTransaction != null)
                 {
@@ -539,9 +529,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     GridFunctions.PopulateGrid(ResultGrid, results, ResultGridColumns());
                 }
-
-                ResultGrid.ClearSelection();
-                ResultGrid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+                ResultGrid.FastAutoSizeColumns();
                 bolGridFilling = false;
                 DisplayRecords(ResultGrid.Rows.Count);
                 ResultGrid.ScrollBars = ScrollBars.Both;
@@ -702,14 +690,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (ServerInfo.CurrentDataBase == Databases.test_db)
             {
-                OtherFunctions.Message("TEST DATABASE IN USE", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "WARNING", this);
+                // OtherFunctions.Message("TEST DATABASE IN USE", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "WARNING");//, this);
                 this.BackColor = Color.DarkRed;
-                //Me.Text += " - ****TEST DATABASE****"
+                this.Text += " - ****TEST DATABASE****";
             }
             else
             {
                 this.BackColor = Color.FromArgb(232, 232, 232);
-                //  Me.Text = "Asset Manager - Main"
+                this.Text = "Asset Manager - Main";
             }
         }
 
@@ -1031,7 +1019,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            LoadProgram();
             Application.DoEvents();
         }
 
