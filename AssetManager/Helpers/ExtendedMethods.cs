@@ -94,24 +94,29 @@ namespace AssetManager
                     // Leverage Linq enumerator to rapidly collect all the rows into a string array, making sure to exclude null values.
                     string[] colStringCollection = gridTable.AsEnumerable().Where(r => r.Field<object>(i) != null).Select(r => r.Field<object>(i).ToString()).ToArray();
 
-                    // Sort the string array by string lengths.
-                    colStringCollection = colStringCollection.OrderBy((x) => x.Length).ToArray();
-
-                    // Get the last and longest string in the array.
-                    string longestColString = colStringCollection.Last();
-
-                    // Use the graphics object to measure the string size.
-                    var colWidth = gfx.MeasureString(longestColString, targetGrid.Font);
-
-                    // If the calulated width is longer than the column header width, set the new column width.
-                    if (colWidth.Width > targetGrid.Columns[i].HeaderCell.Size.Width)
+                    // Make sure the Linq query returned results.
+                    if (colStringCollection.Length > 0)
                     {
-                        targetGrid.Columns[i].Width = (int)colWidth.Width;
+                        // Sort the string array by string lengths.
+                        colStringCollection = colStringCollection.OrderBy((x) => x.Length).ToArray();
+
+                        // Get the last and longest string in the array.
+                        string longestColString = colStringCollection.Last();
+
+                        // Use the graphics object to measure the string size.
+                        var colWidth = gfx.MeasureString(longestColString, targetGrid.Font);
+
+                        // If the calulated width is longer than the column header width, set the new column width.
+                        if (colWidth.Width > targetGrid.Columns[i].HeaderCell.Size.Width)
+                        {
+                            targetGrid.Columns[i].Width = (int)colWidth.Width;
+                        }
+                        else // Otherwise, set the column width to the header width.
+                        {
+                            targetGrid.Columns[i].Width = targetGrid.Columns[i].HeaderCell.Size.Width;
+                        }
                     }
-                    else // Otherwise, set the column width to the header width.
-                    {
-                        targetGrid.Columns[i].Width = targetGrid.Columns[i].HeaderCell.Size.Width;
-                    }
+
                 }
             }
         }
