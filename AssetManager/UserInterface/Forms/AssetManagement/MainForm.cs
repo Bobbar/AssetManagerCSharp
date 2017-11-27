@@ -516,7 +516,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 return;
             using (results)
             {
-                SetStatusBar("Building Grid...");
                 ResultGrid.SuspendLayout();
                 ResultGrid.ScrollBars = ScrollBars.None;
                 ResultGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
