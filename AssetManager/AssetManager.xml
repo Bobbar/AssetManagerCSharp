@@ -926,6 +926,11 @@
             <param name="slideOutDirection">Slide out direction.</param>
             <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
         </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.Clear">
+            <summary>
+            Clears currently displayed and queued messages.
+            </summary>
+        </member>
         <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.ToToolStripControl(System.Windows.Forms.Control)">
             <summary>
             Returns a <see cref="T:System.Windows.Forms.ToolStripControlHost"/> of this control for insertion into tool strips/status strips.
@@ -1154,6 +1159,11 @@
         <member name="M:AssetManager.UserInterface.Forms.GK_Updater.GKUpdaterForm.StartNextUpdate">
             <summary>
             Starts the next update that has a queued status.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiMainForm.ItemSearch(System.String)">
+            <summary>
+            Searches all request item columns for item that match the specified search string.
             </summary>
         </member>
         <member name="M:AssetManager.LiveBox.ProcessSearch(System.String)">

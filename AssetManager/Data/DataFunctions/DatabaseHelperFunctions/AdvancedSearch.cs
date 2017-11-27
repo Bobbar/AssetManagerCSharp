@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Data;
 
-namespace AssetManager.AdvancedSearch
+namespace AssetManager.DatabaseHelperFunctions
 {
-    public class Search
+    public class AdvancedSearch
     {
         #region "Fields"
 
@@ -15,10 +15,16 @@ namespace AssetManager.AdvancedSearch
 
         #region "Constructors"
 
-        public Search(string searchString, List<TableInfo> searchTables)
+        public AdvancedSearch(string searchString, List<TableInfo> searchTables)
         {
             _searchString = searchString;
             _searchTables = searchTables;
+        }
+
+        public AdvancedSearch()
+        {
+            _searchString = string.Empty;
+            _searchTables = null;
         }
 
         #endregion "Constructors"
@@ -30,13 +36,13 @@ namespace AssetManager.AdvancedSearch
             List<string> colList = new List<string>();
             var SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + ServerInfo.CurrentDataBase.ToString() + "' AND TABLE_NAME = '" + table + "'";
             var results = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(SQLQry);
-            //comms.ReturnMySqlTable(SQLQry)
             foreach (DataRow row in results.Rows)
             {
                 colList.Add(row["COLUMN_NAME"].ToString());
             }
             return colList;
         }
+
 
         public List<DataTable> GetResults()
         {
@@ -58,6 +64,24 @@ namespace AssetManager.AdvancedSearch
                 }
             }
             return resultsList;
+        }
+
+        public DataTable GetSingleTableResults(string searchString, string tableName)
+        {
+            List<DataTable> resultsList = new List<DataTable>();
+            var searchTableInfo = new TableInfo(tableName, GetColumns(tableName));
+            string qry = "SELECT " + BuildSelectString(searchTableInfo) + " FROM " + searchTableInfo.TableName + " WHERE ";
+            qry += BuildFieldString(searchTableInfo);
+            using (MySQLDatabase MySQLDB = new MySQLDatabase())
+            {
+                using (var cmd = MySQLDB.GetCommand(qry))
+                {
+                    cmd.AddParameterWithValue("@" + "SEARCHVAL", searchString);
+                    var results = MySQLDB.DataTableFromCommand(cmd);
+                    results.TableName = searchTableInfo.TableName;
+                    return results;
+                }
+            }
         }
 
         private string BuildFieldString(TableInfo table)

@@ -35,6 +35,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SibiMainForm));
             this.Panel1 = new System.Windows.Forms.Panel();
             this.GroupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.searchSlider = new AssetManager.UserInterface.CustomControls.SliderLabel();
+            this.ItemSearchButton = new System.Windows.Forms.Button();
+            this.ItemSearchTextBox = new System.Windows.Forms.TextBox();
             this.txtRTNum = new System.Windows.Forms.TextBox();
             this.txtReq = new System.Windows.Forms.TextBox();
             this.txtPO = new System.Windows.Forms.TextBox();
@@ -53,6 +57,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.Panel1.SuspendLayout();
             this.GroupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.GroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SibiResultGrid)).BeginInit();
             this.ToolStrip1.SuspendLayout();
@@ -75,6 +80,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.GroupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GroupBox2.Controls.Add(this.groupBox3);
             this.GroupBox2.Controls.Add(this.txtRTNum);
             this.GroupBox2.Controls.Add(this.txtReq);
             this.GroupBox2.Controls.Add(this.txtPO);
@@ -88,14 +94,55 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox2.Controls.Add(this.Label2);
             this.GroupBox2.Location = new System.Drawing.Point(6, 16);
             this.GroupBox2.Name = "GroupBox2";
-            this.GroupBox2.Size = new System.Drawing.Size(1170, 59);
+            this.GroupBox2.Size = new System.Drawing.Size(1170, 81);
             this.GroupBox2.TabIndex = 22;
             this.GroupBox2.TabStop = false;
             this.GroupBox2.Text = "Filters:";
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.searchSlider);
+            this.groupBox3.Controls.Add(this.ItemSearchButton);
+            this.groupBox3.Controls.Add(this.ItemSearchTextBox);
+            this.groupBox3.Location = new System.Drawing.Point(756, 10);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(266, 62);
+            this.groupBox3.TabIndex = 30;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Search Items";
+            // 
+            // searchSlider
+            // 
+            this.searchSlider.BackColor = System.Drawing.SystemColors.Control;
+            this.searchSlider.DistplayTime = 4;
+            this.searchSlider.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.searchSlider.Location = new System.Drawing.Point(6, 43);
+            this.searchSlider.Name = "searchSlider";
+            this.searchSlider.Size = new System.Drawing.Size(184, 16);
+            this.searchSlider.SlideText = "";
+            this.searchSlider.TabIndex = 31;
+            // 
+            // ItemSearchButton
+            // 
+            this.ItemSearchButton.Location = new System.Drawing.Point(196, 18);
+            this.ItemSearchButton.Name = "ItemSearchButton";
+            this.ItemSearchButton.Size = new System.Drawing.Size(56, 23);
+            this.ItemSearchButton.TabIndex = 30;
+            this.ItemSearchButton.Text = "Go";
+            this.ItemSearchButton.UseVisualStyleBackColor = true;
+            this.ItemSearchButton.Click += new System.EventHandler(this.ItemSearchButton_Click);
+            // 
+            // ItemSearchTextBox
+            // 
+            this.ItemSearchTextBox.Location = new System.Drawing.Point(6, 18);
+            this.ItemSearchTextBox.Name = "ItemSearchTextBox";
+            this.ItemSearchTextBox.Size = new System.Drawing.Size(184, 23);
+            this.ItemSearchTextBox.TabIndex = 29;
+            this.ItemSearchTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ItemSearchTextBox_KeyDown);
+            // 
             // txtRTNum
             // 
-            this.txtRTNum.Location = new System.Drawing.Point(844, 22);
+            this.txtRTNum.Location = new System.Drawing.Point(624, 40);
             this.txtRTNum.Name = "txtRTNum";
             this.txtRTNum.Size = new System.Drawing.Size(77, 23);
             this.txtRTNum.TabIndex = 27;
@@ -103,7 +150,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // txtReq
             // 
-            this.txtReq.Location = new System.Drawing.Point(713, 22);
+            this.txtReq.Location = new System.Drawing.Point(519, 40);
             this.txtReq.Name = "txtReq";
             this.txtReq.Size = new System.Drawing.Size(77, 23);
             this.txtReq.TabIndex = 23;
@@ -111,7 +158,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // txtPO
             // 
-            this.txtPO.Location = new System.Drawing.Point(546, 22);
+            this.txtPO.Location = new System.Drawing.Point(374, 40);
             this.txtPO.Name = "txtPO";
             this.txtPO.Size = new System.Drawing.Size(121, 23);
             this.txtPO.TabIndex = 21;
@@ -120,24 +167,24 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Location = new System.Drawing.Point(918, 25);
+            this.Label5.Location = new System.Drawing.Point(621, 22);
             this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(42, 15);
+            this.Label5.Size = new System.Drawing.Size(35, 15);
             this.Label5.TabIndex = 28;
-            this.Label5.Text = ":RT #";
+            this.Label5.Text = "RT #";
             // 
             // Label4
             // 
             this.Label4.AutoSize = true;
-            this.Label4.Location = new System.Drawing.Point(449, 25);
+            this.Label4.Location = new System.Drawing.Point(165, 22);
             this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(91, 15);
+            this.Label4.Size = new System.Drawing.Size(84, 15);
             this.Label4.TabIndex = 26;
-            this.Label4.Text = ":Description";
+            this.Label4.Text = "Description";
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(265, 22);
+            this.txtDescription.Location = new System.Drawing.Point(168, 40);
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(184, 23);
             this.txtDescription.TabIndex = 25;
@@ -146,11 +193,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Location = new System.Drawing.Point(789, 25);
+            this.Label3.Location = new System.Drawing.Point(516, 22);
             this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(49, 15);
+            this.Label3.Size = new System.Drawing.Size(42, 15);
             this.Label3.TabIndex = 24;
-            this.Label3.Text = ":Req #";
+            this.Label3.Text = "Req #";
             // 
             // cmdShowAll
             // 
@@ -166,17 +213,17 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Location = new System.Drawing.Point(665, 25);
+            this.Label1.Location = new System.Drawing.Point(371, 22);
             this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(42, 15);
+            this.Label1.Size = new System.Drawing.Size(35, 15);
             this.Label1.TabIndex = 22;
-            this.Label1.Text = ":PO #";
+            this.Label1.Text = "PO #";
             // 
             // cmbDisplayYear
             // 
             this.cmbDisplayYear.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbDisplayYear.FormattingEnabled = true;
-            this.cmbDisplayYear.Location = new System.Drawing.Point(16, 22);
+            this.cmbDisplayYear.Location = new System.Drawing.Point(9, 40);
             this.cmbDisplayYear.Name = "cmbDisplayYear";
             this.cmbDisplayYear.Size = new System.Drawing.Size(115, 23);
             this.cmbDisplayYear.TabIndex = 19;
@@ -186,11 +233,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.Label2.AutoSize = true;
             this.Label2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Label2.Location = new System.Drawing.Point(137, 25);
+            this.Label2.Location = new System.Drawing.Point(6, 22);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(91, 15);
             this.Label2.TabIndex = 20;
-            this.Label2.Text = "Display Year";
+            this.Label2.Text = "Request Year";
             // 
             // GroupBox1
             // 
@@ -199,9 +246,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.Controls.Add(this.SibiResultGrid);
             this.GroupBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GroupBox1.Location = new System.Drawing.Point(6, 81);
+            this.GroupBox1.Location = new System.Drawing.Point(6, 103);
             this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(1170, 512);
+            this.GroupBox1.Size = new System.Drawing.Size(1170, 490);
             this.GroupBox1.TabIndex = 21;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Requests:";
@@ -247,7 +294,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.SibiResultGrid.ShowCellErrors = false;
             this.SibiResultGrid.ShowCellToolTips = false;
             this.SibiResultGrid.ShowEditingIcon = false;
-            this.SibiResultGrid.Size = new System.Drawing.Size(1158, 484);
+            this.SibiResultGrid.Size = new System.Drawing.Size(1158, 462);
             this.SibiResultGrid.TabIndex = 18;
             this.SibiResultGrid.VirtualMode = true;
             this.SibiResultGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellDoubleClick);
@@ -303,6 +350,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Panel1.ResumeLayout(false);
             this.GroupBox2.ResumeLayout(false);
             this.GroupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.GroupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SibiResultGrid)).EndInit();
             this.ToolStrip1.ResumeLayout(false);
@@ -328,5 +377,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
         internal TextBox txtDescription;
         internal Label Label5;
         internal TextBox txtRTNum;
+        internal TextBox ItemSearchTextBox;
+        private GroupBox groupBox3;
+        private Button ItemSearchButton;
+        private SliderLabel searchSlider;
     }
 }

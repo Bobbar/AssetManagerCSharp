@@ -8,8 +8,10 @@ using System.Windows.Forms;
 namespace AssetManager.UserInterface.Forms.AdminTools
 {
     public partial class AdvancedSearchForm : ExtendedForm
-
     {
+        private DatabaseHelperFunctions.AdvancedSearch AdvSearch = new DatabaseHelperFunctions.AdvancedSearch();
+
+
         public AdvancedSearchForm(ExtendedForm parentForm)
         {
             InitializeComponent();
@@ -30,7 +32,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                     childAllNode.Tag = true;
                     childAllNode.Checked = true;
                     parentNode.Nodes.Add(childAllNode);
-                    foreach (var col in GetColumns(table))
+                    foreach (var col in AdvSearch.GetColumns(table))
                     {
                         TreeNode childNode = new TreeNode(col);
                         childNode.Tag = false;
@@ -61,27 +63,13 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             return Tables;
         }
 
-        private List<string> GetColumns(string table)
-        {
-            List<string> colList = new List<string>();
-            var SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + ServerInfo.CurrentDataBase.ToString() + "' AND TABLE_NAME = '" + table + "'";
-            using (var results = DBFactory.GetDatabase().DataTableFromQueryString(SQLQry))
-            {
-                foreach (DataRow row in results.Rows)
-                {
-                    colList.Add(row["COLUMN_NAME"].ToString());
-                }
-            }
-
-            return colList;
-        }
 
         private async void StartSearch()
         {
             try
             {
                 OtherFunctions.SetWaitCursor(true, ParentForm);
-                AdvancedSearch.Search AdvSearch = new AdvancedSearch.Search(SearchStringTextBox.Text.Trim(), GetSelectedTables()); // GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
+                AdvSearch = new DatabaseHelperFunctions.AdvancedSearch(SearchStringTextBox.Text.Trim(), GetSelectedTables()); // GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
                 GridForm DisplayGrid = new GridForm(ParentForm, "Advanced Search Results");
 
                 List<DataTable> Tables = await Task.Run(() =>
@@ -105,14 +93,14 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             }
         }
 
-        private List<AdvancedSearch.TableInfo> GetSelectedTables()
+        private List<DatabaseHelperFunctions.TableInfo> GetSelectedTables()
         {
-            List<AdvancedSearch.TableInfo> tables = new List<AdvancedSearch.TableInfo>();
+            List<DatabaseHelperFunctions.TableInfo> tables = new List<DatabaseHelperFunctions.TableInfo>();
             foreach (TreeNode node in TableTree.Nodes)
             {
                 if (node.Checked)
                 {
-                    tables.Add(new AdvancedSearch.TableInfo(node.Text, GetSelectedColumns(node)));
+                    tables.Add(new DatabaseHelperFunctions.TableInfo(node.Text, GetSelectedColumns(node)));
                 }
             }
             return tables;

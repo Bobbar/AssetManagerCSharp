@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Timers;
-
 namespace AssetManager.UserInterface.CustomControls
 {
 
@@ -49,9 +49,10 @@ namespace AssetManager.UserInterface.CustomControls
         private SlideState CurrentSlideState = SlideState.Done;
         private SlideDirection SlideInDirection;
         private SlideDirection SlideOutDirection;
-        
+
         private List<MessageParameters> MessageQueue = new List<MessageParameters>();
-        
+        private CancellationTokenSource pauseCancel;
+
         private System.Timers.Timer SlideTimer;
         private SizeF TextSize;
         private PointF StartPosition = new PointF();
@@ -83,6 +84,8 @@ namespace AssetManager.UserInterface.CustomControls
             SlideOutDirection = defaultSlideOutDirection;
 
             this.Disposed += SliderLabel_Disposed;
+
+            pauseCancel = new CancellationTokenSource();
         }
 
         #endregion
@@ -155,6 +158,24 @@ namespace AssetManager.UserInterface.CustomControls
             AddMessageToQueue(text, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime);
         }
 
+
+        /// <summary>
+        /// Clears currently displayed and queued messages.
+        /// </summary>
+        public void Clear()
+        {
+            MessageQueue.Clear();
+            if (CurrentSlideState == SlideState.Paused)
+            {
+                pauseCancel.Cancel();
+
+            }
+            else if (CurrentSlideState == SlideState.Hold)
+            {
+                SetSlideOutAnimation();
+                SlideTimer.Start();
+            }
+        }
 
         /// <summary>
         /// Returns a <see cref="ToolStripControlHost"/> of this control for insertion into tool strips/status strips.
@@ -238,10 +259,13 @@ namespace AssetManager.UserInterface.CustomControls
         /// <returns></returns>
         private Task Pause(int pauseTime)
         {
+            if (pauseCancel != null) pauseCancel.Dispose();
+            pauseCancel = new CancellationTokenSource();
             return Task.Run(() =>
             {
-                Task.Delay(pauseTime * 1000).Wait();
+                Task.Delay(pauseTime * 1000, pauseCancel.Token).Wait();
             });
+
         }
 
         /// <summary>
@@ -471,8 +495,18 @@ namespace AssetManager.UserInterface.CustomControls
                     SlideTimer.Stop();
                     CurrentSlideState = SlideState.Paused;
 
-                    //Asynchronous wait task. (Keeps UI alive)
-                    await Pause(currentDisplayTime);
+                    try
+                    {
+                        //Asynchronous wait task. (Keeps UI alive)
+                        await Pause(currentDisplayTime);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.InnerException is TaskCanceledException)
+                        {
+                            // Task canceled exception is expected.
+                        }
+                    }
 
                     //Once the wait is complete, set the next state (slide-out) and re-start the animation timer.
                     SetSlideOutAnimation();
@@ -518,6 +552,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             MessageQueue.Clear();
             SlideTimer.Stop();
+            pauseCancel.Dispose();
         }
 
         #endregion

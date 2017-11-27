@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.Common;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
@@ -151,6 +152,57 @@ namespace AssetManager.UserInterface.Forms.Sibi
             cmd.CommandText = strQry;
             ExecuteCmd(ref cmd);
         }
+
+        /// <summary>
+        /// Searches all request item columns for item that match the specified search string.
+        /// </summary>
+        private async void ItemSearch(string searchString)
+        {
+            // If search string is empty, clear slider label and return.
+            if (searchString.Trim() == "")
+            {
+                searchSlider.Clear();
+                return;
+            }
+
+            // Get a new AdvancedSearch instance.
+            DatabaseHelperFunctions.AdvancedSearch AdvSearch = new DatabaseHelperFunctions.AdvancedSearch();
+
+            // Perform search on Request Items table
+            using (DataTable results = AdvSearch.GetSingleTableResults(searchString.Trim(), SibiRequestItemsCols.TableName))
+            {
+
+                // Make sure we have results.
+                if (results.Rows.Count > 0)
+                {
+
+                    //Clear slider label of any previous errors.
+                    searchSlider.Clear();
+
+                    // Iterate through results and use Request Items Request UID column to query for the full request data.
+                    // Task.Run lambda to keep UI alive.
+                    DataTable resultsTable = await Task.Run(() =>
+                    {
+                        DataTable rtables = new DataTable();
+                        foreach (DataRow row in results.Rows)
+                        {
+                            DataTable requestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(row[SibiRequestItemsCols.RequestUID].ToString()));
+                            // Merge results into one table.
+                            rtables.Merge(requestTable);
+                        }
+                        return rtables;
+                    });
+                    // Display the table containing a collection of corresponding Requests.
+                    SendToGrid(resultsTable);
+                }
+                else
+                {
+                    // Notify user of no results.
+                    searchSlider.NewSlideMessage("No matches found!", SlideDirection.Up, SlideDirection.Down, 0);
+                }
+            }
+        }
+
 
         private void ExecuteCmd(ref DbCommand cmd)
         {
@@ -472,6 +524,19 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 LastCmd.Dispose();
             MyWindowList.Dispose();
             Helpers.ChildFormControl.CloseChildren(this);
+        }
+
+        private void ItemSearchButton_Click(object sender, EventArgs e)
+        {
+            ItemSearch(ItemSearchTextBox.Text);
+        }
+
+        private void ItemSearchTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ItemSearch(ItemSearchTextBox.Text);
+            }
         }
     }
 }
