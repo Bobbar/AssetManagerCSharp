@@ -935,7 +935,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             StatusStrip1.Items.Insert(0, StatusSlider.ToToolStripControl(StatusStrip1));
 
             InitDBControls();
-            ExtendedMethods.DoubleBufferedDataGrid(RequestItemsGrid, true);
+            RequestItemsGrid.DoubleBufferedDataGrid(true);
             MyMunisToolBar.InsertMunisDropDown(ToolStrip);
             this.ParentForm = ParentForm;
             this.FormUID = UID;

@@ -46,7 +46,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Label4 = new System.Windows.Forms.Label();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.Label3 = new System.Windows.Forms.Label();
-            this.cmdShowAll = new System.Windows.Forms.Button();
+            this.RefreshResetButton = new System.Windows.Forms.Button();
             this.Label1 = new System.Windows.Forms.Label();
             this.cmbDisplayYear = new System.Windows.Forms.ComboBox();
             this.Label2 = new System.Windows.Forms.Label();
@@ -88,7 +88,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox2.Controls.Add(this.Label4);
             this.GroupBox2.Controls.Add(this.txtDescription);
             this.GroupBox2.Controls.Add(this.Label3);
-            this.GroupBox2.Controls.Add(this.cmdShowAll);
+            this.GroupBox2.Controls.Add(this.RefreshResetButton);
             this.GroupBox2.Controls.Add(this.Label1);
             this.GroupBox2.Controls.Add(this.cmbDisplayYear);
             this.GroupBox2.Controls.Add(this.Label2);
@@ -199,16 +199,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Label3.TabIndex = 24;
             this.Label3.Text = "Req #";
             // 
-            // cmdShowAll
+            // RefreshResetButton
             // 
-            this.cmdShowAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdShowAll.Location = new System.Drawing.Point(1050, 17);
-            this.cmdShowAll.Name = "cmdShowAll";
-            this.cmdShowAll.Size = new System.Drawing.Size(111, 30);
-            this.cmdShowAll.TabIndex = 1;
-            this.cmdShowAll.Text = "Refresh/Reset";
-            this.cmdShowAll.UseVisualStyleBackColor = true;
-            this.cmdShowAll.Click += new System.EventHandler(this.cmdShowAll_Click);
+            this.RefreshResetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.RefreshResetButton.Location = new System.Drawing.Point(1050, 17);
+            this.RefreshResetButton.Name = "RefreshResetButton";
+            this.RefreshResetButton.Size = new System.Drawing.Size(111, 30);
+            this.RefreshResetButton.TabIndex = 1;
+            this.RefreshResetButton.Text = "Refresh/Reset";
+            this.RefreshResetButton.UseVisualStyleBackColor = true;
+            this.RefreshResetButton.Click += new System.EventHandler(this.RefreshResetButton_Click);
             // 
             // Label1
             // 
@@ -261,7 +261,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.SibiResultGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.SibiResultGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.SibiResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.SibiResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.SibiResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
@@ -361,7 +360,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         }
         internal Panel Panel1;
         internal DataGridView SibiResultGrid;
-        internal Button cmdShowAll;
+        internal Button RefreshResetButton;
         internal OneClickToolStrip ToolStrip1;
         internal ToolStripButton cmdManage;
         internal Label Label2;

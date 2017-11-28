@@ -32,8 +32,8 @@ namespace AssetManager.UserInterface.Forms
             if (!string.IsNullOrEmpty(title))
                 this.Text = title;
             // Add any initialization after the InitializeComponent() call.
-            ExtendedMethods.DoubleBufferedTableLayout(GridPanel, true);
-            ExtendedMethods.DoubleBufferedPanel(Panel1, true);
+            GridPanel.DoubleBufferedTableLayout(true);
+            Panel1.DoubleBufferedPanel(true);
             GridPanel.RowStyles.Clear();
         }
 
@@ -120,7 +120,8 @@ namespace AssetManager.UserInterface.Forms
             NewGrid.CellLeave += GridLeaveCell;
             NewGrid.CellEnter += GridEnterCell;
             NewGrid.CellDoubleClick += GridDoubleClickCell;
-            ExtendedMethods.DoubleBufferedDataGrid(NewGrid, true);
+            NewGrid.DoubleBufferedDataGrid(true);
+            //ExtendedMethods.DoubleBufferedDataGrid(NewGrid, true);
             return NewGrid;
         }
 

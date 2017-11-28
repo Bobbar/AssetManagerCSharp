@@ -84,7 +84,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             RefreshParentAttachCount = refreshAction;
             ImageCaching.CacheControlImages(this);
             AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
-            ExtendedMethods.DoubleBufferedDataGrid(AttachGrid, true);
+            AttachGrid.DoubleBufferedDataGrid(true);
             SetStatusBar("Idle...");
             _attachTable = AttachTable;
             if (!ReferenceEquals(attachDataObject, null))

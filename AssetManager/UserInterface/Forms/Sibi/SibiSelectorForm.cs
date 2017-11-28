@@ -24,7 +24,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void frmSibiSelector_Load(object sender, EventArgs e)
         {
-            ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, true);
+            ResultGrid.DoubleBufferedDataGrid(true);
             ShowAll();
         }
 

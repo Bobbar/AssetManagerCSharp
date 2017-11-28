@@ -61,8 +61,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             MyLiveBox.AttachToControl(txtDescription_View_REQ, DevicesCols.Description, LiveBoxType.SelectValue);
             RefreshCombos();
             RemoteToolsBox.Visible = false;
-            ExtendedMethods.DoubleBufferedDataGrid(DataGridHistory, true);
-            ExtendedMethods.DoubleBufferedDataGrid(TrackingGrid, true);
+            DataGridHistory.DoubleBufferedDataGrid(true);
+            TrackingGrid.DoubleBufferedDataGrid(true);
             DefaultFormTitle = this.Text;
             DisableControls();
             LoadDevice();

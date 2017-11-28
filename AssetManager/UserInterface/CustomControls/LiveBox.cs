@@ -180,7 +180,7 @@ namespace AssetManager
             LiveListBox.MouseMove += LiveBox_MouseMove;
             LiveListBox.KeyDown += LiveBox_KeyDown;
             LiveListBox.LostFocus += LiveBox_LostFocus;
-            ExtendedMethods.DoubleBufferedListBox(LiveListBox, true);
+            LiveListBox.DoubleBufferedListBox(true);
             LiveListBox.Visible = false;
             CurrentLiveBoxArgs = new LiveBoxArgs();
             SetStyle();

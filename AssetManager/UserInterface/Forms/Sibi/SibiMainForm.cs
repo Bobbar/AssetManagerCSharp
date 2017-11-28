@@ -13,7 +13,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
     public partial class SibiMainForm : ExtendedForm
     {
         private bool bolGridFilling = false;
-        private WindowList MyWindowList;// = new WindowList(this);
+        private WindowList MyWindowList;
         private DbCommand LastCmd;
         private bool bolRebuildingCombo = false;
 
@@ -36,7 +36,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                ExtendedMethods.DoubleBufferedDataGrid(SibiResultGrid, true);
+                SibiResultGrid.DoubleBufferedDataGrid(true);
                 this.GridTheme = new GridTheme(Colors.HighlightBlue, Colors.SibiSelectColor, Colors.SibiSelectAltColor, SibiResultGrid.DefaultCellStyle.BackColor);
                 StyleFunctions.SetGridStyle(SibiResultGrid, this.GridTheme);
                 ToolStrip1.BackColor = Colors.SibiToolBarColor;
@@ -45,6 +45,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 SetDisplayYears();
                 this.Show();
                 this.Activate();
+                Application.DoEvents();
                 ShowAll("All");
             }
             catch (Exception ex)
@@ -80,11 +81,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void cmdShowAll_Click(object sender, EventArgs e)
+        private void RefreshResetButton_Click(object sender, EventArgs e)
         {
             try
             {
                 OtherFunctions.SetWaitCursor(true, this);
+                searchSlider.Clear();
                 ClearAll(this.Controls);
                 SetDisplayYears();
                 ShowAll();
@@ -233,9 +235,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 using (results)
                 {
                     bolGridFilling = true;
+                    SibiResultGrid.SuspendLayout();
                     StatusColors = GetStatusColors(results);
                     GridFunctions.PopulateGrid(SibiResultGrid, results, SibiTableColumns());
+                    SibiResultGrid.FastAutoSizeColumns();
                     SibiResultGrid.ClearSelection();
+                    SibiResultGrid.ResumeLayout();
                     bolGridFilling = false;
                 }
             }

@@ -24,9 +24,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             bolStarting = false;
             MaxUpdates.Value = MaxSimUpdates;
             // Add any initialization after the InitializeComponent() call.
-
-            ExtendedMethods.DoubleBufferedFlowLayout(Updater_Table, true);
-
+            Updater_Table.DoubleBufferedFlowLayout(true);
         }
 
         public void AddMultipleUpdates(List<DeviceObject> devices)

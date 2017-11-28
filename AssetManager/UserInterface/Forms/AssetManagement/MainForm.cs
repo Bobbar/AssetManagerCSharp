@@ -53,7 +53,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
             DateTimeLabel.Text = DateTime.Now.ToString();
             ToolStrip1.BackColor = Colors.AssetToolBarColor;
-            ExtendedMethods.DoubleBufferedDataGrid(ResultGrid, true);
+            ResultGrid.DoubleBufferedDataGrid(true);
             if (SecurityTools.CanAccess(SecurityTools.AccessGroup.IsAdmin))
             {
                 AdminDropDown.Visible = true;

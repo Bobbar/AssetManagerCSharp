@@ -11,42 +11,35 @@ namespace AssetManager
     static class ExtendedMethods
     {
 
-        public static void DoubleBufferedDataGrid(DataGridView dgv, bool setting)
+        public static void DoubleBufferedDataGrid(this DataGridView dgv, bool setting)
         {
             Type dgvType = dgv.GetType();
             PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
             pi.SetValue(dgv, setting, null);
         }
 
-        public static void DoubleBufferedListView(ListView dgv, bool setting)
+        public static void DoubleBufferedListBox(this ListBox dgv, bool setting)
         {
             Type dgvType = dgv.GetType();
             PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
             pi.SetValue(dgv, setting, null);
         }
 
-        public static void DoubleBufferedListBox(ListBox dgv, bool setting)
+        public static void DoubleBufferedFlowLayout(this FlowLayoutPanel dgv, bool setting)
         {
             Type dgvType = dgv.GetType();
             PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
             pi.SetValue(dgv, setting, null);
         }
 
-        public static void DoubleBufferedFlowLayout(FlowLayoutPanel dgv, bool setting)
+        public static void DoubleBufferedTableLayout(this TableLayoutPanel dgv, bool setting)
         {
             Type dgvType = dgv.GetType();
             PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
             pi.SetValue(dgv, setting, null);
         }
 
-        public static void DoubleBufferedTableLayout(TableLayoutPanel dgv, bool setting)
-        {
-            Type dgvType = dgv.GetType();
-            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, setting, null);
-        }
-
-        public static void DoubleBufferedPanel(Panel dgv, bool setting)
+        public static void DoubleBufferedPanel(this Panel dgv, bool setting)
         {
             Type dgvType = dgv.GetType();
             PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
