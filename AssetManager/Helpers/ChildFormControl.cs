@@ -44,7 +44,7 @@ namespace AssetManager.Helpers
             {
                 foreach (ExtendedForm child in Children)
                 {
-                    child.Dispose();
+                    child.Close();
                 }
             }
             Children.Clear();
