@@ -407,7 +407,7 @@ namespace AssetManager
             }
             else
             {
-                return "";
+                return string.Empty;
             }
         }
 

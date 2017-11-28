@@ -321,7 +321,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     return;
                 }
-                if (CurrentRequest.GUID != "" && !IsNewRequest)
+                if (!string.IsNullOrEmpty(CurrentRequest.GUID) && !IsNewRequest)
                 {
                     SibiNotesForm NewNote = new SibiNotesForm(this, CurrentRequest);
                     if (NewNote.DialogResult == DialogResult.OK)
@@ -388,7 +388,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private async void CheckForPO()
         {
-            if (CurrentRequest.RequisitionNumber != "" && CurrentRequest.PO == "")
+            if (!string.IsNullOrEmpty(CurrentRequest.RequisitionNumber) && string.IsNullOrEmpty(CurrentRequest.PO))
             {
                 string GetPO = await GlobalInstances.MunisFunc.GetPOFromReqNumberAsync(CurrentRequest.RequisitionNumber, CurrentRequest.DateStamp.Year.ToString());
                 if (GetPO != null && GetPO.Length > 1)
@@ -510,7 +510,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
-                if (CurrentRequest.GUID != "" && !IsNewRequest)
+                if (!string.IsNullOrEmpty(CurrentRequest.GUID) && !IsNewRequest)
                 {
                     AttachmentsForm NewAttach = new AttachmentsForm(this, new SibiAttachmentsCols(), CurrentRequest, SetAttachCount);
                 }
@@ -626,7 +626,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 return;
             }
-            if (CurrentRequest.GUID != "" && !IsModifying)
+            if (!string.IsNullOrEmpty(CurrentRequest.GUID) && !IsModifying)
             {
                 SetModifyMode(IsModifying);
             }
@@ -1000,7 +1000,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     {
                         return GlobalInstances.MunisFunc.GetSerialFromAsset(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.NewAsset));
                     });
-                    if (Serial != "")
+                    if (!string.IsNullOrEmpty(Serial))
                     {
                         GlobalInstances.AssetFunc.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.NewSerial, Serial, SibiRequestItemsCols.ItemUID, ItemUID);
                         RefreshRequest();
@@ -1013,7 +1013,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     {
                         return GlobalInstances.MunisFunc.GetAssetFromSerial(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.NewSerial));
                     });
-                    if (Asset != "")
+                    if (!string.IsNullOrEmpty(Asset))
                     {
                         GlobalInstances.AssetFunc.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.NewAsset, Asset, SibiRequestItemsCols.ItemUID, ItemUID);
                         RefreshRequest();
@@ -1026,7 +1026,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     {
                         return GlobalInstances.MunisFunc.GetSerialFromAsset(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ReplaceAsset));
                     });
-                    if (Serial != "")
+                    if (!string.IsNullOrEmpty(Serial))
                     {
                         GlobalInstances.AssetFunc.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.ReplaceSerial, Serial, SibiRequestItemsCols.ItemUID, ItemUID);
                         RefreshRequest();
@@ -1039,7 +1039,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     {
                         return GlobalInstances.MunisFunc.GetAssetFromSerial(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ReplaceSerial));
                     });
-                    if (Asset != "")
+                    if (!string.IsNullOrEmpty(Asset))
                     {
                         GlobalInstances.AssetFunc.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.ReplaceAsset, Asset, SibiRequestItemsCols.ItemUID, ItemUID);
                         RefreshRequest();
@@ -1289,7 +1289,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (RequestItemsGrid.CurrentCell.OwningColumn.Name == SibiRequestItemsCols.ObjectCode || RequestItemsGrid.CurrentCell.OwningColumn.Name == SibiRequestItemsCols.OrgCode)
                 {
-                    if (GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ObjectCode) != "" && GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.OrgCode) != "")
+                    if (!string.IsNullOrEmpty(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ObjectCode)) && !string.IsNullOrEmpty(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.OrgCode)))
                     {
                         tsmGLBudget.Visible = true;
                     }
@@ -1327,7 +1327,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             int intPO = 0;
             lblPOStatus.Text = "Status: NA";
-            if (PO != "" && int.TryParse(PO, out intPO))
+            if (!string.IsNullOrEmpty(PO) && int.TryParse(PO, out intPO))
             {
                 string GetStatusString = await GlobalInstances.MunisFunc.GetPOStatusFromPO(intPO);
                 if (!string.IsNullOrEmpty(GetStatusString))
@@ -1343,7 +1343,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             lblReqStatus.Text = "Status: NA";
             if (FY > 0)
             {
-                if (ReqNum != "" && int.TryParse(ReqNum, out intReq))
+                if (!string.IsNullOrEmpty(ReqNum) && int.TryParse(ReqNum, out intReq))
                 {
                     string GetStatusString = await GlobalInstances.MunisFunc.GetReqStatusFromReqNum(ReqNum, FY);
                     if (!string.IsNullOrEmpty(GetStatusString))

@@ -246,7 +246,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void LockUnlockUserField()
         {
-            if (MunisUser.Number != "")
+            if (!string.IsNullOrEmpty(MunisUser.Number))
             {
                 txtCurUser_REQ.BackColor = Colors.EditColor;
                 txtCurUser_REQ.ReadOnly = true;
@@ -371,7 +371,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             using (MunisUserForm NewMunisSearch = new MunisUserForm(this))
             {
                 MunisUser = NewMunisSearch.EmployeeInfo;
-                if (MunisUser.Number != "")
+                if (!string.IsNullOrEmpty(MunisUser.Number))
                 {
                     txtCurUser_REQ.Text = MunisUser.Name;
                     txtCurUser_REQ.ReadOnly = true;
@@ -385,7 +385,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             var tmpTable = DataParser.ReturnInsertTable(selectQuery);
             var DBRow = tmpTable.Rows[0];
             //Add Add'l info
-            if (MunisUser.Number != null && MunisUser.Number != "")
+            if (!string.IsNullOrEmpty(MunisUser.Number))
             {
                 DBRow[DevicesCols.CurrentUser] = MunisUser.Name;
                 DBRow[DevicesCols.MunisEmpNum] = MunisUser.Number;

@@ -157,11 +157,11 @@ Missing Files: " + MissingSQLFiles.Count;
         private bool CheckForPrimaryItem(string itemUID)
         {
             bool exists = false;
-            if (GlobalInstances.AssetFunc.GetSqlValue(DevicesCols.TableName, DevicesCols.DeviceUID, itemUID, DevicesCols.DeviceUID) != "")
+            if (!string.IsNullOrEmpty(GlobalInstances.AssetFunc.GetSqlValue(DevicesCols.TableName, DevicesCols.DeviceUID, itemUID, DevicesCols.DeviceUID)))
             {
                 exists = true;
             }
-            if (GlobalInstances.AssetFunc.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.UID, itemUID, SibiRequestCols.UID) != "")
+            if (!string.IsNullOrEmpty(GlobalInstances.AssetFunc.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.UID, itemUID, SibiRequestCols.UID)))
             {
                 exists = true;
             }

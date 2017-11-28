@@ -18,7 +18,7 @@ namespace AssetManager
         {
             if (!ReferenceEquals(PO, null))
             {
-                if (PO != "")
+                if (!string.IsNullOrEmpty(PO))
                 {
                     return MunisComms.ReturnSqlValue("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber").ToString();
                 }
@@ -28,7 +28,7 @@ namespace AssetManager
 
         private async Task<string> GetReqNumberFromPOAsync(string PO)
         {
-            if (PO != "")
+            if (!string.IsNullOrEmpty(PO))
             {
                 return await MunisComms.ReturnSqlValueAsync("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber");
             }
@@ -37,7 +37,7 @@ namespace AssetManager
 
         public async Task<string> GetPOFromReqNumberAsync(string reqNum, string FY)
         {
-            if (reqNum != "")
+            if (!string.IsNullOrEmpty(reqNum))
             {
                 return await MunisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_pur_no", "rqdt_fsc_yr", FY);
             }
@@ -50,13 +50,13 @@ namespace AssetManager
             string POFromSerial = "";
             string POFromAssetFromPurchaseHist = "";
 
-            if (device.AssetTag != null && device.AssetTag != "")
+            if (!string.IsNullOrEmpty(device.AssetTag))
             {
                 POFromAsset = await MunisComms.ReturnSqlValueAsync("famaster", "fama_tag", device.AssetTag, "fama_purch_memo");
                 POFromAssetFromPurchaseHist = await MunisComms.ReturnSqlValueAsync("fapurchh", "faph_asset", device.AssetTag, "faph_po_num");
             }
 
-            if (device.Serial != null && device.Serial != "")
+            if (!string.IsNullOrEmpty(device.Serial))
             {
                 POFromSerial = await MunisComms.ReturnSqlValueAsync("famaster", "fama_serial", device.Serial, "fama_purch_memo");
             }
@@ -418,7 +418,7 @@ namespace AssetManager
                 List<DBQueryParameter> GL_Params = new List<DBQueryParameter>();
                 GL_Params.Add(new DBQueryParameter("glma_org", org, true));
 
-                if (obj != "") //Show Rollup info for Object
+                if (!string.IsNullOrEmpty(obj)) //Show Rollup info for Object
                 {
                     GL_Params.Add(new DBQueryParameter("glma_obj", obj, true));
 

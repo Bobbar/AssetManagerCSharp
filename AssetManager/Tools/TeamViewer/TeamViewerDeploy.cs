@@ -48,7 +48,7 @@ namespace AssetManager
         {
             try
             {
-                if (targetDevice != null && targetDevice.HostName != "")
+                if (targetDevice != null && !string.IsNullOrEmpty(targetDevice.HostName))
                 {
                     ActivityTick();
                     WatchDogTask.Start();

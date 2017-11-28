@@ -131,7 +131,7 @@ namespace AssetManager
         {
             //  Dim PSWrapper As New PowerShellWrapper
             var UpdateResult = await Task.Run(() => { return ExecuteRemotePSScript(hostname, scriptByte, SecurityTools.AdminCreds); });
-            if (UpdateResult != "")
+            if (!string.IsNullOrEmpty(UpdateResult))
             {
                 OtherFunctions.Message(UpdateResult, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error Running Script");
                 return false;
@@ -146,7 +146,7 @@ namespace AssetManager
         {
             // Dim PSWrapper As New PowerShellWrapper
             var UpdateResult = await Task.Run(() => { return InvokeRemotePSCommand(hostname, SecurityTools.AdminCreds, PScommand); });
-            if (UpdateResult != "")
+            if (!string.IsNullOrEmpty(UpdateResult))
             {
                 OtherFunctions.Message(UpdateResult, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error Running Script");
                 return false;

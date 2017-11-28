@@ -725,7 +725,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 string oldFilename = AttachGrid[_attachTable.FileName, row].Value.ToString().Trim();
 
                 //Make sure filename has changed.
-                if (newFilename != oldFilename && newFilename != "")
+                if (newFilename != oldFilename && !string.IsNullOrEmpty(newFilename))
                 {
                     //Get the UID of the attachment for the update method.
                     string renamedUID = AttachGrid[_attachTable.FileUID, row].Value.ToString();

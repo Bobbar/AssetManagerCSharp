@@ -24,7 +24,7 @@ namespace AssetManager
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-                return "";
+                return string.Empty;
             }
         }
 

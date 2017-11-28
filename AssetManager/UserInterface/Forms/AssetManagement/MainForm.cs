@@ -220,7 +220,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             foreach (Control ctl in DataParser.GetDBControls(this))
             {
                 object CtlValue = DataParser.GetDBControlValue(ctl);
-                if (!object.ReferenceEquals(CtlValue, DBNull.Value) && CtlValue.ToString() != "")
+                if (!object.ReferenceEquals(CtlValue, DBNull.Value) && !string.IsNullOrEmpty(CtlValue.ToString()))
                 {
                     var DBInfo = (DBControlInfo)ctl.Tag;
                     bool IsExact = false;
@@ -711,7 +711,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             try
             {
                 //Dim Hostname As String
-                if (hostName == "")
+                if (string.IsNullOrEmpty(hostName))
                 {
                     using (AdvancedDialog GetHostnameDialog = new AdvancedDialog(this))
                     {
@@ -731,7 +731,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     }
                 }
 
-                if (hostName != "")
+                if (!string.IsNullOrEmpty(hostName))
                 {
                     if (SecurityTools.VerifyAdminCreds())
                     {
@@ -762,7 +762,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             try
             {
                 //Dim Hostname As String
-                if (hostName == "")
+                if (string.IsNullOrEmpty(hostName))
                 {
                     using (AdvancedDialog GetHostnameDialog = new AdvancedDialog(this))
                     {
@@ -782,7 +782,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     }
                 }
 
-                if (hostName != "")
+                if (!string.IsNullOrEmpty(hostName))
                 {
                     if (SecurityTools.VerifyAdminCreds())
                     {

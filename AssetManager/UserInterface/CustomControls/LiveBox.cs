@@ -354,7 +354,7 @@ namespace AssetManager
         {
             CurrentLiveBoxArgs = args;
             string strSearchString = CurrentLiveBoxArgs.Control.Text.Trim();
-            if (strSearchString != "")
+            if (!string.IsNullOrEmpty(strSearchString))
             {
                 ProcessSearch(strSearchString);
             }

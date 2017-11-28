@@ -1022,7 +1022,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                if (CurrentViewDevice.HostName != "")
+                if (!string.IsNullOrEmpty(CurrentViewDevice.HostName))
                 {
                     ActiveDirectoryWrapper ADWrap = new ActiveDirectoryWrapper(CurrentViewDevice.HostName);
                     if (await ADWrap.LoadResultsAsync())
@@ -1053,7 +1053,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void SetMunisEmpStatus()
         {
             ToolTip1.SetToolTip(txtCurUser_View_REQ, "");
-            if (CurrentViewDevice.CurrentUserEmpNum != "")
+            if (!string.IsNullOrEmpty(CurrentViewDevice.CurrentUserEmpNum))
             {
                 txtCurUser_View_REQ.BackColor = Colors.EditColor;
                 ToolTip1.SetToolTip(txtCurUser_View_REQ, "Munis Linked Employee");
@@ -1322,7 +1322,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             using (MunisUserForm NewMunisSearch = new MunisUserForm(this))
             {
                 MunisUser = NewMunisSearch.EmployeeInfo;
-                if (MunisUser.Name != "")
+                if (!string.IsNullOrEmpty(MunisUser.Name))
                 {
                     txtCurUser_View_REQ.Text = MunisUser.Name;
                     txtCurUser_View_REQ.ReadOnly = true;
@@ -1504,7 +1504,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void tsmAssetInputForm_Click(object sender, EventArgs e)
         {
-            if (CurrentViewDevice.PO != "")
+            if (!string.IsNullOrEmpty(CurrentViewDevice.PO))
             {
                 PdfFormFilling PDFForm = new PdfFormFilling(this, CurrentViewDevice, PdfFormType.InputForm);
             }
