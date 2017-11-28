@@ -47,48 +47,32 @@ namespace AssetManager
         {
         }
 
-        public DataMappingObject(object data)
+        public DataMappingObject(DataTable data)
         {
-            MapClassProperties(data);
+            var row = ((DataTable)data).Rows[0];
+            populatingTable = data;
+            populatingTable.TableName = data.TableName;
+            MapProperty(this, row);
+        }
+
+        public DataMappingObject(DataRow data)
+        {
+            var row = data;
+            populatingTable = row.Table;
+            populatingTable.TableName = row.Table.TableName;
+            MapProperty(this, row);
         }
 
         #endregion Constructors
 
         #region Methods
 
-        public void MapClassProperties(object data)
+        public void MapClassProperties(DataTable data)
         {
-            MapProperty(this, data);
-        }
-
-        public void MapClassProperties(object obj, object data)
-        {
-            MapProperty(obj, data);
-        }
-
-        /// <summary>
-        /// Uses reflection to recursively populate/map class properties that are marked with a <see cref="DataColumnNameAttribute"/>.
-        /// </summary>
-        /// <param name="obj">Object to be populated.</param>
-        /// <param name="data">DataRow or DataTable with columns matching the <see cref="DataColumnNameAttribute"/> in the objects properties.</param>
-        private void MapProperty(object obj, object data)
-        {
-            if (data is DataTable)
-            {
-                PopulatingTable = (DataTable)data;
-                var row = ((DataTable)data).Rows[0];
-                MapProperty(obj, row);
-            }
-            else if (data is DataRow)
-            {
-                var row = (DataRow)data;
-                PopulatingTable = row.Table;
-                MapProperty(obj, row);
-            }
-            else
-            {
-                throw new Exception("Invalid data object type.");
-            }
+            var row = ((DataTable)data).Rows[0];
+            populatingTable = row.Table;
+            populatingTable.TableName = row.Table.TableName;
+            MapProperty(this, row);
         }
 
         /// <summary>
@@ -199,6 +183,7 @@ namespace AssetManager
         //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
         //   Dispose(false);
         // }
+
         #endregion IDisposable Support
 
         #endregion Methods

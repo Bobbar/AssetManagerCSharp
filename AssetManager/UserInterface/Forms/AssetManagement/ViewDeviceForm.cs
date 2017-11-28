@@ -368,7 +368,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void CollectCurrentTracking(DataTable results)
         {
-            CurrentViewDevice.MapClassProperties(CurrentViewDevice.Tracking, results);
+            CurrentViewDevice.Tracking.MapClassProperties(results);
         }
 
         private bool ConcurrencyCheck()

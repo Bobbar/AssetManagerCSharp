@@ -14,13 +14,6 @@
             DataTable that was used to populate this object.
             </summary>
         </member>
-        <member name="M:AssetManager.DataMappingObject.MapProperty(System.Object,System.Object)">
-            <summary>
-            Uses reflection to recursively populate/map class properties that are marked with a <see cref="T:AssetManager.DataColumnNameAttribute"/>.
-            </summary>
-            <param name="obj">Object to be populated.</param>
-            <param name="data">DataRow or DataTable with columns matching the <see cref="T:AssetManager.DataColumnNameAttribute"/> in the objects properties.</param>
-        </member>
         <member name="M:AssetManager.DataMappingObject.MapProperty(System.Object,System.Data.DataRow)">
             <summary>
             Uses reflection to recursively populate/map class properties that are marked with a <see cref="T:AssetManager.DataColumnNameAttribute"/>.

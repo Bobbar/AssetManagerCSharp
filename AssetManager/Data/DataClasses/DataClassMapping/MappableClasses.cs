@@ -10,13 +10,13 @@ namespace AssetManager
         {
         }
 
-        public DeviceObject(object data) : base(data)
+        public DeviceObject(DataTable data) : base(data)
         {
         }
 
         public DeviceObject(string GUID)
         {
-            this.MapClassProperties(GetDeviceDataFromGUID(GUID));
+           this.MapClassProperties(GetDeviceDataFromGUID(GUID));
         }
 
         #endregion Constructors
@@ -92,6 +92,7 @@ namespace AssetManager
         {
             using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGUID(GUID)))
             {
+                results.TableName = DevicesCols.TableName;
                 return results;
             }
         }
@@ -117,7 +118,7 @@ namespace AssetManager
             this.GUID = System.Guid.NewGuid().ToString();
         }
 
-        public RequestObject(object data) : base(data)
+        public RequestObject(DataTable data) : base(data)
         {
         }
 
@@ -180,10 +181,6 @@ namespace AssetManager
         {
         }
 
-        public DeviceHistoricalObject(object data) : base(data)
-        {
-        }
-
         #endregion Constructors
 
         #region Properties
@@ -216,10 +213,6 @@ namespace AssetManager
         #region Constructors
 
         public DeviceTrackingObject()
-        {
-        }
-
-        public DeviceTrackingObject(object data) : base(data)
         {
         }
 
@@ -272,7 +265,7 @@ namespace AssetManager
         {
         }
 
-        public AccessGroupObject(object data) : base(data)
+        public AccessGroupObject(DataRow data) : base(data)
         {
         }
 
