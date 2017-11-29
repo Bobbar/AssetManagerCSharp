@@ -49,6 +49,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
             InitializeComponent();
 
+            CheckRDP();
+
             DefaultFormTitle = this.Text;
 
             MyLiveBox = new LiveBox(this);
@@ -94,7 +96,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut);
                 this.Text = this.DefaultFormTitle + FormTitle(CurrentViewDevice);
-                CheckRDP();
                 this.Show();
                 DataGridHistory.ClearSelection();
                 GridFilling = false;
@@ -278,8 +279,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private bool CheckFields()
         {
-            bool bolMissingField = false;
-            bolMissingField = false;
+            bool MissingField = false;
+            MissingField = false;
             fieldErrorIcon.Clear();
             foreach (Control c in DataParser.GetDBControls(this))
             {
@@ -290,7 +291,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         if (c.Text.Trim() == "")
                         {
-                            bolMissingField = true;
+                            MissingField = true;
                             c.BackColor = Colors.MissingField;
                             AddErrorIcon(c);
                         }
@@ -310,7 +311,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         if (cmb.SelectedIndex == -1)
                         {
-                            bolMissingField = true;
+                            MissingField = true;
                             cmb.BackColor = Colors.MissingField;
                             AddErrorIcon(cmb);
                         }
@@ -326,7 +327,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             if (!DataConsistency.ValidPhoneNumber(PhoneNumberTextBox.Text))
             {
-                bolMissingField = true;
+                MissingField = true;
                 PhoneNumberTextBox.BackColor = Colors.MissingField;
                 AddErrorIcon(PhoneNumberTextBox);
             }
@@ -335,7 +336,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 PhoneNumberTextBox.BackColor = Color.Empty;
                 ClearErrorIcon(PhoneNumberTextBox);
             }
-            return !bolMissingField; //if fields are missing return false to trigger a message if needed
+            return !MissingField; //if fields are missing return false to trigger a message if needed
         }
 
         private void RecheckFieldsEvent(object sender, EventArgs e)
@@ -818,6 +819,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 DataParser.FillDBFields(CurrentViewDevice.PopulatingTable);
                 SetMunisEmpStatus();
                 GridFunctions.PopulateGrid(DataGridHistory, HistoricalResults, HistoricalGridColumns());
+                DataGridHistory.FastAutoSizeColumns();
                 SetAttachCount();
                 SetADInfo();
             }

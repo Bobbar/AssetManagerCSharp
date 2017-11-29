@@ -675,7 +675,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.DataGridHistory.AllowUserToDeleteRows = false;
             this.DataGridHistory.AllowUserToResizeColumns = false;
             this.DataGridHistory.AllowUserToResizeRows = false;
-            this.DataGridHistory.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.DataGridHistory.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGridHistory.ContextMenuStrip = this.RightClickMenu;
