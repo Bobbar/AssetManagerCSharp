@@ -83,7 +83,6 @@ namespace AssetManager
                 GlobalInstances.SibiAttribute.StatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiStatusType);
                 GlobalInstances.SibiAttribute.ItemStatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiItemStatusType);
                 GlobalInstances.SibiAttribute.RequestType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiRequestType);
-                GlobalInstances.SibiAttribute.AttachFolder = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiAttachFolder);
             });
             BuildIdxs.Wait();
         }

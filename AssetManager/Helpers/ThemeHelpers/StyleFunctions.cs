@@ -92,7 +92,7 @@ namespace AssetManager
             }
         }
 
-        public static void LeaveRow(DataGridView Grid, GridTheme Theme, int Row)
+        public static void LeaveRow(DataGridView Grid, int Row)
         {
             Color BackColor = Grid.Rows[Row].InheritedStyle.BackColor;
             Color SelectColor = Grid.CurrentRow.InheritedStyle.SelectionBackColor;

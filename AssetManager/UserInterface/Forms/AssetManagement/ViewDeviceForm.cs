@@ -462,15 +462,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-                    TeamViewerDeploy NewTVDeploy = new TeamViewerDeploy();
-                    StatusSlider.NewSlideMessage("Deploying TeamViewer...", 0);
-                    if (await NewTVDeploy.DeployToDevice(this, device))
+                    using (TeamViewerDeploy NewTVDeploy = new TeamViewerDeploy())
                     {
-                        StatusSlider.NewSlideMessage("TeamViewer deployment complete!");
-                    }
-                    else
-                    {
-                        StatusSlider.NewSlideMessage("TeamViewer deployment failed...");
+                        StatusSlider.NewSlideMessage("Deploying TeamViewer...", 0);
+                        if (await NewTVDeploy.DeployToDevice(this, device))
+                        {
+                            StatusSlider.NewSlideMessage("TeamViewer deployment complete!");
+                        }
+                        else
+                        {
+                            StatusSlider.NewSlideMessage("TeamViewer deployment failed...");
+                        }
                     }
                 }
             }

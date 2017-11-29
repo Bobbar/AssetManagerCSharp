@@ -7,7 +7,6 @@ namespace AssetManager
             public AttributeDataStruct[] StatusType;
             public AttributeDataStruct[] ItemStatusType;
             public AttributeDataStruct[] RequestType;
-            public AttributeDataStruct[] AttachFolder;
         }
 
         public class DeviceAttributes
