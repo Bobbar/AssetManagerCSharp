@@ -476,7 +476,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void ResultGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            StyleFunctions.LeaveRow(SibiResultGrid, GridTheme, e.RowIndex);
+            StyleFunctions.LeaveRow(SibiResultGrid, e.RowIndex);
         }
 
         private void cmbDisplayYear_SelectedIndexChanged(object sender, EventArgs e)

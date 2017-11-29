@@ -407,7 +407,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.txtDescription_View_REQ.Name = "txtDescription_View_REQ";
             this.txtDescription_View_REQ.Size = new System.Drawing.Size(389, 23);
             this.txtDescription_View_REQ.TabIndex = 4;
-            this.txtDescription_View_REQ.Text = "Ba";
             this.txtDescription_View_REQ.TextChanged += new System.EventHandler(this.txtDescription_View_REQ_TextChanged);
             // 
             // cmbOSVersion_REQ
@@ -1305,7 +1304,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.CheckOutTool.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CheckOutTool.Image = global::AssetManager.Properties.Resources.CheckedBoxRedIcon;
             this.CheckOutTool.Name = "CheckOutTool";
-            this.CheckOutTool.Size = new System.Drawing.Size(161, 32);
+            this.CheckOutTool.Size = new System.Drawing.Size(135, 22);
             this.CheckOutTool.Text = "Check Out";
             this.CheckOutTool.Click += new System.EventHandler(this.CheckOutTool_Click);
             // 
@@ -1314,7 +1313,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.CheckInTool.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CheckInTool.Image = global::AssetManager.Properties.Resources.CheckedBoxGreenIcon;
             this.CheckInTool.Name = "CheckInTool";
-            this.CheckInTool.Size = new System.Drawing.Size(161, 32);
+            this.CheckInTool.Size = new System.Drawing.Size(135, 22);
             this.CheckInTool.Text = "Check In";
             this.CheckInTool.Click += new System.EventHandler(this.CheckInTool_Click);
             // 
@@ -1342,7 +1341,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolStrip1.Location = new System.Drawing.Point(3, 74);
             this.ToolStrip1.Name = "ToolStrip1";
             this.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.ToolStrip1.Size = new System.Drawing.Size(435, 37);
+            this.ToolStrip1.Size = new System.Drawing.Size(404, 37);
             this.ToolStrip1.TabIndex = 45;
             this.ToolStrip1.Text = "MyToolStrip1";
             // 

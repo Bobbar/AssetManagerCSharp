@@ -916,7 +916,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ResultGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            StyleFunctions.LeaveRow(ResultGrid, GridTheme, e.RowIndex);
+            StyleFunctions.LeaveRow(ResultGrid, e.RowIndex);
         }
 
         private void ResultGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)

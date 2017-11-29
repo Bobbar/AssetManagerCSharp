@@ -1096,7 +1096,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void RequestItemsGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            StyleFunctions.LeaveRow(RequestItemsGrid, GridTheme, e.RowIndex);
+            StyleFunctions.LeaveRow(RequestItemsGrid, e.RowIndex);
         }
 
         private void RequestItemsGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)

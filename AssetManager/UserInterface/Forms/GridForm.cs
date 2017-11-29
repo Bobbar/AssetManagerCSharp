@@ -168,7 +168,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void GridLeaveCell(object sender, DataGridViewCellEventArgs e)
         {
-            StyleFunctions.LeaveRow((DataGridView)sender, this.GridTheme, e.RowIndex);
+            StyleFunctions.LeaveRow((DataGridView)sender, e.RowIndex);
         }
 
         private void ResizeGridPanel()

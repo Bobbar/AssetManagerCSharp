@@ -1118,7 +1118,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         private void AttachGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            StyleFunctions.LeaveRow(AttachGrid, GridTheme, e.RowIndex);
+            StyleFunctions.LeaveRow(AttachGrid, e.RowIndex);
         }
 
         private void AttachGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)

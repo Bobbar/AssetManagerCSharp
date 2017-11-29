@@ -1392,7 +1392,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DataGridHistory_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
-            StyleFunctions.LeaveRow(DataGridHistory, GridTheme, e.RowIndex);
+            StyleFunctions.LeaveRow(DataGridHistory, e.RowIndex);
         }
 
         private void DataGridHistory_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
