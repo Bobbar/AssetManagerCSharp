@@ -7,7 +7,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
     partial class ViewDeviceForm
     {
         //Form overrides dispose to clean up the component list.
-        
+
         protected override void Dispose(bool disposing)
         {
             try
@@ -23,11 +23,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
         //Required by the Windows Form Designer
-        private System.ComponentModel.IContainer components  = null;
+        private System.ComponentModel.IContainer components = null;
         //NOTE: The following procedure is required by the Windows Form Designer
         //It can be modified using the Windows Form Designer.  
         //Do not modify it using the code editor.
-        
+
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -201,7 +201,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.PhoneNumberTextBox.Size = new System.Drawing.Size(177, 23);
             this.PhoneNumberTextBox.TabIndex = 57;
             this.PhoneNumberTextBox.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
-            this.PhoneNumberTextBox.TextChanged += new System.EventHandler(this.PhoneNumberTextBox_TextChanged);
             this.PhoneNumberTextBox.Leave += new System.EventHandler(this.PhoneNumberTextBox_Leave);
             // 
             // Label14
@@ -317,7 +316,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.AssetTagTextBox.Name = "AssetTagTextBox";
             this.AssetTagTextBox.Size = new System.Drawing.Size(134, 23);
             this.AssetTagTextBox.TabIndex = 1;
-            this.AssetTagTextBox.TextChanged += new System.EventHandler(this.AssetTagTextBox_TextChanged);
             // 
             // Label10
             // 
@@ -336,7 +334,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.SerialTextBox.Name = "SerialTextBox";
             this.SerialTextBox.Size = new System.Drawing.Size(134, 23);
             this.SerialTextBox.TabIndex = 0;
-            this.SerialTextBox.TextChanged += new System.EventHandler(this.SerialTextBox_TextChanged);
             // 
             // Label2
             // 
@@ -365,7 +362,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.CurrentUserTextBox.Name = "CurrentUserTextBox";
             this.CurrentUserTextBox.Size = new System.Drawing.Size(134, 23);
             this.CurrentUserTextBox.TabIndex = 2;
-            this.CurrentUserTextBox.TextChanged += new System.EventHandler(this.CurrentUserTextBox_TextChanged);
             // 
             // StatusComboBox
             // 
@@ -375,7 +371,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.StatusComboBox.Name = "StatusComboBox";
             this.StatusComboBox.Size = new System.Drawing.Size(177, 23);
             this.StatusComboBox.TabIndex = 8;
-            this.StatusComboBox.SelectedIndexChanged += new System.EventHandler(this.StatusComboBox_SelectedIndexChanged);
             // 
             // Label3
             // 
@@ -404,7 +399,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.DescriptionTextBox.Name = "DescriptionTextBox";
             this.DescriptionTextBox.Size = new System.Drawing.Size(389, 23);
             this.DescriptionTextBox.TabIndex = 4;
-            this.DescriptionTextBox.TextChanged += new System.EventHandler(this.DescriptionTextBox_TextChanged);
             // 
             // OSVersionComboBox
             // 
@@ -414,7 +408,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.OSVersionComboBox.Name = "OSVersionComboBox";
             this.OSVersionComboBox.Size = new System.Drawing.Size(177, 23);
             this.OSVersionComboBox.TabIndex = 6;
-            this.OSVersionComboBox.SelectedIndexChanged += new System.EventHandler(this.OSVersionComboBox_SelectedIndexChanged);
             // 
             // Label4
             // 
@@ -434,7 +427,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.LocationComboBox.Name = "LocationComboBox";
             this.LocationComboBox.Size = new System.Drawing.Size(177, 23);
             this.LocationComboBox.TabIndex = 7;
-            this.LocationComboBox.SelectedIndexChanged += new System.EventHandler(this.LocationComboBox_SelectedIndexChanged);
             // 
             // Label13
             // 
@@ -464,7 +456,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.EquipTypeComboBox.Name = "EquipTypeComboBox";
             this.EquipTypeComboBox.Size = new System.Drawing.Size(177, 23);
             this.EquipTypeComboBox.TabIndex = 5;
-            this.EquipTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.EquipTypeComboBox_SelectedIndexChanged);
             // 
             // PurchaseDatePicker
             // 
@@ -475,7 +466,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.PurchaseDatePicker.Name = "PurchaseDatePicker";
             this.PurchaseDatePicker.Size = new System.Drawing.Size(168, 23);
             this.PurchaseDatePicker.TabIndex = 9;
-            this.PurchaseDatePicker.ValueChanged += new System.EventHandler(this.PurchaseDatePicker_ValueChanged);
             // 
             // Label7
             // 
@@ -930,6 +920,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // RemoteToolsTimer
             // 
+            this.RemoteToolsTimer.Enabled = true;
             this.RemoteToolsTimer.Interval = 1000;
             this.RemoteToolsTimer.Tick += new System.EventHandler(this.RemoteToolsTimer_Tick);
             // 

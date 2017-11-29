@@ -18,10 +18,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         #region Fields
 
         public MunisEmployeeStruct MunisUser = new MunisEmployeeStruct();
-        private bool bolCheckFields;
-        private bool bolGridFilling = false;
+        private bool FieldsInvalid;
+        private bool GridFilling = false;
         private string CurrentHash;
-        private DeviceObject CurrentViewDevice = new DeviceObject();
+        private DeviceObject CurrentViewDevice;
         private DBControlParser DataParser;
         private bool EditMode = false;
         private int intFailedPings = 0;
@@ -43,26 +43,38 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public ViewDeviceForm(ExtendedForm parentForm, DataMappingObject device) : base(parentForm, device)
         {
-            InitializeComponent();
-            DataParser = new DBControlParser(this);
-            MyLiveBox = new LiveBox(this);
-            MyMunisToolBar = new MunisToolBar(this);
-            MyWindowList = new WindowList(this);
             CurrentViewDevice = (DeviceObject)device;
-            StatusSlider = new SliderLabel();
-            StatusStrip1.Items.Add(StatusSlider.ToToolStripControl(StatusStrip1));
-            MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6);
-            ImageCaching.CacheControlImages(this);
-            MyWindowList.InsertWindowList(ToolStrip1);
-            InitDBControls();
+
+            DataParser = new DBControlParser(this);
+
+            InitializeComponent();
+
+            DefaultFormTitle = this.Text;
+
+            MyLiveBox = new LiveBox(this);
             MyLiveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
             MyLiveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBoxType.SelectValue);
+
+            MyMunisToolBar = new MunisToolBar(this);
+            MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6);
+
+            MyWindowList = new WindowList(this);
+            MyWindowList.InsertWindowList(ToolStrip1);
+
+            StatusSlider = new SliderLabel();
+            StatusStrip1.Items.Add(StatusSlider.ToToolStripControl(StatusStrip1));
+
+            ImageCaching.CacheControlImages(this);
+
+            InitDBControls();
+
             RefreshCombos();
-            RemoteToolsBox.Visible = false;
+
             DataGridHistory.DoubleBufferedDataGrid(true);
             TrackingGrid.DoubleBufferedDataGrid(true);
-            DefaultFormTitle = this.Text;
+
             SetEditMode(false);
+
             LoadDevice();
         }
 
@@ -74,8 +86,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                //  Waiting();
-                bolGridFilling = true;
+                GridFilling = true;
                 LoadHistoryAndFields();
                 if (CurrentViewDevice.IsTrackable)
                 {
@@ -84,18 +95,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut);
                 this.Text = this.DefaultFormTitle + FormTitle(CurrentViewDevice);
                 CheckRDP();
-                RemoteToolsTimer.Enabled = true;
                 this.Show();
                 DataGridHistory.ClearSelection();
-                bolGridFilling = false;
+                GridFilling = false;
             }
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
-            finally
-            {
-                //DoneWaiting();
             }
         }
 
@@ -149,7 +155,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 if (!CheckFields())
                 {
                     OtherFunctions.Message("Some required fields are missing or invalid.  Please check and fill all highlighted fields.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Data", this);
-                    bolCheckFields = true;
+                    FieldsInvalid = true;
                     return;
                 }
                 using (UpdateDev UpdateDia = new UpdateDev(this))
@@ -259,7 +265,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Discard Changes?", this);
                 if (blah == DialogResult.Yes)
                 {
-                    bolCheckFields = false;
+                    FieldsInvalid = false;
                     fieldErrorIcon.Clear();
                     SetEditMode(false);
                     ResetBackColors();
@@ -293,6 +299,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                             c.BackColor = Color.Empty;
                             ClearErrorIcon(c);
                         }
+                        c.TextChanged -= RecheckFieldsEvent;
+                        c.TextChanged += RecheckFieldsEvent;
                     }
                 }
                 else if (c is ComboBox)
@@ -311,6 +319,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                             cmb.BackColor = Color.Empty;
                             ClearErrorIcon(cmb);
                         }
+                        cmb.SelectedIndexChanged -= RecheckFieldsEvent;
+                        cmb.SelectedIndexChanged += RecheckFieldsEvent;
                     }
                 }
             }
@@ -326,6 +336,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 ClearErrorIcon(PhoneNumberTextBox);
             }
             return !bolMissingField; //if fields are missing return false to trigger a message if needed
+        }
+
+        private void RecheckFieldsEvent(object sender, EventArgs e)
+        {
+            if (FieldsInvalid)
+            {
+                CheckFields();
+            }
         }
 
         private void CheckRDP()
@@ -894,14 +912,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             foreach (Control c in DataParser.GetDBControls(this))
             {
-                if (c is TextBox)
-                {
-                    c.BackColor = Color.Empty;
-                }
-                else if (c is ComboBox)
-                {
-                    c.BackColor = Color.Empty;
-                }
+                c.BackColor = Color.Empty;
             }
         }
 
@@ -1150,38 +1161,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             StartTrackDeviceForm();
         }
 
-        private void EquipTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields();
-            }
-        }
-
-        private void LocationComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields();
-            }
-        }
-
-        private void OSVersionComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields();
-            }
-        }
-
-        private void StatusComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields();
-            }
-        }
-
         private void AcceptToolButton_Click(object sender, EventArgs e)
         {
             AcceptChanges();
@@ -1286,7 +1265,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DataGridHistory_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (!bolGridFilling)
+            if (!GridFilling)
             {
                 StyleFunctions.HighlightRow(DataGridHistory, GridTheme, e.RowIndex);
             }
@@ -1308,14 +1287,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void DeleteEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DeleteSelectedHistoricalEntry();
-        }
-
-        private void PurchaseDatePicker_ValueChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields();
-            }
         }
 
         private void GUIDLabel_Click(object sender, EventArgs e)
@@ -1423,64 +1394,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             PdfFormFilling PDFForm = new PdfFormFilling(this, CurrentViewDevice, PdfFormType.TransferForm);
         }
 
-        private void AssetTagTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields();
-            }
-        }
-
-        private void CurrentUserTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields();
-            }
-        }
-
-        private void DescriptionTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields();
-            }
-        }
-
         private void PhoneNumberTextBox_Leave(object sender, EventArgs e)
         {
             if (PhoneNumberTextBox.Text.Trim() != "" && !DataConsistency.ValidPhoneNumber(PhoneNumberTextBox.Text))
             {
                 OtherFunctions.Message("Invalid phone number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
-                PhoneNumberTextBox.Focus();
-            }
-        }
-
-        private void PhoneNumberTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields();
-            }
-        }
-
-        private void SerialTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields();
-            }
-        }
-
-        private void View_Disposed(object sender, EventArgs e)
-        {
-            MyWindowList.Dispose();
-            MyLiveBox.Dispose();
-            MyMunisToolBar.Dispose();
-            Helpers.ChildFormControl.CloseChildren(this);
-            if (MyPingVis != null)
-            {
-                MyPingVis.Dispose();
             }
         }
 
