@@ -37,6 +37,9 @@ namespace AssetManager
             }
         }
 
+        /// <summary>
+        /// Database Tablename for implementing object.
+        /// </summary>
         public abstract string TableName { get; set; }
 
         #endregion Properties
@@ -51,7 +54,7 @@ namespace AssetManager
         {
             var row = ((DataTable)data).Rows[0];
             populatingTable = data;
-            populatingTable.TableName = data.TableName;
+            populatingTable.TableName = TableName;
             MapProperty(this, row);
         }
 
@@ -59,7 +62,7 @@ namespace AssetManager
         {
             var row = data;
             populatingTable = row.Table;
-            populatingTable.TableName = row.Table.TableName;
+            populatingTable.TableName = TableName;
             MapProperty(this, row);
         }
 
@@ -71,7 +74,7 @@ namespace AssetManager
         {
             var row = ((DataTable)data).Rows[0];
             populatingTable = row.Table;
-            populatingTable.TableName = row.Table.TableName;
+            populatingTable.TableName = TableName;
             MapProperty(this, row);
         }
 

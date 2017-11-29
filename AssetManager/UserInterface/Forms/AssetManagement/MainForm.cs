@@ -820,21 +820,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             AddNewDevice();
         }
 
-        private void cmbEquipType_DropDown(object sender, EventArgs e)
-        {
-            OtherFunctions.AdjustComboBoxWidth(sender, e);
-        }
-
-        private void cmbLocation_DropDown(object sender, EventArgs e)
-        {
-            OtherFunctions.AdjustComboBoxWidth(sender, e);
-        }
-
-        private void cmbOSType_DropDown(object sender, EventArgs e)
-        {
-            OtherFunctions.AdjustComboBoxWidth(sender, e);
-        }
-
         private void cmdClear_Click(object sender, EventArgs e)
         {
             Clear_All();

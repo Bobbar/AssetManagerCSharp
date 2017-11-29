@@ -242,7 +242,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.cmbStatus_REQ.Name = "cmbStatus_REQ";
             this.cmbStatus_REQ.Size = new System.Drawing.Size(251, 26);
             this.cmbStatus_REQ.TabIndex = 7;
-            this.cmbStatus_REQ.DropDown += new System.EventHandler(this.cmbStatus_REQ_DropDown);
             this.cmbStatus_REQ.SelectedIndexChanged += new System.EventHandler(this.cmbStatus_REQ_SelectedIndexChanged);
             // 
             // Label10
@@ -265,7 +264,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.cmbOSType_REQ.Name = "cmbOSType_REQ";
             this.cmbOSType_REQ.Size = new System.Drawing.Size(251, 26);
             this.cmbOSType_REQ.TabIndex = 5;
-            this.cmbOSType_REQ.DropDown += new System.EventHandler(this.cmbOSType_REQ_DropDown);
             this.cmbOSType_REQ.SelectedIndexChanged += new System.EventHandler(this.cmbOSType_REQ_SelectedIndexChanged);
             // 
             // Label9
@@ -308,7 +306,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.cmbEquipType_REQ.Name = "cmbEquipType_REQ";
             this.cmbEquipType_REQ.Size = new System.Drawing.Size(251, 26);
             this.cmbEquipType_REQ.TabIndex = 4;
-            this.cmbEquipType_REQ.DropDown += new System.EventHandler(this.cmbEquipType_REQ_DropDown);
             this.cmbEquipType_REQ.SelectedIndexChanged += new System.EventHandler(this.cmbEquipType_REQ_SelectedIndexChanged);
             // 
             // txtNotes
@@ -399,7 +396,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.cmbLocation_REQ.Size = new System.Drawing.Size(251, 26);
             this.cmbLocation_REQ.TabIndex = 6;
             this.cmbLocation_REQ.Text = "cmbLocation";
-            this.cmbLocation_REQ.DropDown += new System.EventHandler(this.cmbLocation_REQ_DropDown);
             this.cmbLocation_REQ.SelectedIndexChanged += new System.EventHandler(this.cmbLocation_REQ_SelectedIndexChanged);
             // 
             // Label4

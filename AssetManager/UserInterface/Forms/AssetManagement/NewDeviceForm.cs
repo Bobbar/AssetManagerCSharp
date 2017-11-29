@@ -1,17 +1,18 @@
-﻿using System;
+﻿using AssetManager.UserInterface.CustomControls;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data;
-using System.Collections.Generic;
-using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
     public partial class NewDeviceForm : ExtendedForm
     {
-
         #region Fields
+
         private MunisEmployeeStruct _munisUser;
+
         public MunisEmployeeStruct MunisUser
         {
             get
@@ -32,7 +33,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private LiveBox MyLiveBox;
         private string NewUID;
 
-        #endregion
+        #endregion Fields
 
         #region Methods
 
@@ -58,7 +59,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 MunisUser = GlobalInstances.AssetFunc.SmartEmployeeSearch(results.Rows[0][SibiRequestItemsCols.User].ToString().ToUpper());
                 POPurchaseDate = GlobalInstances.MunisFunc.GetPODate(results.Rows[0][SibiRequestCols.PO].ToString());
             }
-
 
             txtCurUser_REQ.Text = MunisUser.Name;
             CheckFields(this, false);
@@ -174,7 +174,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     }
                 }
             }
-
         }
 
         private bool CheckFields(Control Parent, bool bolValidFields)
@@ -282,7 +281,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ClearFields(Control Parent)
         {
-
             foreach (Control ctl in Parent.Controls)
             {
                 if (ctl is TextBox)
@@ -303,22 +301,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void cmbEquipType_REQ_DropDown(object sender, EventArgs e)
-        {
-            OtherFunctions.AdjustComboBoxWidth(sender, e);
-        }
-
         private void cmbEquipType_REQ_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (bolCheckFields)
             {
                 CheckFields(this, false);
             }
-        }
-
-        private void cmbLocation_REQ_DropDown(object sender, EventArgs e)
-        {
-            OtherFunctions.AdjustComboBoxWidth(sender, e);
         }
 
         private void cmbLocation_REQ_SelectedIndexChanged(object sender, EventArgs e)
@@ -329,11 +317,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void cmbOSType_REQ_DropDown(object sender, EventArgs e)
-        {
-            OtherFunctions.AdjustComboBoxWidth(sender, e);
-        }
-
         private void cmbOSType_REQ_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (bolCheckFields)
@@ -341,11 +324,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 CheckFields(this, false);
             }
             SetHostname();
-        }
-
-        private void cmbStatus_REQ_DropDown(object sender, EventArgs e)
-        {
-            OtherFunctions.AdjustComboBoxWidth(sender, e);
         }
 
         private void cmbStatus_REQ_SelectedIndexChanged(object sender, EventArgs e)
@@ -377,7 +355,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     txtCurUser_REQ.ReadOnly = true;
                 }
             }
-
         }
 
         private DataTable DeviceInsertTable(string selectQuery)
@@ -539,12 +516,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             MyLiveBox.AttachToControl(txtDescription_REQ, DevicesCols.Description, LiveBoxType.SelectValue);
         }
 
-
-        #endregion
-
         private void NewDeviceForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             MyLiveBox.Dispose();
         }
+
+        #endregion Methods
+
+
     }
 }

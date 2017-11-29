@@ -441,7 +441,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.cmbOSType.Size = new System.Drawing.Size(135, 23);
             this.cmbOSType.TabIndex = 51;
             this.cmbOSType.TabStop = false;
-            this.cmbOSType.DropDown += new System.EventHandler(this.cmbOSType_DropDown);
             // 
             // Label2
             // 
@@ -523,7 +522,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.cmbEquipType.Size = new System.Drawing.Size(159, 23);
             this.cmbEquipType.TabIndex = 35;
             this.cmbEquipType.TabStop = false;
-            this.cmbEquipType.Click += new System.EventHandler(this.cmbEquipType_DropDown);
             // 
             // txtSerialSearch
             // 
@@ -554,7 +552,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.cmbLocation.Size = new System.Drawing.Size(165, 23);
             this.cmbLocation.TabIndex = 39;
             this.cmbLocation.TabStop = false;
-            this.cmbLocation.Click += new System.EventHandler(this.cmbLocation_DropDown);
             // 
             // txtCurUser
             // 

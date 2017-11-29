@@ -375,12 +375,6 @@
     <Compile Include="UserInterface\Forms\Sibi\SibiNotesForm.Designer.cs">
       <DependentUpon>SibiNotesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\Sibi\SibiSelectorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Sibi\SibiSelectorForm.Designer.cs">
-      <DependentUpon>SibiSelectorForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserInterface\Forms\SplashScreenForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -475,9 +469,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Sibi\SibiNotesForm.resx">
       <DependentUpon>SibiNotesForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\Sibi\SibiSelectorForm.resx">
-      <DependentUpon>SibiSelectorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\SplashScreenForm.resx">
       <DependentUpon>SplashScreenForm.cs</DependentUpon>

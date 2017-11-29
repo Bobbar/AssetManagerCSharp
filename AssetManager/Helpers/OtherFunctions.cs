@@ -53,25 +53,6 @@ namespace AssetManager
             }
         }
 
-        public static void AdjustComboBoxWidth(object sender, EventArgs e)
-        {
-            var senderComboBox = (ComboBox)sender;
-            int width = senderComboBox.DropDownWidth;
-            Graphics g = senderComboBox.CreateGraphics();
-            Font font = senderComboBox.Font;
-            int vertScrollBarWidth = (senderComboBox.Items.Count > senderComboBox.MaxDropDownItems) ? SystemInformation.VerticalScrollBarWidth : 0;
-            int newWidth = 0;
-            foreach (string s in ((ComboBox)sender).Items)
-            {
-                newWidth = Convert.ToInt32(g.MeasureString(s, font).Width) + vertScrollBarWidth;
-                if (width < newWidth)
-                {
-                    width = newWidth;
-                }
-            }
-            senderComboBox.DropDownWidth = width;
-        }
-
         public static string NotePreview(string Note, int CharLimit = 50)
         {
             if (!string.IsNullOrEmpty(Note))
@@ -97,7 +78,7 @@ namespace AssetManager
             AdvancedDialog NewMessage = new AdvancedDialog(ParentFrm);
             return NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm);
         }
-        
+
         public static bool OKToEnd()
         {
             if (GlobalSwitches.BuildingCache)

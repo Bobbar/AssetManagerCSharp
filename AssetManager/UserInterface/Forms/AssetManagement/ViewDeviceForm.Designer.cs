@@ -375,7 +375,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.StatusComboBox.Name = "StatusComboBox";
             this.StatusComboBox.Size = new System.Drawing.Size(177, 23);
             this.StatusComboBox.TabIndex = 8;
-            this.StatusComboBox.DropDown += new System.EventHandler(this.StatusComboBox_DropDown);
             this.StatusComboBox.SelectedIndexChanged += new System.EventHandler(this.StatusComboBox_SelectedIndexChanged);
             // 
             // Label3
@@ -415,7 +414,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.OSVersionComboBox.Name = "OSVersionComboBox";
             this.OSVersionComboBox.Size = new System.Drawing.Size(177, 23);
             this.OSVersionComboBox.TabIndex = 6;
-            this.OSVersionComboBox.DropDown += new System.EventHandler(this.OSVersionComboBox_DropDown);
             this.OSVersionComboBox.SelectedIndexChanged += new System.EventHandler(this.OSVersionComboBox_SelectedIndexChanged);
             // 
             // Label4
@@ -436,7 +434,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.LocationComboBox.Name = "LocationComboBox";
             this.LocationComboBox.Size = new System.Drawing.Size(177, 23);
             this.LocationComboBox.TabIndex = 7;
-            this.LocationComboBox.DropDown += new System.EventHandler(this.LocationComboBox_DropDown);
             this.LocationComboBox.SelectedIndexChanged += new System.EventHandler(this.LocationComboBox_SelectedIndexChanged);
             // 
             // Label13
@@ -467,7 +464,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.EquipTypeComboBox.Name = "EquipTypeComboBox";
             this.EquipTypeComboBox.Size = new System.Drawing.Size(177, 23);
             this.EquipTypeComboBox.TabIndex = 5;
-            this.EquipTypeComboBox.DropDown += new System.EventHandler(this.EquipTypeComboBox_DropDown);
             this.EquipTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.EquipTypeComboBox_SelectedIndexChanged);
             // 
             // PurchaseDatePicker
@@ -1420,10 +1416,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.AssetTransferFormToolItem.Text = "Asset Transfer Form";
             this.AssetTransferFormToolItem.Click += new System.EventHandler(this.AssetTransferFormToolItem_Click);
             // 
-            // AssetDisposalForm
+            // AssetDisposalFormToolItem
             // 
             this.AssetDisposalFormToolItem.Image = global::AssetManager.Properties.Resources.TrashIcon;
-            this.AssetDisposalFormToolItem.Name = "AssetDisposalForm";
+            this.AssetDisposalFormToolItem.Name = "AssetDisposalFormToolItem";
             this.AssetDisposalFormToolItem.Size = new System.Drawing.Size(230, 32);
             this.AssetDisposalFormToolItem.Text = "Asset Disposal Form";
             this.AssetDisposalFormToolItem.Click += new System.EventHandler(this.AssetDisposalFormToolItem_Click);

@@ -3,19 +3,56 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Drawing;
 namespace AssetManager
 {
     static class AttribIndexFunctions
     {
 
-        public static void FillComboBox(AttributeDataStruct[] IndexType, ComboBox cmb)
+        public static void FillComboBox(AttributeDataStruct[] IndexType, ComboBox combo)
         {
-            cmb.Items.Clear();
-            cmb.Text = "";
+            combo.Items.Clear();
+            combo.Text = "";
+            AddAutoSizeDropWidthHandler(combo);
             foreach (AttributeDataStruct ComboItem in IndexType)
             {
-                cmb.Items.Add(ComboItem.DisplayValue);
+                combo.Items.Add(ComboItem.DisplayValue);
             }
+        }
+
+        public static void AddAutoSizeDropWidthHandler(ComboBox combo)
+        {
+            combo.DropDown -= AdjustComboBoxWidth;
+            combo.DropDown += AdjustComboBoxWidth;
+        }
+
+        public static void AdjustComboBoxWidth(object sender, EventArgs e)
+        {
+            var senderComboBox = (ComboBox)sender;
+            int correctWidth = senderComboBox.DropDownWidth;
+            int newWidth = 0;
+            using (Graphics gfx = senderComboBox.CreateGraphics())
+            {
+                int vertScrollBarWidth = 0;
+                if (senderComboBox.Items.Count > senderComboBox.MaxDropDownItems)
+                {
+                    vertScrollBarWidth = SystemInformation.VerticalScrollBarWidth;
+                }
+                else
+                {
+                    vertScrollBarWidth = 0;
+                }
+                foreach (string s in senderComboBox.Items)
+                {
+                    newWidth = Convert.ToInt32(gfx.MeasureString(s, senderComboBox.Font).Width) + vertScrollBarWidth;
+                    if (correctWidth < newWidth)
+                    {
+                        correctWidth = newWidth;
+                    }
+                }
+            }
+            senderComboBox.DropDownWidth = correctWidth;
         }
 
         public static void FillToolComboBox(AttributeDataStruct[] IndexType, ref ToolStripComboBox cmb)

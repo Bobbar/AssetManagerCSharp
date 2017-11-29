@@ -62,7 +62,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DataGridHistory.DoubleBufferedDataGrid(true);
             TrackingGrid.DoubleBufferedDataGrid(true);
             DefaultFormTitle = this.Text;
-            DisableControls();
+            SetEditMode(false);
             LoadDevice();
         }
 
@@ -261,7 +261,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     bolCheckFields = false;
                     fieldErrorIcon.Clear();
-                    DisableControls();
+                    SetEditMode(false);
                     ResetBackColors();
                     RefreshData();
                     return true;
@@ -420,17 +420,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             try
             {
                 string entryGUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
-                DeviceObject Info = default(DeviceObject);
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGUID)))
+                using (var Info = new DeviceObject(results))
                 {
-                    Info = new DeviceObject(results);
-                }
-                var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + Info.Historical.ActionDateTime + " - " + AttribIndexFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, Info.Historical.ChangeType) + " - " + entryGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
-                if (blah == DialogResult.Yes)
-                {
-                    DBFactory.GetDatabase().ExecuteQuery(Queries.DeleteHistoricalEntryByGUID(entryGUID));
-                    SetStatusBar("Entry deleted successfully.");
-                    RefreshData();
+                    var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + Info.Historical.ActionDateTime + " - " + AttribIndexFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, Info.Historical.ChangeType) + " - " + entryGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
+                    if (blah == DialogResult.Yes)
+                    {
+                        int affectedRows = DBFactory.GetDatabase().ExecuteQuery(Queries.DeleteHistoricalEntryByGUID(entryGUID));
+                        if (affectedRows > 0)
+                        {
+                            SetStatusBar("Entry deleted successfully.");
+                            RefreshData();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -517,15 +519,28 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void DisableControls()
+        private void SetEditMode(bool editMode)
         {
-            EditMode = false;
-            DisableControlsRecursive(this);
-            MunisSibiPanel.Visible = true;
-            MunisSearchButton.Visible = false;
-            this.Text = DefaultFormTitle;
-            AcceptCancelToolStrip.Visible = false;
-            TrackingToolStrip.Visible = false;
+            if (editMode)
+            {
+                EditMode = true;
+                EnableControlsRecursive(this);
+                ActiveDirectoryBox.Visible = false;
+                MunisSibiPanel.Visible = false;
+                MunisSearchButton.Visible = true;
+                this.Text = "View" + FormTitle(CurrentViewDevice) + "  *MODIFYING**";
+                AcceptCancelToolStrip.Visible = true;
+            }
+            else
+            {
+                EditMode = false;
+                DisableControlsRecursive(this);
+                MunisSibiPanel.Visible = true;
+                MunisSearchButton.Visible = false;
+                this.Text = DefaultFormTitle;
+                AcceptCancelToolStrip.Visible = false;
+                TrackingToolStrip.Visible = false;
+            }
         }
 
         private void DisableControlsRecursive(Control control)
@@ -578,17 +593,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void DoneWaiting()
         {
             OtherFunctions.SetWaitCursor(false, this);
-        }
-
-        private void EnableControls()
-        {
-            EditMode = true;
-            EnableControlsRecursive(this);
-            ActiveDirectoryBox.Visible = false;
-            MunisSibiPanel.Visible = false;
-            MunisSearchButton.Visible = true;
-            this.Text = "View" + FormTitle(CurrentViewDevice) + "  *MODIFYING**";
-            AcceptCancelToolStrip.Visible = true;
         }
 
         private void EnableControlsRecursive(Control control)
@@ -788,18 +792,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             Process.Start(StartInfo);
         }
 
-        private void LinkSibi()
-        {
-            using (SibiSelectorForm f = new SibiSelectorForm(this))
-            {
-                if (f.DialogResult == DialogResult.OK)
-                {
-                    CurrentViewDevice.SibiLink = f.SibiUID;
-                    OtherFunctions.Message("Sibi Link Set.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Success", this);
-                }
-            }
-        }
-
         private void LoadHistoryAndFields()
         {
             using (var HistoricalResults = GetHistoricalTable(CurrentViewDevice.GUID))
@@ -807,7 +799,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 CurrentHash = GetHash(CurrentViewDevice.PopulatingTable, HistoricalResults);
                 DataParser.FillDBFields(CurrentViewDevice.PopulatingTable);
                 SetMunisEmpStatus();
-                SendToHistGrid(HistoricalResults);
+                GridFunctions.PopulateGrid(DataGridHistory, HistoricalResults, HistoricalGridColumns());
                 SetAttachCount();
                 SetADInfo();
             }
@@ -820,7 +812,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 if (Results.Rows.Count > 0)
                 {
                     CollectCurrentTracking(Results);
-                    SendToTrackGrid(Results);
+                    GridFunctions.PopulateGrid(TrackingGrid, Results, TrackingGridColumns());
                     DisableSorting(TrackingGrid);
                 }
                 else
@@ -837,7 +829,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 return;
             }
-            EnableControls();
+            SetEditMode(true);
         }
 
         private void NewEntryView(string entryGUID)
@@ -862,32 +854,25 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     return;
                 }
-                string SibiUID = "";
-                if (LinkDevice.SibiLink == "")
+                if (string.IsNullOrEmpty(LinkDevice.PO))
                 {
-                    if (LinkDevice.PO == "")
+                    OtherFunctions.Message("A valid PO Number is required.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Missing Info", this);
+                    return;
+                }
+                else
+                {
+                    string SibiUID = GlobalInstances.AssetFunc.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, LinkDevice.PO, SibiRequestCols.UID);
+
+                    if (string.IsNullOrEmpty(SibiUID))
                     {
-                        OtherFunctions.Message("A valid PO Number or Sibi Link is required.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Missing Info", this);
-                        return;
+                        OtherFunctions.Message("No Sibi request found with matching PO number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Not Found", this);
                     }
                     else
                     {
-                        SibiUID = GlobalInstances.AssetFunc.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, LinkDevice.PO, SibiRequestCols.UID);
-                    }
-                }
-                else
-                {
-                    SibiUID = LinkDevice.SibiLink;
-                }
-                if (string.IsNullOrEmpty(SibiUID))
-                {
-                    OtherFunctions.Message("No Sibi request found with matching PO number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Not Found", this);
-                }
-                else
-                {
-                    if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiManageRequestForm), SibiUID))
-                    {
-                        SibiManageRequestForm NewRequest = new SibiManageRequestForm(this, SibiUID);
+                        if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiManageRequestForm), SibiUID))
+                        {
+                            SibiManageRequestForm NewRequest = new SibiManageRequestForm(this, SibiUID);
+                        }
                     }
                 }
             }
@@ -934,6 +919,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         using (NetworkConnection NetCon = new NetworkConnection(FullPath, SecurityTools.AdminCreds))
                         using (Process p = new Process())
                         {
+                            string results;
                             p.StartInfo.UseShellExecute = false;
                             p.StartInfo.RedirectStandardOutput = true;
                             p.StartInfo.RedirectStandardError = true;
@@ -941,10 +927,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                             p.StartInfo.FileName = "shutdown.exe";
                             p.StartInfo.Arguments = "/m " + FullPath + " /f /r /t 0";
                             p.Start();
-                            output = p.StandardError.ReadToEnd();
+                            results = p.StandardError.ReadToEnd();
                             p.WaitForExit();
-                            output = output.Trim();
-                            return output;
+                            return results.Trim();
                         }
                     });
                     return output;
@@ -959,50 +944,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 RestartDeviceButton.Image = OrigButtonImage;
             }
             return string.Empty;
-        }
-
-        private void SendToHistGrid(DataTable results)
-        {
-            try
-            {
-                using (results)
-                {
-                    if (results.Rows.Count > 0)
-                    {
-                        GridFunctions.PopulateGrid(DataGridHistory, results, HistoricalGridColumns());
-                    }
-                    else
-                    {
-                        DataGridHistory.DataSource = null;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
-        }
-
-        private void SendToTrackGrid(DataTable results)
-        {
-            try
-            {
-                using (results)
-                {
-                    if (results.Rows.Count > 0)
-                    {
-                        GridFunctions.PopulateGrid(TrackingGrid, results, TrackingGridColumns());
-                    }
-                    else
-                    {
-                        TrackingGrid.DataSource = null;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
         }
 
         private async void SetADInfo()
@@ -1056,9 +997,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void SetTracking(bool bolEnabled, bool bolCheckedOut)
+        private void SetTracking(bool isTrackable, bool isCheckedOut)
         {
-            if (bolEnabled)
+            if (isTrackable)
             {
                 if (!TabControl1.TabPages.Contains(TrackingTab))
                 {
@@ -1066,13 +1007,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 ExpandSplitter(true);
                 TrackingBox.Visible = true;
-                TrackingToolStrip.Visible = bolEnabled;
-                CheckOutTool.Visible = !bolCheckedOut;
-                CheckInTool.Visible = bolCheckedOut;
+                TrackingToolStrip.Visible = isTrackable;
+                CheckOutTool.Visible = !isCheckedOut;
+                CheckInTool.Visible = isCheckedOut;
             }
             else
             {
-                TrackingToolStrip.Visible = bolEnabled;
+                TrackingToolStrip.Visible = isTrackable;
                 TabControl1.TabPages.Remove(TrackingTab);
                 TrackingBox.Visible = false;
                 ExpandSplitter();
@@ -1093,7 +1034,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             if (!RemoteToolsBox.Visible && PingResults.Status == IPStatus.Success)
             {
-                intFailedPings = 0;
                 ShowIPButton.Tag = PingResults.Address;
                 ExpandSplitter(true);
                 RemoteToolsBox.Visible = true;
@@ -1133,8 +1073,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void UpdateDevice(DeviceUpdateInfoStruct UpdateInfo)
         {
-            DisableControls();
-            int rows = 0;
+            SetEditMode(false);
+            int affectedRows = 0;
             string SelectQry = Queries.SelectDeviceByGUID(CurrentViewDevice.GUID);
             string InsertQry = Queries.SelectEmptyHistoricalTable;
             using (var trans = DBFactory.GetDatabase().StartTransaction())
@@ -1143,10 +1083,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     try
                     {
-                        rows += DBFactory.GetDatabase().UpdateTable(SelectQry, GetUpdateTable(SelectQry), trans);
-                        rows += DBFactory.GetDatabase().UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo), trans);
+                        affectedRows += DBFactory.GetDatabase().UpdateTable(SelectQry, GetUpdateTable(SelectQry), trans);
+                        affectedRows += DBFactory.GetDatabase().UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo), trans);
 
-                        if (rows == 2)
+                        if (affectedRows == 2)
                         {
                             trans.Commit();
                             RefreshData();
@@ -1210,22 +1150,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             StartTrackDeviceForm();
         }
 
-        private void EquipTypeComboBox_DropDown(object sender, EventArgs e)
-        {
-            OtherFunctions.AdjustComboBoxWidth(sender, e);
-        }
-
         private void EquipTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (bolCheckFields)
             {
                 CheckFields();
             }
-        }
-
-        private void LocationComboBox_DropDown(object sender, EventArgs e)
-        {
-            OtherFunctions.AdjustComboBoxWidth(sender, e);
         }
 
         private void LocationComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1236,22 +1166,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void OSVersionComboBox_DropDown(object sender, EventArgs e)
-        {
-            OtherFunctions.AdjustComboBoxWidth(sender, e);
-        }
-
         private void OSVersionComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (bolCheckFields)
             {
                 CheckFields();
             }
-        }
-
-        private void StatusComboBox_DropDown(object sender, EventArgs e)
-        {
-            OtherFunctions.AdjustComboBoxWidth(sender, e);
         }
 
         private void StatusComboBox_SelectedIndexChanged(object sender, EventArgs e)
