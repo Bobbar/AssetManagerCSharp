@@ -1,19 +1,18 @@
-﻿using System.Threading.Tasks;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Data;
-using System.Collections.Generic;
-using System.Diagnostics;
-using AssetManager.UserInterface.CustomControls;
+﻿using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AssetManagement;
 using AssetManager.UserInterface.Forms.Attachments;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
     public partial class SibiManageRequestForm : ExtendedForm
     {
-
         #region Fields
 
         private RequestObject CurrentRequest = new RequestObject();
@@ -31,7 +30,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private FormWindowState PrevWindowState;
         private SliderLabel StatusSlider;
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
@@ -58,7 +57,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             NewRequest();
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -100,9 +99,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             IsModifying = false;
             IsNewRequest = false;
             fieldErrorIcon.Clear();
-            SetAttachCount();
+            ClearAttachCount();
             SetMunisStatus();
-
         }
 
         private void NewRequest()
@@ -169,14 +167,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         LoadNotes(CurrentRequest.GUID);
                         DisableControls();
                         SetTitle(false);
-                        SetAttachCount();
+                        UpdateAttachCountHandler(this, new EventArgs());
                         this.Show();
                         this.Activate();
                         SetMunisStatus();
                         bolGridFilling = false;
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -215,7 +212,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         return true;
                     }
                 }
-
             }
             catch (Exception)
             {
@@ -223,23 +219,15 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        public void SetAttachCount()
+        public void UpdateAttachCountHandler(object sender, EventArgs e)
         {
-            if (!GlobalSwitches.CachedMode)
-            {
+            GlobalInstances.AssetFunc.SetAttachmentCount(cmdAttachments, CurrentRequest.GUID, new SibiAttachmentsCols());
+        }
 
-                if (CurrentRequest != null)
-                {
-                    cmdAttachments.Text = "(" + GlobalInstances.AssetFunc.GetAttachmentCount(CurrentRequest.GUID, new SibiAttachmentsCols()).ToString() + ")";
-                    cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text;
-                }
-                else
-                {
-                    cmdAttachments.Text = "(0)";
-                    cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text;
-                }
-
-            }
+        public void ClearAttachCount()
+        {
+            cmdAttachments.Text = "(0)";
+            cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text;
         }
 
         private void AddErrorIcon(Control ctl)
@@ -310,7 +298,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     }
                 }
             }
-
         }
 
         private void AddNote()
@@ -512,7 +499,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (!string.IsNullOrEmpty(CurrentRequest.GUID) && !IsNewRequest)
                 {
-                    AttachmentsForm NewAttach = new AttachmentsForm(this, new SibiAttachmentsCols(), CurrentRequest, SetAttachCount);
+                    AttachmentsForm NewAttach = new AttachmentsForm(this, new SibiAttachmentsCols(), CurrentRequest, UpdateAttachCountHandler);
                 }
             }
         }
@@ -751,7 +738,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             foreach (Control c in control.Controls)
             {
-
                 if (c is TextBox)
                 {
                     var txt = (TextBox)c;
@@ -799,7 +785,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             foreach (Control c in control.Controls)
             {
-
                 if (c is TextBox)
                 {
                     var txt = (TextBox)c;
@@ -926,7 +911,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             txtRequestNum.Tag = new DBControlInfo(SibiRequestCols.RequestNumber, ParseType.DisplayOnly, false);
             txtRTNumber.Tag = new DBControlInfo(SibiRequestCols.RTNumber, false);
             txtCreateDate.Tag = new DBControlInfo(SibiRequestCols.DateStamp, ParseType.DisplayOnly, false);
-
         }
 
         private void InitForm(ExtendedForm ParentForm, string UID = "")
@@ -1172,7 +1156,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             catch (Exception)
             {
-
             }
         }
 
@@ -1236,14 +1219,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     e.RowBounds.Location.X + 20,
                     e.RowBounds.Location.Y + 4);
             }
-
         }
 
         private void ResetBackColors(Control parent)
         {
             foreach (Control c in parent.Controls)
             {
-
                 if (c is TextBox)
                 {
                     c.BackColor = Color.Empty;
@@ -1627,7 +1608,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     }
                 }
             }
-
         }
 
         private bool ValidateFields()
@@ -1697,7 +1677,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-
                 var colIndex = RequestItemsGrid.CurrentCell.ColumnIndex;
                 if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.ReplaceAsset))
                 {
@@ -1735,7 +1714,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             NewDeviceForm NewDev = new NewDeviceForm(this);
             NewDev.ImportFromSibi(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ItemUID));
-
         }
 
         private void SibiManageRequestForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -1781,8 +1759,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // InitForm();
         }
 
-        #endregion
-
-
+        #endregion Methods
     }
 }

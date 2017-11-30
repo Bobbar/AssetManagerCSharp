@@ -32,7 +32,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
         private CancellationTokenSource taskCancelTokenSource;
         private bool TransferTaskRunning = false;
         private DataObject dragDropDataObj = new DataObject();
-        private Action RefreshParentAttachCount;
+        public EventHandler AttachCountChanged;
 
         /// <summary>
         /// "ftp://  strServerIP  /attachments/  CurrentDB  /"
@@ -76,12 +76,12 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         #region Constructors
 
-        public AttachmentsForm(ExtendedForm ParentForm, AttachmentsBaseCols AttachTable, object attachDataObject = null, Action refreshAction = null) : base(ParentForm)
+        public AttachmentsForm(ExtendedForm ParentForm, AttachmentsBaseCols AttachTable, object attachDataObject = null, EventHandler attachCountChangeHandler = null) : base(ParentForm)
         {
             FTPUri = "ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/";
 
             InitializeComponent();
-            RefreshParentAttachCount = refreshAction;
+            AttachCountChanged += attachCountChangeHandler;
             ImageCaching.CacheControlImages(this);
             AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
             AttachGrid.DoubleBufferedDataGrid(true);
@@ -192,7 +192,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 }
 
                 AttachGrid.Columns[_attachTable.FileName].DefaultCellStyle.Font = new Font("Consolas", 9.75F, FontStyle.Bold);
-                RefreshAttachCount();
+                OnAttachCountChanged(new EventArgs());
                 AttachGrid.ClearSelection();
                 if (this.Visible)
                 {
@@ -688,9 +688,9 @@ namespace AssetManager.UserInterface.Forms.Attachments
             return false;
         }
 
-        private void RefreshAttachCount()
+        private void OnAttachCountChanged(EventArgs e)
         {
-            RefreshParentAttachCount();
+            AttachCountChanged(this, e);
         }
 
         private void UpdateDbAttachementName(string AttachUID, string NewFileName)

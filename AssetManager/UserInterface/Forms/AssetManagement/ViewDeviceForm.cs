@@ -140,13 +140,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        public void SetAttachCount()
+        public void UpdateAttachCountHandler(object sender, EventArgs e)
         {
-            if (!GlobalSwitches.CachedMode)
-            {
-                AttachmentsToolButton.Text = "(" + GlobalInstances.AssetFunc.GetAttachmentCount(CurrentViewDevice.GUID, new DeviceAttachmentsCols()).ToString() + ")";
-                AttachmentsToolButton.ToolTipText = "Attachments " + AttachmentsToolButton.Text;
-            }
+            GlobalInstances.AssetFunc.SetAttachmentCount(AttachmentsToolButton, CurrentViewDevice.GUID, new DeviceAttachmentsCols());
         }
 
         private void AcceptChanges()
@@ -820,7 +816,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 SetMunisEmpStatus();
                 GridFunctions.PopulateGrid(DataGridHistory, HistoricalResults, HistoricalGridColumns());
                 DataGridHistory.FastAutoSizeColumns();
-                SetAttachCount();
+                UpdateAttachCountHandler(this, new EventArgs());
                 SetADInfo();
             }
         }
@@ -1132,7 +1128,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
-                AttachmentsForm NewAttachments = new AttachmentsForm(this, new DeviceAttachmentsCols(), CurrentViewDevice, SetAttachCount);
+                AttachmentsForm NewAttachments = new AttachmentsForm(this, new DeviceAttachmentsCols(), CurrentViewDevice, UpdateAttachCountHandler);
             }
         }
 

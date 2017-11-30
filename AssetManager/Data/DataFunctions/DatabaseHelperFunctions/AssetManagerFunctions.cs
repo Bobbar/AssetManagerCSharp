@@ -411,16 +411,20 @@ namespace AssetManager
             }
         }
 
-        public int GetAttachmentCount(string attachFolderUID, AttachmentsBaseCols attachTable)
+        public void SetAttachmentCount(ToolStripButton targetTool, string attachFolderUID, AttachmentsBaseCols attachTable)
         {
-            try
+            if (!GlobalSwitches.CachedMode)
             {
-                return Convert.ToInt32(GetSqlValue(attachTable.TableName, attachTable.FKey, attachFolderUID, "COUNT(*)"));
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-                return 0;
+                try
+                {
+                    int attachCount = Convert.ToInt32(GetSqlValue(attachTable.TableName, attachTable.FKey, attachFolderUID, "COUNT(*)"));
+                    targetTool.Text = "(" + attachCount.ToString() + ")";
+                    targetTool.ToolTipText = "Attachments " + targetTool.Text;
+                }
+                catch (Exception ex)
+                {
+                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                }
             }
         }
 
