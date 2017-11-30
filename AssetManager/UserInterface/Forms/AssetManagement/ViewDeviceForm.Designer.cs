@@ -739,7 +739,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.TrackingGrid.TabIndex = 41;
             this.TrackingGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TrackingGrid_CellDoubleClick);
             this.TrackingGrid.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.TrackingGrid_RowPrePaint);
-            this.TrackingGrid.Paint += new System.Windows.Forms.PaintEventHandler(this.TrackingGrid_Paint);
             // 
             // TrackingBox
             // 

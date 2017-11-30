@@ -48,7 +48,7 @@ namespace AssetManager
 
         public static void SetGridStyle(DataGridView grid, GridTheme theme)
         {
-           // grid.BackgroundColor = Colors.DefaultGridBackColor;
+            // grid.BackgroundColor = Colors.DefaultGridBackColor;
             grid.DefaultCellStyle = new DataGridViewCellStyle(DefaultGridStyles);
             grid.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle(AlternatingRowDefaultStyles);
             grid.AlternatingRowsDefaultCellStyle.SelectionBackColor = theme.CellAltSelectColor;
@@ -67,18 +67,9 @@ namespace AssetManager
                 {
                     Color c1 = Theme.RowHighlightColor;
                     Color c2 = SelectColor;
-
-                    var BlendColorSelect = Color.FromArgb(Convert.ToInt32((Convert.ToInt32(c1.A) + Convert.ToInt32(c2.A)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.R) + Convert.ToInt32(c2.R)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.G) + Convert.ToInt32(c2.G)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.B) + Convert.ToInt32(c2.B)) / 2));
-
+                    var BlendColorSelect = Colors.ColorAlphaBlend(c1, c2);
                     c2 = Color.FromArgb(BackColor.R, BackColor.G, BackColor.B);
-                    var BlendColorBack = Color.FromArgb(Convert.ToInt32((Convert.ToInt32(c1.A) + Convert.ToInt32(c2.A)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.R) + Convert.ToInt32(c2.R)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.G) + Convert.ToInt32(c2.G)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.B) + Convert.ToInt32(c2.B)) / 2));
-
+                    var BlendColorBack = Colors.ColorAlphaBlend(c1, c2);
                     foreach (DataGridViewCell cell in Grid.Rows[Row].Cells)
                     {
                         cell.Style.SelectionBackColor = BlendColorSelect;

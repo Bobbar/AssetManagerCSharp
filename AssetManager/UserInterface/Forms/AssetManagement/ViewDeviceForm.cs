@@ -829,6 +829,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     CollectCurrentTracking(Results);
                     GridFunctions.PopulateGrid(TrackingGrid, Results, TrackingGridColumns());
+                    TrackingGrid.Columns[TrackablesCols.CheckType].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    TrackingGrid.Columns[TrackablesCols.CheckType].DefaultCellStyle.Font = new Font(TrackingGrid.Font, FontStyle.Bold);
                     DisableSorting(TrackingGrid);
                 }
                 else
@@ -1317,46 +1319,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void TrackingGrid_Paint(object sender, PaintEventArgs e)
-        {
-            try
-            {
-                if (TrackingGrid.Rows.Count > 0)
-                {
-                    TrackingGrid.Columns[TrackablesCols.CheckType].DefaultCellStyle.Font = new Font(TrackingGrid.Font, FontStyle.Bold);
-                }
-            }
-            catch
-            {
-            }
-        }
-
         private void TrackingGrid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
-            Color c1 = ColorTranslator.FromHtml("#8BCEE8"); //highlight color
-            TrackingGrid.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.Black;
-            TrackingGrid.Rows[e.RowIndex].Cells[GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType)].Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            if (TrackingGrid.Rows[e.RowIndex].Cells[GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType)].Value.ToString() == CheckType.Checkin)
+            int CheckTypeColIndex = GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType);
+            string CheckTypeValue = TrackingGrid.Rows[e.RowIndex].Cells[CheckTypeColIndex].Value.ToString();
+            DataGridViewCell CheckTypeCell = TrackingGrid.Rows[e.RowIndex].Cells[CheckTypeColIndex];
+            CheckTypeCell.Style.ForeColor = Color.Black;
+            if (CheckTypeValue == CheckType.Checkin)
             {
-                TrackingGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Colors.CheckIn;
-                Color c2 = Color.FromArgb(Colors.CheckIn.R, Colors.CheckIn.G, Colors.CheckIn.B);
-                Color BlendColor = default(Color);
-                BlendColor = Color.FromArgb(Convert.ToInt32((Convert.ToInt32(c1.A) + Convert.ToInt32(c2.A)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.R) + Convert.ToInt32(c2.R)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.G) + Convert.ToInt32(c2.G)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.B) + Convert.ToInt32(c2.B)) / 2));
-                TrackingGrid.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = BlendColor;
+                CheckTypeCell.Style.BackColor = Colors.CheckIn;
             }
-            else if (TrackingGrid.Rows[e.RowIndex].Cells[GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType)].Value.ToString() == CheckType.Checkout)
+            else if (CheckTypeValue == CheckType.Checkout)
             {
-                TrackingGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Colors.CheckOut;
-                Color c2 = Color.FromArgb(Colors.CheckOut.R, Colors.CheckOut.G, Colors.CheckOut.B);
-                Color BlendColor = default(Color);
-                BlendColor = Color.FromArgb(Convert.ToInt32((Convert.ToInt32(c1.A) + Convert.ToInt32(c2.A)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.R) + Convert.ToInt32(c2.R)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.G) + Convert.ToInt32(c2.G)) / 2),
-                         Convert.ToInt32((Convert.ToInt32(c1.B) + Convert.ToInt32(c2.B)) / 2));
-                TrackingGrid.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = BlendColor;
+                CheckTypeCell.Style.BackColor = Colors.CheckOut;
             }
         }
 

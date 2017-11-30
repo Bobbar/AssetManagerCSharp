@@ -544,6 +544,14 @@
             </summary>
             <param name="targetGrid"></param>
         </member>
+        <member name="M:AssetManager.Colors.ColorAlphaBlend(System.Drawing.Color,System.Drawing.Color)">
+            <summary>
+            Alpha blend two colors.
+            </summary>
+            <param name="InColor"></param>
+            <param name="BlendColor"></param>
+            <returns></returns>
+        </member>
         <member name="T:AssetManager.Properties.Resources">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.

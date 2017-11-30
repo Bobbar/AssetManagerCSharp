@@ -42,14 +42,16 @@ namespace AssetManager
         {
             if (empSearchName.Trim() != "")
             {
+                // Split the name string by spaces to try and separate first/last names.
                 string[] SplitName = empSearchName.Split(char.Parse(" "));
-                // Dim LevDist As New List(Of Integer)
+
+                // Init new list of search result objects.
                 List<SmartEmpSearchStruct> Results = new List<SmartEmpSearchStruct>();
 
-                //Get results for complete name from employees table
+                // Get results for complete name from employees table
                 Results.AddRange(GetEmpSearchResults(EmployeesCols.TableName, empSearchName, EmployeesCols.Name, EmployeesCols.Number));
 
-                //Get results for complete name from devices table
+                // Get results for complete name from devices table
                 Results.AddRange(GetEmpSearchResults(DevicesCols.TableName, empSearchName, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum));
 
                 foreach (string s in SplitName)
@@ -60,6 +62,7 @@ namespace AssetManager
                     //Get results for partial name from devices table
                     Results.AddRange(GetEmpSearchResults(DevicesCols.TableName, s, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum));
                 }
+
 
                 if (Results.Count > 0)
                 {
@@ -92,13 +95,13 @@ namespace AssetManager
                 if (resultSplit.Count() > 0)
                 {
                     //Iterate through the separate strings
-                    foreach (var item in resultSplit)
+                    foreach (var resultString in resultSplit)
                     {
                         //Make sure the result string contains the search string
-                        if (item.Contains(result.SearchString) && item.StartsWith(result.SearchString))
+                        if (resultString.Contains(result.SearchString) && resultString.StartsWith(result.SearchString))
                         {
                             //Get a new Levenshtein distance.
-                            var NewDistance = Fastenshtein.Levenshtein.Distance(item, result.SearchString);
+                            var NewDistance = Fastenshtein.Levenshtein.Distance(resultString, result.SearchString);
                             //If the strings are closer together, add the new data.
                             if (NewDistance < result.MatchDistance)
                             {

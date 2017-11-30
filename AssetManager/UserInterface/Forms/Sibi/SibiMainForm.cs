@@ -371,7 +371,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 ForeCol = GetFontColor(BackCol);
                 dvgCell.Style.BackColor = BackCol;
                 dvgCell.Style.ForeColor = ForeCol;
-                dvgCell.Style.SelectionBackColor = ColorAlphaBlend(BackCol, Color.FromArgb(87, 87, 87));
+                dvgCell.Style.SelectionBackColor = Colors.ColorAlphaBlend(BackCol, Color.FromArgb(87, 87, 87));
             }
         }
 
@@ -392,50 +392,42 @@ namespace AssetManager.UserInterface.Forms.Sibi
             switch (Value)
             {
                 case "NEW":
-                    return ColorAlphaBlend(Color.FromArgb(0, 255, 30), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(0, 255, 30), DarkColor);
 
                 case "QTN":
-                    return ColorAlphaBlend(Color.FromArgb(242, 255, 0), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(242, 255, 0), DarkColor);
 
                 case "QTR":
-                    return ColorAlphaBlend(Color.FromArgb(255, 208, 0), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(255, 208, 0), DarkColor);
 
                 case "QRC":
-                    return ColorAlphaBlend(Color.FromArgb(255, 162, 0), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(255, 162, 0), DarkColor);
 
                 case "RQN":
-                    return ColorAlphaBlend(Color.FromArgb(0, 255, 251), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(0, 255, 251), DarkColor);
 
                 case "RQR":
-                    return ColorAlphaBlend(Color.FromArgb(0, 140, 255), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(0, 140, 255), DarkColor);
 
                 case "POS":
-                    return ColorAlphaBlend(Color.FromArgb(197, 105, 255), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(197, 105, 255), DarkColor);
 
                 case "SHD":
-                    return ColorAlphaBlend(Color.FromArgb(255, 79, 243), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(255, 79, 243), DarkColor);
 
                 case "ORC":
-                    return ColorAlphaBlend(Color.FromArgb(79, 144, 255), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(79, 144, 255), DarkColor);
 
                 case "NPAY":
-                    return ColorAlphaBlend(Color.FromArgb(255, 36, 36), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(255, 36, 36), DarkColor);
 
                 case "RCOMP":
-                    return ColorAlphaBlend(Color.FromArgb(158, 158, 158), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(158, 158, 158), DarkColor);
 
                 case "ONH":
-                    return ColorAlphaBlend(Color.FromArgb(255, 255, 255), DarkColor);
+                    return Colors.ColorAlphaBlend(Color.FromArgb(255, 255, 255), DarkColor);
             }
             return DarkColor;
-        }
-
-        private Color ColorAlphaBlend(Color InColor, Color BlendColor)
-        {
-            //blend colors with darker color so they aren't so intense
-            Color OutColor = default(Color);
-            OutColor = Color.FromArgb(Convert.ToInt32((Convert.ToInt32(InColor.A) + Convert.ToInt32(BlendColor.A)) / 2), Convert.ToInt32((Convert.ToInt32(InColor.R) + Convert.ToInt32(BlendColor.R)) / 2), Convert.ToInt32((Convert.ToInt32(InColor.G) + Convert.ToInt32(BlendColor.G)) / 2), Convert.ToInt32((Convert.ToInt32(InColor.B) + Convert.ToInt32(BlendColor.B)) / 2));
-            return OutColor;
         }
 
         private Color GetFontColor(Color color)
