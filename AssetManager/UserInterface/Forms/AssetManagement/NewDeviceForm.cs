@@ -346,14 +346,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void cmdUserSearch_Click(object sender, EventArgs e)
         {
-            using (MunisUserForm NewMunisSearch = new MunisUserForm(this))
+            MunisUser = GlobalInstances.MunisFunc.MunisUserSearch(this);
+            if (!string.IsNullOrEmpty(MunisUser.Number))
             {
-                MunisUser = NewMunisSearch.EmployeeInfo;
-                if (!string.IsNullOrEmpty(MunisUser.Number))
-                {
-                    txtCurUser_REQ.Text = MunisUser.Name;
-                    txtCurUser_REQ.ReadOnly = true;
-                }
+                txtCurUser_REQ.Text = MunisUser.Name;
+                txtCurUser_REQ.ReadOnly = true;
             }
         }
 

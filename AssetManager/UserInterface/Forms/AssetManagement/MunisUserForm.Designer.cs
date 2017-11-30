@@ -51,8 +51,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.MunisResults.AllowUserToAddRows = false;
             this.MunisResults.AllowUserToDeleteRows = false;
             this.MunisResults.AllowUserToResizeRows = false;
-            this.MunisResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.MunisResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MunisResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.MunisResults.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -77,8 +77,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.Controls.Add(this.lblSelectedEmp);
             this.GroupBox1.Controls.Add(this.cmdAccept);
@@ -93,7 +93,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // lblSelectedEmp
             // 
-            this.lblSelectedEmp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.lblSelectedEmp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSelectedEmp.Location = new System.Drawing.Point(6, 277);
             this.lblSelectedEmp.Name = "lblSelectedEmp";
@@ -115,7 +115,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // pnlSearch
             // 
-            this.pnlSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.pnlSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlSearch.Controls.Add(this.pbWorking);
             this.pnlSearch.Controls.Add(this.Label1);
@@ -165,6 +165,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.txtSearchName.Name = "txtSearchName";
             this.txtSearchName.Size = new System.Drawing.Size(157, 22);
             this.txtSearchName.TabIndex = 0;
+            this.txtSearchName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearchName_KeyDown);
             // 
             // MunisUserForm
             // 

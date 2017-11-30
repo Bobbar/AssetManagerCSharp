@@ -11,14 +11,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             get
             {
-                using (this)
-                {
-                    if (DialogResult == DialogResult.Yes)
-                    {
-                        return SelectedEmpInfo;
-                    }
-                    return new MunisEmployeeStruct();
-                }
+                return SelectedEmpInfo;
             }
         }
 
@@ -91,7 +84,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (!string.IsNullOrEmpty(SelectedEmpInfo.Name) && !string.IsNullOrEmpty(SelectedEmpInfo.Number))
             {
                 GlobalInstances.AssetFunc.AddNewEmp(SelectedEmpInfo);
-                this.DialogResult = DialogResult.Yes;
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else

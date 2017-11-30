@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using AssetManager.UserInterface.Forms.AssetManagement;
 namespace AssetManager
 {
     public class MunisFunctions //Be warned. This whole class is a horrible bastard...
@@ -693,6 +693,21 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
             string strFields = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo";
             string Query = "SELECT TOP 1 " + strFields + " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" + device.AssetTag + "' AND fama_tag <> '' OR fama_serial='" + device.Serial + "' AND fama_serial <> ''";
             return await MunisComms.ReturnSqlTableAsync(Query);
+        }
+
+        public MunisEmployeeStruct MunisUserSearch(ExtendedForm parentForm)
+        {
+            using (MunisUserForm NewMunisSearch = new MunisUserForm(parentForm))
+            {
+                if (NewMunisSearch.DialogResult == DialogResult.OK)
+                {
+                    return NewMunisSearch.EmployeeInfo;
+                }
+                else
+                {
+                    return new MunisEmployeeStruct();
+                }
+            }
         }
     }
 }

@@ -308,31 +308,28 @@ namespace AssetManager
             try
             {
                 MunisEmployeeStruct SupInfo = default(MunisEmployeeStruct);
-                using (MunisUserForm NewMunisSearch = new MunisUserForm(parentForm))
+                SupInfo = GlobalInstances.MunisFunc.MunisUserSearch(parentForm);
+                if (!string.IsNullOrEmpty(SupInfo.Number))
                 {
-                    if (NewMunisSearch.DialogResult == DialogResult.Yes)
+                    OtherFunctions.SetWaitCursor(true, parentForm);
+                    using (DataTable DeviceList = new DataTable())
                     {
-                        OtherFunctions.SetWaitCursor(true, parentForm);
-                        SupInfo = NewMunisSearch.EmployeeInfo;
-                        using (DataTable DeviceList = new DataTable())
+                        using (DataTable EmpList = GlobalInstances.MunisFunc.ListOfEmpsBySup(SupInfo.Number))
                         {
-                            using (DataTable EmpList = GlobalInstances.MunisFunc.ListOfEmpsBySup(SupInfo.Number))
+                            foreach (DataRow r in EmpList.Rows)
                             {
-                                foreach (DataRow r in EmpList.Rows)
+                                using (DataTable tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevicesByEmpNum(r["a_employee_number"].ToString())))
                                 {
-                                    using (DataTable tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevicesByEmpNum(r["a_employee_number"].ToString())))
-                                    {
-                                        DeviceList.Merge(tmpTable);
-                                    }
+                                    DeviceList.Merge(tmpTable);
                                 }
-                                return DeviceList;
                             }
+                            return DeviceList;
                         }
                     }
-                    else
-                    {
-                        return null;
-                    }
+                }
+                else
+                {
+                    return null;
                 }
             }
             finally

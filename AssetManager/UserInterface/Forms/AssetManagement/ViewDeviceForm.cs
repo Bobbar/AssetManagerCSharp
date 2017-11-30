@@ -850,11 +850,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             SetEditMode(true);
         }
 
-        private void NewEntryView(string entryGUID)
+        private void NewEntryView()
         {
-            Waiting();
-            ViewHistoryForm NewEntry = new ViewHistoryForm(this, entryGUID, CurrentViewDevice.GUID);
-            DoneWaiting();
+            string entryUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
+            if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewHistoryForm), entryUID))
+            {
+                Waiting();
+                ViewHistoryForm NewEntry = new ViewHistoryForm(this, entryUID, CurrentViewDevice.GUID);
+                DoneWaiting();
+            }
         }
 
         private void NewTrackingView(string GUID)
@@ -1203,14 +1207,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void MunisSearchButton_Click(object sender, EventArgs e)
         {
-            using (MunisUserForm NewMunisSearch = new MunisUserForm(this))
+            MunisUser = GlobalInstances.MunisFunc.MunisUserSearch(this);
+            if (!string.IsNullOrEmpty(MunisUser.Name))
             {
-                MunisUser = NewMunisSearch.EmployeeInfo;
-                if (!string.IsNullOrEmpty(MunisUser.Name))
-                {
-                    CurrentUserTextBox.Text = MunisUser.Name;
-                    CurrentUserTextBox.ReadOnly = true;
-                }
+                CurrentUserTextBox.Text = MunisUser.Name;
+                CurrentUserTextBox.ReadOnly = true;
             }
         }
 
@@ -1256,11 +1257,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DataGridHistory_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            string EntryUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
-            if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewHistoryForm), EntryUID))
-            {
-                NewEntryView(EntryUID);
-            }
+            NewEntryView();
         }
 
         private void DataGridHistory_CellEnter(object sender, DataGridViewCellEventArgs e)
