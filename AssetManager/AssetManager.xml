@@ -583,6 +583,11 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:AssetManager.Properties.Resources.asset_icon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
         <member name="P:AssetManager.Properties.Resources.AssetManagerIcon">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -688,11 +693,6 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:AssetManager.Properties.Resources.icon_box">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-            </summary>
-        </member>
         <member name="P:AssetManager.Properties.Resources.Image1">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -701,11 +701,6 @@
         <member name="P:AssetManager.Properties.Resources.ImportIcon">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:AssetManager.Properties.Resources.inventory_icon_orange">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
             </summary>
         </member>
         <member name="P:AssetManager.Properties.Resources.LoadingAni">
@@ -753,7 +748,12 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:AssetManager.Properties.Resources.SibiIcon">
+        <member name="P:AssetManager.Properties.Resources.sibi_icon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:AssetManager.Properties.Resources.SibiLogo">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>

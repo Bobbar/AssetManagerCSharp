@@ -25,6 +25,7 @@ namespace AssetManager.UserInterface.Forms
         public GetCredentialsForm(string credentialDescription)
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.asset_icon;
             CredDescriptionLabel.Text = credentialDescription;
         }
 

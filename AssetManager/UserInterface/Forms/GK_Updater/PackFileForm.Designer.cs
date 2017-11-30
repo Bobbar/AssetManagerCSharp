@@ -32,7 +32,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PackFileForm));
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
             this.ProgressTimer = new System.Windows.Forms.Timer(this.components);
             this.StatusLabel = new System.Windows.Forms.Label();
@@ -157,7 +156,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             this.Controls.Add(this.GroupBox1);
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PackFileForm";

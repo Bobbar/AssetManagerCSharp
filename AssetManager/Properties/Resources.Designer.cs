@@ -91,6 +91,16 @@ namespace AssetManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon asset_icon {
+            get {
+                object obj = ResourceManager.GetObject("asset_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap AssetManagerIcon {
@@ -301,42 +311,12 @@ namespace AssetManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon icon_box {
-            get {
-                object obj = ResourceManager.GetObject("icon_box", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Image1 {
-            get {
-                object obj = ResourceManager.GetObject("Image1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap ImportIcon {
             get {
                 object obj = ResourceManager.GetObject("ImportIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon inventory_icon_orange {
-            get {
-                object obj = ResourceManager.GetObject("inventory_icon_orange", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -431,11 +411,21 @@ namespace AssetManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon sibi_icon {
+            get {
+                object obj = ResourceManager.GetObject("sibi_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SibiIcon {
+        internal static System.Drawing.Bitmap SibiLogo {
             get {
-                object obj = ResourceManager.GetObject("SibiIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("SibiLogo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

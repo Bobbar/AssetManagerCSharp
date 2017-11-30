@@ -32,7 +32,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GKUpdaterForm));
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.Updater_Table = new System.Windows.Forms.FlowLayoutPanel();
             this.GroupBox3 = new System.Windows.Forms.GroupBox();
@@ -283,7 +282,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             this.Controls.Add(this.MenuStrip);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MenuStrip;
             this.MinimumSize = new System.Drawing.Size(1010, 428);
             this.Name = "GKUpdaterForm";

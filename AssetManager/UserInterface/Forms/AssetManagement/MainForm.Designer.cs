@@ -33,7 +33,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.ResultGrid = new System.Windows.Forms.DataGridView();
             this.ContextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -885,7 +884,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.cmdSibi.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.cmdSibi.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdSibi.Image = global::AssetManager.Properties.Resources.SibiIcon;
+            this.cmdSibi.Image = global::AssetManager.Properties.Resources.SibiLogo;
             this.cmdSibi.Name = "cmdSibi";
             this.cmdSibi.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
             this.cmdSibi.Size = new System.Drawing.Size(232, 34);
@@ -904,7 +903,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Controls.Add(this.StatusStrip1);
             this.Controls.Add(this.GroupBox1);
             this.DoubleBuffered = true;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1256, 443);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -37,6 +37,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
+                this.Icon = Properties.Resources.sibi_icon;
                 SibiResultGrid.DoubleBufferedDataGrid(true);
                 this.GridTheme = new GridTheme(Colors.HighlightBlue, Colors.SibiSelectColor, Colors.SibiSelectAltColor, SibiResultGrid.DefaultCellStyle.BackColor);
                 StyleFunctions.SetGridStyle(SibiResultGrid, this.GridTheme);

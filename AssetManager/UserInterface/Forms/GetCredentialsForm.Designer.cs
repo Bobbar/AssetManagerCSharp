@@ -31,7 +31,6 @@ namespace AssetManager.UserInterface.Forms
         
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GetCredentialsForm));
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.CredDescriptionLabel = new System.Windows.Forms.Label();
             this.cmdAccept = new System.Windows.Forms.Button();
@@ -44,8 +43,8 @@ namespace AssetManager.UserInterface.Forms
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.Controls.Add(this.CredDescriptionLabel);
             this.GroupBox1.Controls.Add(this.cmdAccept);
@@ -126,7 +125,6 @@ namespace AssetManager.UserInterface.Forms
             this.ClientSize = new System.Drawing.Size(295, 245);
             this.Controls.Add(this.GroupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "GetCredentialsForm";

@@ -14,6 +14,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         public PackFileForm(bool showFunctions)
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.asset_icon;
             FunctionPanel.Visible = showFunctions;
             if (!showFunctions)
             {

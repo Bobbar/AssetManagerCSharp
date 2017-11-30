@@ -21,6 +21,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         {
             // This call is required by the designer.
             InitializeComponent();
+            this.Icon = Properties.Resources.asset_icon;
             bolStarting = false;
             MaxUpdates.Value = MaxSimUpdates;
             // Add any initialization after the InitializeComponent() call.

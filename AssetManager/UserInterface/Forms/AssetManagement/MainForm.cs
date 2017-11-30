@@ -46,6 +46,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         public MainForm()
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.asset_icon;
             ShowAll();
             MyLiveBox = new LiveBox(this);
             MyMunisToolBar = new CustomControls.MunisToolBar(this);

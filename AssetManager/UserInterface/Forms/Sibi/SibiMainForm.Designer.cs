@@ -32,7 +32,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SibiMainForm));
             this.Panel1 = new System.Windows.Forms.Panel();
             this.GroupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -340,7 +339,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ClientSize = new System.Drawing.Size(1188, 636);
             this.Controls.Add(this.ToolStrip1);
             this.Controls.Add(this.Panel1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1121, 371);
             this.Name = "SibiMainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;

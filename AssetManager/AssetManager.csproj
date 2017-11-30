@@ -446,9 +446,6 @@
     <EmbeddedResource Include="UserInterface\Forms\Attachments\AttachmentsForm.resx">
       <DependentUpon>AttachmentsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\GetCredentialsForm.resx">
-      <DependentUpon>GetCredentialsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GK_Updater\GKProgressControl.resx">
       <DependentUpon>GKProgressControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -469,9 +466,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Sibi\SibiNotesForm.resx">
       <DependentUpon>SibiNotesForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\SplashScreenForm.resx">
-      <DependentUpon>SplashScreenForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
