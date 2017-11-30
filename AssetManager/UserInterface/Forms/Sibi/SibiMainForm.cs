@@ -7,6 +7,7 @@ using System.Data.Common;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
@@ -368,7 +369,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 Color BackCol = default(Color);
                 Color ForeCol = default(Color);
                 BackCol = GetRowColorFromID(dvgRow.Cells[SibiRequestCols.RequestNumber].Value.ToString());
-                ForeCol = GetFontColor(BackCol);
+                ForeCol = Color.Black;
                 dvgCell.Style.BackColor = BackCol;
                 dvgCell.Style.ForeColor = ForeCol;
                 dvgCell.Style.SelectionBackColor = Colors.ColorAlphaBlend(BackCol, Color.FromArgb(87, 87, 87));
@@ -385,66 +386,21 @@ namespace AssetManager.UserInterface.Forms.Sibi
             return Color.Red;
         }
 
-        private Color GetRowColor(string Value)
+        /// <summary>
+        /// Gets the color associated with the specified attribute code. Alpha blended with gray to make it more pastel.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        private Color GetRowColor(string code)
         {
-            Color DarkColor = Color.FromArgb(222, 222, 222);
             //gray color
-            switch (Value)
-            {
-                case "NEW":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(0, 255, 30), DarkColor);
-
-                case "QTN":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(242, 255, 0), DarkColor);
-
-                case "QTR":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(255, 208, 0), DarkColor);
-
-                case "QRC":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(255, 162, 0), DarkColor);
-
-                case "RQN":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(0, 255, 251), DarkColor);
-
-                case "RQR":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(0, 140, 255), DarkColor);
-
-                case "POS":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(197, 105, 255), DarkColor);
-
-                case "SHD":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(255, 79, 243), DarkColor);
-
-                case "ORC":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(79, 144, 255), DarkColor);
-
-                case "NPAY":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(255, 36, 36), DarkColor);
-
-                case "RCOMP":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(158, 158, 158), DarkColor);
-
-                case "ONH":
-                    return Colors.ColorAlphaBlend(Color.FromArgb(255, 255, 255), DarkColor);
-            }
-            return DarkColor;
-        }
-
-        private Color GetFontColor(Color color)
-        {
-            //get contrasting font color
-            int d = 0;
-            double a = 0;
-            a = 1 - (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255;
-            if (a < 0.5)
-            {
-                d = 0;
-            }
-            else
-            {
-                d = 255;
-            }
-            return Color.FromArgb(d, d, d);
+            Color DarkColor = Color.FromArgb(222, 222, 222);
+            // Get a list from the attrib array.
+            var attribList = GlobalInstances.SibiAttribute.StatusType.OfType<AttributeDataStruct>().ToList();
+            // Use List.Find to locate the matching attribute.
+            var attribColor = attribList.Find((i) => { return i.Code == code; }).Color;
+            // Return the a blended color.
+            return Colors.ColorAlphaBlend(attribColor, DarkColor);
         }
 
         private void HighlightCurrentRow(int Row)

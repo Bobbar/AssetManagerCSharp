@@ -1,3 +1,4 @@
+using System.Drawing;
 namespace AssetManager
 {
     public struct AttributeDataStruct
@@ -5,14 +6,23 @@ namespace AssetManager
         public string DisplayValue { get; set; }
         public string Code { get; set; }
         public int ID { get; set; }
+        public Color Color { get; set; }
 
         public AttributeDataStruct(string displayValue, string code, int id)
         {
             this.DisplayValue = displayValue;
             this.Code = code;
             this.ID = id;
+            this.Color = Color.Empty;
         }
 
+        public AttributeDataStruct(string displayValue, string code, int id, Color color)
+        {
+            this.DisplayValue = displayValue;
+            this.Code = code;
+            this.ID = id;
+            this.Color = color;
+        }
     }
 }
 namespace AssetManager
@@ -34,7 +44,7 @@ namespace AssetManager
         public int AccessLevel;
         public string GUID;
 
-        public LocalUserInfoStruct(string userName,string fullName,int accessLevel,string guid)
+        public LocalUserInfoStruct(string userName, string fullName, int accessLevel, string guid)
         {
             UserName = userName;
             Fullname = fullName;
@@ -42,7 +52,7 @@ namespace AssetManager
             GUID = guid;
         }
     }
-    
+
 }
 namespace AssetManager
 {

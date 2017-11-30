@@ -149,7 +149,14 @@ namespace AssetManager
                         {
                             DisplayValue = r[ComboCodesBaseCols.DisplayValue].ToString();
                         }
-                        tmpArray.Add(new AttributeDataStruct(DisplayValue, r[ComboCodesBaseCols.CodeValue].ToString(), Convert.ToInt32(r[ComboCodesBaseCols.ID])));
+
+                        Color attribColor = Color.Empty;
+                        if (!string.IsNullOrEmpty(r[ComboCodesBaseCols.Color].ToString()))
+                        {
+                            attribColor = ColorTranslator.FromHtml(r[ComboCodesBaseCols.Color].ToString());
+                        }
+
+                        tmpArray.Add(new AttributeDataStruct(DisplayValue, r[ComboCodesBaseCols.CodeValue].ToString(), Convert.ToInt32(r[ComboCodesBaseCols.ID]), attribColor));
                     }
                     return tmpArray.ToArray();
                 }

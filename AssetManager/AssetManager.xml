@@ -1172,6 +1172,13 @@
             Searches all request item columns for item that match the specified search string.
             </summary>
         </member>
+        <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiMainForm.GetRowColor(System.String)">
+            <summary>
+            Gets the color associated with the specified attribute code. Alpha blended with gray to make it more pastel.
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
         <member name="M:AssetManager.LiveBox.ProcessSearch(System.String)">
             <summary>
             Runs the DB query Asynchronously.

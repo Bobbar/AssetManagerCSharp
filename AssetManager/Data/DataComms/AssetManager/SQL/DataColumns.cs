@@ -167,6 +167,7 @@ namespace AssetManager
         public const string DisplayValue = "human_value";
         public const string CodeValue = "db_value";
         public const string ID = "id";
+        public const string Color = "hex_color";
     }
 }
 namespace AssetManager
