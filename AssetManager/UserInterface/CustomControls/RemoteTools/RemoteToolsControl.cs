@@ -12,10 +12,22 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
     {
         #region Fields
 
-        private int FailedPings = 0;
-        private PingVis MyPingVis;
+        private int failedPings = 0;
+        private PingVis pingVis;
         private ExtendedForm hostForm;
-        public DeviceObject Device { get; set; }
+        private DeviceObject device;
+        public DeviceObject Device
+        {
+            get
+            {
+                return device;
+            }
+            set
+            {
+                device = value;
+                CheckRDP();
+            }
+        }
 
         [Browsable(true)]
         public event EventHandler<StatusPrompt> NewStatusPrompt;
@@ -30,7 +42,6 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
         public RemoteToolsControl()
         {
             InitializeComponent();
-
         }
 
         #endregion Constructors
@@ -56,7 +67,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
         {
             if (disposing && (components != null))
             {
-                if (MyPingVis != null) MyPingVis.Dispose();
+                if (pingVis != null) pingVis.Dispose();
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -99,16 +110,13 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
             {
                 if (Device.OSVersion.Contains("WIN"))
                 {
-                    if (ReferenceEquals(MyPingVis, null))
+                    if (ReferenceEquals(pingVis, null))
                     {
-                        MyPingVis = new PingVis((Control)ShowIPButton, Device.HostName + "." + NetworkInfo.CurrentDomain);
+                        pingVis = new PingVis((Control)ShowIPButton, Device.HostName + "." + NetworkInfo.CurrentDomain);
                     }
-                    if (MyPingVis.CurrentResult != null)
+                    if (pingVis.CurrentResult != null)
                     {
-                        //if (MyPingVis.CurrentResult.Status == IPStatus.Success)
-                        //{
-                        SetupNetTools(MyPingVis.CurrentResult);
-                        //}
+                        SetupNetTools(pingVis.CurrentResult);
                     }
                 }
             }
@@ -179,7 +187,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
             var blah = OtherFunctions.Message("Click 'Yes' to reboot this Device.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", hostForm);
             if (blah == DialogResult.Yes)
             {
-                string IP = MyPingVis.CurrentResult.Address.ToString();
+                string IP = pingVis.CurrentResult.Address.ToString();
                 var RestartOutput = await SendRestart(IP, Device.HostName);
                 if ((string)RestartOutput == "")
                 {
@@ -237,11 +245,11 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
         {
             if (PingResults.Status != IPStatus.Success)
             {
-                FailedPings++;
+                failedPings++;
             }
             else
             {
-                FailedPings = 0;
+                failedPings = 0;
             }
             if (!this.Visible && PingResults.Status == IPStatus.Success)
             {
@@ -249,7 +257,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
                 OnVisibleChanging(true);
                 this.Visible = true;
             }
-            if (FailedPings > 10 && this.Visible)
+            if (failedPings > 10 && this.Visible)
             {
                 OnVisibleChanging(false);
                 this.Visible = false;
@@ -257,9 +265,9 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
         }
         private void ShowIP()
         {
-            if (MyPingVis.CurrentResult != null)
+            if (pingVis.CurrentResult != null)
             {
-                string IPAddress = MyPingVis.CurrentResult.Address.ToString();
+                string IPAddress = pingVis.CurrentResult.Address.ToString();
                 var blah = OtherFunctions.Message(IPAddress + " - " + NetworkInfo.LocationOfIP(IPAddress) + "\r\n" + "\r\n" + "Press 'Yes' to copy to clipboard.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Information, "IP Address", hostForm);
                 if (blah == DialogResult.Yes)
                 {
@@ -321,10 +329,10 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
         }
         private void RemoteToolsControl_VisibleChanged(object sender, EventArgs e)
         {
-            if (MyPingVis != null)
+            if (pingVis != null)
             {
-                MyPingVis.Dispose();
-                MyPingVis = null;
+                pingVis.Dispose();
+                pingVis = null;
             }
         }
 
