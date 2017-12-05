@@ -66,15 +66,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label7 = new System.Windows.Forms.Label();
             this.Label6 = new System.Windows.Forms.Label();
             this.ReplaceYearTextBox = new System.Windows.Forms.TextBox();
-            this.RemoteToolsBox = new System.Windows.Forms.GroupBox();
-            this.FlowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.GKUpdateButton = new System.Windows.Forms.Button();
-            this.BrowseFilesButton = new System.Windows.Forms.Button();
-            this.RestartDeviceButton = new System.Windows.Forms.PictureBox();
-            this.StartRDPButton = new System.Windows.Forms.Button();
-            this.DeployTVButton = new System.Windows.Forms.Button();
-            this.UpdateChromeButton = new System.Windows.Forms.Button();
-            this.ShowIPButton = new System.Windows.Forms.Button();
             this.RightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.DeleteEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TabControl1 = new System.Windows.Forms.TabControl();
@@ -97,7 +88,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.StatusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.RemoteToolsTimer = new System.Windows.Forms.Timer(this.components);
             this.fieldErrorIcon = new System.Windows.Forms.ErrorProvider(this.components);
             this.AcceptCancelToolStrip = new AssetManager.UserInterface.CustomControls.OneClickToolStrip();
             this.AcceptToolButton = new System.Windows.Forms.ToolStripButton();
@@ -123,6 +113,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.iCloudTextBox = new System.Windows.Forms.TextBox();
             this.Label17 = new System.Windows.Forms.Label();
             this.RemoteTrackingPanel = new System.Windows.Forms.Panel();
+            this.remoteToolsControl = new AssetManager.UserInterface.CustomControls.RemoteTools.RemoteToolsControl();
             this.ToolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.TrackingToolStrip = new System.Windows.Forms.ToolStrip();
             this.TrackingDropDown = new System.Windows.Forms.ToolStripDropDownButton();
@@ -143,9 +134,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.AssetDisposalFormToolItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.MunisSibiPanel.SuspendLayout();
-            this.RemoteToolsBox.SuspendLayout();
-            this.FlowLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).BeginInit();
             this.RightClickMenu.SuspendLayout();
             this.TabControl1.SuspendLayout();
             this.HistoryTab.SuspendLayout();
@@ -495,137 +483,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ReplaceYearTextBox.Size = new System.Drawing.Size(169, 23);
             this.ReplaceYearTextBox.TabIndex = 10;
             // 
-            // RemoteToolsBox
-            // 
-            this.RemoteToolsBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.RemoteToolsBox.BackColor = System.Drawing.SystemColors.Control;
-            this.RemoteToolsBox.Controls.Add(this.FlowLayoutPanel1);
-            this.RemoteToolsBox.Controls.Add(this.ShowIPButton);
-            this.RemoteToolsBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.RemoteToolsBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RemoteToolsBox.Location = new System.Drawing.Point(3, 2);
-            this.RemoteToolsBox.Name = "RemoteToolsBox";
-            this.RemoteToolsBox.Size = new System.Drawing.Size(421, 108);
-            this.RemoteToolsBox.TabIndex = 52;
-            this.RemoteToolsBox.TabStop = false;
-            this.RemoteToolsBox.Text = "Remote Tools";
-            this.RemoteToolsBox.Visible = false;
-            // 
-            // FlowLayoutPanel1
-            // 
-            this.FlowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.FlowLayoutPanel1.AutoScroll = true;
-            this.FlowLayoutPanel1.Controls.Add(this.GKUpdateButton);
-            this.FlowLayoutPanel1.Controls.Add(this.BrowseFilesButton);
-            this.FlowLayoutPanel1.Controls.Add(this.RestartDeviceButton);
-            this.FlowLayoutPanel1.Controls.Add(this.StartRDPButton);
-            this.FlowLayoutPanel1.Controls.Add(this.DeployTVButton);
-            this.FlowLayoutPanel1.Controls.Add(this.UpdateChromeButton);
-            this.FlowLayoutPanel1.Location = new System.Drawing.Point(6, 16);
-            this.FlowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.FlowLayoutPanel1.Name = "FlowLayoutPanel1";
-            this.FlowLayoutPanel1.Size = new System.Drawing.Size(318, 86);
-            this.FlowLayoutPanel1.TabIndex = 57;
-            // 
-            // GKUpdateButton
-            // 
-            this.GKUpdateButton.BackgroundImage = global::AssetManager.Properties.Resources.GK__UpdateIcon;
-            this.GKUpdateButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.GKUpdateButton.Location = new System.Drawing.Point(1, 1);
-            this.GKUpdateButton.Margin = new System.Windows.Forms.Padding(1);
-            this.GKUpdateButton.Name = "GKUpdateButton";
-            this.GKUpdateButton.Size = new System.Drawing.Size(45, 45);
-            this.GKUpdateButton.TabIndex = 55;
-            this.ToolTip1.SetToolTip(this.GKUpdateButton, "Enqueue GK Update");
-            this.GKUpdateButton.UseVisualStyleBackColor = true;
-            this.GKUpdateButton.Click += new System.EventHandler(this.GKUpdateButton_Click);
-            // 
-            // BrowseFilesButton
-            // 
-            this.BrowseFilesButton.BackgroundImage = global::AssetManager.Properties.Resources.FolderIcon;
-            this.BrowseFilesButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BrowseFilesButton.Location = new System.Drawing.Point(48, 1);
-            this.BrowseFilesButton.Margin = new System.Windows.Forms.Padding(1);
-            this.BrowseFilesButton.Name = "BrowseFilesButton";
-            this.BrowseFilesButton.Size = new System.Drawing.Size(45, 45);
-            this.BrowseFilesButton.TabIndex = 52;
-            this.ToolTip1.SetToolTip(this.BrowseFilesButton, "Browse Files");
-            this.BrowseFilesButton.UseVisualStyleBackColor = true;
-            this.BrowseFilesButton.Click += new System.EventHandler(this.BrowseFilesButton_Click);
-            // 
-            // RestartDeviceButton
-            // 
-            this.RestartDeviceButton.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.RestartDeviceButton.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RestartDeviceButton.Image = global::AssetManager.Properties.Resources.RestartIcon;
-            this.RestartDeviceButton.Location = new System.Drawing.Point(95, 1);
-            this.RestartDeviceButton.Margin = new System.Windows.Forms.Padding(1);
-            this.RestartDeviceButton.Name = "RestartDeviceButton";
-            this.RestartDeviceButton.Size = new System.Drawing.Size(45, 45);
-            this.RestartDeviceButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.RestartDeviceButton.TabIndex = 56;
-            this.RestartDeviceButton.TabStop = false;
-            this.ToolTip1.SetToolTip(this.RestartDeviceButton, "Reboot Device");
-            this.RestartDeviceButton.Click += new System.EventHandler(this.RestartDeviceButton_Click);
-            // 
-            // StartRDPButton
-            // 
-            this.StartRDPButton.BackgroundImage = global::AssetManager.Properties.Resources.RDPIcon;
-            this.StartRDPButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.StartRDPButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.StartRDPButton.Location = new System.Drawing.Point(142, 1);
-            this.StartRDPButton.Margin = new System.Windows.Forms.Padding(1);
-            this.StartRDPButton.Name = "StartRDPButton";
-            this.StartRDPButton.Size = new System.Drawing.Size(45, 45);
-            this.StartRDPButton.TabIndex = 46;
-            this.ToolTip1.SetToolTip(this.StartRDPButton, "Launch Remote Desktop");
-            this.StartRDPButton.UseVisualStyleBackColor = true;
-            this.StartRDPButton.Click += new System.EventHandler(this.StartRDPButton_Click);
-            // 
-            // DeployTVButton
-            // 
-            this.DeployTVButton.BackgroundImage = global::AssetManager.Properties.Resources.TeamViewerIcon;
-            this.DeployTVButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.DeployTVButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.DeployTVButton.Location = new System.Drawing.Point(189, 1);
-            this.DeployTVButton.Margin = new System.Windows.Forms.Padding(1);
-            this.DeployTVButton.Name = "DeployTVButton";
-            this.DeployTVButton.Size = new System.Drawing.Size(45, 45);
-            this.DeployTVButton.TabIndex = 57;
-            this.ToolTip1.SetToolTip(this.DeployTVButton, "Deploy TeamViewer");
-            this.DeployTVButton.UseVisualStyleBackColor = true;
-            this.DeployTVButton.Click += new System.EventHandler(this.DeployTVButton_Click);
-            // 
-            // UpdateChromeButton
-            // 
-            this.UpdateChromeButton.BackgroundImage = global::AssetManager.Properties.Resources.ChromeIcon;
-            this.UpdateChromeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.UpdateChromeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.UpdateChromeButton.Location = new System.Drawing.Point(236, 1);
-            this.UpdateChromeButton.Margin = new System.Windows.Forms.Padding(1);
-            this.UpdateChromeButton.Name = "UpdateChromeButton";
-            this.UpdateChromeButton.Size = new System.Drawing.Size(45, 45);
-            this.UpdateChromeButton.TabIndex = 58;
-            this.ToolTip1.SetToolTip(this.UpdateChromeButton, "Update/Install Chrome");
-            this.UpdateChromeButton.UseVisualStyleBackColor = true;
-            this.UpdateChromeButton.Click += new System.EventHandler(this.UpdateChromeButton_Click);
-            // 
-            // ShowIPButton
-            // 
-            this.ShowIPButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ShowIPButton.BackColor = System.Drawing.Color.Black;
-            this.ShowIPButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ShowIPButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.ShowIPButton.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ShowIPButton.ForeColor = System.Drawing.Color.White;
-            this.ShowIPButton.Location = new System.Drawing.Point(327, 12);
-            this.ShowIPButton.Name = "ShowIPButton";
-            this.ShowIPButton.Size = new System.Drawing.Size(90, 90);
-            this.ShowIPButton.TabIndex = 53;
-            this.ShowIPButton.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.ShowIPButton.UseVisualStyleBackColor = false;
-            this.ShowIPButton.Click += new System.EventHandler(this.ShowIPButton_Click);
-            // 
             // RightClickMenu
             // 
             this.RightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -643,8 +500,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // TabControl1
             // 
-            this.TabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.TabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TabControl1.Controls.Add(this.HistoryTab);
             this.TabControl1.Controls.Add(this.TrackingTab);
@@ -916,12 +773,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(0, 17);
             // 
-            // RemoteToolsTimer
-            // 
-            this.RemoteToolsTimer.Enabled = true;
-            this.RemoteToolsTimer.Interval = 1000;
-            this.RemoteToolsTimer.Tick += new System.EventHandler(this.RemoteToolsTimer_Tick);
-            // 
             // fieldErrorIcon
             // 
             this.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
@@ -981,7 +832,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // FieldsPanel
             // 
-            this.FieldsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.FieldsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FieldsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.FieldsPanel.Controls.Add(this.InfoDataSplitter);
@@ -1212,13 +1063,24 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // RemoteTrackingPanel
             // 
-            this.RemoteTrackingPanel.Controls.Add(this.RemoteToolsBox);
+            this.RemoteTrackingPanel.Controls.Add(this.remoteToolsControl);
             this.RemoteTrackingPanel.Controls.Add(this.TrackingBox);
             this.RemoteTrackingPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RemoteTrackingPanel.Location = new System.Drawing.Point(0, 0);
             this.RemoteTrackingPanel.Name = "RemoteTrackingPanel";
             this.RemoteTrackingPanel.Size = new System.Drawing.Size(427, 284);
             this.RemoteTrackingPanel.TabIndex = 54;
+            // 
+            // remoteToolsControl
+            // 
+            this.remoteToolsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.remoteToolsControl.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.remoteToolsControl.Location = new System.Drawing.Point(3, 7);
+            this.remoteToolsControl.Name = "remoteToolsControl";
+            this.remoteToolsControl.Size = new System.Drawing.Size(422, 103);
+            this.remoteToolsControl.TabIndex = 42;
+            this.remoteToolsControl.NewStatusPrompt += new System.EventHandler<AssetManager.UserInterface.CustomControls.RemoteTools.RemoteToolsControl.StatusPrompt>(this.remoteToolsControl_NewStatusPrompt);
+            this.remoteToolsControl.VisibleChanging += new System.EventHandler<bool>(this.remoteToolsControl_VisibleChanging);
             // 
             // ToolStripContainer1
             // 
@@ -1435,9 +1297,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ViewDeviceForm_FormClosed);
             this.Resize += new System.EventHandler(this.ViewDeviceForm_Resize);
             this.MunisSibiPanel.ResumeLayout(false);
-            this.RemoteToolsBox.ResumeLayout(false);
-            this.FlowLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).EndInit();
             this.RightClickMenu.ResumeLayout(false);
             this.TabControl1.ResumeLayout(false);
             this.HistoryTab.ResumeLayout(false);
@@ -1524,20 +1383,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal ToolStripButton CancelToolButton;
         internal ToolStripButton AcceptToolButton;
         internal Button MunisInfoButton;
-        internal Button StartRDPButton;
         internal Label Label12;
         internal TextBox PONumberTextBox;
-        internal Timer RemoteToolsTimer;
         internal Button SibiViewButton;
         internal Panel MunisSibiPanel;
         internal ErrorProvider fieldErrorIcon;
-        internal Button BrowseFilesButton;
-        internal GroupBox RemoteToolsBox;
         internal Button MunisSearchButton;
         internal Label GUIDLabel;
-        internal Button ShowIPButton;
         internal Label Label14;
-        internal Button GKUpdateButton;
         internal MaskedTextBox PhoneNumberTextBox;
         internal Panel FieldsPanel;
         internal ToolStripContainer ToolStripContainer1;
@@ -1559,7 +1412,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal ToolStripMenuItem CheckInTool;
         internal ToolStripSeparator ToolStripSeparator2;
         internal ToolStripSeparator ToolStripSeparator4;
-        internal PictureBox RestartDeviceButton;
         internal TextBox HostnameTextBox;
         internal Label Label15;
         internal TabControl FieldTabs;
@@ -1581,10 +1433,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal TextBox ADOSTextBox;
         internal ToolStripButton RefreshToolButton;
         internal ToolStripStatusLabel StatusLabel;
-        internal FlowLayoutPanel FlowLayoutPanel1;
-        internal Button DeployTVButton;
-        internal Button UpdateChromeButton;
         internal SplitContainer InfoDataSplitter;
         internal Panel Panel3;
+        private CustomControls.RemoteTools.RemoteToolsControl remoteToolsControl;
     }
 }

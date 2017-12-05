@@ -1,14 +1,10 @@
 ﻿using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.Attachments;
 using AssetManager.UserInterface.Forms.Sibi;
-using PingVisLib;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.Net.NetworkInformation;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
@@ -24,10 +20,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private DeviceObject CurrentViewDevice;
         private DBControlParser DataParser;
         private bool EditMode = false;
-        private int intFailedPings = 0;
         private LiveBox MyLiveBox;
         private MunisToolBar MyMunisToolBar;
-        private PingVis MyPingVis;
         private WindowList MyWindowList;
         private SliderLabel StatusSlider;
 
@@ -48,8 +42,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DataParser = new DBControlParser(this);
 
             InitializeComponent();
-
-            CheckRDP();
 
             DefaultFormTitle = this.Text;
 
@@ -129,12 +121,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             else
             {
                 ActiveDirectoryBox.Visible = false;
-                RemoteToolsBox.Visible = false;
-                if (MyPingVis != null)
-                {
-                    MyPingVis.Dispose();
-                    MyPingVis = null;
-                }
+                remoteToolsControl.Visible = false;
                 CurrentViewDevice = new DeviceObject(CurrentViewDevice.GUID);
                 LoadDevice();
             }
@@ -216,35 +203,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         RefreshData();
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
-        }
-
-        private async void BrowseFiles()
-        {
-            try
-            {
-                if (SecurityTools.VerifyAdminCreds())
-                {
-                    string FullPath = "\\\\" + CurrentViewDevice.HostName + "\\c$";
-                    await Task.Run(() =>
-                    {
-                        using (NetworkConnection NetCon = new NetworkConnection(FullPath, SecurityTools.AdminCreds))
-                        using (Process p = new Process())
-                        {
-                            p.StartInfo.UseShellExecute = false;
-                            p.StartInfo.RedirectStandardOutput = true;
-                            p.StartInfo.RedirectStandardError = true;
-                            p.StartInfo.FileName = "explorer.exe";
-                            p.StartInfo.Arguments = FullPath;
-                            p.Start();
-                            p.WaitForExit();
-                        }
-                    });
                 }
             }
             catch (Exception ex)
@@ -343,31 +301,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void CheckRDP()
-        {
-            try
-            {
-                if (CurrentViewDevice.OSVersion.Contains("WIN"))
-                {
-                    if (ReferenceEquals(MyPingVis, null))
-                    {
-                        MyPingVis = new PingVis((Control)ShowIPButton, CurrentViewDevice.HostName + "." + NetworkInfo.CurrentDomain);
-                    }
-                    if (MyPingVis.CurrentResult != null)
-                    {
-                        if (MyPingVis.CurrentResult.Status == IPStatus.Success)
-                        {
-                            SetupNetTools(MyPingVis.CurrentResult);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
-        }
-
         private void ClearErrorIcon(Control ctl)
         {
             fieldErrorIcon.SetError(ctl, string.Empty);
@@ -453,84 +386,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
-        }
-
-        private async void DeployTeamViewer(DeviceObject device)
-        {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin))
-            {
-                return;
-            }
-            if (OtherFunctions.Message("Deploy TeamViewer to this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", this) != DialogResult.Yes)
-            {
-                return;
-            }
-            try
-            {
-                if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
-                {
-                    using (TeamViewerDeploy NewTVDeploy = new TeamViewerDeploy())
-                    {
-                        StatusSlider.NewSlideMessage("Deploying TeamViewer...", 0);
-                        if (await NewTVDeploy.DeployToDevice(this, device))
-                        {
-                            StatusSlider.NewSlideMessage("TeamViewer deployment complete!");
-                        }
-                        else
-                        {
-                            StatusSlider.NewSlideMessage("TeamViewer deployment failed...");
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                StatusSlider.NewSlideMessage("TeamViewer deployment failed...");
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
-            finally
-            {
-                DoneWaiting();
-            }
-        }
-
-        private async void UpdateChrome(DeviceObject device)
-        {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin))
-            {
-                return;
-            }
-            if (OtherFunctions.Message("Update/Install Chrome on this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", this) != DialogResult.Yes)
-            {
-                return;
-            }
-            try
-            {
-                if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
-                {
-                    Waiting();
-                    StatusSlider.NewSlideMessage("Installing Chrome...", 0);
-                    PowerShellWrapper PSWrapper = new PowerShellWrapper();
-                    if (await PSWrapper.ExecutePowerShellScript(device.HostName, Properties.Resources.UpdateChrome))
-                    {
-                        StatusSlider.NewSlideMessage("Chrome install complete!");
-                        OtherFunctions.Message("Command successful.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Done", this);
-                    }
-                    else
-                    {
-                        StatusSlider.NewSlideMessage("Error while installing Chrome!");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                StatusSlider.NewSlideMessage("Error while installing Chrome!");
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
-            finally
-            {
-                DoneWaiting();
             }
         }
 
@@ -652,11 +507,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ExpandSplitter()
         {
-            if (RemoteToolsBox.Visible || TrackingBox.Visible)
+            if (remoteToolsControl.Visible || TrackingBox.Visible)
             {
                 InfoDataSplitter.Panel2Collapsed = false;
             }
-            else if (!RemoteToolsBox.Visible && !TrackingBox.Visible)
+            else if (!remoteToolsControl.Visible && !TrackingBox.Visible)
             {
                 InfoDataSplitter.Panel2Collapsed = true;
             }
@@ -799,14 +654,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             iCloudTextBox.Tag = new DBControlInfo(DevicesBaseCols.iCloudAccount, false);
         }
 
-        private void LaunchRDP()
-        {
-            ProcessStartInfo StartInfo = new ProcessStartInfo();
-            StartInfo.FileName = "mstsc.exe";
-            StartInfo.Arguments = "/v:" + CurrentViewDevice.HostName;
-            Process.Start(StartInfo);
-        }
-
         private void LoadHistoryAndFields()
         {
             using (var HistoricalResults = GetHistoricalTable(CurrentViewDevice.GUID))
@@ -818,6 +665,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 DataGridHistory.FastAutoSizeColumns();
                 UpdateAttachCountHandler(this, new EventArgs());
                 SetADInfo();
+                remoteToolsControl.Device = CurrentViewDevice;
             }
         }
 
@@ -920,47 +768,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private async Task<string> SendRestart(string IP, string DeviceName)
-        {
-            var OrigButtonImage = RestartDeviceButton.Image;
-            try
-            {
-                if (SecurityTools.VerifyAdminCreds())
-                {
-                    RestartDeviceButton.Image = Properties.Resources.LoadingAni;
-                    string FullPath = "\\\\" + IP;
-                    string output = await Task.Run(() =>
-                    {
-                        using (NetworkConnection NetCon = new NetworkConnection(FullPath, SecurityTools.AdminCreds))
-                        using (Process p = new Process())
-                        {
-                            string results;
-                            p.StartInfo.UseShellExecute = false;
-                            p.StartInfo.RedirectStandardOutput = true;
-                            p.StartInfo.RedirectStandardError = true;
-                            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                            p.StartInfo.FileName = "shutdown.exe";
-                            p.StartInfo.Arguments = "/m " + FullPath + " /f /r /t 0";
-                            p.Start();
-                            results = p.StandardError.ReadToEnd();
-                            p.WaitForExit();
-                            return results.Trim();
-                        }
-                    });
-                    return output;
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
-            finally
-            {
-                RestartDeviceButton.Image = OrigButtonImage;
-            }
-            return string.Empty;
-        }
-
         private async void SetADInfo()
         {
             try
@@ -1035,29 +842,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             StyleFunctions.SetGridStyle(DataGridHistory, GridTheme);
             StyleFunctions.SetGridStyle(TrackingGrid, GridTheme);
-        }
-
-        private void SetupNetTools(PingVis.PingInfo PingResults)
-        {
-            if (PingResults.Status != IPStatus.Success)
-            {
-                intFailedPings++;
-            }
-            else
-            {
-                intFailedPings = 0;
-            }
-            if (!RemoteToolsBox.Visible && PingResults.Status == IPStatus.Success)
-            {
-                ShowIPButton.Tag = PingResults.Address;
-                ExpandSplitter(true);
-                RemoteToolsBox.Visible = true;
-            }
-            if (intFailedPings > 10 && RemoteToolsBox.Visible)
-            {
-                RemoteToolsBox.Visible = false;
-                ExpandSplitter();
-            }
         }
 
         private void StartTrackDeviceForm()
@@ -1170,27 +954,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             AcceptChanges();
         }
 
-        private void BrowseFilesButton_Click(object sender, EventArgs e)
-        {
-            BrowseFiles();
-        }
-
         private void CancelToolButton_Click(object sender, EventArgs e)
         {
             CancelModify();
-        }
-
-        private void GKUpdateButton_Click(object sender, EventArgs e)
-        {
-            if (SecurityTools.VerifyAdminCreds())
-            {
-                var GKInstance = Helpers.ChildFormControl.GKUpdaterInstance();
-                GKInstance.AddUpdate(CurrentViewDevice);
-                if (!GKInstance.Visible)
-                {
-                    GKInstance.Show();
-                }
-            }
         }
 
         private void MunisInfoButton_Click(object sender, EventArgs e)
@@ -1212,41 +978,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 CurrentUserTextBox.Text = MunisUser.Name;
                 CurrentUserTextBox.ReadOnly = true;
-            }
-        }
-
-        private void StartRDPButton_Click(object sender, EventArgs e)
-        {
-            LaunchRDP();
-        }
-
-        private async void RestartDeviceButton_Click(object sender, EventArgs e)
-        {
-            var blah = OtherFunctions.Message("Click 'Yes' to reboot this device.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?");
-            if (blah == DialogResult.Yes)
-            {
-                string IP = MyPingVis.CurrentResult.Address.ToString();
-                var RestartOutput = await SendRestart(IP, CurrentViewDevice.HostName);
-                if ((string)RestartOutput == "")
-                {
-                    OtherFunctions.Message("Success", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Restart Device", this);
-                }
-                else
-                {
-                    OtherFunctions.Message("Failed" + "\r\n" + "\r\n" + "Output: " + RestartOutput, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Restart Device", this);
-                }
-            }
-        }
-
-        private void ShowIPButton_Click(object sender, EventArgs e)
-        {
-            if (!ReferenceEquals(ShowIPButton.Tag, null))
-            {
-                var blah = OtherFunctions.Message(ShowIPButton.Tag.ToString() + " - " + NetworkInfo.LocationOfIP(ShowIPButton.Tag.ToString()) + "\r\n" + "\r\n" + "Press 'Yes' to copy to clipboard.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Information, "IP Address", this);
-                if (blah == DialogResult.Yes)
-                {
-                    Clipboard.SetText(ShowIPButton.Tag.ToString());
-                }
             }
         }
 
@@ -1300,11 +1031,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void TabControl1_MouseDown(object sender, MouseEventArgs e)
         {
             TrackingGrid.Refresh();
-        }
-
-        private void RemoteToolsTimer_Tick(object sender, EventArgs e)
-        {
-            CheckRDP();
         }
 
         private void TrackingGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -1380,25 +1106,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void DeployTVButton_Click(object sender, EventArgs e)
-        {
-            DeployTeamViewer(CurrentViewDevice);
-        }
-
-        private void UpdateChromeButton_Click(object sender, EventArgs e)
-        {
-            UpdateChrome(CurrentViewDevice);
-        }
-
         private void ViewDeviceForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!OKToClose())
             {
                 e.Cancel = true;
-            }
-            else
-            {
-                //    DisposeImages(Me)
             }
         }
 
@@ -1409,10 +1121,23 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             MyMunisToolBar.Dispose();
             CurrentViewDevice.Dispose();
             Helpers.ChildFormControl.CloseChildren(this);
-            if (MyPingVis != null)
+        }
+
+        private void remoteToolsControl_VisibleChanging(object sender, bool e)
+        {
+            if (e)
             {
-                MyPingVis.Dispose();
+                ExpandSplitter(true);
             }
+            else
+            {
+                ExpandSplitter();
+            }
+        }
+
+        private void remoteToolsControl_NewStatusPrompt(object sender, CustomControls.RemoteTools.RemoteToolsControl.StatusPrompt e)
+        {
+            StatusSlider.NewSlideMessage(e.Message, e.DisplayTime);
         }
 
         #endregion Control Events

@@ -145,12 +145,27 @@ namespace AssetManager.UserInterface.CustomControls
         /// <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
         public void NewSlideMessage(string text, SlideDirection slideInDirection = SlideDirection.Up, SlideDirection slideOutDirection = SlideDirection.Left, int displayTime = 4)
         {
-            AddMessageToQueue(text, slideInDirection, slideOutDirection, displayTime);
+            if (displayTime >= 0)
+            {
+                AddMessageToQueue(text, slideInDirection, slideOutDirection, displayTime);
+            }
+            else
+            {
+                AddMessageToQueue(text, slideInDirection, slideOutDirection, defaultDisplayTime);
+            }
+           
         }
 
         public void NewSlideMessage(string text, int displayTime)
         {
-            AddMessageToQueue(text, defaultSlideInDirection, defaultSlideOutDirection, displayTime);
+            if (displayTime >= 0)
+            {
+                AddMessageToQueue(text, defaultSlideInDirection, defaultSlideOutDirection, displayTime);
+            }
+            else
+            {
+                AddMessageToQueue(text, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime);
+            }
         }
 
         public void NewSlideMessage(string text)
