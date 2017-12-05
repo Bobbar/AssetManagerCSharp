@@ -111,7 +111,7 @@ namespace AssetManager.UserInterface.Forms
             NewGrid.EditMode = DataGridViewEditMode.EditProgrammatically;
             NewGrid.AllowUserToResizeRows = false;
             NewGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            NewGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            NewGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             NewGrid.AllowUserToAddRows = false;
             NewGrid.AllowUserToDeleteRows = false;
             NewGrid.Padding = new Padding(0, 0, 0, 10);
@@ -185,10 +185,7 @@ namespace AssetManager.UserInterface.Forms
         {
             foreach (DataGridView grid in GridList)
             {
-                foreach (DataGridViewColumn c in grid.Columns)
-                {
-                    c.Width = c.GetPreferredWidth(DataGridViewAutoSizeColumnMode.AllCells, true);
-                }
+                grid.FastAutoSizeColumns();
                 grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
                 grid.AllowUserToResizeColumns = true;
             }
