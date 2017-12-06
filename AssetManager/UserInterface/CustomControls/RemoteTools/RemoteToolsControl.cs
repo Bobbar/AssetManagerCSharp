@@ -113,6 +113,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
                     if (ReferenceEquals(pingVis, null))
                     {
                         pingVis = new PingVis((Control)ShowIPButton, Device.HostName + "." + NetworkInfo.CurrentDomain);
+                        Debug.Print("New ping.");
                     }
                     if (pingVis.CurrentResult != null)
                     {
@@ -327,12 +328,17 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
         {
             QueueGKUpdate();
         }
+
         private void RemoteToolsControl_VisibleChanged(object sender, EventArgs e)
         {
-            if (pingVis != null)
+            // If control is hidden, dispose the pingVis instance to reset the ping result collections.
+            if (!this.Visible)
             {
-                pingVis.Dispose();
-                pingVis = null;
+                if (pingVis != null)
+                {
+                    pingVis.Dispose();
+                    pingVis = null;
+                }
             }
         }
 
