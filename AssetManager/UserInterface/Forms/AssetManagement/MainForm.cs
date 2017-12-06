@@ -529,7 +529,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     GridFunctions.PopulateGrid(ResultGrid, results, ResultGridColumns());
                 }
-                ResultGrid.FastAutoSizeColumns();
+                
+                // If currently in a transaction, use the native resizing method as the datatable is bound to an unmodified datatable.
+                // The raw datatable contains more columns than are displayed in the grid, and FastAutoResize does not currently support this.
+                if (CurrentTransaction == null)
+                {
+                    ResultGrid.FastAutoSizeColumns();
+                }
+                else
+                {
+                    ResultGrid.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
+                    ResultGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                }
+
                 bolGridFilling = false;
                 DisplayRecords(ResultGrid.Rows.Count);
                 ResultGrid.ScrollBars = ScrollBars.Both;
