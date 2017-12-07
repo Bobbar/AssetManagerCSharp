@@ -29,7 +29,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private int intReplacementSched = 4;
         private bool bolCheckFields;
         private DBControlParser DataParser;
-        private DeviceObject Device = new DeviceObject();
+        private DeviceMapObject Device = new DeviceMapObject();
         private LiveBox MyLiveBox;
         private string NewUID;
 

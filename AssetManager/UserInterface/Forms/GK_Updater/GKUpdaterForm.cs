@@ -28,12 +28,12 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             Updater_Table.DoubleBufferedFlowLayout(true);
         }
 
-        public void AddMultipleUpdates(List<DeviceObject> devices)
+        public void AddMultipleUpdates(List<DeviceMapObject> devices)
         {
             try
             {
                 OtherFunctions.SetWaitCursor(true, this);
-                foreach (DeviceObject device in devices)
+                foreach (DeviceMapObject device in devices)
                 {
                     if (bolCheckForDups && !Exists(device))
                     {
@@ -62,7 +62,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
-        public void AddUpdate(DeviceObject device)
+        public void AddUpdate(DeviceMapObject device)
         {
             try
             {
@@ -92,12 +92,12 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
-        private void StartUpdateByDevice(DeviceObject device)
+        private void StartUpdateByDevice(DeviceMapObject device)
         {
             MyUpdates.Find(upd => upd.Device.GUID == device.GUID).StartUpdate();
         }
 
-        private bool Exists(DeviceObject device)
+        private bool Exists(DeviceMapObject device)
         {
             return MyUpdates.Exists(upd => upd.Device.GUID == device.GUID);
         }

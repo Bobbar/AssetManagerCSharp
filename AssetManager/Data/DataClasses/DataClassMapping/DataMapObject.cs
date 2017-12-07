@@ -9,7 +9,7 @@ namespace AssetManager
     /// <summary>
     /// Data mapper for classes tagged with <see cref="DataColumnNameAttribute"/>
     /// </summary>
-    public abstract class DataMappingObject : IDisposable
+    public abstract class DataMapObject : IDisposable
     {
         #region Fields
 
@@ -46,11 +46,11 @@ namespace AssetManager
 
         #region Constructors
 
-        public DataMappingObject()
+        public DataMapObject()
         {
         }
 
-        public DataMappingObject(DataTable data)
+        public DataMapObject(DataTable data)
         {
             var row = ((DataTable)data).Rows[0];
             populatingTable = data;
@@ -58,7 +58,7 @@ namespace AssetManager
             MapProperty(this, row);
         }
 
-        public DataMappingObject(DataRow data)
+        public DataMapObject(DataRow data)
         {
             var row = data;
             populatingTable = row.Table;
@@ -140,7 +140,7 @@ namespace AssetManager
                 }
                 else
                 {
-                    if (typeof(DataMappingObject).IsAssignableFrom(prop.PropertyType))
+                    if (typeof(DataMapObject).IsAssignableFrom(prop.PropertyType))
                     {
                         //Recurse with nested DataMapping properties.
                         var nestObject = prop.GetValue(obj, null);

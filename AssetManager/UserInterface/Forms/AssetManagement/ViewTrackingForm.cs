@@ -6,7 +6,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 {
     public partial class ViewTrackingForm : ExtendedForm
     {
-        public ViewTrackingForm(ExtendedForm parentForm, string entryGUID, DeviceObject device)
+        public ViewTrackingForm(ExtendedForm parentForm, string entryGUID, DeviceMapObject device)
         {
             InitializeComponent();
             this.ParentForm = parentForm;
@@ -15,7 +15,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             Show();
         }
 
-        private void ViewTrackingEntry(string entryUID, DeviceObject device)
+        private void ViewTrackingEntry(string entryUID, DeviceMapObject device)
         {
             try
             {

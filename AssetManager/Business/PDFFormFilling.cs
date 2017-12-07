@@ -13,11 +13,11 @@ namespace AssetManager
     public class PdfFormFilling
     {
         private ExtendedForm ParentForm;
-        private DeviceObject CurrentDevice = new DeviceObject();
+        private DeviceMapObject CurrentDevice = new DeviceMapObject();
         private AdvancedDialog CurrentDialog;
         private string UnitPriceTxtName = "txtUnitPrice";
 
-        public PdfFormFilling(ExtendedForm parentForm, DeviceObject deviceInfo, PdfFormType pdfType)
+        public PdfFormFilling(ExtendedForm parentForm, DeviceMapObject deviceInfo, PdfFormType pdfType)
         {
             this.ParentForm = parentForm;
             CurrentDevice = deviceInfo;
@@ -137,7 +137,7 @@ namespace AssetManager
             }
         }
 
-        private AcroFields DisposalFormFields(DeviceObject Device, PdfStamper pdfStamper)
+        private AcroFields DisposalFormFields(DeviceMapObject Device, PdfStamper pdfStamper)
         {
             AcroFields tmpFields = pdfStamper.AcroFields;
             using (AdvancedDialog newDialog = new AdvancedDialog(ParentForm, true))
@@ -239,7 +239,7 @@ namespace AssetManager
             return tmpFields;
         }
 
-        private AcroFields InputFormFields(DeviceObject Device, PdfStamper pdfStamper)
+        private AcroFields InputFormFields(DeviceMapObject Device, PdfStamper pdfStamper)
         {
             AcroFields tmpFields = pdfStamper.AcroFields;
             string strUnitPrice = GetUnitPrice();
@@ -267,7 +267,7 @@ namespace AssetManager
             return tmpFields;
         }
 
-        private AcroFields TransferFormFields(DeviceObject Device, PdfStamper pdfStamper)
+        private AcroFields TransferFormFields(DeviceMapObject Device, PdfStamper pdfStamper)
         {
             AcroFields tmpFields = pdfStamper.AcroFields;
             using (AdvancedDialog newDialog = new AdvancedDialog(ParentForm))

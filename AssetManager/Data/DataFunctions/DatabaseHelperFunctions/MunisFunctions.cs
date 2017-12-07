@@ -44,7 +44,7 @@ namespace AssetManager
             return string.Empty;
         }
 
-        public async Task<string> GetPOFromDevice(DeviceObject device)
+        public async Task<string> GetPOFromDevice(DeviceMapObject device)
         {
             string POFromAsset = "";
             string POFromSerial = "";
@@ -260,7 +260,7 @@ namespace AssetManager
         {
             try
             {
-                DeviceObject Device = new DeviceObject();
+                DeviceMapObject Device = new DeviceMapObject();
                 using (AdvancedDialog NewDialog = new AdvancedDialog(parentForm))
                 {
                     NewDialog.Text = "Asset Search";
@@ -625,7 +625,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
             }
         }
 
-        public async void LoadMunisInfoByDevice(DeviceObject device, ExtendedForm parentForm)
+        public async void LoadMunisInfoByDevice(DeviceMapObject device, ExtendedForm parentForm)
         {
             try
             {
@@ -688,7 +688,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
             }
         }
 
-        private async Task<DataTable> LoadMunisInventoryGrid(DeviceObject device)
+        private async Task<DataTable> LoadMunisInventoryGrid(DeviceMapObject device)
         {
             string strFields = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo";
             string Query = "SELECT TOP 1 " + strFields + " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" + device.AssetTag + "' AND fama_tag <> '' OR fama_serial='" + device.Serial + "' AND fama_serial <> ''";

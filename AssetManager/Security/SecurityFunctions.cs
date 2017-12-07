@@ -16,7 +16,7 @@ namespace AssetManager
     public static class SecurityTools
     {
         public static NetworkCredential AdminCreds = null;
-        private static Dictionary<string, AccessGroupObject> AccessGroups = new Dictionary<string, AccessGroupObject>();
+        private static Dictionary<string, AccessGroupMapObject> AccessGroups = new Dictionary<string, AccessGroupMapObject>();
         private static LocalUserInfoStruct LocalUserAccess;
 
         private const string CryptKey = "r7L$aNjE6eiVj&zhap_@|Gz_";
@@ -163,7 +163,7 @@ namespace AssetManager
                 {
                     foreach (DataRow row in results.Rows)
                     {
-                        AccessGroups.Add(row[SecurityCols.SecModule].ToString(), new AccessGroupObject(row));
+                        AccessGroups.Add(row[SecurityCols.SecModule].ToString(), new AccessGroupMapObject(row));
                     }
                 }
             }
@@ -187,7 +187,7 @@ namespace AssetManager
             {
                 UsrLevel = AccessLevel;
             }
-            foreach (AccessGroupObject group in AccessGroups.Values)
+            foreach (AccessGroupMapObject group in AccessGroups.Values)
             {
                 calc_level = UsrLevel & mask;
                 if (calc_level != 0)

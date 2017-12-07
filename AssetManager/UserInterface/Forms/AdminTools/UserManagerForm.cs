@@ -9,7 +9,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 {
     public partial class UserManagerForm : ExtendedForm
     {
-        private List<AccessGroupObject> ModuleIndex = new List<AccessGroupObject>();
+        private List<AccessGroupMapObject> ModuleIndex = new List<AccessGroupMapObject>();
         private int SelectedRow;
 
         public UserManagerForm(ExtendedForm parentForm)
@@ -67,14 +67,14 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             AutoSizeCLBColumns(clbModules);
         }
 
-        public List<AccessGroupObject> BuildModuleIndex()
+        public List<AccessGroupMapObject> BuildModuleIndex()
         {
-            List<AccessGroupObject> tmpList = new List<AccessGroupObject>();
+            List<AccessGroupMapObject> tmpList = new List<AccessGroupMapObject>();
             using (DataTable ModuleTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSecurityTable))
             {
                 foreach (DataRow row in ModuleTable.Rows)
                 {
-                    tmpList.Add(new AccessGroupObject(row));
+                    tmpList.Add(new AccessGroupMapObject(row));
                 }
                 return tmpList;
             }
@@ -84,7 +84,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         {
             CheckBox chkModuleBox = null;
             clbModules.Items.Clear();
-            foreach (AccessGroupObject ModuleBox in ModuleIndex)
+            foreach (AccessGroupMapObject ModuleBox in ModuleIndex)
             {
                 chkModuleBox = new CheckBox();
                 chkModuleBox.Text = ModuleBox.Description;

@@ -34,7 +34,7 @@ namespace AssetManager.UserInterface.CustomControls
     {
 
         #region Fields
-
+        private const int maxMessages = 10;
         private const int defaultDisplayTime = 4;
         private const int AnimationTimerInterval = 15;
         private int currentDisplayTime = defaultDisplayTime;
@@ -45,21 +45,21 @@ namespace AssetManager.UserInterface.CustomControls
         private float slideAcceleration = (float)(0.5F);
         private float currentSlideSpeed = 0;
 
-        private SlideDirection CurrentDirection;
-        private SlideState CurrentSlideState = SlideState.Done;
-        private SlideDirection SlideInDirection;
-        private SlideDirection SlideOutDirection;
+        private SlideDirection currentDirection;
+        private SlideState currentSlideState = SlideState.Done;
+        private SlideDirection slideInDirection;
+        private SlideDirection slideOutDirection;
 
-        private List<MessageParameters> MessageQueue = new List<MessageParameters>();
+        private List<MessageParameters> messageQueue = new List<MessageParameters>();
         private CancellationTokenSource pauseCancel;
 
-        private System.Timers.Timer SlideTimer;
-        private SizeF TextSize;
-        private PointF StartPosition = new PointF();
-        private PointF EndPosition = new PointF();
-        private PointF CurrentPosition = new PointF();
+        private System.Timers.Timer slideTimer;
+        private SizeF textSize;
+        private PointF startPosition = new PointF();
+        private PointF endPosition = new PointF();
+        private PointF currentPosition = new PointF();
 
-        private bool SlideComplete = false;
+        private bool slideComplete = false;
         private RectangleF lastPositionRect;
 
         #endregion
@@ -75,13 +75,13 @@ namespace AssetManager.UserInterface.CustomControls
             this.SetStyle(ControlStyles.UserPaint, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
 
-            SlideTimer = new System.Timers.Timer();
-            SlideTimer.Interval = AnimationTimerInterval;
-            SlideTimer.Stop();
-            SlideTimer.Elapsed += new ElapsedEventHandler(Tick);
+            slideTimer = new System.Timers.Timer();
+            slideTimer.Interval = AnimationTimerInterval;
+            slideTimer.Stop();
+            slideTimer.Elapsed += new ElapsedEventHandler(Tick);
 
-            SlideInDirection = defaultSlideInDirection;
-            SlideOutDirection = defaultSlideOutDirection;
+            slideInDirection = defaultSlideInDirection;
+            slideOutDirection = defaultSlideOutDirection;
 
             this.Disposed += SliderLabel_Disposed;
 
@@ -130,10 +130,10 @@ namespace AssetManager.UserInterface.CustomControls
             canvas.Clear(this.BackColor);
             using (var textBrush = new SolidBrush(this.ForeColor))
             {
-                canvas.DrawString(this.SlideText, this.Font, textBrush, CurrentPosition);
+                canvas.DrawString(this.SlideText, this.Font, textBrush, currentPosition);
             }
 
-            lastPositionRect = new RectangleF(CurrentPosition.X, CurrentPosition.Y, TextSize.Width, TextSize.Height);
+            lastPositionRect = new RectangleF(currentPosition.X, currentPosition.Y, textSize.Width, textSize.Height);
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 AddMessageToQueue(text, slideInDirection, slideOutDirection, defaultDisplayTime);
             }
-           
+
         }
 
         public void NewSlideMessage(string text, int displayTime)
@@ -179,16 +179,16 @@ namespace AssetManager.UserInterface.CustomControls
         /// </summary>
         public void Clear()
         {
-            MessageQueue.Clear();
-            if (CurrentSlideState == SlideState.Paused)
+            messageQueue.Clear();
+            if (currentSlideState == SlideState.Paused)
             {
                 pauseCancel.Cancel();
 
             }
-            else if (CurrentSlideState == SlideState.Hold)
+            else if (currentSlideState == SlideState.Hold)
             {
                 SetSlideOutAnimation();
-                SlideTimer.Start();
+                slideTimer.Start();
             }
         }
 
@@ -219,8 +219,11 @@ namespace AssetManager.UserInterface.CustomControls
         /// <param name="displayTime"></param>
         private void AddMessageToQueue(string text, SlideDirection slideInDirection, SlideDirection slideOutDirection, int displayTime)
         {
-            MessageQueue.Add(new MessageParameters(text, slideInDirection, slideOutDirection, displayTime));
-            ProcessQueue();
+            if (messageQueue.Count <= maxMessages)
+            {
+                messageQueue.Add(new MessageParameters(text, slideInDirection, slideOutDirection, displayTime));
+                ProcessQueue();
+            }
         }
 
         /// <summary>
@@ -233,12 +236,12 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 Text = message.Message;
                 currentDisplayTime = message.DisplayTime;
-                TextSize = GetTextSize(message.Message);
-                SlideInDirection = message.SlideInDirection;
-                SlideOutDirection = message.SlideOutDirection;
+                textSize = GetTextSize(message.Message);
+                slideInDirection = message.SlideInDirection;
+                slideOutDirection = message.SlideOutDirection;
                 SetControlSize();
                 SetSlideInAnimation();
-                SlideTimer.Start();
+                slideTimer.Start();
                 this.Invalidate();
                 this.Update();
             }
@@ -288,19 +291,19 @@ namespace AssetManager.UserInterface.CustomControls
         /// </summary>
         private void ProcessQueue()
         {
-            if (MessageQueue.Count > 0)
+            if (messageQueue.Count > 0)
             {
                 //If state is done, then we can display the next message
-                if (CurrentSlideState == SlideState.Done)
+                if (currentSlideState == SlideState.Done)
                 {
-                    DisplayText(MessageQueue.Last());
-                    MessageQueue.RemoveAt(MessageQueue.Count - 1);
+                    DisplayText(messageQueue.Last());
+                    messageQueue.RemoveAt(messageQueue.Count - 1);
                     //If the state is hold, then a permanent message is currently displayed. Trigger a slide out animation, which will change the state to done once complete.
                 }
-                else if (CurrentSlideState == SlideState.Hold)
+                else if (currentSlideState == SlideState.Hold)
                 {
                     SetSlideOutAnimation();
-                    SlideTimer.Start();
+                    slideTimer.Start();
                 }
             }
 
@@ -323,37 +326,37 @@ namespace AssetManager.UserInterface.CustomControls
         /// </summary>
         private void SetSlideInAnimation()
         {
-            CurrentDirection = SlideInDirection;
-            CurrentSlideState = SlideState.SlideIn;
-            CurrentPosition = new PointF(0, 0);
+            currentDirection = slideInDirection;
+            currentSlideState = SlideState.SlideIn;
+            currentPosition = new PointF(0, 0);
             currentSlideSpeed = 0;
-            SlideComplete = false;
-            switch (SlideInDirection)
+            slideComplete = false;
+            switch (slideInDirection)
             {
 
                 case SlideDirection.DefaultSlide:
                 case SlideDirection.Up:
-                    StartPosition.Y = TextSize.Height;
-                    CurrentPosition.Y = StartPosition.Y;
-                    EndPosition.Y = 0;
+                    startPosition.Y = textSize.Height;
+                    currentPosition.Y = startPosition.Y;
+                    endPosition.Y = 0;
                     break;
 
                 case SlideDirection.Down:
-                    StartPosition.Y = -TextSize.Height;
-                    CurrentPosition.Y = StartPosition.Y;
-                    EndPosition.Y = 0;
+                    startPosition.Y = -textSize.Height;
+                    currentPosition.Y = startPosition.Y;
+                    endPosition.Y = 0;
                     break;
 
                 case SlideDirection.Left:
-                    StartPosition.X = TextSize.Width;
-                    CurrentPosition.X = StartPosition.X;
-                    EndPosition.X = 0;
+                    startPosition.X = textSize.Width;
+                    currentPosition.X = startPosition.X;
+                    endPosition.X = 0;
                     break;
 
                 case SlideDirection.Right:
-                    StartPosition.X = -TextSize.Width;
-                    CurrentPosition.X = StartPosition.X;
-                    EndPosition.X = 0;
+                    startPosition.X = -textSize.Width;
+                    currentPosition.X = startPosition.X;
+                    endPosition.X = 0;
                     break;
 
             }
@@ -364,28 +367,28 @@ namespace AssetManager.UserInterface.CustomControls
         /// </summary>
         private void SetSlideOutAnimation()
         {
-            CurrentDirection = SlideOutDirection;
-            CurrentSlideState = SlideState.SlideOut;
+            currentDirection = slideOutDirection;
+            currentSlideState = SlideState.SlideOut;
             currentSlideSpeed = 0;
-            SlideComplete = false;
-            switch (SlideOutDirection)
+            slideComplete = false;
+            switch (slideOutDirection)
             {
 
                 case SlideDirection.DefaultSlide:
                 case SlideDirection.Up:
-                    EndPosition.Y = -TextSize.Height;
+                    endPosition.Y = -textSize.Height;
                     break;
 
                 case SlideDirection.Down:
-                    EndPosition.Y = TextSize.Height;
+                    endPosition.Y = textSize.Height;
                     break;
 
                 case SlideDirection.Left:
-                    EndPosition.X = -TextSize.Width;
+                    endPosition.X = -textSize.Width;
                     break;
 
                 case SlideDirection.Right:
-                    EndPosition.X = TextSize.Width;
+                    endPosition.X = textSize.Width;
                     break;
 
             }
@@ -419,8 +422,8 @@ namespace AssetManager.UserInterface.CustomControls
                 }
                 else
                 {
-                    SlideTimer.Stop();
-                    SlideTimer.Dispose();
+                    slideTimer.Stop();
+                    slideTimer.Dispose();
                 }
             }
             catch (ObjectDisposedException)
@@ -436,55 +439,55 @@ namespace AssetManager.UserInterface.CustomControls
         {
 
             //Check current direction and change X,Y positions/speeds as needed using an accumulating acceleration.
-            switch (CurrentDirection)
+            switch (currentDirection)
             {
                 case SlideDirection.DefaultSlide:
                 case SlideDirection.Up:
-                    if (CurrentPosition.Y + currentSlideSpeed > EndPosition.Y)
+                    if (currentPosition.Y + currentSlideSpeed > endPosition.Y)
                     {
                         currentSlideSpeed -= slideAcceleration;
-                        CurrentPosition.Y += currentSlideSpeed;
+                        currentPosition.Y += currentSlideSpeed;
                     }
                     else
                     {
-                        CurrentPosition.Y = EndPosition.Y;
-                        SlideComplete = true;
+                        currentPosition.Y = endPosition.Y;
+                        slideComplete = true;
                     }
                     break;
                 case SlideDirection.Down:
-                    if (CurrentPosition.Y + currentSlideSpeed < EndPosition.Y)
+                    if (currentPosition.Y + currentSlideSpeed < endPosition.Y)
                     {
                         currentSlideSpeed += slideAcceleration;
-                        CurrentPosition.Y += currentSlideSpeed;
+                        currentPosition.Y += currentSlideSpeed;
                     }
                     else
                     {
-                        CurrentPosition.Y = EndPosition.Y;
-                        SlideComplete = true;
+                        currentPosition.Y = endPosition.Y;
+                        slideComplete = true;
                     }
                     break;
                 case SlideDirection.Left:
-                    if (CurrentPosition.X + currentSlideSpeed > EndPosition.X)
+                    if (currentPosition.X + currentSlideSpeed > endPosition.X)
                     {
                         currentSlideSpeed -= slideAcceleration;
-                        CurrentPosition.X += currentSlideSpeed;
+                        currentPosition.X += currentSlideSpeed;
                     }
                     else
                     {
-                        CurrentPosition.X = EndPosition.X;
-                        SlideComplete = true;
+                        currentPosition.X = endPosition.X;
+                        slideComplete = true;
                     }
                     break;
                 case SlideDirection.Right:
-                    if (CurrentPosition.X + currentSlideSpeed < EndPosition.X)
+                    if (currentPosition.X + currentSlideSpeed < endPosition.X)
                     {
                         currentSlideSpeed += slideAcceleration;
-                        CurrentPosition.X += currentSlideSpeed;
+                        currentPosition.X += currentSlideSpeed;
                     }
                     else
                     {
-                        CurrentPosition.X = EndPosition.X;
-                        SlideComplete = true;
+                        currentPosition.X = endPosition.X;
+                        slideComplete = true;
                     }
                     break;
             }
@@ -496,19 +499,19 @@ namespace AssetManager.UserInterface.CustomControls
             this.Update();
 
             //Current slide animation complete.
-            if (SlideComplete)
+            if (slideComplete)
             {
 
                 //Reset speed.
                 currentSlideSpeed = 0;
 
                 //If current state is slide-in and display time is not forever.
-                if (CurrentSlideState == SlideState.SlideIn & currentDisplayTime > 0)
+                if (currentSlideState == SlideState.SlideIn & currentDisplayTime > 0)
                 {
 
                     //Stop the animation timer, change state to paused, and pause for the specified display time.
-                    SlideTimer.Stop();
-                    CurrentSlideState = SlideState.Paused;
+                    slideTimer.Stop();
+                    currentSlideState = SlideState.Paused;
 
                     try
                     {
@@ -525,7 +528,7 @@ namespace AssetManager.UserInterface.CustomControls
 
                     //Once the wait is complete, set the next state (slide-out) and re-start the animation timer.
                     SetSlideOutAnimation();
-                    SlideTimer.Start();
+                    slideTimer.Start();
                 }
                 else
                 {
@@ -534,24 +537,24 @@ namespace AssetManager.UserInterface.CustomControls
                     {
 
                         //If the forever displayed message state is slide-out, then the forever message is being replaced with a new message, so change the state to done.
-                        if (CurrentSlideState == SlideState.SlideOut)
+                        if (currentSlideState == SlideState.SlideOut)
                         {
-                            CurrentSlideState = SlideState.Done;
+                            currentSlideState = SlideState.Done;
                         }
                         else
                         {
                             //Otherwise, change the forever displayed message state to hold to keep it visible.
-                            CurrentSlideState = SlideState.Hold;
+                            currentSlideState = SlideState.Hold;
                         }
                     }
                     else
                     {
                         //If the message has a display time, set state to done.
-                        CurrentSlideState = SlideState.Done;
+                        currentSlideState = SlideState.Done;
                     }
 
                     //Stop the animation timer.
-                    SlideTimer.Stop();
+                    slideTimer.Stop();
 
                     //Add pause between messages if desired.
                     //Await Pause(1)
@@ -565,8 +568,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void SliderLabel_Disposed(object sender, EventArgs e)
         {
-            MessageQueue.Clear();
-            SlideTimer.Stop();
+            messageQueue.Clear();
+            slideTimer.Stop();
             pauseCancel.Dispose();
         }
 

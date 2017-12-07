@@ -351,7 +351,7 @@ namespace AssetManager
             }
         }
 
-        public DeviceObject FindDeviceFromAssetOrSerial(string searchVal, FindDevType type)
+        public DeviceMapObject FindDeviceFromAssetOrSerial(string searchVal, FindDevType type)
         {
             try
             {
@@ -359,13 +359,13 @@ namespace AssetManager
                 {
                     List<DBQueryParameter> Params = new List<DBQueryParameter>();
                     Params.Add(new DBQueryParameter(DevicesCols.AssetTag, searchVal, true));
-                    return new DeviceObject(AssetManager.DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));//"SELECT * FROM " + DevicesCols.TableName + " WHERE ", Params));
+                    return new DeviceMapObject(AssetManager.DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));//"SELECT * FROM " + DevicesCols.TableName + " WHERE ", Params));
                 }
                 else if (type == FindDevType.Serial)
                 {
                     List<DBQueryParameter> Params = new List<DBQueryParameter>();
                     Params.Add(new DBQueryParameter(DevicesCols.Serial, searchVal, true));
-                    return new DeviceObject(AssetManager.DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));
+                    return new DeviceMapObject(AssetManager.DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));
                 }
                 return null;
             }

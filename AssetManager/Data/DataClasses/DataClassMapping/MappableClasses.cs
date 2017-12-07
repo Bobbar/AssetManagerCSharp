@@ -2,19 +2,19 @@ using System.Data;
 
 namespace AssetManager
 {
-    public class DeviceObject : DataMappingObject
+    public class DeviceMapObject : DataMapObject
     {
         #region Constructors
 
-        public DeviceObject()
+        public DeviceMapObject()
         {
         }
 
-        public DeviceObject(DataTable data) : base(data)
+        public DeviceMapObject(DataTable data) : base(data)
         {
         }
 
-        public DeviceObject(string GUID)
+        public DeviceMapObject(string GUID)
         {
            this.MapClassProperties(GetDeviceDataFromGUID(GUID));
         }
@@ -43,7 +43,7 @@ namespace AssetManager
         [DataColumnName(DevicesCols.DeviceUID)]
         public override string GUID { get; set; }
 
-        public DeviceHistoricalObject Historical { get; set; } = new DeviceHistoricalObject();
+        public DeviceHistoricalMapObject Historical { get; set; } = new DeviceHistoricalMapObject();
 
         [DataColumnName(DevicesCols.HostName)]
         public string HostName { get; set; }
@@ -82,7 +82,7 @@ namespace AssetManager
 
         public override string TableName { get; set; } = DevicesCols.TableName;
 
-        public DeviceTrackingObject Tracking { get; set; } = new DeviceTrackingObject();
+        public DeviceTrackingMapObject Tracking { get; set; } = new DeviceTrackingMapObject();
 
         #endregion Properties
 
@@ -103,22 +103,22 @@ namespace AssetManager
 
 namespace AssetManager
 {
-    public class RequestObject : DataMappingObject
+    public class SibiRequestMapObject : DataMapObject
     {
         #region Fields
 
-        public DataTable RequestItems;
+        public DataTable RequestItems { get; set; }
 
         #endregion Fields
 
         #region Constructors
 
-        public RequestObject()
+        public SibiRequestMapObject()
         {
             this.GUID = System.Guid.NewGuid().ToString();
         }
 
-        public RequestObject(DataTable data) : base(data)
+        public SibiRequestMapObject(DataTable data) : base(data)
         {
         }
 
@@ -173,11 +173,11 @@ namespace AssetManager
 
 namespace AssetManager
 {
-    public class DeviceHistoricalObject : DataMappingObject
+    public class DeviceHistoricalMapObject : DataMapObject
     {
         #region Constructors
 
-        public DeviceHistoricalObject()
+        public DeviceHistoricalMapObject()
         {
         }
 
@@ -208,11 +208,11 @@ namespace AssetManager
 
 namespace AssetManager
 {
-    public class DeviceTrackingObject : DataMappingObject
+    public class DeviceTrackingMapObject : DataMapObject
     {
         #region Constructors
 
-        public DeviceTrackingObject()
+        public DeviceTrackingMapObject()
         {
         }
 
@@ -257,15 +257,15 @@ namespace AssetManager
 
 namespace AssetManager
 {
-    public class AccessGroupObject : DataMappingObject
+    public class AccessGroupMapObject : DataMapObject
     {
         #region Constructors
 
-        public AccessGroupObject()
+        public AccessGroupMapObject()
         {
         }
 
-        public AccessGroupObject(DataRow data) : base(data)
+        public AccessGroupMapObject(DataRow data) : base(data)
         {
         }
 

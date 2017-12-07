@@ -9,13 +9,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
     public partial class SibiNotesForm : ExtendedForm
     {
 
-        private RequestObject MyRequest;
-        public RequestObject Request
+        private SibiRequestMapObject MyRequest;
+        public SibiRequestMapObject Request
         {
             get { return MyRequest; }
         }
 
-        public SibiNotesForm(ExtendedForm parentForm, RequestObject request)
+        public SibiNotesForm(ExtendedForm parentForm, SibiRequestMapObject request)
         {
             InitializeComponent();
             this.ParentForm = parentForm;

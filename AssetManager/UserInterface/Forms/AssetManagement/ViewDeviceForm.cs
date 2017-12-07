@@ -17,7 +17,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private bool FieldsInvalid;
         private bool GridFilling = false;
         private string CurrentHash;
-        private DeviceObject CurrentViewDevice;
+        private DeviceMapObject CurrentViewDevice;
         private DBControlParser DataParser;
         private bool EditMode = false;
         private LiveBox MyLiveBox;
@@ -35,9 +35,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #region Constructors
 
-        public ViewDeviceForm(ExtendedForm parentForm, DataMappingObject device) : base(parentForm, device)
+        public ViewDeviceForm(ExtendedForm parentForm, DataMapObject device) : base(parentForm, device)
         {
-            CurrentViewDevice = (DeviceObject)device;
+            CurrentViewDevice = (DeviceMapObject)device;
 
             DataParser = new DBControlParser(this);
 
@@ -122,7 +122,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 ActiveDirectoryBox.Visible = false;
                 remoteToolsControl.Visible = false;
-                CurrentViewDevice = new DeviceObject(CurrentViewDevice.GUID);
+                CurrentViewDevice = new DeviceMapObject(CurrentViewDevice.GUID);
                 LoadDevice();
             }
         }
@@ -369,7 +369,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 string entryGUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGUID)))
-                using (var Info = new DeviceObject(results))
+                using (var Info = new DeviceMapObject(results))
                 {
                     var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + Info.Historical.ActionDateTime + " - " + AttribIndexFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, Info.Historical.ChangeType) + " - " + entryGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
                     if (blah == DialogResult.Yes)
@@ -550,7 +550,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             TrackingStatusTextBox.Text = (CurrentViewDevice.Tracking.IsCheckedOut ? "Checked Out" : "Checked In").ToString();
         }
 
-        private string FormTitle(DeviceObject Device)
+        private string FormTitle(DeviceMapObject Device)
         {
             return " - " + Device.CurrentUser + " - " + Device.AssetTag + " - " + Device.Description;
         }
@@ -716,7 +716,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DoneWaiting();
         }
 
-        private void OpenSibiLink(DeviceObject LinkDevice)
+        private void OpenSibiLink(DeviceMapObject LinkDevice)
         {
             try
             {

@@ -15,7 +15,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
     {
         #region Fields
 
-        private RequestObject CurrentRequest = new RequestObject();
+        private SibiRequestMapObject CurrentRequest = new SibiRequestMapObject();
         private string CurrentHash;
         private bool IsModifying = false;
         private bool IsNewRequest = false;
@@ -127,7 +127,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 ClearAll();
                 IsNewRequest = true;
                 SetTitle(true);
-                CurrentRequest = new RequestObject();
+                CurrentRequest = new SibiRequestMapObject();
                 this.FormUID = CurrentRequest.GUID;
                 IsModifying = true;
                 //Set the datasource to a new empty DB table.
@@ -272,7 +272,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 return;
             }
-            RequestObject RequestData = CollectData();
+            SibiRequestMapObject RequestData = CollectData();
             using (var trans = DBFactory.GetDatabase().StartTransaction())
             {
                 using (var conn = trans.Connection)
@@ -624,11 +624,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             ModifyRequest();
         }
 
-        private RequestObject CollectData()
+        private SibiRequestMapObject CollectData()
         {
             try
             {
-                RequestObject info = new RequestObject();
+                SibiRequestMapObject info = new SibiRequestMapObject();
                 info.Description = txtDescription.Text.Trim();
                 info.RequestUser = txtUser.Text.Trim();
                 info.RequestType = AttribIndexFunctions.GetDBValue(GlobalInstances.SibiAttribute.RequestType, cmbType.SelectedIndex);
@@ -673,7 +673,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                CurrentRequest = new RequestObject(RequestResults);
+                CurrentRequest = new SibiRequestMapObject(RequestResults);
                 CurrentRequest.RequestItems = RequestItemsResults;
             }
             catch (Exception ex)
@@ -1583,7 +1583,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                             OtherFunctions.Message("It appears that someone else has modified this request. Please refresh and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Concurrency Failure", this);
                             return;
                         }
-                        RequestObject RequestData = CollectData();
+                        SibiRequestMapObject RequestData = CollectData();
                         RequestData.GUID = CurrentRequest.GUID;
                         if (ReferenceEquals(RequestData.RequestItems, null))
                         {

@@ -8,10 +8,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 {
     public partial class TrackDeviceForm : ExtendedForm
     {
-        private DeviceObject CurrentTrackingDevice = new DeviceObject();
-        private DeviceTrackingObject CheckData = new DeviceTrackingObject();
+        private DeviceMapObject CurrentTrackingDevice = new DeviceMapObject();
+        private DeviceTrackingMapObject CheckData = new DeviceTrackingMapObject();
 
-        public TrackDeviceForm(DeviceObject device, ExtendedForm parentForm)
+        public TrackDeviceForm(DeviceMapObject device, ExtendedForm parentForm)
         {
             InitializeComponent();
             CurrentTrackingDevice = device;

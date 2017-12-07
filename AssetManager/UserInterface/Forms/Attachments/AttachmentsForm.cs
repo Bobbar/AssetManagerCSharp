@@ -24,8 +24,8 @@ namespace AssetManager.UserInterface.Forms.Attachments
         private string AttachFolderUID;
         private const short FileSizeMBLimit = 150;
         private AttachmentsBaseCols _attachTable;
-        private DeviceObject AttachDevice;
-        private RequestObject AttachRequest;
+        private DeviceMapObject AttachDevice;
+        private SibiRequestMapObject AttachRequest;
         private bool bolAllowDrag = true;
         private bool bolDragging = false;
         private bool bolGridFilling;
@@ -89,9 +89,9 @@ namespace AssetManager.UserInterface.Forms.Attachments
             _attachTable = AttachTable;
             if (!ReferenceEquals(attachDataObject, null))
             {
-                if (attachDataObject is RequestObject)
+                if (attachDataObject is SibiRequestMapObject)
                 {
-                    AttachRequest = (RequestObject)attachDataObject;
+                    AttachRequest = (SibiRequestMapObject)attachDataObject;
                     AttachFolderUID = AttachRequest.GUID;
                     FormUID = AttachFolderUID;
                     this.Text = "Sibi Attachments";
@@ -99,9 +99,9 @@ namespace AssetManager.UserInterface.Forms.Attachments
                     SibiGroup.Dock = DockStyle.Top;
                     FillSibiInfo();
                 }
-                else if (attachDataObject is DeviceObject)
+                else if (attachDataObject is DeviceMapObject)
                 {
-                    AttachDevice = (DeviceObject)attachDataObject;
+                    AttachDevice = (DeviceMapObject)attachDataObject;
                     AttachFolderUID = AttachDevice.GUID;
                     FormUID = AttachFolderUID;
                     this.Text = "Device Attachments";
