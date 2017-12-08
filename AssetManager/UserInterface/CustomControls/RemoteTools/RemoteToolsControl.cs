@@ -20,11 +20,11 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
         {
             get
             {
-                return device;
+                return this.device;
             }
             set
             {
-                device = value;
+                this.device = value;
                 CheckRDP();
             }
         }
@@ -81,7 +81,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
             {
                 if (SecurityTools.VerifyAdminCreds())
                 {
-                    string FullPath = "\\\\" + Device.HostName + "\\c$";
+                    string FullPath = "\\\\" + this.device.HostName + "\\c$";
                     await Task.Run(() =>
                     {
                         using (NetworkConnection NetCon = new NetworkConnection(FullPath, SecurityTools.AdminCreds))
@@ -106,13 +106,14 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
 
         private void CheckRDP()
         {
+            if (this.device == null) return;
             try
             {
-                if (Device.OSVersion.Contains("WIN"))
+                if (this.device.OSVersion.Contains("WIN"))
                 {
                     if (ReferenceEquals(pingVis, null))
                     {
-                        pingVis = new PingVis((Control)ShowIPButton, Device.HostName + "." + NetworkInfo.CurrentDomain);
+                        pingVis = new PingVis((Control)ShowIPButton, this.device.HostName + "." + NetworkInfo.CurrentDomain);
                         Debug.Print("New ping.");
                     }
                     if (pingVis.CurrentResult != null)
@@ -144,7 +145,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
                     using (TeamViewerDeploy NewTVDeploy = new TeamViewerDeploy())
                     {
                         OnStatusPrompt("Deploying TeamViewer...", 0);
-                        if (await NewTVDeploy.DeployToDevice(hostForm, device))
+                        if (await NewTVDeploy.DeployToDevice(hostForm, this.device))
                         {
                             OnStatusPrompt("TeamViewer deployment complete!");
                         }
@@ -166,7 +167,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
         {
             ProcessStartInfo StartInfo = new ProcessStartInfo();
             StartInfo.FileName = "mstsc.exe";
-            StartInfo.Arguments = "/v:" + Device.HostName;
+            StartInfo.Arguments = "/v:" + this.device.HostName;
             Process.Start(StartInfo);
         }
 
@@ -175,7 +176,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
             if (SecurityTools.VerifyAdminCreds())
             {
                 var GKInstance = Helpers.ChildFormControl.GKUpdaterInstance();
-                GKInstance.AddUpdate(Device);
+                GKInstance.AddUpdate(this.device);
                 if (!GKInstance.Visible)
                 {
                     GKInstance.Show();
@@ -189,7 +190,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
             if (blah == DialogResult.Yes)
             {
                 string IP = pingVis.CurrentResult.Address.ToString();
-                var RestartOutput = await SendRestart(IP, Device.HostName);
+                var RestartOutput = await SendRestart(IP, this.device.HostName);
                 if ((string)RestartOutput == "")
                 {
                     OtherFunctions.Message("Success", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Restart Device", hostForm);
@@ -293,7 +294,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
                 {
                     OnStatusPrompt("Installing Chrome...", 0);
                     PowerShellWrapper PSWrapper = new PowerShellWrapper();
-                    if (await PSWrapper.ExecutePowerShellScript(Device.HostName, Properties.Resources.UpdateChrome))
+                    if (await PSWrapper.ExecutePowerShellScript(this.device.HostName, Properties.Resources.UpdateChrome))
                     {
                         OnStatusPrompt("Chrome install complete!");
                         OtherFunctions.Message("Command successful.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Done", hostForm);
@@ -321,7 +322,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
 
         private void DeployTVButton_Click(object sender, EventArgs e)
         {
-            DeployTeamViewer(Device);
+            DeployTeamViewer(this.device);
         }
 
         private void GKUpdateButton_Click(object sender, EventArgs e)
@@ -363,7 +364,7 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
         }
         private void UpdateChromeButton_Click(object sender, EventArgs e)
         {
-            UpdateChrome(Device);
+            UpdateChrome(this.device);
         }
 
         private void RemoteToolsControl_Load(object sender, EventArgs e)
