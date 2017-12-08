@@ -529,7 +529,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     GridFunctions.PopulateGrid(ResultGrid, results, ResultGridColumns());
                 }
-                
+
                 // If currently in a transaction, use the native resizing method as the datatable is bound to an unmodified datatable.
                 // The raw datatable contains more columns than are displayed in the grid, and FastAutoResize does not currently support this.
                 if (CurrentTransaction == null)
@@ -860,7 +860,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 DataTable results = GlobalInstances.AssetFunc.DevicesBySupervisor(this);
                 if (results != null)
                 {
-                    SendToGrid(ref results);
+                    var newGridForm = new GridForm(this, "Devices By Supervisor");
+                    newGridForm.AddGrid("DevBySup", "Devices", results);
+                    newGridForm.Show();
                 }
                 else
                 {
