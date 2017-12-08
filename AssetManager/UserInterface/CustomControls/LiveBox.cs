@@ -23,9 +23,11 @@ namespace AssetManager
         private LiveBoxArgs CurrentLiveBoxArgs;
         private ListBox LiveListBox;
         private List<LiveBoxArgs> LiveBoxControls = new List<LiveBoxArgs>();
-        private int RowLimit = 30;
+        private int rowLimit = 30;
 
-        private string strPrevSearchString;
+        private bool queryRunning = false;
+
+        private string previousSearchString;
         #endregion
 
         #region "Constructors"
@@ -123,15 +125,15 @@ namespace AssetManager
             }
         }
 
-        private void DrawLiveBox(DataTable dtResults)
+        private void DrawLiveBox(DataTable results)
         {
             try
             {
-                if (dtResults.Rows.Count > 0)
+                if (results.Rows.Count > 0)
                 {
                     LiveListBox.SuspendLayout();
                     LiveListBox.BeginUpdate();
-                    LiveListBox.DataSource = dtResults;
+                    LiveListBox.DataSource = results;
                     LiveListBox.DisplayMember = CurrentLiveBoxArgs.DisplayMember;
                     LiveListBox.ValueMember = CurrentLiveBoxArgs.ValueMember;
                     LiveListBox.ClearSelected();
@@ -139,7 +141,7 @@ namespace AssetManager
                     LiveListBox.Visible = true;
                     LiveListBox.EndUpdate();
                     LiveListBox.ResumeLayout();
-                    if (strPrevSearchString != CurrentLiveBoxArgs.Control.Text.Trim())
+                    if (previousSearchString != CurrentLiveBoxArgs.Control.Text.Trim())
                     {
                         StartLiveSearch(CurrentLiveBoxArgs);
                         //if search string has changed since last completion, run again.
@@ -308,9 +310,11 @@ namespace AssetManager
         /// <param name="searchString"></param>
         private async void ProcessSearch(string searchString)
         {
-            strPrevSearchString = searchString;
             try
             {
+                if (queryRunning) return;
+                previousSearchString = searchString;
+                queryRunning = true;
                 DataTable Results = await Task.Run(() =>
                 {
                     string strQry;
@@ -318,11 +322,11 @@ namespace AssetManager
 
                     if (CurrentLiveBoxArgs.ValueMember == null)
                     {
-                        strQry = "SELECT " + DevicesCols.DeviceUID + "," + CurrentLiveBoxArgs.DisplayMember + " FROM " + DevicesCols.TableName + " WHERE " + CurrentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + CurrentLiveBoxArgs.DisplayMember + " ORDER BY " + CurrentLiveBoxArgs.DisplayMember + " LIMIT " + RowLimit;
+                        strQry = "SELECT " + DevicesCols.DeviceUID + "," + CurrentLiveBoxArgs.DisplayMember + " FROM " + DevicesCols.TableName + " WHERE " + CurrentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + CurrentLiveBoxArgs.DisplayMember + " ORDER BY " + CurrentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
                     }
                     else
                     {
-                        strQry = "SELECT " + DevicesCols.DeviceUID + "," + CurrentLiveBoxArgs.DisplayMember + "," + CurrentLiveBoxArgs.ValueMember + " FROM " + DevicesCols.TableName + " WHERE " + CurrentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + CurrentLiveBoxArgs.DisplayMember + " ORDER BY " + CurrentLiveBoxArgs.DisplayMember + " LIMIT " + RowLimit;
+                        strQry = "SELECT " + DevicesCols.DeviceUID + "," + CurrentLiveBoxArgs.DisplayMember + "," + CurrentLiveBoxArgs.ValueMember + " FROM " + DevicesCols.TableName + " WHERE " + CurrentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + CurrentLiveBoxArgs.DisplayMember + " ORDER BY " + CurrentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
                     }
 
                     using (var cmd = DBFactory.GetDatabase().GetCommand(strQry))
@@ -337,6 +341,10 @@ namespace AssetManager
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+            }
+            finally
+            {
+                queryRunning = false;
             }
         }
 
