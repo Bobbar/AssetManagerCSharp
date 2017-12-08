@@ -959,7 +959,7 @@
             <param name="slideOutDirection"></param>
             <param name="displayTime"></param>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.DisplayText(AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.StartNewSlide(AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters)">
             <summary>
             Displays the specified text and starts the animation.
             </summary>
@@ -984,17 +984,17 @@
             Handles the message queue. Messages are queued until they their animation is complete. Messages with a display time of 0 are moved to the slide out animation status, then replaced with the next message when complete.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.SetControlSize">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.SetControlSize(AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters)">
             <summary>
             If autosize set to true, sets the control size to fit the text.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.SetSlideInAnimation">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.StartSlideInAnimation">
             <summary>
             Sets states, current positions and ending positions for a slide-in animation.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.SetSlideOutAnimation">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.StartSlideOutAnimation">
             <summary>
             Sets states, current positions and ending positions for a slide-out animation.
             </summary>
