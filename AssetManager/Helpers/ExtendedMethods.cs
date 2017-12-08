@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Reflection;
 using System.Data;
 using System.Linq;
+using System.Drawing;
 
 namespace AssetManager
 {
@@ -90,27 +91,68 @@ namespace AssetManager
                     // Make sure the Linq query returned results.
                     if (colStringCollection.Length > 0)
                     {
-                        // Sort the string array by string lengths.
-                        colStringCollection = colStringCollection.OrderBy((x) => x.Length).ToArray();
+                        // Measure all the strings in the column.
+                        var colStringSizeCollection = MeasureStrings(colStringCollection, gfx, targetGrid.DefaultCellStyle.Font);
 
-                        // Get the last and longest string in the array.
-                        string longestColString = colStringCollection.Last();
+                        // Sort the array by string widths.
+                        colStringSizeCollection = colStringSizeCollection.OrderBy((x) => x.Size.Width).ToArray();
+              
+                        // Get the last and widest string in the array.
+                        var newColumnWidth = colStringSizeCollection.Last().Size;
 
-                        // Use the graphics object to measure the string size.
-                        var colWidth = gfx.MeasureString(longestColString, targetGrid.Font);
+                        // Measure the width of the header text.
+                        var headerWidth = gfx.MeasureString(targetGrid.Columns[i].HeaderText, targetGrid.ColumnHeadersDefaultCellStyle.Font);
 
-                        // If the calulated width is longer than the column header width, set the new column width.
-                        if (colWidth.Width > targetGrid.Columns[i].HeaderCell.Size.Width)
+                        // Compare current header width to measured header width and choose the largest.
+                        int maxHeaderWidth = 0;
+                        if (targetGrid.Columns[i].HeaderCell.Size.Width > headerWidth.Width)
                         {
-                            targetGrid.Columns[i].Width = (int)colWidth.Width;
+                            maxHeaderWidth = targetGrid.Columns[i].HeaderCell.Size.Width;
+                        }
+                        else
+                        {
+                            maxHeaderWidth = (int)headerWidth.Width;
+                        }
+
+                        // If the calulated max column width is larger than the max header width, set the new column width.
+                        if (newColumnWidth.Width > maxHeaderWidth)
+                        {
+                            targetGrid.Columns[i].Width = (int)newColumnWidth.Width;
                         }
                         else // Otherwise, set the column width to the header width.
                         {
-                            targetGrid.Columns[i].Width = targetGrid.Columns[i].HeaderCell.Size.Width;
+                            targetGrid.Columns[i].Width = maxHeaderWidth;
                         }
                     }
-
                 }
+            }
+        }
+
+        private static StringSize[] MeasureStrings(string[] stringArray, Graphics gfx, Font font)
+        {
+          var tempArray = new StringSize[stringArray.Length];
+            for (int i = 0; i < stringArray.Length; i++)
+            {
+                tempArray[i] = new StringSize(stringArray[i], gfx.MeasureString(stringArray[i], font));
+            }
+            return tempArray;
+        }
+
+        private class StringSize
+        {
+            public string Text { get; set; } = string.Empty;
+            public SizeF Size { get; set; } = new SizeF();
+
+            public StringSize()
+            {
+                Text = string.Empty;
+                Size = new SizeF();
+            }
+
+            public StringSize(string text, SizeF size)
+            {
+                Text = text;
+                Size = size;
             }
         }
 
