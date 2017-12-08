@@ -114,7 +114,6 @@ namespace AssetManager.UserInterface.CustomControls.RemoteTools
                     if (ReferenceEquals(pingVis, null))
                     {
                         pingVis = new PingVis((Control)ShowIPButton, this.device.HostName + "." + NetworkInfo.CurrentDomain);
-                        Debug.Print("New ping.");
                     }
                     if (pingVis.CurrentResult != null)
                     {
