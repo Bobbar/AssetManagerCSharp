@@ -144,6 +144,10 @@ namespace AssetManager
         public const string ObjectCode = "sibi_items_object_code";
         public const string Qty = "sibi_items_qty";
         public const string Timestamp = "sibi_items_timestamp";
+        public const string BudgetLineNo = "sibi_items_budget_lineno";
+        public const string RequiresApproval = "sibi_items_requires_approval";
+        public const string ApproverId = "sibi_items_approver_id";
+
     }
 }
 namespace AssetManager

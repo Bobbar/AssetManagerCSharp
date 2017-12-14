@@ -900,6 +900,40 @@
             Override and add code to refresh data from the database.
             </summary>
         </member>
+        <member name="F:AssetManager.UserInterface.CustomControls.LabeledComboBox.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.LabeledComboBox.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.LabeledComboBox.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:AssetManager.UserInterface.CustomControls.LabeledTextBox.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.LabeledTextBox.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.LabeledTextBox.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
         <member name="M:AssetManager.UserInterface.CustomControls.MunisToolBar.InsertMunisDropDown(AssetManager.UserInterface.CustomControls.OneClickToolStrip,System.Int32)">
             <summary>
             Inserts the MunisToolBar into the specified toolstrip.
@@ -1184,6 +1218,23 @@
             </summary>
             <param name="code"></param>
             <returns></returns>
+        </member>
+        <member name="F:AssetManager.UserInterface.Forms.Sibi.SibiManageItemForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiManageItemForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiManageItemForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
         </member>
         <member name="M:AssetManager.LiveBox.ProcessSearch(System.String)">
             <summary>

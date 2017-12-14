@@ -7,7 +7,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
     partial class SibiManageRequestForm
     {
         //Form overrides dispose to clean up the component list.
-        
+
         protected override void Dispose(bool disposing)
         {
             try
@@ -23,11 +23,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
         //Required by the Windows Form Designer
-        private System.ComponentModel.IContainer components  = null;
+        private System.ComponentModel.IContainer components = null;
         //NOTE: The following procedure is required by the Windows Form Designer
         //It can be modified using the Windows Form Designer.  
         //Do not modify it using the code editor.
-        
+
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -98,6 +98,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbRefresh = new System.Windows.Forms.ToolStripButton();
             this.StatusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.button1 = new System.Windows.Forms.Button();
             this.PopupMenuItems.SuspendLayout();
             this.PopupMenuNotes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldErrorIcon)).BeginInit();
@@ -275,6 +276,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // GroupBox1
             // 
+            this.GroupBox1.Controls.Add(this.button1);
             this.GroupBox1.Controls.Add(this.txtCreateDate);
             this.GroupBox1.Controls.Add(this.Panel3);
             this.GroupBox1.Controls.Add(this.Label8);
@@ -305,7 +307,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Panel3.Controls.Add(this.pnlEditButtons);
             this.Panel3.Controls.Add(this.pnlCreate);
-            this.Panel3.Location = new System.Drawing.Point(229, 102);
+            this.Panel3.Location = new System.Drawing.Point(252, 102);
             this.Panel3.Name = "Panel3";
             this.Panel3.Size = new System.Drawing.Size(148, 148);
             this.Panel3.TabIndex = 22;
@@ -823,6 +825,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.StatusStrip1.TabIndex = 7;
             this.StatusStrip1.Text = "StatusStrip1";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(171, 204);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 24;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // SibiManageRequestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -929,5 +941,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         internal ToolStripMenuItem tsmGLBudget;
         internal ToolStripMenuItem NewDeviceMenuItem;
         internal StatusStrip StatusStrip1;
+        private Button button1;
     }
 }

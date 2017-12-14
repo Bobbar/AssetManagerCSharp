@@ -230,6 +230,18 @@
     <Compile Include="UserInterface\CustomControls\ExtendedForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\CustomControls\LabeledComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserInterface\CustomControls\LabeledComboBox.Designer.cs">
+      <DependentUpon>LabeledComboBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\CustomControls\LabeledTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserInterface\CustomControls\LabeledTextBox.Designer.cs">
+      <DependentUpon>LabeledTextBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserInterface\CustomControls\LiveBox.cs" />
     <Compile Include="UserInterface\CustomControls\MunisToolBar.cs" />
     <Compile Include="UserInterface\CustomControls\OneClickToolStrip.cs">
@@ -369,6 +381,12 @@
     <Compile Include="UserInterface\Forms\Sibi\SibiMainForm.Designer.cs">
       <DependentUpon>SibiMainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserInterface\Forms\Sibi\SibiManageItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\Forms\Sibi\SibiManageItemForm.Designer.cs">
+      <DependentUpon>SibiManageItemForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserInterface\Forms\Sibi\SibiManageRequestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -408,6 +426,12 @@
     <EmbeddedResource Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
     <EmbeddedResource Include="Resources\Exh_K-02_Asset_Disposal_Form.pdf" />
     <EmbeddedResource Include="Resources\Exh_K-03_Asset_Transfer_Form.pdf" />
+    <EmbeddedResource Include="UserInterface\CustomControls\LabeledComboBox.resx">
+      <DependentUpon>LabeledComboBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\CustomControls\LabeledTextBox.resx">
+      <DependentUpon>LabeledTextBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\CustomControls\RemoteTools\RemoteToolsControl.resx">
       <DependentUpon>RemoteToolsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -469,6 +493,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Sibi\SibiMainForm.resx">
       <DependentUpon>SibiMainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\Sibi\SibiManageItemForm.resx">
+      <DependentUpon>SibiManageItemForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Sibi\SibiManageRequestForm.resx">
       <DependentUpon>SibiManageRequestForm.cs</DependentUpon>

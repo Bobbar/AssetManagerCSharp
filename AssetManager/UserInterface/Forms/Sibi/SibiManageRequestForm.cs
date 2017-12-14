@@ -1760,5 +1760,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
         }
 
         #endregion Methods
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var NewItemForm = new SibiManageItemForm(this, CurrentRequest);
+            NewItemForm.Show();
+        }
     }
 }

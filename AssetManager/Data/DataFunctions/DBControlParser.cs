@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
+using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager
 {
@@ -151,6 +152,8 @@ namespace AssetManager
         #region "Fields"
 
         private Form ParentForm;
+        private ErrorProvider errorProvider;
+        // private bool CheckFields = false;
 
         #endregion "Fields"
 
@@ -266,6 +269,140 @@ namespace AssetManager
             }
         }
 
+        public void EnableFieldValidation(ErrorProvider errorProvider)
+        {
+            this.errorProvider = errorProvider;
+            SetValidateEvents();
+        }
+
+
+        private void SetValidateEvents()
+        {
+            foreach (Control ctl in GetDBControls(ParentForm))
+            {
+                var DBInfo = (DBControlInfo)ctl.Tag;
+                if (DBInfo.Required)
+                {
+                    ctl.Validated += ControlValidateEvent;
+                }
+
+            }
+        }
+
+
+        private void ControlValidateEvent(object sender, EventArgs e)
+        {
+            if (errorProvider != null)
+            {
+                ValidateFields(errorProvider);
+            }
+
+        }
+
+
+        public bool ValidateFields(ErrorProvider errorProvider)
+        {
+            bool fieldsValid = true;
+            foreach (Control ctl in GetDBControls(ParentForm))
+            {
+                var DBInfo = (DBControlInfo)ctl.Tag;
+
+                if (DBInfo.Required)
+                {
+                    //if (ctl is TextBox || ctl is MaskedTextBox || ctl is LabeledTextBox)
+                    //{
+                    //    if (string.IsNullOrEmpty(ctl.Text.Trim()))
+                    //    {
+                    //        SetErrorIcon(errorProvider, ctl, false);
+                    //    }
+                    //    else
+                    //    {
+                    //        SetErrorIcon(errorProvider, ctl, true);
+                    //    }
+                    //}
+                    //else if (ctl is ComboBox)
+                    if (ctl is ComboBox)
+                    {
+                        ComboBox dbCmb = (ComboBox)ctl;
+                        if (dbCmb.SelectedIndex < 0)
+                        {
+                            SetErrorIcon(errorProvider, dbCmb, false);
+                            fieldsValid = false;
+                        }
+                        else
+                        {
+                            SetErrorIcon(errorProvider, dbCmb, true);
+                        }
+                    }
+                    else if (ctl is LabeledComboBox)
+                    {
+                        var LblCmb = (LabeledComboBox)ctl;
+                        var dbCmb = LblCmb.ComboBox;
+                        if (dbCmb.SelectedIndex < 0)
+                        {
+                            SetErrorIcon(errorProvider, LblCmb, false);
+                            fieldsValid = false;
+                        }
+                        else
+                        {
+                            SetErrorIcon(errorProvider, LblCmb, true);
+                        }
+
+                    }
+                    else
+                    {
+                        Console.WriteLine(ctl.Name + " - '" + ctl.Text.Trim() + "'");
+                        if (string.IsNullOrEmpty(ctl.Text.Trim()))
+                        {
+                            SetErrorIcon(errorProvider, ctl, false);
+                            fieldsValid = false;
+                        }
+                        else
+                        {
+                            SetErrorIcon(errorProvider, ctl, true);
+                        }
+
+                        // throw new Exception("Unexpected type.");
+                        //return null;
+                    }
+                }
+
+                //else if (ctl is CheckBox)
+                //{
+                //    CheckBox dbChk = (CheckBox)ctl;
+
+                //}
+                //else if (ctl is MaskedTextBox)
+                //{
+                //    MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
+
+                //}
+                //else if (ctl is DateTimePicker)
+                //{
+                //    DateTimePicker dbDtPick = (DateTimePicker)ctl;
+                //}
+
+            }
+            return fieldsValid;
+        }
+
+        private void SetErrorIcon(ErrorProvider errorProvider, Control control, bool isValid)
+        {
+            if (!isValid)
+            {
+                if (ReferenceEquals(errorProvider.GetError(control), string.Empty))
+                {
+                    errorProvider.SetIconAlignment(control, ErrorIconAlignment.MiddleRight);
+                    errorProvider.SetIconPadding(control, 4);
+                    errorProvider.SetError(control, "Required or Invalid Field");
+                }
+            }
+            else
+            {
+                errorProvider.SetError(control, string.Empty);
+            }
+        }
+
         /// <summary>
         /// Recursively collects list of controls initiated with <see cref="DBControlInfo"/> tags within Parent control.
         /// </summary>
@@ -294,10 +431,11 @@ namespace AssetManager
         {
             var DBInfo = (DBControlInfo)dbControl.Tag;
 
-            if (dbControl is TextBox)
+            if (dbControl is TextBox || dbControl is LabeledTextBox)
             {
-                TextBox dbTxt = (TextBox)dbControl;
-                return DataConsistency.CleanDBValue(dbTxt.Text);
+                //TextBox dbTxt = (TextBox)dbControl;
+                //return DataConsistency.CleanDBValue(dbTxt.Text);
+                return DataConsistency.CleanDBValue(dbControl.Text);
             }
             else if (dbControl is MaskedTextBox)
             {
@@ -313,6 +451,11 @@ namespace AssetManager
             {
                 ComboBox dbCmb = (ComboBox)dbControl;
                 return AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
+            }
+            else if (dbControl is LabeledComboBox)
+            {
+                var lblCmb = (LabeledComboBox)dbControl;
+                return AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, lblCmb.SelectedIndex);
             }
             else if (dbControl is CheckBox)
             {
@@ -346,6 +489,20 @@ namespace AssetManager
             return tmpTable;
         }
 
+        public DataTable ReturnInsertTable(string selectQry, Dictionary<string, object> addlValues)
+        {
+            DataTable tmpTable = null;
+            tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(selectQry);
+            tmpTable.Rows.Add();
+            var DBRow = tmpTable.Rows[0];
+            UpdateDBControlRow(DBRow);//tmpTable.Rows[0]);
+            foreach (var item in addlValues)
+            {
+                DBRow[item.Key] = item.Value;
+            }
+            return tmpTable;
+        }
+
         /// <summary>
         /// Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="UpdateDBControlRow(DataRow)"/>
         /// </summary>
@@ -376,36 +533,47 @@ namespace AssetManager
                 DBControlInfo DBInfo = (DBControlInfo)ctl.Tag;
                 if (DBInfo.ParseType != ParseType.DisplayOnly)
                 {
-                    if (ctl is TextBox)
-                    {
-                        TextBox dbTxt = (TextBox)ctl;
-                        DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbTxt.Text);
-                    }
-                    else if (ctl is MaskedTextBox)
-                    {
-                        MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
-                        DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbMaskTxt.Text);
-                    }
-                    else if (ctl is DateTimePicker)
-                    {
-                        DateTimePicker dbDtPick = (DateTimePicker)ctl;
-                        DBRow[DBInfo.DataColumn] = dbDtPick.Value;
-                    }
-                    else if (ctl is ComboBox)
-                    {
-                        ComboBox dbCmb = (ComboBox)ctl;
-                        DBRow[DBInfo.DataColumn] = AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
-                    }
-                    else if (ctl is CheckBox)
-                    {
-                        CheckBox dbChk = (CheckBox)ctl;
-                        DBRow[DBInfo.DataColumn] = dbChk.Checked;
-                    }
-                    else
-                    {
-                        throw new Exception("Unexpected type.");
-                        //return null;
-                    }
+                    DBRow[DBInfo.DataColumn] = GetDBControlValue(ctl);
+
+
+
+
+                    //if (ctl is TextBox || ctl is LabeledTextBox)
+                    //{
+                    //    // TextBox dbTxt = (TextBox)ctl;
+                    //    // DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbTxt.Text);
+                    //    DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(ctl.Text);
+                    //}
+                    //else if (ctl is MaskedTextBox)
+                    //{
+                    //    MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
+                    //    DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbMaskTxt.Text);
+                    //}
+                    //else if (ctl is DateTimePicker)
+                    //{
+                    //    DateTimePicker dbDtPick = (DateTimePicker)ctl;
+                    //    DBRow[DBInfo.DataColumn] = dbDtPick.Value;
+                    //}
+                    //else if (ctl is ComboBox)
+                    //{
+                    //    ComboBox dbCmb = (ComboBox)ctl;
+                    //    DBRow[DBInfo.DataColumn] = AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
+                    //}
+                    //else if (ctl is LabeledComboBox)
+                    //{
+                    //    var lblCmb = (LabeledComboBox)ctl;
+                    //    DBRow[DBInfo.DataColumn] = AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, lblCmb.ComboBox.SelectedIndex);
+                    //}
+                    //else if (ctl is CheckBox)
+                    //{
+                    //    CheckBox dbChk = (CheckBox)ctl;
+                    //    DBRow[DBInfo.DataColumn] = dbChk.Checked;
+                    //}
+                    //else
+                    //{
+                    //    throw new Exception("Unexpected type.");
+                    //    //return null;
+                    //}
                 }
             }
         }
