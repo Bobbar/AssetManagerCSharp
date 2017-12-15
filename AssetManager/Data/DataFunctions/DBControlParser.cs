@@ -489,13 +489,24 @@ namespace AssetManager
             return tmpTable;
         }
 
+        /// <summary>
+        /// Collects an EMPTY DataTable via a SQL Select statement and adds a new row for SQL Insertion.
+        /// </summary>
+        /// <remarks>
+        /// The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="UpdateDBControlRow(DataRow)"/>
+        /// </remarks>
+        /// <param name="selectQry">A SQL Select query string that will return an EMPTY table. Ex: "SELECT * FROM table LIMIT 0"</param>
+        /// <param name="addlValues">A <see cref="Dictionary{TKey, TValue}"/> that contains additional column names (TKey) and values (TValue) to be added to the table. </param>
+        /// <returns>
+        /// Returns a DataTable with a new row added via <see cref="UpdateDBControlRow(DataRow)"/>
+        /// </returns>
         public DataTable ReturnInsertTable(string selectQry, Dictionary<string, object> addlValues)
         {
             DataTable tmpTable = null;
             tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(selectQry);
             tmpTable.Rows.Add();
             var DBRow = tmpTable.Rows[0];
-            UpdateDBControlRow(DBRow);//tmpTable.Rows[0]);
+            UpdateDBControlRow(DBRow);
             foreach (var item in addlValues)
             {
                 DBRow[item.Key] = item.Value;

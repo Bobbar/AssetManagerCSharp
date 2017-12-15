@@ -191,6 +191,7 @@
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AssetManagerFunctions.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\FTPFunctions.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\MunisFunctions.cs" />
+    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\SibiFunctions.cs" />
     <Compile Include="Data\DataFunctions\DBCacheFunctions.cs" />
     <Compile Include="Data\DataFunctions\DBControlParser.cs" />
     <Compile Include="GlobalObjects\Enums.cs" />

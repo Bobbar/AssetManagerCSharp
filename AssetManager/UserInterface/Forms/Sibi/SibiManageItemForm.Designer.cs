@@ -35,7 +35,7 @@
             this.OrgTextBox = new AssetManager.UserInterface.CustomControls.LabeledTextBox();
             this.BudgetLineTextBox = new AssetManager.UserInterface.CustomControls.LabeledTextBox();
             this.ObjectTextBox = new AssetManager.UserInterface.CustomControls.LabeledTextBox();
-            this.SupervisorTextBox = new AssetManager.UserInterface.CustomControls.LabeledTextBox();
+            this.ApproverTextBox = new AssetManager.UserInterface.CustomControls.LabeledTextBox();
             this.FindSupervisorButton = new System.Windows.Forms.Button();
             this.AcceptButton = new System.Windows.Forms.Button();
             this.NewSerialTextBox = new AssetManager.UserInterface.CustomControls.LabeledTextBox();
@@ -82,7 +82,7 @@
             this.BudgetGroupBox.Controls.Add(this.OrgTextBox);
             this.BudgetGroupBox.Controls.Add(this.BudgetLineTextBox);
             this.BudgetGroupBox.Controls.Add(this.ObjectTextBox);
-            this.BudgetGroupBox.Controls.Add(this.SupervisorTextBox);
+            this.BudgetGroupBox.Controls.Add(this.ApproverTextBox);
             this.BudgetGroupBox.Controls.Add(this.FindSupervisorButton);
             this.BudgetGroupBox.Location = new System.Drawing.Point(331, 160);
             this.BudgetGroupBox.Name = "BudgetGroupBox";
@@ -125,13 +125,13 @@
             this.ObjectTextBox.Size = new System.Drawing.Size(149, 40);
             this.ObjectTextBox.TabIndex = 11;
             // 
-            // SupervisorTextBox
+            // ApproverTextBox
             // 
-            this.SupervisorTextBox.LabelText = "Supervisor:";
-            this.SupervisorTextBox.Location = new System.Drawing.Point(189, 71);
-            this.SupervisorTextBox.Name = "SupervisorTextBox";
-            this.SupervisorTextBox.Size = new System.Drawing.Size(149, 40);
-            this.SupervisorTextBox.TabIndex = 12;
+            this.ApproverTextBox.LabelText = "Approver:";
+            this.ApproverTextBox.Location = new System.Drawing.Point(189, 71);
+            this.ApproverTextBox.Name = "ApproverTextBox";
+            this.ApproverTextBox.Size = new System.Drawing.Size(149, 40);
+            this.ApproverTextBox.TabIndex = 12;
             // 
             // FindSupervisorButton
             // 
@@ -262,7 +262,7 @@
         private CustomControls.LabeledTextBox ReplaceAssetTextBox;
         private CustomControls.LabeledTextBox ObjectTextBox;
         private CustomControls.LabeledTextBox OrgTextBox;
-        private CustomControls.LabeledTextBox SupervisorTextBox;
+        private CustomControls.LabeledTextBox ApproverTextBox;
         private System.Windows.Forms.Button FindSupervisorButton;
         private System.Windows.Forms.Button AcceptButton;
         private CustomControls.LabeledTextBox BudgetLineTextBox;

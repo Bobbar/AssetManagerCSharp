@@ -497,6 +497,19 @@
             Returns a DataTable with a new row added via <see cref="M:AssetManager.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
             </returns>
         </member>
+        <member name="M:AssetManager.DBControlParser.ReturnInsertTable(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Collects an EMPTY DataTable via a SQL Select statement and adds a new row for SQL Insertion.
+            </summary>
+            <remarks>
+            The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="M:AssetManager.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
+            </remarks>
+            <param name="selectQry">A SQL Select query string that will return an EMPTY table. Ex: "SELECT * FROM table LIMIT 0"</param>
+            <param name="addlValues">A <see cref="T:System.Collections.Generic.Dictionary`2"/> that contains additional column names (TKey) and values (TValue) to be added to the table. </param>
+            <returns>
+            Returns a DataTable with a new row added via <see cref="M:AssetManager.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
+            </returns>
+        </member>
         <member name="M:AssetManager.DBControlParser.ReturnUpdateTable(System.String)">
             <summary>
             Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="M:AssetManager.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>

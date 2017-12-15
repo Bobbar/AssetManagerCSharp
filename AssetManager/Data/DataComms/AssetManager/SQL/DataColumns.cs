@@ -147,6 +147,10 @@ namespace AssetManager
         public const string BudgetLineNo = "sibi_items_budget_lineno";
         public const string RequiresApproval = "sibi_items_requires_approval";
         public const string ApproverId = "sibi_items_approver_id";
+        public const string RequestorId = "sibi_items_requestor_id";
+        public const string ModifyStatus = "sibi_items_modify_status";
+        public const string ApprovalID = "sibi_items_approval_id";
+        public const string ChangeType = "sibi_items_change_type";
 
     }
 }

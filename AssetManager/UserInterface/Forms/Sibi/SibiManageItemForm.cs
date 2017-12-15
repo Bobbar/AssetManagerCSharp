@@ -46,7 +46,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             NewSerialTextBox.Tag = new DBControlInfo(SibiRequestItemsCols.NewSerial, false);
             OrgTextBox.Tag = new DBControlInfo(SibiRequestItemsCols.OrgCode, false);
             ObjectTextBox.Tag = new DBControlInfo(SibiRequestItemsCols.ObjectCode, false);
-
+            ApproverTextBox.Tag = new DBControlInfo(SibiRequestItemsCols.ApproverId, false);
 
 
             AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, LocationComboBox.ComboBox);
@@ -67,7 +67,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     { SibiRequestItemsCols.RequestUID,request.GUID },
                     { SibiRequestItemsCols.ItemUID, Guid.NewGuid().ToString() },
-                    { SibiRequestItemsCols.RequiresApproval, ApprovalRequiredCheckBox.Checked }
+                    { SibiRequestItemsCols.RequiresApproval, ApprovalRequiredCheckBox.Checked },
+                    { SibiRequestItemsCols.ModifyStatus, "MODNEW" },
+                    { SibiRequestItemsCols.RequestorId, "2" },
+                    { SibiRequestItemsCols.ChangeType, "NEW" }
                 };
 
                 var newItemDataTable = dbParser.ReturnInsertTable("SELECT * FROM " + SibiRequestItemsCols.TableName + " LIMIT 0", addlValues);
@@ -75,7 +78,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 DBFactory.GetDatabase().UpdateTable("SELECT * FROM " + SibiRequestItemsCols.TableName + " LIMIT 0", newItemDataTable);
 
 
-
+                ParentForm.RefreshData();
 
 
 

@@ -55,6 +55,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.Panel4 = new System.Windows.Forms.Panel();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.AddItemsButton = new System.Windows.Forms.Button();
             this.Panel3 = new System.Windows.Forms.Panel();
             this.pnlEditButtons = new System.Windows.Forms.Panel();
             this.cmdAccept = new System.Windows.Forms.Button();
@@ -98,7 +99,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbRefresh = new System.Windows.Forms.ToolStripButton();
             this.StatusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.button1 = new System.Windows.Forms.Button();
             this.PopupMenuItems.SuspendLayout();
             this.PopupMenuNotes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldErrorIcon)).BeginInit();
@@ -276,7 +276,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Controls.Add(this.button1);
+            this.GroupBox1.Controls.Add(this.AddItemsButton);
             this.GroupBox1.Controls.Add(this.txtCreateDate);
             this.GroupBox1.Controls.Add(this.Panel3);
             this.GroupBox1.Controls.Add(this.Label8);
@@ -299,6 +299,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox1.TabIndex = 0;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Request Info";
+            // 
+            // AddItemsButton
+            // 
+            this.AddItemsButton.Location = new System.Drawing.Point(171, 204);
+            this.AddItemsButton.Name = "AddItemsButton";
+            this.AddItemsButton.Size = new System.Drawing.Size(75, 23);
+            this.AddItemsButton.TabIndex = 24;
+            this.AddItemsButton.Text = "Add Items";
+            this.AddItemsButton.UseVisualStyleBackColor = true;
+            this.AddItemsButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // Panel3
             // 
@@ -825,16 +835,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.StatusStrip1.TabIndex = 7;
             this.StatusStrip1.Text = "StatusStrip1";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(171, 204);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 24;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // SibiManageRequestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -941,6 +941,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         internal ToolStripMenuItem tsmGLBudget;
         internal ToolStripMenuItem NewDeviceMenuItem;
         internal StatusStrip StatusStrip1;
-        private Button button1;
+        private Button AddItemsButton;
     }
 }

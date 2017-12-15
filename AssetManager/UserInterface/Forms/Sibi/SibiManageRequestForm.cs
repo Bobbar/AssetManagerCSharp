@@ -818,7 +818,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void EnableControls()
         {
             EnableControlsRecursive(this);
-            EnableGrid();
+            // EnableGrid();
         }
 
         private void EnableGrid()
@@ -987,7 +987,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     if (!string.IsNullOrEmpty(Serial))
                     {
                         GlobalInstances.AssetFunc.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.NewSerial, Serial, SibiRequestItemsCols.ItemUID, ItemUID);
-                        RefreshRequest();
+                        RefreshData();
                     }
                 }
                 else if (ColumnName == SibiRequestItemsCols.NewAsset)
@@ -1000,7 +1000,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     if (!string.IsNullOrEmpty(Asset))
                     {
                         GlobalInstances.AssetFunc.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.NewAsset, Asset, SibiRequestItemsCols.ItemUID, ItemUID);
-                        RefreshRequest();
+                        RefreshData();
                     }
                 }
                 else if (ColumnName == SibiRequestItemsCols.ReplaceSerial)
@@ -1013,7 +1013,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     if (!string.IsNullOrEmpty(Serial))
                     {
                         GlobalInstances.AssetFunc.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.ReplaceSerial, Serial, SibiRequestItemsCols.ItemUID, ItemUID);
-                        RefreshRequest();
+                        RefreshData();
                     }
                 }
                 else if (ColumnName == SibiRequestItemsCols.ReplaceAsset)
@@ -1026,7 +1026,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     if (!string.IsNullOrEmpty(Asset))
                     {
                         GlobalInstances.AssetFunc.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.ReplaceAsset, Asset, SibiRequestItemsCols.ItemUID, ItemUID);
-                        RefreshRequest();
+                        RefreshData();
                     }
                 }
             }
@@ -1040,9 +1040,28 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void RefreshRequest()
+        public override void RefreshData()
         {
-            OpenRequest(CurrentRequest.GUID);
+            if (!IsModifying)
+            {
+                OpenRequest(CurrentRequest.GUID);
+            }
+            else
+            {
+                RefreshItems();
+            }
+
+        }
+
+        private void RefreshItems()
+        {
+            using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
+            {
+                RequestItemsResults.TableName = SibiRequestItemsCols.TableName;
+                CollectRequestInfo(CurrentRequest.PopulatingTable, RequestItemsResults);
+                CurrentHash = GetHash(CurrentRequest.PopulatingTable, RequestItemsResults);
+                SendToGrid(RequestItemsResults);
+            }
         }
 
         private List<DataGridColumn> NotesGridColumns()
@@ -1552,7 +1571,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (!ConcurrencyCheck())
                 {
-                    RefreshRequest();
+                    RefreshData();
                     OtherFunctions.Message("This request has been modified since it's been open and has been refreshed with the current data.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Concurrency Check", this);
                 }
                 EnableControls();
@@ -1596,6 +1615,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans);
 
                         trans.Commit();
+
+                        Data.DataFunctions.DatabaseHelperFunctions.SibiFunctions.ProcessApprovals(CurrentRequest);
 
                         ParentForm.RefreshData();
                         OpenRequest(CurrentRequest.GUID);
