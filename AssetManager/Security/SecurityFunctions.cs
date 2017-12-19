@@ -96,6 +96,27 @@ namespace AssetManager
             }
         }
 
+        public static byte[] SerializeDataRow(DataRow row)
+        {
+            var serializer = new DataContractSerializer(typeof(DataRow));
+            using (var memoryStream = new MemoryStream())
+            {
+
+                serializer.WriteObject(memoryStream, row);
+                return memoryStream.ToArray();
+            }
+        }
+
+        public static DataRow DeserializeDataRow(byte[] byteArray)
+        {
+            var deserializer = new DataContractSerializer(typeof(DataRow));
+            using (var memoryStream = new MemoryStream(byteArray))
+            {
+                return (DataRow)deserializer.ReadObject(memoryStream);
+            }
+
+        }
+
         public static string GetMD5OfFile(string filePath)
         {
             using (FileStream fStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 16 * 1024 * 1024))

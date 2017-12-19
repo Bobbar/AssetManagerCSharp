@@ -55,3 +55,13 @@ namespace AssetManager
         vintondd
     }
 }
+
+namespace AssetManager
+{
+    public enum ItemChangeStatus
+    {
+        MODCURR,
+        MODNEW,
+        MODCHAN
+    }
+}

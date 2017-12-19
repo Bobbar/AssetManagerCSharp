@@ -154,6 +154,42 @@ namespace AssetManager
 
     }
 }
+
+namespace AssetManager
+{
+    public class SibiApprovalColumns
+    {
+        public const string TableName = "sibi_approvals";
+        public const string UID = "uid";
+        public const string RequestUID = "sibi_request_uid";
+        public const string Type = "approval_type";
+        public const string Note = "approval_note";
+        public const string Status = "approval_status";
+        public const string Timestamp = "approval_timestamp";
+        public const string ApproverID = "approver_id";
+        public const string RequestorID = "requestor_id";
+        public const string NotifySent = "notify_sent";
+
+
+    }
+}
+
+namespace AssetManager
+{
+    public class SibiApprovalItemsColumns
+    {
+        public const string TableName = "request_approval_items";
+        public const string UID = "uid";
+        public const string ApprovalUID = "approval_uid";
+        public const string RequestItemUID = "request_item_uid";
+        public const string ChangeType = "change_type";
+        public const string ItemHistoryUID = "item_historical_id";
+        public const string NewValues = "item_newvalues";
+
+
+    }
+}
+
 namespace AssetManager
 {
 

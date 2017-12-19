@@ -22,11 +22,12 @@ namespace AssetManager.Data.DataFunctions.DatabaseHelperFunctions
                     DataTable distinctValues = view.ToTable(true, SibiRequestItemsCols.ApproverId);
 
 
-
+                    //Get unique approver IDs within items.
                     for (int i = 0; i < distinctValues.Rows.Count; i++)
                     {
                         var row = distinctValues.Rows[i];
-                        SetItemApprovals(approvals, request.GUID, row[SibiRequestItemsCols.ApproverId].ToString());
+                     
+                      //  SetItemApprovals(approvals, request.GUID, row[SibiRequestItemsCols.ApproverId].ToString());
 
                     }
 
@@ -35,6 +36,43 @@ namespace AssetManager.Data.DataFunctions.DatabaseHelperFunctions
 
 
             }
+
+
+
+        }
+
+
+        private static void AddNewApprovalItems(string requestId, string approvalId, string approverId)
+        {
+            var requestItemsQuery = "SELECT * FROM " + SibiRequestItemsCols.TableName + " WHERE " + SibiRequestItemsCols.RequestUID + " = '" + requestId + "' AND " + SibiRequestItemsCols.ApproverId + " = '" + approverId + "'";
+
+            var approvalItemsQuery = "SELECT * FROM " + SibiApprovalItemsColumns.TableName + " LIMIT 0";
+
+
+
+
+
+
+            using (DataTable newItems = DBFactory.GetDatabase().DataTableFromQueryString(approvalItemsQuery))
+            using (DataTable requestItems = DBFactory.GetDatabase().DataTableFromQueryString(requestItemsQuery))
+            {
+                if (requestItems.Rows.Count > 0)
+                {
+
+                    foreach (DataRow row in requestItems.Rows)
+                    {
+                        newItems.Rows.Add();
+
+
+
+                    }
+
+                }
+
+               
+
+            }
+
 
 
 
@@ -63,46 +101,27 @@ namespace AssetManager.Data.DataFunctions.DatabaseHelperFunctions
 
 
             DBFactory.GetDatabase().UpdateTable(approvalQuery, allApprovals);
-            //for (int i = 0; i < filterRows.Count(); i++)
-            //{
-
-            //    filterRows[i][SibiRequestItemsCols.ApprovalID] = approvalID;
-
-            //}
+           
 
 
 
         }
 
-        //private static void SetItemApprovals(DataTable allApprovals, string requestId, string approverId, string requestorId)
-        //{
-        //    var filterRows = allApprovals.Select(SibiRequestItemsCols.ApproverId + " = " + approverId);
-
-        //    var approvalID = AddNewApproval(requestId, approverId, requestorId);
-        //    for (int i = 0; i < filterRows.Count(); i++)
-        //    {
-        //        filterRows[i][SibiRequestItemsCols.ApprovalID] = approvalID;
-
-        //    }
-
-
-
-        //}
-
+    
         private static string AddNewApproval(string requestId, string approverId, string requestorId)
         {
             var newUID = Guid.NewGuid().ToString();
-            var approvalsQuery = "SELECT * FROM sibi_request_items_approvals LIMIT 0";
+            var approvalsQuery = "SELECT * FROM " + SibiApprovalColumns.TableName + " LIMIT 0";
             using (DataTable newApproval = DBFactory.GetDatabase().DataTableFromQueryString(approvalsQuery))
             {
                 newApproval.Rows.Add();
                 var newRow = newApproval.Rows[0];
 
-                newRow["uid"] = newUID;
-                newRow["sibi_request_uid"] = requestId;
-                newRow["approval_status"] = "new";
-                newRow["approver_id"] = approverId;
-                newRow["requestor_id"] = requestorId;
+                newRow[SibiApprovalColumns.UID] = newUID;
+                newRow[SibiApprovalColumns.RequestUID] = requestId;
+                newRow[SibiApprovalColumns.Status] = "pending";
+                newRow[SibiApprovalColumns.ApproverID] = approverId;
+                newRow[SibiApprovalColumns.RequestorID] = requestorId;
 
                 DBFactory.GetDatabase().UpdateTable(approvalsQuery, newApproval);
 

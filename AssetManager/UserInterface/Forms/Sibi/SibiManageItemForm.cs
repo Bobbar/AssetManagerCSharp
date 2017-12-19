@@ -62,15 +62,29 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 // Do lots of stuff
                 Console.WriteLine("Valid Fields");
 
+                string modifyStatus = "";
+
+                if (ApprovalRequiredCheckBox.Checked && isNew)
+                {
+                    modifyStatus = ItemChangeStatus.MODNEW.ToString();
+                }
+                else if (ApprovalRequiredCheckBox.Checked && !isNew)
+                {
+                    modifyStatus = ItemChangeStatus.MODCHAN.ToString();
+                }
+                else if (!ApprovalRequiredCheckBox.Checked)
+                {
+                    modifyStatus = ItemChangeStatus.MODCURR.ToString();
+                }
 
                 var addlValues = new Dictionary<string, object>
                 {
                     { SibiRequestItemsCols.RequestUID,request.GUID },
                     { SibiRequestItemsCols.ItemUID, Guid.NewGuid().ToString() },
                     { SibiRequestItemsCols.RequiresApproval, ApprovalRequiredCheckBox.Checked },
-                    { SibiRequestItemsCols.ModifyStatus, "MODNEW" },
-                    { SibiRequestItemsCols.RequestorId, "2" },
-                    { SibiRequestItemsCols.ChangeType, "NEW" }
+                    { SibiRequestItemsCols.ModifyStatus, modifyStatus },
+                    { SibiRequestItemsCols.RequestorId, "3" }//TODO: Get requestor info from approval_users table
+                   // { SibiRequestItemsCols.ChangeType, "NEW" }
                 };
 
                 var newItemDataTable = dbParser.ReturnInsertTable("SELECT * FROM " + SibiRequestItemsCols.TableName + " LIMIT 0", addlValues);
