@@ -60,8 +60,44 @@ namespace AssetManager
 {
     public enum ItemChangeStatus
     {
+        /// <summary>
+        /// Is current. (Up-to-date)
+        /// </summary>
         MODCURR,
+        /// <summary>
+        /// Is a new item.
+        /// </summary>
         MODNEW,
-        MODCHAN
+        /// <summary>
+        /// Is changed. Pending approval.
+        /// </summary>
+        MODCHAN,
+        /// <summary>
+        /// Status change. Only notify approver.
+        /// </summary>
+        MODSTCH
+    }
+}
+
+namespace AssetManager
+{
+    public enum NotificationType
+    {
+        /// <summary>
+        /// Notify approver of new approval.
+        /// </summary>
+        APPROVAL,
+        /// <summary>
+        /// Approver accepted. Notify approver and requestor.
+        /// </summary>
+        ACCEPTED,
+        /// <summary>
+        /// Approver rejected. Notify approver and requestor.
+        /// </summary>
+        REJECTED,
+        /// <summary>
+        /// Item status change. Only notify approver.
+        /// </summary>
+        CHANGE
     }
 }

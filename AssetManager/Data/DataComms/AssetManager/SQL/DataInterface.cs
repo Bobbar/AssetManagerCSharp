@@ -14,6 +14,18 @@ namespace AssetManager
         DbTransaction StartTransaction();
 
         /// <summary>
+        /// Commits the provided transaction and closes/disposes of associated connection.
+        /// </summary>
+        /// <param name="transaction"></param>
+        void CommitTransaction(DbTransaction transaction);
+
+        /// <summary>
+        /// Rollsback the provided transaction and closes/disposes of associated connection.
+        /// </summary>
+        /// <param name="transaction"></param>
+        void RollbackTransaction(DbTransaction transaction);
+
+        /// <summary>
         /// Returns a DataTable from a SQL query string.
         /// </summary>
         /// <param name="query"></param>
@@ -56,6 +68,16 @@ namespace AssetManager
         /// <param name="query"></param>
         /// <returns></returns>
         int ExecuteQuery(string query);
+
+
+        /// <summary>
+        /// Executes a non query and returns the number of rows affected.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="transaction"></param>
+        /// <returns></returns>
+        int ExecuteQuery(DbCommand command, DbTransaction transaction = null);
+
 
         /// <summary>
         /// Inserts a list of <see cref="DBParameter"/> into the specified table. Returns the number of rows affected.

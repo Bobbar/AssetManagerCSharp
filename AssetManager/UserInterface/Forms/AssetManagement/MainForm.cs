@@ -101,8 +101,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 if (OtherFunctions.Message("Are you sure? This will permanently apply the changes to the database.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Commit Transaction", this) == DialogResult.Yes)
                 {
-                    CurrentTransaction.Commit();
-                    CurrentTransaction.Dispose();
+                    DBFactory.GetDatabase().CommitTransaction(CurrentTransaction);
                     CurrentTransaction = null;
                     RefreshData();
                     GridEditMode(false);
@@ -117,8 +116,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 if (OtherFunctions.Message("Restore database to original state?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Rollback Transaction", this) == DialogResult.Yes)
                 {
-                    CurrentTransaction.Rollback();
-                    CurrentTransaction.Dispose();
+                    DBFactory.GetDatabase().RollbackTransaction(CurrentTransaction);
                     CurrentTransaction = null;
                     RefreshData();
                     GridEditMode(false);

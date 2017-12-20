@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.Common;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
@@ -29,6 +30,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private WindowList MyWindowList;
         private FormWindowState PrevWindowState;
         private SliderLabel StatusSlider;
+
+        private DbTransaction currentTransaction = null;
 
         #endregion Fields
 
@@ -70,6 +73,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Discard Changes?", this);
                 if (blah == DialogResult.Yes)
                 {
+                    RollbackTransaction();
                     if (IsNewRequest)
                     {
                         return true;
@@ -92,7 +96,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             HideEditControls();
             dgvNotes.DataSource = null;
             FillCombos();
-            pnlCreate.Visible = false;
+            // pnlCreate.Visible = false;
             CurrentRequest = null;
             DisableControls();
             ToolStrip.BackColor = Colors.SibiToolBarColor;
@@ -131,10 +135,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 this.FormUID = CurrentRequest.GUID;
                 IsModifying = true;
                 //Set the datasource to a new empty DB table.
-                var EmptyTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectEmptySibiItemsTable(GridFunctions.ColumnsString(RequestItemsColumns())));
-                GridFunctions.PopulateGrid(RequestItemsGrid, EmptyTable, RequestItemsColumns());
+                StartNewTransaction();
+
+                var cmd = DBFactory.GetDatabase().GetCommand(Queries.SelectEmptySibiItemsTable(GridFunctions.ColumnsString(RequestItemsColumns())));
+                var emptyTable = DBFactory.GetDatabase().DataTableFromCommand(cmd, currentTransaction);
+                GridFunctions.PopulateGrid(RequestItemsGrid, emptyTable, RequestItemsColumns());
                 EnableControls();
-                pnlCreate.Visible = true;
+                ShowEditControls();
                 this.Show();
             }
             catch (Exception ex)
@@ -153,9 +160,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             OtherFunctions.SetWaitCursor(true, this);
             try
             {
-                using (DataTable RequestResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(RequestUID)))
+
+                using (var reqCmd = DBFactory.GetDatabase().GetCommand(Queries.SelectSibiRequestsByGUID(RequestUID)))
+                using (DataTable RequestResults = DBFactory.GetDatabase().DataTableFromCommand(reqCmd, currentTransaction))
                 {
-                    using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), RequestUID)))
+
+                    using (var itemCmd = DBFactory.GetDatabase().GetCommand(Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), RequestUID)))
+                    using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromCommand(itemCmd, currentTransaction))
                     {
                         RequestResults.TableName = SibiRequestCols.TableName;
                         RequestItemsResults.TableName = SibiRequestItemsCols.TableName;
@@ -198,9 +209,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                using (var RequestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID)))
+                var database = DBFactory.GetDatabase();
+
+                using (var reqCmd = database.GetCommand(Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID)))
+                using (var RequestTable = database.DataTableFromCommand(reqCmd, currentTransaction))
                 {
-                    using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
+
+                    using (var itemCmd = database.GetCommand(Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
+                    using (var ItemTable = database.DataTableFromCommand(itemCmd, currentTransaction))
                     {
                         RequestTable.TableName = SibiRequestCols.TableName;
                         ItemTable.TableName = SibiRequestItemsCols.TableName;
@@ -273,31 +289,34 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 return;
             }
             SibiRequestMapObject RequestData = CollectData();
-            using (var trans = DBFactory.GetDatabase().StartTransaction())
+            //using (var trans = DBFactory.GetDatabase().StartTransaction())
+            //{
+
+            try
             {
-                using (var conn = trans.Connection)
-                {
-                    try
-                    {
-                        string InsertRequestQry = Queries.SelectEmptySibiRequestTable;
-                        string InsertRequestItemsQry = Queries.SelectEmptySibiItemsTable(GridFunctions.ColumnsString(RequestItemsColumns()));
-                        DBFactory.GetDatabase().UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID), trans);
-                        DBFactory.GetDatabase().UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, trans);
-                        pnlCreate.Visible = false;
-                        trans.Commit();
-                        IsModifying = false;
-                        IsNewRequest = false;
-                        OpenRequest(CurrentRequest.GUID);
-                        ParentForm.RefreshData();
-                        OtherFunctions.Message("New Request Added.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Complete", this);
-                    }
-                    catch (Exception ex)
-                    {
-                        trans.Rollback();
-                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-                    }
-                }
+                string InsertRequestQry = Queries.SelectEmptySibiRequestTable;
+                string InsertRequestItemsQry = Queries.SelectEmptySibiItemsTable(GridFunctions.ColumnsString(RequestItemsColumns()));
+                DBFactory.GetDatabase().UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID), currentTransaction);
+                DBFactory.GetDatabase().UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, currentTransaction);
+                // pnlCreate.Visible = false;
+                //trans.Commit();
+
+                CommitTransaction();
+
+                IsModifying = false;
+                IsNewRequest = false;
+                OpenRequest(CurrentRequest.GUID);
+                ParentForm.RefreshData();
+                OtherFunctions.Message("New Request Added.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Complete", this);
             }
+            catch (Exception ex)
+            {
+                //trans.Rollback();
+                RollbackTransaction();
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+            }
+
+            //}
         }
 
         private void AddNote()
@@ -475,7 +494,15 @@ namespace AssetManager.UserInterface.Forms.Sibi
             DisableControls();
             ToolStrip.BackColor = Colors.SibiToolBarColor;
             HideEditControls();
-            UpdateRequest();
+            if (IsNewRequest)
+            {
+                AddNewRequest();
+            }
+            else
+            {
+                UpdateRequest();
+            }
+
             IsModifying = false;
         }
 
@@ -696,6 +723,19 @@ namespace AssetManager.UserInterface.Forms.Sibi
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                return false;
+            }
+        }
+
+        private bool DeleteRequestItem(string itemUID)
+        {
+            using (var cmd = DBFactory.GetDatabase().GetCommand("DELETE FROM " + SibiRequestItemsCols.TableName + " WHERE " + SibiRequestItemsCols.ItemUID + " = '" + itemUID + "'"))
+            {
+                int affectedRows = DBFactory.GetDatabase().ExecuteQuery(cmd, currentTransaction);
+                if (affectedRows > 0)
+                {
+                    return true;
+                }
                 return false;
             }
         }
@@ -1055,7 +1095,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void RefreshItems()
         {
-            using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
+            using (var cmd = DBFactory.GetDatabase().GetCommand(Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
+            using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromCommand(cmd, currentTransaction))
             {
                 RequestItemsResults.TableName = SibiRequestItemsCols.TableName;
                 CollectRequestInfo(CurrentRequest.PopulatingTable, RequestItemsResults);
@@ -1432,10 +1473,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 var blah = OtherFunctions.Message("Delete selected row?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Delete Item Row", this);
                 if (blah == DialogResult.Yes)
                 {
-                    if (!DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index))
+                    //if (!DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index))
+                    if (!DeleteRequestItem(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ItemUID)))
                     {
                         blah = OtherFunctions.Message("Failed to delete row.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
                     }
+                    RefreshItems();
                 }
                 else
                 {
@@ -1574,6 +1617,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     RefreshData();
                     OtherFunctions.Message("This request has been modified since it's been open and has been refreshed with the current data.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Concurrency Check", this);
                 }
+                StartNewTransaction();
                 EnableControls();
                 ToolStrip.BackColor = Colors.EditColor;
                 ShowEditControls();
@@ -1588,46 +1632,54 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 IsModifying = false;
             }
         }
+        private void StartNewTransaction()
+        {
+            currentTransaction = DBFactory.GetDatabase().StartTransaction();
+        }
+
+        private void CommitTransaction()
+        {
+            DBFactory.GetDatabase().CommitTransaction(currentTransaction);
+        }
+
+        private void RollbackTransaction()
+        {
+            DBFactory.GetDatabase().RollbackTransaction(currentTransaction);
+        }
 
         private void UpdateRequest()
         {
-            using (var trans = DBFactory.GetDatabase().StartTransaction())
+            try
             {
-                using (var conn = trans.Connection)
+                if (!ConcurrencyCheck())
                 {
-                    try
-                    {
-                        if (!ConcurrencyCheck())
-                        {
-                            OtherFunctions.Message("It appears that someone else has modified this request. Please refresh and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Concurrency Failure", this);
-                            return;
-                        }
-                        SibiRequestMapObject RequestData = CollectData();
-                        RequestData.GUID = CurrentRequest.GUID;
-                        if (ReferenceEquals(RequestData.RequestItems, null))
-                        {
-                            return;
-                        }
-                        string RequestUpdateQry = Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID);
-                        string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID);
-
-                        DBFactory.GetDatabase().UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans);
-                        DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans);
-
-                        trans.Commit();
-
-                        Data.DataFunctions.DatabaseHelperFunctions.SibiFunctions.ProcessApprovals(CurrentRequest);
-
-                        ParentForm.RefreshData();
-                        OpenRequest(CurrentRequest.GUID);
-                        StatusSlider.NewSlideMessage("Update successful!");
-                    }
-                    catch (Exception ex)
-                    {
-                        trans.Rollback();
-                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-                    }
+                    OtherFunctions.Message("It appears that someone else has modified this request. Please refresh and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Concurrency Failure", this);
+                    return;
                 }
+                SibiRequestMapObject RequestData = CollectData();
+                RequestData.GUID = CurrentRequest.GUID;
+                if (ReferenceEquals(RequestData.RequestItems, null))
+                {
+                    return;
+                }
+                string RequestUpdateQry = Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID);
+                string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID);
+
+                DBFactory.GetDatabase().UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), currentTransaction);
+                DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, currentTransaction);
+
+                CommitTransaction();
+
+                Data.DataFunctions.DatabaseHelperFunctions.SibiFunctions.ProcessApprovals(CurrentRequest);
+
+                ParentForm.RefreshData();
+                OpenRequest(CurrentRequest.GUID);
+                StatusSlider.NewSlideMessage("Update successful!");
+            }
+            catch (Exception ex)
+            {
+                RollbackTransaction();
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
             }
         }
 
@@ -1782,10 +1834,22 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         #endregion Methods
 
-        private void button1_Click(object sender, EventArgs e)
+        private void AddItemsButton_Click(object sender, EventArgs e)
         {
-            var NewItemForm = new SibiManageItemForm(this, CurrentRequest);
+            var NewItemForm = new SibiManageItemForm(this, CurrentRequest, currentTransaction);
+            NewItemForm.NewItem();
             NewItemForm.Show();
+        }
+
+        private void RequestItemsGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (IsModifying)
+            {
+                var NewItemForm = new SibiManageItemForm(this, CurrentRequest, currentTransaction);
+                var itemUID = GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ItemUID);
+                NewItemForm.LoadItem(itemUID);
+            }
+            //TODO: Prompt user to start modifying before they can edit items.
         }
     }
 }

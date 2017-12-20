@@ -98,21 +98,32 @@ namespace AssetManager
 
         public static byte[] SerializeDataRow(DataRow row)
         {
-            var serializer = new DataContractSerializer(typeof(DataRow));
-            using (var memoryStream = new MemoryStream())
+            using (DataTable serialTable = row.Table.Clone())
             {
+                serialTable.TableName = "serialTable";
 
-                serializer.WriteObject(memoryStream, row);
-                return memoryStream.ToArray();
+
+                serialTable.Rows.Add(row.ItemArray);
+
+
+                var serializer = new DataContractSerializer(typeof(DataTable));
+                using (var memoryStream = new MemoryStream())
+                {
+
+                    serializer.WriteObject(memoryStream, serialTable);
+                    return memoryStream.ToArray();
+                }
             }
         }
 
         public static DataRow DeserializeDataRow(byte[] byteArray)
         {
-            var deserializer = new DataContractSerializer(typeof(DataRow));
+            var deserializer = new DataContractSerializer(typeof(DataTable));
             using (var memoryStream = new MemoryStream(byteArray))
             {
-                return (DataRow)deserializer.ReadObject(memoryStream);
+                var serialTable = new DataTable();
+                serialTable = (DataTable)deserializer.ReadObject(memoryStream);
+                return serialTable.Rows[0];
             }
 
         }

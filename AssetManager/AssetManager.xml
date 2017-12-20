@@ -32,6 +32,18 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AssetManager.IDataBase.CommitTransaction(System.Data.Common.DbTransaction)">
+            <summary>
+            Commits the provided transaction and closes/disposes of associated connection.
+            </summary>
+            <param name="transaction"></param>
+        </member>
+        <member name="M:AssetManager.IDataBase.RollbackTransaction(System.Data.Common.DbTransaction)">
+            <summary>
+            Rollsback the provided transaction and closes/disposes of associated connection.
+            </summary>
+            <param name="transaction"></param>
+        </member>
         <member name="M:AssetManager.IDataBase.DataTableFromQueryString(System.String)">
             <summary>
             Returns a DataTable from a SQL query string.
@@ -74,6 +86,14 @@
             Executes a non query and returns the number of rows affected.
             </summary>
             <param name="query"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.IDataBase.ExecuteQuery(System.Data.Common.DbCommand,System.Data.Common.DbTransaction)">
+            <summary>
+            Executes a non query and returns the number of rows affected.
+            </summary>
+            <param name="command"></param>
+            <param name="transaction"></param>
             <returns></returns>
         </member>
         <member name="M:AssetManager.IDataBase.InsertFromParameters(System.String,System.Collections.Generic.List{AssetManager.DBParameter},System.Data.Common.DbTransaction)">
@@ -527,6 +547,46 @@
             Modifies a DataRow with data parsed from controls collected by <see cref="M:AssetManager.DBControlParser.GetDBControls(System.Windows.Forms.Control,System.Collections.Generic.List{System.Windows.Forms.Control})"/>
             </summary>
             <param name="DBRow">DataRow to be modified.</param>
+        </member>
+        <member name="F:AssetManager.ItemChangeStatus.MODCURR">
+            <summary>
+            Is current. (Up-to-date)
+            </summary>
+        </member>
+        <member name="F:AssetManager.ItemChangeStatus.MODNEW">
+            <summary>
+            Is a new item.
+            </summary>
+        </member>
+        <member name="F:AssetManager.ItemChangeStatus.MODCHAN">
+            <summary>
+            Is changed. Pending approval.
+            </summary>
+        </member>
+        <member name="F:AssetManager.ItemChangeStatus.MODSTCH">
+            <summary>
+            Status change. Only notify approver.
+            </summary>
+        </member>
+        <member name="F:AssetManager.NotificationType.APPROVAL">
+            <summary>
+            Notify approver of new approval.
+            </summary>
+        </member>
+        <member name="F:AssetManager.NotificationType.ACCEPTED">
+            <summary>
+            Approver accepted. Notify approver and requestor.
+            </summary>
+        </member>
+        <member name="F:AssetManager.NotificationType.REJECTED">
+            <summary>
+            Approver rejected. Notify approver and requestor.
+            </summary>
+        </member>
+        <member name="F:AssetManager.NotificationType.CHANGE">
+            <summary>
+            Item status change. Only notify approver.
+            </summary>
         </member>
         <member name="M:AssetManager.GridFunctions.ColumnsString(System.Collections.Generic.List{AssetManager.DataGridColumn})">
             <summary>
@@ -1230,6 +1290,12 @@
             Gets the color associated with the specified attribute code. Alpha blended with gray to make it more pastel.
             </summary>
             <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiManageItemForm.GetChangeStatus">
+            <summary>
+            Checks if approval is required, checks if the item is new, and checks which values have been changed to determine the correct item state.
+            </summary>
             <returns></returns>
         </member>
         <member name="F:AssetManager.UserInterface.Forms.Sibi.SibiManageItemForm.components">

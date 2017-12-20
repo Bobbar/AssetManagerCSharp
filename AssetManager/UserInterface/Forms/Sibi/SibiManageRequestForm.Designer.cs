@@ -60,8 +60,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.pnlEditButtons = new System.Windows.Forms.Panel();
             this.cmdAccept = new System.Windows.Forms.Button();
             this.cmdDiscard = new System.Windows.Forms.Button();
-            this.pnlCreate = new System.Windows.Forms.Panel();
-            this.cmdAddNew = new System.Windows.Forms.Button();
             this.Label8 = new System.Windows.Forms.Label();
             this.txtRequestNum = new System.Windows.Forms.TextBox();
             this.cmbStatus = new System.Windows.Forms.ComboBox();
@@ -106,7 +104,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox1.SuspendLayout();
             this.Panel3.SuspendLayout();
             this.pnlEditButtons.SuspendLayout();
-            this.pnlCreate.SuspendLayout();
             this.GroupBox2.SuspendLayout();
             this.GroupBox3.SuspendLayout();
             this.Panel2.SuspendLayout();
@@ -276,7 +273,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Controls.Add(this.AddItemsButton);
             this.GroupBox1.Controls.Add(this.txtCreateDate);
             this.GroupBox1.Controls.Add(this.Panel3);
             this.GroupBox1.Controls.Add(this.Label8);
@@ -302,33 +298,32 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // AddItemsButton
             // 
-            this.AddItemsButton.Location = new System.Drawing.Point(171, 204);
+            this.AddItemsButton.Location = new System.Drawing.Point(9, 80);
             this.AddItemsButton.Name = "AddItemsButton";
-            this.AddItemsButton.Size = new System.Drawing.Size(75, 23);
+            this.AddItemsButton.Size = new System.Drawing.Size(119, 23);
             this.AddItemsButton.TabIndex = 24;
-            this.AddItemsButton.Text = "Add Items";
+            this.AddItemsButton.Text = "Add New Item";
             this.AddItemsButton.UseVisualStyleBackColor = true;
             this.AddItemsButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // Panel3
             // 
             this.Panel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.Panel3.AutoSize = true;
             this.Panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Panel3.Controls.Add(this.pnlEditButtons);
-            this.Panel3.Controls.Add(this.pnlCreate);
-            this.Panel3.Location = new System.Drawing.Point(252, 102);
+            this.Panel3.Location = new System.Drawing.Point(221, 130);
             this.Panel3.Name = "Panel3";
-            this.Panel3.Size = new System.Drawing.Size(148, 148);
+            this.Panel3.Size = new System.Drawing.Size(147, 118);
             this.Panel3.TabIndex = 22;
             // 
             // pnlEditButtons
             // 
+            this.pnlEditButtons.Controls.Add(this.AddItemsButton);
             this.pnlEditButtons.Controls.Add(this.cmdAccept);
             this.pnlEditButtons.Controls.Add(this.cmdDiscard);
-            this.pnlEditButtons.Location = new System.Drawing.Point(3, 4);
+            this.pnlEditButtons.Location = new System.Drawing.Point(3, 3);
             this.pnlEditButtons.Name = "pnlEditButtons";
-            this.pnlEditButtons.Size = new System.Drawing.Size(141, 78);
+            this.pnlEditButtons.Size = new System.Drawing.Size(141, 110);
             this.pnlEditButtons.TabIndex = 20;
             this.pnlEditButtons.Visible = false;
             // 
@@ -355,26 +350,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.cmdDiscard.Text = "Discard Changes";
             this.cmdDiscard.UseVisualStyleBackColor = false;
             this.cmdDiscard.Click += new System.EventHandler(this.cmdDiscard_Click);
-            // 
-            // pnlCreate
-            // 
-            this.pnlCreate.Controls.Add(this.cmdAddNew);
-            this.pnlCreate.Location = new System.Drawing.Point(3, 90);
-            this.pnlCreate.Name = "pnlCreate";
-            this.pnlCreate.Size = new System.Drawing.Size(142, 55);
-            this.pnlCreate.TabIndex = 21;
-            this.pnlCreate.Visible = false;
-            // 
-            // cmdAddNew
-            // 
-            this.cmdAddNew.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdAddNew.Location = new System.Drawing.Point(9, 8);
-            this.cmdAddNew.Name = "cmdAddNew";
-            this.cmdAddNew.Size = new System.Drawing.Size(119, 41);
-            this.cmdAddNew.TabIndex = 8;
-            this.cmdAddNew.Text = "Create Request";
-            this.cmdAddNew.UseVisualStyleBackColor = true;
-            this.cmdAddNew.Click += new System.EventHandler(this.cmdAddNew_Click);
             // 
             // Label8
             // 
@@ -708,6 +683,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.RequestItemsGrid.ShowCellToolTips = false;
             this.RequestItemsGrid.Size = new System.Drawing.Size(1046, 340);
             this.RequestItemsGrid.TabIndex = 18;
+            this.RequestItemsGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellDoubleClick);
             this.RequestItemsGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellEnter);
             this.RequestItemsGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellLeave);
             this.RequestItemsGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.RequestItemsGrid_CellMouseDown);
@@ -863,7 +839,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox1.PerformLayout();
             this.Panel3.ResumeLayout(false);
             this.pnlEditButtons.ResumeLayout(false);
-            this.pnlCreate.ResumeLayout(false);
             this.GroupBox2.ResumeLayout(false);
             this.GroupBox2.PerformLayout();
             this.GroupBox3.ResumeLayout(false);
@@ -903,8 +878,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         internal Panel pnlEditButtons;
         internal Button cmdAccept;
         internal Button cmdDiscard;
-        internal Panel pnlCreate;
-        internal Button cmdAddNew;
         internal Label Label8;
         internal TextBox txtRequestNum;
         internal ComboBox cmbStatus;

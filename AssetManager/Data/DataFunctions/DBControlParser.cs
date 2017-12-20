@@ -151,9 +151,9 @@ namespace AssetManager
     {
         #region "Fields"
 
+        public Dictionary<string, object> InitialControlValues = new Dictionary<string, object>();
         private Form ParentForm;
         private ErrorProvider errorProvider;
-        // private bool CheckFields = false;
 
         #endregion "Fields"
 
@@ -179,6 +179,7 @@ namespace AssetManager
         /// <param name="remappingList">List of remapping objects for mapping between different column names.</param>
         public void FillDBFields(DataTable data, List<DBRemappingInfo> remappingList = null)
         {
+            InitialControlValues.Clear();
             DataRow Row = data.Rows[0];
             foreach (Control ctl in GetDBControls(ParentForm))
             {
@@ -211,36 +212,62 @@ namespace AssetManager
                         {
                             dbTxt.Text = Row[DBColumn].ToString();
                         }
+                        InitialControlValues.Add(DBColumn, dbTxt.Text);
+                    }
+                    else if (ctlType == typeof(LabeledTextBox))
+                    {
+                        LabeledTextBox dbTxt = (LabeledTextBox)ctl;
+                        if (DBInfo.AttribIndex != null)
+                        {
+                            dbTxt.Text = AttribIndexFunctions.GetDisplayValueFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
+                        }
+                        else
+                        {
+                            dbTxt.Text = Row[DBColumn].ToString();
+                        }
+                        InitialControlValues.Add(DBColumn, dbTxt.Text);
                     }
                     else if (ctlType == typeof(MaskedTextBox))
                     {
                         MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
                         dbMaskTxt.Text = Row[DBColumn].ToString();
+                        InitialControlValues.Add(DBColumn, dbMaskTxt.Text);
                     }
                     else if (ctlType == typeof(DateTimePicker))
                     {
                         DateTimePicker dbDtPick = (DateTimePicker)ctl;
                         dbDtPick.Value = DateTime.Parse(Row[DBColumn].ToString());
+                        InitialControlValues.Add(DBColumn, dbDtPick.Value);
                     }
                     else if (ctlType == typeof(ComboBox))
                     {
                         ComboBox dbCmb = (ComboBox)ctl;
                         dbCmb.SelectedIndex = AttribIndexFunctions.GetComboIndexFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
+                        InitialControlValues.Add(DBColumn, Row[DBColumn].ToString());
+                    }
+                    else if (ctlType == typeof(LabeledComboBox))
+                    {
+                        LabeledComboBox dbCmb = (LabeledComboBox)ctl;
+                        dbCmb.SelectedIndex = AttribIndexFunctions.GetComboIndexFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
+                        InitialControlValues.Add(DBColumn, Row[DBColumn].ToString());
                     }
                     else if (ctlType == typeof(Label))
                     {
                         Label dbLbl = (Label)ctl;
                         dbLbl.Text = Row[DBColumn].ToString();
+                        InitialControlValues.Add(DBColumn, dbLbl.Text);
                     }
                     else if (ctlType == typeof(CheckBox))
                     {
                         CheckBox dbChk = (CheckBox)ctl;
                         dbChk.Checked = Convert.ToBoolean(Row[DBColumn]);
+                        InitialControlValues.Add(DBColumn, dbChk.Checked);
                     }
                     else if (ctlType == typeof(RichTextBox))
                     {
                         RichTextBox dbRtb = (RichTextBox)ctl;
                         OtherFunctions.SetRichTextBox(dbRtb, Row[DBColumn].ToString());
+                        InitialControlValues.Add(DBColumn, Row[DBColumn].ToString());
                     }
                     else
                     {
@@ -299,6 +326,40 @@ namespace AssetManager
 
         }
 
+        public bool ControlValueHasChanged(string columnName)
+        {
+            foreach (Control ctl in GetDBControls(ParentForm))
+            {
+                var DBInfo = (DBControlInfo)ctl.Tag;
+                if (DBInfo.DataColumn == columnName)
+                {
+                    if (GetDBControlValue(ctl) != InitialControlValues[columnName])
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public List<string> GetChangedColumns()
+        {
+            var changedColumns = new List<string>();
+            foreach (Control ctl in GetDBControls(ParentForm))
+            {
+                var DBInfo = (DBControlInfo)ctl.Tag;
+                Console.WriteLine(ctl.Name + " - " + GetDBControlValue(ctl).ToString() + " - " + InitialControlValues[DBInfo.DataColumn]);
+                if (GetDBControlValue(ctl).ToString() != InitialControlValues[DBInfo.DataColumn].ToString())
+                {
+                    changedColumns.Add(DBInfo.DataColumn);
+                }
+            }
+            return changedColumns;
+        }
 
         public bool ValidateFields(ErrorProvider errorProvider)
         {
@@ -351,7 +412,6 @@ namespace AssetManager
                     }
                     else
                     {
-                        Console.WriteLine(ctl.Name + " - '" + ctl.Text.Trim() + "'");
                         if (string.IsNullOrEmpty(ctl.Text.Trim()))
                         {
                             SetErrorIcon(errorProvider, ctl, false);
@@ -533,6 +593,20 @@ namespace AssetManager
             return tmpTable;
         }
 
+        public DataTable ReturnUpdateTable(string selectQry, Dictionary<string, object> addlValues)
+        {
+            DataTable tmpTable = new DataTable();
+            tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(selectQry);
+            tmpTable.TableName = "UpdateTable";
+            var DBRow = tmpTable.Rows[0];
+            UpdateDBControlRow(tmpTable.Rows[0]);
+            foreach (var item in addlValues)
+            {
+                DBRow[item.Key] = item.Value;
+            }
+            return tmpTable;
+        }
+
         /// <summary>
         /// Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControls(Control, List{Control})"/>
         /// </summary>
@@ -545,46 +619,6 @@ namespace AssetManager
                 if (DBInfo.ParseType != ParseType.DisplayOnly)
                 {
                     DBRow[DBInfo.DataColumn] = GetDBControlValue(ctl);
-
-
-
-
-                    //if (ctl is TextBox || ctl is LabeledTextBox)
-                    //{
-                    //    // TextBox dbTxt = (TextBox)ctl;
-                    //    // DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbTxt.Text);
-                    //    DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(ctl.Text);
-                    //}
-                    //else if (ctl is MaskedTextBox)
-                    //{
-                    //    MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
-                    //    DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbMaskTxt.Text);
-                    //}
-                    //else if (ctl is DateTimePicker)
-                    //{
-                    //    DateTimePicker dbDtPick = (DateTimePicker)ctl;
-                    //    DBRow[DBInfo.DataColumn] = dbDtPick.Value;
-                    //}
-                    //else if (ctl is ComboBox)
-                    //{
-                    //    ComboBox dbCmb = (ComboBox)ctl;
-                    //    DBRow[DBInfo.DataColumn] = AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
-                    //}
-                    //else if (ctl is LabeledComboBox)
-                    //{
-                    //    var lblCmb = (LabeledComboBox)ctl;
-                    //    DBRow[DBInfo.DataColumn] = AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, lblCmb.ComboBox.SelectedIndex);
-                    //}
-                    //else if (ctl is CheckBox)
-                    //{
-                    //    CheckBox dbChk = (CheckBox)ctl;
-                    //    DBRow[DBInfo.DataColumn] = dbChk.Checked;
-                    //}
-                    //else
-                    //{
-                    //    throw new Exception("Unexpected type.");
-                    //    //return null;
-                    //}
                 }
             }
         }

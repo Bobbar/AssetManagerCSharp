@@ -390,6 +390,16 @@ namespace AssetManager
             throw (new NotImplementedException());
         }
 
+        public void CommitTransaction(DbTransaction transaction)
+        {
+            throw (new NotImplementedException());
+        }
+
+        public void RollbackTransaction(DbTransaction transaction)
+        {
+            throw (new NotImplementedException());
+        }
+
         public DataTable DataTableFromQueryString(string query)
         {
             using (DataTable results = new DataTable())
@@ -460,6 +470,11 @@ namespace AssetManager
         }
 
         public int ExecuteQuery(string query)
+        {
+            throw (new NotImplementedException());
+        }
+
+        public int ExecuteQuery(DbCommand command, DbTransaction transaction = null)
         {
             throw (new NotImplementedException());
         }

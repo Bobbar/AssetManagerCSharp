@@ -157,6 +157,20 @@ namespace AssetManager
 
 namespace AssetManager
 {
+
+    public class SibiHistoricalItemsCols : SibiRequestItemsCols
+    {
+        public new const string TableName = "sibi_request_items_history";
+        public const string HistID = "id";
+        public const string ActionType = "action";
+        public const string HistTimestamp = "timestamp";
+
+    }
+}
+
+
+namespace AssetManager
+{
     public class SibiApprovalColumns
     {
         public const string TableName = "sibi_approvals";
@@ -170,6 +184,20 @@ namespace AssetManager
         public const string RequestorID = "requestor_id";
         public const string NotifySent = "notify_sent";
 
+
+    }
+}
+
+namespace AssetManager
+{
+    public class NotificationColumns
+    {
+        public const string TableName = "notifications";
+        public const string UID = "uid";
+        public const string Type = "type";
+        public const string ApprovalID = "approval_uid";
+        public const string RequestItemUID = "request_item_uid";
+        public const string Sent = "sent";
 
     }
 }

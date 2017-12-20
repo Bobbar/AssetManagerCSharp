@@ -239,7 +239,9 @@
             this.Controls.Add(this.ItemGroupBox);
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "SibiManageItemForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Requisition Item";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SibiManageItemForm_FormClosing);
             this.ItemGroupBox.ResumeLayout(false);
             this.BudgetGroupBox.ResumeLayout(false);
             this.BudgetGroupBox.PerformLayout();
