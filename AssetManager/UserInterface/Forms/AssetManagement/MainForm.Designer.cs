@@ -715,22 +715,22 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // CommitButton
             // 
             this.CommitButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.CommitButton.Location = new System.Drawing.Point(30, 41);
+            this.CommitButton.Location = new System.Drawing.Point(6, 41);
             this.CommitButton.Name = "CommitButton";
-            this.CommitButton.Size = new System.Drawing.Size(76, 22);
+            this.CommitButton.Size = new System.Drawing.Size(122, 22);
             this.CommitButton.TabIndex = 36;
-            this.CommitButton.Text = "Commit";
+            this.CommitButton.Text = "Commit Changes";
             this.CommitButton.UseVisualStyleBackColor = false;
             this.CommitButton.Click += new System.EventHandler(this.CommitButton_Click);
             // 
             // RollbackButton
             // 
             this.RollbackButton.BackColor = System.Drawing.Color.Red;
-            this.RollbackButton.Location = new System.Drawing.Point(31, 64);
+            this.RollbackButton.Location = new System.Drawing.Point(6, 64);
             this.RollbackButton.Name = "RollbackButton";
-            this.RollbackButton.Size = new System.Drawing.Size(76, 22);
+            this.RollbackButton.Size = new System.Drawing.Size(122, 22);
             this.RollbackButton.TabIndex = 37;
-            this.RollbackButton.Text = "Rollback";
+            this.RollbackButton.Text = "Rollback/Cancel";
             this.RollbackButton.UseVisualStyleBackColor = false;
             this.RollbackButton.Click += new System.EventHandler(this.RollbackButton_Click);
             // 
