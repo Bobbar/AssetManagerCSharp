@@ -48,9 +48,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private bool ValidateUpdateType()
         {
-            if (UpdateTypeCombo.SelectedIndex > 0)
+            if (UpdateTypeCombo.SelectedIndex > -1)
             {
-                ErrorProvider1.SetError(UpdateTypeCombo, "");
+                ErrorProvider.SetError(UpdateTypeCombo, "");
                 SubmitButton.Enabled = true;
                 return true;
             }
@@ -58,7 +58,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 SubmitButton.Enabled = false;
                 UpdateTypeCombo.Focus();
-                ErrorProvider1.SetError(UpdateTypeCombo, "Please select a change type.");
+                ErrorProvider.SetError(UpdateTypeCombo, "Please select a change type.");
             }
             return false;
         }

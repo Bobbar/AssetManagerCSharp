@@ -36,9 +36,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label2 = new System.Windows.Forms.Label();
             this.Label1 = new System.Windows.Forms.Label();
             this.UpdateTypeCombo = new System.Windows.Forms.ComboBox();
-            this.ErrorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.ErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.GroupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ErrorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ErrorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // GroupBox1
@@ -129,7 +129,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // ErrorProvider1
             // 
-            this.ErrorProvider1.ContainerControl = this;
+            this.ErrorProvider.ContainerControl = this;
             // 
             // UpdateDev
             // 
@@ -147,7 +147,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Text = "Update Device";
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ErrorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ErrorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -158,6 +158,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal Label Label2;
         internal Button CancelUpdateButton;
         internal RichTextBox NotesTextBox;
-        internal ErrorProvider ErrorProvider1;
+        internal ErrorProvider ErrorProvider;
     }
 }
