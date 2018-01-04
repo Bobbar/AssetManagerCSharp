@@ -77,7 +77,7 @@ namespace AssetManager
             {
                 Directory.CreateDirectory(Paths.DownloadPath);
                 string strTimeStamp = DateTime.Now.ToString("_hhmmss");
-                string newFile = Paths.DownloadPath + CurrentDevice.Description + strTimeStamp + ".pdf";
+                string newFile = Paths.DownloadPath + CurrentDevice.AssetTag + " - " + CurrentDevice.Description + strTimeStamp + ".pdf";
 
                 if (Type == PdfFormType.InputForm)
                 {
@@ -86,6 +86,7 @@ namespace AssetManager
                         using (var pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create)))
                         {
                             AcroFields pdfFormFields = InputFormFields(CurrentDevice, pdfStamper);
+                            if (pdfFormFields == null) return;
                             pdfStamper.FormFlattening = FlattenPrompt();
                         }
                     }
@@ -98,6 +99,7 @@ namespace AssetManager
                         using (var pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create)))
                         {
                             AcroFields pdfFormFields = TransferFormFields(CurrentDevice, pdfStamper);
+                            if (pdfFormFields == null) return;
                             pdfStamper.FormFlattening = FlattenPrompt();
                         }
                     }
@@ -110,6 +112,7 @@ namespace AssetManager
                         using (var pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create)))
                         {
                             AcroFields pdfFormFields = DisposalFormFields(CurrentDevice, pdfStamper);
+                            if (pdfFormFields == null) return;
                             pdfStamper.FormFlattening = FlattenPrompt();
                         }
                     }

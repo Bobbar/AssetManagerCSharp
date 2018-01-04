@@ -95,7 +95,11 @@ namespace AssetManager
 
         public static string GetDisplayValueFromIndex(AttributeDataStruct[] codeIndex, int index)
         {
-            return codeIndex[index].DisplayValue;
+            if (index > -1)
+            {
+                return codeIndex[index].DisplayValue;
+            }
+            return string.Empty;
         }
 
         public static int GetComboIndexFromCode(AttributeDataStruct[] codeIndex, string code)
