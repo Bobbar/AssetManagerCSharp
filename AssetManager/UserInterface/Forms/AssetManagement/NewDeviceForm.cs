@@ -265,7 +265,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             MunisUser = new MunisEmployeeStruct();  //null;
             ClearFields(this);
             dtPurchaseDate_REQ.Value = DateTime.Now;
-            cmbStatus_REQ.SelectedIndex = AttribIndexFunctions.GetComboIndexFromCode(GlobalInstances.DeviceAttribute.StatusType, "INSRV");
+            cmbStatus_REQ.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(GlobalInstances.DeviceAttribute.StatusType, "INSRV");
             ResetBackColors(this);
             chkTrackable.Checked = false;
             chkNoClear.Checked = false;
@@ -414,10 +414,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RefreshCombos()
         {
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbLocation_REQ);
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.EquipType, cmbEquipType_REQ);
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, cmbOSType_REQ);
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, cmbStatus_REQ);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbLocation_REQ);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.EquipType, cmbEquipType_REQ);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, cmbOSType_REQ);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, cmbStatus_REQ);
         }
 
         private void ResetBackColors(Control Parent)
@@ -496,7 +496,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void SetHostname()
         {
-            if (txtSerial_REQ.Text != "" && AttribIndexFunctions.GetDBValue(GlobalInstances.DeviceAttribute.OSType, cmbOSType_REQ.SelectedIndex).Contains("WIN"))
+            if (txtSerial_REQ.Text != "" && AttributeFunctions.GetDBValue(GlobalInstances.DeviceAttribute.OSType, cmbOSType_REQ.SelectedIndex).Contains("WIN"))
             {
                 txtHostname.Text = DataConsistency.DeviceHostnameFormat(txtSerial_REQ.Text);
             }

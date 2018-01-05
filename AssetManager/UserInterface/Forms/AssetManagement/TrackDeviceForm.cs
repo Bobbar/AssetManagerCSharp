@@ -73,7 +73,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             txtAssetTag.Text = CurrentTrackingDevice.AssetTag;
             txtDescription.Text = CurrentTrackingDevice.Description;
             txtSerial.Text = CurrentTrackingDevice.Serial;
-            txtDeviceType.Text = AttribIndexFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.EquipType, CurrentTrackingDevice.EquipmentType);
+            txtDeviceType.Text = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.EquipType, CurrentTrackingDevice.EquipmentType);
             if (CurrentTrackingDevice.Tracking.IsCheckedOut)
             {
                 dtCheckOut.Value = CurrentTrackingDevice.Tracking.CheckoutTime;

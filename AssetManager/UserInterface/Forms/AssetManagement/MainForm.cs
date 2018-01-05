@@ -478,10 +478,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RefreshCombos()
         {
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.EquipType, cmbEquipType);
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbLocation);
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, cmbStatus);
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, cmbOSType);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.EquipType, cmbEquipType);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbLocation);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, cmbStatus);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, cmbOSType);
         }
 
         private List<DataGridColumn> ResultGridColumns()
@@ -651,7 +651,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                                 {
                                     Helpers.ChildFormControl.CloseChildren(this);
                                     ServerInfo.CurrentDataBase = database;
-                                    AttribIndexFunctions.PopulateAttributeIndexes();
+                                    AttributeFunctions.PopulateAttributeIndexes();
                                     RefreshCombos();
                                     SecurityTools.GetUserAccess();
                                     InitDBControls();

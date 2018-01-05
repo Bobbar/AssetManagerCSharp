@@ -195,7 +195,7 @@ namespace AssetManager
                 tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.AssetTag);
                 tmpFields.SetField("topmostSubform[0].Page1[0].Mfg_serial_number_1[0]", Device.Serial);
                 tmpFields.SetField("topmostSubform[0].Page1[0].Mfg_serial_number_2[0]", Device.Description);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Mfg_serial_number_3[0]", "FCBDD");
+                tmpFields.SetField("topmostSubform[0].Page1[0].Mfg_serial_number_3[0]", AttributeFunctions.DepartmentOf(Device.Location));
                 tmpFields.SetField("topmostSubform[0].Page1[0].County_s_possession[0]", DateTime.Now.ToString("MM/dd/yyyy"));
 
                 #region Section 2
@@ -232,7 +232,7 @@ namespace AssetManager
                 tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number_2[0]", newDialog.GetControlValue("txtAssetTag").ToString());
                 tmpFields.SetField("topmostSubform[0].Page1[0].Serial_number[0]", newDialog.GetControlValue("txtSerial").ToString());
                 tmpFields.SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", newDialog.GetControlValue("txtDescription").ToString());
-                tmpFields.SetField("topmostSubform[0].Page1[0].Department_1[0]", "FCBDD");
+                tmpFields.SetField("topmostSubform[0].Page1[0].Department_1[0]", AttributeFunctions.DepartmentOf(Device.Location));
                 tmpFields.SetField("topmostSubform[0].Page1[0].Date[0]", DateTime.Now.ToString("MM/dd/yyyy"));
 
                 #endregion
@@ -259,7 +259,7 @@ namespace AssetManager
             // .SetField("topmostSubform[0].Page1[0]._2[0]", "7")
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_4[0]", Device.PO);
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_5[0]",GlobalInstances.AssetFunc.GetMunisCodeFromAssetCode(Device.Location));
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_6[0]", "5200");
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_6[0]", AttributeFunctions.DepartmentOf(Device.Location));
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_7[0]",GlobalInstances.AssetFunc.GetMunisCodeFromAssetCode(Device.EquipmentType));
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_8[0]", "GP");
             //.SetField("topmostSubform[0].Page1[0].undefined_9[0]", "13")
@@ -277,10 +277,10 @@ namespace AssetManager
             {
                 newDialog.Text = "Additional Input Required";
                 ComboBox cmbFrom = new ComboBox();
-                AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbFrom);
+                AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbFrom);
                 newDialog.AddCustomControl("cmbFromLoc", "Transfer FROM:", (Control)cmbFrom);
                 ComboBox cmbTo = new ComboBox();
-                AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbTo);
+                AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbTo);
                 newDialog.AddCustomControl("cmbToLoc", "Transfer TO:", (Control)cmbTo);
                 newDialog.AddLabel("Reason For Transfer-Check One:", true);
                 newDialog.AddCheckBox("chkBetterU", "Better Use of asset:");
@@ -293,13 +293,19 @@ namespace AssetManager
                 {
                     return null;
                 }
+
+                string fromLocationCode = AttributeFunctions.GetDBValue(GlobalInstances.DeviceAttribute.Locations, (int)(newDialog.GetControlValue("cmbFromLoc")));
+                string fromLocDescription = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.Locations, fromLocationCode);
+                string toLocationCode = AttributeFunctions.GetDBValue(GlobalInstances.DeviceAttribute.Locations, (int)(newDialog.GetControlValue("cmbToLoc")));
+                string toLocDescription = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.Locations, toLocationCode);
+                
                 tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.AssetTag);
                 tmpFields.SetField("topmostSubform[0].Page1[0].Serial_number[0]", Device.Serial);
                 tmpFields.SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.Description);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD - 5200");
-                tmpFields.SetField("topmostSubform[0].Page1[0].Location[0]", AttribIndexFunctions.GetDisplayValueFromIndex(GlobalInstances.DeviceAttribute.Locations, System.Convert.ToInt32(newDialog.GetControlValue("cmbFromLoc"))));
-                tmpFields.SetField("topmostSubform[0].Page1[0].Department_2[0]", "FCBDD - 5200");
-                tmpFields.SetField("topmostSubform[0].Page1[0].Location_2[0]", AttribIndexFunctions.GetDisplayValueFromIndex(GlobalInstances.DeviceAttribute.Locations, System.Convert.ToInt32(newDialog.GetControlValue("cmbToLoc"))));
+                tmpFields.SetField("topmostSubform[0].Page1[0].Department[0]", AttributeFunctions.DepartmentOf(fromLocationCode));
+                tmpFields.SetField("topmostSubform[0].Page1[0].Location[0]", fromLocDescription);
+                tmpFields.SetField("topmostSubform[0].Page1[0].Department_2[0]", AttributeFunctions.DepartmentOf(toLocationCode));
+                tmpFields.SetField("topmostSubform[0].Page1[0].Location_2[0]", toLocDescription);
                 tmpFields.SetField("topmostSubform[0].Page1[0].Better_utilization_of_assets[0]", CheckValueToString(System.Convert.ToBoolean(newDialog.GetControlValue("chkBetterU"))));
                 tmpFields.SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]", CheckValueToString(System.Convert.ToBoolean(newDialog.GetControlValue("chkTradeIn"))));
                 tmpFields.SetField("topmostSubform[0].Page1[0].Excess_assets[0]", CheckValueToString(System.Convert.ToBoolean(newDialog.GetControlValue("chkExcess"))));

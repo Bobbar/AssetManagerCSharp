@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 namespace AssetManager
 {
     internal static class GlobalInstances
     {
+        public static Dictionary<string, string> DepartmentCodes;
         public class SibiAttributes
         {
             public AttributeDataStruct[] StatusType;

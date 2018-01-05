@@ -7,7 +7,7 @@ using System.Linq;
 using System.Drawing;
 namespace AssetManager
 {
-    static class AttribIndexFunctions
+    static class AttributeFunctions
     {
 
         public static void FillComboBox(AttributeDataStruct[] IndexType, ComboBox combo)
@@ -55,12 +55,12 @@ namespace AssetManager
             senderComboBox.DropDownWidth = correctWidth;
         }
 
-        public static void FillToolComboBox(AttributeDataStruct[] IndexType, ref ToolStripComboBox cmb)
+        public static void FillToolComboBox(AttributeDataStruct[] attribType, ref ToolStripComboBox cmb)
         {
             cmb.Items.Clear();
             cmb.Text = "";
             int i = 0;
-            foreach (AttributeDataStruct ComboItem in IndexType)
+            foreach (AttributeDataStruct ComboItem in attribType)
             {
                 cmb.Items.Insert(i, ComboItem.DisplayValue);
                 i += 1;
@@ -124,11 +124,34 @@ namespace AssetManager
                 GlobalInstances.SibiAttribute.StatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiStatusType);
                 GlobalInstances.SibiAttribute.ItemStatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiItemStatusType);
                 GlobalInstances.SibiAttribute.RequestType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiRequestType);
+                PopulateDepartments();
             });
             BuildIdxs.Wait();
         }
 
-        public static AttributeDataStruct[] BuildIndex(string codeType, string typeName)
+        private static void PopulateDepartments()
+        {
+            GlobalInstances.DepartmentCodes = new Dictionary<string, string>();
+            var selectDpmtQuery = "SELECT * FROM munis_departments";
+            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(selectDpmtQuery))
+            {
+                foreach (DataRow row in results.Rows)
+                {
+                    GlobalInstances.DepartmentCodes.Add(row["asset_location_code"].ToString(), row["munis_department_code"].ToString());
+                }
+            }
+        }
+
+        public static string DepartmentOf(string location)
+        {
+            if (GlobalInstances.DepartmentCodes.ContainsKey(location))
+            {
+                return GlobalInstances.DepartmentCodes[location];
+            }
+            return string.Empty;
+        }
+
+        private static AttributeDataStruct[] BuildIndex(string codeType, string typeName)
         {
             try
             {

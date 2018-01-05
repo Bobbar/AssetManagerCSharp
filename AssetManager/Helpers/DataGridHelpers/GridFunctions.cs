@@ -45,7 +45,7 @@ namespace AssetManager
                                 break;
 
                             case ColumnFormatTypes.AttributeDisplayMemberOnly:
-                                NewRow[col.ColumnName] = AttribIndexFunctions.GetDisplayValueFromCode(col.AttributeIndex, row[col.ColumnName].ToString());
+                                NewRow[col.ColumnName] = AttributeFunctions.GetDisplayValueFromCode(col.AttributeIndex, row[col.ColumnName].ToString());
 
                                 break;
 

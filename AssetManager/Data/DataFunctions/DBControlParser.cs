@@ -202,7 +202,7 @@ namespace AssetManager
                         TextBox dbTxt = (TextBox)ctl;
                         if (DBInfo.AttribIndex != null)
                         {
-                            dbTxt.Text = AttribIndexFunctions.GetDisplayValueFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
+                            dbTxt.Text = AttributeFunctions.GetDisplayValueFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
                         }
                         else
                         {
@@ -222,7 +222,7 @@ namespace AssetManager
                     else if (ctlType == typeof(ComboBox))
                     {
                         ComboBox dbCmb = (ComboBox)ctl;
-                        dbCmb.SelectedIndex = AttribIndexFunctions.GetComboIndexFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
+                        dbCmb.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
                     }
                     else if (ctlType == typeof(Label))
                     {
@@ -312,7 +312,7 @@ namespace AssetManager
             else if (dbControl is ComboBox)
             {
                 ComboBox dbCmb = (ComboBox)dbControl;
-                return AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
+                return AttributeFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
             }
             else if (dbControl is CheckBox)
             {
@@ -394,7 +394,7 @@ namespace AssetManager
                     else if (ctl is ComboBox)
                     {
                         ComboBox dbCmb = (ComboBox)ctl;
-                        DBRow[DBInfo.DataColumn] = AttribIndexFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
+                        DBRow[DBInfo.DataColumn] = AttributeFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
                     }
                     else if (ctl is CheckBox)
                     {

@@ -631,9 +631,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 SibiRequestMapObject info = new SibiRequestMapObject();
                 info.Description = txtDescription.Text.Trim();
                 info.RequestUser = txtUser.Text.Trim();
-                info.RequestType = AttribIndexFunctions.GetDBValue(GlobalInstances.SibiAttribute.RequestType, cmbType.SelectedIndex);
+                info.RequestType = AttributeFunctions.GetDBValue(GlobalInstances.SibiAttribute.RequestType, cmbType.SelectedIndex);
                 info.NeedByDate = dtNeedBy.Value;
-                info.Status = AttribIndexFunctions.GetDBValue(GlobalInstances.SibiAttribute.StatusType, cmbStatus.SelectedIndex);
+                info.Status = AttributeFunctions.GetDBValue(GlobalInstances.SibiAttribute.StatusType, cmbStatus.SelectedIndex);
                 info.PO = txtPO.Text.Trim();
                 info.RequisitionNumber = txtReqNumber.Text.Trim();
                 info.RTNumber = txtRTNumber.Text.Trim();
@@ -830,8 +830,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void FillCombos()
         {
-            AttribIndexFunctions.FillComboBox(GlobalInstances.SibiAttribute.StatusType, cmbStatus);
-            AttribIndexFunctions.FillComboBox(GlobalInstances.SibiAttribute.RequestType, cmbType);
+            AttributeFunctions.FillComboBox(GlobalInstances.SibiAttribute.StatusType, cmbStatus);
+            AttributeFunctions.FillComboBox(GlobalInstances.SibiAttribute.RequestType, cmbType);
         }
 
         public override bool OKToClose()

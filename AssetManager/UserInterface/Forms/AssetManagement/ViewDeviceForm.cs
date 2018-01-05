@@ -371,7 +371,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGUID)))
                 using (var Info = new DeviceMapObject(results))
                 {
-                    var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + Info.Historical.ActionDateTime + " - " + AttribIndexFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, Info.Historical.ChangeType) + " - " + entryGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
+                    var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + Info.Historical.ActionDateTime + " - " + AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, Info.Historical.ChangeType) + " - " + entryGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
                     if (blah == DialogResult.Yes)
                     {
                         int affectedRows = DBFactory.GetDatabase().ExecuteQuery(Queries.DeleteHistoricalEntryByGUID(entryGUID));
@@ -539,7 +539,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             else
             {
                 TrackingStatusTextBox.BackColor = Colors.CheckIn;
-                TrackingLocationTextBox.Text = AttribIndexFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.Locations, CurrentViewDevice.Location);
+                TrackingLocationTextBox.Text = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.Locations, CurrentViewDevice.Location);
                 CheckTimeLabel.Text = "CheckIn Time:";
                 CheckTimeTextBox.Text = CurrentViewDevice.Tracking.CheckinTime.ToString();
                 CheckUserLabel.Text = "CheckIn User:";
@@ -754,10 +754,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RefreshCombos()
         {
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.EquipType, EquipTypeComboBox);
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, LocationComboBox);
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, OSVersionComboBox);
-            AttribIndexFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, StatusComboBox);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.EquipType, EquipTypeComboBox);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, LocationComboBox);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, OSVersionComboBox);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, StatusComboBox);
         }
 
         private void ResetBackColors()

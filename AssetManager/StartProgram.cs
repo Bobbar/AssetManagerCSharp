@@ -63,7 +63,7 @@ namespace AssetManager
             }
 
             Status("Loading Indexes...");
-            AttribIndexFunctions.PopulateAttributeIndexes();
+            AttributeFunctions.PopulateAttributeIndexes();
             Status("Checking Access Level...");
             SecurityTools.PopulateAccessGroups();
             SecurityTools.GetUserAccess();
