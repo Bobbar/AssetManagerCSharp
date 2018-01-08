@@ -1064,5 +1064,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         #endregion "Control Event Methods"
 
         #endregion "Methods"
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var NetScan = new AssetManager.Tools.NetworkScanning.NetworkScanner();
+            NetScan.StartScan();
+
+        }
     }
 }

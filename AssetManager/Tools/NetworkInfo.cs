@@ -21,7 +21,7 @@ namespace AssetManager
             {Databases.vintondd, "vinton.local"}
         };
 
-        private static Dictionary<string, string> SubnetLocations = new Dictionary<string, string>
+        public static Dictionary<string, string> SubnetLocations = new Dictionary<string, string>
         {
             {"10.10.80.0", "Admin"},
             {"10.10.81.0", "OC"},
