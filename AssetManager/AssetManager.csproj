@@ -220,8 +220,6 @@
     <Compile Include="Tools\ActiveDirectory\ActiveDirectoryWrapper.cs" />
     <Compile Include="Tools\FileIcon.cs" />
     <Compile Include="Tools\NetworkInfo.cs" />
-    <Compile Include="Tools\NetworkScanning\NetworkScanner.cs" />
-    <Compile Include="Tools\NetworkScanning\Pinger.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedImages.cs" />
     <Compile Include="Tools\PowerShell\PowerShellWrapper.cs" />
     <Compile Include="Tools\ProgressCounter.cs" />

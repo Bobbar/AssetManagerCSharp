@@ -28,7 +28,11 @@ namespace AssetManager
             {"10.10.82.0", "DiscoverU"},
             {"10.10.83.0", "FRS"},
             {"10.10.84.0", "PRO"},
-            {"10.10.85.0", "Art & Clay"}
+            {"10.10.85.0", "Art & Clay"},
+            {"10.17.80.0", "Admin - Wifi"},
+            {"10.17.81.0", "OC - Wifi"},
+            {"10.17.83.0", "FRS - Wifi"},
+            {"10.17.84.0", "PRO - Wifi"}
         };
 
         public static string LocationOfIP(string ip)

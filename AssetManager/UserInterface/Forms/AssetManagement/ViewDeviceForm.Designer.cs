@@ -99,6 +99,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.FieldTabs = new System.Windows.Forms.TabControl();
             this.AssetInfoTab = new System.Windows.Forms.TabPage();
             this.MiscInfoTab = new System.Windows.Forms.TabPage();
+            this.PingHistLabel = new System.Windows.Forms.Label();
             this.ActiveDirectoryBox = new System.Windows.Forms.GroupBox();
             this.Label22 = new System.Windows.Forms.Label();
             this.ADCreatedTextBox = new System.Windows.Forms.TextBox();
@@ -500,8 +501,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // TabControl1
             // 
-            this.TabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.TabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TabControl1.Controls.Add(this.HistoryTab);
             this.TabControl1.Controls.Add(this.TrackingTab);
@@ -832,7 +833,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // FieldsPanel
             // 
-            this.FieldsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.FieldsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FieldsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.FieldsPanel.Controls.Add(this.InfoDataSplitter);
@@ -916,6 +917,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.MiscInfoTab.AutoScroll = true;
             this.MiscInfoTab.BackColor = System.Drawing.SystemColors.Control;
+            this.MiscInfoTab.Controls.Add(this.PingHistLabel);
             this.MiscInfoTab.Controls.Add(this.ActiveDirectoryBox);
             this.MiscInfoTab.Controls.Add(this.iCloudTextBox);
             this.MiscInfoTab.Controls.Add(this.Label17);
@@ -933,6 +935,20 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.MiscInfoTab.Size = new System.Drawing.Size(821, 257);
             this.MiscInfoTab.TabIndex = 1;
             this.MiscInfoTab.Text = "Misc.";
+            // 
+            // PingHistLabel
+            // 
+            this.PingHistLabel.AutoSize = true;
+            this.PingHistLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.PingHistLabel.Font = new System.Drawing.Font("Consolas", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PingHistLabel.ForeColor = System.Drawing.Color.Blue;
+            this.PingHistLabel.Location = new System.Drawing.Point(102, 25);
+            this.PingHistLabel.Name = "PingHistLabel";
+            this.PingHistLabel.Size = new System.Drawing.Size(91, 13);
+            this.PingHistLabel.TabIndex = 62;
+            this.PingHistLabel.Text = "(Ping History)";
+            this.PingHistLabel.Visible = false;
+            this.PingHistLabel.Click += new System.EventHandler(this.PingHistLabel_Click);
             // 
             // ActiveDirectoryBox
             // 
@@ -1074,6 +1090,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // remoteToolsControl
             // 
             this.remoteToolsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.remoteToolsControl.Device = null;
             this.remoteToolsControl.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.remoteToolsControl.Location = new System.Drawing.Point(3, 7);
             this.remoteToolsControl.Name = "remoteToolsControl";
@@ -1436,5 +1453,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal SplitContainer InfoDataSplitter;
         internal Panel Panel3;
         private CustomControls.RemoteTools.RemoteToolsControl remoteToolsControl;
+        private Label PingHistLabel;
     }
 }

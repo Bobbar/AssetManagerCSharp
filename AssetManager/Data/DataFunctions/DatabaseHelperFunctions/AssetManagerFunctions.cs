@@ -1,16 +1,59 @@
 using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms.AssetManagement;
+using AssetManager.UserInterface.Forms;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace AssetManager
 {
     public class AssetManagerFunctions
     {
         #region "Methods"
+
+        public async Task<bool> HasPingHistory(DeviceMapObject device)
+        {
+            string query = "SELECT device_guid FROM device_ping_history WHERE device_guid = '" + device.GUID + "'";
+
+           return await Task.Run(() =>
+             {
+                 Task.Delay(1000).Wait();
+                 using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
+                 {
+                     if (results.Rows.Count > 0) return true;
+                 }
+                 return false;
+             });
+
+        }
+
+        public void ShowPingHistory(ExtendedForm parentForm, DeviceMapObject device)
+        {
+            string query = "SELECT timestamp, hostname, ip FROM device_ping_history WHERE device_guid = '" + device.GUID + "' ORDER BY timestamp";
+
+            using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
+            {
+                if (results.Rows.Count > 0)
+                {
+
+                    results.Columns.Add("location");
+
+                    foreach (DataRow row in results.Rows)
+                    {
+                        row["location"] = NetworkInfo.LocationOfIP(row["ip"].ToString());
+                    }
+                    
+                    var newGrid = new GridForm(parentForm, "Ping History - " + device.HostName);
+                    newGrid.AddGrid("pingGrid", "Ping History", results);
+                    newGrid.Show();
+
+                }
+            }
+
+        }
+
 
         public void AddNewEmp(MunisEmployeeStruct empInfo)
         {

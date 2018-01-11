@@ -76,6 +76,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #region Methods
 
+        public async void SetPingHistoryLink()
+        {
+            bool hasPingHist = await GlobalInstances.AssetFunc.HasPingHistory(CurrentViewDevice);
+            PingHistLabel.Visible = hasPingHist;
+        }
+
         public void LoadDevice()
         {
             try
@@ -86,6 +92,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     LoadTracking(CurrentViewDevice.GUID);
                 }
+                SetPingHistoryLink();
                 SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut);
                 this.Text = this.DefaultFormTitle + FormTitle(CurrentViewDevice);
                 this.Show();
@@ -928,7 +935,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         #region Control Events
-
+        private void PingHistLabel_Click(object sender, EventArgs e)
+        {
+            GlobalInstances.AssetFunc.ShowPingHistory(this, CurrentViewDevice);
+        }
         private void AssetDisposalFormToolItem_Click(object sender, EventArgs e)
         {
             PdfFormFilling PDFForm = new PdfFormFilling(this, CurrentViewDevice, PdfFormType.DisposeForm);
@@ -1143,5 +1153,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         #endregion Control Events
 
         #endregion Methods
+              
     }
 }
