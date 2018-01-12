@@ -31,7 +31,7 @@ namespace AssetManager
 
         public void ShowPingHistory(ExtendedForm parentForm, DeviceMapObject device)
         {
-            string query = "SELECT timestamp, hostname, ip FROM device_ping_history WHERE device_guid = '" + device.GUID + "' ORDER BY timestamp";
+            string query = "SELECT timestamp, hostname, ip FROM device_ping_history WHERE device_guid = '" + device.GUID + "' ORDER BY timestamp DESC";
 
             using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
             {
