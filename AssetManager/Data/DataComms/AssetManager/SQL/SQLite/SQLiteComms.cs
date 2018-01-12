@@ -206,97 +206,77 @@ namespace AssetManager
         }
 
         /// <summary>
-        /// Converts MySQL Create statement into a SQL compatible one.
+        /// Builds a SQLite compatible CREATE statement from a MySQL 'SHOW FULL COLUMNS FROM' query result.
         /// </summary>
-        /// <param name="createStatement"></param>
+        /// <param name="columnResults"></param>
         /// <returns></returns>
-        private string ConvertStatement(string createStatement)
+        private string BuildCreateStatement(DataTable columnResults)
         {
-            List<string> ColumnDefs = new List<string>();
-            List<string> RemoveItems = new List<string>();
-            string key = "";
-            string NewStatement = "";
-            string NewKeyString = "";
-            int KeyStringIndex = 0;
 
-            //Remove incompatible defs
-            createStatement = createStatement.Replace("AUTO_INCREMENT", "");
+            // List for primary keys.
+            var keys = new List<string>();
 
-            //Split the statement by commas
-            ColumnDefs = createStatement.Split(',').ToList();
+            string statement = "CREATE TABLE ";
 
-            //Find the primary key column name
-            foreach (var item in ColumnDefs)
+            // Add the table name from the results parameter.
+            // **REMEMEBER TO ADD THE TABLE NAME TO THE RESULTS DATATABLE BEFORE CALLING THIS FUNCTION**
+            statement += " `" + columnResults.TableName + "` ( ";
+
+            // Iterate through the table rows.
+            foreach (DataRow row in columnResults.Rows)
             {
-                if (item.Contains("PRIMARY KEY"))
+                // Add the field/column name and data type to the statement.
+                statement += "`" + row["Field"].ToString() + "` ";
+                statement += row["Type"].ToString();
+
+                // If the current field/column is a primary key, add it to the keys list.
+                if (row["Key"].ToString() == "PRI")
                 {
-                    key = item.Split('`')[1];
+                    keys.Add(row["Field"].ToString());
                 }
+
+                // Add a column delimiter if we are not on the last item.
+                if (columnResults.Rows.IndexOf(row) != (columnResults.Rows.Count - 1)) statement += ", ";
             }
 
-            //Find incompatible elements
-            foreach (var item in ColumnDefs)
+
+            // Add primary keys declaration.
+            if (keys.Count > 0)
             {
-                if (item.Contains("PRIMARY") || item.Contains("UNIQUE") || item.Contains("ENGINE"))
+                // Declaration header and open parentheses.
+                statement += ", PRIMARY KEY (";
+
+                foreach (string key in keys)
                 {
-                    RemoveItems.Add(item);
+                    // Add keys string and delimiter, if needed.
+                    statement += key;
+                    if (keys.IndexOf(key) != (keys.Count - 1)) statement += ", ";
                 }
+
+                // Close parentheses.
+                statement += ")";
             }
 
-            //Remove incompatible elements
-            foreach (var item in RemoveItems)
-            {
-                ColumnDefs.Remove(item);
-            }
+            // End of statement close parentheses.
+            statement += ");";
 
-            foreach (var item in ColumnDefs)
-            {
-                if (item.Contains(key)) //Find primary key location
-                {
-                    KeyStringIndex = ColumnDefs.IndexOf(item);
-                    if (item.Contains("CREATE")) //If the key is at the start of the statement, add all the correct syntax
-                    {
-                        var firstDef = (item.Replace("\n", "")).Split(' ');
-                        NewKeyString = firstDef[0] + " " + firstDef[1] + " " + firstDef[2] + " " + firstDef[3] + " " +firstDef[5] + " " + firstDef[6] + " PRIMARY KEY";
-                    }
-                    else
-                    {
-                        var keyString = (item.Replace("\n", "")).Split(' ');
-                        NewKeyString = " " + keyString[2] + " " + keyString[3] + " PRIMARY KEY";
-                    }
-                }
-            }
-
-            //Modify the key element with corrected syntax
-            ColumnDefs[KeyStringIndex] = NewKeyString;
-
-            //Rebuild the statement with new syntax
-            foreach (var item in ColumnDefs)
-            {
-                NewStatement += item;
-                if (ColumnDefs.IndexOf(item) != ColumnDefs.Count - 1)
-                {
-                    NewStatement += ",";
-                }
-            }
-
-            //Add closing parentheses
-            NewStatement += ")";
-
-            //  Debug.Print(NewStatement)
-
-            return NewStatement;
+            return statement;
         }
 
         private void CreateCacheTable(string tableName, SQLiteTransaction transaction)
         {
-            var Statement = GetTableCreateStatement(tableName);
-            string qry = ConvertStatement(Statement);
-            using (SQLiteCommand cmd = new SQLiteCommand(qry, Connection))
+            string createQry;
+            using (DataTable tableColumns = GetTableColumns(tableName))
+            {
+                createQry = BuildCreateStatement(tableColumns);
+            }
+
+            using (SQLiteCommand cmd = new SQLiteCommand(createQry, Connection))
             {
                 cmd.Transaction = transaction;
                 cmd.ExecuteNonQuery();
             }
+
         }
 
         private DataTable GetRemoteDBTable(string tableName)
@@ -320,14 +300,15 @@ namespace AssetManager
             }
         }
 
-        private string GetTableCreateStatement(string tableName)
+        private DataTable GetTableColumns(string tableName)
         {
-            string qry = "SHOW CREATE TABLE " + tableName;
+            string qry = "SHOW FULL COLUMNS FROM " + tableName;
             using (MySQLDatabase MySQLDB = new MySQLDatabase())
             {
                 using (var results = MySQLDB.DataTableFromQueryString(qry))
                 {
-                    return results.Rows[0][1].ToString();
+                    results.TableName = tableName;
+                    return results;
                 }
             }
         }
@@ -363,6 +344,8 @@ namespace AssetManager
             list.Add("munis_codes");
             list.Add(SecurityCols.TableName);
             list.Add(UsersCols.TableName);
+            list.Add("device_ping_history");
+            list.Add("munis_departments");
             return list;
         }
 

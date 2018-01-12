@@ -301,11 +301,11 @@
             SELECT apitoken FROM teamviewer_info
             </summary>
         </member>
-        <member name="M:AssetManager.SQLiteDatabase.ConvertStatement(System.String)">
+        <member name="M:AssetManager.SQLiteDatabase.BuildCreateStatement(System.Data.DataTable)">
             <summary>
-            Converts MySQL Create statement into a SQL compatible one.
+            Builds a SQLite compatible CREATE statement from a MySQL 'SHOW FULL COLUMNS FROM' query result.
             </summary>
-            <param name="createStatement"></param>
+            <param name="columnResults"></param>
             <returns></returns>
         </member>
         <member name="M:AssetManager.MunisComms.GetSqlCommandFromParams(System.String,System.Collections.Generic.List{AssetManager.DBQueryParameter})">
