@@ -20,9 +20,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private bool IsModifying = false;
         private bool IsNewRequest = false;
         private bool bolDragging = false;
-        private bool bolFieldsValid;
         private bool bolGridFilling = false;
-        private DBControlParser DataParser;
+        private DBControlParser controlParser;
         private Point MouseStartPos;
         private MunisToolBar MyMunisToolBar;
         private string TitleText = "Manage Request";
@@ -36,18 +35,18 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         public SibiManageRequestForm(ExtendedForm parentForm, string requestUID)
         {
-            DataParser = new DBControlParser(this);
             MyMunisToolBar = new MunisToolBar(this);
             MyWindowList = new WindowList(this);
 
             InitializeComponent();
             InitForm(parentForm, requestUID);
+
             OpenRequest(requestUID);
         }
 
         public SibiManageRequestForm(ExtendedForm parentForm)
         {
-            DataParser = new DBControlParser(this);
+            controlParser = new DBControlParser(this);
             MyMunisToolBar = new MunisToolBar(this);
             MyWindowList = new WindowList(this);
 
@@ -88,7 +87,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void ClearAll()
         {
             ClearControls(this);
-            ResetBackColors(this);
             HideEditControls();
             dgvNotes.DataSource = null;
             FillCombos();
@@ -98,7 +96,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             ToolStrip.BackColor = Colors.SibiToolBarColor;
             IsModifying = false;
             IsNewRequest = false;
-            fieldErrorIcon.Clear();
+            controlParser.ClearErrors();
             ClearAttachCount();
             SetMunisStatus();
         }
@@ -162,7 +160,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         CurrentHash = GetHash(RequestResults, RequestItemsResults);
                         ClearAll();
                         CollectRequestInfo(RequestResults, RequestItemsResults);
-                        DataParser.FillDBFields(RequestResults);
+                        controlParser.FillDBFields(RequestResults);
                         SendToGrid(RequestItemsResults);
                         LoadNotes(CurrentRequest.GUID);
                         DisableControls();
@@ -228,16 +226,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             cmdAttachments.Text = "(0)";
             cmdAttachments.ToolTipText = "Attachments " + cmdAttachments.Text;
-        }
-
-        private void AddErrorIcon(Control ctl)
-        {
-            if (ReferenceEquals(fieldErrorIcon.GetError(ctl), string.Empty))
-            {
-                fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight);
-                fieldErrorIcon.SetIconPadding(ctl, 4);
-                fieldErrorIcon.SetError(ctl, "Required Field");
-            }
         }
 
         private bool AddNewNote(string RequestUID, string Note)
@@ -324,55 +312,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private bool CheckFields(Control parent)
-        {
-            foreach (Control c in parent.Controls)
-            {
-                DBControlInfo DBInfo = new DBControlInfo();
-                if (c.Tag != null)
-                {
-                    DBInfo = (DBControlInfo)c.Tag;
-                }
-                if (DBInfo.Required)
-                {
-                    if (c is TextBox)
-                    {
-                        if (c.Text.Trim() == "")
-                        {
-                            bolFieldsValid = false;
-                            c.BackColor = Colors.MissingField;
-                            AddErrorIcon(c);
-                        }
-                        else
-                        {
-                            c.BackColor = Color.Empty;
-                            ClearErrorIcon(c);
-                        }
-                    }
-                    else if (c is ComboBox)
-                    {
-                        var cmb = (ComboBox)c;
-                        if (cmb.SelectedIndex == -1)
-                        {
-                            bolFieldsValid = false;
-                            cmb.BackColor = Colors.MissingField;
-                            AddErrorIcon(cmb);
-                        }
-                        else
-                        {
-                            cmb.BackColor = Color.Empty;
-                            ClearErrorIcon(cmb);
-                        }
-                    }
-                }
-                if (c.HasChildren)
-                {
-                    CheckFields(c);
-                }
-            }
-            return bolFieldsValid; //if fields are missing return false to trigger a message if needed
-        }
-
         private async void CheckForPO()
         {
             if (!string.IsNullOrEmpty(CurrentRequest.RequisitionNumber) && string.IsNullOrEmpty(CurrentRequest.PO))
@@ -451,11 +390,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void ClearErrorIcon(Control ctl)
-        {
-            fieldErrorIcon.SetError(ctl, string.Empty);
-        }
-
         private void ClearTextBoxes(Control control)
         {
             if (control is TextBox)
@@ -507,12 +441,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void cmdAttachments_Click(object sender, EventArgs e)
         {
             ViewAttachments();
-        }
-
-        private void cmdClearAll_Click(object sender, EventArgs e)
-        {
-            ClearAll();
-            CurrentRequest = null;
         }
 
         private void cmdCreate_Click(object sender, EventArgs e)
@@ -628,15 +556,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                SibiRequestMapObject info = new SibiRequestMapObject();
-                info.Description = txtDescription.Text.Trim();
-                info.RequestUser = txtUser.Text.Trim();
-                info.RequestType = AttributeFunctions.GetDBValue(GlobalInstances.SibiAttribute.RequestType, cmbType.SelectedIndex);
-                info.NeedByDate = dtNeedBy.Value;
-                info.Status = AttributeFunctions.GetDBValue(GlobalInstances.SibiAttribute.StatusType, cmbStatus.SelectedIndex);
-                info.PO = txtPO.Text.Trim();
-                info.RequisitionNumber = txtReqNumber.Text.Trim();
-                info.RTNumber = txtRTNumber.Text.Trim();
                 RequestItemsGrid.EndEdit();
                 foreach (DataGridViewRow row in RequestItemsGrid.Rows)
                 {
@@ -659,6 +578,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         }
                     }
                 }
+                SibiRequestMapObject info = new SibiRequestMapObject();
                 info.RequestItems = (DataTable)RequestItemsGrid.DataSource;
                 return info;
             }
@@ -852,7 +772,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                var tmpTable = DataParser.ReturnInsertTable(selectQuery);
+                var tmpTable = controlParser.ReturnInsertTable(selectQuery);
                 var DBRow = tmpTable.Rows[0];
                 //Add Add'l info
                 DBRow[SibiRequestCols.UID] = UID;
@@ -869,7 +789,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                var tmpTable = DataParser.ReturnUpdateTable(selectQuery);
+                var tmpTable = controlParser.ReturnUpdateTable(selectQuery);
                 //Add Add'l info
                 return tmpTable;
             }
@@ -919,6 +839,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
             StatusStrip1.Items.Insert(0, StatusSlider.ToToolStripControl(StatusStrip1));
 
             InitDBControls();
+
+            controlParser = new DBControlParser(this);
+            controlParser.EnableFieldValidation();
+
             RequestItemsGrid.DoubleBufferedDataGrid(true);
             MyMunisToolBar.InsertMunisDropDown(ToolStrip);
             this.ParentForm = ParentForm;
@@ -1218,25 +1142,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     b,
                     e.RowBounds.Location.X + 20,
                     e.RowBounds.Location.Y + 4);
-            }
-        }
-
-        private void ResetBackColors(Control parent)
-        {
-            foreach (Control c in parent.Controls)
-            {
-                if (c is TextBox)
-                {
-                    c.BackColor = Color.Empty;
-                }
-                else if (c is ComboBox)
-                {
-                    c.BackColor = Color.Empty;
-                }
-                if (c.HasChildren)
-                {
-                    ResetBackColors(c);
-                }
             }
         }
 
@@ -1612,17 +1517,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private bool ValidateFields()
         {
-            bolFieldsValid = true;
-            bool ValidateResults = CheckFields(this);
-            if (ValidateResults)
+            bool validFields = controlParser.ValidateFields();
+            if (validFields)
             {
-                ValidateResults = ValidateRequestItems();
+                validFields = ValidateRequestItems();
             }
-            if (!ValidateResults)
+            if (!validFields)
             {
                 OtherFunctions.Message("Some required fields are missing. Please enter data into all require fields.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Data", this);
             }
-            return ValidateResults;
+            return validFields;
         }
 
         private bool ValidateRequestItems()
@@ -1752,11 +1656,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             //Form f = (Form)sender;
             PrevWindowState = this.WindowState;
-        }
-
-        private void SibiManageRequestForm_Load(object sender, EventArgs e)
-        {
-            // InitForm();
         }
 
         #endregion Methods
