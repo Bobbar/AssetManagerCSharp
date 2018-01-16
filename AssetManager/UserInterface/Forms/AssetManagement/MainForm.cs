@@ -185,12 +185,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     Waiting();
                     ViewDeviceForm NewView = new ViewDeviceForm(this, new DeviceMapObject(deviceGUID));
-                    DoneWaiting();
                 }
             }
-            catch (IndexOutOfRangeException ex)
+            catch (IndexOutOfRangeException)
             {
                 OtherFunctions.Message("That device was not found!  It may have been deleted.  Re-execute your search.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Not Found", this);
+            }
+            finally
+            {
+                DoneWaiting();
             }
         }
 

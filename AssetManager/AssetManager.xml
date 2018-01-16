@@ -981,7 +981,7 @@
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.ProcessQueue">
             <summary>
-            Handles the message queue. Messages are queued until they their animation is complete. Messages with a display time of 0 are moved to the slide out animation status, then replaced with the next message when complete.
+            Handles the message queue. Messages are queued until their animation is complete. Messages with a display time of 0 are moved to the slide out animation status, then replaced with the next message when complete.
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.SetControlSize(AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters)">
