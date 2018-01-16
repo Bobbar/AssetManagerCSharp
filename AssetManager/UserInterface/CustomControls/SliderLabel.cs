@@ -33,7 +33,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private const int maxMessages = 10;
         private const int defaultDisplayTime = 4;
-        private const int AnimationTimerInterval = 15;
+        private const int animationTimerInterval = 15;
 
         private const SlideDirection defaultSlideInDirection = SlideDirection.Up;
         private const SlideDirection defaultSlideOutDirection = SlideDirection.Left;
@@ -61,7 +61,7 @@ namespace AssetManager.UserInterface.CustomControls
             this.SetStyle(ControlStyles.ResizeRedraw, true);
 
             slideTimer = new System.Timers.Timer();
-            slideTimer.Interval = AnimationTimerInterval;
+            slideTimer.Interval = animationTimerInterval;
             slideTimer.Stop();
             slideTimer.Elapsed += new ElapsedEventHandler(Tick);
 
@@ -74,7 +74,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region Properties
 
-        public int DistplayTime
+        public int DisplayTime
         {
             get
             {
@@ -236,7 +236,7 @@ namespace AssetManager.UserInterface.CustomControls
             catch (ObjectDisposedException)
             {
                 return new SizeF();
-                //We've been disposed. Do nothing.
+                // We've been disposed. Do nothing.
             }
         }
 
@@ -256,20 +256,21 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         /// <summary>
-        /// Handles the message queue. Messages are queued until they their animation is complete. Messages with a display time of 0 are moved to the slide out animation status, then replaced with the next message when complete.
+        /// Handles the message queue. Messages are queued until their animation is complete. Messages with a display time of 0 are moved to the slide out animation status, then replaced with the next message when complete.
         /// </summary>
         private void ProcessQueue()
         {
             if (messageQueue.Count > 0)
             {
-                //If state is done, then we can display the next message
+                // If state is done, then we can display the next message.
                 if (currentMessage.SlideState == SlideState.Done)
                 {
                     StartNewSlide(messageQueue.Last());
                     messageQueue.RemoveAt(messageQueue.Count - 1);
-                    //If the state is hold, then a permanent message is currently displayed. Trigger a slide out animation, which will change the state to done once complete.
                 }
-                else if (currentMessage.SlideState == SlideState.Hold)
+                // If the state is hold, then a permanent message is currently displayed. 
+                // Trigger a slide out animation, which will change the state to done once complete.
+                else if (currentMessage.SlideState == SlideState.Hold) 
                 {
                     StartSlideOutAnimation();
                 }
@@ -397,7 +398,7 @@ namespace AssetManager.UserInterface.CustomControls
         /// </summary>
         private void UpdateTextPosition()
         {
-            //Check current direction and change X,Y positions/speeds accordingly using an accumulating acceleration.
+            // Check current direction and change X,Y positions/speeds accordingly using an accumulating acceleration.
             switch (currentMessage.Direction)
             {
                 case SlideDirection.DefaultSlide:
@@ -462,26 +463,26 @@ namespace AssetManager.UserInterface.CustomControls
 
             if (currentMessage.AnimationComplete) ProcessNextState();
 
-            //Check the queue for new messages.
+            // Check the queue for new messages.
             ProcessQueue();
         }
 
         private async void ProcessNextState()
         {
-            //Current slide animation complete.
+            // Current slide animation complete.
 
-            //Reset speed.
+            // Reset speed.
             currentMessage.SlideVelocity = 0;
-            //If current state is slide-in and display time is not forever.
+            // If current state is slide-in and display time is not forever.
             if (currentMessage.SlideState == SlideState.SlideIn & currentMessage.DisplayTime > 0)
             {
-                //Stop the animation timer, change state to paused, and pause for the specified display time.
+                //S top the animation timer, change state to paused, and pause for the specified display time.
                 slideTimer.Stop();
                 currentMessage.SlideState = SlideState.Paused;
 
                 try
                 {
-                    //Asynchronous wait task. (Keeps UI alive)
+                    // Asynchronous wait task. (Keeps UI alive)
                     await Pause(currentMessage.DisplayTime);
                 }
                 catch (Exception ex)
@@ -492,35 +493,35 @@ namespace AssetManager.UserInterface.CustomControls
                     }
                 }
 
-                //Once the wait is complete, start the slide out animation.
+                // Once the wait is complete, start the slide out animation.
                 StartSlideOutAnimation();
             }
             else
             {
-                //If the display time is forever
+                // If the display time is forever
                 if (currentMessage.DisplayTime == 0)
                 {
-                    //If the forever displayed message state is slide-out, then the forever message is being replaced with a new message, so change the state to done.
+                    // If the forever displayed message state is slide-out, then the forever message is being replaced with a new message, so change the state to done.
                     if (currentMessage.SlideState == SlideState.SlideOut)
                     {
                         currentMessage.SlideState = SlideState.Done;
                     }
                     else
                     {
-                        //Otherwise, change the forever displayed message state to hold to keep it visible.
+                        // Otherwise, change the forever displayed message state to hold to keep it visible.
                         currentMessage.SlideState = SlideState.Hold;
                     }
                 }
                 else
                 {
-                    //If the message has a display time, set state to done.
+                    // If the message has a display time, set state to done.
                     currentMessage.SlideState = SlideState.Done;
                 }
 
-                //Stop the animation timer.
+                // Stop the animation timer.
                 slideTimer.Stop();
 
-                //Add pause between messages if desired.
+                // Add pause between messages if desired.
                 //Await Pause(1)
             }
         }

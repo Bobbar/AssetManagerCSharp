@@ -113,7 +113,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // searchSlider
             // 
             this.searchSlider.BackColor = System.Drawing.SystemColors.Control;
-            this.searchSlider.DistplayTime = 4;
+            this.searchSlider.DisplayTime = 4;
             this.searchSlider.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.searchSlider.Location = new System.Drawing.Point(6, 43);
             this.searchSlider.Name = "searchSlider";
