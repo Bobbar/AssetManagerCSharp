@@ -29,52 +29,49 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewDeviceForm));
             this.GroupBox2 = new System.Windows.Forms.GroupBox();
-            this.txtSerial_REQ = new System.Windows.Forms.TextBox();
+            this.SerialTextBox = new System.Windows.Forms.TextBox();
             this.Label1 = new System.Windows.Forms.Label();
-            this.txtCurUser_REQ = new System.Windows.Forms.TextBox();
-            this.cmdUserSearch = new System.Windows.Forms.Button();
+            this.CurrentUserTextBox = new System.Windows.Forms.TextBox();
+            this.MunisSearchButton = new System.Windows.Forms.Button();
             this.Label3 = new System.Windows.Forms.Label();
             this.Label2 = new System.Windows.Forms.Label();
             this.Label12 = new System.Windows.Forms.Label();
-            this.txtAssetTag_REQ = new System.Windows.Forms.TextBox();
-            this.chkNoClear = new System.Windows.Forms.CheckBox();
-            this.chkTrackable = new System.Windows.Forms.CheckBox();
-            this.cmdClear = new System.Windows.Forms.Button();
+            this.AssetTagTextBox = new System.Windows.Forms.TextBox();
+            this.NoClearCheckBox = new System.Windows.Forms.CheckBox();
+            this.TrackableCheckBox = new System.Windows.Forms.CheckBox();
+            this.ClearButton = new System.Windows.Forms.Button();
             this.Label11 = new System.Windows.Forms.Label();
-            this.cmbStatus_REQ = new System.Windows.Forms.ComboBox();
+            this.StatusComboBox = new System.Windows.Forms.ComboBox();
             this.Label10 = new System.Windows.Forms.Label();
-            this.cmbOSType_REQ = new System.Windows.Forms.ComboBox();
+            this.OSTypeComboBox = new System.Windows.Forms.ComboBox();
             this.Label9 = new System.Windows.Forms.Label();
-            this.txtPO = new System.Windows.Forms.TextBox();
+            this.POTextBox = new System.Windows.Forms.TextBox();
             this.Label8 = new System.Windows.Forms.Label();
-            this.cmbEquipType_REQ = new System.Windows.Forms.ComboBox();
-            this.txtNotes = new System.Windows.Forms.TextBox();
-            this.cmdAdd = new System.Windows.Forms.Button();
+            this.EquipTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.NotesTextBox = new System.Windows.Forms.TextBox();
+            this.AddButton = new System.Windows.Forms.Button();
             this.Label6 = new System.Windows.Forms.Label();
-            this.txtReplaceYear = new System.Windows.Forms.TextBox();
+            this.ReplaceYearTextBox = new System.Windows.Forms.TextBox();
             this.lbPurchaseDate = new System.Windows.Forms.Label();
-            this.dtPurchaseDate_REQ = new System.Windows.Forms.DateTimePicker();
+            this.PurchaseDatePicker = new System.Windows.Forms.DateTimePicker();
             this.Label5 = new System.Windows.Forms.Label();
-            this.cmbLocation_REQ = new System.Windows.Forms.ComboBox();
+            this.LocationComboBox = new System.Windows.Forms.ComboBox();
             this.Label4 = new System.Windows.Forms.Label();
-            this.txtDescription_REQ = new System.Windows.Forms.TextBox();
-            this.fieldErrorIcon = new System.Windows.Forms.ErrorProvider(this.components);
+            this.DescriptionTextBox = new System.Windows.Forms.TextBox();
             this.GroupBox3 = new System.Windows.Forms.GroupBox();
             this.GroupBox4 = new System.Windows.Forms.GroupBox();
             this.GroupBox5 = new System.Windows.Forms.GroupBox();
             this.iCloudTextBox = new System.Windows.Forms.TextBox();
             this.Label14 = new System.Windows.Forms.Label();
-            this.txtHostname = new System.Windows.Forms.TextBox();
+            this.HostnameTextBox = new System.Windows.Forms.TextBox();
             this.Label7 = new System.Windows.Forms.Label();
-            this.txtPhoneNumber = new System.Windows.Forms.MaskedTextBox();
+            this.PhoneNumTextBox = new System.Windows.Forms.MaskedTextBox();
             this.Label13 = new System.Windows.Forms.Label();
             this.GroupBox6 = new System.Windows.Forms.GroupBox();
             this.GroupBox7 = new System.Windows.Forms.GroupBox();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.GroupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldErrorIcon)).BeginInit();
             this.GroupBox3.SuspendLayout();
             this.GroupBox4.SuspendLayout();
             this.GroupBox5.SuspendLayout();
@@ -84,14 +81,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // GroupBox2
             // 
-            this.GroupBox2.Controls.Add(this.txtSerial_REQ);
+            this.GroupBox2.Controls.Add(this.SerialTextBox);
             this.GroupBox2.Controls.Add(this.Label1);
-            this.GroupBox2.Controls.Add(this.txtCurUser_REQ);
-            this.GroupBox2.Controls.Add(this.cmdUserSearch);
+            this.GroupBox2.Controls.Add(this.CurrentUserTextBox);
+            this.GroupBox2.Controls.Add(this.MunisSearchButton);
             this.GroupBox2.Controls.Add(this.Label3);
             this.GroupBox2.Controls.Add(this.Label2);
             this.GroupBox2.Controls.Add(this.Label12);
-            this.GroupBox2.Controls.Add(this.txtAssetTag_REQ);
+            this.GroupBox2.Controls.Add(this.AssetTagTextBox);
             this.GroupBox2.Location = new System.Drawing.Point(12, 12);
             this.GroupBox2.Name = "GroupBox2";
             this.GroupBox2.Size = new System.Drawing.Size(236, 294);
@@ -99,16 +96,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.GroupBox2.TabStop = false;
             this.GroupBox2.Text = "Unique Info";
             // 
-            // txtSerial_REQ
+            // SerialTextBox
             // 
-            this.txtSerial_REQ.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSerial_REQ.Location = new System.Drawing.Point(17, 46);
-            this.txtSerial_REQ.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.txtSerial_REQ.Name = "txtSerial_REQ";
-            this.txtSerial_REQ.Size = new System.Drawing.Size(178, 25);
-            this.txtSerial_REQ.TabIndex = 0;
-            this.txtSerial_REQ.Text = "txtSerial";
-            this.txtSerial_REQ.TextChanged += new System.EventHandler(this.txtSerial_REQ_TextChanged);
+            this.SerialTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SerialTextBox.Location = new System.Drawing.Point(17, 46);
+            this.SerialTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.SerialTextBox.Name = "SerialTextBox";
+            this.SerialTextBox.Size = new System.Drawing.Size(178, 25);
+            this.SerialTextBox.TabIndex = 0;
+            this.SerialTextBox.TextChanged += new System.EventHandler(this.SerialTextBox_TextChanged);
             // 
             // Label1
             // 
@@ -121,28 +117,26 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label1.TabIndex = 25;
             this.Label1.Text = "Serial";
             // 
-            // txtCurUser_REQ
+            // CurrentUserTextBox
             // 
-            this.txtCurUser_REQ.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCurUser_REQ.Location = new System.Drawing.Point(17, 144);
-            this.txtCurUser_REQ.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.txtCurUser_REQ.Name = "txtCurUser_REQ";
-            this.txtCurUser_REQ.Size = new System.Drawing.Size(178, 25);
-            this.txtCurUser_REQ.TabIndex = 2;
-            this.txtCurUser_REQ.Text = "txtCurUser";
-            this.txtCurUser_REQ.TextChanged += new System.EventHandler(this.txtCurUser_REQ_TextChanged);
-            this.txtCurUser_REQ.DoubleClick += new System.EventHandler(this.txtCurUser_REQ_DoubleClick);
+            this.CurrentUserTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CurrentUserTextBox.Location = new System.Drawing.Point(17, 144);
+            this.CurrentUserTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.CurrentUserTextBox.Name = "CurrentUserTextBox";
+            this.CurrentUserTextBox.Size = new System.Drawing.Size(178, 25);
+            this.CurrentUserTextBox.TabIndex = 2;
+            this.CurrentUserTextBox.DoubleClick += new System.EventHandler(this.CurrentUserTextBox_DoubleClick);
             // 
-            // cmdUserSearch
+            // MunisSearchButton
             // 
-            this.cmdUserSearch.Location = new System.Drawing.Point(36, 173);
-            this.cmdUserSearch.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.cmdUserSearch.Name = "cmdUserSearch";
-            this.cmdUserSearch.Size = new System.Drawing.Size(141, 23);
-            this.cmdUserSearch.TabIndex = 50;
-            this.cmdUserSearch.Text = "Munis Search";
-            this.cmdUserSearch.UseVisualStyleBackColor = true;
-            this.cmdUserSearch.Click += new System.EventHandler(this.cmdUserSearch_Click);
+            this.MunisSearchButton.Location = new System.Drawing.Point(36, 173);
+            this.MunisSearchButton.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.MunisSearchButton.Name = "MunisSearchButton";
+            this.MunisSearchButton.Size = new System.Drawing.Size(141, 23);
+            this.MunisSearchButton.TabIndex = 50;
+            this.MunisSearchButton.Text = "Munis Search";
+            this.MunisSearchButton.UseVisualStyleBackColor = true;
+            this.MunisSearchButton.Click += new System.EventHandler(this.MunisSearchButton_Click);
             // 
             // Label3
             // 
@@ -178,49 +172,47 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label12.Text = "(\"NA\" if not available.)";
             this.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // txtAssetTag_REQ
+            // AssetTagTextBox
             // 
-            this.txtAssetTag_REQ.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAssetTag_REQ.Location = new System.Drawing.Point(17, 95);
-            this.txtAssetTag_REQ.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.txtAssetTag_REQ.Name = "txtAssetTag_REQ";
-            this.txtAssetTag_REQ.Size = new System.Drawing.Size(178, 25);
-            this.txtAssetTag_REQ.TabIndex = 1;
-            this.txtAssetTag_REQ.Text = "txtAssetTag";
-            this.txtAssetTag_REQ.TextChanged += new System.EventHandler(this.txtAssetTag_REQ_TextChanged);
+            this.AssetTagTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AssetTagTextBox.Location = new System.Drawing.Point(17, 95);
+            this.AssetTagTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.AssetTagTextBox.Name = "AssetTagTextBox";
+            this.AssetTagTextBox.Size = new System.Drawing.Size(178, 25);
+            this.AssetTagTextBox.TabIndex = 1;
             // 
-            // chkNoClear
+            // NoClearCheckBox
             // 
-            this.chkNoClear.AutoSize = true;
-            this.chkNoClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkNoClear.Location = new System.Drawing.Point(732, 392);
-            this.chkNoClear.Name = "chkNoClear";
-            this.chkNoClear.Size = new System.Drawing.Size(91, 20);
-            this.chkNoClear.TabIndex = 16;
-            this.chkNoClear.Text = "Don\'t clear";
-            this.chkNoClear.UseVisualStyleBackColor = true;
+            this.NoClearCheckBox.AutoSize = true;
+            this.NoClearCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NoClearCheckBox.Location = new System.Drawing.Point(732, 392);
+            this.NoClearCheckBox.Name = "NoClearCheckBox";
+            this.NoClearCheckBox.Size = new System.Drawing.Size(91, 20);
+            this.NoClearCheckBox.TabIndex = 16;
+            this.NoClearCheckBox.Text = "Don\'t clear";
+            this.NoClearCheckBox.UseVisualStyleBackColor = true;
             // 
-            // chkTrackable
+            // TrackableCheckBox
             // 
-            this.chkTrackable.AutoSize = true;
-            this.chkTrackable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkTrackable.Location = new System.Drawing.Point(31, 196);
-            this.chkTrackable.Name = "chkTrackable";
-            this.chkTrackable.Size = new System.Drawing.Size(135, 20);
-            this.chkTrackable.TabIndex = 12;
-            this.chkTrackable.Text = "Trackable Device";
-            this.chkTrackable.UseVisualStyleBackColor = true;
+            this.TrackableCheckBox.AutoSize = true;
+            this.TrackableCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TrackableCheckBox.Location = new System.Drawing.Point(31, 196);
+            this.TrackableCheckBox.Name = "TrackableCheckBox";
+            this.TrackableCheckBox.Size = new System.Drawing.Size(135, 20);
+            this.TrackableCheckBox.TabIndex = 12;
+            this.TrackableCheckBox.Text = "Trackable Device";
+            this.TrackableCheckBox.UseVisualStyleBackColor = true;
             // 
-            // cmdClear
+            // ClearButton
             // 
-            this.cmdClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdClear.Location = new System.Drawing.Point(693, 427);
-            this.cmdClear.Name = "cmdClear";
-            this.cmdClear.Size = new System.Drawing.Size(170, 23);
-            this.cmdClear.TabIndex = 17;
-            this.cmdClear.Text = "Clear";
-            this.cmdClear.UseVisualStyleBackColor = true;
-            this.cmdClear.Click += new System.EventHandler(this.cmdClear_Click);
+            this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClearButton.Location = new System.Drawing.Point(693, 427);
+            this.ClearButton.Name = "ClearButton";
+            this.ClearButton.Size = new System.Drawing.Size(170, 23);
+            this.ClearButton.TabIndex = 17;
+            this.ClearButton.Text = "Clear";
+            this.ClearButton.UseVisualStyleBackColor = true;
+            this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
             // Label11
             // 
@@ -233,16 +225,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label11.TabIndex = 47;
             this.Label11.Text = "Device Status";
             // 
-            // cmbStatus_REQ
+            // StatusComboBox
             // 
-            this.cmbStatus_REQ.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbStatus_REQ.FormattingEnabled = true;
-            this.cmbStatus_REQ.Location = new System.Drawing.Point(17, 246);
-            this.cmbStatus_REQ.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.cmbStatus_REQ.Name = "cmbStatus_REQ";
-            this.cmbStatus_REQ.Size = new System.Drawing.Size(251, 26);
-            this.cmbStatus_REQ.TabIndex = 7;
-            this.cmbStatus_REQ.SelectedIndexChanged += new System.EventHandler(this.cmbStatus_REQ_SelectedIndexChanged);
+            this.StatusComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusComboBox.FormattingEnabled = true;
+            this.StatusComboBox.Location = new System.Drawing.Point(17, 246);
+            this.StatusComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.StatusComboBox.Name = "StatusComboBox";
+            this.StatusComboBox.Size = new System.Drawing.Size(251, 26);
+            this.StatusComboBox.TabIndex = 7;
             // 
             // Label10
             // 
@@ -255,16 +246,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label10.TabIndex = 45;
             this.Label10.Text = "Operating System";
             // 
-            // cmbOSType_REQ
+            // OSTypeComboBox
             // 
-            this.cmbOSType_REQ.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbOSType_REQ.FormattingEnabled = true;
-            this.cmbOSType_REQ.Location = new System.Drawing.Point(17, 146);
-            this.cmbOSType_REQ.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.cmbOSType_REQ.Name = "cmbOSType_REQ";
-            this.cmbOSType_REQ.Size = new System.Drawing.Size(251, 26);
-            this.cmbOSType_REQ.TabIndex = 5;
-            this.cmbOSType_REQ.SelectedIndexChanged += new System.EventHandler(this.cmbOSType_REQ_SelectedIndexChanged);
+            this.OSTypeComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OSTypeComboBox.FormattingEnabled = true;
+            this.OSTypeComboBox.Location = new System.Drawing.Point(17, 146);
+            this.OSTypeComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.OSTypeComboBox.Name = "OSTypeComboBox";
+            this.OSTypeComboBox.Size = new System.Drawing.Size(251, 26);
+            this.OSTypeComboBox.TabIndex = 5;
+            this.OSTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.OSTypeComboBox_SelectedIndexChanged);
             // 
             // Label9
             // 
@@ -277,14 +268,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label9.TabIndex = 43;
             this.Label9.Text = "PO Number";
             // 
-            // txtPO
+            // POTextBox
             // 
-            this.txtPO.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPO.Location = new System.Drawing.Point(14, 154);
-            this.txtPO.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.txtPO.Name = "txtPO";
-            this.txtPO.Size = new System.Drawing.Size(170, 25);
-            this.txtPO.TabIndex = 10;
+            this.POTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.POTextBox.Location = new System.Drawing.Point(14, 154);
+            this.POTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.POTextBox.Name = "POTextBox";
+            this.POTextBox.Size = new System.Drawing.Size(170, 25);
+            this.POTextBox.TabIndex = 10;
             // 
             // Label8
             // 
@@ -297,37 +288,36 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label8.TabIndex = 41;
             this.Label8.Text = "Equipment Type";
             // 
-            // cmbEquipType_REQ
+            // EquipTypeComboBox
             // 
-            this.cmbEquipType_REQ.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbEquipType_REQ.FormattingEnabled = true;
-            this.cmbEquipType_REQ.Location = new System.Drawing.Point(17, 96);
-            this.cmbEquipType_REQ.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.cmbEquipType_REQ.Name = "cmbEquipType_REQ";
-            this.cmbEquipType_REQ.Size = new System.Drawing.Size(251, 26);
-            this.cmbEquipType_REQ.TabIndex = 4;
-            this.cmbEquipType_REQ.SelectedIndexChanged += new System.EventHandler(this.cmbEquipType_REQ_SelectedIndexChanged);
+            this.EquipTypeComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EquipTypeComboBox.FormattingEnabled = true;
+            this.EquipTypeComboBox.Location = new System.Drawing.Point(17, 96);
+            this.EquipTypeComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.EquipTypeComboBox.Name = "EquipTypeComboBox";
+            this.EquipTypeComboBox.Size = new System.Drawing.Size(251, 26);
+            this.EquipTypeComboBox.TabIndex = 4;
             // 
-            // txtNotes
+            // NotesTextBox
             // 
-            this.txtNotes.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNotes.Location = new System.Drawing.Point(6, 21);
-            this.txtNotes.MaxLength = 200;
-            this.txtNotes.Multiline = true;
-            this.txtNotes.Name = "txtNotes";
-            this.txtNotes.Size = new System.Drawing.Size(366, 86);
-            this.txtNotes.TabIndex = 14;
+            this.NotesTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NotesTextBox.Location = new System.Drawing.Point(6, 21);
+            this.NotesTextBox.MaxLength = 200;
+            this.NotesTextBox.Multiline = true;
+            this.NotesTextBox.Name = "NotesTextBox";
+            this.NotesTextBox.Size = new System.Drawing.Size(366, 86);
+            this.NotesTextBox.TabIndex = 14;
             // 
-            // cmdAdd
+            // AddButton
             // 
-            this.cmdAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdAdd.Location = new System.Drawing.Point(693, 342);
-            this.cmdAdd.Name = "cmdAdd";
-            this.cmdAdd.Size = new System.Drawing.Size(170, 44);
-            this.cmdAdd.TabIndex = 15;
-            this.cmdAdd.Text = "Add Device";
-            this.cmdAdd.UseVisualStyleBackColor = true;
-            this.cmdAdd.Click += new System.EventHandler(this.cmdAdd_Click);
+            this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AddButton.Location = new System.Drawing.Point(693, 342);
+            this.AddButton.Name = "AddButton";
+            this.AddButton.Size = new System.Drawing.Size(170, 44);
+            this.AddButton.TabIndex = 15;
+            this.AddButton.Text = "Add Device";
+            this.AddButton.UseVisualStyleBackColor = true;
+            this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
             // Label6
             // 
@@ -340,15 +330,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label6.TabIndex = 36;
             this.Label6.Text = "Replace Year";
             // 
-            // txtReplaceYear
+            // ReplaceYearTextBox
             // 
-            this.txtReplaceYear.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtReplaceYear.Location = new System.Drawing.Point(14, 100);
-            this.txtReplaceYear.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.txtReplaceYear.Name = "txtReplaceYear";
-            this.txtReplaceYear.Size = new System.Drawing.Size(170, 25);
-            this.txtReplaceYear.TabIndex = 9;
-            this.txtReplaceYear.Text = "txtReplaceYear";
+            this.ReplaceYearTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReplaceYearTextBox.Location = new System.Drawing.Point(14, 100);
+            this.ReplaceYearTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.ReplaceYearTextBox.Name = "ReplaceYearTextBox";
+            this.ReplaceYearTextBox.Size = new System.Drawing.Size(170, 25);
+            this.ReplaceYearTextBox.TabIndex = 9;
             // 
             // lbPurchaseDate
             // 
@@ -361,18 +350,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.lbPurchaseDate.TabIndex = 34;
             this.lbPurchaseDate.Text = "Purchase Date";
             // 
-            // dtPurchaseDate_REQ
+            // PurchaseDatePicker
             // 
-            this.dtPurchaseDate_REQ.CustomFormat = "yyyy-MM-dd";
-            this.dtPurchaseDate_REQ.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtPurchaseDate_REQ.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtPurchaseDate_REQ.Location = new System.Drawing.Point(13, 46);
-            this.dtPurchaseDate_REQ.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.dtPurchaseDate_REQ.Name = "dtPurchaseDate_REQ";
-            this.dtPurchaseDate_REQ.Size = new System.Drawing.Size(171, 25);
-            this.dtPurchaseDate_REQ.TabIndex = 8;
-            this.dtPurchaseDate_REQ.Value = new System.DateTime(2016, 4, 14, 0, 0, 0, 0);
-            this.dtPurchaseDate_REQ.ValueChanged += new System.EventHandler(this.dtPurchaseDate_REQ_ValueChanged);
+            this.PurchaseDatePicker.CustomFormat = "yyyy-MM-dd";
+            this.PurchaseDatePicker.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PurchaseDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.PurchaseDatePicker.Location = new System.Drawing.Point(13, 46);
+            this.PurchaseDatePicker.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.PurchaseDatePicker.Name = "PurchaseDatePicker";
+            this.PurchaseDatePicker.Size = new System.Drawing.Size(171, 25);
+            this.PurchaseDatePicker.TabIndex = 8;
+            this.PurchaseDatePicker.Value = new System.DateTime(2016, 4, 14, 0, 0, 0, 0);
+            this.PurchaseDatePicker.ValueChanged += new System.EventHandler(this.PurchaseDatePicker_ValueChanged);
             // 
             // Label5
             // 
@@ -385,18 +374,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label5.TabIndex = 32;
             this.Label5.Text = "Location";
             // 
-            // cmbLocation_REQ
+            // LocationComboBox
             // 
-            this.cmbLocation_REQ.DropDownWidth = 171;
-            this.cmbLocation_REQ.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbLocation_REQ.FormattingEnabled = true;
-            this.cmbLocation_REQ.Location = new System.Drawing.Point(17, 196);
-            this.cmbLocation_REQ.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.cmbLocation_REQ.Name = "cmbLocation_REQ";
-            this.cmbLocation_REQ.Size = new System.Drawing.Size(251, 26);
-            this.cmbLocation_REQ.TabIndex = 6;
-            this.cmbLocation_REQ.Text = "cmbLocation";
-            this.cmbLocation_REQ.SelectedIndexChanged += new System.EventHandler(this.cmbLocation_REQ_SelectedIndexChanged);
+            this.LocationComboBox.DropDownWidth = 171;
+            this.LocationComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LocationComboBox.FormattingEnabled = true;
+            this.LocationComboBox.Location = new System.Drawing.Point(17, 196);
+            this.LocationComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.LocationComboBox.Name = "LocationComboBox";
+            this.LocationComboBox.Size = new System.Drawing.Size(251, 26);
+            this.LocationComboBox.TabIndex = 6;
             // 
             // Label4
             // 
@@ -409,34 +396,26 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label4.TabIndex = 30;
             this.Label4.Text = "Description";
             // 
-            // txtDescription_REQ
+            // DescriptionTextBox
             // 
-            this.txtDescription_REQ.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDescription_REQ.Location = new System.Drawing.Point(17, 47);
-            this.txtDescription_REQ.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.txtDescription_REQ.Name = "txtDescription_REQ";
-            this.txtDescription_REQ.Size = new System.Drawing.Size(251, 25);
-            this.txtDescription_REQ.TabIndex = 3;
-            this.txtDescription_REQ.Text = "Description";
-            this.txtDescription_REQ.TextChanged += new System.EventHandler(this.txtDescription_REQ_TextChanged);
-            // 
-            // fieldErrorIcon
-            // 
-            this.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
-            this.fieldErrorIcon.ContainerControl = this;
-            this.fieldErrorIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("fieldErrorIcon.Icon")));
+            this.DescriptionTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DescriptionTextBox.Location = new System.Drawing.Point(17, 47);
+            this.DescriptionTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.DescriptionTextBox.Name = "DescriptionTextBox";
+            this.DescriptionTextBox.Size = new System.Drawing.Size(251, 25);
+            this.DescriptionTextBox.TabIndex = 3;
             // 
             // GroupBox3
             // 
             this.GroupBox3.Controls.Add(this.Label4);
-            this.GroupBox3.Controls.Add(this.txtDescription_REQ);
-            this.GroupBox3.Controls.Add(this.cmbLocation_REQ);
+            this.GroupBox3.Controls.Add(this.DescriptionTextBox);
+            this.GroupBox3.Controls.Add(this.LocationComboBox);
             this.GroupBox3.Controls.Add(this.Label5);
-            this.GroupBox3.Controls.Add(this.cmbEquipType_REQ);
+            this.GroupBox3.Controls.Add(this.EquipTypeComboBox);
             this.GroupBox3.Controls.Add(this.Label11);
             this.GroupBox3.Controls.Add(this.Label8);
-            this.GroupBox3.Controls.Add(this.cmbStatus_REQ);
-            this.GroupBox3.Controls.Add(this.cmbOSType_REQ);
+            this.GroupBox3.Controls.Add(this.StatusComboBox);
+            this.GroupBox3.Controls.Add(this.OSTypeComboBox);
             this.GroupBox3.Controls.Add(this.Label10);
             this.GroupBox3.Location = new System.Drawing.Point(254, 12);
             this.GroupBox3.Name = "GroupBox3";
@@ -448,10 +427,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // GroupBox4
             // 
             this.GroupBox4.Controls.Add(this.lbPurchaseDate);
-            this.GroupBox4.Controls.Add(this.dtPurchaseDate_REQ);
-            this.GroupBox4.Controls.Add(this.txtReplaceYear);
+            this.GroupBox4.Controls.Add(this.PurchaseDatePicker);
+            this.GroupBox4.Controls.Add(this.ReplaceYearTextBox);
             this.GroupBox4.Controls.Add(this.Label6);
-            this.GroupBox4.Controls.Add(this.txtPO);
+            this.GroupBox4.Controls.Add(this.POTextBox);
             this.GroupBox4.Controls.Add(this.Label9);
             this.GroupBox4.Location = new System.Drawing.Point(565, 12);
             this.GroupBox4.Name = "GroupBox4";
@@ -464,11 +443,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.GroupBox5.Controls.Add(this.iCloudTextBox);
             this.GroupBox5.Controls.Add(this.Label14);
-            this.GroupBox5.Controls.Add(this.txtHostname);
+            this.GroupBox5.Controls.Add(this.HostnameTextBox);
             this.GroupBox5.Controls.Add(this.Label7);
-            this.GroupBox5.Controls.Add(this.txtPhoneNumber);
+            this.GroupBox5.Controls.Add(this.PhoneNumTextBox);
             this.GroupBox5.Controls.Add(this.Label13);
-            this.GroupBox5.Controls.Add(this.chkTrackable);
+            this.GroupBox5.Controls.Add(this.TrackableCheckBox);
             this.GroupBox5.Location = new System.Drawing.Point(785, 12);
             this.GroupBox5.Name = "GroupBox5";
             this.GroupBox5.Size = new System.Drawing.Size(205, 294);
@@ -496,15 +475,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label14.TabIndex = 62;
             this.Label14.Text = "iCloud Account";
             // 
-            // txtHostname
+            // HostnameTextBox
             // 
-            this.txtHostname.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtHostname.Location = new System.Drawing.Point(14, 100);
-            this.txtHostname.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
-            this.txtHostname.Name = "txtHostname";
-            this.txtHostname.Size = new System.Drawing.Size(178, 25);
-            this.txtHostname.TabIndex = 12;
-            this.txtHostname.Text = "txtHostname";
+            this.HostnameTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HostnameTextBox.Location = new System.Drawing.Point(14, 100);
+            this.HostnameTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
+            this.HostnameTextBox.Name = "HostnameTextBox";
+            this.HostnameTextBox.Size = new System.Drawing.Size(178, 25);
+            this.HostnameTextBox.TabIndex = 12;
             // 
             // Label7
             // 
@@ -517,16 +495,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label7.TabIndex = 60;
             this.Label7.Text = "Hostname";
             // 
-            // txtPhoneNumber
+            // PhoneNumTextBox
             // 
-            this.txtPhoneNumber.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPhoneNumber.Location = new System.Drawing.Point(14, 46);
-            this.txtPhoneNumber.Mask = "(999) 000-0000";
-            this.txtPhoneNumber.Name = "txtPhoneNumber";
-            this.txtPhoneNumber.Size = new System.Drawing.Size(178, 25);
-            this.txtPhoneNumber.TabIndex = 11;
-            this.txtPhoneNumber.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
-            this.txtPhoneNumber.Leave += new System.EventHandler(this.txtPhoneNumber_Leave);
+            this.PhoneNumTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PhoneNumTextBox.Location = new System.Drawing.Point(14, 46);
+            this.PhoneNumTextBox.Mask = "(999) 000-0000";
+            this.PhoneNumTextBox.Name = "PhoneNumTextBox";
+            this.PhoneNumTextBox.Size = new System.Drawing.Size(178, 25);
+            this.PhoneNumTextBox.TabIndex = 11;
+            this.PhoneNumTextBox.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
+            this.PhoneNumTextBox.Leave += new System.EventHandler(this.PhoneNumTextBox_Leave);
             // 
             // Label13
             // 
@@ -541,7 +519,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // GroupBox6
             // 
-            this.GroupBox6.Controls.Add(this.txtNotes);
+            this.GroupBox6.Controls.Add(this.NotesTextBox);
             this.GroupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox6.Location = new System.Drawing.Point(84, 19);
             this.GroupBox6.Name = "GroupBox6";
@@ -565,10 +543,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.ClientSize = new System.Drawing.Size(997, 472);
-            this.Controls.Add(this.chkNoClear);
-            this.Controls.Add(this.cmdClear);
+            this.Controls.Add(this.NoClearCheckBox);
+            this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.GroupBox7);
-            this.Controls.Add(this.cmdAdd);
+            this.Controls.Add(this.AddButton);
             this.Controls.Add(this.GroupBox5);
             this.Controls.Add(this.GroupBox2);
             this.Controls.Add(this.GroupBox4);
@@ -583,7 +561,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Load += new System.EventHandler(this.NewDeviceForm_Load);
             this.GroupBox2.ResumeLayout(false);
             this.GroupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldErrorIcon)).EndInit();
             this.GroupBox3.ResumeLayout(false);
             this.GroupBox3.PerformLayout();
             this.GroupBox4.ResumeLayout(false);
@@ -598,34 +575,33 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         }
         internal Label Label10;
-        internal ComboBox cmbOSType_REQ;
+        internal ComboBox OSTypeComboBox;
         internal Label Label9;
-        internal TextBox txtPO;
+        internal TextBox POTextBox;
         internal Label Label8;
-        internal ComboBox cmbEquipType_REQ;
-        internal TextBox txtNotes;
-        internal Button cmdAdd;
+        internal ComboBox EquipTypeComboBox;
+        internal TextBox NotesTextBox;
+        internal Button AddButton;
         internal Label Label6;
-        internal TextBox txtReplaceYear;
+        internal TextBox ReplaceYearTextBox;
         internal Label lbPurchaseDate;
-        internal DateTimePicker dtPurchaseDate_REQ;
+        internal DateTimePicker PurchaseDatePicker;
         internal Label Label5;
-        internal ComboBox cmbLocation_REQ;
+        internal ComboBox LocationComboBox;
         internal Label Label4;
         internal Label Label3;
-        internal TextBox txtDescription_REQ;
-        internal TextBox txtCurUser_REQ;
+        internal TextBox DescriptionTextBox;
+        internal TextBox CurrentUserTextBox;
         internal Label Label2;
         internal Label Label1;
-        internal TextBox txtAssetTag_REQ;
-        internal TextBox txtSerial_REQ;
+        internal TextBox AssetTagTextBox;
+        internal TextBox SerialTextBox;
         internal Label Label11;
-        internal ComboBox cmbStatus_REQ;
-        internal Button cmdClear;
-        internal CheckBox chkTrackable;
-        internal CheckBox chkNoClear;
-        internal ErrorProvider fieldErrorIcon;
-        internal Button cmdUserSearch;
+        internal ComboBox StatusComboBox;
+        internal Button ClearButton;
+        internal CheckBox TrackableCheckBox;
+        internal CheckBox NoClearCheckBox;
+        internal Button MunisSearchButton;
         internal Label Label12;
         internal GroupBox GroupBox2;
         internal GroupBox GroupBox7;
@@ -634,8 +610,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal Label Label13;
         internal GroupBox GroupBox4;
         internal GroupBox GroupBox3;
-        internal MaskedTextBox txtPhoneNumber;
-        internal TextBox txtHostname;
+        internal MaskedTextBox PhoneNumTextBox;
+        internal TextBox HostnameTextBox;
         internal Label Label7;
         internal TextBox iCloudTextBox;
         internal Label Label14;

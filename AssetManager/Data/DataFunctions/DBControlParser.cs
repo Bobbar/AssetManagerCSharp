@@ -294,7 +294,39 @@ namespace AssetManager
                 Control ctl = (Control)sender;
                 if (ctl.Enabled)
                 {
-                    ValidateFields();
+                    ValidateControl(ctl);
+                }
+            }
+        }
+
+        private void ValidateControl(Control control)
+        {
+            var dbInfo = (DBControlInfo)control.Tag;
+
+            if (dbInfo.Required)
+            {
+                if (control is ComboBox)
+                {
+                    ComboBox dbCmb = (ComboBox)control;
+                    if (dbCmb.SelectedIndex < 0)
+                    {
+                        SetError(dbCmb, false);
+                    }
+                    else
+                    {
+                        SetError(dbCmb, true);
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(control.Text.Trim()))
+                    {
+                        SetError(control, false);
+                    }
+                    else
+                    {
+                        SetError(control, true);
+                    }
                 }
             }
         }

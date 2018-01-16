@@ -26,12 +26,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private int intReplacementSched = 4;
-        private bool bolCheckFields;
-        private DBControlParser DataParser;
-        private DeviceMapObject Device = new DeviceMapObject();
-        private LiveBox MyLiveBox;
-        private string NewUID;
+        private int replacementYears = 4;
+        private DBControlParser controlParser;
+        private DeviceMapObject device = new DeviceMapObject();
+        private LiveBox liveBox;
+        private string newUID;
 
         #endregion Fields
 
@@ -39,12 +38,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public NewDeviceForm(ExtendedForm parentForm)
         {
-            DataParser = new DBControlParser(this);
             InitializeComponent();
+            InitDBControls();
+            controlParser = new DBControlParser(this);
+            controlParser.EnableFieldValidation();
             this.ParentForm = parentForm;
             this.Owner = parentForm;
             ClearAll();
-            InitDBControls();
             this.Show();
             this.Activate();
         }
@@ -55,15 +55,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DateTime POPurchaseDate = default(DateTime);
             using (var results = DBFactory.GetDatabase().DataTableFromQueryString(itemQuery))
             {
-                DataParser.FillDBFields(results, ImportColumnRemaps());
+                controlParser.FillDBFields(results, ImportColumnRemaps());
                 MunisUser = GlobalInstances.AssetFunc.SmartEmployeeSearch(results.Rows[0][SibiRequestItemsCols.User].ToString().ToUpper());
                 POPurchaseDate = GlobalInstances.MunisFunc.GetPODate(results.Rows[0][SibiRequestCols.PO].ToString());
             }
 
-            txtCurUser_REQ.Text = MunisUser.Name;
-            CheckFields(this, false);
-            dtPurchaseDate_REQ.Value = POPurchaseDate;
-            bolCheckFields = true;
+            CurrentUserTextBox.Text = MunisUser.Name;
+            CheckFields();
+            PurchaseDatePicker.Value = POPurchaseDate;
         }
 
         private List<DBRemappingInfo> ImportColumnRemaps()
@@ -82,28 +81,23 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                if (!CheckFields(this, true))
+                if (!CheckFields())
                 {
                     OtherFunctions.Message("Some required fields are missing or invalid.  Please fill and/or verify all highlighted fields.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Data", this);
-                    bolCheckFields = true;
                     return;
                 }
                 else
                 {
-                    if (GlobalInstances.AssetFunc.DeviceExists(txtAssetTag_REQ.Text.ToString().Trim(), txtSerial_REQ.Text.ToString().Trim()))
+                    if (GlobalInstances.AssetFunc.DeviceExists(AssetTagTextBox.Text.ToString().Trim(), SerialTextBox.Text.ToString().Trim()))
                     {
                         OtherFunctions.Message("A device with that serial and/or asset tag already exists.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Duplicate Device", this);
                         return;
-                    }
-                    else
-                    {
-                        //proceed
                     }
                     bool Success = AddNewDevice();
                     if (Success)
                     {
                         var blah = OtherFunctions.Message("New Device Added.   Add another?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Information, "Complete", this);
-                        if (!chkNoClear.Checked)
+                        if (!NoClearCheckBox.Checked)
                         {
                             ClearAll();
                         }
@@ -128,17 +122,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void AddErrorIcon(Control ctl)
-        {
-            ctl.BackColor = Colors.MissingField;
-            if (ReferenceEquals(fieldErrorIcon.GetError(ctl), string.Empty))
-            {
-                fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight);
-                fieldErrorIcon.SetIconPadding(ctl, 4);
-                fieldErrorIcon.SetError(ctl, "Required or invalid field");
-            }
-        }
-
         private bool AddNewDevice()
         {
             using (var trans = DBFactory.GetDatabase().StartTransaction())
@@ -147,7 +130,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     try
                     {
-                        NewUID = Guid.NewGuid().ToString();
+                        newUID = Guid.NewGuid().ToString();
                         int rows = 0;
                         string DeviceInsertQry = "SELECT * FROM " + DevicesCols.TableName + " LIMIT 0";
                         string HistoryInsertQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " LIMIT 0";
@@ -176,86 +159,36 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private bool CheckFields(Control Parent, bool bolValidFields)
+        private bool CheckFields()
         {
-            foreach (Control ctl in Parent.Controls)
+            bool validFields = true;
+            validFields = controlParser.ValidateFields();
+
+            LockUnlockUserField();
+
+            if (PhoneNumTextBox.Text.Trim() != "" && !DataConsistency.ValidPhoneNumber(PhoneNumTextBox.Text))
             {
-                DBControlInfo DBInfo = new DBControlInfo();
-                if (ctl.Tag != null)
-                {
-                    DBInfo = (DBControlInfo)ctl.Tag;
-                }
-
-                if (ctl is TextBox)
-                {
-                    if (DBInfo.Required)
-                    {
-                        if (ctl.Text.Trim() == "")
-                        {
-                            bolValidFields = false;
-                            //  ctl.BackColor = Colors.MissingField
-                            AddErrorIcon(ctl);
-                        }
-                        else
-                        {
-                            // ctl.BackColor = Color.Empty
-                            ClearErrorIcon(ctl);
-                            if (ReferenceEquals(ctl, txtCurUser_REQ))
-                            {
-                                LockUnlockUserField();
-                            }
-                        }
-                    }
-                    if (ReferenceEquals(ctl, txtPhoneNumber))
-                    {
-                        if (txtPhoneNumber.Text.Trim() != "" && !DataConsistency.ValidPhoneNumber(txtPhoneNumber.Text))
-                        {
-                            bolValidFields = false;
-                            AddErrorIcon(ctl);
-                            OtherFunctions.Message("Invalid phone number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
-                        }
-                    }
-                }
-                else if (ctl is ComboBox)
-                {
-                    ComboBox cmb = (ComboBox)ctl;
-                    if (DBInfo.Required)
-                    {
-                        if (cmb.SelectedIndex == -1)
-                        {
-                            bolValidFields = false;
-                            // cmb.BackColor = Colors.MissingField
-                            AddErrorIcon(cmb);
-                        }
-                        else
-                        {
-                            //  cmb.BackColor = Color.Empty
-                            ClearErrorIcon(cmb);
-                        }
-                    }
-                }
-
-                if (ctl.HasChildren)
-                {
-                    bolValidFields = CheckFields(ctl, bolValidFields);
-                }
+                validFields = false;
+                controlParser.SetError(PhoneNumTextBox, false);
+                OtherFunctions.Message("Invalid phone number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
             }
-            return bolValidFields; //if fields are missing return false to trigger a message if needed
+
+            return validFields;
         }
 
         private void LockUnlockUserField()
         {
             if (!string.IsNullOrEmpty(MunisUser.Number))
             {
-                txtCurUser_REQ.BackColor = Colors.EditColor;
-                txtCurUser_REQ.ReadOnly = true;
-                ToolTip1.SetToolTip(txtCurUser_REQ, "Munis Linked Employee - Double-Click to change.");
+                CurrentUserTextBox.BackColor = Colors.EditColor;
+                CurrentUserTextBox.ReadOnly = true;
+                ToolTip1.SetToolTip(CurrentUserTextBox, "Munis Linked Employee - Double-Click to change.");
             }
             else
             {
-                txtCurUser_REQ.BackColor = Color.Empty;
-                txtCurUser_REQ.ReadOnly = false;
-                ToolTip1.SetToolTip(txtCurUser_REQ, "");
+                CurrentUserTextBox.BackColor = Color.Empty;
+                CurrentUserTextBox.ReadOnly = false;
+                ToolTip1.SetToolTip(CurrentUserTextBox, "");
             }
         }
 
@@ -264,19 +197,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             RefreshCombos();
             MunisUser = new MunisEmployeeStruct();  //null;
             ClearFields(this);
-            dtPurchaseDate_REQ.Value = DateTime.Now;
-            cmbStatus_REQ.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(GlobalInstances.DeviceAttribute.StatusType, "INSRV");
-            ResetBackColors(this);
-            chkTrackable.Checked = false;
-            chkNoClear.Checked = false;
-            bolCheckFields = false;
-            fieldErrorIcon.Clear();
-        }
-
-        private void ClearErrorIcon(Control ctl)
-        {
-            ctl.BackColor = Color.Empty;
-            fieldErrorIcon.SetError(ctl, string.Empty);
+            PurchaseDatePicker.Value = DateTime.Now;
+            StatusComboBox.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(GlobalInstances.DeviceAttribute.StatusType, "INSRV");
+            TrackableCheckBox.Checked = false;
+            NoClearCheckBox.Checked = false;
+            controlParser.ClearErrors();
         }
 
         private void ClearFields(Control Parent)
@@ -301,62 +226,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void cmbEquipType_REQ_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields(this, false);
-            }
-        }
-
-        private void cmbLocation_REQ_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields(this, false);
-            }
-        }
-
-        private void cmbOSType_REQ_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields(this, false);
-            }
-            SetHostname();
-        }
-
-        private void cmbStatus_REQ_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields(this, false);
-            }
-        }
-
-        private void cmdAdd_Click(object sender, EventArgs e)
-        {
-            AddDevice();
-        }
-
-        private void cmdClear_Click(object sender, EventArgs e)
-        {
-            ClearAll();
-        }
-
-        private void cmdUserSearch_Click(object sender, EventArgs e)
-        {
-            MunisUser = GlobalInstances.MunisFunc.MunisUserSearch(this);
-            if (!string.IsNullOrEmpty(MunisUser.Number))
-            {
-                txtCurUser_REQ.Text = MunisUser.Name;
-                txtCurUser_REQ.ReadOnly = true;
-            }
-        }
-
         private DataTable DeviceInsertTable(string selectQuery)
         {
-            var tmpTable = DataParser.ReturnInsertTable(selectQuery);
+            var tmpTable = controlParser.ReturnInsertTable(selectQuery);
             var DBRow = tmpTable.Rows[0];
             //Add Add'l info
             if (!string.IsNullOrEmpty(MunisUser.Number))
@@ -366,160 +238,132 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             DBRow[DevicesCols.LastModUser] = GlobalConstants.LocalDomainUser;
             DBRow[DevicesCols.LastModDate] = DateTime.Now;
-            DBRow[DevicesCols.DeviceUID] = NewUID;
+            DBRow[DevicesCols.DeviceUID] = newUID;
             DBRow[DevicesCols.CheckedOut] = false;
             return tmpTable;
         }
 
-        private void dtPurchaseDate_REQ_ValueChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields(this, false);
-            }
-            SetReplacementYear(dtPurchaseDate_REQ.Value);
-        }
-
         private DataTable HistoryInsertTable(string selectQuery)
         {
-            var tmpTable = DataParser.ReturnInsertTable(selectQuery);
+            var tmpTable = controlParser.ReturnInsertTable(selectQuery);
             var DBRow = tmpTable.Rows[0];
             //Add Add'l info
             DBRow[HistoricalDevicesCols.ChangeType] = "NEWD";
-            DBRow[HistoricalDevicesCols.Notes] = txtNotes.Text.ToString().Trim();
+            DBRow[HistoricalDevicesCols.Notes] = NotesTextBox.Text.ToString().Trim();
             DBRow[HistoricalDevicesCols.ActionUser] = GlobalConstants.LocalDomainUser;
-            DBRow[HistoricalDevicesCols.DeviceUID] = NewUID;
+            DBRow[HistoricalDevicesCols.DeviceUID] = newUID;
             return tmpTable;
         }
 
         private void InitDBControls()
         {
-            txtDescription_REQ.Tag = new DBControlInfo(DevicesBaseCols.Description, true);
-            txtAssetTag_REQ.Tag = new DBControlInfo(DevicesBaseCols.AssetTag, true);
-            txtSerial_REQ.Tag = new DBControlInfo(DevicesBaseCols.Serial, true);
-            dtPurchaseDate_REQ.Tag = new DBControlInfo(DevicesBaseCols.PurchaseDate, true);
-            txtReplaceYear.Tag = new DBControlInfo(DevicesBaseCols.ReplacementYear, false);
-            cmbLocation_REQ.Tag = new DBControlInfo(DevicesBaseCols.Location, GlobalInstances.DeviceAttribute.Locations, true);
-            txtCurUser_REQ.Tag = new DBControlInfo(DevicesBaseCols.CurrentUser, true);
+            DescriptionTextBox.Tag = new DBControlInfo(DevicesBaseCols.Description, true);
+            AssetTagTextBox.Tag = new DBControlInfo(DevicesBaseCols.AssetTag, true);
+            SerialTextBox.Tag = new DBControlInfo(DevicesBaseCols.Serial, true);
+            PurchaseDatePicker.Tag = new DBControlInfo(DevicesBaseCols.PurchaseDate, true);
+            ReplaceYearTextBox.Tag = new DBControlInfo(DevicesBaseCols.ReplacementYear, false);
+            LocationComboBox.Tag = new DBControlInfo(DevicesBaseCols.Location, GlobalInstances.DeviceAttribute.Locations, true);
+            CurrentUserTextBox.Tag = new DBControlInfo(DevicesBaseCols.CurrentUser, true);
             // txtNotes.Tag = New DBControlInfo(historical_dev.Notes, False)
-            cmbOSType_REQ.Tag = new DBControlInfo(DevicesBaseCols.OSVersion, GlobalInstances.DeviceAttribute.OSType, true);
-            txtPhoneNumber.Tag = new DBControlInfo(DevicesBaseCols.PhoneNumber, false);
-            cmbEquipType_REQ.Tag = new DBControlInfo(DevicesBaseCols.EQType, GlobalInstances.DeviceAttribute.EquipType, true);
-            cmbStatus_REQ.Tag = new DBControlInfo(DevicesBaseCols.Status, GlobalInstances.DeviceAttribute.StatusType, true);
-            chkTrackable.Tag = new DBControlInfo(DevicesBaseCols.Trackable, false);
-            txtPO.Tag = new DBControlInfo(DevicesBaseCols.PO, false);
-            txtHostname.Tag = new DBControlInfo(DevicesBaseCols.HostName, false);
+            OSTypeComboBox.Tag = new DBControlInfo(DevicesBaseCols.OSVersion, GlobalInstances.DeviceAttribute.OSType, true);
+            PhoneNumTextBox.Tag = new DBControlInfo(DevicesBaseCols.PhoneNumber, false);
+            EquipTypeComboBox.Tag = new DBControlInfo(DevicesBaseCols.EQType, GlobalInstances.DeviceAttribute.EquipType, true);
+            StatusComboBox.Tag = new DBControlInfo(DevicesBaseCols.Status, GlobalInstances.DeviceAttribute.StatusType, true);
+            TrackableCheckBox.Tag = new DBControlInfo(DevicesBaseCols.Trackable, false);
+            POTextBox.Tag = new DBControlInfo(DevicesBaseCols.PO, false);
+            HostnameTextBox.Tag = new DBControlInfo(DevicesBaseCols.HostName, false);
             iCloudTextBox.Tag = new DBControlInfo(DevicesBaseCols.iCloudAccount, false);
         }
 
         private void RefreshCombos()
         {
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbLocation_REQ);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.EquipType, cmbEquipType_REQ);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, cmbOSType_REQ);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, cmbStatus_REQ);
-        }
-
-        private void ResetBackColors(Control Parent)
-        {
-            foreach (Control ctl in Parent.Controls)
-            {
-                if (ctl is TextBox)
-                {
-                    ctl.BackColor = Color.Empty;
-                }
-                else if (ctl is ComboBox)
-                {
-                    ctl.BackColor = Color.Empty;
-                }
-                if (ctl.HasChildren)
-                {
-                    ResetBackColors(ctl);
-                }
-            }
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, LocationComboBox);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.EquipType, EquipTypeComboBox);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, OSTypeComboBox);
+            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, StatusComboBox);
         }
 
         private void SetReplacementYear(DateTime PurDate)
         {
-            int ReplaceYear = PurDate.Year + intReplacementSched;
-            txtReplaceYear.Text = ReplaceYear.ToString();
+            int ReplaceYear = PurDate.Year + replacementYears;
+            ReplaceYearTextBox.Text = ReplaceYear.ToString();
         }
 
-        private void txtAssetTag_REQ_TextChanged(object sender, EventArgs e)
+        private void AddButton_Click(object sender, EventArgs e)
         {
-            if (bolCheckFields)
+            AddDevice();
+        }
+
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            ClearAll();
+        }
+
+        private void MunisSearchButton_Click(object sender, EventArgs e)
+        {
+            MunisUser = GlobalInstances.MunisFunc.MunisUserSearch(this);
+            if (!string.IsNullOrEmpty(MunisUser.Number))
             {
-                CheckFields(this, false);
+                CurrentUserTextBox.Text = MunisUser.Name;
+                CurrentUserTextBox.ReadOnly = true;
             }
         }
 
-        private void txtCurUser_REQ_TextChanged(object sender, EventArgs e)
+        private void CurrentUserTextBox_DoubleClick(object sender, EventArgs e)
         {
-            if (bolCheckFields)
-            {
-                CheckFields(this, false);
-            }
+            CurrentUserTextBox.ReadOnly = false;
+            MunisUser = new MunisEmployeeStruct();
+            CurrentUserTextBox.SelectAll();
         }
 
-        private void txtCurUser_REQ_DoubleClick(object sender, EventArgs e)
+        private void PhoneNumTextBox_Leave(object sender, EventArgs e)
         {
-            txtCurUser_REQ.ReadOnly = false;
-            MunisUser = new MunisEmployeeStruct();  //null;
-            txtCurUser_REQ.SelectAll();
-        }
-
-        private void txtDescription_REQ_TextChanged(object sender, EventArgs e)
-        {
-            if (bolCheckFields)
-            {
-                CheckFields(this, false);
-            }
-        }
-
-        private void txtPhoneNumber_Leave(object sender, EventArgs e)
-        {
-            if (txtPhoneNumber.Text.ToString().Trim() != "" && !DataConsistency.ValidPhoneNumber(txtPhoneNumber.Text))
+            if (PhoneNumTextBox.Text.ToString().Trim() != "" && !DataConsistency.ValidPhoneNumber(PhoneNumTextBox.Text))
             {
                 OtherFunctions.Message("Invalid phone number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
-                txtPhoneNumber.Focus();
+                PhoneNumTextBox.Focus();
             }
         }
 
-        private void txtSerial_REQ_TextChanged(object sender, EventArgs e)
+        private void SerialTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (bolCheckFields)
-            {
-                CheckFields(this, false);
-            }
             SetHostname();
         }
 
         private void SetHostname()
         {
-            if (txtSerial_REQ.Text != "" && AttributeFunctions.GetDBValue(GlobalInstances.DeviceAttribute.OSType, cmbOSType_REQ.SelectedIndex).Contains("WIN"))
+            if (SerialTextBox.Text != "" && AttributeFunctions.GetDBValue(GlobalInstances.DeviceAttribute.OSType, OSTypeComboBox.SelectedIndex).Contains("WIN"))
             {
-                txtHostname.Text = DataConsistency.DeviceHostnameFormat(txtSerial_REQ.Text);
+                HostnameTextBox.Text = DataConsistency.DeviceHostnameFormat(SerialTextBox.Text);
             }
             else
             {
-                txtHostname.Text = string.Empty;
+                HostnameTextBox.Text = string.Empty;
             }
         }
 
         private void NewDeviceForm_Load(object sender, EventArgs e)
         {
-            MyLiveBox = new LiveBox(this);
-            MyLiveBox.AttachToControl(txtCurUser_REQ, DevicesCols.CurrentUser, LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
-            MyLiveBox.AttachToControl(txtDescription_REQ, DevicesCols.Description, LiveBoxType.SelectValue);
+            liveBox = new LiveBox(this);
+            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
+            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBoxType.SelectValue);
         }
 
         private void NewDeviceForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            MyLiveBox.Dispose();
+            liveBox.Dispose();
         }
 
         #endregion Methods
 
+        private void OSTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetHostname();
+        }
 
+        private void PurchaseDatePicker_ValueChanged(object sender, EventArgs e)
+        {
+            SetReplacementYear(PurchaseDatePicker.Value);
+        }
     }
 }
