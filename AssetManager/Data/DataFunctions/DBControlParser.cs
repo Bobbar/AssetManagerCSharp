@@ -151,6 +151,7 @@ namespace AssetManager
         #region "Fields"
 
         private Form ParentForm;
+        private ErrorProvider errorProvider;
 
         #endregion "Fields"
 
@@ -193,8 +194,6 @@ namespace AssetManager
 
                 if (Row.Table.Columns.Contains(DBColumn))
                 {
-
-
                     Type ctlType = ctl.GetType();
 
                     if (ctlType == typeof(TextBox))
@@ -243,7 +242,6 @@ namespace AssetManager
                     {
                         throw new Exception("Unexpected type.");
                     }
-
                 }
             }
         }
@@ -267,15 +265,118 @@ namespace AssetManager
         }
 
         /// <summary>
+        /// Instantiates an error provider and sets all required DBControls validation events.
+        /// </summary>
+        public void EnableFieldValidation()
+        {
+            errorProvider = new ErrorProvider();
+            errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+            errorProvider.Icon = Properties.Resources.fieldErrorIcon_Icon;
+            SetValidateEvents();
+        }
+
+        private void SetValidateEvents()
+        {
+            foreach (Control ctl in GetDBControls(ParentForm))
+            {
+                var DBInfo = (DBControlInfo)ctl.Tag;
+                if (DBInfo.Required)
+                {
+                    ctl.Validated += ControlValidateEvent;
+                }
+            }
+        }
+
+        private void ControlValidateEvent(object sender, EventArgs e)
+        {
+            if (errorProvider != null)
+            {
+                Control ctl = (Control)sender;
+                if (ctl.Enabled)
+                {
+                    ValidateFields();
+                }
+            }
+        }
+
+        public bool ValidateFields()
+        {
+            bool fieldsValid = true;
+            foreach (Control ctl in GetDBControls(ParentForm))
+            {
+                var DBInfo = (DBControlInfo)ctl.Tag;
+
+                if (DBInfo.Required)
+                {
+                    if (ctl is ComboBox)
+                    {
+                        ComboBox dbCmb = (ComboBox)ctl;
+                        if (dbCmb.SelectedIndex < 0)
+                        {
+                            SetError(dbCmb, false);
+                            fieldsValid = false;
+                        }
+                        else
+                        {
+                            SetError(dbCmb, true);
+                        }
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(ctl.Text.Trim()))
+                        {
+                            SetError(ctl, false);
+                            fieldsValid = false;
+                        }
+                        else
+                        {
+                            SetError(ctl, true);
+                        }
+                    }
+                }
+            }
+            return fieldsValid;
+        }
+
+        public void SetError(Control control, bool isValid)
+        {
+            if (!isValid)
+            {
+                if (ReferenceEquals(errorProvider.GetError(control), string.Empty))
+                {
+                    control.BackColor = Colors.MissingField;
+                    errorProvider.SetIconAlignment(control, ErrorIconAlignment.MiddleRight);
+                    errorProvider.SetIconPadding(control, 4);
+                    errorProvider.SetError(control, "Required or Invalid Field");
+                }
+            }
+            else
+            {
+                control.BackColor = System.Drawing.Color.Empty;
+                errorProvider.SetError(control, string.Empty);
+            }
+        }
+
+        public void ClearErrors()
+        {
+            errorProvider.Clear();
+
+            foreach (Control c in GetDBControls(ParentForm))
+            {
+                c.BackColor = System.Drawing.Color.Empty;
+            }
+        }
+
+        /// <summary>
         /// Recursively collects list of controls initiated with <see cref="DBControlInfo"/> tags within Parent control.
         /// </summary>
-        /// <param name="parentForm">Parent control. Usually a Form to being.</param>
+        /// <param name="parentControl">Parent control. Usually a Form to start from.</param>
         /// <param name="controlList">Blank List of Control to be filled.</param>
-        public List<Control> GetDBControls(Control parentForm, List<Control> controlList = null)
+        public List<Control> GetDBControls(Control parentControl, List<Control> controlList = null)
         {
-            if (controlList == null)
-                controlList = new List<Control>();
-            foreach (Control ctl in parentForm.Controls)
+            if (controlList == null) controlList = new List<Control>();
+
+            foreach (Control ctl in parentControl.Controls)
             {
                 if (ctl.Tag is DBControlInfo)
                 {
@@ -331,7 +432,6 @@ namespace AssetManager
                 throw new Exception("Unexpected type.");
                 //return null;
             }
-
         }
 
         /// <summary>

@@ -478,11 +478,16 @@
             <param name="mappingInfo"></param>
             <returns></returns>
         </member>
+        <member name="M:AssetManager.DBControlParser.EnableFieldValidation">
+            <summary>
+            Instantiates an error provider and sets all required DBControls validation events.
+            </summary>
+        </member>
         <member name="M:AssetManager.DBControlParser.GetDBControls(System.Windows.Forms.Control,System.Collections.Generic.List{System.Windows.Forms.Control})">
             <summary>
             Recursively collects list of controls initiated with <see cref="T:AssetManager.DBControlInfo"/> tags within Parent control.
             </summary>
-            <param name="parentForm">Parent control. Usually a Form to being.</param>
+            <param name="parentControl">Parent control. Usually a Form to start from.</param>
             <param name="controlList">Blank List of Control to be filled.</param>
         </member>
         <member name="M:AssetManager.DBControlParser.ReturnInsertTable(System.String)">
@@ -684,6 +689,11 @@
         <member name="P:AssetManager.Properties.Resources.Exh_K_03_Asset_Transfer_Form">
             <summary>
               Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:AssetManager.Properties.Resources.fieldErrorIcon_Icon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
             </summary>
         </member>
         <member name="P:AssetManager.Properties.Resources.FolderIcon">

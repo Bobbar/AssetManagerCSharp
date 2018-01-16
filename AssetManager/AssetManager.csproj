@@ -404,6 +404,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
     <EmbeddedResource Include="Resources\Exh_K-02_Asset_Disposal_Form.pdf" />
@@ -596,6 +597,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Image1.bmp" />
+    <None Include="Resources\fieldErrorIcon.Icon.ico" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -31,8 +31,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewDeviceForm));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.HostnameTextBox = new System.Windows.Forms.TextBox();
             this.Label15 = new System.Windows.Forms.Label();
             this.PhoneNumberTextBox = new System.Windows.Forms.MaskedTextBox();
@@ -88,7 +87,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.StatusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.fieldErrorIcon = new System.Windows.Forms.ErrorProvider(this.components);
             this.AcceptCancelToolStrip = new AssetManager.UserInterface.CustomControls.OneClickToolStrip();
             this.AcceptToolButton = new System.Windows.Forms.ToolStripButton();
             this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -144,7 +142,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.TrackingBox.SuspendLayout();
             this.Panel3.SuspendLayout();
             this.StatusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldErrorIcon)).BeginInit();
             this.AcceptCancelToolStrip.SuspendLayout();
             this.FieldsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.InfoDataSplitter)).BeginInit();
@@ -536,15 +533,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.DataGridHistory.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGridHistory.ContextMenuStrip = this.RightClickMenu;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(10);
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.DataGridHistory.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(10);
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.DataGridHistory.DefaultCellStyle = dataGridViewCellStyle2;
             this.DataGridHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.DataGridHistory.Location = new System.Drawing.Point(3, 3);
@@ -773,12 +770,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.StatusLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(0, 17);
-            // 
-            // fieldErrorIcon
-            // 
-            this.fieldErrorIcon.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
-            this.fieldErrorIcon.ContainerControl = this;
-            this.fieldErrorIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("fieldErrorIcon.Icon")));
             // 
             // AcceptCancelToolStrip
             // 
@@ -1325,7 +1316,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Panel3.PerformLayout();
             this.StatusStrip1.ResumeLayout(false);
             this.StatusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldErrorIcon)).EndInit();
             this.AcceptCancelToolStrip.ResumeLayout(false);
             this.AcceptCancelToolStrip.PerformLayout();
             this.FieldsPanel.ResumeLayout(false);
@@ -1404,7 +1394,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal TextBox PONumberTextBox;
         internal Button SibiViewButton;
         internal Panel MunisSibiPanel;
-        internal ErrorProvider fieldErrorIcon;
         internal Button MunisSearchButton;
         internal Label GUIDLabel;
         internal Label Label14;

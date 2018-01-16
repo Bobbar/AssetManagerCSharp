@@ -14,16 +14,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         #region Fields
 
         public MunisEmployeeStruct MunisUser = new MunisEmployeeStruct();
-        private bool FieldsInvalid;
-        private bool GridFilling = false;
-        private string CurrentHash;
-        private DeviceMapObject CurrentViewDevice;
-        private DBControlParser DataParser;
-        private bool EditMode = false;
-        private LiveBox MyLiveBox;
-        private MunisToolBar MyMunisToolBar;
-        private WindowList MyWindowList;
-        private SliderLabel StatusSlider;
+        private bool gridFilling = false;
+        private string currentHash;
+        private DeviceMapObject currentViewDevice;
+        private DBControlParser controlParser;
+        private bool editMode = false;
+        private LiveBox liveBox;
+        private MunisToolBar munisToolBar;
+        private WindowList windowList;
+        private SliderLabel statusSlider;
 
         #endregion Fields
 
@@ -37,30 +36,30 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public ViewDeviceForm(ExtendedForm parentForm, DataMapObject device) : base(parentForm, device)
         {
-            CurrentViewDevice = (DeviceMapObject)device;
-
-            DataParser = new DBControlParser(this);
+            currentViewDevice = (DeviceMapObject)device;
 
             InitializeComponent();
+            InitDBControls();
+
+            controlParser = new DBControlParser(this);
+            controlParser.EnableFieldValidation();
 
             DefaultFormTitle = this.Text;
 
-            MyLiveBox = new LiveBox(this);
-            MyLiveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
-            MyLiveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBoxType.SelectValue);
+            liveBox = new LiveBox(this);
+            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
+            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBoxType.SelectValue);
 
-            MyMunisToolBar = new MunisToolBar(this);
-            MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 6);
+            munisToolBar = new MunisToolBar(this);
+            munisToolBar.InsertMunisDropDown(ToolStrip1, 6);
 
-            MyWindowList = new WindowList(this);
-            MyWindowList.InsertWindowList(ToolStrip1);
+            windowList = new WindowList(this);
+            windowList.InsertWindowList(ToolStrip1);
 
-            StatusSlider = new SliderLabel();
-            StatusStrip1.Items.Add(StatusSlider.ToToolStripControl(StatusStrip1));
+            statusSlider = new SliderLabel();
+            StatusStrip1.Items.Add(statusSlider.ToToolStripControl(StatusStrip1));
 
             ImageCaching.CacheControlImages(this);
-
-            InitDBControls();
 
             RefreshCombos();
 
@@ -78,7 +77,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public async void SetPingHistoryLink()
         {
-            bool hasPingHist = await GlobalInstances.AssetFunc.HasPingHistory(CurrentViewDevice);
+            bool hasPingHist = await GlobalInstances.AssetFunc.HasPingHistory(currentViewDevice);
             PingHistLabel.Visible = hasPingHist;
         }
 
@@ -86,18 +85,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                GridFilling = true;
+                gridFilling = true;
                 LoadHistoryAndFields();
-                if (CurrentViewDevice.IsTrackable)
+                if (currentViewDevice.IsTrackable)
                 {
-                    LoadTracking(CurrentViewDevice.GUID);
+                    LoadTracking(currentViewDevice.GUID);
                 }
                 SetPingHistoryLink();
-                SetTracking(CurrentViewDevice.IsTrackable, CurrentViewDevice.Tracking.IsCheckedOut);
-                this.Text = this.DefaultFormTitle + FormTitle(CurrentViewDevice);
+                SetTracking(currentViewDevice.IsTrackable, currentViewDevice.Tracking.IsCheckedOut);
+                this.Text = this.DefaultFormTitle + FormTitle(currentViewDevice);
                 this.Show();
                 DataGridHistory.ClearSelection();
-                GridFilling = false;
+                gridFilling = false;
             }
             catch (Exception ex)
             {
@@ -112,7 +111,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 CanClose = false;
             }
-            if (EditMode && !CancelModify())
+            if (editMode && !CancelModify())
             {
                 CanClose = false;
             }
@@ -121,7 +120,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public override void RefreshData()
         {
-            if (EditMode)
+            if (editMode)
             {
                 CancelModify();
             }
@@ -129,24 +128,23 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 ActiveDirectoryBox.Visible = false;
                 remoteToolsControl.Visible = false;
-                CurrentViewDevice = new DeviceMapObject(CurrentViewDevice.GUID);
+                currentViewDevice = new DeviceMapObject(currentViewDevice.GUID);
                 LoadDevice();
             }
         }
 
         public void UpdateAttachCountHandler(object sender, EventArgs e)
         {
-            GlobalInstances.AssetFunc.SetAttachmentCount(AttachmentsToolButton, CurrentViewDevice.GUID, new DeviceAttachmentsCols());
+            GlobalInstances.AssetFunc.SetAttachmentCount(AttachmentsToolButton, currentViewDevice.GUID, new DeviceAttachmentsCols());
         }
 
         private void AcceptChanges()
         {
             try
             {
-                if (!CheckFields())
+                if (!FieldsValid())
                 {
                     OtherFunctions.Message("Some required fields are missing or invalid.  Please check and fill all highlighted fields.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Data", this);
-                    FieldsInvalid = true;
                     return;
                 }
                 using (UpdateDev UpdateDia = new UpdateDev(this))
@@ -172,16 +170,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
-        }
-
-        private void AddErrorIcon(Control ctl)
-        {
-            if (ReferenceEquals(fieldErrorIcon.GetError(ctl), string.Empty))
-            {
-                fieldErrorIcon.SetIconAlignment(ctl, ErrorIconAlignment.MiddleRight);
-                fieldErrorIcon.SetIconPadding(ctl, 4);
-                fieldErrorIcon.SetError(ctl, "Required or Invalid Field");
             }
         }
 
@@ -220,17 +208,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private bool CancelModify()
         {
-            if (EditMode)
+            if (editMode)
             {
                 this.WindowState = FormWindowState.Normal;
                 this.Activate();
                 var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Discard Changes?", this);
                 if (blah == DialogResult.Yes)
                 {
-                    FieldsInvalid = false;
-                    fieldErrorIcon.Clear();
+                    controlParser.ClearErrors();
                     SetEditMode(false);
-                    ResetBackColors();
                     RefreshData();
                     return true;
                 }
@@ -238,96 +224,38 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return false;
         }
 
-        private bool CheckFields()
+        private bool FieldsValid()
         {
-            bool MissingField = false;
-            MissingField = false;
-            fieldErrorIcon.Clear();
-            foreach (Control c in DataParser.GetDBControls(this))
-            {
-                DBControlInfo DBInfo = (DBControlInfo)c.Tag;
-                if (c is TextBox)
-                {
-                    if (DBInfo.Required)
-                    {
-                        if (c.Text.Trim() == "")
-                        {
-                            MissingField = true;
-                            c.BackColor = Colors.MissingField;
-                            AddErrorIcon(c);
-                        }
-                        else
-                        {
-                            c.BackColor = Color.Empty;
-                            ClearErrorIcon(c);
-                        }
-                        c.TextChanged -= RecheckFieldsEvent;
-                        c.TextChanged += RecheckFieldsEvent;
-                    }
-                }
-                else if (c is ComboBox)
-                {
-                    ComboBox cmb = (ComboBox)c;
-                    if (DBInfo.Required)
-                    {
-                        if (cmb.SelectedIndex == -1)
-                        {
-                            MissingField = true;
-                            cmb.BackColor = Colors.MissingField;
-                            AddErrorIcon(cmb);
-                        }
-                        else
-                        {
-                            cmb.BackColor = Color.Empty;
-                            ClearErrorIcon(cmb);
-                        }
-                        cmb.SelectedIndexChanged -= RecheckFieldsEvent;
-                        cmb.SelectedIndexChanged += RecheckFieldsEvent;
-                    }
-                }
-            }
+            bool fieldsValid = true;
+            fieldsValid = controlParser.ValidateFields();
+
             if (!DataConsistency.ValidPhoneNumber(PhoneNumberTextBox.Text))
             {
-                MissingField = true;
-                PhoneNumberTextBox.BackColor = Colors.MissingField;
-                AddErrorIcon(PhoneNumberTextBox);
+                fieldsValid = false;
+                controlParser.SetError(PhoneNumberTextBox, false);
             }
             else
             {
-                PhoneNumberTextBox.BackColor = Color.Empty;
-                ClearErrorIcon(PhoneNumberTextBox);
+                controlParser.SetError(PhoneNumberTextBox, true);
             }
-            return !MissingField; //if fields are missing return false to trigger a message if needed
-        }
-
-        private void RecheckFieldsEvent(object sender, EventArgs e)
-        {
-            if (FieldsInvalid)
-            {
-                CheckFields();
-            }
-        }
-
-        private void ClearErrorIcon(Control ctl)
-        {
-            fieldErrorIcon.SetError(ctl, string.Empty);
+            return fieldsValid; //if fields are missing return false to trigger a message if needed
         }
 
         private void CollectCurrentTracking(DataTable results)
         {
-            CurrentViewDevice.Tracking.MapClassProperties(results);
+            currentViewDevice.Tracking.MapClassProperties(results);
         }
 
         private bool ConcurrencyCheck()
         {
-            using (var DeviceResults = GetDevicesTable(CurrentViewDevice.GUID))
+            using (var DeviceResults = GetDevicesTable(currentViewDevice.GUID))
             {
-                using (var HistoricalResults = GetHistoricalTable(CurrentViewDevice.GUID))
+                using (var HistoricalResults = GetHistoricalTable(currentViewDevice.GUID))
                 {
                     DeviceResults.TableName = DevicesCols.TableName;
                     HistoricalResults.TableName = HistoricalDevicesCols.TableName;
                     var DBHash = GetHash(DeviceResults, HistoricalResults);
-                    if (DBHash != CurrentHash)
+                    if (DBHash != currentHash)
                     {
                         OtherFunctions.Message("This record appears to have been modified by someone else since the start of this modification.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Concurrency Error", this);
                         return false;
@@ -346,17 +274,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "WARNING", this);
             if (blah == DialogResult.Yes)
             {
-                if (GlobalInstances.AssetFunc.DeleteFtpAndSql(CurrentViewDevice.GUID, EntryType.Device))
+                if (GlobalInstances.AssetFunc.DeleteFtpAndSql(currentViewDevice.GUID, EntryType.Device))
                 {
                     OtherFunctions.Message("Device deleted successfully.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Device Deleted", this);
-                    CurrentViewDevice = null;
+                    currentViewDevice = null;
                     Helpers.ChildFormControl.MainFormInstance().RefreshData();
                 }
                 else
                 {
-                    Logging.Logger("*****DELETION ERROR******: " + CurrentViewDevice.GUID);
+                    Logging.Logger("*****DELETION ERROR******: " + currentViewDevice.GUID);
                     OtherFunctions.Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Stop, "Delete Failed", this);
-                    CurrentViewDevice = null;
+                    currentViewDevice = null;
                 }
                 this.Dispose();
             }
@@ -400,17 +328,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (editMode)
             {
-                EditMode = true;
+                this.editMode = true;
                 EnableControlsRecursive(this);
                 ActiveDirectoryBox.Visible = false;
                 MunisSibiPanel.Visible = false;
                 MunisSearchButton.Visible = true;
-                this.Text = "View" + FormTitle(CurrentViewDevice) + "  *MODIFYING**";
+                this.Text = "View" + FormTitle(currentViewDevice) + "  *MODIFYING**";
                 AcceptCancelToolStrip.Visible = true;
             }
             else
             {
-                EditMode = false;
+                this.editMode = false;
                 DisableControlsRecursive(this);
                 MunisSibiPanel.Visible = true;
                 MunisSearchButton.Visible = false;
@@ -531,30 +459,30 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void FillTrackingBox()
         {
-            if (CurrentViewDevice.Tracking.IsCheckedOut)
+            if (currentViewDevice.Tracking.IsCheckedOut)
             {
                 TrackingStatusTextBox.BackColor = Colors.CheckOut;
-                TrackingLocationTextBox.Text = CurrentViewDevice.Tracking.UseLocation;
+                TrackingLocationTextBox.Text = currentViewDevice.Tracking.UseLocation;
                 CheckTimeLabel.Text = "CheckOut Time:";
-                CheckTimeTextBox.Text = CurrentViewDevice.Tracking.CheckoutTime.ToString();
+                CheckTimeTextBox.Text = currentViewDevice.Tracking.CheckoutTime.ToString();
                 CheckUserLabel.Text = "CheckOut User:";
-                CheckUserTextBox.Text = CurrentViewDevice.Tracking.CheckoutUser;
+                CheckUserTextBox.Text = currentViewDevice.Tracking.CheckoutUser;
                 DueBackLabel.Visible = true;
                 DueBackTextBox.Visible = true;
-                DueBackTextBox.Text = CurrentViewDevice.Tracking.DueBackTime.ToString();
+                DueBackTextBox.Text = currentViewDevice.Tracking.DueBackTime.ToString();
             }
             else
             {
                 TrackingStatusTextBox.BackColor = Colors.CheckIn;
-                TrackingLocationTextBox.Text = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.Locations, CurrentViewDevice.Location);
+                TrackingLocationTextBox.Text = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.Locations, currentViewDevice.Location);
                 CheckTimeLabel.Text = "CheckIn Time:";
-                CheckTimeTextBox.Text = CurrentViewDevice.Tracking.CheckinTime.ToString();
+                CheckTimeTextBox.Text = currentViewDevice.Tracking.CheckinTime.ToString();
                 CheckUserLabel.Text = "CheckIn User:";
-                CheckUserTextBox.Text = CurrentViewDevice.Tracking.CheckinUser;
+                CheckUserTextBox.Text = currentViewDevice.Tracking.CheckinUser;
                 DueBackLabel.Visible = false;
                 DueBackTextBox.Visible = false;
             }
-            TrackingStatusTextBox.Text = (CurrentViewDevice.Tracking.IsCheckedOut ? "Checked Out" : "Checked In").ToString();
+            TrackingStatusTextBox.Text = (currentViewDevice.Tracking.IsCheckedOut ? "Checked Out" : "Checked In").ToString();
         }
 
         private string FormTitle(DeviceMapObject Device)
@@ -581,19 +509,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private DataTable GetInsertTable(string selectQuery, DeviceUpdateInfoStruct UpdateInfo)
         {
-            var tmpTable = DataParser.ReturnInsertTable(selectQuery);
+            var tmpTable = controlParser.ReturnInsertTable(selectQuery);
             var DBRow = tmpTable.Rows[0];
             //Add Add'l info
             DBRow[HistoricalDevicesCols.ChangeType] = UpdateInfo.ChangeType;
             DBRow[HistoricalDevicesCols.Notes] = UpdateInfo.Note;
             DBRow[HistoricalDevicesCols.ActionUser] = GlobalConstants.LocalDomainUser;
-            DBRow[HistoricalDevicesCols.DeviceUID] = CurrentViewDevice.GUID;
+            DBRow[HistoricalDevicesCols.DeviceUID] = currentViewDevice.GUID;
             return tmpTable;
         }
 
         private DataTable GetUpdateTable(string selectQuery)
         {
-            var tmpTable = DataParser.ReturnUpdateTable(selectQuery);
+            var tmpTable = controlParser.ReturnUpdateTable(selectQuery);
             var DBRow = tmpTable.Rows[0];
             //Add Add'l info
             if (MunisUser.Number != null && MunisUser.Number != string.Empty)
@@ -603,18 +531,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             else
             {
-                if (CurrentViewDevice.CurrentUser != CurrentUserTextBox.Text.Trim())
+                if (currentViewDevice.CurrentUser != CurrentUserTextBox.Text.Trim())
                 {
                     DBRow[DevicesCols.CurrentUser] = CurrentUserTextBox.Text.Trim();
                     DBRow[DevicesCols.MunisEmpNum] = DBNull.Value;
                 }
                 else
                 {
-                    DBRow[DevicesCols.CurrentUser] = CurrentViewDevice.CurrentUser;
-                    DBRow[DevicesCols.MunisEmpNum] = CurrentViewDevice.CurrentUserEmpNum;
+                    DBRow[DevicesCols.CurrentUser] = currentViewDevice.CurrentUser;
+                    DBRow[DevicesCols.MunisEmpNum] = currentViewDevice.CurrentUserEmpNum;
                 }
             }
-            DBRow[DevicesCols.SibiLinkUID] = DataConsistency.CleanDBValue(CurrentViewDevice.SibiLink);
+            DBRow[DevicesCols.SibiLinkUID] = DataConsistency.CleanDBValue(currentViewDevice.SibiLink);
             DBRow[DevicesCols.LastModUser] = GlobalConstants.LocalDomainUser;
             DBRow[DevicesCols.LastModDate] = DateTime.Now;
             MunisUser = new MunisEmployeeStruct();//null;
@@ -663,16 +591,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void LoadHistoryAndFields()
         {
-            using (var HistoricalResults = GetHistoricalTable(CurrentViewDevice.GUID))
+            using (var HistoricalResults = GetHistoricalTable(currentViewDevice.GUID))
             {
-                CurrentHash = GetHash(CurrentViewDevice.PopulatingTable, HistoricalResults);
-                DataParser.FillDBFields(CurrentViewDevice.PopulatingTable);
+                currentHash = GetHash(currentViewDevice.PopulatingTable, HistoricalResults);
+                controlParser.FillDBFields(currentViewDevice.PopulatingTable);
                 SetMunisEmpStatus();
                 GridFunctions.PopulateGrid(DataGridHistory, HistoricalResults, HistoricalGridColumns());
                 DataGridHistory.FastAutoSizeColumns();
                 UpdateAttachCountHandler(this, new EventArgs());
                 SetADInfo();
-                remoteToolsControl.Device = CurrentViewDevice;
+                remoteToolsControl.Device = currentViewDevice;
             }
         }
 
@@ -711,7 +639,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewHistoryForm), entryUID))
             {
                 Waiting();
-                ViewHistoryForm NewEntry = new ViewHistoryForm(this, entryUID, CurrentViewDevice.GUID);
+                ViewHistoryForm NewEntry = new ViewHistoryForm(this, entryUID, currentViewDevice.GUID);
                 DoneWaiting();
             }
         }
@@ -719,7 +647,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void NewTrackingView(string GUID)
         {
             Waiting();
-            ViewTrackingForm NewTracking = new ViewTrackingForm(this, GUID, CurrentViewDevice);
+            ViewTrackingForm NewTracking = new ViewTrackingForm(this, GUID, currentViewDevice);
             DoneWaiting();
         }
 
@@ -767,21 +695,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, StatusComboBox);
         }
 
-        private void ResetBackColors()
-        {
-            foreach (Control c in DataParser.GetDBControls(this))
-            {
-                c.BackColor = Color.Empty;
-            }
-        }
-
         private async void SetADInfo()
         {
             try
             {
-                if (!string.IsNullOrEmpty(CurrentViewDevice.HostName))
+                if (!string.IsNullOrEmpty(currentViewDevice.HostName))
                 {
-                    ActiveDirectoryWrapper ADWrap = new ActiveDirectoryWrapper(CurrentViewDevice.HostName);
+                    ActiveDirectoryWrapper ADWrap = new ActiveDirectoryWrapper(currentViewDevice.HostName);
                     if (await ADWrap.LoadResultsAsync())
                     {
                         ADOUTextBox.Text = ADWrap.GetDeviceOU();
@@ -804,7 +724,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void SetMunisEmpStatus()
         {
             ToolTip1.SetToolTip(CurrentUserTextBox, "");
-            if (!string.IsNullOrEmpty(CurrentViewDevice.CurrentUserEmpNum))
+            if (!string.IsNullOrEmpty(currentViewDevice.CurrentUserEmpNum))
             {
                 CurrentUserTextBox.BackColor = Colors.EditColor;
                 ToolTip1.SetToolTip(CurrentUserTextBox, "Munis Linked Employee");
@@ -821,7 +741,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             else
             {
                 // StatusLabel.Text = text
-                StatusSlider.SlideText = text;
+                statusSlider.SlideText = text;
                 StatusStrip1.Update();
             }
         }
@@ -858,7 +778,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 return;
             }
             Waiting();
-            TrackDeviceForm NewTracking = new TrackDeviceForm(CurrentViewDevice, this);
+            TrackDeviceForm NewTracking = new TrackDeviceForm(currentViewDevice, this);
             DoneWaiting();
         }
 
@@ -881,7 +801,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             SetEditMode(false);
             int affectedRows = 0;
-            string SelectQry = Queries.SelectDeviceByGUID(CurrentViewDevice.GUID);
+            string SelectQry = Queries.SelectDeviceByGUID(currentViewDevice.GUID);
             string InsertQry = Queries.SelectEmptyHistoricalTable;
             using (var trans = DBFactory.GetDatabase().StartTransaction())
             {
@@ -925,7 +845,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
-                AttachmentsForm NewAttachments = new AttachmentsForm(this, new DeviceAttachmentsCols(), CurrentViewDevice, UpdateAttachCountHandler);
+                AttachmentsForm NewAttachments = new AttachmentsForm(this, new DeviceAttachmentsCols(), currentViewDevice, UpdateAttachCountHandler);
             }
         }
 
@@ -937,11 +857,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         #region Control Events
         private void PingHistLabel_Click(object sender, EventArgs e)
         {
-            GlobalInstances.AssetFunc.ShowPingHistory(this, CurrentViewDevice);
+            GlobalInstances.AssetFunc.ShowPingHistory(this, currentViewDevice);
         }
         private void AssetDisposalFormToolItem_Click(object sender, EventArgs e)
         {
-            PdfFormFilling PDFForm = new PdfFormFilling(this, CurrentViewDevice, PdfFormType.DisposeForm);
+            PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormType.DisposeForm);
         }
 
         private void AttachmentsToolButton_Click(object sender, EventArgs e)
@@ -973,7 +893,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                GlobalInstances.MunisFunc.LoadMunisInfoByDevice(CurrentViewDevice, this);
+                GlobalInstances.MunisFunc.LoadMunisInfoByDevice(currentViewDevice, this);
             }
             catch (Exception ex)
             {
@@ -993,7 +913,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void SibiViewButton_Click(object sender, EventArgs e)
         {
-            OpenSibiLink(CurrentViewDevice);
+            OpenSibiLink(currentViewDevice);
         }
 
         private void DataGridHistory_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -1003,7 +923,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DataGridHistory_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (!GridFilling)
+            if (!gridFilling)
             {
                 StyleFunctions.HighlightRow(DataGridHistory, GridTheme, e.RowIndex);
             }
@@ -1085,9 +1005,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void AssetInputFormToolItem_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(CurrentViewDevice.PO))
+            if (!string.IsNullOrEmpty(currentViewDevice.PO))
             {
-                PdfFormFilling PDFForm = new PdfFormFilling(this, CurrentViewDevice, PdfFormType.InputForm);
+                PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormType.InputForm);
             }
             else
             {
@@ -1097,7 +1017,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void AssetTransferFormToolItem_Click(object sender, EventArgs e)
         {
-            PdfFormFilling PDFForm = new PdfFormFilling(this, CurrentViewDevice, PdfFormType.TransferForm);
+            PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormType.TransferForm);
         }
 
         private void PhoneNumberTextBox_Leave(object sender, EventArgs e)
@@ -1126,10 +1046,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ViewDeviceForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            MyWindowList.Dispose();
-            MyLiveBox.Dispose();
-            MyMunisToolBar.Dispose();
-            CurrentViewDevice.Dispose();
+            windowList.Dispose();
+            liveBox.Dispose();
+            munisToolBar.Dispose();
+            currentViewDevice.Dispose();
             Helpers.ChildFormControl.CloseChildren(this);
         }
 
@@ -1147,12 +1067,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void remoteToolsControl_NewStatusPrompt(object sender, CustomControls.RemoteTools.RemoteToolsControl.StatusPrompt e)
         {
-            StatusSlider.NewSlideMessage(e.Message, e.DisplayTime);
+            statusSlider.NewSlideMessage(e.Message, e.DisplayTime);
         }
 
         #endregion Control Events
 
         #endregion Methods
-              
     }
 }
