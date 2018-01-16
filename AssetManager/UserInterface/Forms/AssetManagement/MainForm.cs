@@ -168,8 +168,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     strStartQry = "SELECT * FROM " + DevicesCols.TableName + " WHERE ";
                 }
 
-                List<DBQueryParameter> SearchValCol = BuildSearchList();
-                StartBigQuery(DBFactory.GetDatabase().GetCommandFromParams(strStartQry, SearchValCol));
+                List<DBQueryParameter> searchParams = BuildSearchList();
+                StartBigQuery(DBFactory.GetDatabase().GetCommandFromParams(strStartQry, searchParams));
             }
             catch (Exception ex)
             {
@@ -230,9 +230,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     bool IsExact = false;
                     switch (DBInfo.DataColumn)
                     {
-                        case DevicesCols.OSVersion:
-                            IsExact = true;
-                            break;
+                        //case DevicesCols.OSVersion:
+                        //    IsExact = true;
+                        //    break;
 
                         case DevicesCols.EQType:
                             IsExact = true;

@@ -511,7 +511,7 @@
         </member>
         <member name="M:AssetManager.DBControlParser.UpdateDBControlRow(System.Data.DataRow)">
             <summary>
-            Modifies a DataRow with data parsed from controls collected by <see cref="M:AssetManager.DBControlParser.GetDBControls(System.Windows.Forms.Control,System.Collections.Generic.List{System.Windows.Forms.Control})"/>
+            Modifies a DataRow with data parsed from controls collected by <see cref="M:AssetManager.DBControlParser.GetDBControlValue(System.Windows.Forms.Control)"/>
             </summary>
             <param name="DBRow">DataRow to be modified.</param>
         </member>

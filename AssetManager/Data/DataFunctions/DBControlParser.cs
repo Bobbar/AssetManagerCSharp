@@ -312,7 +312,14 @@ namespace AssetManager
             else if (dbControl is ComboBox)
             {
                 ComboBox dbCmb = (ComboBox)dbControl;
-                return AttributeFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
+                if (dbCmb.SelectedIndex > -1)
+                {
+                    return AttributeFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
+                }
+                else
+                {
+                    return dbCmb.Text;
+                }
             }
             else if (dbControl is CheckBox)
             {
@@ -366,7 +373,7 @@ namespace AssetManager
         }
 
         /// <summary>
-        /// Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControls(Control, List{Control})"/>
+        /// Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControlValue(Control)"/>
         /// </summary>
         /// <param name="DBRow">DataRow to be modified.</param>
         private void UpdateDBControlRow(DataRow DBRow)
@@ -376,36 +383,7 @@ namespace AssetManager
                 DBControlInfo DBInfo = (DBControlInfo)ctl.Tag;
                 if (DBInfo.ParseType != ParseType.DisplayOnly)
                 {
-                    if (ctl is TextBox)
-                    {
-                        TextBox dbTxt = (TextBox)ctl;
-                        DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbTxt.Text);
-                    }
-                    else if (ctl is MaskedTextBox)
-                    {
-                        MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
-                        DBRow[DBInfo.DataColumn] = DataConsistency.CleanDBValue(dbMaskTxt.Text);
-                    }
-                    else if (ctl is DateTimePicker)
-                    {
-                        DateTimePicker dbDtPick = (DateTimePicker)ctl;
-                        DBRow[DBInfo.DataColumn] = dbDtPick.Value;
-                    }
-                    else if (ctl is ComboBox)
-                    {
-                        ComboBox dbCmb = (ComboBox)ctl;
-                        DBRow[DBInfo.DataColumn] = AttributeFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
-                    }
-                    else if (ctl is CheckBox)
-                    {
-                        CheckBox dbChk = (CheckBox)ctl;
-                        DBRow[DBInfo.DataColumn] = dbChk.Checked;
-                    }
-                    else
-                    {
-                        throw new Exception("Unexpected type.");
-                        //return null;
-                    }
+                    DBRow[DBInfo.DataColumn] = GetDBControlValue(ctl);
                 }
             }
         }
