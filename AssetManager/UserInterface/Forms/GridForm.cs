@@ -110,7 +110,7 @@ namespace AssetManager.UserInterface.Forms
             NewGrid.RowHeadersVisible = false;
             NewGrid.EditMode = DataGridViewEditMode.EditProgrammatically;
             NewGrid.AllowUserToResizeRows = false;
-            NewGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            NewGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             NewGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             NewGrid.AllowUserToAddRows = false;
             NewGrid.AllowUserToDeleteRows = false;
