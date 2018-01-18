@@ -9,17 +9,23 @@ namespace AssetManager.UserInterface.Forms.Sibi
     public partial class SibiNotesForm : ExtendedForm
     {
 
-        private SibiRequestMapObject MyRequest;
+        private SibiRequestMapObject sibiRequest;
+
         public SibiRequestMapObject Request
         {
-            get { return MyRequest; }
+            get { return sibiRequest; }
+        }
+
+        public string Note
+        {
+            get { return NotesTextBox.Rtf.Trim(); }
         }
 
         public SibiNotesForm(ExtendedForm parentForm, SibiRequestMapObject request)
         {
             InitializeComponent();
             this.ParentForm = parentForm;
-            MyRequest = request;
+            sibiRequest = request;
             ShowDialog(parentForm);
         }
 
@@ -33,21 +39,27 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void ClearAll()
         {
-            rtbNotes.Clear();
+            NotesTextBox.Clear();
         }
 
         private void ViewNote(string noteUID)
         {
+            string noteText;
+            string noteTimeStamp;
+
             try
             {
-                cmdOK.Visible = false;
-                rtbNotes.Clear();
-                string NoteText = GlobalInstances.AssetFunc.GetSqlValue(SibiNotesCols.TableName, SibiNotesCols.NoteUID, noteUID, SibiNotesCols.Note);
-                string NoteTimeStamp = GlobalInstances.AssetFunc.GetSqlValue(SibiNotesCols.TableName, SibiNotesCols.NoteUID, noteUID, SibiNotesCols.DateStamp);
-                this.Text += " - " + NoteTimeStamp;
-                OtherFunctions.SetRichTextBox(rtbNotes, NoteText);
-                rtbNotes.ReadOnly = true;
-                rtbNotes.BackColor = Color.White;
+                OkButton.Visible = false;
+                NotesTextBox.Clear();
+                using (var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectNoteByGuid(noteUID)))
+                {
+                    noteText = results.Rows[0][SibiNotesCols.Note].ToString();
+                    noteTimeStamp = results.Rows[0][SibiNotesCols.DateStamp].ToString();
+                }
+                this.Text += " - " + noteTimeStamp;
+                OtherFunctions.SetRichTextBox(NotesTextBox, noteText);
+                NotesTextBox.ReadOnly = true;
+                NotesTextBox.BackColor = Color.White;
                 Show();
                 Activate();
             }
@@ -57,19 +69,19 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void cmdOK_Click(object sender, EventArgs e)
+        private void OkButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
             this.Close();
         }
 
-        private void cmdClose_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Abort;
             this.Dispose();
         }
 
-        private void rtbNotes_LinkClicked(object sender, LinkClickedEventArgs e)
+        private void NotesTextBox_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             Process.Start(e.LinkText);
         }

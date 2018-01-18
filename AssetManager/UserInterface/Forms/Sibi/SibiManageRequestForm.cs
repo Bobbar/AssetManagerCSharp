@@ -301,7 +301,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     SibiNotesForm NewNote = new SibiNotesForm(this, CurrentRequest);
                     if (NewNote.DialogResult == DialogResult.OK)
                     {
-                        AddNewNote(NewNote.Request.GUID, NewNote.rtbNotes.Rtf.Trim());
+                        AddNewNote(NewNote.Request.GUID, NewNote.Note);
                         LoadNotes(CurrentRequest.GUID);
                     }
                 }

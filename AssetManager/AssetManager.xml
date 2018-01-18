@@ -252,7 +252,14 @@
         </member>
         <member name="M:AssetManager.Queries.SelectSibiNotes(System.String)">
             <summary>
-            SELECT * FROM <see cref="F:AssetManager.SibiNotesCols.TableName"/> WHERE <see cref="F:AssetManager.SibiNotesCols.RequestUID"/> = <paramref name="noteGUID"/> ORDER BY <see cref="F:AssetManager.SibiNotesCols.DateStamp"/> DESC
+            SELECT * FROM <see cref="F:AssetManager.SibiNotesCols.TableName"/> WHERE <see cref="F:AssetManager.SibiNotesCols.RequestUID"/> = <paramref name="requestGUID"/> ORDER BY <see cref="F:AssetManager.SibiNotesCols.DateStamp"/> DESC
+            </summary>
+            <param name="requestGUID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Queries.SelectNoteByGuid(System.String)">
+            <summary>
+            SELECT * FROM <see cref="F:AssetManager.SibiNotesCols.TableName"/> WHERE <see cref="F:AssetManager.SibiNotesCols.NoteUID"/> = <paramref name="noteGUID"/>
             </summary>
             <param name="noteGUID"></param>
             <returns></returns>

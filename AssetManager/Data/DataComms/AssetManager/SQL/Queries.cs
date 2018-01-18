@@ -182,13 +182,23 @@ namespace AssetManager//.Data.DataComms.AssetManager.SQL
         }
 
         /// <summary>
-        /// SELECT * FROM <see cref="SibiNotesCols.TableName"/> WHERE <see cref="SibiNotesCols.RequestUID"/> = <paramref name="noteGUID"/> ORDER BY <see cref="SibiNotesCols.DateStamp"/> DESC
+        /// SELECT * FROM <see cref="SibiNotesCols.TableName"/> WHERE <see cref="SibiNotesCols.RequestUID"/> = <paramref name="requestGUID"/> ORDER BY <see cref="SibiNotesCols.DateStamp"/> DESC
+        /// </summary>
+        /// <param name="requestGUID"></param>
+        /// <returns></returns>
+        public static string SelectSibiNotes(string requestGUID)
+        {
+            return "SELECT * FROM " + SibiNotesCols.TableName + " WHERE " + SibiNotesCols.RequestUID + "='" + requestGUID + "' ORDER BY " + SibiNotesCols.DateStamp + " DESC";
+        }
+
+        /// <summary>
+        /// SELECT * FROM <see cref="SibiNotesCols.TableName"/> WHERE <see cref="SibiNotesCols.NoteUID"/> = <paramref name="noteGUID"/>
         /// </summary>
         /// <param name="noteGUID"></param>
         /// <returns></returns>
-        public static string SelectSibiNotes(string noteGUID)
+        public static string SelectNoteByGuid(string noteGUID)
         {
-            return "SELECT * FROM " + SibiNotesCols.TableName + " WHERE " + SibiNotesCols.RequestUID + "='" + noteGUID + "' ORDER BY " + SibiNotesCols.DateStamp + " DESC";
+            return "SELECT * FROM " + SibiNotesCols.TableName + " WHERE " + SibiNotesCols.NoteUID + "='" + noteGUID + "'";
         }
 
         /// <summary>
