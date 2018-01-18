@@ -64,7 +64,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void CopySelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GridFunctions.CopySelectedGridData(GetActiveGrid());
+            GetActiveGrid().CopyToClipboard();
         }
 
         private void AddGridsToForm()
@@ -193,7 +193,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void SendToNewGridForm_Click(object sender, EventArgs e)
         {
-            GridFunctions.CopyToGridForm(GetActiveGrid(), ParentForm);
+            GetActiveGrid().CopyToGridForm(ParentForm);
         }
 
         private void GridForm_Disposed(object sender, EventArgs e)

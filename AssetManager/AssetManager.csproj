@@ -199,10 +199,11 @@
     <Compile Include="GlobalObjects\GlobalVariables.cs" />
     <Compile Include="GlobalObjects\Paths.cs" />
     <Compile Include="Helpers\ChildFormControl.cs" />
-    <Compile Include="Helpers\DataGridHelpers\ColumnClasses.cs" />
-    <Compile Include="Helpers\DataGridHelpers\GridFunctions.cs" />
+    <Compile Include="Helpers\DataGridHelpers\GridColumnAttrib.cs" />
+    <Compile Include="Helpers\DataGridHelpers\GridPopulation.cs" />
     <Compile Include="Helpers\ErrorHandling.cs" />
-    <Compile Include="Helpers\ExtendedMethods.cs" />
+    <Compile Include="Helpers\MiscExtensions.cs" />
+    <Compile Include="Helpers\DataGridHelpers\DataGridViewExtensions.cs" />
     <Compile Include="Helpers\Logging.cs" />
     <Compile Include="Helpers\OtherFunctions.cs" />
     <Compile Include="Helpers\ThemeHelpers\Colors.cs" />
@@ -605,9 +606,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\CodeSnippets\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

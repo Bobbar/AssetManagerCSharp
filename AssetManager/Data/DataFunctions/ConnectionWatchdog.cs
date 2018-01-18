@@ -231,30 +231,7 @@ namespace AssetManager
             {
                 return WatchDogConnectionStatus.Offline;
             }
-
-
-            //switch (true)
-            //{
-
-            //    case ServerIsOnline & !InCachedMode:
-
-            //        return WatchDogConnectionStatus.Online;
-            //    case ServerIsOnline & InCachedMode:
-            //        InCachedMode = false;
-
-            //        return WatchDogConnectionStatus.Online;
-            //    case !ServerIsOnline & CacheIsAvailable:
-            //        InCachedMode = true;
-
-            //        return WatchDogConnectionStatus.CachedMode;
-            //    case !ServerIsOnline & !CacheIsAvailable:
-            //        InCachedMode = false;
-
-            //        return WatchDogConnectionStatus.Offline;
-            //    default:
-
-            //        return WatchDogConnectionStatus.Offline;
-            //}
+                     
         }
 
         #region "IDisposable Support"

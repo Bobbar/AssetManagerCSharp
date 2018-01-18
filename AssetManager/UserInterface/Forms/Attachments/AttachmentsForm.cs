@@ -188,7 +188,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQry))
                 {
                     bolGridFilling = true;
-                    GridFunctions.PopulateGrid(AttachGrid, results, AttachGridColumns(_attachTable));
+                    AttachGrid.Populate(results, AttachGridColumns(_attachTable));
                 }
 
                 AttachGrid.Columns[_attachTable.FileName].DefaultCellStyle.Font = new Font("Consolas", 9.75F, FontStyle.Bold);
@@ -434,16 +434,16 @@ namespace AssetManager.UserInterface.Forms.Attachments
             return new Attachment(DBFactory.GetDatabase().DataTableFromQueryString(strQry), _attachTable);
         }
 
-        private List<DataGridColumn> AttachGridColumns(AttachmentsBaseCols attachtable)
+        private List<GridColumnAttrib> AttachGridColumns(AttachmentsBaseCols attachtable)
         {
-            List<DataGridColumn> ColList = new List<DataGridColumn>();
-            ColList.Add(new DataGridColumn(attachtable.FileType, "", typeof(Image), ColumnFormatTypes.Image));
-            ColList.Add(new DataGridColumn(attachtable.FileName, "Filename", typeof(string)));
-            ColList.Add(new DataGridColumn(attachtable.FileSize, "Size", typeof(string), ColumnFormatTypes.FileSize));
-            ColList.Add(new DataGridColumn(attachtable.Timestamp, "Date", typeof(DateTime)));
-            ColList.Add(new DataGridColumn(attachtable.Folder, "Folder", typeof(string)));
-            ColList.Add(new DataGridColumn(attachtable.FileUID, "AttachUID", typeof(string)));
-            ColList.Add(new DataGridColumn(attachtable.FileHash, "MD5", typeof(string)));
+            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
+            ColList.Add(new GridColumnAttrib(attachtable.FileType, "", typeof(Image), ColumnFormatTypes.Image));
+            ColList.Add(new GridColumnAttrib(attachtable.FileName, "Filename", typeof(string)));
+            ColList.Add(new GridColumnAttrib(attachtable.FileSize, "Size", typeof(string), ColumnFormatTypes.FileSize));
+            ColList.Add(new GridColumnAttrib(attachtable.Timestamp, "Date", typeof(DateTime)));
+            ColList.Add(new GridColumnAttrib(attachtable.Folder, "Folder", typeof(string)));
+            ColList.Add(new GridColumnAttrib(attachtable.FileUID, "AttachUID", typeof(string)));
+            ColList.Add(new GridColumnAttrib(attachtable.FileHash, "MD5", typeof(string)));
             return ColList;
         }
 
@@ -622,7 +622,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                         //Cast out the datarow, get the attach UID, and move the attachment to the new folder.
                         var DragRow = (DataGridViewRow)(dropObject.GetData(typeof(DataGridViewRow)));
                         CurrentSelectedFolder = PrevSelectedFolder;
-                        MoveAttachToFolder(DragRow.Cells[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileUID)].Value.ToString(), folder);
+                        MoveAttachToFolder(DragRow.Cells[_attachTable.FileUID].Value.ToString(), folder);
                     }
                     else
                     {
@@ -707,8 +707,8 @@ namespace AssetManager.UserInterface.Forms.Attachments
             //Enable read/write mode, set current cell to the filename cell and begin edit.
             AttachGrid.ReadOnly = false;
             AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            AttachGrid.CurrentRow.Cells[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileName)].ReadOnly = false;
-            AttachGrid.CurrentCell = AttachGrid.CurrentRow.Cells[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileName)];
+            AttachGrid.CurrentRow.Cells[_attachTable.FileName].ReadOnly = false;
+            AttachGrid.CurrentCell = AttachGrid.CurrentRow.Cells[_attachTable.FileName];
             AttachGrid.BeginEdit(true);
         }
 
@@ -754,7 +754,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 {
                     return;
                 }
-                string strFilename = AttachGrid[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileName), AttachGrid.CurrentRow.Index].Value.ToString();
+                string strFilename = AttachGrid.CurrentRowStringValue(_attachTable.FileName);
                 var blah = OtherFunctions.Message("Are you sure you want to delete '" + strFilename + "'?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Confirm Delete", this);
                 if (blah == DialogResult.Yes)
                 {
@@ -1028,7 +1028,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         private string SelectedAttachmentUID()
         {
-            string AttachUID = AttachGrid[GridFunctions.GetColIndex(AttachGrid, _attachTable.FileUID), AttachGrid.CurrentRow.Index].Value.ToString();
+            string AttachUID = AttachGrid.CurrentRowStringValue(_attachTable.FileUID);
             if (!string.IsNullOrEmpty(AttachUID))
             {
                 return AttachUID;

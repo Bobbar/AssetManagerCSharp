@@ -302,7 +302,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             try
             {
-                string entryGUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
+                string entryGUID = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryUID);
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGUID)))
                 using (var Info = new DeviceMapObject(results))
                 {
@@ -549,20 +549,20 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return tmpTable;
         }
 
-        private List<DataGridColumn> HistoricalGridColumns()
+        private List<GridColumnAttrib> HistoricalGridColumns()
         {
-            List<DataGridColumn> ColList = new List<DataGridColumn>();
-            ColList.Add(new DataGridColumn(HistoricalDevicesCols.ActionDateTime, "Time Stamp", typeof(DateTime)));
-            ColList.Add(new DataGridColumn(HistoricalDevicesCols.ChangeType, "Change Type", GlobalInstances.DeviceAttribute.ChangeType, ColumnFormatTypes.AttributeDisplayMemberOnly));
-            ColList.Add(new DataGridColumn(HistoricalDevicesCols.ActionUser, "Action User", typeof(string)));
-            ColList.Add(new DataGridColumn(HistoricalDevicesCols.Notes, "Note Peek", typeof(string), ColumnFormatTypes.NotePreview));
-            ColList.Add(new DataGridColumn(HistoricalDevicesCols.CurrentUser, "User", typeof(string)));
-            ColList.Add(new DataGridColumn(HistoricalDevicesCols.AssetTag, "Asset ID", typeof(string)));
-            ColList.Add(new DataGridColumn(HistoricalDevicesCols.Serial, "Serial", typeof(string)));
-            ColList.Add(new DataGridColumn(HistoricalDevicesCols.Description, "Description", typeof(string)));
-            ColList.Add(new DataGridColumn(HistoricalDevicesCols.Location, "Location", GlobalInstances.DeviceAttribute.Locations, ColumnFormatTypes.AttributeDisplayMemberOnly));
-            ColList.Add(new DataGridColumn(HistoricalDevicesCols.PurchaseDate, "Purchase Date", typeof(DateTime)));
-            ColList.Add(new DataGridColumn(HistoricalDevicesCols.HistoryEntryUID, "GUID", typeof(string)));
+            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionDateTime, "Time Stamp", typeof(DateTime)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ChangeType, "Change Type", GlobalInstances.DeviceAttribute.ChangeType, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionUser, "Action User", typeof(string)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Notes, "Note Peek", typeof(string), ColumnFormatTypes.NotePreview));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.CurrentUser, "User", typeof(string)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.AssetTag, "Asset ID", typeof(string)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Serial, "Serial", typeof(string)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Description, "Description", typeof(string)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Location, "Location", GlobalInstances.DeviceAttribute.Locations, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.PurchaseDate, "Purchase Date", typeof(DateTime)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.HistoryEntryUID, "GUID", typeof(string)));
             return ColList;
         }
 
@@ -596,11 +596,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 currentHash = GetHash(currentViewDevice.PopulatingTable, HistoricalResults);
                 controlParser.FillDBFields(currentViewDevice.PopulatingTable);
                 SetMunisEmpStatus();
-                         
+
                 DataGridHistory.SuspendLayout();
                 DataGridHistory.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
                 DataGridHistory.ColumnHeadersHeight = 38;
-                GridFunctions.PopulateGrid(DataGridHistory, HistoricalResults, HistoricalGridColumns());
+                DataGridHistory.Populate(HistoricalResults, HistoricalGridColumns());
                 DataGridHistory.FastAutoSizeColumns();
                 DataGridHistory.ResumeLayout();
 
@@ -617,7 +617,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 if (Results.Rows.Count > 0)
                 {
                     CollectCurrentTracking(Results);
-                    GridFunctions.PopulateGrid(TrackingGrid, Results, TrackingGridColumns());
+                    TrackingGrid.Populate(Results, TrackingGridColumns());
                     TrackingGrid.Columns[TrackablesCols.CheckType].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                     TrackingGrid.Columns[TrackablesCols.CheckType].DefaultCellStyle.Font = new Font(TrackingGrid.Font, FontStyle.Bold);
                     DisableSorting(TrackingGrid);
@@ -641,7 +641,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void NewEntryView()
         {
-            string entryUID = GridFunctions.GetCurrentCellValue(DataGridHistory, HistoricalDevicesCols.HistoryEntryUID);
+            string entryUID = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryUID);
             if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewHistoryForm), entryUID))
             {
                 Waiting();
@@ -788,18 +788,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DoneWaiting();
         }
 
-        private List<DataGridColumn> TrackingGridColumns()
+        private List<GridColumnAttrib> TrackingGridColumns()
         {
-            List<DataGridColumn> ColList = new List<DataGridColumn>();
-            ColList.Add(new DataGridColumn(TrackablesCols.DateStamp, "Date", typeof(DateTime)));
-            ColList.Add(new DataGridColumn(TrackablesCols.CheckType, "Check Type", typeof(string)));
-            ColList.Add(new DataGridColumn(TrackablesCols.CheckoutUser, "Check Out User", typeof(string)));
-            ColList.Add(new DataGridColumn(TrackablesCols.CheckinUser, "Check In User", typeof(string)));
-            ColList.Add(new DataGridColumn(TrackablesCols.CheckoutTime, "Check Out", typeof(DateTime)));
-            ColList.Add(new DataGridColumn(TrackablesCols.CheckinTime, "Check In", typeof(DateTime)));
-            ColList.Add(new DataGridColumn(TrackablesCols.DueBackDate, "Due Back", typeof(DateTime)));
-            ColList.Add(new DataGridColumn(TrackablesCols.UseLocation, "Location", typeof(string)));
-            ColList.Add(new DataGridColumn(TrackablesCols.UID, "GUID", typeof(string)));
+            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
+            ColList.Add(new GridColumnAttrib(TrackablesCols.DateStamp, "Date", typeof(DateTime)));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckType, "Check Type", typeof(string)));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckoutUser, "Check Out User", typeof(string)));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckinUser, "Check In User", typeof(string)));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckoutTime, "Check Out", typeof(DateTime)));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckinTime, "Check In", typeof(DateTime)));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.DueBackDate, "Due Back", typeof(DateTime)));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.UseLocation, "Location", typeof(string)));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.UID, "GUID", typeof(string)));
             return ColList;
         }
 
@@ -971,7 +971,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void TrackingGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            var EntryUID = GridFunctions.GetCurrentCellValue(TrackingGrid, TrackablesCols.UID);
+            var EntryUID = TrackingGrid.CurrentRowStringValue(TrackablesCols.UID);
             if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewTrackingForm), EntryUID))
             {
                 NewTrackingView(EntryUID);
@@ -980,15 +980,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void TrackingGrid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
-            int CheckTypeColIndex = GridFunctions.GetColIndex(TrackingGrid, TrackablesCols.CheckType);
-            string CheckTypeValue = TrackingGrid.Rows[e.RowIndex].Cells[CheckTypeColIndex].Value.ToString();
-            DataGridViewCell CheckTypeCell = TrackingGrid.Rows[e.RowIndex].Cells[CheckTypeColIndex];
+            string checkTypeValue = TrackingGrid.Rows[e.RowIndex].Cells[TrackablesCols.CheckType].Value.ToString();
+            DataGridViewCell CheckTypeCell = TrackingGrid.Rows[e.RowIndex].Cells[TrackablesCols.CheckType];
             CheckTypeCell.Style.ForeColor = Color.Black;
-            if (CheckTypeValue == CheckType.Checkin)
+            if (checkTypeValue == CheckType.Checkin)
             {
                 CheckTypeCell.Style.BackColor = Colors.CheckIn;
             }
-            else if (CheckTypeValue == CheckType.Checkout)
+            else if (checkTypeValue == CheckType.Checkout)
             {
                 CheckTypeCell.Style.BackColor = Colors.CheckOut;
             }

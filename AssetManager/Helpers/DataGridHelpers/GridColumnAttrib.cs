@@ -1,9 +1,10 @@
 using System;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace AssetManager
 {
-    public class DataGridColumn
+    public class GridColumnAttrib
     {
         public string ColumnName { get; set; }
         public string ColumnCaption { get; set; }
@@ -13,7 +14,7 @@ namespace AssetManager
         public AttributeDataStruct[] AttributeIndex { get; set; }
         public ColumnFormatTypes ColumnFormatType { get; set; }
 
-        public DataGridColumn(string colName, string caption, Type type)
+        public GridColumnAttrib(string colName, string caption, Type type)
         {
             ColumnName = colName;
             ColumnCaption = caption;
@@ -24,7 +25,7 @@ namespace AssetManager
             ColumnFormatType = ColumnFormatTypes.DefaultFormat;
         }
 
-        public DataGridColumn(string colName, string caption, Type type, ColumnFormatTypes displayMode)
+        public GridColumnAttrib(string colName, string caption, Type type, ColumnFormatTypes displayMode)
         {
             ColumnName = colName;
             ColumnCaption = caption;
@@ -35,7 +36,7 @@ namespace AssetManager
             ColumnFormatType = displayMode;
         }
 
-        public DataGridColumn(string colName, string caption, AttributeDataStruct[] attribIndex)
+        public GridColumnAttrib(string colName, string caption, AttributeDataStruct[] attribIndex)
         {
             ColumnName = colName;
             ColumnCaption = caption;
@@ -46,7 +47,7 @@ namespace AssetManager
             ColumnFormatType = ColumnFormatTypes.AttributeCombo;
         }
 
-        public DataGridColumn(string colName, string caption, AttributeDataStruct[] attribIndex, ColumnFormatTypes displayMode)
+        public GridColumnAttrib(string colName, string caption, AttributeDataStruct[] attribIndex, ColumnFormatTypes displayMode)
         {
             ColumnName = colName;
             ColumnCaption = caption;
@@ -57,7 +58,7 @@ namespace AssetManager
             ColumnFormatType = displayMode;
         }
 
-        public DataGridColumn(string colName, string caption, Type type, bool isReadOnly, bool visible)
+        public GridColumnAttrib(string colName, string caption, Type type, bool isReadOnly, bool visible)
         {
             ColumnName = colName;
             ColumnCaption = caption;
@@ -85,16 +86,40 @@ namespace AssetManager
 
 namespace AssetManager
 {
-    public struct StatusColumnColorStruct
+    public struct StatusColumnColor
     {
         public string StatusID;
 
         public Color StatusColor;
 
-        public StatusColumnColorStruct(string id, Color color)
+        public StatusColumnColor(string id, Color color)
         {
             StatusID = id;
             StatusColor = color;
         }
+    }
+}
+
+namespace AssetManager
+{
+    public static class GridColumnFunctions
+    {
+        /// <summary>
+        /// Returns a comma separated string containing the DB columns within a List(Of ColumnStruct). For use in queries.
+        /// </summary>
+        /// <param name="columns"></param>
+        /// <returns></returns>
+        public static string ColumnsString(List<GridColumnAttrib> columns)
+        {
+            string colString = "";
+            foreach (GridColumnAttrib column in columns)
+            {
+                colString += column.ColumnName;
+                if (columns.IndexOf(column) != columns.Count - 1) colString += ",";
+
+            }
+            return colString;
+        }
+
     }
 }

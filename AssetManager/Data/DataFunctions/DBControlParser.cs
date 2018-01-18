@@ -236,7 +236,7 @@ namespace AssetManager
                     else if (ctlType == typeof(RichTextBox))
                     {
                         RichTextBox dbRtb = (RichTextBox)ctl;
-                        OtherFunctions.SetRichTextBox(dbRtb, Row[DBColumn].ToString());
+                        dbRtb.TextOrRtf(Row[DBColumn].ToString());
                     }
                     else
                     {

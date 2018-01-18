@@ -7,9 +7,9 @@ using System.Windows.Forms;
 
 namespace AssetManager
 {
-    public static class GridFunctions
+    public static class GridPopulation
     {
-        public static void PopulateGrid(DataGridView grid, DataTable data, List<DataGridColumn> columns, bool forceRawData = false)
+        public static void PopulateGrid(DataGridView grid, DataTable data, List<GridColumnAttrib> columns, bool forceRawData)
         {
             SetupGrid(grid, columns);
             using (data)
@@ -19,13 +19,27 @@ namespace AssetManager
             }
         }
 
-        private static DataTable BuildDataSource(DataTable data, List<DataGridColumn> columns, bool forceRawData)
+
+        private static void SetupGrid(DataGridView grid, List<GridColumnAttrib> columns)
+        {
+            grid.DataSource = null;
+            grid.Rows.Clear();
+            grid.Columns.Clear();
+            grid.AutoGenerateColumns = false;
+            foreach (GridColumnAttrib col in columns)
+            {
+                grid.Columns.Add(GetColumn(col));
+            }
+        }
+
+
+        private static DataTable BuildDataSource(DataTable data, List<GridColumnAttrib> columns, bool forceRawData)
         {
             var NeedsRebuilt = ColumnsRequireRebuild(columns);
             if (NeedsRebuilt & !forceRawData)
             {
                 DataTable NewTable = new DataTable();
-                foreach (DataGridColumn col in columns)
+                foreach (GridColumnAttrib col in columns)
                 {
                     NewTable.Columns.Add(col.ColumnName, col.ColumnType);
                 }
@@ -34,7 +48,7 @@ namespace AssetManager
                     DataRow NewRow = null;
                     NewRow = NewTable.NewRow();
 
-                    foreach (DataGridColumn col in columns)
+                    foreach (GridColumnAttrib col in columns)
                     {
                         switch (col.ColumnFormatType)
                         {
@@ -77,10 +91,10 @@ namespace AssetManager
             }
         }
 
-        private static bool ColumnsRequireRebuild(List<DataGridColumn> columns)
+        private static bool ColumnsRequireRebuild(List<GridColumnAttrib> columns)
         {
             bool RebuildRequired = false;
-            foreach (DataGridColumn col in columns)
+            foreach (GridColumnAttrib col in columns)
             {
                 switch (col.ColumnFormatType)
                 {
@@ -95,19 +109,9 @@ namespace AssetManager
             return RebuildRequired;
         }
 
-        private static void SetupGrid(DataGridView grid, List<DataGridColumn> columns)
-        {
-            grid.DataSource = null;
-            grid.Rows.Clear();
-            grid.Columns.Clear();
-            grid.AutoGenerateColumns = false;
-            foreach (DataGridColumn col in columns)
-            {
-                grid.Columns.Add(GetColumn(col));
-            }
-        }
+       
 
-        private static DataGridViewColumn GetColumn(DataGridColumn column)
+        private static DataGridViewColumn GetColumn(GridColumnAttrib column)
         {
             switch (column.ColumnFormatType)
             {
@@ -126,7 +130,7 @@ namespace AssetManager
             return null;
         }
 
-        private static DataGridViewColumn DataGridImageColumn(DataGridColumn column)
+        private static DataGridViewColumn DataGridImageColumn(GridColumnAttrib column)
         {
             DataGridViewImageColumn NewCol = new DataGridViewImageColumn();
             NewCol.Name = column.ColumnName;
@@ -141,7 +145,7 @@ namespace AssetManager
             return NewCol;
         }
 
-        private static DataGridViewColumn GenericColumn(DataGridColumn column)
+        private static DataGridViewColumn GenericColumn(GridColumnAttrib column)
         {
             DataGridViewColumn NewCol = new DataGridViewColumn();
             NewCol.Name = column.ColumnName;
@@ -170,55 +174,7 @@ namespace AssetManager
             return NewCombo;
         }
 
-        /// <summary>
-        /// Returns a comma separated string containing the DB columns within a List(Of ColumnStruct). For use in queries.
-        /// </summary>
-        /// <param name="columns"></param>
-        /// <returns></returns>
-        public static string ColumnsString(List<DataGridColumn> columns)
-        {
-            string ColString = "";
-            foreach (DataGridColumn col in columns)
-            {
-                ColString += col.ColumnName;
-                if (columns.IndexOf(col) != columns.Count - 1)
-                    ColString += ",";
-            }
-            return ColString;
-        }
+       
 
-        public static int GetColIndex(DataGridView grid, string columnName)
-        {
-            try
-            {
-                return grid.Columns[columnName].Index;
-            }
-            catch
-            {
-                return -1;
-            }
-        }
-
-        public static string GetCurrentCellValue(DataGridView grid, string columnName)
-        {
-            return DataConsistency.NoNull(grid[GetColIndex(grid, columnName), grid.CurrentRow.Index].Value.ToString());
-        }
-
-        public static void CopyToGridForm(DataGridView grid, ExtendedForm parentForm)
-        {
-            if (grid != null)
-            {
-                GridForm NewGridForm = new GridForm(parentForm, grid.Name + " Copy");
-                NewGridForm.AddGrid(grid.Name, grid.Name, ((DataTable)grid.DataSource).Copy());
-                NewGridForm.Show();
-            }
-        }
-
-        public static void CopySelectedGridData(DataGridView grid)
-        {
-            grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
-            Clipboard.SetDataObject(grid.GetClipboardContent());
-            grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithAutoHeaderText;
-        }
     }
 }

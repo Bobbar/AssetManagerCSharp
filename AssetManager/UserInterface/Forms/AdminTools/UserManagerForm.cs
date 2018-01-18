@@ -110,9 +110,9 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 
         private void UserGrid_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (UserGrid[GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index].Value is int)
+            if (UserGrid.CurrentRowValue(UsersCols.AccessLevel) is int)
             {
-                DisplayAccess(Convert.ToInt32(UserGrid[GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel), UserGrid.CurrentRow.Index].Value));
+                DisplayAccess(Convert.ToInt32(UserGrid.CurrentRowValue(UsersCols.AccessLevel)));
             }
             else
             {
@@ -146,21 +146,21 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 
         private void AddGUIDs()
         {
-            foreach (DataGridViewRow rows in UserGrid.Rows)
+            foreach (DataGridViewRow row in UserGrid.Rows)
             {
-                if (string.IsNullOrEmpty(rows.Cells[GridFunctions.GetColIndex(UserGrid, UsersCols.UID)].EditedFormattedValue.ToString()))
+                if (string.IsNullOrEmpty(row.Cells[UsersCols.UID].EditedFormattedValue.ToString()))
                 {
                     string UserUID = Guid.NewGuid().ToString();
-                    rows.Cells[GridFunctions.GetColIndex(UserGrid, UsersCols.UID)].Value = UserUID;
+                    row.Cells[UsersCols.UID].Value = UserUID;
                 }
             }
         }
 
         private void AddAccessLevelToGrid()
         {
-            UserGrid.Rows[SelectedRow].Cells[GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel)].Selected = true;
+            UserGrid.Rows[SelectedRow].Cells[UsersCols.AccessLevel].Selected = true;
             UserGrid.BeginEdit(false);
-            UserGrid.Rows[SelectedRow].Cells[GridFunctions.GetColIndex(UserGrid, UsersCols.AccessLevel)].Value = CalcAccessLevel();
+            UserGrid.Rows[SelectedRow].Cells[UsersCols.AccessLevel].Value = CalcAccessLevel();
             UserGrid.EndEdit();
         }
 

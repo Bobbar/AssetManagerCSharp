@@ -487,7 +487,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, cmbOSType);
         }
 
-        private List<DataGridColumn> ResultGridColumns()
+        private List<GridColumnAttrib> ResultGridColumns()
         {
             ColumnFormatTypes AttribColumnType;
             if (CurrentTransaction != null)
@@ -498,19 +498,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 AttribColumnType = ColumnFormatTypes.AttributeDisplayMemberOnly;
             }
-            List<DataGridColumn> ColList = new List<DataGridColumn>();
-            ColList.Add(new DataGridColumn(DevicesCols.CurrentUser, "User", typeof(string)));
-            ColList.Add(new DataGridColumn(DevicesCols.AssetTag, "Asset ID", typeof(string)));
-            ColList.Add(new DataGridColumn(DevicesCols.Serial, "Serial", typeof(string)));
-            ColList.Add(new DataGridColumn(DevicesCols.EQType, "Device Type", GlobalInstances.DeviceAttribute.EquipType, AttribColumnType));
-            ColList.Add(new DataGridColumn(DevicesCols.Description, "Description", typeof(string)));
-            ColList.Add(new DataGridColumn(DevicesCols.OSVersion, "OS Version", GlobalInstances.DeviceAttribute.OSType, AttribColumnType));
-            ColList.Add(new DataGridColumn(DevicesCols.Location, "Location", GlobalInstances.DeviceAttribute.Locations, AttribColumnType));
-            ColList.Add(new DataGridColumn(DevicesCols.PO, "PO Number", typeof(string)));
-            ColList.Add(new DataGridColumn(DevicesCols.PurchaseDate, "Purchase Date", typeof(System.DateTime)));
-            ColList.Add(new DataGridColumn(DevicesCols.ReplacementYear, "Replace Year", typeof(string)));
-            ColList.Add(new DataGridColumn(DevicesCols.LastModDate, "Modified", typeof(System.DateTime)));
-            ColList.Add(new DataGridColumn(DevicesCols.DeviceUID, "GUID", typeof(string)));
+            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
+            ColList.Add(new GridColumnAttrib(DevicesCols.CurrentUser, "User", typeof(string)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.AssetTag, "Asset ID", typeof(string)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.Serial, "Serial", typeof(string)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.EQType, "Device Type", GlobalInstances.DeviceAttribute.EquipType, AttribColumnType));
+            ColList.Add(new GridColumnAttrib(DevicesCols.Description, "Description", typeof(string)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.OSVersion, "OS Version", GlobalInstances.DeviceAttribute.OSType, AttribColumnType));
+            ColList.Add(new GridColumnAttrib(DevicesCols.Location, "Location", GlobalInstances.DeviceAttribute.Locations, AttribColumnType));
+            ColList.Add(new GridColumnAttrib(DevicesCols.PO, "PO Number", typeof(string)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.PurchaseDate, "Purchase Date", typeof(System.DateTime)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.ReplacementYear, "Replace Year", typeof(string)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.LastModDate, "Modified", typeof(System.DateTime)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.DeviceUID, "GUID", typeof(string)));
             return ColList;
         }
 
@@ -529,11 +529,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 bolGridFilling = true;
                 if (CurrentTransaction != null)
                 {
-                    GridFunctions.PopulateGrid(ResultGrid, results, ResultGridColumns(), true);
+                    ResultGrid.Populate(results, ResultGridColumns(), true);
                 }
                 else
                 {
-                    GridFunctions.PopulateGrid(ResultGrid, results, ResultGridColumns());
+                   ResultGrid.Populate(results, ResultGridColumns());
                 }
 
                 // If currently in a transaction, use the native resizing method as the datatable is bound to an unmodified datatable.
@@ -887,7 +887,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void CopyTool_Click(object sender, EventArgs e)
         {
-            GridFunctions.CopySelectedGridData(ResultGrid);
+            ResultGrid.CopyToClipboard();
         }
 
         private void DateTimeLabel_Click(object sender, EventArgs e)
@@ -941,7 +941,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (e.KeyCode == Keys.Enter)
             {
-                LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID));
+                LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceUID));
                 e.SuppressKeyPress = true;
             }
         }
@@ -977,7 +977,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void tsmSendToGridForm_Click(object sender, EventArgs e)
         {
-            GridFunctions.CopyToGridForm(ResultGrid, this);
+            ResultGrid.CopyToGridForm(this);
         }
 
         private void tsmUserManager_Click(object sender, EventArgs e)
@@ -996,7 +996,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID));
+            LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceUID));
         }
 
         private async void InstallChromeMenuItem_Click(object sender, EventArgs e)
@@ -1054,7 +1054,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ResultGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            LoadDevice(GridFunctions.GetCurrentCellValue(ResultGrid, DevicesCols.DeviceUID));
+            LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceUID));
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)

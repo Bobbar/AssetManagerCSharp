@@ -57,7 +57,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     noteTimeStamp = results.Rows[0][SibiNotesCols.DateStamp].ToString();
                 }
                 this.Text += " - " + noteTimeStamp;
-                OtherFunctions.SetRichTextBox(NotesTextBox, noteText);
+                NotesTextBox.TextOrRtf(noteText);
                 NotesTextBox.ReadOnly = true;
                 NotesTextBox.BackColor = Color.White;
                 Show();

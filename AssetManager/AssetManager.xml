@@ -540,14 +540,14 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.GridFunctions.ColumnsString(System.Collections.Generic.List{AssetManager.DataGridColumn})">
+        <member name="M:AssetManager.GridColumnFunctions.ColumnsString(System.Collections.Generic.List{AssetManager.GridColumnAttrib})">
             <summary>
             Returns a comma separated string containing the DB columns within a List(Of ColumnStruct). For use in queries.
             </summary>
             <param name="columns"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.ExtendedMethods.AddParameterWithValue(System.Data.Common.DbCommand,System.String,System.Object)">
+        <member name="M:AssetManager.MiscExtensions.AddParameterWithValue(System.Data.Common.DbCommand,System.String,System.Object)">
             <summary>
             Adds a parameter to the command.
             </summary>
@@ -563,7 +563,61 @@
             <remarks>
             </remarks>
         </member>
-        <member name="M:AssetManager.ExtendedMethods.FastAutoSizeColumns(System.Windows.Forms.DataGridView)">
+        <member name="M:AssetManager.MiscExtensions.TextOrRtf(System.Windows.Forms.RichTextBox,System.String)">
+            <summary>
+            Sets the Rtf property if Rtf format is detected. Otherwise sets the Text property.
+            </summary>
+            <param name="richTextBox"></param>
+            <param name="text"></param>
+        </member>
+        <member name="M:AssetManager.DataGridViewExtensions.CopyToClipboard(System.Windows.Forms.DataGridView,System.Boolean)">
+            <summary>
+            Copies current selection to clipboard.
+            </summary>
+            <param name="grid"></param>
+            <param name="includeHeaders">False to exclude column headers. Default: True. </param>
+        </member>
+        <member name="M:AssetManager.DataGridViewExtensions.CopyToGridForm(System.Windows.Forms.DataGridView,AssetManager.UserInterface.CustomControls.ExtendedForm)">
+            <summary>
+            Sends a copy of this grid to a new <see cref="T:AssetManager.UserInterface.Forms.GridForm"/> instance.
+            </summary>
+            <param name="grid"></param>
+            <param name="parentForm"></param>
+        </member>
+        <member name="M:AssetManager.DataGridViewExtensions.CurrentRowValue(System.Windows.Forms.DataGridView,System.String)">
+            <summary>
+            Returns the object value of the cell in the current row at the specified column.
+            </summary>
+            <param name="grid"></param>
+            <param name="columnName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.DataGridViewExtensions.CurrentRowStringValue(System.Windows.Forms.DataGridView,System.String)">
+            <summary>
+            Returns the string value of the cell in the current row at the specified column.
+            </summary>
+            <param name="grid"></param>
+            <param name="columnName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.DataGridViewExtensions.ColumnIndex(System.Windows.Forms.DataGridView,System.String)">
+            <summary>
+            Returns the index for the specified column name.
+            </summary>
+            <param name="grid"></param>
+            <param name="columnName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.DataGridViewExtensions.Populate(System.Windows.Forms.DataGridView,System.Data.DataTable,System.Collections.Generic.List{AssetManager.GridColumnAttrib},System.Boolean)">
+            <summary>
+            Populates this grid from a <see cref="T:System.Data.DataTable"/> and <see cref="T:System.Collections.Generic.List`1"/> of <see cref="T:AssetManager.GridColumnAttrib"/>.
+            </summary>
+            <param name="grid"></param>
+            <param name="data"></param>
+            <param name="columns">List of <see cref="T:AssetManager.GridColumnAttrib"/> used to parse column attributes for type, visibility, caption, etc.</param>
+            <param name="forceRawData">True if data will not be recreated into a new datatable that conforms to the columns property. Used for grids that should be directly bound to a datatable. Default: false.</param>
+        </member>
+        <member name="M:AssetManager.DataGridViewExtensions.FastAutoSizeColumns(System.Windows.Forms.DataGridView)">
             <summary>
             Provides much faster column resizing than the built-in AutoResizeColumns method.
             </summary>

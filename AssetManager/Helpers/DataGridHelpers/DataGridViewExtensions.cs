@@ -1,72 +1,103 @@
-using System;
-using System.Windows.Forms;
-using System.Data.Common;
-using System.Reflection;
-using System.Data;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data;
 using System.Drawing;
+using AssetManager.UserInterface.Forms;
+using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager
 {
-
-    static class ExtendedMethods
+    public static class DataGridViewExtensions
     {
 
-        public static void DoubleBufferedDataGrid(this DataGridView dgv, bool setting)
+        /// <summary>
+        /// Copies current selection to clipboard.
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="includeHeaders">False to exclude column headers. Default: True. </param>
+        public static void CopyToClipboard(this DataGridView grid, bool includeHeaders = true)
         {
-            Type dgvType = dgv.GetType();
-            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, setting, null);
-        }
+            var originalCopyMode = grid.ClipboardCopyMode;
 
-        public static void DoubleBufferedListBox(this ListBox dgv, bool setting)
-        {
-            Type dgvType = dgv.GetType();
-            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, setting, null);
-        }
+            if (includeHeaders)
+            {
+                grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+            }
+            else
+            {
+                grid.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+            }
 
-        public static void DoubleBufferedFlowLayout(this FlowLayoutPanel dgv, bool setting)
-        {
-            Type dgvType = dgv.GetType();
-            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, setting, null);
-        }
-
-        public static void DoubleBufferedTableLayout(this TableLayoutPanel dgv, bool setting)
-        {
-            Type dgvType = dgv.GetType();
-            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, setting, null);
-        }
-
-        public static void DoubleBufferedPanel(this Panel dgv, bool setting)
-        {
-            Type dgvType = dgv.GetType();
-            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, setting, null);
+            Clipboard.SetDataObject(grid.GetClipboardContent());
+            grid.ClipboardCopyMode = originalCopyMode;
         }
 
         /// <summary>
-        /// Adds a parameter to the command.
+        /// Sends a copy of this grid to a new <see cref="GridForm"/> instance.
         /// </summary>
-        /// <param name="command">
-        /// The command.
-        /// </param>
-        /// <param name="parameterName">
-        /// Name of the parameter.
-        /// </param>
-        /// <param name="parameterValue">
-        /// The parameter value.
-        /// </param>
-        /// <remarks>
-        /// </remarks>
-        public static void AddParameterWithValue(this DbCommand command, string parameterName, object parameterValue)
+        /// <param name="grid"></param>
+        /// <param name="parentForm"></param>
+        public static void CopyToGridForm(this DataGridView grid, ExtendedForm parentForm)
         {
-            var parameter = command.CreateParameter();
-            parameter.ParameterName = parameterName;
-            parameter.Value = parameterValue;
-            command.Parameters.Add(parameter);
+            GridForm NewGridForm = new GridForm(parentForm, grid.Name + " Copy");
+            NewGridForm.AddGrid(grid.Name, grid.Name, ((DataTable)grid.DataSource).Copy());
+            NewGridForm.Show();
+        }
+
+        /// <summary>
+        /// Returns the object value of the cell in the current row at the specified column.
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
+        public static object CurrentRowValue(this DataGridView grid, string columnName)
+        {
+            return grid.CurrentRow.Cells[columnName].Value;
+        }
+
+        /// <summary>
+        /// Returns the string value of the cell in the current row at the specified column.
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
+        public static string CurrentRowStringValue(this DataGridView grid, string columnName)
+        {
+            return grid.CurrentRow.Cells[columnName].Value.ToString();
+        }
+
+        /// <summary>
+        /// Returns the index for the specified column name.
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
+        public static int ColumnIndex(this DataGridView grid, string columnName)
+        {
+            try
+            {
+                return grid.Columns[columnName].Index;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        /// <summary>
+        /// Populates this grid from a <see cref="DataTable"/> and <see cref="List{T}"/> of <see cref="GridColumnAttrib"/>.
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="data"></param>
+        /// <param name="columns">List of <see cref="GridColumnAttrib"/> used to parse column attributes for type, visibility, caption, etc.</param>
+        /// <param name="forceRawData">True if data will not be recreated into a new datatable that conforms to the columns property. Used for grids that should be directly bound to a datatable. Default: false.</param>
+        public static void Populate(this DataGridView grid, DataTable data, List<GridColumnAttrib> columns, bool forceRawData = false)
+        {
+            GridPopulation.PopulateGrid(grid, data, columns, forceRawData);
         }
 
         /// <summary>
@@ -96,7 +127,7 @@ namespace AssetManager
 
                         // Sort the array by string widths.
                         colStringSizeCollection = colStringSizeCollection.OrderBy((x) => x.Size.Width).ToArray();
-              
+
                         // Get the last and widest string in the array.
                         var newColumnWidth = colStringSizeCollection.Last().Size;
 
@@ -130,7 +161,7 @@ namespace AssetManager
 
         private static StringSize[] MeasureStrings(string[] stringArray, Graphics gfx, Font font)
         {
-          var tempArray = new StringSize[stringArray.Length];
+            var tempArray = new StringSize[stringArray.Length];
             for (int i = 0; i < stringArray.Length; i++)
             {
                 tempArray[i] = new StringSize(stringArray[i], gfx.MeasureString(stringArray[i], font));

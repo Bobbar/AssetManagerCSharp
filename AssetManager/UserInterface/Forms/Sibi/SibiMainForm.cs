@@ -18,7 +18,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private DbCommand LastCmd;
         private bool bolRebuildingCombo = false;
 
-        private List<StatusColumnColorStruct> StatusColors;
+        private List<StatusColumnColor> StatusColors;
 
         public SibiMainForm(ExtendedForm parentForm)
         {
@@ -241,7 +241,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     SibiResultGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
                     SibiResultGrid.ColumnHeadersHeight = 38;
                     StatusColors = GetStatusColors(results);
-                    GridFunctions.PopulateGrid(SibiResultGrid, results, SibiTableColumns());
+                    SibiResultGrid.Populate(results, SibiTableColumns());
                     SibiResultGrid.FastAutoSizeColumns();
                     SibiResultGrid.ClearSelection();
                     SibiResultGrid.ResumeLayout();
@@ -254,30 +254,30 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private List<StatusColumnColorStruct> GetStatusColors(DataTable Results)
+        private List<StatusColumnColor> GetStatusColors(DataTable Results)
         {
-            List<StatusColumnColorStruct> StatusList = new List<StatusColumnColorStruct>();
+            List<StatusColumnColor> StatusList = new List<StatusColumnColor>();
             foreach (DataRow row in Results.Rows)
             {
-                StatusList.Add(new StatusColumnColorStruct(row[SibiRequestCols.RequestNumber].ToString(), GetRowColor(row[SibiRequestCols.Status].ToString())));
+                StatusList.Add(new StatusColumnColor(row[SibiRequestCols.RequestNumber].ToString(), GetRowColor(row[SibiRequestCols.Status].ToString())));
             }
             return StatusList;
         }
 
-        private List<DataGridColumn> SibiTableColumns()
+        private List<GridColumnAttrib> SibiTableColumns()
         {
-            List<DataGridColumn> ColList = new List<DataGridColumn>();
-            ColList.Add(new DataGridColumn(SibiRequestCols.RequestNumber, "Request #", typeof(int)));
-            ColList.Add(new DataGridColumn(SibiRequestCols.Status, "Status", GlobalInstances.SibiAttribute.StatusType, ColumnFormatTypes.AttributeDisplayMemberOnly));
-            ColList.Add(new DataGridColumn(SibiRequestCols.Description, "Description", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestCols.RequestUser, "Request User", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestCols.Type, "Request Type", GlobalInstances.SibiAttribute.RequestType, ColumnFormatTypes.AttributeDisplayMemberOnly));
-            ColList.Add(new DataGridColumn(SibiRequestCols.NeedBy, "Need By", typeof(System.DateTime)));
-            ColList.Add(new DataGridColumn(SibiRequestCols.PO, "PO Number", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestCols.RequisitionNumber, "Req. Number", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestCols.RTNumber, "RT Number", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestCols.DateStamp, "Create Date", typeof(System.DateTime)));
-            ColList.Add(new DataGridColumn(SibiRequestCols.UID, "UID", typeof(string)));
+            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestNumber, "Request #", typeof(int)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.Status, "Status", GlobalInstances.SibiAttribute.StatusType, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.Description, "Description", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestUser, "Request User", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", GlobalInstances.SibiAttribute.RequestType, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.NeedBy, "Need By", typeof(System.DateTime)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.PO, "PO Number", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequisitionNumber, "Req. Number", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.RTNumber, "RT Number", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.DateStamp, "Create Date", typeof(System.DateTime)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.UID, "UID", typeof(string)));
             return ColList;
         }
 
@@ -344,7 +344,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void ResultGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (SibiResultGrid.CurrentRow.Index > -1)
-                OpenRequest(GridFunctions.GetCurrentCellValue(SibiResultGrid, SibiRequestCols.UID));
+                OpenRequest(SibiResultGrid.CurrentRowStringValue(SibiRequestCols.UID));
         }
 
         private void OpenRequest(string strUID)
@@ -381,7 +381,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private Color GetRowColorFromID(string ReqID)
         {
-            foreach (StatusColumnColorStruct status in StatusColors)
+            foreach (StatusColumnColor status in StatusColors)
             {
                 if (status.StatusID == ReqID)
                     return status.StatusColor;

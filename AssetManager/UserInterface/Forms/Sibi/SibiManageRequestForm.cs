@@ -129,8 +129,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 this.FormUID = CurrentRequest.GUID;
                 IsModifying = true;
                 //Set the datasource to a new empty DB table.
-                var EmptyTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectEmptySibiItemsTable(GridFunctions.ColumnsString(RequestItemsColumns())));
-                GridFunctions.PopulateGrid(RequestItemsGrid, EmptyTable, RequestItemsColumns());
+                var EmptyTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectEmptySibiItemsTable(GridColumnFunctions.ColumnsString(RequestItemsColumns())));
+                RequestItemsGrid.Populate(EmptyTable, RequestItemsColumns());
                 EnableControls();
                 pnlCreate.Visible = true;
                 this.Show();
@@ -153,7 +153,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 using (DataTable RequestResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(RequestUID)))
                 {
-                    using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), RequestUID)))
+                    using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), RequestUID)))
                     {
                         RequestResults.TableName = SibiRequestCols.TableName;
                         RequestItemsResults.TableName = SibiRequestItemsCols.TableName;
@@ -198,7 +198,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 using (var RequestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID)))
                 {
-                    using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
+                    using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
                     {
                         RequestTable.TableName = SibiRequestCols.TableName;
                         ItemTable.TableName = SibiRequestItemsCols.TableName;
@@ -268,7 +268,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     try
                     {
                         string InsertRequestQry = Queries.SelectEmptySibiRequestTable;
-                        string InsertRequestItemsQry = Queries.SelectEmptySibiItemsTable(GridFunctions.ColumnsString(RequestItemsColumns()));
+                        string InsertRequestItemsQry = Queries.SelectEmptySibiItemsTable(GridColumnFunctions.ColumnsString(RequestItemsColumns()));
                         DBFactory.GetDatabase().UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID), trans);
                         DBFactory.GetDatabase().UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, trans);
                         pnlCreate.Visible = false;
@@ -510,7 +510,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 var blah = OtherFunctions.Message("Are you sure?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Delete Note", this);
                 if (blah == DialogResult.Yes)
                 {
-                    string NoteUID = GridFunctions.GetCurrentCellValue(dgvNotes, SibiNotesCols.NoteUID);
+                    string NoteUID = dgvNotes.CurrentRowStringValue(SibiNotesCols.NoteUID);
                     if (!string.IsNullOrEmpty(NoteUID))
                     {
                         OtherFunctions.Message(DeleteNote(NoteUID) + " Rows affected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Delete Item", this);
@@ -642,7 +642,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                var NoteUID = GridFunctions.GetCurrentCellValue(dgvNotes, SibiNotesCols.NoteUID);
+                var NoteUID = dgvNotes.CurrentRowStringValue(SibiNotesCols.NoteUID);
                 if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiNotesForm), NoteUID))
                 {
                     SibiNotesForm ViewNote = new SibiNotesForm(this, NoteUID);
@@ -872,7 +872,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiNotes(RequestUID)))
                 {
-                    GridFunctions.PopulateGrid(dgvNotes, Results, NotesGridColumns());
+                    dgvNotes.Populate(Results, NotesGridColumns());
                 }
                 dgvNotes.ClearSelection();
             }
@@ -903,10 +903,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 OtherFunctions.SetWaitCursor(true, this);
                 if (ColumnName == SibiRequestItemsCols.NewSerial)
                 {
-                    var ItemUID = GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ItemUID);
+                    var ItemUID = RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemUID);
                     var Serial = await Task.Run(() =>
                     {
-                        return GlobalInstances.MunisFunc.GetSerialFromAsset(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.NewAsset));
+                        return GlobalInstances.MunisFunc.GetSerialFromAsset(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.NewAsset));
                     });
                     if (!string.IsNullOrEmpty(Serial))
                     {
@@ -916,10 +916,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 }
                 else if (ColumnName == SibiRequestItemsCols.NewAsset)
                 {
-                    var ItemUID = GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ItemUID);
+                    var ItemUID = RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemUID);
                     var Asset = await Task.Run(() =>
                     {
-                        return GlobalInstances.MunisFunc.GetAssetFromSerial(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.NewSerial));
+                        return GlobalInstances.MunisFunc.GetAssetFromSerial(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.NewSerial));
                     });
                     if (!string.IsNullOrEmpty(Asset))
                     {
@@ -929,10 +929,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 }
                 else if (ColumnName == SibiRequestItemsCols.ReplaceSerial)
                 {
-                    var ItemUID = GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ItemUID);
+                    var ItemUID = RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemUID);
                     var Serial = await Task.Run(() =>
                     {
-                        return GlobalInstances.MunisFunc.GetSerialFromAsset(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ReplaceAsset));
+                        return GlobalInstances.MunisFunc.GetSerialFromAsset(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ReplaceAsset));
                     });
                     if (!string.IsNullOrEmpty(Serial))
                     {
@@ -942,10 +942,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 }
                 else if (ColumnName == SibiRequestItemsCols.ReplaceAsset)
                 {
-                    var ItemUID = GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ItemUID);
+                    var ItemUID = RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemUID);
                     var Asset = await Task.Run(() =>
                     {
-                        return GlobalInstances.MunisFunc.GetAssetFromSerial(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ReplaceSerial));
+                        return GlobalInstances.MunisFunc.GetAssetFromSerial(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ReplaceSerial));
                     });
                     if (!string.IsNullOrEmpty(Asset))
                     {
@@ -969,31 +969,31 @@ namespace AssetManager.UserInterface.Forms.Sibi
             OpenRequest(CurrentRequest.GUID);
         }
 
-        private List<DataGridColumn> NotesGridColumns()
+        private List<GridColumnAttrib> NotesGridColumns()
         {
-            List<DataGridColumn> ColList = new List<DataGridColumn>();
-            ColList.Add(new DataGridColumn(SibiNotesCols.Note, "Note", typeof(string), ColumnFormatTypes.NotePreview));
-            ColList.Add(new DataGridColumn(SibiNotesCols.DateStamp, "Date Stamp", typeof(DateTime)));
-            ColList.Add(new DataGridColumn(SibiNotesCols.NoteUID, "UID", typeof(string), true, false));
+            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
+            ColList.Add(new GridColumnAttrib(SibiNotesCols.Note, "Note", typeof(string), ColumnFormatTypes.NotePreview));
+            ColList.Add(new GridColumnAttrib(SibiNotesCols.DateStamp, "Date Stamp", typeof(DateTime)));
+            ColList.Add(new GridColumnAttrib(SibiNotesCols.NoteUID, "UID", typeof(string), true, false));
             return ColList;
         }
 
-        private List<DataGridColumn> RequestItemsColumns()
+        private List<GridColumnAttrib> RequestItemsColumns()
         {
-            List<DataGridColumn> ColList = new List<DataGridColumn>();
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.User, "User", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.Description, "Description", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.Qty, "Qty", typeof(int)));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.Location, "Location", GlobalInstances.DeviceAttribute.Locations));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.Status, "Status", GlobalInstances.SibiAttribute.ItemStatusType));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.ReplaceAsset, "Replace Asset", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.ReplaceSerial, "Replace Serial", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.NewAsset, "New Asset", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.NewSerial, "New Serial", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.OrgCode, "Org Code", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.ObjectCode, "Object Code", typeof(string)));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.ItemUID, "Item UID", typeof(string), true, true));
-            ColList.Add(new DataGridColumn(SibiRequestItemsCols.RequestUID, "Request UID", typeof(string), true, false));
+            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.User, "User", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Description, "Description", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Qty, "Qty", typeof(int)));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Location, "Location", GlobalInstances.DeviceAttribute.Locations));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Status, "Status", GlobalInstances.SibiAttribute.ItemStatusType));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceAsset, "Replace Asset", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceSerial, "Replace Serial", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewAsset, "New Asset", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewSerial, "New Serial", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.OrgCode, "Org Code", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ObjectCode, "Object Code", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ItemUID, "Item UID", typeof(string), true, true));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.RequestUID, "Request UID", typeof(string), true, false));
             return ColList;
         }
 
@@ -1150,7 +1150,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 bolGridFilling = true;
-                GridFunctions.PopulateGrid(RequestItemsGrid, Results, RequestItemsColumns(), true);
+                RequestItemsGrid.Populate(Results, RequestItemsColumns(), true);
                 RequestItemsGrid.ClearSelection();
             }
             catch (Exception ex)
@@ -1175,7 +1175,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (RequestItemsGrid.CurrentCell.OwningColumn.Name == SibiRequestItemsCols.ObjectCode || RequestItemsGrid.CurrentCell.OwningColumn.Name == SibiRequestItemsCols.OrgCode)
                 {
-                    if (!string.IsNullOrEmpty(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ObjectCode)) && !string.IsNullOrEmpty(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.OrgCode)))
+                    if (!string.IsNullOrEmpty(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ObjectCode)) && !string.IsNullOrEmpty(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.OrgCode)))
                     {
                         tsmGLBudget.Visible = true;
                     }
@@ -1302,9 +1302,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void tsmCopyText_Click(object sender, EventArgs e)
         {
-            RequestItemsGrid.RowHeadersVisible = false;
-            GridFunctions.CopySelectedGridData(RequestItemsGrid);
-            RequestItemsGrid.RowHeadersVisible = true;
+            RequestItemsGrid.CopyToClipboard(false);
         }
 
         private void DeleteSelectedRequestItem()
@@ -1342,8 +1340,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                var Org = GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.OrgCode);
-                var Obj = GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ObjectCode);
+                var Org = RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.OrgCode);
+                var Obj = RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ObjectCode);
                 var FY = CurrentRequest.DateStamp.Year.ToString();
                 GlobalInstances.MunisFunc.NewOrgObView(Org, Obj, FY, this);
             }
@@ -1358,19 +1356,19 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 int colIndex = RequestItemsGrid.CurrentCell.ColumnIndex;
-                if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.ReplaceAsset))
+                if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.ReplaceAsset))
                 {
                     Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
                 }
-                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.ReplaceSerial))
+                else if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.ReplaceSerial))
                 {
                     Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
                 }
-                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.NewAsset))
+                else if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.NewAsset))
                 {
                     Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
                 }
-                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.NewSerial))
+                else if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.NewSerial))
                 {
                     Helpers.ChildFormControl.LookupDevice(this, GlobalInstances.AssetFunc.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
                 }
@@ -1495,7 +1493,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                             return;
                         }
                         string RequestUpdateQry = Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID);
-                        string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID);
+                        string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID);
 
                         DBFactory.GetDatabase().UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans);
                         DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans);
@@ -1582,19 +1580,19 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 var colIndex = RequestItemsGrid.CurrentCell.ColumnIndex;
-                if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.ReplaceAsset))
+                if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.ReplaceAsset))
                 {
                     return true;
                 }
-                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.ReplaceSerial))
+                else if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.ReplaceSerial))
                 {
                     return true;
                 }
-                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.NewAsset))
+                else if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.NewAsset))
                 {
                     return true;
                 }
-                else if (colIndex == GridFunctions.GetColIndex(RequestItemsGrid, SibiRequestItemsCols.NewSerial))
+                else if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.NewSerial))
                 {
                     return true;
                 }
@@ -1617,7 +1615,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 return;
             }
             NewDeviceForm NewDev = new NewDeviceForm(this);
-            NewDev.ImportFromSibi(GridFunctions.GetCurrentCellValue(RequestItemsGrid, SibiRequestItemsCols.ItemUID));
+            NewDev.ImportFromSibi(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemUID));
         }
 
         private void SibiManageRequestForm_FormClosing(object sender, FormClosingEventArgs e)

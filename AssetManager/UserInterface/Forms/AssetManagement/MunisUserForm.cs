@@ -67,8 +67,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void MunisResults_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            SelectedEmpInfo.Name = GridFunctions.GetCurrentCellValue(MunisResults, "a_name_first") + " " + GridFunctions.GetCurrentCellValue(MunisResults, "a_name_last");
-            SelectedEmpInfo.Number = GridFunctions.GetCurrentCellValue(MunisResults, "a_employee_number");
+            SelectedEmpInfo.Name = MunisResults.CurrentRowStringValue("a_name_first") + " " + MunisResults.CurrentRowStringValue("a_name_last");
+            SelectedEmpInfo.Number = MunisResults.CurrentRowStringValue("a_employee_number");
             lblSelectedEmp.Text = "Selected Emp: " + SelectedEmpInfo.Name + " - " + SelectedEmpInfo.Number;
         }
 
