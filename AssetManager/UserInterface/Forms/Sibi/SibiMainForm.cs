@@ -238,6 +238,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     bolGridFilling = true;
                     SibiResultGrid.SuspendLayout();
+                    SibiResultGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+                    SibiResultGrid.ColumnHeadersHeight = 38;
                     StatusColors = GetStatusColors(results);
                     GridFunctions.PopulateGrid(SibiResultGrid, results, SibiTableColumns());
                     SibiResultGrid.FastAutoSizeColumns();

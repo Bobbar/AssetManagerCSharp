@@ -204,8 +204,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void AddNewDevice()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice))
-                return;
+            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice)) return;
+
             var NewDevForm = Helpers.ChildFormControl.GetChildOfType(this, typeof(NewDeviceForm));
             if (NewDevForm == null)
             {
@@ -516,11 +516,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void SendToGrid(ref DataTable results)
         {
-            if (results == null)
-                return;
+
+            if (results == null) return;
+
             using (results)
             {
                 ResultGrid.SuspendLayout();
+                ResultGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+                ResultGrid.ColumnHeadersHeight = 38;
                 ResultGrid.ScrollBars = ScrollBars.None;
                 ResultGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
                 bolGridFilling = true;

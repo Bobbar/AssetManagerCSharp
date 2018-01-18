@@ -596,8 +596,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 currentHash = GetHash(currentViewDevice.PopulatingTable, HistoricalResults);
                 controlParser.FillDBFields(currentViewDevice.PopulatingTable);
                 SetMunisEmpStatus();
+                         
+                DataGridHistory.SuspendLayout();
+                DataGridHistory.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+                DataGridHistory.ColumnHeadersHeight = 38;
                 GridFunctions.PopulateGrid(DataGridHistory, HistoricalResults, HistoricalGridColumns());
                 DataGridHistory.FastAutoSizeColumns();
+                DataGridHistory.ResumeLayout();
+
                 UpdateAttachCountHandler(this, new EventArgs());
                 SetADInfo();
                 remoteToolsControl.Device = currentViewDevice;
