@@ -176,8 +176,6 @@ namespace AssetManager
             LiveListBox = new ListBox();
             LiveListBox.Parent = parentForm;
             LiveListBox.BringToFront();
-            //AddHandler LiveBox.MouseClick, AddressOf LiveBox_MouseClick
-
             LiveListBox.MouseDown += LiveBox_MouseDown;
             LiveListBox.MouseMove += LiveBox_MouseMove;
             LiveListBox.KeyDown += LiveBox_KeyDown;

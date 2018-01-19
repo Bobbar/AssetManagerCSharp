@@ -122,7 +122,7 @@ namespace AssetManager
                                 break;
                         }
                     }
-                    catch (ArgumentException ex)
+                    catch (ArgumentException)
                     {
                         Logging.Logger("Invalid argument: " + Args[i]);
                     }

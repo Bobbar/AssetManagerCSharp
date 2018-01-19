@@ -79,6 +79,7 @@ namespace AssetManager//.Data.DataComms.AssetManager.SQL
         /// <summary>
         /// SELECT * FROM <see cref="HistoricalDevicesCols.TableName"/> WHERE <see cref="DevicesBaseCols.DeviceUID"/> = <paramref name="deviceGUID"/> AND <see cref="HistoricalDevicesCols.ActionDateTime"/> "LESS THAN" <paramref name="startDate"/> ORDER BY <see cref="HistoricalDevicesCols.ActionDateTime"/> DESC
         /// </summary>
+        /// <param name="deviceGUID"></param>
         /// <param name="startDate"></param>
         /// <returns></returns>
         public static string SelectDevHistoricalEntriesOlderThan(string deviceGUID, DateTime startDate)

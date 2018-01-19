@@ -592,7 +592,15 @@ FROM poheader";
             List<DBQueryParameter> Params = new List<DBQueryParameter>();
             @Params.Add(new DBQueryParameter("rqhd_req_no", reqNumber, true));
             @Params.Add(new DBQueryParameter("rqhd_fsc_yr", fiscalYr, true));
-            return await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(Query, @Params));
+
+            DataTable results = await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(Query, @Params));
+
+            if (results.Rows.Count > 0)
+            {
+                return results;
+            }
+            return null;
+            //return await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(Query, @Params));
         }
 
         private async Task<DataTable> GetReqLineItemsFromReqNum(string reqNumber, string fiscalYr)
@@ -656,7 +664,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
                     GridForm NewGridForm = new GridForm(parentForm, "MUNIS Info");
                     if (ReferenceEquals(InventoryTable, null))
                     {
-                        OtherFunctions.Message("Could not pull Munis Fixed Asset info.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "No FA Record");
+                        OtherFunctions.Message("Munis Fixed Asset info. not found.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "No FA Record");
                     }
                     else
                     {
@@ -671,11 +679,20 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
                         NewGridForm.AddGrid("ReqHeadGrid", "Requisition Header:", ReqHeaderTable);
                         NewGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", ReqLinesTable);
                     }
-                    NewGridForm.Show();
+
+                    if (NewGridForm.GridCount > 0)
+                    {
+                        NewGridForm.Show();
+                    }
+                    else
+                    {
+                        NewGridForm.Dispose();
+                    }
+                   
                 }
                 else if (ReferenceEquals(InventoryTable, null) && ReferenceEquals(ReqLinesTable, null))
                 {
-                    OtherFunctions.Message("Could not resolve any Req. or FA info.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Nothing Found");
+                    OtherFunctions.Message("Could not resolve any purchase or Fixed Asset info.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Nothing Found");
                 }
             }
             catch (Exception ex)
@@ -692,7 +709,14 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
         {
             string strFields = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo";
             string Query = "SELECT TOP 1 " + strFields + " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" + device.AssetTag + "' AND fama_tag <> '' OR fama_serial='" + device.Serial + "' AND fama_serial <> ''";
-            return await MunisComms.ReturnSqlTableAsync(Query);
+            DataTable results = await MunisComms.ReturnSqlTableAsync(Query);
+
+            if (results.Rows.Count > 0)
+            {
+                return results;
+            }
+            return null;
+            //return await MunisComms.ReturnSqlTableAsync(Query);
         }
 
         public MunisEmployeeStruct MunisUserSearch(ExtendedForm parentForm)

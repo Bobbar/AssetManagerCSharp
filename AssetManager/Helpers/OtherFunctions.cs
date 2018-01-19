@@ -141,7 +141,7 @@ namespace AssetManager
                     return rtfText;
                 }
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 //If we get an argument error, that means the text is not RTF so we return the plain text.
                 return rtfText;
