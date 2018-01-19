@@ -34,7 +34,7 @@ namespace AssetManager
 
         public LiveBox(Form parentForm)
         {
-            InitializeControl(parentForm);
+            InitializeLiveListBox(parentForm);
         }
 
         #endregion
@@ -171,7 +171,7 @@ namespace AssetManager
 
         }
 
-        private void InitializeControl(Form parentForm)
+        private void InitializeLiveListBox(Form parentForm)
         {
             LiveListBox = new ListBox();
             LiveListBox.Parent = parentForm;
@@ -182,12 +182,20 @@ namespace AssetManager
             LiveListBox.MouseMove += LiveBox_MouseMove;
             LiveListBox.KeyDown += LiveBox_KeyDown;
             LiveListBox.LostFocus += LiveBox_LostFocus;
+            LiveListBox.PreviewKeyDown += LiveBox_PreviewKeyDown;
             LiveListBox.DoubleBufferedListBox(true);
             LiveListBox.Visible = false;
             CurrentLiveBoxArgs = new LiveBoxArgs();
             SetStyle();
         }
 
+        private void LiveBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab)
+            {
+                LiveBoxSelect();
+            }
+        }
 
         private void LiveBox_LostFocus(object sender, EventArgs e)
         {
@@ -196,7 +204,6 @@ namespace AssetManager
 
         private void LiveBox_KeyDown(object sender, KeyEventArgs e)
         {
-
             if (e.KeyCode == Keys.Enter)
             {
                 LiveBoxSelect();
