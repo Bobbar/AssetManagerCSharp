@@ -1,4 +1,9 @@
-﻿using AssetManager.UserInterface.CustomControls;
+﻿using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Data.Functions;
+using AssetManager.Helpers;
+using AssetManager.Security;
+using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AdminTools;
 using System;
 using System.ComponentModel;

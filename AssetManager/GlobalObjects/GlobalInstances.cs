@@ -1,5 +1,7 @@
 using System.Collections.Generic;
-using AssetManager.Data.DataClasses;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Functions;
+
 namespace AssetManager
 {
     internal static class GlobalInstances

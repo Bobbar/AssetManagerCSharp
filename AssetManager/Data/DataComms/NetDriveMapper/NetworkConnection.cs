@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Net;
 using System.Runtime.InteropServices;
 
-namespace AssetManager.Data.DataComms
+namespace AssetManager.Data.Communications
 {
     /// <summary>
     /// Credit to: http://stackoverflow.com/questions/295538/how-to-provide-user-name-and-password-when-connecting-to-a-network-share

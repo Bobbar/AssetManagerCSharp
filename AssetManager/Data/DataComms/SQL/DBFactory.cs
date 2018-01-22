@@ -1,3 +1,5 @@
+using AssetManager.Data.Communications;
+
 namespace AssetManager.Data
 {
     public static class DBFactory

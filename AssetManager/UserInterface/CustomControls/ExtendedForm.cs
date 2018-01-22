@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 using AssetManager.Helpers;
-using AssetManager.Data.DataClasses;
+using AssetManager.Data.Classes;
 
 namespace AssetManager.UserInterface.CustomControls
 {

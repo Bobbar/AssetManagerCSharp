@@ -1,4 +1,9 @@
-﻿using System;
+﻿using AssetManager.Data;
+using AssetManager.Data.Communications;
+using AssetManager.Data.Functions;
+using AssetManager.Helpers;
+using AssetManager.Security;
+using System;
 using System.Threading;
 using System.Windows.Forms;
 

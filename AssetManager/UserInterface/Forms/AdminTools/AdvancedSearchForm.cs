@@ -1,4 +1,11 @@
 ﻿using AssetManager.UserInterface.CustomControls;
+using AssetManager.Data;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Data.Functions;
+using AssetManager.Helpers;
+using AssetManager.Security;
+using AssetManager.Tools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +16,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 {
     public partial class AdvancedSearchForm : ExtendedForm
     {
-        private DatabaseHelperFunctions.AdvancedSearch AdvSearch = new DatabaseHelperFunctions.AdvancedSearch();
+        private AdvancedSearch AdvSearch = new AdvancedSearch();
 
 
         public AdvancedSearchForm(ExtendedForm parentForm)
@@ -69,7 +76,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             try
             {
                 OtherFunctions.SetWaitCursor(true, ParentForm);
-                AdvSearch = new DatabaseHelperFunctions.AdvancedSearch(SearchStringTextBox.Text.Trim(), GetSelectedTables()); // GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
+                AdvSearch = new AdvancedSearch(SearchStringTextBox.Text.Trim(), GetSelectedTables()); // GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
                 GridForm DisplayGrid = new GridForm(ParentForm, "Advanced Search Results");
 
                 List<DataTable> Tables = await Task.Run(() =>
@@ -93,14 +100,14 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             }
         }
 
-        private List<DatabaseHelperFunctions.TableInfo> GetSelectedTables()
+        private List<TableInfo> GetSelectedTables()
         {
-            List<DatabaseHelperFunctions.TableInfo> tables = new List<DatabaseHelperFunctions.TableInfo>();
+            List<TableInfo> tables = new List<TableInfo>();
             foreach (TreeNode node in TableTree.Nodes)
             {
                 if (node.Checked)
                 {
-                    tables.Add(new DatabaseHelperFunctions.TableInfo(node.Text, GetSelectedColumns(node)));
+                    tables.Add(new TableInfo(node.Text, GetSelectedColumns(node)));
                 }
             }
             return tables;

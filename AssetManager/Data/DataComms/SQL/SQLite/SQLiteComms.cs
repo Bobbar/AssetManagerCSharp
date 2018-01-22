@@ -6,10 +6,10 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using AssetManager.Security;
-using AssetManager.Data.DataFunctions;
+using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 
-namespace AssetManager.Data.DataComms
+namespace AssetManager.Data.Communications
 {
     public class SQLiteDatabase : IDisposable, IDataBase
     {

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Data;
-using AssetManager.Data.DataComms;
+using AssetManager.Data.Communications;
 using AssetManager.Helpers;
-namespace AssetManager.Data.DataFunctions
+namespace AssetManager.Data.Functions
 {
     public class AdvancedSearch
     {

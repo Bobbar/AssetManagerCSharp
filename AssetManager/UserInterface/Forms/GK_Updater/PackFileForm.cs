@@ -1,4 +1,5 @@
-﻿using AssetManager.UserInterface.CustomControls;
+﻿using AssetManager.Helpers;
+using AssetManager.UserInterface.CustomControls;
 using System;
 using System.Windows.Forms;
 

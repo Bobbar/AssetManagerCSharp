@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
-using AssetManager.Data.DataClasses;
+using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 
-namespace AssetManager.Data.DataFunctions
+namespace AssetManager.Data.Functions
 {
     /// <summary>
     /// Determines how the parser handles the updating and filling of a control.
@@ -24,7 +24,7 @@ namespace AssetManager.Data.DataFunctions
     }
 }
 
-namespace AssetManager.Data.DataFunctions
+namespace AssetManager.Data.Functions
 {
     /// <summary>
     /// Instantiate and assign to <see cref="Control.Tag"/> property to enable DBParsing functions.
@@ -131,7 +131,7 @@ namespace AssetManager.Data.DataFunctions
     }
 }
 
-namespace AssetManager.Data.DataFunctions
+namespace AssetManager.Data.Functions
 {
     public struct DBRemappingInfo
     {
@@ -146,7 +146,7 @@ namespace AssetManager.Data.DataFunctions
     }
 }
 
-namespace AssetManager.Data.DataFunctions
+namespace AssetManager.Data.Functions
 {
     public class DBControlParser
     {

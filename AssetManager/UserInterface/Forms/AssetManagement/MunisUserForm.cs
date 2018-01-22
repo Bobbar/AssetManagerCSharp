@@ -1,3 +1,7 @@
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Data.Functions;
+using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
 using System;
 using System.Data;

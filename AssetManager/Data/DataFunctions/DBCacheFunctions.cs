@@ -8,9 +8,9 @@ using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using AssetManager.Helpers;
-using AssetManager.Data.DataComms;
+using AssetManager.Data.Communications;
 
-namespace AssetManager.Data.DataFunctions
+namespace AssetManager.Data.Functions
 {
     public static class DBCacheFunctions
     {

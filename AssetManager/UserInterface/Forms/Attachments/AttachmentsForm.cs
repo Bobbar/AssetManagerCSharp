@@ -1,7 +1,12 @@
-﻿using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms.AssetManagement;
-using AssetManager.UserInterface.Forms.Sibi;
-using AssetManager.Data;
+﻿using AssetManager.Data;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Data.Functions;
+using AssetManager.Helpers;
+using AssetManager.Security;
+using AssetManager.Tools;
+using AssetManager.UserInterface.CustomControls;
+using MyDialogLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -14,8 +19,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MyDialogLib;
-using AssetManager.Tools;
 
 
 namespace AssetManager.UserInterface.Forms

@@ -1,4 +1,8 @@
 using AssetManager.UserInterface.CustomControls;
+using AssetManager.Data.Classes;
+using AssetManager.Data;
+using AssetManager.Data.Communications;
+using AssetManager.Helpers;
 using System;
 using System.Data;
 

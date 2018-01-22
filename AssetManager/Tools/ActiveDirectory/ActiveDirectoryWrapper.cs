@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.DirectoryServices;
+using AssetManager.Data;
+using AssetManager.Security;
 
-namespace AssetManager.Tools.ActiveDirectory
+namespace AssetManager.Tools
 {
     public class ActiveDirectoryWrapper
     {

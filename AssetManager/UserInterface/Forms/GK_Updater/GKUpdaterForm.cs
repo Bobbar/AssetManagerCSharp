@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AssetManager.UserInterface.CustomControls;
+using AssetManager.Data.Classes;
+using AssetManager.Helpers;
+using AssetManager.Security;
+
 
 namespace AssetManager.UserInterface.Forms.GK_Updater
 {

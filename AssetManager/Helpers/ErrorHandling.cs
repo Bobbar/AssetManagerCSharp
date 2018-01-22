@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using AssetManager.Security;
 using AssetManager.Data;
-using AssetManager.Data.DataComms;
+using AssetManager.Data.Communications;
 
 namespace AssetManager.Helpers
 {

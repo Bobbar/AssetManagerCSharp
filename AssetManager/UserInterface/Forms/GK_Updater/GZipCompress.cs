@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using AssetManager.Tools;
 
 namespace AssetManager.UserInterface.Forms.GK_Updater
 {

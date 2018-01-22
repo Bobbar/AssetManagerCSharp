@@ -1,4 +1,4 @@
-﻿namespace AssetManager.UserInterface.CustomControls.RemoteTools
+﻿namespace AssetManager.UserInterface.CustomControls
 {
     partial class RemoteToolsControl
     {

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Drawing;
 using AssetManager.Helpers;
-using AssetManager.Data.DataComms;
-using AssetManager.Data.DataClasses;
-namespace AssetManager.Data.DataFunctions
+using AssetManager.Data.Communications;
+using AssetManager.Data.Classes;
+namespace AssetManager.Data.Functions
 {
     static class AttributeFunctions
     {

@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Data;
 using AssetManager.Helpers;
 
-namespace AssetManager.Data.DataComms
+namespace AssetManager.Data.Communications
 {
 
     public class MunisComms

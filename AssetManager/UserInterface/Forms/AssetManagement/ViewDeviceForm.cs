@@ -1,6 +1,13 @@
 ﻿using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms.Attachments;
 using AssetManager.UserInterface.Forms.Sibi;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Functions;
+using AssetManager.Data.Communications;
+using AssetManager.Data;
+using AssetManager.Helpers;
+using AssetManager.Tools;
+using AssetManager.Security;
+using AssetManager.Business;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -1070,7 +1077,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void remoteToolsControl_NewStatusPrompt(object sender, CustomControls.RemoteTools.RemoteToolsControl.StatusPrompt e)
+        private void remoteToolsControl_NewStatusPrompt(object sender, RemoteToolsControl.StatusPrompt e)
         {
             statusSlider.NewSlideMessage(e.Message, e.DisplayTime);
         }

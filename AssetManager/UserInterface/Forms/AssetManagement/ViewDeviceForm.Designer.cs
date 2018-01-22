@@ -112,7 +112,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.iCloudTextBox = new System.Windows.Forms.TextBox();
             this.Label17 = new System.Windows.Forms.Label();
             this.RemoteTrackingPanel = new System.Windows.Forms.Panel();
-            this.remoteToolsControl = new AssetManager.UserInterface.CustomControls.RemoteTools.RemoteToolsControl();
+            this.remoteToolsControl = new RemoteToolsControl();
             this.ToolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.TrackingToolStrip = new System.Windows.Forms.ToolStrip();
             this.TrackingDropDown = new System.Windows.Forms.ToolStripDropDownButton();
@@ -1087,7 +1087,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.remoteToolsControl.Name = "remoteToolsControl";
             this.remoteToolsControl.Size = new System.Drawing.Size(422, 103);
             this.remoteToolsControl.TabIndex = 42;
-            this.remoteToolsControl.NewStatusPrompt += new System.EventHandler<AssetManager.UserInterface.CustomControls.RemoteTools.RemoteToolsControl.StatusPrompt>(this.remoteToolsControl_NewStatusPrompt);
+            this.remoteToolsControl.NewStatusPrompt += new System.EventHandler<RemoteToolsControl.StatusPrompt>(this.remoteToolsControl_NewStatusPrompt);
             this.remoteToolsControl.VisibleChanging += new System.EventHandler<bool>(this.remoteToolsControl_VisibleChanging);
             // 
             // ToolStripContainer1
@@ -1441,7 +1441,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal ToolStripStatusLabel StatusLabel;
         internal SplitContainer InfoDataSplitter;
         internal Panel Panel3;
-        private CustomControls.RemoteTools.RemoteToolsControl remoteToolsControl;
+        private RemoteToolsControl remoteToolsControl;
         private Label PingHistLabel;
     }
 }

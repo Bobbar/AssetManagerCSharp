@@ -4,7 +4,7 @@ using System.IO;
 using AssetManager.Data;
 using AssetManager.Security;
 
-namespace AssetManager.Data.DataClasses
+namespace AssetManager.Data.Classes
 {
     public class Attachment : IDisposable
     {

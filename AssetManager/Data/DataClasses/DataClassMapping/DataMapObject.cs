@@ -4,7 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 
-namespace AssetManager.Data.DataClasses
+namespace AssetManager.Data.Classes
 {
     /// <summary>
     /// Data mapper for classes tagged with <see cref="DataColumnNameAttribute"/>

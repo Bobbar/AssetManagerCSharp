@@ -1,5 +1,5 @@
 using System;
-namespace AssetManager.Data.DataComms
+namespace AssetManager.Data.Communications
 {
     public class NoPingException : Exception
 	{

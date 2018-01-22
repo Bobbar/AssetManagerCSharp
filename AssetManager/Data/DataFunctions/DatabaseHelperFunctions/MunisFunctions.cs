@@ -7,11 +7,11 @@ using System.Data;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AssetManager.UserInterface.Forms.AssetManagement;
-using AssetManager.Data.DataComms;
-using AssetManager.Data.DataClasses;
+using AssetManager.Data.Communications;
+using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 
-namespace AssetManager.Data.DataFunctions
+namespace AssetManager.Data.Functions
 {
     public class MunisFunctions //Be warned. This whole class is a horrible bastard...
     {

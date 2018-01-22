@@ -5,10 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
-using AssetManager.Data.DataComms;
+using AssetManager.Data.Communications;
 using AssetManager.Helpers;
 
-namespace AssetManager.Data.DataFunctions.DatabaseHelperFunctions
+namespace AssetManager.Data.Functions
 {
     public class FtpFunctions
     {

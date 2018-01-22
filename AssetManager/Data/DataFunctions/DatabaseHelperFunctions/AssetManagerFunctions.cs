@@ -6,12 +6,12 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using System.Threading.Tasks;
-using AssetManager.Data.DataClasses;
-using AssetManager.Data.DataComms;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
 using AssetManager.Helpers;
 
 
-namespace AssetManager.Data.DataFunctions
+namespace AssetManager.Data.Functions
 {
     public static class AssetManagerFunctions
     {

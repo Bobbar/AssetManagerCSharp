@@ -3,6 +3,11 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using AssetManager.Data.Classes;
+using AssetManager.Tools;
+using AssetManager.Helpers;
+using AssetManager.Security;
+
 
 namespace AssetManager.UserInterface.Forms.GK_Updater
 {

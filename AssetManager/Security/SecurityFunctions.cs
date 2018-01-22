@@ -11,8 +11,8 @@ using System;
 using AssetManager.UserInterface.Forms;
 using AssetManager.Helpers;
 using AssetManager.Data;
-using AssetManager.Data.DataClasses;
-using AssetManager.Data.DataComms;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
 
 
 

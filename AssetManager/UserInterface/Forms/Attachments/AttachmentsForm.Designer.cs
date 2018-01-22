@@ -1,5 +1,5 @@
 using System.Windows.Forms;
-namespace AssetManager.UserInterface.Forms.Attachments
+namespace AssetManager.UserInterface.Forms
 {
 
 

@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data;
 using System.Drawing;
-using AssetManager.UserInterface.Forms.Attachments;
 using AssetManager.UserInterface.Forms.AssetManagement;
-using AssetManager.UserInterface.Forms.Sibi;
-using AssetManager.UserInterface.Forms.GK_Updater;
-using AssetManager.UserInterface.Forms.AdminTools;
+using AssetManager.Data;
+using AssetManager.Data.Classes;
+using AssetManager.Helpers;
 using System.Diagnostics;
 
 namespace AssetManager.UserInterface.CustomControls

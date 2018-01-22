@@ -1,12 +1,19 @@
-﻿using PingVisLib;
+﻿using AssetManager.Data;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Helpers;
+using AssetManager.Security;
+using AssetManager.Tools;
+using AssetManager.Tools.TeamViewer;
+using PingVisLib;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.ComponentModel;
 
-namespace AssetManager.UserInterface.CustomControls.RemoteTools
+namespace AssetManager.UserInterface.CustomControls
 {
     public partial class RemoteToolsControl : UserControl
     {

@@ -1,5 +1,5 @@
 using System.Drawing;
-namespace AssetManager.Data.DataClasses
+namespace AssetManager.Data.Classes
 {
     public struct AttributeDataStruct
     {
@@ -25,7 +25,7 @@ namespace AssetManager.Data.DataClasses
         }
     }
 }
-namespace AssetManager.Data.DataClasses
+namespace AssetManager.Data.Classes
 {
 
     public struct DeviceUpdateInfoStruct
@@ -34,7 +34,7 @@ namespace AssetManager.Data.DataClasses
         public string ChangeType;
     }
 }
-namespace AssetManager.Data.DataClasses
+namespace AssetManager.Data.Classes
 {
 
     public struct LocalUserInfoStruct
@@ -54,7 +54,7 @@ namespace AssetManager.Data.DataClasses
     }
 
 }
-namespace AssetManager.Data.DataClasses
+namespace AssetManager.Data.Classes
 {
 
     public class MunisEmployeeStruct
@@ -78,7 +78,7 @@ namespace AssetManager.Data.DataClasses
         }
     }
 }
-namespace AssetManager.Data.DataClasses
+namespace AssetManager.Data.Classes
 {
 
     public struct SmartEmpSearchStruct

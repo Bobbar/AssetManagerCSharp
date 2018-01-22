@@ -1,3 +1,5 @@
+using AssetManager.Data.Classes;
+using AssetManager.Data.Functions;
 using AssetManager.UserInterface.CustomControls;
 using System;
 using System.ComponentModel;

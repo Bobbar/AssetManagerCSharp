@@ -1,3 +1,9 @@
+using AssetManager.Data;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Data.Functions;
+using AssetManager.Helpers;
+using AssetManager.Tools;
 using AssetManager.UserInterface.CustomControls;
 using System;
 using System.Collections.Generic;
@@ -5,9 +11,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
@@ -170,7 +176,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
 
             // Get a new AdvancedSearch instance.
-            DatabaseHelperFunctions.AdvancedSearch AdvSearch = new DatabaseHelperFunctions.AdvancedSearch();
+            AdvancedSearch AdvSearch = new AdvancedSearch();
 
             // Perform search on Request Items table
             using (DataTable results = AdvSearch.GetSingleTableResults(searchString.Trim(), SibiRequestItemsCols.TableName))

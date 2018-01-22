@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetManager.Data.DataComms
+namespace AssetManager.Data.Communications
 {
     public static class Queries
     {

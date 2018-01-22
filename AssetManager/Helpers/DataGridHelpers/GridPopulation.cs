@@ -1,11 +1,12 @@
-using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Functions;
+using AssetManager.Tools;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 
-namespace AssetManager.Helpers.DataGridHelpers
+namespace AssetManager.Helpers
 {
     public static class GridPopulation
     {

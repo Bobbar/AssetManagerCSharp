@@ -1,5 +1,12 @@
 ﻿using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AdminTools;
+using AssetManager.Data;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Data.Functions;
+using AssetManager.Helpers;
+using AssetManager.Security;
+using AssetManager.Tools;
 using MyDialogLib;
 using System;
 using System.Collections.Generic;
@@ -533,7 +540,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 else
                 {
-                   ResultGrid.Populate(results, ResultGridColumns());
+                    ResultGrid.Populate(results, ResultGridColumns());
                 }
 
                 // If currently in a transaction, use the native resizing method as the datatable is bound to an unmodified datatable.

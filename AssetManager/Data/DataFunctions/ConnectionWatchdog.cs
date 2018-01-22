@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.NetworkInformation;
-using MySql.Data;
+﻿using AssetManager.Data.Communications;
 using MySql.Data.MySqlClient;
+using System;
+using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 
-
-namespace AssetManager.Data.DataFunctions
+namespace AssetManager.Data.Functions
 {
 
     public class ConnectionWatchdog : IDisposable

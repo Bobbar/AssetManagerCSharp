@@ -6,7 +6,7 @@ using System.Data.Common;
 using AssetManager.Security;
 
 
-namespace AssetManager.Data.DataComms
+namespace AssetManager.Data.Communications
 {
     public class MySQLDatabase : IDisposable, IDataBase
     {
