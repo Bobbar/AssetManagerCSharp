@@ -83,7 +83,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (!string.IsNullOrEmpty(SelectedEmpInfo.Name) && !string.IsNullOrEmpty(SelectedEmpInfo.Number))
             {
-                GlobalInstances.AssetFunc.AddNewEmp(SelectedEmpInfo);
+                AssetManagerFunctions.AddNewEmp(SelectedEmpInfo);
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using AssetManager.UserInterface.CustomControls;
 
-namespace AssetManager
+namespace AssetManager.Business
 {
     public class PdfFormFilling
     {
@@ -258,9 +258,9 @@ namespace AssetManager
             //.SetField("topmostSubform[0].Page1[0]._1[0]", "6")
             // .SetField("topmostSubform[0].Page1[0]._2[0]", "7")
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_4[0]", Device.PO);
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_5[0]",GlobalInstances.AssetFunc.GetMunisCodeFromAssetCode(Device.Location));
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_5[0]",AssetManagerFunctions.GetMunisCodeFromAssetCode(Device.Location));
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_6[0]", AttributeFunctions.DepartmentOf(Device.Location));
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_7[0]",GlobalInstances.AssetFunc.GetMunisCodeFromAssetCode(Device.EquipmentType));
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_7[0]",AssetManagerFunctions.GetMunisCodeFromAssetCode(Device.EquipmentType));
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_8[0]", "GP");
             //.SetField("topmostSubform[0].Page1[0].undefined_9[0]", "13")
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_10[0]", "1");

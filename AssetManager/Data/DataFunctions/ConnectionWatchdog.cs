@@ -8,7 +8,7 @@ using MySql.Data;
 using MySql.Data.MySqlClient;
 
 
-namespace AssetManager
+namespace AssetManager.Data.DataFunctions
 {
 
     public class ConnectionWatchdog : IDisposable

@@ -1,8 +1,10 @@
 using System;
 using System.Data;
 using System.IO;
+using AssetManager.Data;
+using AssetManager.Security;
 
-namespace AssetManager
+namespace AssetManager.Data.DataClasses
 {
     public class Attachment : IDisposable
     {

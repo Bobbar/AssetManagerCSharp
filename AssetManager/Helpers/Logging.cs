@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-namespace AssetManager
+namespace AssetManager.Helpers
 {
 
     static class Logging

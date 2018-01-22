@@ -1,6 +1,6 @@
 using System;
 using System.Windows.Forms;
-namespace AssetManager
+namespace AssetManager.UserInterface.CustomControls
 {
     public class CorrectedTreeView : TreeView
     {

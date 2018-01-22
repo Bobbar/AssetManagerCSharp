@@ -1,6 +1,7 @@
 using System.Data;
+using AssetManager.Data.DataComms;
 
-namespace AssetManager
+namespace AssetManager.Data.DataClasses
 {
     public class DeviceMapObject : DataMapObject
     {
@@ -101,7 +102,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.Data.DataClasses
 {
     public class SibiRequestMapObject : DataMapObject
     {
@@ -171,7 +172,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.Data.DataClasses
 {
     public class DeviceHistoricalMapObject : DataMapObject
     {
@@ -206,7 +207,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.Data.DataClasses
 {
     public class DeviceTrackingMapObject : DataMapObject
     {
@@ -255,7 +256,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.Data.DataClasses
 {
     public class AccessGroupMapObject : DataMapObject
     {

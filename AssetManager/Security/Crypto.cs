@@ -1,7 +1,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace AssetManager
+namespace AssetManager.Security
 {
     public class Simple3Des : IDisposable
     {

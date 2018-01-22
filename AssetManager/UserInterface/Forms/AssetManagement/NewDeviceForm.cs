@@ -56,7 +56,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             using (var results = DBFactory.GetDatabase().DataTableFromQueryString(itemQuery))
             {
                 controlParser.FillDBFields(results, ImportColumnRemaps());
-                MunisUser = GlobalInstances.AssetFunc.SmartEmployeeSearch(results.Rows[0][SibiRequestItemsCols.User].ToString().ToUpper());
+                MunisUser = AssetManagerFunctions.SmartEmployeeSearch(results.Rows[0][SibiRequestItemsCols.User].ToString().ToUpper());
                 POPurchaseDate = GlobalInstances.MunisFunc.GetPODate(results.Rows[0][SibiRequestCols.PO].ToString());
             }
 
@@ -88,7 +88,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 else
                 {
-                    if (GlobalInstances.AssetFunc.DeviceExists(AssetTagTextBox.Text.ToString().Trim(), SerialTextBox.Text.ToString().Trim()))
+                    if (AssetManagerFunctions.DeviceExists(AssetTagTextBox.Text.ToString().Trim(), SerialTextBox.Text.ToString().Trim()))
                     {
                         OtherFunctions.Message("A device with that serial and/or asset tag already exists.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Duplicate Device", this);
                         return;

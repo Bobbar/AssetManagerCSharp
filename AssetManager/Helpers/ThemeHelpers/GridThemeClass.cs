@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace AssetManager
+namespace AssetManager.Helpers
 {
     public class GridTheme
     {

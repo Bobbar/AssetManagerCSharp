@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AssetManager.Security;
 
-namespace AssetManager
+namespace AssetManager.Data
 {
     public static class NetworkInfo
     {
@@ -37,13 +38,13 @@ namespace AssetManager
 
         public static string LocationOfIP(string ip)
         {
-        
+
             try
             {
                 string Subnet = ip.Substring(0, 8) + ".0";
                 if (SubnetLocations.ContainsKey(Subnet))
                 {
-                    
+
                     return SubnetLocations[Subnet];
                 }
                 else

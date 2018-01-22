@@ -9,8 +9,11 @@ using System.Text;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AssetManager.Data;
+using AssetManager.Security;
+using AssetManager.Helpers;
 
-namespace AssetManager
+namespace AssetManager.Tools
 {
     public class PowerShellWrapper
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
-namespace AssetManager
+namespace AssetManager.Tools
 {
     public class FileIcon
     {

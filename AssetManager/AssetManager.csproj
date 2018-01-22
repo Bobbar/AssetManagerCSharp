@@ -172,20 +172,20 @@
     <Compile Include="Data\DataClasses\DataClassMapping\DataMapObject.cs" />
     <Compile Include="Data\DataClasses\DataClassMapping\MappableClasses.cs" />
     <Compile Include="Data\DataClasses\DataStructures.cs" />
-    <Compile Include="Data\DataComms\AssetManager\DBFactory.cs" />
-    <Compile Include="Data\DataComms\AssetManager\DBParameter.cs" />
-    <Compile Include="Data\DataComms\AssetManager\FTP\FTPComms.cs" />
-    <Compile Include="Data\DataComms\AssetManager\ServerInfo.cs" />
-    <Compile Include="Data\DataComms\AssetManager\SQL\DataColumns.cs" />
-    <Compile Include="Data\DataComms\AssetManager\SQL\DataInterface.cs" />
-    <Compile Include="Data\DataComms\AssetManager\SQL\MySQL\MySQLComms.cs" />
-    <Compile Include="Data\DataComms\AssetManager\SQL\MySQL\NoPingException.cs" />
-    <Compile Include="Data\DataComms\AssetManager\SQL\Queries.cs" />
-    <Compile Include="Data\DataComms\AssetManager\SQL\SQLite\SQLiteComms.cs" />
+    <Compile Include="Data\DataComms\SQL\DBFactory.cs" />
+    <Compile Include="Data\DataComms\SQL\DBParameter.cs" />
+    <Compile Include="Data\DataComms\FTP\FTPComms.cs" />
+    <Compile Include="Data\DataComms\ServerInfo.cs" />
+    <Compile Include="Data\DataColumns.cs" />
+    <Compile Include="Data\DataComms\SQL\DataInterface.cs" />
+    <Compile Include="Data\DataComms\SQL\MySQL\MySQLComms.cs" />
+    <Compile Include="Data\DataComms\SQL\MySQL\NoPingException.cs" />
+    <Compile Include="Data\DataComms\SQL\Queries.cs" />
+    <Compile Include="Data\DataComms\SQL\SQLite\SQLiteComms.cs" />
     <Compile Include="Data\DataComms\Munis\MunisComms.cs" />
     <Compile Include="Data\DataComms\NetDriveMapper\NetworkConnection.cs" />
     <Compile Include="Data\DataFunctions\ClientSideFunctions\AttribIndexFunctions.cs" />
-    <Compile Include="Data\DataFunctions\ClientSideFunctions\DataConsistency.cs" />
+    <Compile Include="Data\DataConsistency.cs" />
     <Compile Include="Data\DataFunctions\ConnectionWatchdog.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AdvancedSearch.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AssetManagerFunctions.cs" />
@@ -220,9 +220,9 @@
     <Compile Include="StartProgram.cs" />
     <Compile Include="Tools\ActiveDirectory\ActiveDirectoryWrapper.cs" />
     <Compile Include="Tools\FileIcon.cs" />
-    <Compile Include="Tools\NetworkInfo.cs" />
+    <Compile Include="Data\NetworkInfo.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedImages.cs" />
-    <Compile Include="Tools\PowerShell\PowerShellWrapper.cs" />
+    <Compile Include="Tools\PowerShellWrapper.cs" />
     <Compile Include="Tools\ProgressCounter.cs" />
     <Compile Include="Tools\TeamViewer\TeamViewerDeploy.cs" />
     <Compile Include="UserInterface\CustomControls\CorrectedTreeView.cs">
@@ -325,7 +325,7 @@
     <Compile Include="UserInterface\Forms\AssetManagement\ViewTrackingForm.Designer.cs">
       <DependentUpon>ViewTrackingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\Attachments\AttachmentObject.cs" />
+    <Compile Include="Data\DataClasses\AttachmentObject.cs" />
     <Compile Include="UserInterface\Forms\Attachments\AttachmentsForm.cs">
       <SubType>Form</SubType>
     </Compile>

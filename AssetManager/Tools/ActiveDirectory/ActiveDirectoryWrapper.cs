@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.DirectoryServices;
 
-namespace AssetManager
+namespace AssetManager.Tools.ActiveDirectory
 {
     public class ActiveDirectoryWrapper
     {

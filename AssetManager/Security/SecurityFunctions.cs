@@ -9,9 +9,14 @@ using System.Windows.Forms;
 using System.Data;
 using System;
 using AssetManager.UserInterface.Forms;
+using AssetManager.Helpers;
+using AssetManager.Data;
+using AssetManager.Data.DataClasses;
+using AssetManager.Data.DataComms;
 
 
-namespace AssetManager
+
+namespace AssetManager.Security
 {
     public static class SecurityTools
     {

@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-namespace AssetManager
+using AssetManager.Helpers;
+namespace AssetManager.Data
 {
 
     static class DataConsistency

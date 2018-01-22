@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
 using MyDialogLib;
-namespace AssetManager
+namespace AssetManager.Helpers
 {
 
     static class OtherFunctions

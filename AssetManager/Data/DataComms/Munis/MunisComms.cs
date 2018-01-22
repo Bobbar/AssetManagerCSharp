@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
+using AssetManager.Helpers;
 
-namespace AssetManager
+namespace AssetManager.Data.DataComms
 {
 
     public class MunisComms

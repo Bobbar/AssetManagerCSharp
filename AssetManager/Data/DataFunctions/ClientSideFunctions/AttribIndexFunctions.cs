@@ -5,7 +5,10 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Drawing;
-namespace AssetManager
+using AssetManager.Helpers;
+using AssetManager.Data.DataComms;
+using AssetManager.Data.DataClasses;
+namespace AssetManager.Data.DataFunctions
 {
     static class AttributeFunctions
     {

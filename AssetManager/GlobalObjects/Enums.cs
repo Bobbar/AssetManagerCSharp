@@ -7,7 +7,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.GlobalObjects
 {
     public enum PdfFormType
     {
@@ -17,7 +17,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.GlobalObjects
 {
     public enum LiveBoxType
     {
@@ -37,7 +37,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.GlobalObjects
 {
     public enum CommandArgs
     {
@@ -46,7 +46,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.Data
 {
     public enum Databases
     {

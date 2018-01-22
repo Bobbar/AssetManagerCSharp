@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Data;
-
-namespace AssetManager.DatabaseHelperFunctions
+using AssetManager.Data.DataComms;
+using AssetManager.Helpers;
+namespace AssetManager.Data.DataFunctions
 {
     public class AdvancedSearch
     {
@@ -35,7 +36,7 @@ namespace AssetManager.DatabaseHelperFunctions
         {
             List<string> colList = new List<string>();
             var SQLQry = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" + ServerInfo.CurrentDataBase.ToString() + "' AND TABLE_NAME = '" + table + "'";
-            var results = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(SQLQry);
+            var results = DBFactory.GetDatabase().DataTableFromQueryString(SQLQry);
             foreach (DataRow row in results.Rows)
             {
                 colList.Add(row["COLUMN_NAME"].ToString());

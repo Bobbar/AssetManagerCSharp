@@ -13,7 +13,7 @@ using AssetManager.UserInterface.Forms.GK_Updater;
 using AssetManager.UserInterface.Forms.AdminTools;
 using System.Diagnostics;
 
-namespace AssetManager
+namespace AssetManager.UserInterface.CustomControls
 {
     public class LiveBox : IDisposable
     {

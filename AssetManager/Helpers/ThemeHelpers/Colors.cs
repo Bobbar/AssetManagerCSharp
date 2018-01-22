@@ -1,6 +1,6 @@
 using System.Drawing;
 using System;
-namespace AssetManager
+namespace AssetManager.Helpers
 {
     internal static class Colors
     {

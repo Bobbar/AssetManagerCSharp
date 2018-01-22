@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace AssetManager
+namespace AssetManager.Tools
 {
     /// <summary>
     ///  These methods allow me to add a single line after the

@@ -1,7 +1,8 @@
 using System.Net;
 using System.IO;
+using AssetManager.Security;
 
-namespace AssetManager
+namespace AssetManager.Data.DataComms
 {
 
     public class FtpComms

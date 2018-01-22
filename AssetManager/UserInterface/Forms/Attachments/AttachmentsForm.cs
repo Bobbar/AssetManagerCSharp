@@ -1,6 +1,7 @@
 ﻿using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AssetManagement;
 using AssetManager.UserInterface.Forms.Sibi;
+using AssetManager.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -14,8 +15,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MyDialogLib;
+using AssetManager.Tools;
 
-namespace AssetManager.UserInterface.Forms.Attachments
+
+namespace AssetManager.UserInterface.Forms
 {
     public partial class AttachmentsForm : ExtendedForm
     {
@@ -524,7 +527,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
             {
                 Waiting();
                 RightClickMenu.Close();
-                GlobalInstances.AssetFunc.UpdateSqlValue(_attachTable.TableName, _attachTable.Folder, Folder, _attachTable.FileUID, AttachUID);
+                AssetManagerFunctions.UpdateSqlValue(_attachTable.TableName, _attachTable.Folder, Folder, _attachTable.FileUID, AttachUID);
                 if (isNew)
                 {
                     PopulateFolderList(Folder);
@@ -695,7 +698,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
 
         private void UpdateDbAttachementName(string AttachUID, string NewFileName)
         {
-            GlobalInstances.AssetFunc.UpdateSqlValue(_attachTable.TableName, _attachTable.FileName, NewFileName, _attachTable.FileUID, AttachUID);
+            AssetManagerFunctions.UpdateSqlValue(_attachTable.TableName, _attachTable.FileName, NewFileName, _attachTable.FileUID, AttachUID);
         }
 
         private void BeginRenameAttachment()
@@ -759,7 +762,7 @@ namespace AssetManager.UserInterface.Forms.Attachments
                 if (blah == DialogResult.Yes)
                 {
                     Waiting();
-                    if (GlobalInstances.AssetFunc.DeleteSqlAttachment(GetSQLAttachment(AttachUID)) > 0)
+                    if (AssetManagerFunctions.DeleteSqlAttachment(GetSQLAttachment(AttachUID)) > 0)
                     {
                         ListAttachments();
                     }

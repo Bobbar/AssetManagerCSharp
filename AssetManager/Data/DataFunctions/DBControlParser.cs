@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
+using AssetManager.Data.DataClasses;
+using AssetManager.Helpers;
 
-namespace AssetManager
+namespace AssetManager.Data.DataFunctions
 {
     /// <summary>
     /// Determines how the parser handles the updating and filling of a control.
@@ -22,7 +24,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.Data.DataFunctions
 {
     /// <summary>
     /// Instantiate and assign to <see cref="Control.Tag"/> property to enable DBParsing functions.
@@ -129,7 +131,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.Data.DataFunctions
 {
     public struct DBRemappingInfo
     {
@@ -144,7 +146,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.Data.DataFunctions
 {
     public class DBControlParser
     {
@@ -479,7 +481,7 @@ namespace AssetManager
         public DataTable ReturnInsertTable(string selectQry)
         {
             DataTable tmpTable = null;
-            tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(selectQry);
+            tmpTable = DBFactory.GetDatabase().DataTableFromQueryString(selectQry);
             tmpTable.Rows.Add();
             UpdateDBControlRow(tmpTable.Rows[0]);
             return tmpTable;
@@ -498,7 +500,7 @@ namespace AssetManager
         public DataTable ReturnUpdateTable(string selectQry)
         {
             DataTable tmpTable = new DataTable();
-            tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(selectQry);
+            tmpTable = DBFactory.GetDatabase().DataTableFromQueryString(selectQry);
             tmpTable.TableName = "UpdateTable";
             UpdateDBControlRow(tmpTable.Rows[0]);
             return tmpTable;

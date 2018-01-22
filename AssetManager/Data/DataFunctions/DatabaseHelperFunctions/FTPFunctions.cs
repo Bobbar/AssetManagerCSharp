@@ -5,8 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
+using AssetManager.Data.DataComms;
+using AssetManager.Helpers;
 
-namespace AssetManager
+namespace AssetManager.Data.DataFunctions.DatabaseHelperFunctions
 {
     public class FtpFunctions
     {
@@ -157,11 +159,11 @@ Missing Files: " + MissingSQLFiles.Count;
         private bool CheckForPrimaryItem(string itemUID)
         {
             bool exists = false;
-            if (!string.IsNullOrEmpty(GlobalInstances.AssetFunc.GetSqlValue(DevicesCols.TableName, DevicesCols.DeviceUID, itemUID, DevicesCols.DeviceUID)))
+            if (!string.IsNullOrEmpty(AssetManagerFunctions.GetSqlValue(DevicesCols.TableName, DevicesCols.DeviceUID, itemUID, DevicesCols.DeviceUID)))
             {
                 exists = true;
             }
-            if (!string.IsNullOrEmpty(GlobalInstances.AssetFunc.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.UID, itemUID, SibiRequestCols.UID)))
+            if (!string.IsNullOrEmpty(AssetManagerFunctions.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.UID, itemUID, SibiRequestCols.UID)))
             {
                 exists = true;
             }

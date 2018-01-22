@@ -1,4 +1,4 @@
-namespace AssetManager
+namespace AssetManager.Data
 {
     public class DevicesBaseCols
     {
@@ -21,7 +21,7 @@ namespace AssetManager
         public const string iCloudAccount = "dev_icloud_account";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class DevicesCols : DevicesBaseCols
@@ -35,7 +35,7 @@ namespace AssetManager
         public const string MunisEmpNum = "dev_cur_user_emp_num";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class HistoricalDevicesCols : DevicesBaseCols
@@ -48,7 +48,7 @@ namespace AssetManager
         public const string ActionUser = "hist_action_user";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class TrackablesCols
@@ -69,7 +69,7 @@ namespace AssetManager
         public const string DateStamp = "track_datestamp";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public abstract class AttachmentsBaseCols
@@ -86,7 +86,7 @@ namespace AssetManager
         public string Folder { get; } = "attach_folder";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class DeviceAttachmentsCols : AttachmentsBaseCols
@@ -94,7 +94,7 @@ namespace AssetManager
         public override string TableName { get; } = "dev_attachments";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class SibiAttachmentsCols : AttachmentsBaseCols
@@ -102,7 +102,7 @@ namespace AssetManager
         public override string TableName { get; } = "sibi_attachments";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class SibiRequestCols
@@ -124,7 +124,7 @@ namespace AssetManager
         public const string RTNumber = "sibi_RT_number";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class SibiRequestItemsCols
@@ -146,7 +146,7 @@ namespace AssetManager
         public const string Timestamp = "sibi_items_timestamp";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class SibiNotesCols
@@ -158,7 +158,7 @@ namespace AssetManager
         public const string Note = "sibi_note";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class ComboCodesBaseCols
@@ -170,7 +170,7 @@ namespace AssetManager
         public const string Color = "hex_color";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class DeviceComboCodesCols : ComboCodesBaseCols
@@ -179,7 +179,7 @@ namespace AssetManager
         public const string MunisCode = "munis_code";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class SibiComboCodesCols : ComboCodesBaseCols
@@ -187,7 +187,7 @@ namespace AssetManager
         public const string TableName = "sibi_codes";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class SecurityCols
@@ -199,7 +199,7 @@ namespace AssetManager
         public const string AvailOffline = "sec_availoffline";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class UsersCols
@@ -211,7 +211,7 @@ namespace AssetManager
         public const string UID = "usr_UID";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public class EmployeesCols
@@ -222,7 +222,7 @@ namespace AssetManager
         public const string UID = "emp_UID";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public sealed class DeviceAttribType
@@ -235,7 +235,7 @@ namespace AssetManager
         public const string StatusType = "STATUS_TYPE";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public sealed class SibiAttribType
@@ -247,7 +247,7 @@ namespace AssetManager
         public const string SibiAttachFolder = "ATTACH_FOLDER";
     }
 }
-namespace AssetManager
+namespace AssetManager.Data
 {
 
     public sealed class CheckType

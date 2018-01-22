@@ -1,5 +1,6 @@
 using System;
 using System.Deployment.Application;
+using AssetManager.Data;
 
 namespace AssetManager
 {

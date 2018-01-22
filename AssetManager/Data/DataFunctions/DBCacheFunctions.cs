@@ -7,8 +7,10 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
+using AssetManager.Helpers;
+using AssetManager.Data.DataComms;
 
-namespace AssetManager
+namespace AssetManager.Data.DataFunctions
 {
     public static class DBCacheFunctions
     {

@@ -77,7 +77,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public async void SetPingHistoryLink()
         {
-            bool hasPingHist = await GlobalInstances.AssetFunc.HasPingHistory(currentViewDevice);
+            bool hasPingHist = await AssetManagerFunctions.HasPingHistory(currentViewDevice);
             PingHistLabel.Visible = hasPingHist;
         }
 
@@ -135,7 +135,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public void UpdateAttachCountHandler(object sender, EventArgs e)
         {
-            GlobalInstances.AssetFunc.SetAttachmentCount(AttachmentsToolButton, currentViewDevice.GUID, new DeviceAttachmentsCols());
+            AssetManagerFunctions.SetAttachmentCount(AttachmentsToolButton, currentViewDevice.GUID, new DeviceAttachmentsCols());
         }
 
         private void AcceptChanges()
@@ -274,7 +274,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "WARNING", this);
             if (blah == DialogResult.Yes)
             {
-                if (GlobalInstances.AssetFunc.DeleteFtpAndSql(currentViewDevice.GUID, EntryType.Device))
+                if (AssetManagerFunctions.DeleteFtpAndSql(currentViewDevice.GUID, EntryType.Device))
                 {
                     OtherFunctions.Message("Device deleted successfully.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Device Deleted", this);
                     currentViewDevice = null;
@@ -672,7 +672,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 else
                 {
-                    string SibiUID = GlobalInstances.AssetFunc.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, LinkDevice.PO, SibiRequestCols.UID);
+                    string SibiUID = AssetManagerFunctions.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, LinkDevice.PO, SibiRequestCols.UID);
 
                     if (string.IsNullOrEmpty(SibiUID))
                     {
@@ -863,7 +863,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         #region Control Events
         private void PingHistLabel_Click(object sender, EventArgs e)
         {
-            GlobalInstances.AssetFunc.ShowPingHistory(this, currentViewDevice);
+            AssetManagerFunctions.ShowPingHistory(this, currentViewDevice);
         }
         private void AssetDisposalFormToolItem_Click(object sender, EventArgs e)
         {

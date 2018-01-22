@@ -1,4 +1,4 @@
-namespace AssetManager
+namespace AssetManager.Data
 {
     static class ServerInfo
     {

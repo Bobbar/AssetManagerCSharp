@@ -6,7 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Drawing;
 
-namespace AssetManager
+namespace AssetManager.Helpers
 {
 
     static class MiscExtensions

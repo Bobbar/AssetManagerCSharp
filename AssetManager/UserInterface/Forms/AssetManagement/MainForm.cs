@@ -863,7 +863,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                DataTable results = GlobalInstances.AssetFunc.DevicesBySupervisor(this);
+                DataTable results = AssetManagerFunctions.DevicesBySupervisor(this);
                 if (results != null)
                 {
                     var newGridForm = new GridForm(this, "Devices By Supervisor");

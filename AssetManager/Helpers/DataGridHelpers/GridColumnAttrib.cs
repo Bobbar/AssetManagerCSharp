@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 
-namespace AssetManager
+namespace AssetManager.Helpers.DataGridHelpers
 {
     public class GridColumnAttrib
     {
@@ -71,7 +71,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.Helpers.DataGridHelpers
 {
     public enum ColumnFormatTypes
     {
@@ -84,7 +84,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.Helpers.DataGridHelpers
 {
     public struct StatusColumnColor
     {
@@ -100,7 +100,7 @@ namespace AssetManager
     }
 }
 
-namespace AssetManager
+namespace AssetManager.Helpers.DataGridHelpers
 {
     public static class GridColumnFunctions
     {

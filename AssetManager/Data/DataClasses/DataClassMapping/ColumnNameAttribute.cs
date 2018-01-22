@@ -1,5 +1,5 @@
 using System;
-namespace AssetManager
+namespace AssetManager.Data.DataClasses
 {
     [AttributeUsage(AttributeTargets.Property)]
 	public class DataColumnNameAttribute : Attribute

@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using AssetManager.Security;
 
-namespace AssetManager
+
+namespace AssetManager.Data.DataComms
 {
     public class MySQLDatabase : IDisposable, IDataBase
     {

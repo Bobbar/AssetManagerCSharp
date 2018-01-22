@@ -9,8 +9,11 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Windows.Forms;
+using AssetManager.Security;
+using AssetManager.Data;
+using AssetManager.Data.DataComms;
 
-namespace AssetManager
+namespace AssetManager.Helpers
 {
     internal static class ErrorHandling
     {

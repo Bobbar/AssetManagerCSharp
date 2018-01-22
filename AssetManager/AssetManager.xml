@@ -177,6 +177,7 @@
             <summary>
             SELECT * FROM <see cref="F:AssetManager.HistoricalDevicesCols.TableName"/> WHERE <see cref="F:AssetManager.DevicesBaseCols.DeviceUID"/> = <paramref name="deviceGUID"/> AND <see cref="F:AssetManager.HistoricalDevicesCols.ActionDateTime"/> "LESS THAN" <paramref name="startDate"/> ORDER BY <see cref="F:AssetManager.HistoricalDevicesCols.ActionDateTime"/> DESC
             </summary>
+            <param name="deviceGUID"></param>
             <param name="startDate"></param>
             <returns></returns>
         </member>

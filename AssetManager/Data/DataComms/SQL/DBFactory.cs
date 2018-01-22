@@ -1,4 +1,4 @@
-namespace AssetManager
+namespace AssetManager.Data
 {
     public static class DBFactory
     {

@@ -5,8 +5,11 @@ using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using AssetManager.Security;
+using AssetManager.Data.DataFunctions;
+using AssetManager.Helpers;
 
-namespace AssetManager
+namespace AssetManager.Data.DataComms
 {
     public class SQLiteDatabase : IDisposable, IDataBase
     {

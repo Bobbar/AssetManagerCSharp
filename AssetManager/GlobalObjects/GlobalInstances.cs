@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AssetManager.Data.DataClasses;
 namespace AssetManager
 {
     internal static class GlobalInstances
@@ -23,7 +24,7 @@ namespace AssetManager
         public static DeviceAttributes DeviceAttribute = new DeviceAttributes();
         public static SibiAttributes SibiAttribute = new SibiAttributes();
         public static MunisFunctions MunisFunc = new MunisFunctions();
-        public static AssetManagerFunctions AssetFunc = new AssetManagerFunctions();
+        //public static AssetManagerFunctions AssetFunc = new AssetManagerFunctions();
 
         public static FtpFunctions FTPFunc = new FtpFunctions();
     }

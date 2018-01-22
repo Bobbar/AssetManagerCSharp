@@ -7,7 +7,7 @@ using System.Management.Automation.Runspaces;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AssetManager
+namespace AssetManager.Tools.TeamViewer
 {
     public class TeamViewerDeploy : IDisposable
     {
@@ -188,7 +188,7 @@ namespace AssetManager
 
         private Command GetTVAssignCommand()
         {
-            string ApiToken = GlobalInstances.AssetFunc.GetTVApiToken();
+            string ApiToken = AssetManagerFunctions.GetTVApiToken();
             var cmd = new Command("Start-Process", false, true);
             cmd.Parameters.Add("FilePath", "C:\\Temp\\TVDeploy\\Assignment\\TeamViewer_Assignment.exe");
             cmd.Parameters.Add("ArgumentList", "-apitoken " + ApiToken + " -datafile ${ProgramFiles}\\TeamViewer\\AssignmentData.json");

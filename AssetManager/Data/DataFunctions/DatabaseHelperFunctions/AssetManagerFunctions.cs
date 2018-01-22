@@ -6,30 +6,34 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using AssetManager.Data.DataClasses;
+using AssetManager.Data.DataComms;
+using AssetManager.Helpers;
 
-namespace AssetManager
+
+namespace AssetManager.Data.DataFunctions
 {
-    public class AssetManagerFunctions
+    public static class AssetManagerFunctions
     {
         #region "Methods"
 
-        public async Task<bool> HasPingHistory(DeviceMapObject device)
+        public static async Task<bool> HasPingHistory(DeviceMapObject device)
         {
             string query = "SELECT device_guid FROM device_ping_history WHERE device_guid = '" + device.GUID + "'";
 
-           return await Task.Run(() =>
-             {
-                 Task.Delay(1000).Wait();
-                 using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
-                 {
-                     if (results.Rows.Count > 0) return true;
-                 }
-                 return false;
-             });
+            return await Task.Run(() =>
+              {
+                  Task.Delay(1000).Wait();
+                  using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
+                  {
+                      if (results.Rows.Count > 0) return true;
+                  }
+                  return false;
+              });
 
         }
 
-        public void ShowPingHistory(ExtendedForm parentForm, DeviceMapObject device)
+        public static void ShowPingHistory(ExtendedForm parentForm, DeviceMapObject device)
         {
             string query = "SELECT timestamp, hostname, ip FROM device_ping_history WHERE device_guid = '" + device.GUID + "' ORDER BY timestamp DESC";
 
@@ -44,7 +48,7 @@ namespace AssetManager
                     {
                         row["location"] = NetworkInfo.LocationOfIP(row["ip"].ToString());
                     }
-                    
+
                     var newGrid = new GridForm(parentForm, "Ping History - " + device.HostName);
                     newGrid.AddGrid("pingGrid", "Ping History", results);
                     newGrid.Show();
@@ -55,7 +59,7 @@ namespace AssetManager
         }
 
 
-        public void AddNewEmp(MunisEmployeeStruct empInfo)
+        public static void AddNewEmp(MunisEmployeeStruct empInfo)
         {
             try
             {
@@ -66,7 +70,7 @@ namespace AssetManager
                     InsertEmployeeParams.Add(new DBParameter(EmployeesCols.Name, empInfo.Name));
                     InsertEmployeeParams.Add(new DBParameter(EmployeesCols.Number, empInfo.Number));
                     InsertEmployeeParams.Add(new DBParameter(EmployeesCols.UID, UID));
-                    AssetManager.DBFactory.GetDatabase().InsertFromParameters(EmployeesCols.TableName, InsertEmployeeParams);
+                    DBFactory.GetDatabase().InsertFromParameters(EmployeesCols.TableName, InsertEmployeeParams);
                 }
             }
             catch (Exception ex)
@@ -81,7 +85,7 @@ namespace AssetManager
         /// <param name="empSearchName"></param>
         /// <param name="MinSearchDistance"></param>
         /// <returns></returns>
-        public MunisEmployeeStruct SmartEmployeeSearch(string empSearchName, int MinSearchDistance = 10)
+        public static MunisEmployeeStruct SmartEmployeeSearch(string empSearchName, int MinSearchDistance = 10)
         {
             if (empSearchName.Trim() != "")
             {
@@ -127,7 +131,7 @@ namespace AssetManager
         /// <remarks>This is done because the initial calculations are performed against the full length
         /// of the returned names (First and last name), and the distance between the search string and name string may be inaccurate.</remarks>
         /// <returns></returns>
-        private List<SmartEmpSearchStruct> NarrowResults(List<SmartEmpSearchStruct> results)
+        private static List<SmartEmpSearchStruct> NarrowResults(List<SmartEmpSearchStruct> results)
         {
             List<SmartEmpSearchStruct> newResults = new List<SmartEmpSearchStruct>();
             //Iterate through results
@@ -170,7 +174,7 @@ namespace AssetManager
         /// </summary>
         /// <param name="results"></param>
         /// <returns></returns>
-        private SmartEmpSearchStruct FindBestSmartSearchMatch(List<SmartEmpSearchStruct> results)
+        private static SmartEmpSearchStruct FindBestSmartSearchMatch(List<SmartEmpSearchStruct> results)
         {
             //Initial minimum distance
             int MinDist = results.First().MatchDistance;
@@ -218,7 +222,7 @@ namespace AssetManager
         /// <param name="empNameColumn"></param>
         /// <param name="empNumColumn"></param>
         /// <returns></returns>
-        private List<SmartEmpSearchStruct> GetEmpSearchResults(string tableName, string searchEmpName, string empNameColumn, string empNumColumn)
+        private static List<SmartEmpSearchStruct> GetEmpSearchResults(string tableName, string searchEmpName, string empNameColumn, string empNumColumn)
         {
             List<SmartEmpSearchStruct> tmpResults = new List<SmartEmpSearchStruct>();
             List<DBQueryParameter> EmpSearchParams = new List<DBQueryParameter>();
@@ -233,7 +237,7 @@ namespace AssetManager
             return tmpResults;
         }
 
-        public bool DeleteMasterSqlEntry(string sqlGUID, EntryType type)
+        public static bool DeleteMasterSqlEntry(string sqlGUID, EntryType type)
         {
             try
             {
@@ -248,7 +252,7 @@ namespace AssetManager
                         DeleteQuery = Queries.DeleteSibiRequestByGUID(sqlGUID);
                         break;
                 }
-                if (AssetManager.DBFactory.GetDatabase().ExecuteQuery(DeleteQuery) > 0)
+                if (DBFactory.GetDatabase().ExecuteQuery(DeleteQuery) > 0)
                 {
                     return true;
                 }
@@ -261,7 +265,7 @@ namespace AssetManager
             }
         }
 
-        public bool DeleteFtpAndSql(string sqlGUID, EntryType type)
+        public static bool DeleteFtpAndSql(string sqlGUID, EntryType type)
         {
             try
             {
@@ -284,7 +288,7 @@ namespace AssetManager
             return false;
         }
 
-        public int DeleteSqlAttachment(Attachment attachment)
+        public static int DeleteSqlAttachment(Attachment attachment)
         {
             try
             {
@@ -294,7 +298,7 @@ namespace AssetManager
                 {
                     //delete SQL entry
                     var SQLDeleteQry = "DELETE FROM " + attachment.AttachTable.TableName + " WHERE " + attachment.AttachTable.FileUID + "='" + attachment.FileUID + "'";
-                    return AssetManager.DBFactory.GetDatabase().ExecuteQuery(SQLDeleteQry);
+                    return DBFactory.GetDatabase().ExecuteQuery(SQLDeleteQry);
                 }
                 return -1;
             }
@@ -305,7 +309,7 @@ namespace AssetManager
             }
         }
 
-        public bool DeviceExists(string assetTag, string serial)
+        public static bool DeviceExists(string assetTag, string serial)
         {
             bool bolAsset = false;
             bool bolSerial = false;
@@ -346,7 +350,7 @@ namespace AssetManager
             }
         }
 
-        public DataTable DevicesBySupervisor(ExtendedForm parentForm)
+        public static DataTable DevicesBySupervisor(ExtendedForm parentForm)
         {
             try
             {
@@ -361,7 +365,7 @@ namespace AssetManager
                         {
                             foreach (DataRow r in EmpList.Rows)
                             {
-                                using (DataTable tmpTable = AssetManager.DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevicesByEmpNum(r["a_employee_number"].ToString())))
+                                using (DataTable tmpTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevicesByEmpNum(r["a_employee_number"].ToString())))
                                 {
                                     DeviceList.Merge(tmpTable);
                                 }
@@ -381,7 +385,7 @@ namespace AssetManager
             }
         }
 
-        public bool IsEmployeeInDB(string empNum)
+        public static bool IsEmployeeInDB(string empNum)
         {
             string EmpName = GetSqlValue(EmployeesCols.TableName, EmployeesCols.Number, empNum, EmployeesCols.Name);
             if (!string.IsNullOrEmpty(EmpName))
@@ -394,7 +398,7 @@ namespace AssetManager
             }
         }
 
-        public DeviceMapObject FindDeviceFromAssetOrSerial(string searchVal, FindDevType type)
+        public static DeviceMapObject FindDeviceFromAssetOrSerial(string searchVal, FindDevType type)
         {
             try
             {
@@ -402,13 +406,13 @@ namespace AssetManager
                 {
                     List<DBQueryParameter> Params = new List<DBQueryParameter>();
                     Params.Add(new DBQueryParameter(DevicesCols.AssetTag, searchVal, true));
-                    return new DeviceMapObject(AssetManager.DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));//"SELECT * FROM " + DevicesCols.TableName + " WHERE ", Params));
+                    return new DeviceMapObject(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));//"SELECT * FROM " + DevicesCols.TableName + " WHERE ", Params));
                 }
                 else if (type == FindDevType.Serial)
                 {
                     List<DBQueryParameter> Params = new List<DBQueryParameter>();
                     Params.Add(new DBQueryParameter(DevicesCols.Serial, searchVal, true));
-                    return new DeviceMapObject(AssetManager.DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));
+                    return new DeviceMapObject(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));
                 }
                 return null;
             }
@@ -419,7 +423,7 @@ namespace AssetManager
             }
         }
 
-        public string GetTVApiToken()
+        public static string GetTVApiToken()
         {
             using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTVApiToken))
             {
@@ -433,17 +437,17 @@ namespace AssetManager
         //    return new DeviceObject(AssetManager.DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + "='" + deviceGUID + "'"));
         //}
 
-        public string GetMunisCodeFromAssetCode(string assetCode)
+        public static string GetMunisCodeFromAssetCode(string assetCode)
         {
             return GetSqlValue("munis_codes", "asset_man_code", assetCode, "munis_code");
         }
 
-        public string GetSqlValue(string table, string fieldIn, string valueIn, string fieldOut)
+        public static string GetSqlValue(string table, string fieldIn, string valueIn, string fieldOut)
         {
             string sqlQRY = "SELECT " + fieldOut + " FROM " + table + " WHERE ";
             List<DBQueryParameter> Params = new List<DBQueryParameter>();
             Params.Add(new DBQueryParameter(fieldIn, valueIn, true));
-            var Result = AssetManager.DBFactory.GetDatabase().ExecuteScalarFromCommand(AssetManager.DBFactory.GetDatabase().GetCommandFromParams(sqlQRY, Params));
+            var Result = DBFactory.GetDatabase().ExecuteScalarFromCommand(DBFactory.GetDatabase().GetCommandFromParams(sqlQRY, Params));
             if (Result != null)
             {
                 return Result.ToString();
@@ -454,7 +458,7 @@ namespace AssetManager
             }
         }
 
-        public void SetAttachmentCount(ToolStripButton targetTool, string attachFolderUID, AttachmentsBaseCols attachTable)
+        public static void SetAttachmentCount(ToolStripButton targetTool, string attachFolderUID, AttachmentsBaseCols attachTable)
         {
             if (!GlobalSwitches.CachedMode)
             {
@@ -471,9 +475,9 @@ namespace AssetManager
             }
         }
 
-        public int UpdateSqlValue(string table, string fieldIn, string valueIn, string idField, string idValue)
+        public static int UpdateSqlValue(string table, string fieldIn, string valueIn, string idField, string idValue)
         {
-            return AssetManager.DBFactory.GetDatabase().UpdateValue(table, fieldIn, valueIn, idField, idValue);
+            return DBFactory.GetDatabase().UpdateValue(table, fieldIn, valueIn, idField, idValue);
         }
 
         #endregion "Methods"

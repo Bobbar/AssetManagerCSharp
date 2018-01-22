@@ -9,7 +9,7 @@ using System.Drawing;
 using AssetManager.UserInterface.Forms;
 using AssetManager.UserInterface.CustomControls;
 
-namespace AssetManager
+namespace AssetManager.Helpers.DataGridHelpers
 {
     public static class DataGridViewExtensions
     {

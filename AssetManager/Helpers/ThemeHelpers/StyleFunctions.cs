@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-namespace AssetManager
+namespace AssetManager.Helpers
 {
     static class StyleFunctions
     {
