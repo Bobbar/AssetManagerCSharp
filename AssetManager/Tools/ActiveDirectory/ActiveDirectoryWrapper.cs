@@ -88,7 +88,7 @@ namespace AssetManager.Tools
             {
                 using (var rootDSE = new DirectoryEntry("LDAP://" + NetworkInfo.CurrentDomain + "/RootDSE"))
                 {
-                    if (ServerInfo.CurrentDataBase == Databases.vintondd)
+                    if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.vintondd)
                     {
                         if (!SecurityTools.VerifyAdminCreds("Credentials for Vinton AD"))
                         {
@@ -103,7 +103,7 @@ namespace AssetManager.Tools
 
                     using (var searchRoot = new DirectoryEntry(domainRootADsPath))
                     {
-                        if (ServerInfo.CurrentDataBase == Databases.vintondd)
+                        if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.vintondd)
                         {
                             searchRoot.Username = SecurityTools.AdminCreds.UserName;
                             searchRoot.Password = SecurityTools.AdminCreds.Password;

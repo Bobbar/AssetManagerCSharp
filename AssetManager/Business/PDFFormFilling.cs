@@ -359,5 +359,13 @@ namespace AssetManager.Business
             }
         }
 
+        public enum PdfFormType
+        {
+            InputForm,
+            TransferForm,
+            DisposeForm
+        }
+
+
     }
 }

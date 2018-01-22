@@ -136,7 +136,7 @@ namespace AssetManager.Security
         {
             try
             {
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectUserByName(GlobalConstants.LocalDomainUser)))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectUserByName(NetworkInfo.LocalDomainUser)))
                 {
                     if (results.Rows.Count > 0)
                     {

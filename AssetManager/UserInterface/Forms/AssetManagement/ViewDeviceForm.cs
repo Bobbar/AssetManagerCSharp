@@ -54,8 +54,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DefaultFormTitle = this.Text;
 
             liveBox = new LiveBox(this);
-            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
-            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBoxType.SelectValue);
+            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
+            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxType.SelectValue);
 
             munisToolBar = new MunisToolBar(this);
             munisToolBar.InsertMunisDropDown(ToolStrip1, 6);
@@ -281,7 +281,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "WARNING", this);
             if (blah == DialogResult.Yes)
             {
-                if (AssetManagerFunctions.DeleteFtpAndSql(currentViewDevice.GUID, EntryType.Device))
+                if (AssetManagerFunctions.DeleteDevice(currentViewDevice.GUID))
                 {
                     OtherFunctions.Message("Device deleted successfully.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Device Deleted", this);
                     currentViewDevice = null;
@@ -522,7 +522,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             //Add Add'l info
             DBRow[HistoricalDevicesCols.ChangeType] = UpdateInfo.ChangeType;
             DBRow[HistoricalDevicesCols.Notes] = UpdateInfo.Note;
-            DBRow[HistoricalDevicesCols.ActionUser] = GlobalConstants.LocalDomainUser;
+            DBRow[HistoricalDevicesCols.ActionUser] = NetworkInfo.LocalDomainUser;
             DBRow[HistoricalDevicesCols.DeviceUID] = currentViewDevice.GUID;
             return tmpTable;
         }
@@ -551,7 +551,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
             }
             DBRow[DevicesCols.SibiLinkUID] = DataConsistency.CleanDBValue(currentViewDevice.SibiLink);
-            DBRow[DevicesCols.LastModUser] = GlobalConstants.LocalDomainUser;
+            DBRow[DevicesCols.LastModUser] = NetworkInfo.LocalDomainUser;
             DBRow[DevicesCols.LastModDate] = DateTime.Now;
             MunisUser = new MunisEmployee();//null;
             return tmpTable;
@@ -875,7 +875,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
         private void AssetDisposalFormToolItem_Click(object sender, EventArgs e)
         {
-            PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormType.DisposeForm);
+            PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.DisposeForm);
         }
 
         private void AttachmentsToolButton_Click(object sender, EventArgs e)
@@ -1020,7 +1020,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (!string.IsNullOrEmpty(currentViewDevice.PO))
             {
-                PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormType.InputForm);
+                PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.InputForm);
             }
             else
             {
@@ -1030,7 +1030,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void AssetTransferFormToolItem_Click(object sender, EventArgs e)
         {
-            PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormType.TransferForm);
+            PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.TransferForm);
         }
 
         private void PhoneNumberTextBox_Leave(object sender, EventArgs e)

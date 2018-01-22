@@ -67,9 +67,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             CheckData.UseReason = txtUseReason.Text.Trim().ToUpper();
             CheckData.CheckinNotes = txtCheckInNotes.Text.Trim().ToUpper();
             CheckData.GUID = CurrentTrackingDevice.GUID;
-            CheckData.CheckoutUser = GlobalConstants.LocalDomainUser;
+            CheckData.CheckoutUser = NetworkInfo.LocalDomainUser;
             CheckData.CheckinTime = dtCheckIn.Value; //.ToString(strDBDateTimeFormat)
-            CheckData.CheckinUser = GlobalConstants.LocalDomainUser;
+            CheckData.CheckinUser = NetworkInfo.LocalDomainUser;
             return true;
         }
 

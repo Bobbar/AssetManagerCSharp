@@ -5,8 +5,8 @@ namespace AssetManager.Data
         public static bool ServerPinging = false;
         public const string MySQLServerIP = "10.10.0.89";
 
-        private static Databases _currentDataBase = Databases.asset_manager;
-        public static Databases CurrentDataBase
+        private static NetworkInfo.Databases _currentDataBase = NetworkInfo.Databases.asset_manager;
+        public static NetworkInfo.Databases CurrentDataBase
         {
             get { return _currentDataBase; }
             set

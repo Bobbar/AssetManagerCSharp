@@ -28,7 +28,7 @@ namespace AssetManager
 
             ProcessCommandArgs();
 
-            GlobalConstants.LocalDomainUser = Environment.UserName;
+            NetworkInfo.LocalDomainUser = Environment.UserName;
 
             bool ConnectionSuccessful = false;
             bool CacheAvailable = false;
@@ -119,11 +119,11 @@ namespace AssetManager
                         switch (ArgToEnum)
                         {
                             case CommandArgs.TESTDB:
-                                ServerInfo.CurrentDataBase = Databases.test_db;
+                                ServerInfo.CurrentDataBase = NetworkInfo.Databases.test_db;
                                 break;
 
                             case CommandArgs.VINTONDD:
-                                ServerInfo.CurrentDataBase = Databases.vintondd;
+                                ServerInfo.CurrentDataBase = NetworkInfo.Databases.vintondd;
                                 break;
                         }
                     }
@@ -142,6 +142,12 @@ namespace AssetManager
         private static void Status(string Text)
         {
             Helpers.ChildFormControl.SplashScreenInstance().SetStatus(Text);
+        }
+
+        private enum CommandArgs
+        {
+            TESTDB,
+            VINTONDD
         }
 
         #endregion Methods

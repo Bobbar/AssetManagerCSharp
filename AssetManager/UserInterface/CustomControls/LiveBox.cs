@@ -396,7 +396,7 @@ namespace AssetManager.UserInterface.CustomControls
             public Nullable<LiveBoxType> Type { get; set; }
             public string ValueMember { get; set; }
 
-            public LiveBoxArgs(TextBox control, string displayMember, AssetManager.LiveBoxType type, string valueMember)
+            public LiveBoxArgs(TextBox control, string displayMember, LiveBoxType type, string valueMember)
             {
                 this.Control = control;
                 this.DisplayMember = displayMember;
@@ -413,6 +413,14 @@ namespace AssetManager.UserInterface.CustomControls
             }
 
 
+        }
+
+        public enum LiveBoxType
+        {
+            DynamicSearch,
+            InstaLoad,
+            SelectValue,
+            UserSelect
         }
 
         #endregion

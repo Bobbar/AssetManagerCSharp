@@ -1,15 +1,14 @@
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Windows.Forms;
 using System.Threading.Tasks;
-using AssetManager.Data.Classes;
-using AssetManager.Data.Communications;
-using AssetManager.Helpers;
-
+using System.Windows.Forms;
 
 namespace AssetManager.Data.Functions
 {
@@ -30,7 +29,6 @@ namespace AssetManager.Data.Functions
                   }
                   return false;
               });
-
         }
 
         public static void ShowPingHistory(ExtendedForm parentForm, Device device)
@@ -41,7 +39,6 @@ namespace AssetManager.Data.Functions
             {
                 if (results.Rows.Count > 0)
                 {
-
                     results.Columns.Add("location");
 
                     foreach (DataRow row in results.Rows)
@@ -52,12 +49,9 @@ namespace AssetManager.Data.Functions
                     var newGrid = new GridForm(parentForm, "Ping History - " + device.HostName);
                     newGrid.AddGrid("pingGrid", "Ping History", results);
                     newGrid.Show();
-
                 }
             }
-
         }
-
 
         public static void AddNewEmp(MunisEmployee empInfo)
         {
@@ -109,7 +103,6 @@ namespace AssetManager.Data.Functions
                     //Get results for partial name from devices table
                     Results.AddRange(GetEmpSearchResults(DevicesCols.TableName, s, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum));
                 }
-
 
                 if (Results.Count > 0)
                 {
@@ -237,7 +230,7 @@ namespace AssetManager.Data.Functions
             return tmpResults;
         }
 
-        public static bool DeleteMasterSqlEntry(string sqlGUID, EntryType type)
+        private static bool DeleteMasterSqlEntry(string sqlGUID, EntryType type)
         {
             try
             {
@@ -265,27 +258,40 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static bool DeleteFtpAndSql(string sqlGUID, EntryType type)
+        public static bool DeleteDevice(string GUID)
         {
             try
             {
-                if (GlobalInstances.FTPFunc.HasFtpFolder(sqlGUID))
+                // if has attachments, delete ftp directory, then delete the sql records.
+                if (GlobalInstances.FTPFunc.HasFtpFolder(GUID))
                 {
-                    if (GlobalInstances.FTPFunc.DeleteFtpFolder(sqlGUID))
-                        return DeleteMasterSqlEntry(sqlGUID, type);
-                    // if has attachments, delete ftp directory, then delete the sql records.
+                    if (!GlobalInstances.FTPFunc.DeleteFtpFolder(GUID)) return false;
                 }
-                else
-                {
-                    return DeleteMasterSqlEntry(sqlGUID, type);
-                    //delete sql records
-                }
+                //delete sql records
+                return DeleteMasterSqlEntry(GUID, EntryType.Device);
             }
             catch (Exception ex)
             {
                 return ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
             }
-            return false;
+        }
+
+        public static bool DeleteSibiRequest(string GUID)
+        {
+            try
+            {
+                // if has attachments, delete ftp directory, then delete the sql records.
+                if (GlobalInstances.FTPFunc.HasFtpFolder(GUID))
+                {
+                    if (!GlobalInstances.FTPFunc.DeleteFtpFolder(GUID)) return false;
+                }
+                //delete sql records
+                return DeleteMasterSqlEntry(GUID, EntryType.Sibi);
+            }
+            catch (Exception ex)
+            {
+                return ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+            }
         }
 
         public static int DeleteSqlAttachment(Attachment attachment)
@@ -406,7 +412,7 @@ namespace AssetManager.Data.Functions
                 {
                     List<DBQueryParameter> Params = new List<DBQueryParameter>();
                     Params.Add(new DBQueryParameter(DevicesCols.AssetTag, searchVal, true));
-                    return new Device(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));//"SELECT * FROM " + DevicesCols.TableName + " WHERE ", Params));
+                    return new Device(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));
                 }
                 else if (type == FindDevType.Serial)
                 {
@@ -431,11 +437,6 @@ namespace AssetManager.Data.Functions
                 return token;
             }
         }
-
-        //public DeviceObject GetDeviceInfoFromGUID(string deviceGUID)
-        //{
-        //    return new DeviceObject(AssetManager.DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + "='" + deviceGUID + "'"));
-        //}
 
         public static string GetMunisCodeFromAssetCode(string assetCode)
         {
@@ -481,5 +482,17 @@ namespace AssetManager.Data.Functions
         }
 
         #endregion "Methods"
+
+        private enum EntryType
+        {
+            Sibi,
+            Device
+        }
+
+        public enum FindDevType
+        {
+            AssetTag,
+            Serial
+        }
     }
 }

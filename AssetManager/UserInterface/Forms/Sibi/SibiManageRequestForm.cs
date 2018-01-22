@@ -470,7 +470,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 if (blah == DialogResult.Yes)
                 {
                     OtherFunctions.SetWaitCursor(true, this);
-                    if (AssetManagerFunctions.DeleteFtpAndSql(CurrentRequest.GUID, EntryType.Sibi))
+                    if (AssetManagerFunctions.DeleteSibiRequest(CurrentRequest.GUID))
                     {
                         OtherFunctions.Message("Sibi Request deleted successfully.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Device Deleted", this);
                         CurrentRequest = null;
@@ -1362,21 +1362,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 int colIndex = RequestItemsGrid.CurrentCell.ColumnIndex;
-                if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.ReplaceAsset))
+                if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.ReplaceAsset) || colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.NewAsset))
                 {
-                    Helpers.ChildFormControl.LookupDevice(this, AssetManagerFunctions.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
+                    Helpers.ChildFormControl.LookupDevice(this, AssetManagerFunctions.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), AssetManagerFunctions.FindDevType.AssetTag));
                 }
-                else if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.ReplaceSerial))
+                else if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.ReplaceSerial) || colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.NewSerial))
                 {
-                    Helpers.ChildFormControl.LookupDevice(this, AssetManagerFunctions.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
-                }
-                else if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.NewAsset))
-                {
-                    Helpers.ChildFormControl.LookupDevice(this, AssetManagerFunctions.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.AssetTag));
-                }
-                else if (colIndex == RequestItemsGrid.ColumnIndex(SibiRequestItemsCols.NewSerial))
-                {
-                    Helpers.ChildFormControl.LookupDevice(this, AssetManagerFunctions.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), FindDevType.Serial));
+                    Helpers.ChildFormControl.LookupDevice(this, AssetManagerFunctions.FindDeviceFromAssetOrSerial(RequestItemsGrid[colIndex, RequestItemsGrid.CurrentRow.Index].Value.ToString(), AssetManagerFunctions.FindDevType.Serial));
                 }
             }
             catch (Exception ex)

@@ -441,15 +441,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void InitLiveBox()
         {
-            MyLiveBox.AttachToControl(txtDescription, DevicesCols.Description, LiveBoxType.DynamicSearch);
-            MyLiveBox.AttachToControl(txtCurUser, DevicesCols.CurrentUser, LiveBoxType.DynamicSearch);
-            MyLiveBox.AttachToControl(txtSerial, DevicesCols.Serial, LiveBoxType.InstaLoad, DevicesCols.DeviceUID);
-            MyLiveBox.AttachToControl(txtAssetTag, DevicesCols.AssetTag, LiveBoxType.InstaLoad, DevicesCols.DeviceUID);
+            MyLiveBox.AttachToControl(txtDescription, DevicesCols.Description, LiveBox.LiveBoxType.DynamicSearch);
+            MyLiveBox.AttachToControl(txtCurUser, DevicesCols.CurrentUser, LiveBox.LiveBoxType.DynamicSearch);
+            MyLiveBox.AttachToControl(txtSerial, DevicesCols.Serial, LiveBox.LiveBoxType.InstaLoad, DevicesCols.DeviceUID);
+            MyLiveBox.AttachToControl(txtAssetTag, DevicesCols.AssetTag, LiveBox.LiveBoxType.InstaLoad, DevicesCols.DeviceUID);
         }
 
         private void InitDBCombo()
         {
-            foreach (var item in Enum.GetValues(typeof(Databases)))
+            foreach (var item in Enum.GetValues(typeof(NetworkInfo.Databases)))
             {
                 DatabaseToolCombo.Items.Add(item.ToString());
             }
@@ -647,7 +647,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void ChangeDatabase(Databases database)
+        private void ChangeDatabase(NetworkInfo.Databases database)
         {
             try
             {
@@ -697,15 +697,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             switch (ServerInfo.CurrentDataBase)
             {
-                case Databases.asset_manager:
+                case NetworkInfo.Databases.asset_manager:
                     this.Text = "Asset Manager - Main";
                     break;
 
-                case Databases.test_db:
+                case NetworkInfo.Databases.test_db:
                     this.Text = "Asset Manager - Main - ****TEST DATABASE****";
                     break;
 
-                case Databases.vintondd:
+                case NetworkInfo.Databases.vintondd:
                     this.Text = "Asset Manager - Main - Vinton DD";
                     break;
             }
@@ -713,7 +713,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ShowTestDBWarning()
         {
-            if (ServerInfo.CurrentDataBase == Databases.test_db)
+            if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.test_db)
             {
                 // OtherFunctions.Message("TEST DATABASE IN USE", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "WARNING");//, this);
                 this.BackColor = Color.DarkRed;
@@ -787,7 +787,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                //Dim Hostname As String
                 if (string.IsNullOrEmpty(hostName))
                 {
                     using (AdvancedDialog GetHostnameDialog = new AdvancedDialog(this))
@@ -816,7 +815,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         PowerShellWrapper PSWrapper = new PowerShellWrapper();
                         if (await PSWrapper.InvokePowerShellCommand(hostName, PScommand))
                         {
-                            //  OtherFunctions.Message("Command successful.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Done", Me)
                             return true;
                         }
                     }
@@ -1026,7 +1024,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DatabaseToolCombo_DropDownClosed(object sender, EventArgs e)
         {
-            ChangeDatabase((Databases)DatabaseToolCombo.SelectedIndex);
+            ChangeDatabase((NetworkInfo.Databases)DatabaseToolCombo.SelectedIndex);
         }
 
         private void MainForm_Load(object sender, EventArgs e)

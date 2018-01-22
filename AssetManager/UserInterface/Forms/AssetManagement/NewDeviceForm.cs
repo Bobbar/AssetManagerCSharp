@@ -241,7 +241,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 DBRow[DevicesCols.CurrentUser] = MunisUser.Name;
                 DBRow[DevicesCols.MunisEmpNum] = MunisUser.Number;
             }
-            DBRow[DevicesCols.LastModUser] = GlobalConstants.LocalDomainUser;
+            DBRow[DevicesCols.LastModUser] = NetworkInfo.LocalDomainUser;
             DBRow[DevicesCols.LastModDate] = DateTime.Now;
             DBRow[DevicesCols.DeviceUID] = newUID;
             DBRow[DevicesCols.CheckedOut] = false;
@@ -255,7 +255,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             //Add Add'l info
             DBRow[HistoricalDevicesCols.ChangeType] = "NEWD";
             DBRow[HistoricalDevicesCols.Notes] = NotesTextBox.Text.ToString().Trim();
-            DBRow[HistoricalDevicesCols.ActionUser] = GlobalConstants.LocalDomainUser;
+            DBRow[HistoricalDevicesCols.ActionUser] = NetworkInfo.LocalDomainUser;
             DBRow[HistoricalDevicesCols.DeviceUID] = newUID;
             return tmpTable;
         }
@@ -350,8 +350,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void NewDeviceForm_Load(object sender, EventArgs e)
         {
             liveBox = new LiveBox(this);
-            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
-            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBoxType.SelectValue);
+            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
+            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxType.SelectValue);
         }
 
         private void NewDeviceForm_FormClosed(object sender, FormClosedEventArgs e)

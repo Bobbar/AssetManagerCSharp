@@ -9,6 +9,8 @@ namespace AssetManager.Data
 {
     public static class NetworkInfo
     {
+        public static string LocalDomainUser { get; set; }
+
         private static string _currentDomain = "core.co.fairfield.oh.us";
         public static string CurrentDomain
         {
@@ -69,6 +71,12 @@ namespace AssetManager.Data
             return DomainNames[database];
         }
 
+        public enum Databases
+        {
+            test_db,
+            asset_manager,
+            vintondd
+        }
 
     }
 }

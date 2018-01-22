@@ -196,10 +196,8 @@
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\MunisFunctions.cs" />
     <Compile Include="Data\DataFunctions\DBCacheFunctions.cs" />
     <Compile Include="Data\DataFunctions\DBControlParser.cs" />
-    <Compile Include="GlobalObjects\Enums.cs" />
-    <Compile Include="GlobalObjects\GlobalConstants.cs" />
     <Compile Include="GlobalObjects\GlobalInstances.cs" />
-    <Compile Include="GlobalObjects\GlobalVariables.cs" />
+    <Compile Include="GlobalObjects\GlobalSwitches.cs" />
     <Compile Include="GlobalObjects\Paths.cs" />
     <Compile Include="Helpers\ChildFormControl.cs" />
     <Compile Include="Helpers\DataGridHelpers\GridColumnAttrib.cs" />
