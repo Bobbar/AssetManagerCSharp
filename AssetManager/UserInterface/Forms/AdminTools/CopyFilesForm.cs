@@ -10,12 +10,12 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 {
     public partial class CopyFilesForm : ExtendedForm
     {
-        private DeviceMapObject TargetDevice;
+        private Device TargetDevice;
         private string SourceDirectory;
         private string TargetDirectory;
         private GKProgressControl PushFilesControl;
         private bool Cancel = false;
-        public CopyFilesForm(ExtendedForm parentForm, DeviceMapObject targetDevice, string sourceDirectory, string targetDirectory)
+        public CopyFilesForm(ExtendedForm parentForm, Device targetDevice, string sourceDirectory, string targetDirectory)
         {
             InitializeComponent();
             ImageCaching.CacheControlImages(this);

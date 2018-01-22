@@ -160,7 +160,7 @@ namespace AssetManager.Helpers
             return NewCol;
         }
 
-        private static DataGridViewComboBoxColumn DataGridComboColumn(AttributeDataStruct[] indexType, string headerText, string name)
+        private static DataGridViewComboBoxColumn DataGridComboColumn(CodeAttribute[] indexType, string headerText, string name)
         {
             DataGridViewComboBoxColumn NewCombo = new DataGridViewComboBoxColumn();
             NewCombo.Items.Clear();
@@ -169,8 +169,8 @@ namespace AssetManager.Helpers
             NewCombo.Name = name;
             NewCombo.Width = 200;
             NewCombo.SortMode = DataGridViewColumnSortMode.Automatic;
-            NewCombo.DisplayMember = nameof(AttributeDataStruct.DisplayValue);
-            NewCombo.ValueMember = nameof(AttributeDataStruct.Code);
+            NewCombo.DisplayMember = nameof(CodeAttribute.DisplayValue);
+            NewCombo.ValueMember = nameof(CodeAttribute.Code);
             NewCombo.DataSource = indexType;
             return NewCombo;
         }

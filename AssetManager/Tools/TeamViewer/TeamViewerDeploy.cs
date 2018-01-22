@@ -49,7 +49,7 @@ namespace AssetManager.Tools.TeamViewer
 
         #endregion Constructors
 
-        public async Task<bool> DeployToDevice(ExtendedForm parentForm, DeviceMapObject targetDevice)
+        public async Task<bool> DeployToDevice(ExtendedForm parentForm, Device targetDevice)
         {
             try
             {
@@ -222,7 +222,7 @@ namespace AssetManager.Tools.TeamViewer
             return cmd;
         }
 
-        private async Task<bool> TeamViewerInstalled(DeviceMapObject targetDevice)
+        private async Task<bool> TeamViewerInstalled(Device targetDevice)
         {
             try
             {

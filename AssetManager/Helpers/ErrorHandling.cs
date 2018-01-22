@@ -1,3 +1,6 @@
+using AssetManager.Data;
+using AssetManager.Data.Communications;
+using AssetManager.Security;
 using MySql.Data.MySqlClient;
 using System;
 using System.ComponentModel;
@@ -9,9 +12,6 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Windows.Forms;
-using AssetManager.Security;
-using AssetManager.Data;
-using AssetManager.Data.Communications;
 
 namespace AssetManager.Helpers
 {

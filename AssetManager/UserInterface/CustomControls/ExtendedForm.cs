@@ -71,7 +71,7 @@ namespace AssetManager.UserInterface.CustomControls
             SetTheme(parentForm);
         }
 
-        public ExtendedForm(ExtendedForm parentForm, DataMapObject currentObject)
+        public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject)
         {
             ParentForm = parentForm;
             FormUID = currentObject.GUID;

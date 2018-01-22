@@ -1,28 +1,26 @@
-﻿using System.IO;
+﻿using AssetManager.Data;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Helpers;
+using AssetManager.UserInterface.Forms;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.DirectoryServices.AccountManagement;
+using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
-using System.Collections.Generic;
 using System.Text;
-using System.DirectoryServices.AccountManagement;
 using System.Windows.Forms;
-using System.Data;
-using System;
-using AssetManager.UserInterface.Forms;
-using AssetManager.Helpers;
-using AssetManager.Data;
-using AssetManager.Data.Classes;
-using AssetManager.Data.Communications;
-
-
 
 namespace AssetManager.Security
 {
     public static class SecurityTools
     {
         public static NetworkCredential AdminCreds = null;
-        private static Dictionary<string, AccessGroupMapObject> AccessGroups = new Dictionary<string, AccessGroupMapObject>();
-        private static LocalUserInfoStruct LocalUserAccess;
+        private static Dictionary<string, Data.Classes.AccessGroup> AccessGroups = new Dictionary<string, Data.Classes.AccessGroup>();
+        private static LocalUser LocalUserAccess;
 
         private const string CryptKey = "r7L$aNjE6eiVj&zhap_@|Gz_";
         public static bool VerifyAdminCreds(string credentialDescription = "")
@@ -168,7 +166,7 @@ namespace AssetManager.Security
                 {
                     foreach (DataRow row in results.Rows)
                     {
-                        AccessGroups.Add(row[SecurityCols.SecModule].ToString(), new AccessGroupMapObject(row));
+                        AccessGroups.Add(row[SecurityCols.SecModule].ToString(), new Data.Classes.AccessGroup(row));
                     }
                 }
             }
@@ -192,7 +190,7 @@ namespace AssetManager.Security
             {
                 UsrLevel = AccessLevel;
             }
-            foreach (AccessGroupMapObject group in AccessGroups.Values)
+            foreach (Data.Classes.AccessGroup group in AccessGroups.Values)
             {
                 calc_level = UsrLevel & mask;
                 if (calc_level != 0)

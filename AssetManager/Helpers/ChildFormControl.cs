@@ -55,7 +55,7 @@ namespace AssetManager.Helpers
             return Application.OpenForms.OfType<ExtendedForm>().ToList().FindAll(f => object.ReferenceEquals(f.ParentForm, parentForm) & !f.IsDisposed);
         }
 
-        public static void LookupDevice(ExtendedForm parentForm, DeviceMapObject device)
+        public static void LookupDevice(ExtendedForm parentForm, Device device)
         {
             if (device.GUID != null)
             {

@@ -33,7 +33,7 @@ namespace AssetManager.Data.Functions
     {
         #region "Fields"
 
-        private AttributeDataStruct[] db_attrib_index;
+        private CodeAttribute[] db_attrib_index;
         private string db_column;
         private ParseType db_parse_type;
 
@@ -67,7 +67,7 @@ namespace AssetManager.Data.Functions
             db_attrib_index = null;
         }
 
-        public DBControlInfo(string dataColumn, AttributeDataStruct[] attribIndex, bool required = false)
+        public DBControlInfo(string dataColumn, CodeAttribute[] attribIndex, bool required = false)
         {
             db_column = dataColumn;
             db_required = required;
@@ -75,7 +75,7 @@ namespace AssetManager.Data.Functions
             db_attrib_index = attribIndex;
         }
 
-        public DBControlInfo(string dataColumn, AttributeDataStruct[] attribIndex, ParseType parseType, bool required = false)
+        public DBControlInfo(string dataColumn, CodeAttribute[] attribIndex, ParseType parseType, bool required = false)
         {
             db_column = dataColumn;
             db_required = required;
@@ -88,10 +88,10 @@ namespace AssetManager.Data.Functions
         #region "Properties"
 
         /// <summary>
-        /// Gets or sets the <see cref="AttributeDataStruct"/> index for <see cref="ComboBox"/> controls.
+        /// Gets or sets the <see cref="CodeAttribute"/> index for <see cref="ComboBox"/> controls.
         /// </summary>
         /// <returns></returns>
-        public AttributeDataStruct[] AttribIndex
+        public CodeAttribute[] AttribIndex
         {
             get { return db_attrib_index; }
             set { db_attrib_index = value; }

@@ -4,22 +4,22 @@
         <name>AssetManager</name>
     </assembly>
     <members>
-        <member name="T:AssetManager.Data.Classes.DataMapObject">
+        <member name="T:AssetManager.Data.Classes.MappableObject">
             <summary>
             Data mapper for classes tagged with <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/>
             </summary>
         </member>
-        <member name="P:AssetManager.Data.Classes.DataMapObject.PopulatingTable">
+        <member name="P:AssetManager.Data.Classes.MappableObject.PopulatingTable">
             <summary>
             DataTable that was used to populate this object.
             </summary>
         </member>
-        <member name="P:AssetManager.Data.Classes.DataMapObject.TableName">
+        <member name="P:AssetManager.Data.Classes.MappableObject.TableName">
             <summary>
             Database Tablename for implementing object.
             </summary>
         </member>
-        <member name="M:AssetManager.Data.Classes.DataMapObject.MapProperty(System.Object,System.Data.DataRow)">
+        <member name="M:AssetManager.Data.Classes.MappableObject.MapProperty(System.Object,System.Data.DataRow)">
             <summary>
             Uses reflection to recursively populate/map class properties that are marked with a <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/>.
             </summary>
@@ -344,7 +344,7 @@
             <param name="MinSearchDistance"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Functions.AssetManagerFunctions.NarrowResults(System.Collections.Generic.List{AssetManager.Data.Classes.SmartEmpSearchStruct})">
+        <member name="M:AssetManager.Data.Functions.AssetManagerFunctions.NarrowResults(System.Collections.Generic.List{AssetManager.Data.Classes.SmartEmpSearchInfo})">
             <summary>
             Reprocesses the search results to obtain a more accurate Levenshtein distance calculation.
             </summary>
@@ -353,7 +353,7 @@
             of the returned names (First and last name), and the distance between the search string and name string may be inaccurate.</remarks>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Functions.AssetManagerFunctions.FindBestSmartSearchMatch(System.Collections.Generic.List{AssetManager.Data.Classes.SmartEmpSearchStruct})">
+        <member name="M:AssetManager.Data.Functions.AssetManagerFunctions.FindBestSmartSearchMatch(System.Collections.Generic.List{AssetManager.Data.Classes.SmartEmpSearchInfo})">
             <summary>
             Finds the best match within the results. The item with shortest Levenshtein distance and the longest match length (string length) is preferred.
             </summary>
@@ -443,7 +443,7 @@
         </member>
         <member name="P:AssetManager.Data.Functions.DBControlInfo.AttribIndex">
             <summary>
-            Gets or sets the <see cref="T:AssetManager.Data.Classes.AttributeDataStruct"/> index for <see cref="T:System.Windows.Forms.ComboBox"/> controls.
+            Gets or sets the <see cref="T:AssetManager.Data.Classes.CodeAttribute"/> index for <see cref="T:System.Windows.Forms.ComboBox"/> controls.
             </summary>
             <returns></returns>
         </member>

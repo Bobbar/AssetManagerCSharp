@@ -1,14 +1,14 @@
 using System.Drawing;
 namespace AssetManager.Data.Classes
 {
-    public struct AttributeDataStruct
+    public struct CodeAttribute
     {
         public string DisplayValue { get; set; }
         public string Code { get; set; }
         public int ID { get; set; }
         public Color Color { get; set; }
-
-        public AttributeDataStruct(string displayValue, string code, int id)
+        
+        public CodeAttribute(string displayValue, string code, int id)
         {
             this.DisplayValue = displayValue;
             this.Code = code;
@@ -16,7 +16,7 @@ namespace AssetManager.Data.Classes
             this.Color = Color.Empty;
         }
 
-        public AttributeDataStruct(string displayValue, string code, int id, Color color)
+        public CodeAttribute(string displayValue, string code, int id, Color color)
         {
             this.DisplayValue = displayValue;
             this.Code = code;
@@ -28,7 +28,7 @@ namespace AssetManager.Data.Classes
 namespace AssetManager.Data.Classes
 {
 
-    public struct DeviceUpdateInfoStruct
+    public struct DeviceUpdateInfo
     {
         public string Note;
         public string ChangeType;
@@ -37,14 +37,14 @@ namespace AssetManager.Data.Classes
 namespace AssetManager.Data.Classes
 {
 
-    public struct LocalUserInfoStruct
+    public struct LocalUser
     {
         public string UserName;
         public string Fullname;
         public int AccessLevel;
         public string GUID;
 
-        public LocalUserInfoStruct(string userName, string fullName, int accessLevel, string guid)
+        public LocalUser(string userName, string fullName, int accessLevel, string guid)
         {
             UserName = userName;
             Fullname = fullName;
@@ -57,20 +57,20 @@ namespace AssetManager.Data.Classes
 namespace AssetManager.Data.Classes
 {
 
-    public class MunisEmployeeStruct
+    public class MunisEmployee
     {
         public string Number;
         public string Name;
         public string GUID;
 
-        public MunisEmployeeStruct(string name, string number)
+        public MunisEmployee(string name, string number)
         {
             this.Name = name;
             this.Number = number;
             this.GUID = string.Empty;
         }
 
-        public MunisEmployeeStruct()
+        public MunisEmployee()
         {
             this.Name = string.Empty;
             this.Number = string.Empty;
@@ -81,15 +81,15 @@ namespace AssetManager.Data.Classes
 namespace AssetManager.Data.Classes
 {
 
-    public struct SmartEmpSearchStruct
+    public struct SmartEmpSearchInfo
     {
-        public MunisEmployeeStruct SearchResult { get; set; }
+        public MunisEmployee SearchResult { get; set; }
         public string SearchString { get; set; }
         public int MatchDistance { get; set; }
         public int MatchLength { get; set; }
 
 
-        public SmartEmpSearchStruct(MunisEmployeeStruct munisInfo, string searchString, int matchDistance)
+        public SmartEmpSearchInfo(MunisEmployee munisInfo, string searchString, int matchDistance)
         {
             this.SearchResult = munisInfo;
             this.SearchString = searchString;
@@ -98,7 +98,7 @@ namespace AssetManager.Data.Classes
 
         }
 
-        public SmartEmpSearchStruct(MunisEmployeeStruct munisInfo, string searchString)
+        public SmartEmpSearchInfo(MunisEmployee munisInfo, string searchString)
         {
             this.SearchResult = munisInfo;
             this.SearchString = searchString;

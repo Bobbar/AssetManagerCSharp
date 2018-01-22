@@ -1,4 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using AssetManager.Data;
+using AssetManager.Helpers;
+using AssetManager.Security;
+using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Management.Automation;
@@ -6,12 +10,8 @@ using System.Management.Automation.Remoting;
 using System.Management.Automation.Runspaces;
 using System.Net;
 using System.Text;
-using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AssetManager.Data;
-using AssetManager.Security;
-using AssetManager.Helpers;
 
 namespace AssetManager.Tools
 {

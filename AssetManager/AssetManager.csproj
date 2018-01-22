@@ -170,8 +170,11 @@
     <Compile Include="Business\PDFFormFilling.cs" />
     <Compile Include="Data\DataClasses\DataClassMapping\ColumnNameAttribute.cs" />
     <Compile Include="Data\DataClasses\DataClassMapping\DataMapObject.cs" />
-    <Compile Include="Data\DataClasses\DataClassMapping\MappableClasses.cs" />
     <Compile Include="Data\DataClasses\DataStructures.cs" />
+    <Compile Include="Data\DataClasses\MappableObjects\AccessGroup.cs" />
+    <Compile Include="Data\DataClasses\MappableObjects\Device.cs" />
+    <Compile Include="Data\DataClasses\MappableObjects\SibiRequest.cs" />
+    <Compile Include="Data\DataClasses\MappableObjects\TrackingEntry.cs" />
     <Compile Include="Data\DataComms\SQL\DBFactory.cs" />
     <Compile Include="Data\DataComms\SQL\DBParameter.cs" />
     <Compile Include="Data\DataComms\FTP\FTPComms.cs" />

@@ -1,11 +1,7 @@
-﻿using AssetManager.UserInterface.CustomControls;
-using AssetManager.Data;
-using AssetManager.Data.Classes;
-using AssetManager.Data.Communications;
+﻿using AssetManager.Data;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
-using AssetManager.Security;
-using AssetManager.Tools;
+using AssetManager.UserInterface.CustomControls;
 using System;
 using System.Collections.Generic;
 using System.Data;

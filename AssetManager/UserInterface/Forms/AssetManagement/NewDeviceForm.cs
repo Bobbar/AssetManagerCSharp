@@ -16,9 +16,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
     {
         #region Fields
 
-        private MunisEmployeeStruct _munisUser;
+        private MunisEmployee _munisUser;
 
-        public MunisEmployeeStruct MunisUser
+        public MunisEmployee MunisUser
         {
             get
             {
@@ -33,7 +33,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private int replacementYears = 4;
         private DBControlParser controlParser;
-        private DeviceMapObject device = new DeviceMapObject();
+        private Device device = new Device();
         private LiveBox liveBox;
         private string newUID;
 
@@ -200,7 +200,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void ClearAll()
         {
             RefreshCombos();
-            MunisUser = new MunisEmployeeStruct();  //null;
+            MunisUser = new MunisEmployee();  //null;
             ClearFields(this);
             PurchaseDatePicker.Value = DateTime.Now;
             StatusComboBox.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(GlobalInstances.DeviceAttribute.StatusType, "INSRV");
@@ -317,7 +317,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void CurrentUserTextBox_DoubleClick(object sender, EventArgs e)
         {
             CurrentUserTextBox.ReadOnly = false;
-            MunisUser = new MunisEmployeeStruct();
+            MunisUser = new MunisEmployee();
             CurrentUserTextBox.SelectAll();
         }
 

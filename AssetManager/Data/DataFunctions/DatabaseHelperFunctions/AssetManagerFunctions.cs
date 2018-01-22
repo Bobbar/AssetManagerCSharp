@@ -17,7 +17,7 @@ namespace AssetManager.Data.Functions
     {
         #region "Methods"
 
-        public static async Task<bool> HasPingHistory(DeviceMapObject device)
+        public static async Task<bool> HasPingHistory(Device device)
         {
             string query = "SELECT device_guid FROM device_ping_history WHERE device_guid = '" + device.GUID + "'";
 
@@ -33,7 +33,7 @@ namespace AssetManager.Data.Functions
 
         }
 
-        public static void ShowPingHistory(ExtendedForm parentForm, DeviceMapObject device)
+        public static void ShowPingHistory(ExtendedForm parentForm, Device device)
         {
             string query = "SELECT timestamp, hostname, ip FROM device_ping_history WHERE device_guid = '" + device.GUID + "' ORDER BY timestamp DESC";
 
@@ -59,7 +59,7 @@ namespace AssetManager.Data.Functions
         }
 
 
-        public static void AddNewEmp(MunisEmployeeStruct empInfo)
+        public static void AddNewEmp(MunisEmployee empInfo)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace AssetManager.Data.Functions
         /// <param name="empSearchName"></param>
         /// <param name="MinSearchDistance"></param>
         /// <returns></returns>
-        public static MunisEmployeeStruct SmartEmployeeSearch(string empSearchName, int MinSearchDistance = 10)
+        public static MunisEmployee SmartEmployeeSearch(string empSearchName, int MinSearchDistance = 10)
         {
             if (empSearchName.Trim() != "")
             {
@@ -93,7 +93,7 @@ namespace AssetManager.Data.Functions
                 string[] SplitName = empSearchName.Split(char.Parse(" "));
 
                 // Init new list of search result objects.
-                List<SmartEmpSearchStruct> Results = new List<SmartEmpSearchStruct>();
+                List<SmartEmpSearchInfo> Results = new List<SmartEmpSearchInfo>();
 
                 // Get results for complete name from employees table
                 Results.AddRange(GetEmpSearchResults(EmployeesCols.TableName, empSearchName, EmployeesCols.Name, EmployeesCols.Number));
@@ -121,7 +121,7 @@ namespace AssetManager.Data.Functions
                     }
                 }
             }
-            return new MunisEmployeeStruct();
+            return new MunisEmployee();
         }
 
         /// <summary>
@@ -131,9 +131,9 @@ namespace AssetManager.Data.Functions
         /// <remarks>This is done because the initial calculations are performed against the full length
         /// of the returned names (First and last name), and the distance between the search string and name string may be inaccurate.</remarks>
         /// <returns></returns>
-        private static List<SmartEmpSearchStruct> NarrowResults(List<SmartEmpSearchStruct> results)
+        private static List<SmartEmpSearchInfo> NarrowResults(List<SmartEmpSearchInfo> results)
         {
-            List<SmartEmpSearchStruct> newResults = new List<SmartEmpSearchStruct>();
+            List<SmartEmpSearchInfo> newResults = new List<SmartEmpSearchInfo>();
             //Iterate through results
             foreach (var result in results)
             {
@@ -152,7 +152,7 @@ namespace AssetManager.Data.Functions
                             //If the strings are closer together, add the new data.
                             if (NewDistance < result.MatchDistance)
                             {
-                                newResults.Add(new SmartEmpSearchStruct(result.SearchResult, result.SearchString, NewDistance));
+                                newResults.Add(new SmartEmpSearchInfo(result.SearchResult, result.SearchString, NewDistance));
                             }
                             else
                             {
@@ -174,14 +174,14 @@ namespace AssetManager.Data.Functions
         /// </summary>
         /// <param name="results"></param>
         /// <returns></returns>
-        private static SmartEmpSearchStruct FindBestSmartSearchMatch(List<SmartEmpSearchStruct> results)
+        private static SmartEmpSearchInfo FindBestSmartSearchMatch(List<SmartEmpSearchInfo> results)
         {
             //Initial minimum distance
             int MinDist = results.First().MatchDistance;
             //Initial minimum match
-            SmartEmpSearchStruct MinMatch = results.First();
-            SmartEmpSearchStruct LongestMatch = new SmartEmpSearchStruct();
-            List<SmartEmpSearchStruct> DeDupDist = new List<SmartEmpSearchStruct>();
+            SmartEmpSearchInfo MinMatch = results.First();
+            SmartEmpSearchInfo LongestMatch = new SmartEmpSearchInfo();
+            List<SmartEmpSearchInfo> DeDupDist = new List<SmartEmpSearchInfo>();
             //Iterate through the results and determine the result with the shortest Levenshtein distance.
             foreach (var result in results)
             {
@@ -222,16 +222,16 @@ namespace AssetManager.Data.Functions
         /// <param name="empNameColumn"></param>
         /// <param name="empNumColumn"></param>
         /// <returns></returns>
-        private static List<SmartEmpSearchStruct> GetEmpSearchResults(string tableName, string searchEmpName, string empNameColumn, string empNumColumn)
+        private static List<SmartEmpSearchInfo> GetEmpSearchResults(string tableName, string searchEmpName, string empNameColumn, string empNumColumn)
         {
-            List<SmartEmpSearchStruct> tmpResults = new List<SmartEmpSearchStruct>();
+            List<SmartEmpSearchInfo> tmpResults = new List<SmartEmpSearchInfo>();
             List<DBQueryParameter> EmpSearchParams = new List<DBQueryParameter>();
             EmpSearchParams.Add(new DBQueryParameter(empNameColumn, searchEmpName, false));
             using (DataTable data = DBFactory.GetDatabase().DataTableFromParameters("SELECT * FROM " + tableName + " WHERE", EmpSearchParams))
             {
                 foreach (DataRow row in data.Rows)
                 {
-                    tmpResults.Add(new SmartEmpSearchStruct(new MunisEmployeeStruct(row[empNameColumn].ToString(), row[empNumColumn].ToString()), searchEmpName, Fastenshtein.Levenshtein.Distance(searchEmpName.ToUpper(), row[empNameColumn].ToString().ToUpper())));
+                    tmpResults.Add(new SmartEmpSearchInfo(new MunisEmployee(row[empNameColumn].ToString(), row[empNumColumn].ToString()), searchEmpName, Fastenshtein.Levenshtein.Distance(searchEmpName.ToUpper(), row[empNameColumn].ToString().ToUpper())));
                 }
             }
             return tmpResults;
@@ -354,7 +354,7 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                MunisEmployeeStruct SupInfo = default(MunisEmployeeStruct);
+                MunisEmployee SupInfo = default(MunisEmployee);
                 SupInfo = GlobalInstances.MunisFunc.MunisUserSearch(parentForm);
                 if (!string.IsNullOrEmpty(SupInfo.Number))
                 {
@@ -398,7 +398,7 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static DeviceMapObject FindDeviceFromAssetOrSerial(string searchVal, FindDevType type)
+        public static Device FindDeviceFromAssetOrSerial(string searchVal, FindDevType type)
         {
             try
             {
@@ -406,13 +406,13 @@ namespace AssetManager.Data.Functions
                 {
                     List<DBQueryParameter> Params = new List<DBQueryParameter>();
                     Params.Add(new DBQueryParameter(DevicesCols.AssetTag, searchVal, true));
-                    return new DeviceMapObject(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));//"SELECT * FROM " + DevicesCols.TableName + " WHERE ", Params));
+                    return new Device(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));//"SELECT * FROM " + DevicesCols.TableName + " WHERE ", Params));
                 }
                 else if (type == FindDevType.Serial)
                 {
                     List<DBQueryParameter> Params = new List<DBQueryParameter>();
                     Params.Add(new DBQueryParameter(DevicesCols.Serial, searchVal, true));
-                    return new DeviceMapObject(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));
+                    return new Device(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));
                 }
                 return null;
             }

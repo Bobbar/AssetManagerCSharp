@@ -9,18 +9,18 @@ namespace AssetManager
         public static Dictionary<string, string> DepartmentCodes;
         public class SibiAttributes
         {
-            public AttributeDataStruct[] StatusType;
-            public AttributeDataStruct[] ItemStatusType;
-            public AttributeDataStruct[] RequestType;
+            public CodeAttribute[] StatusType;
+            public CodeAttribute[] ItemStatusType;
+            public CodeAttribute[] RequestType;
         }
 
         public class DeviceAttributes
         {
-            public AttributeDataStruct[] Locations;
-            public AttributeDataStruct[] ChangeType;
-            public AttributeDataStruct[] EquipType;
-            public AttributeDataStruct[] OSType;
-            public AttributeDataStruct[] StatusType;
+            public CodeAttribute[] Locations;
+            public CodeAttribute[] ChangeType;
+            public CodeAttribute[] EquipType;
+            public CodeAttribute[] OSType;
+            public CodeAttribute[] StatusType;
         }
 
         public static DeviceAttributes DeviceAttribute = new DeviceAttributes();

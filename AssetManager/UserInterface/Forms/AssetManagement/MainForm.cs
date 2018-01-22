@@ -191,7 +191,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewDeviceForm), deviceGUID))
                 {
                     Waiting();
-                    ViewDeviceForm NewView = new ViewDeviceForm(this, new DeviceMapObject(deviceGUID));
+                    ViewDeviceForm NewView = new ViewDeviceForm(this, new Device(deviceGUID));
                 }
             }
             catch (IndexOutOfRangeException)
@@ -383,7 +383,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (SecurityTools.VerifyAdminCreds())
             {
-                List<DeviceMapObject> SelectedDevices = new List<DeviceMapObject>();
+                List<Device> SelectedDevices = new List<Device>();
                 HashSet<int> Rows = new HashSet<int>();
                 //Iterate selected cells and collect unique row indexes via a HashSet.(HashSet only allows unique values to be added to collection).
                 foreach (DataGridViewCell cell in ResultGrid.SelectedCells)
@@ -394,7 +394,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 foreach (var row in Rows)
                 {
                     string DevUID = ResultGrid[DevicesCols.DeviceUID, row].Value.ToString();
-                    SelectedDevices.Add(new DeviceMapObject(DevUID));
+                    SelectedDevices.Add(new Device(DevUID));
                 }
 
                 Helpers.ChildFormControl.GKUpdaterInstance().AddMultipleUpdates(SelectedDevices);

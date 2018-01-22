@@ -20,10 +20,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
     {
         #region Fields
 
-        public MunisEmployeeStruct MunisUser = new MunisEmployeeStruct();
+        public MunisEmployee MunisUser = new MunisEmployee();
         private bool gridFilling = false;
         private string currentHash;
-        private DeviceMapObject currentViewDevice;
+        private Device currentViewDevice;
         private DBControlParser controlParser;
         private bool editMode = false;
         private LiveBox liveBox;
@@ -41,9 +41,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #region Constructors
 
-        public ViewDeviceForm(ExtendedForm parentForm, DataMapObject device) : base(parentForm, device)
+        public ViewDeviceForm(ExtendedForm parentForm, MappableObject device) : base(parentForm, device)
         {
-            currentViewDevice = (DeviceMapObject)device;
+            currentViewDevice = (Device)device;
 
             InitializeComponent();
             InitDBControls();
@@ -135,7 +135,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 ActiveDirectoryBox.Visible = false;
                 remoteToolsControl.Visible = false;
-                currentViewDevice = new DeviceMapObject(currentViewDevice.GUID);
+                currentViewDevice = new Device(currentViewDevice.GUID);
                 LoadDevice();
             }
         }
@@ -311,9 +311,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 string entryGUID = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryUID);
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGUID)))
-                using (var Info = new DeviceMapObject(results))
                 {
-                    var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + Info.Historical.ActionDateTime + " - " + AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, Info.Historical.ChangeType) + " - " + entryGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
+                    string dateStamp = results.Rows[0][HistoricalDevicesCols.ActionDateTime].ToString();
+                    string actionType = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, results.Rows[0][HistoricalDevicesCols.ChangeType].ToString());
+                    var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + dateStamp + " - " + actionType + " - " + entryGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
                     if (blah == DialogResult.Yes)
                     {
                         int affectedRows = DBFactory.GetDatabase().ExecuteQuery(Queries.DeleteHistoricalEntryByGUID(entryGUID));
@@ -492,7 +493,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             TrackingStatusTextBox.Text = (currentViewDevice.Tracking.IsCheckedOut ? "Checked Out" : "Checked In").ToString();
         }
 
-        private string FormTitle(DeviceMapObject Device)
+        private string FormTitle(Device Device)
         {
             return " - " + Device.CurrentUser + " - " + Device.AssetTag + " - " + Device.Description;
         }
@@ -514,7 +515,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return results;
         }
 
-        private DataTable GetInsertTable(string selectQuery, DeviceUpdateInfoStruct UpdateInfo)
+        private DataTable GetInsertTable(string selectQuery, DeviceUpdateInfo UpdateInfo)
         {
             var tmpTable = controlParser.ReturnInsertTable(selectQuery);
             var DBRow = tmpTable.Rows[0];
@@ -552,7 +553,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DBRow[DevicesCols.SibiLinkUID] = DataConsistency.CleanDBValue(currentViewDevice.SibiLink);
             DBRow[DevicesCols.LastModUser] = GlobalConstants.LocalDomainUser;
             DBRow[DevicesCols.LastModDate] = DateTime.Now;
-            MunisUser = new MunisEmployeeStruct();//null;
+            MunisUser = new MunisEmployee();//null;
             return tmpTable;
         }
 
@@ -664,7 +665,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DoneWaiting();
         }
 
-        private void OpenSibiLink(DeviceMapObject LinkDevice)
+        private void OpenSibiLink(Device LinkDevice)
         {
             try
             {
@@ -810,7 +811,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return ColList;
         }
 
-        private void UpdateDevice(DeviceUpdateInfoStruct UpdateInfo)
+        private void UpdateDevice(DeviceUpdateInfo UpdateInfo)
         {
             SetEditMode(false);
             int affectedRows = 0;

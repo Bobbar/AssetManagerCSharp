@@ -17,13 +17,13 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         public ProgressStatus ProgStatus;
         private bool bolShow = false;
         private GKUpdaterLib.GKUpdaterLibClass.Status_Stats CurrentStatus;
-        private DeviceMapObject CurDevice = new DeviceMapObject();
+        private Device CurDevice = new Device();
         private string LogBuff = "";
         private Form MyParentForm;
 
         private Color PrevColor;
 
-        public DeviceMapObject Device
+        public Device Device
         {
             get { return CurDevice; }
         }
@@ -37,7 +37,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             // Add any initialization after the InitializeComponent() call.
         }
 
-        public GKProgressControl(Form parentForm, DeviceMapObject device, bool createMissingDirs, string gkPath, int seq = 0)
+        public GKProgressControl(Form parentForm, Device device, bool createMissingDirs, string gkPath, int seq = 0)
         {
             Disposed += GK_Progress_Fragment_Disposed;
             InitializeComponent();
@@ -66,7 +66,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             Panel1.DoubleBufferedPanel(true);
         }
 
-        public GKProgressControl(Form parentForm, DeviceMapObject device, bool createMissingDirs, string sourcePath, string destPath, int seq = 0)
+        public GKProgressControl(Form parentForm, Device device, bool createMissingDirs, string sourcePath, string destPath, int seq = 0)
         {
             Disposed += GK_Progress_Fragment_Disposed;
             InitializeComponent();

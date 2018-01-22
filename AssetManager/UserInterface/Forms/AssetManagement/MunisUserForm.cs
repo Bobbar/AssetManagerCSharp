@@ -11,7 +11,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 {
     public partial class MunisUserForm : ExtendedForm
     {
-        public MunisEmployeeStruct EmployeeInfo
+        public MunisEmployee EmployeeInfo
         {
             get
             {
@@ -19,7 +19,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private MunisEmployeeStruct SelectedEmpInfo = new MunisEmployeeStruct();
+        private MunisEmployee SelectedEmpInfo = new MunisEmployee();
 
         private const int intMaxResults = 50;
 

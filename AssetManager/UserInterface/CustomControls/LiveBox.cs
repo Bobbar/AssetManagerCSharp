@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Data;
-using System.Drawing;
-using AssetManager.UserInterface.Forms.AssetManagement;
-using AssetManager.Data;
+﻿using AssetManager.Data;
 using AssetManager.Data.Classes;
 using AssetManager.Helpers;
-using System.Diagnostics;
+using AssetManager.UserInterface.Forms.AssetManagement;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -262,7 +259,7 @@ namespace AssetManager.UserInterface.CustomControls
                 else if (CurrentLiveBoxArgs.Control.FindForm() is NewDeviceForm)
                 {
                     NewDeviceForm FrmSetData = (NewDeviceForm)CurrentLiveBoxArgs.Control.FindForm();
-                    FrmSetData.MunisUser = new MunisEmployeeStruct(SelectedText, SelectedValue);
+                    FrmSetData.MunisUser = new MunisEmployee(SelectedText, SelectedValue);
                 }
             }
         }

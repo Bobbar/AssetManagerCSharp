@@ -12,7 +12,7 @@ namespace AssetManager.Helpers
         public Type ColumnType { get; set; }
         public bool ColumnReadOnly { get; set; }
         public bool ColumnVisible { get; set; }
-        public AttributeDataStruct[] AttributeIndex { get; set; }
+        public CodeAttribute[] AttributeIndex { get; set; }
         public ColumnFormatTypes ColumnFormatType { get; set; }
 
         public GridColumnAttrib(string colName, string caption, Type type)
@@ -37,7 +37,7 @@ namespace AssetManager.Helpers
             ColumnFormatType = displayMode;
         }
 
-        public GridColumnAttrib(string colName, string caption, AttributeDataStruct[] attribIndex)
+        public GridColumnAttrib(string colName, string caption, CodeAttribute[] attribIndex)
         {
             ColumnName = colName;
             ColumnCaption = caption;
@@ -48,7 +48,7 @@ namespace AssetManager.Helpers
             ColumnFormatType = ColumnFormatTypes.AttributeCombo;
         }
 
-        public GridColumnAttrib(string colName, string caption, AttributeDataStruct[] attribIndex, ColumnFormatTypes displayMode)
+        public GridColumnAttrib(string colName, string caption, CodeAttribute[] attribIndex, ColumnFormatTypes displayMode)
         {
             ColumnName = colName;
             ColumnCaption = caption;

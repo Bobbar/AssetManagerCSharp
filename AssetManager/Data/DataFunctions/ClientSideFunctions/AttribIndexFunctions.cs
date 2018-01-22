@@ -13,12 +13,12 @@ namespace AssetManager.Data.Functions
     static class AttributeFunctions
     {
 
-        public static void FillComboBox(AttributeDataStruct[] IndexType, ComboBox combo)
+        public static void FillComboBox(CodeAttribute[] IndexType, ComboBox combo)
         {
             combo.Items.Clear();
             combo.Text = "";
             AddAutoSizeDropWidthHandler(combo);
-            foreach (AttributeDataStruct ComboItem in IndexType)
+            foreach (CodeAttribute ComboItem in IndexType)
             {
                 combo.Items.Add(ComboItem.DisplayValue);
             }
@@ -58,19 +58,19 @@ namespace AssetManager.Data.Functions
             senderComboBox.DropDownWidth = correctWidth;
         }
 
-        public static void FillToolComboBox(AttributeDataStruct[] attribType, ref ToolStripComboBox cmb)
+        public static void FillToolComboBox(CodeAttribute[] attribType, ref ToolStripComboBox cmb)
         {
             cmb.Items.Clear();
             cmb.Text = "";
             int i = 0;
-            foreach (AttributeDataStruct ComboItem in attribType)
+            foreach (CodeAttribute ComboItem in attribType)
             {
                 cmb.Items.Insert(i, ComboItem.DisplayValue);
                 i += 1;
             }
         }
 
-        public static string GetDBValue(AttributeDataStruct[] codeIndex, int index)
+        public static string GetDBValue(CodeAttribute[] codeIndex, int index)
         {
             try
             {
@@ -86,9 +86,9 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static string GetDisplayValueFromCode(AttributeDataStruct[] codeIndex, string code)
+        public static string GetDisplayValueFromCode(CodeAttribute[] codeIndex, string code)
         {
-            foreach (AttributeDataStruct item in codeIndex)
+            foreach (CodeAttribute item in codeIndex)
             {
                 if (item.Code == code)
                     return item.DisplayValue;
@@ -96,7 +96,7 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        public static string GetDisplayValueFromIndex(AttributeDataStruct[] codeIndex, int index)
+        public static string GetDisplayValueFromIndex(CodeAttribute[] codeIndex, int index)
         {
             if (index > -1)
             {
@@ -105,7 +105,7 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        public static int GetComboIndexFromCode(AttributeDataStruct[] codeIndex, string code)
+        public static int GetComboIndexFromCode(CodeAttribute[] codeIndex, string code)
         {
             for (int i = 0; i <= codeIndex.Length - 1; i++)
             {
@@ -154,13 +154,13 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        private static AttributeDataStruct[] BuildIndex(string codeType, string typeName)
+        private static CodeAttribute[] BuildIndex(string codeType, string typeName)
         {
             try
             {
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectAttributeCodes(codeType, typeName)))
                 {
-                    List<AttributeDataStruct> tmpArray = new List<AttributeDataStruct>();
+                    List<CodeAttribute> tmpArray = new List<CodeAttribute>();
                     foreach (DataRow r in results.Rows)
                     {
                         string DisplayValue = "";
@@ -186,7 +186,7 @@ namespace AssetManager.Data.Functions
                             attribColor = ColorTranslator.FromHtml(r[ComboCodesBaseCols.Color].ToString());
                         }
 
-                        tmpArray.Add(new AttributeDataStruct(DisplayValue, r[ComboCodesBaseCols.CodeValue].ToString(), Convert.ToInt32(r[ComboCodesBaseCols.ID]), attribColor));
+                        tmpArray.Add(new CodeAttribute(DisplayValue, r[ComboCodesBaseCols.CodeValue].ToString(), Convert.ToInt32(r[ComboCodesBaseCols.ID]), attribColor));
                     }
                     return tmpArray.ToArray();
                 }

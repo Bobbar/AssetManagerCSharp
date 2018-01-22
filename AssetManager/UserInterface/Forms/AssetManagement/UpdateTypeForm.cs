@@ -9,12 +9,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 {
     public partial class UpdateDev : ExtendedForm
     {
-        public DeviceUpdateInfoStruct UpdateInfo
+        public DeviceUpdateInfo UpdateInfo
         {
             get { return NewUpdateInfo; }
         }
 
-        private DeviceUpdateInfoStruct NewUpdateInfo;
+        private DeviceUpdateInfo NewUpdateInfo;
 
         public UpdateDev(ExtendedForm parentForm, bool isNoteOnly = false)
         {

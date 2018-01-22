@@ -22,8 +22,8 @@ namespace AssetManager.UserInterface.CustomControls
         private int failedPings = 0;
         private PingVis pingVis;
         private ExtendedForm hostForm;
-        private DeviceMapObject device;
-        public DeviceMapObject Device
+        private Device device;
+        public Device Device
         {
             get
             {
@@ -134,7 +134,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private async void DeployTeamViewer(DeviceMapObject device)
+        private async void DeployTeamViewer(Device device)
         {
             if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin))
             {
@@ -284,7 +284,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private async void UpdateChrome(DeviceMapObject device)
+        private async void UpdateChrome(Device device)
         {
             if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin))
             {
