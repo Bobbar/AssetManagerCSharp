@@ -322,7 +322,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             if (!string.IsNullOrEmpty(CurrentRequest.RequisitionNumber) && string.IsNullOrEmpty(CurrentRequest.PO))
             {
-                string GetPO = await GlobalInstances.MunisFunc.GetPOFromReqNumberAsync(CurrentRequest.RequisitionNumber, CurrentRequest.DateStamp.Year.ToString());
+                string GetPO = await GlobalInstances.MunisFunc.GetPOFromReqNumberAsync(CurrentRequest.RequisitionNumber, CurrentRequest.NeedByDate.Year.ToString());
                 if (GetPO != null && GetPO.Length > 1)
                 {
                     var blah = OtherFunctions.Message("PO Number " + GetPO + " was detected in the Requisition. Do you wish to add it to this request?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "New PO Detected", this);
@@ -1203,7 +1203,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (CurrentRequest != null)
                 {
-                    SetReqStatus(CurrentRequest.RequisitionNumber, CurrentRequest.DateStamp.Year);
+                    SetReqStatus(CurrentRequest.RequisitionNumber, CurrentRequest.NeedByDate.Year);
                     CheckForPO();
                     SetPOStatus(CurrentRequest.PO);
                 }
@@ -1426,7 +1426,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 string ReqNum = txtReqNumber.Text.Trim();
                 if (!IsModifying && !string.IsNullOrEmpty(ReqNum))
                 {
-                    GlobalInstances.MunisFunc.NewMunisReqSearch(ReqNum, DataConsistency.YearFromDate(CurrentRequest.DateStamp), this);
+                    GlobalInstances.MunisFunc.NewMunisReqSearch(ReqNum, CurrentRequest.NeedByDate.Year.ToString(), this);
                 }
             }
             catch (Exception ex)
