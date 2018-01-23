@@ -9,6 +9,8 @@ using System.Data.SQLite;
 using System.IO;
 using AssetManager.Helpers;
 using AssetManager.Data.Communications;
+using AssetDatabase.Data;
+using AssetManager.Security;
 
 namespace AssetManager.Data.Functions
 {
@@ -18,15 +20,16 @@ namespace AssetManager.Data.Functions
         public static List<string> SQLiteTableHashes;
 
         public static List<string> RemoteTableHashes;
+
         public static void RefreshLocalDBCache()
         {
             try
             {
-                // GlobalSwitches.BuildingCache = True
-                using (SQLiteDatabase conn = new SQLiteDatabase(false))
-                {
-                    conn.RefreshSqlCache();
-                }
+                 //GlobalSwitches.BuildingCache = True
+                //using (SqliteDatabase conn = new SqliteDatabase(false))
+                //{
+                    RefreshSqlCache();
+                //}
             }
             catch (Exception ex)
             {
@@ -52,20 +55,20 @@ namespace AssetManager.Data.Functions
                 return await Task.Run(() =>
                 {
                     List<string> LocalHashes = new List<string>();
-                    using (SQLiteDatabase SQLiteComms = new SQLiteDatabase())
-                    {
-                        LocalHashes = SQLiteComms.LocalTableHashList();
-                        return SQLiteComms.CompareTableHashes(LocalHashes, RemoteTableHashes);
-                    }
+                    //using (SQLiteDatabase SQLiteComms = new SQLiteDatabase())
+                    //{
+                        LocalHashes = LocalTableHashList();
+                        return CompareTableHashes(LocalHashes, RemoteTableHashes);
+                    //}
                 });
             }
             else
             {
-                using (SQLiteDatabase SQLiteComms = new SQLiteDatabase())
-                {
-                    if (SQLiteComms.GetSchemaVersion() > 0)
+                //using (SQLiteDatabase SQLiteComms = new SQLiteDatabase())
+                //{
+                    if (GetSchemaVersion() > 0)
                         return true;
-                }
+                //}
             }
             return false;
         }
@@ -79,15 +82,15 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                using (SQLiteDatabase SQLiteComms = new SQLiteDatabase())
-                {
-                    if (SQLiteComms.GetSchemaVersion() > 0)
+                //using (SQLiteDatabase SQLiteComms = new SQLiteDatabase())
+                //{
+                    if (GetSchemaVersion() > 0)
                     {
                         if (connectedToDB)
                         {
-                            SQLiteTableHashes = SQLiteComms.LocalTableHashList();
-                            RemoteTableHashes = SQLiteComms.RemoteTableHashList();
-                            return SQLiteComms.CompareTableHashes(SQLiteTableHashes, RemoteTableHashes);
+                            SQLiteTableHashes = LocalTableHashList();
+                            RemoteTableHashes = RemoteTableHashList();
+                            return CompareTableHashes(SQLiteTableHashes, RemoteTableHashes);
                         }
                         else
                         {
@@ -99,13 +102,347 @@ namespace AssetManager.Data.Functions
                         SQLiteTableHashes = null;
                         return false;
                     }
-                }
+                //}
             }
             catch
             {
                 return false;
             }
         }
+
+
+
+
+        // Stuff from SQLiteComms.
+
+
+
+
+        public static bool CheckLocalCacheHash()
+        {
+            List<string> RemoteHashes = new List<string>();
+            RemoteHashes = RemoteTableHashList();
+            return CompareTableHashes(RemoteHashes, SQLiteTableHashes);
+        }
+
+        public static bool CompareTableHashes(List<string> tableHashesA, List<string> tableHashesB)
+        {
+            try
+            {
+                if (ReferenceEquals(tableHashesA, null) || ReferenceEquals(tableHashesB, null))
+                {
+                    return false;
+                }
+                for (int i = 0; i <= tableHashesA.Count - 1; i++)
+                {
+                    if (tableHashesA[i] != tableHashesB[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public static int GetSchemaVersion()
+        {
+
+            var query = "pragma schema_version";
+            return System.Convert.ToInt32(DBFactory.GetSqliteDatabase().ExecuteScalarFromQueryString(query));
+
+
+
+            //using (var db = DBFactory.GetSqliteDatabase())
+            //using (DbCommand cmd = db.GetCommand("pragma schema_version"))//new SqliteCommand("pragma schema_version"))
+            //{
+            //    cmd.Connection = db.NewConnection();
+            //    return System.Convert.ToInt32(cmd.ExecuteScalar());
+            //}
+        }
+
+        public static void RefreshSqlCache()
+        {
+            try
+            {
+                if (SQLiteTableHashes != null && CheckLocalCacheHash())
+                {
+                    return;
+                }
+
+                Logging.Logger("Rebuilding local DB cache...");
+                //CloseConnection();
+                GC.Collect();
+                if (!File.Exists(Paths.SQLiteDir))
+                {
+                    Directory.CreateDirectory(Paths.SQLiteDir);
+                }
+                if (File.Exists(Paths.SQLitePath))
+                {
+                    File.Delete(Paths.SQLitePath);
+                }
+
+                 //var db = DBFactory.GetSqliteDataBase();
+
+                // SqliteConnection.CreateFile(Paths.SqlitePath);
+         
+                //Connection.SetPassword(SecurityTools.DecodePassword(EncSqlitePass));
+                //OpenConnection();
+                //using (var trans = connection.BeginTransaction())
+                using (var trans = DBFactory.GetSqliteDatabase().StartTransaction())
+                {
+                    foreach (var table in TableList())
+                    {
+                        AddTable(table, trans);
+                    }
+                    trans.Commit();
+                }
+
+                SQLiteTableHashes = LocalTableHashList();
+                RemoteTableHashes = RemoteTableHashList();
+                Logging.Logger("Local DB cache complete...");
+            }
+            catch (Exception ex)
+            {
+                Logging.Logger("Errors during cache rebuild!");
+                Logging.Logger("STACK TRACE: " + ex.ToString());
+            }
+        }
+
+        public static List<string> LocalTableHashList()
+        {
+            try
+            {
+                List<string> hashList = new List<string>();
+                foreach (var table in TableList())
+                {
+                    using (var results = ToStringTable(DBFactory.GetSqliteDatabase().DataTableFromQueryString("SELECT * FROM " + table)))
+                    {
+                        results.TableName = table;
+                        hashList.Add(SecurityTools.GetSHAOfTable(results));
+                    }
+                }
+                return hashList;
+            }
+            catch (Exception)
+            {
+                return default(List<string>);
+            }
+        }
+
+        public static List<string> RemoteTableHashList()
+        {
+            List<string> hashList = new List<string>();
+            //using (MySQLDatabase MySQLDB = new MySQLDatabase())
+            //{
+
+            var MySQLDB = DBFactory.GetMySqlDatabase();
+            foreach (var table in TableList())
+            {
+                using (var results = ToStringTable(DBFactory.GetMySqlDatabase().DataTableFromQueryString("SELECT * FROM " + table)))
+                {
+                    results.TableName = table;
+                    hashList.Add(SecurityTools.GetSHAOfTable(results));
+                }
+            }
+            return hashList;
+            //}
+        }
+
+        private static void AddTable(string tableName, DbTransaction transaction)
+        {
+            CreateCacheTable(tableName, transaction);
+            ImportDatabase(tableName, transaction);
+        }
+
+        /// <summary>
+        /// Builds a Sqlite compatible CREATE statement from a MySQL 'SHOW FULL COLUMNS FROM' query result.
+        /// </summary>
+        /// <param name="columnResults"></param>
+        /// <returns></returns>
+        private static string BuildCreateStatement(DataTable columnResults)
+        {
+
+            // List for primary keys.
+            var keys = new List<string>();
+
+            string statement = "CREATE TABLE ";
+
+            // Add the table name from the results parameter.
+            // **REMEMEBER TO ADD THE TABLE NAME TO THE RESULTS DATATABLE BEFORE CALLING THIS FUNCTION**
+            statement += " `" + columnResults.TableName + "` ( ";
+
+            // Iterate through the table rows.
+            foreach (DataRow row in columnResults.Rows)
+            {
+                // Add the field/column name and data type to the statement.
+                statement += "`" + row["Field"].ToString() + "` ";
+                statement += row["Type"].ToString();
+
+                // If the current field/column is a primary key, add it to the keys list.
+                if (row["Key"].ToString() == "PRI")
+                {
+                    keys.Add(row["Field"].ToString());
+                }
+
+                // Add a column delimiter if we are not on the last item.
+                if (columnResults.Rows.IndexOf(row) != (columnResults.Rows.Count - 1)) statement += ", ";
+            }
+
+
+            // Add primary keys declaration.
+            if (keys.Count > 0)
+            {
+                // Declaration header and open parentheses.
+                statement += ", PRIMARY KEY (";
+
+                foreach (string key in keys)
+                {
+                    // Add keys string and delimiter, if needed.
+                    statement += key;
+                    if (keys.IndexOf(key) != (keys.Count - 1)) statement += ", ";
+                }
+
+                // Close parentheses.
+                statement += ")";
+            }
+
+            // End of statement close parentheses.
+            statement += ");";
+
+            return statement;
+        }
+
+        private static void CreateCacheTable(string tableName, DbTransaction transaction)
+        {
+            string createQry;
+            using (DataTable tableColumns = GetTableColumns(tableName))
+            {
+                createQry = BuildCreateStatement(tableColumns);
+            }
+
+            DBFactory.GetSqliteDatabase().ExecuteNonQuery(createQry, transaction);
+
+
+            //using (DbCommand cmd = new SqliteCommand(createQry, Connection))
+            //{
+            //    cmd.Transaction = transaction;
+            //    cmd.ExecuteNonQuery();
+            //}
+
+        }
+
+        private static DataTable GetRemoteDBTable(string tableName)
+        {
+            string qry = "SELECT * FROM " + tableName;
+
+            using (var adapter = DBFactory.GetMySqlDatabase().GetDataAdapter(qry, false))
+            using (DataTable results = new DataTable(tableName))
+            {
+                adapter.Fill(results);
+                return results;
+            }
+
+            ////using (var MySQLDB = DBFactory.GetMySqlDatabase())
+            ////{
+            //var MySQLDB = DBFactory.GetMySqlDatabase();
+
+            //using (DataTable results = new DataTable())
+            //    {
+            //        using (var conn = MySQLDB.NewConnection())
+            //        {
+            //            using (var adapter = MySQLDB.ReturnMySqlAdapter(qry, conn))
+            //            {
+            //                adapter.AcceptChangesDuringFill = false;
+            //                adapter.Fill(results);
+            //                results.TableName = tableName;
+            //                return results;
+            //            }
+            //        }
+            //    }
+            // }
+        }
+
+        private static DataTable GetTableColumns(string tableName)
+        {
+            string qry = "SHOW FULL COLUMNS FROM " + tableName;
+            //using (MySQLDatabase MySQLDB = new MySQLDatabase())
+            //{
+
+                using (var results = DBFactory.GetMySqlDatabase().DataTableFromQueryString(qry))
+                {
+                    results.TableName = tableName;
+                    return results;
+                }
+            //}
+        }
+
+        private static void ImportDatabase(string tableName, DbTransaction transaction)
+        {
+            var query = "SELECT * FROM " + tableName;
+
+            using (var remoteTable = GetRemoteDBTable(tableName))
+            {
+                DBFactory.GetSqliteDatabase().UpdateTable(query, remoteTable, transaction);
+            }
+
+
+
+
+            //OpenConnection();
+            //using (var cmd = Connection.CreateCommand())
+            //{
+            //    using (var adapter = new SqliteDataAdapter(cmd))
+            //    {
+            //        using (SqliteCommandBuilder builder = new SqliteCommandBuilder(adapter))
+            //        {
+            //            cmd.Transaction = transaction;
+            //            cmd.CommandText = "SELECT * FROM " + tableName;
+            //            adapter.Update(GetRemoteDBTable(tableName));
+            //        }
+            //    }
+            //}
+        }
+
+        private static List<string> TableList()
+        {
+            List<string> list = new List<string>();
+            list.Add(DevicesCols.TableName);
+            list.Add(HistoricalDevicesCols.TableName);
+            list.Add(TrackablesCols.TableName);
+            list.Add(SibiRequestCols.TableName);
+            list.Add(SibiRequestItemsCols.TableName);
+            list.Add(SibiNotesCols.TableName);
+            list.Add(DeviceComboCodesCols.TableName);
+            list.Add(SibiComboCodesCols.TableName);
+            list.Add("munis_codes");
+            list.Add(SecurityCols.TableName);
+            list.Add(UsersCols.TableName);
+            list.Add("device_ping_history");
+            list.Add("munis_departments");
+            return list;
+        }
+
+        private static DataTable ToStringTable(DataTable table)
+        {
+            DataTable tmpTable = table.Clone();
+            for (var i = 0; i <= tmpTable.Columns.Count - 1; i++)
+            {
+                tmpTable.Columns[i].DataType = typeof(string);
+            }
+            foreach (DataRow row in table.Rows)
+            {
+                tmpTable.ImportRow(row);
+            }
+            table.Dispose();
+            return tmpTable;
+        }
+
+
+
 
     }
 }

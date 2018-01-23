@@ -179,14 +179,14 @@ Missing Files: " + MissingSQLFiles.Count;
                 int deletions = 0;
                 foreach (var sqlItem in missingSQLFiles)
                 {
-                    var DeviceRows = DBFactory.GetDatabase().ExecuteQuery("DELETE FROM " + DeviceTable.TableName + " WHERE " + DeviceTable.FileUID + "='" + sqlItem.FileUID + "'");
+                    var DeviceRows = DBFactory.GetDatabase().ExecuteNonQuery("DELETE FROM " + DeviceTable.TableName + " WHERE " + DeviceTable.FileUID + "='" + sqlItem.FileUID + "'");
                     if (DeviceRows > 0)
                     {
                         deletions += DeviceRows;
                         Logging.Logger("Deleted Device SQL File: " + sqlItem.FKey + "/" + sqlItem.FileUID);
                     }
 
-                    var SibiRows = DBFactory.GetDatabase().ExecuteQuery("DELETE FROM " + SibiTable.TableName + " WHERE " + SibiTable.FileUID + "='" + sqlItem.FileUID + "'");
+                    var SibiRows = DBFactory.GetDatabase().ExecuteNonQuery("DELETE FROM " + SibiTable.TableName + " WHERE " + SibiTable.FileUID + "='" + sqlItem.FileUID + "'");
                     if (SibiRows > 0)
                     {
                         deletions += SibiRows;
@@ -209,14 +209,14 @@ Missing Files: " + MissingSQLFiles.Count;
                 {
                     if (!CheckForPrimaryItem(sqlItem.FKey))
                     {
-                        var DeviceRows = DBFactory.GetDatabase().ExecuteQuery("DELETE FROM " + DeviceTable.TableName + " WHERE " + DeviceTable.FKey + "='" + sqlItem.FKey + "'");
+                        var DeviceRows = DBFactory.GetDatabase().ExecuteNonQuery("DELETE FROM " + DeviceTable.TableName + " WHERE " + DeviceTable.FKey + "='" + sqlItem.FKey + "'");
                         if (DeviceRows > 0)
                         {
                             deletions += DeviceRows;
                             Logging.Logger("Deleted " + DeviceRows.ToString() + " Device SQL Entries For: " + sqlItem.FKey);
                         }
 
-                        var SibiRows = DBFactory.GetDatabase().ExecuteQuery("DELETE FROM " + SibiTable.TableName + " WHERE " + SibiTable.FKey + "='" + sqlItem.FKey + "'");
+                        var SibiRows = DBFactory.GetDatabase().ExecuteNonQuery("DELETE FROM " + SibiTable.TableName + " WHERE " + SibiTable.FKey + "='" + sqlItem.FKey + "'");
                         if (SibiRows > 0)
                         {
                             deletions += SibiRows;

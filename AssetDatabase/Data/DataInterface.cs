@@ -1,11 +1,17 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-namespace AssetManager.Data.Communications.Old
+namespace AssetDatabase.Data
 {
 
     public interface IDataBase
     {
+
+        DbConnection NewConnection();
+
+        bool OpenConnection(DbConnection connection, bool overrideNoPing = false);
+
+        bool OpenConnection();
 
         /// <summary>
         /// Returns a new <see cref="DbTransaction"/>.
@@ -55,7 +61,7 @@ namespace AssetManager.Data.Communications.Old
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        int ExecuteQuery(string query);
+        int ExecuteNonQuery(string query, DbTransaction transaction = null);
 
         /// <summary>
         /// Inserts a list of <see cref="DBParameter"/> into the specified table. Returns the number of rows affected.
@@ -101,6 +107,9 @@ namespace AssetManager.Data.Communications.Old
         /// <param name="params"></param>
         /// <returns></returns>
         DbCommand GetCommandFromParams(string query, List<DBQueryParameter> @params);
+
+
+        DbDataAdapter GetDataAdapter(string query, bool acceptChanges = true);
 
     }
 }

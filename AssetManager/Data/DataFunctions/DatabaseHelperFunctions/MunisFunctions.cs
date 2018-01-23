@@ -10,6 +10,7 @@ using AssetManager.UserInterface.Forms.AssetManagement;
 using AssetManager.Data.Communications;
 using AssetManager.Data.Classes;
 using AssetManager.Helpers;
+using AssetDatabase.Data;
 
 namespace AssetManager.Data.Functions
 {

@@ -9,7 +9,7 @@ using AssetManager.Security;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 
-namespace AssetManager.Data.Communications
+namespace AssetManager.Data.Communications.Old
 {
     public class SQLiteDatabase : IDisposable, IDataBase
     {

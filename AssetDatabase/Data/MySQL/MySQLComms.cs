@@ -1,12 +1,12 @@
 ﻿using MySql.Data.MySqlClient;
+using MySql.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using AssetManager.Security;
 
 
-namespace AssetManager.Data.Communications.Old
+namespace AssetDatabase.Data
 {
     public class MySQLDatabase : IDisposable, IDataBase
     {
@@ -50,30 +50,48 @@ namespace AssetManager.Data.Communications.Old
 
         #region Fields
 
+        private string serverIp = string.Empty;
+        private string dbPassword = string.Empty;
+        private string dbUser = string.Empty;
+
+
         private const string EncMySqlPass = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG";
         private string MySQLConnectString;
 
         #endregion Fields
 
+        #region Properties
+
+        public bool ServerPinging { get; set; } = true;
+        public string CurrentDatabase { get; set; } = string.Empty;
+
+
+        #endregion Properties
+
         #region Constructors
 
-        public MySQLDatabase()
+        public MySQLDatabase(string serverIp, string user, string password, string database)
         {
-            MySQLConnectString = "server=" + ServerInfo.MySQLServerIP + ";uid=asset_mgr_usr;pwd=" + SecurityTools.DecodePassword(EncMySqlPass) + ";ConnectionTimeout=5;TreatTinyAsBoolean=false;database=";
+            this.serverIp = serverIp;
+            dbUser = user;
+            dbPassword = password;
+            CurrentDatabase = database;
+
+            MySQLConnectString = "server=" + serverIp + ";uid=" + dbUser + ";pwd=" + dbPassword + ";ConnectionTimeout=5;TreatTinyAsBoolean=false;Encrypt=false;database=";
         }
 
         #endregion Constructors
 
         #region Methods
 
-        public MySqlConnection NewConnection()
+        public DbConnection NewConnection()
         {
             return new MySqlConnection(GetConnectString());
         }
 
-        public bool OpenConnection(MySqlConnection connection, bool overrideNoPing = false)
+        public bool OpenConnection(DbConnection connection, bool overrideNoPing = false)
         {
-            if (!ServerInfo.ServerPinging) //Server not pinging.
+            if (!ServerPinging) //Server not pinging.
             {
                 if (overrideNoPing) //Ignore server not pinging, try to open anyway.
                 {
@@ -90,11 +108,16 @@ namespace AssetManager.Data.Communications.Old
             }
         }
 
-        private bool TryOpenConnection(MySqlConnection connection)
+        public bool OpenConnection()
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool TryOpenConnection(DbConnection connection)
         {
             if (ReferenceEquals(connection, null)) //Instantiate new connection.
             {
-                connection = NewConnection();
+                connection = (MySqlConnection)NewConnection();
             }
             if (connection.State != ConnectionState.Open) //Try to open connection.
             {
@@ -112,13 +135,10 @@ namespace AssetManager.Data.Communications.Old
 
         private string GetConnectString()
         {
-            return MySQLConnectString + ServerInfo.CurrentDataBase.ToString();
+            return MySQLConnectString + CurrentDatabase;
         }
 
-        public MySqlDataAdapter ReturnMySqlAdapter(string sqlQry, MySqlConnection connection)
-        {
-            return new MySqlDataAdapter(sqlQry, connection);
-        }
+      
 
         #endregion Methods
 
@@ -126,7 +146,7 @@ namespace AssetManager.Data.Communications.Old
 
         public DbTransaction StartTransaction()
         {
-            var conn = NewConnection();
+            var conn = (MySqlConnection)NewConnection();
             OpenConnection(conn);
             var trans = conn.BeginTransaction();
             return trans;
@@ -137,7 +157,7 @@ namespace AssetManager.Data.Communications.Old
             using (DataTable results = new DataTable())
             using (var da = new MySqlDataAdapter())
             using (var cmd = new MySqlCommand(query))
-            using (var conn = NewConnection())
+            using (var conn = (MySqlConnection)NewConnection())
             {
                 OpenConnection(conn);
                 cmd.Connection = conn;
@@ -153,7 +173,7 @@ namespace AssetManager.Data.Communications.Old
             {
                 using (DbDataAdapter da = new MySqlDataAdapter())
                 using (DataTable results = new DataTable())
-                using (var conn = NewConnection())
+                using (var conn = (MySqlConnection)NewConnection())
                 {
                     OpenConnection(conn);
                     command.Connection = conn;
@@ -191,7 +211,7 @@ namespace AssetManager.Data.Communications.Old
         {
             try
             {
-                using (var conn = NewConnection())
+                using (var conn = (MySqlConnection)NewConnection())
                 {
                     OpenConnection(conn);
                     command.Connection = conn;
@@ -206,7 +226,7 @@ namespace AssetManager.Data.Communications.Old
 
         public object ExecuteScalarFromQueryString(string query)
         {
-            using (var conn = NewConnection())
+            using (var conn = (MySqlConnection)NewConnection())
             using (MySqlCommand cmd = new MySqlCommand(query, conn))
             {
                 OpenConnection(conn);
@@ -214,14 +234,28 @@ namespace AssetManager.Data.Communications.Old
             }
         }
 
-        public int ExecuteQuery(string query)
+        public int ExecuteNonQuery(string query, DbTransaction transaction = null)
         {
-            using (var conn = NewConnection())
-            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            if (transaction == null)
             {
-                OpenConnection(conn);
-                return cmd.ExecuteNonQuery();
+                using (var conn = (MySqlConnection)NewConnection())
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    OpenConnection(conn);
+                    return cmd.ExecuteNonQuery();
+                }
+
             }
+            else
+            {
+                MySqlConnection conn = (MySqlConnection)transaction.Connection;
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    return cmd.ExecuteNonQuery();
+                }
+
+            }
+
         }
 
         public int InsertFromParameters(string tableName, List<DBParameter> @params, DbTransaction transaction = null)
@@ -245,7 +279,7 @@ namespace AssetManager.Data.Communications.Old
             }
             else
             {
-                using (var conn = NewConnection())
+                using (var conn = (MySqlConnection)NewConnection())
                 using (var Adapter = new MySqlDataAdapter(SelectQuery, conn))
                 using (var Builder = new MySqlCommandBuilder(Adapter))
                 {
@@ -275,7 +309,7 @@ namespace AssetManager.Data.Communications.Old
             }
             else
             {
-                using (var conn = NewConnection())
+                using (var conn = (MySqlConnection)NewConnection())
                 using (var Adapter = new MySqlDataAdapter(selectQuery, conn))
                 using (var Builder = new MySqlCommandBuilder(Adapter))
                 {
@@ -299,7 +333,7 @@ namespace AssetManager.Data.Communications.Old
             }
             else
             {
-                using (var conn = NewConnection())
+                using (var conn = (MySqlConnection)NewConnection())
                 using (MySqlCommand cmd = new MySqlCommand(sqlUpdateQry, conn))
                 {
                     OpenConnection(conn);
@@ -348,6 +382,16 @@ namespace AssetManager.Data.Communications.Old
             return cmd;
         }
 
+        public DbDataAdapter GetDataAdapter(string query, bool acceptChanges = true)
+        {
+            var conn = (MySqlConnection)NewConnection();
+            OpenConnection(conn);
+            var adapter = new MySqlDataAdapter(query, conn);
+            adapter.AcceptChangesDuringFill = acceptChanges;
+            return adapter;
+
+            //return new MySqlDataAdapter(sqlQry, connection);
+        }
         #endregion IDataBase
     }
 }

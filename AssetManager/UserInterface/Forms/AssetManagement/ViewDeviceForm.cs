@@ -317,7 +317,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + dateStamp + " - " + actionType + " - " + entryGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
                     if (blah == DialogResult.Yes)
                     {
-                        int affectedRows = DBFactory.GetDatabase().ExecuteQuery(Queries.DeleteHistoricalEntryByGUID(entryGUID));
+                        int affectedRows = DBFactory.GetDatabase().ExecuteNonQuery(Queries.DeleteHistoricalEntryByGUID(entryGUID));
                         if (affectedRows > 0)
                         {
                             SetStatusBar("Entry deleted successfully.");

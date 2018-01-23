@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AssetDatabase.Data;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
@@ -630,7 +631,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                return DBFactory.GetDatabase().ExecuteQuery(Queries.DeleteSibiNote(noteUID));
+                return DBFactory.GetDatabase().ExecuteNonQuery(Queries.DeleteSibiNote(noteUID));
             }
             catch (Exception ex)
             {

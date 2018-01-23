@@ -33,20 +33,20 @@
             <param name="newFile">Full path to file.</param>
             <param name="attachTable">The table that will be assigned to this instance.</param>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.StartTransaction">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.StartTransaction">
             <summary>
             Returns a new <see cref="T:System.Data.Common.DbTransaction"/>.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.DataTableFromQueryString(System.String)">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.DataTableFromQueryString(System.String)">
             <summary>
             Returns a DataTable from a SQL query string.
             </summary>
             <param name="query"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.DataTableFromCommand(System.Data.Common.DbCommand,System.Data.Common.DbTransaction)">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.DataTableFromCommand(System.Data.Common.DbCommand,System.Data.Common.DbTransaction)">
             <summary>
             Returns a DataTable from a <see cref="T:System.Data.Common.DbCommand"/>.
             </summary>
@@ -54,45 +54,45 @@
             <param name="transaction"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.DataTableFromParameters(System.String,System.Collections.Generic.List{AssetManager.Data.Communications.DBQueryParameter})">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.DataTableFromParameters(System.String,System.Collections.Generic.List{AssetManager.Data.Communications.Old.DBQueryParameter})">
             <summary>
-            Returns a DataTable from a partial SQL query string and a <see cref="T:System.Collections.Generic.List`1"/> of <see cref="T:AssetManager.Data.Communications.DBQueryParameter"/>.
+            Returns a DataTable from a partial SQL query string and a <see cref="T:System.Collections.Generic.List`1"/> of <see cref="T:AssetManager.Data.Communications.Old.DBQueryParameter"/>.
             </summary>
             <param name="query"></param>
             <param name="params"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.ExecuteScalarFromCommand(System.Data.Common.DbCommand)">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.ExecuteScalarFromCommand(System.Data.Common.DbCommand)">
             <summary>
             Returns an object value from a <see cref="T:System.Data.Common.DbCommand"/>.
             </summary>
             <param name="command"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.ExecuteScalarFromQueryString(System.String)">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.ExecuteScalarFromQueryString(System.String)">
             <summary>
              Returns an object value from a SQL query string.
             </summary>
             <param name="query"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.ExecuteQuery(System.String)">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.ExecuteQuery(System.String)">
             <summary>
             Executes a non query and returns the number of rows affected.
             </summary>
             <param name="query"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.InsertFromParameters(System.String,System.Collections.Generic.List{AssetManager.Data.Communications.DBParameter},System.Data.Common.DbTransaction)">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.InsertFromParameters(System.String,System.Collections.Generic.List{AssetManager.Data.Communications.Old.DBParameter},System.Data.Common.DbTransaction)">
             <summary>
-            Inserts a list of <see cref="T:AssetManager.Data.Communications.DBParameter"/> into the specified table. Returns the number of rows affected.
+            Inserts a list of <see cref="T:AssetManager.Data.Communications.Old.DBParameter"/> into the specified table. Returns the number of rows affected.
             </summary>
             <param name="tableName"></param>
             <param name="params"></param>
             <param name="transaction"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.UpdateTable(System.String,System.Data.DataTable,System.Data.Common.DbTransaction)">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.UpdateTable(System.String,System.Data.DataTable,System.Data.Common.DbTransaction)">
             <summary>
             Updates the table returned by the <paramref name="selectQuery"/> with the specified DataTable. Returns rows affected.
             </summary>
@@ -101,7 +101,7 @@
             <param name="transaction"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.UpdateValue(System.String,System.String,System.Object,System.String,System.String,System.Data.Common.DbTransaction)">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.UpdateValue(System.String,System.String,System.Object,System.String,System.String,System.Data.Common.DbTransaction)">
             <summary>
             Updates a single value in the database.
             </summary>
@@ -113,14 +113,14 @@
             <param name="transaction"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.GetCommand(System.String)">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.GetCommand(System.String)">
             <summary>
             Returns a new <see cref="T:System.Data.Common.DbCommand"/>.
             </summary>
             <param name="query"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Communications.IDataBase.GetCommandFromParams(System.String,System.Collections.Generic.List{AssetManager.Data.Communications.DBQueryParameter})">
+        <member name="M:AssetManager.Data.Communications.Old.IDataBase.GetCommandFromParams(System.String,System.Collections.Generic.List{AssetManager.Data.Communications.Old.DBQueryParameter})">
             <summary>
             Returns a new <see cref="T:System.Data.Common.DbCommand"/> with the specified parameters added.
             </summary>
@@ -316,16 +316,9 @@
             SELECT apitoken FROM teamviewer_info
             </summary>
         </member>
-        <member name="M:AssetManager.Data.Communications.SQLiteDatabase.BuildCreateStatement(System.Data.DataTable)">
+        <member name="M:AssetManager.Data.Communications.MunisComms.GetSqlCommandFromParams(System.String,System.Collections.Generic.List{AssetDatabase.Data.DBQueryParameter})">
             <summary>
-            Builds a SQLite compatible CREATE statement from a MySQL 'SHOW FULL COLUMNS FROM' query result.
-            </summary>
-            <param name="columnResults"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Communications.MunisComms.GetSqlCommandFromParams(System.String,System.Collections.Generic.List{AssetManager.Data.Communications.DBQueryParameter})">
-            <summary>
-            Takes a partial query string without the WHERE operator, and a list of <see cref="T:AssetManager.Data.Communications.DBQueryParameter"/> and returns a parameterized <see cref="T:System.Data.SqlClient.SqlCommand"/>.
+            Takes a partial query string without the WHERE operator, and a list of <see cref="T:AssetDatabase.Data.DBQueryParameter"/> and returns a parameterized <see cref="T:System.Data.SqlClient.SqlCommand"/>.
             </summary>
             <param name="partialQuery"></param>
             <param name="parameters"></param>
@@ -419,6 +412,13 @@
             Builds hash lists for both local and remote tables and compares them.  Returns False for mismatch.
             </summary>
             <param name="connectedToDB"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.DBCacheFunctions.BuildCreateStatement(System.Data.DataTable)">
+            <summary>
+            Builds a Sqlite compatible CREATE statement from a MySQL 'SHOW FULL COLUMNS FROM' query result.
+            </summary>
+            <param name="columnResults"></param>
             <returns></returns>
         </member>
         <member name="T:AssetManager.Data.Functions.ParseType">

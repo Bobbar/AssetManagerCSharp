@@ -9,6 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AssetDatabase.Data;
 
 namespace AssetManager.Data.Functions
 {
@@ -245,7 +246,7 @@ namespace AssetManager.Data.Functions
                         DeleteQuery = Queries.DeleteSibiRequestByGUID(sqlGUID);
                         break;
                 }
-                if (DBFactory.GetDatabase().ExecuteQuery(DeleteQuery) > 0)
+                if (DBFactory.GetDatabase().ExecuteNonQuery(DeleteQuery) > 0)
                 {
                     return true;
                 }
@@ -304,7 +305,7 @@ namespace AssetManager.Data.Functions
                 {
                     //delete SQL entry
                     var SQLDeleteQry = "DELETE FROM " + attachment.AttachTable.TableName + " WHERE " + attachment.AttachTable.FileUID + "='" + attachment.FileUID + "'";
-                    return DBFactory.GetDatabase().ExecuteQuery(SQLDeleteQry);
+                    return DBFactory.GetDatabase().ExecuteNonQuery(SQLDeleteQry);
                 }
                 return -1;
             }

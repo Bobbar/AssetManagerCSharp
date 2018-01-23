@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
+using AssetDatabase.Data;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {

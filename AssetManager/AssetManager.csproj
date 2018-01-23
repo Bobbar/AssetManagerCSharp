@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{205C062A-ECE5-4E01-9842-2FBD9F98FB10}</ProjectGuid>
@@ -143,7 +144,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
@@ -181,10 +181,7 @@
     <Compile Include="Data\DataComms\ServerInfo.cs" />
     <Compile Include="Data\DataColumns.cs" />
     <Compile Include="Data\DataComms\SQL\DataInterface.cs" />
-    <Compile Include="Data\DataComms\SQL\MySQL\MySQLComms.cs" />
-    <Compile Include="Data\DataComms\SQL\MySQL\NoPingException.cs" />
     <Compile Include="Data\DataComms\SQL\Queries.cs" />
-    <Compile Include="Data\DataComms\SQL\SQLite\SQLiteComms.cs" />
     <Compile Include="Data\DataComms\Munis\MunisComms.cs" />
     <Compile Include="Data\DataComms\NetDriveMapper\NetworkConnection.cs" />
     <Compile Include="Data\DataFunctions\ClientSideFunctions\AttribIndexFunctions.cs" />
@@ -562,6 +559,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AssetDatabase\AssetDatabase.csproj">
+      <Project>{32bcf1fc-0f86-4fac-8d01-05f84fa0d736}</Project>
+      <Name>AssetDatabase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GK_Updater_Module\GKUpdaterLib.vbproj">
       <Project>{583f28b2-c2f5-4422-bac8-e3d15cb61df0}</Project>
       <Name>GKUpdaterLib</Name>
@@ -607,7 +608,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Data\DataComms\SQL\MySQL\" />
+    <Folder Include="Data\DataComms\SQL\SQLite\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

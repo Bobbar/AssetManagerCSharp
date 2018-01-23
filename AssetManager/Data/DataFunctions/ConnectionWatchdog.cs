@@ -1,8 +1,8 @@
 ﻿using AssetManager.Data.Communications;
-using MySql.Data.MySqlClient;
 using System;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using System.Data.Common;
 
 namespace AssetManager.Data.Functions
 {
@@ -127,10 +127,10 @@ namespace AssetManager.Data.Functions
             {
                 return await Task.Run(() =>
                 {
-                    using (MySQLDatabase MySQLDB = new MySQLDatabase())
-                    {
-                        return MySQLDB.ExecuteScalarFromQueryString("SELECT NOW()").ToString();
-                    }
+                    //using (MySQLDatabase MySQLDB = new MySQLDatabase())
+                    //{
+                        return DBFactory.GetMySqlDatabase().ExecuteScalarFromQueryString("SELECT NOW()").ToString();
+                    //}
                 });
             }
             catch
@@ -186,11 +186,17 @@ namespace AssetManager.Data.Functions
                     //If server pinging, try to open a connection.
                     if (CanPing)
                     {
-                        using (MySQLDatabase MySQLDB = new MySQLDatabase())
-                        using (MySqlConnection conn = MySQLDB.NewConnection())
+                       // using (MySQLDatabase MySQLDB = new MySQLDatabase())
+                        using (var conn = DBFactory.GetMySqlDatabase().NewConnection())
                         {
-                            return MySQLDB.OpenConnection(conn, true);
+                            return DBFactory.GetMySqlDatabase().OpenConnection(conn, true);
                         }
+
+                        //using (MySQLDatabase MySQLDB = new MySQLDatabase())
+                        //using (MySqlConnection conn = MySQLDB.NewConnection())
+                        //{
+                        //    return MySQLDB.OpenConnection(conn, true);
+                        //}
                     }
                     else
                     {

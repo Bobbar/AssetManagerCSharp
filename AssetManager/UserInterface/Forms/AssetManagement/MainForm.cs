@@ -18,6 +18,7 @@ using System.Drawing;
 using System.Management.Automation.Runspaces;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AssetDatabase.Data;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {

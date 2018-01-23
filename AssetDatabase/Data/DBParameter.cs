@@ -1,4 +1,4 @@
-namespace AssetManager.Data.Communications.Old
+namespace AssetDatabase.Data
 {
     public class DBParameter
     {
@@ -13,7 +13,7 @@ namespace AssetManager.Data.Communications.Old
 
     }
 }
-namespace AssetManager.Data.Communications.Old
+namespace AssetDatabase.Data
 {
 
     public class DBQueryParameter : DBParameter
