@@ -1,14 +1,10 @@
 ﻿using AssetManager.Data;
 using AssetManager.Data.Classes;
-using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Windows.Forms;
-using AssetDatabase.Data;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
@@ -62,14 +58,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     }
                 }
             }
-            CheckData.CheckoutTime = dtCheckOut.Value; //.ToString(strDBDateTimeFormat)
-            CheckData.DueBackTime = dtDueBack.Value; //.ToString(strDBDateTimeFormat)
+            CheckData.CheckoutTime = dtCheckOut.Value;
+            CheckData.DueBackTime = dtDueBack.Value;
             CheckData.UseLocation = txtUseLocation.Text.Trim().ToUpper();
             CheckData.UseReason = txtUseReason.Text.Trim().ToUpper();
             CheckData.CheckinNotes = txtCheckInNotes.Text.Trim().ToUpper();
             CheckData.GUID = CurrentTrackingDevice.GUID;
             CheckData.CheckoutUser = NetworkInfo.LocalDomainUser;
-            CheckData.CheckinTime = dtCheckIn.Value; //.ToString(strDBDateTimeFormat)
+            CheckData.CheckinTime = dtCheckIn.Value;
             CheckData.CheckinUser = NetworkInfo.LocalDomainUser;
             return true;
         }
@@ -137,15 +133,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         int rows = 0;
                         rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans);
 
-                        List<DBParameter> CheckOutParams = new List<DBParameter>();
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.CheckType, CheckType.Checkout));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.CheckoutTime, CheckData.CheckoutTime));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.DueBackDate, CheckData.DueBackTime));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.CheckoutUser, CheckData.CheckoutUser));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.Notes, CheckData.UseReason));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.DeviceUID, CheckData.GUID));
-                        rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans);
+                        ParamCollection checkParams = new ParamCollection();
+                        checkParams.Add(TrackablesCols.CheckType, CheckType.Checkout);
+                        checkParams.Add(TrackablesCols.CheckoutTime, CheckData.CheckoutTime);
+                        checkParams.Add(TrackablesCols.DueBackDate, CheckData.DueBackTime);
+                        checkParams.Add(TrackablesCols.CheckoutUser, CheckData.CheckoutUser);
+                        checkParams.Add(TrackablesCols.UseLocation, CheckData.UseLocation);
+                        checkParams.Add(TrackablesCols.Notes, CheckData.UseReason);
+                        checkParams.Add(TrackablesCols.DeviceUID, CheckData.GUID);
+                        rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
 
                         if (rows == 2)
                         {
@@ -188,17 +184,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         int rows = 0;
                         rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans);
 
-                        List<DBParameter> CheckOutParams = new List<DBParameter>();
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.CheckType, CheckType.Checkin));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.CheckoutTime, CheckData.CheckoutTime));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.DueBackDate, CheckData.DueBackTime));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.CheckinTime, CheckData.CheckinTime));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.CheckoutUser, CheckData.CheckoutUser));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.CheckinUser, CheckData.CheckinUser));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.UseLocation, CheckData.UseLocation));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.Notes, CheckData.CheckinNotes));
-                        CheckOutParams.Add(new DBParameter(TrackablesCols.DeviceUID, CheckData.GUID));
-                        rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, CheckOutParams, trans);
+                        ParamCollection checkParams = new ParamCollection();
+
+                        checkParams.Add(TrackablesCols.CheckType, CheckType.Checkin);
+                        checkParams.Add(TrackablesCols.CheckoutTime, CheckData.CheckoutTime);
+                        checkParams.Add(TrackablesCols.DueBackDate, CheckData.DueBackTime);
+                        checkParams.Add(TrackablesCols.CheckinTime, CheckData.CheckinTime);
+                        checkParams.Add(TrackablesCols.CheckoutUser, CheckData.CheckoutUser);
+                        checkParams.Add(TrackablesCols.CheckinUser, CheckData.CheckinUser);
+                        checkParams.Add(TrackablesCols.UseLocation, CheckData.UseLocation);
+                        checkParams.Add(TrackablesCols.Notes, CheckData.CheckinNotes);
+                        checkParams.Add(TrackablesCols.DeviceUID, CheckData.GUID);
+                        rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
 
                         if (rows == 2)
                         {

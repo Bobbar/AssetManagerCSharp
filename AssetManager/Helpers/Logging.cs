@@ -8,38 +8,45 @@ namespace AssetManager.Helpers
 
         public static void Logger(string Message)
         {
-            short MaxLogSizeKiloBytes = 500;
-            string DateStamp = DateTime.Now.ToString();
-            FileInfo infoReader = null;
-            infoReader = new FileInfo(Paths.LogPath);
-            if (!File.Exists(Paths.LogPath))
+            try
             {
-                Directory.CreateDirectory(Paths.AppDir);
-                using (StreamWriter sw = File.CreateText(Paths.LogPath))
+                short MaxLogSizeKiloBytes = 500;
+                string DateStamp = DateTime.Now.ToString();
+                FileInfo infoReader = null;
+                infoReader = new FileInfo(Paths.LogPath);
+                if (!File.Exists(Paths.LogPath))
                 {
-                    sw.WriteLine(DateStamp + ": Log Created...");
-                    sw.WriteLine(DateStamp + ": " + Message);
-                }
-            }
-            else
-            {
-                if ((infoReader.Length / 1000) < MaxLogSizeKiloBytes)
-                {
-                    using (StreamWriter sw = File.AppendText(Paths.LogPath))
+                    Directory.CreateDirectory(Paths.AppDir);
+                    using (StreamWriter sw = File.CreateText(Paths.LogPath))
                     {
+                        sw.WriteLine(DateStamp + ": Log Created...");
                         sw.WriteLine(DateStamp + ": " + Message);
                     }
                 }
                 else
                 {
-                    if (RotateLogs())
+                    if ((infoReader.Length / 1000) < MaxLogSizeKiloBytes)
                     {
                         using (StreamWriter sw = File.AppendText(Paths.LogPath))
                         {
                             sw.WriteLine(DateStamp + ": " + Message);
                         }
                     }
+                    else
+                    {
+                        if (RotateLogs())
+                        {
+                            using (StreamWriter sw = File.AppendText(Paths.LogPath))
+                            {
+                                sw.WriteLine(DateStamp + ": " + Message);
+                            }
+                        }
+                    }
                 }
+            }
+            catch
+            {
+                //Shhhh.
             }
         }
 

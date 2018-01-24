@@ -9,7 +9,6 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AssetDatabase.Data;
 
 namespace AssetManager.Data.Functions
 {
@@ -61,11 +60,11 @@ namespace AssetManager.Data.Functions
                 if (!IsEmployeeInDB(empInfo.Number))
                 {
                     string UID = Guid.NewGuid().ToString();
-                    List<DBParameter> InsertEmployeeParams = new List<DBParameter>();
-                    InsertEmployeeParams.Add(new DBParameter(EmployeesCols.Name, empInfo.Name));
-                    InsertEmployeeParams.Add(new DBParameter(EmployeesCols.Number, empInfo.Number));
-                    InsertEmployeeParams.Add(new DBParameter(EmployeesCols.UID, UID));
-                    DBFactory.GetDatabase().InsertFromParameters(EmployeesCols.TableName, InsertEmployeeParams);
+                    ParamCollection insertParams = new ParamCollection();
+                    insertParams.Add(EmployeesCols.Name, empInfo.Name);
+                    insertParams.Add(EmployeesCols.Number, empInfo.Number);
+                    insertParams.Add(EmployeesCols.UID, UID);
+                    DBFactory.GetDatabase().InsertFromParameters(EmployeesCols.TableName, insertParams.Parameters);
                 }
             }
             catch (Exception ex)
@@ -219,9 +218,11 @@ namespace AssetManager.Data.Functions
         private static List<SmartEmpSearchInfo> GetEmpSearchResults(string tableName, string searchEmpName, string empNameColumn, string empNumColumn)
         {
             List<SmartEmpSearchInfo> tmpResults = new List<SmartEmpSearchInfo>();
-            List<DBQueryParameter> EmpSearchParams = new List<DBQueryParameter>();
-            EmpSearchParams.Add(new DBQueryParameter(empNameColumn, searchEmpName, false));
-            using (DataTable data = DBFactory.GetDatabase().DataTableFromParameters("SELECT * FROM " + tableName + " WHERE", EmpSearchParams))
+            QueryParamCollection searchParams = new QueryParamCollection();
+
+            searchParams.Add(empNameColumn, searchEmpName, false);
+
+            using (DataTable data = DBFactory.GetDatabase().DataTableFromParameters("SELECT * FROM " + tableName + " WHERE", searchParams.Parameters))
             {
                 foreach (DataRow row in data.Rows)
                 {
@@ -411,15 +412,16 @@ namespace AssetManager.Data.Functions
             {
                 if (type == FindDevType.AssetTag)
                 {
-                    List<DBQueryParameter> Params = new List<DBQueryParameter>();
-                    Params.Add(new DBQueryParameter(DevicesCols.AssetTag, searchVal, true));
-                    return new Device(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));
+                    QueryParamCollection searchParam = new QueryParamCollection();
+                    searchParam.Add(DevicesCols.AssetTag, searchVal, true);
+                    return new Device(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, searchParam.Parameters));
                 }
                 else if (type == FindDevType.Serial)
                 {
-                    List<DBQueryParameter> Params = new List<DBQueryParameter>();
-                    Params.Add(new DBQueryParameter(DevicesCols.Serial, searchVal, true));
-                    return new Device(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, Params));
+
+                    QueryParamCollection searchParam = new QueryParamCollection();
+                    searchParam.Add(DevicesCols.Serial, searchVal, true);
+                    return new Device(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, searchParam.Parameters));
                 }
                 return null;
             }
@@ -447,9 +449,10 @@ namespace AssetManager.Data.Functions
         public static string GetSqlValue(string table, string fieldIn, string valueIn, string fieldOut)
         {
             string sqlQRY = "SELECT " + fieldOut + " FROM " + table + " WHERE ";
-            List<DBQueryParameter> Params = new List<DBQueryParameter>();
-            Params.Add(new DBQueryParameter(fieldIn, valueIn, true));
-            var Result = DBFactory.GetDatabase().ExecuteScalarFromCommand(DBFactory.GetDatabase().GetCommandFromParams(sqlQRY, Params));
+
+            QueryParamCollection searchParam = new QueryParamCollection();
+            searchParam.Add(fieldIn, valueIn, true);
+            var Result = DBFactory.GetDatabase().ExecuteScalarFromCommand(DBFactory.GetDatabase().GetCommandFromParams(sqlQRY, searchParam.Parameters));
             if (Result != null)
             {
                 return Result.ToString();

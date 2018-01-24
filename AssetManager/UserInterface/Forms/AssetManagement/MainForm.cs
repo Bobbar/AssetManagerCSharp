@@ -1,12 +1,12 @@
-﻿using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms.AdminTools;
-using AssetManager.Data;
+﻿using AssetManager.Data;
 using AssetManager.Data.Classes;
 using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.Tools;
+using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.AdminTools;
 using MyDialogLib;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,6 @@ using System.Drawing;
 using System.Management.Automation.Runspaces;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AssetDatabase.Data;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
@@ -176,8 +175,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     strStartQry = "SELECT * FROM " + DevicesCols.TableName + " WHERE ";
                 }
 
-                List<DBQueryParameter> searchParams = BuildSearchList();
-                StartBigQuery(DBFactory.GetDatabase().GetCommandFromParams(strStartQry, searchParams));
+                QueryParamCollection searchParams = BuildSearchList();
+                StartBigQuery(DBFactory.GetDatabase().GetCommandFromParams(strStartQry, searchParams.Parameters));
             }
             catch (Exception ex)
             {
@@ -232,9 +231,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private List<DBQueryParameter> BuildSearchList()
+        private QueryParamCollection BuildSearchList()
         {
-            List<DBQueryParameter> tmpList = new List<DBQueryParameter>();
+            QueryParamCollection searchParams = new QueryParamCollection();
+
             DBControlParser DataParser = new DBControlParser(this);
             foreach (Control ctl in DataParser.GetDBControls(this))
             {
@@ -265,10 +265,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                             IsExact = false;
                             break;
                     }
-                    tmpList.Add(new DBQueryParameter(DBInfo.DataColumn, CtlValue, IsExact));
+
+                    searchParams.Add(DBInfo.DataColumn, CtlValue, IsExact);
                 }
             }
-            return tmpList;
+            return searchParams;
         }
 
         private void Clear_All()
@@ -531,7 +532,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void SendToGrid(ref DataTable results)
         {
-
             if (results == null) return;
 
             using (results)
@@ -1083,6 +1083,5 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         #endregion "Control Event Methods"
 
         #endregion "Methods"
-
     }
 }

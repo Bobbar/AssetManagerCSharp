@@ -14,7 +14,6 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AssetDatabase.Data;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
@@ -110,24 +109,24 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private List<DBQueryParameter> BuildSearchListNew()
+        private QueryParamCollection BuildSearchListNew()
         {
-            List<DBQueryParameter> tmpList = new List<DBQueryParameter>();
-            tmpList.Add(new DBQueryParameter(SibiRequestCols.RTNumber, txtRTNum.Text.Trim(), false));
-            tmpList.Add(new DBQueryParameter(SibiRequestCols.Description, txtDescription.Text.Trim(), false));
-            tmpList.Add(new DBQueryParameter(SibiRequestCols.PO, txtPO.Text, false));
-            tmpList.Add(new DBQueryParameter(SibiRequestCols.RequisitionNumber, txtReq.Text, false));
+            QueryParamCollection searchParams = new QueryParamCollection();
+            searchParams.Add(SibiRequestCols.RTNumber, txtRTNum.Text.Trim(), false);
+            searchParams.Add(SibiRequestCols.Description, txtDescription.Text.Trim(), false);
+            searchParams.Add(SibiRequestCols.PO, txtPO.Text, false);
+            searchParams.Add(SibiRequestCols.RequisitionNumber, txtReq.Text, false);
 
             //Filter out unpopulated fields.
-            var popList = new List<DBQueryParameter>();
-            foreach (DBQueryParameter param in tmpList)
+            QueryParamCollection popSearchParams = new QueryParamCollection();
+            foreach (var param in searchParams.Parameters)
             {
                 if (param.Value.ToString() != "")
                 {
-                    popList.Add(param);
+                    popSearchParams.Add(param);
                 }
             }
-            return popList;
+            return popSearchParams;
         }
 
         //dynamically creates sql query using any combination of search filters the users wants
@@ -137,8 +136,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             string strStartQry = null;
             strStartQry = "SELECT * FROM " + SibiRequestCols.TableName + " WHERE";
             string strDynaQry = "";
-            List<DBQueryParameter> SearchValCol = BuildSearchListNew();
-            foreach (DBQueryParameter fld in SearchValCol)
+            QueryParamCollection searchValCol = BuildSearchListNew();
+            foreach (var fld in searchValCol.Parameters)
             {
                 if ((fld.Value != null))
                 {
@@ -147,7 +146,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         strDynaQry += " " + fld.FieldName + " LIKE @" + fld.FieldName;
                         string Value = "%" + fld.Value.ToString() + "%";
                         cmd.AddParameterWithValue("@" + fld.FieldName, Value);
-                        if (SearchValCol.IndexOf(fld) != SearchValCol.Count - 1)
+                        if (searchValCol.Parameters.IndexOf(fld) != searchValCol.Parameters.Count - 1)
                         {
                             strDynaQry += " AND";
                         }

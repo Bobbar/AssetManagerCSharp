@@ -1,5 +1,6 @@
 using AssetDatabase.Data;
 using AssetManager.Security;
+using System.Collections.Generic;
 
 namespace AssetManager.Data
 {
@@ -28,6 +29,57 @@ namespace AssetManager.Data
         public static IDataBase GetSqliteDatabase()
         {
             return new SqliteDatabase(Paths.SQLitePath, SecurityTools.DecodePassword(EncSQLitePass));
+        }
+    }
+
+    /// <summary>
+    /// Wrapper for DBParameter
+    /// </summary>
+    internal class ParamCollection
+    {
+        public List<DBParameter> Parameters;
+
+        public ParamCollection()
+        {
+            Parameters = new List<DBParameter>();
+        }
+
+        public void Add(string fieldName, object fieldValue)
+        {
+            Parameters.Add(new DBParameter(fieldName, fieldValue));
+        }
+    }
+
+    /// <summary>
+    /// Wrapper for DBQueryParameter
+    /// </summary>
+    internal class QueryParamCollection
+    {
+        public List<DBQueryParameter> Parameters;
+
+        public QueryParamCollection()
+        {
+            Parameters = new List<DBQueryParameter>();
+        }
+
+        public void Add(DBQueryParameter parameter)
+        {
+            Parameters.Add(new DBQueryParameter(parameter.FieldName, parameter.Value, parameter.IsExact, parameter.OperatorString));
+        }
+
+        public void Add(string fieldName, object fieldValue, string operatorString)
+        {
+            Parameters.Add(new DBQueryParameter(fieldName, fieldValue, operatorString));
+        }
+
+        public void Add(string fieldName, object fieldValue, bool isExact)
+        {
+            Parameters.Add(new DBQueryParameter(fieldName, fieldValue, isExact));
+        }
+
+        public void Add(string fieldName, object fieldValue, bool isExact, string operatorString)
+        {
+            Parameters.Add(new DBQueryParameter(fieldName, fieldValue, isExact, operatorString));
         }
     }
 }

@@ -19,7 +19,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AssetDatabase.Data;
 
 
 namespace AssetManager.UserInterface.Forms
@@ -456,15 +455,15 @@ namespace AssetManager.UserInterface.Forms
 
         private void InsertSQLAttachment(Attachment Attachment, DbTransaction transaction)
         {
-            List<DBParameter> InsertAttachmentParams = new List<DBParameter>();
-            InsertAttachmentParams.Add(new DBParameter(Attachment.AttachTable.FKey, Attachment.FolderGUID));
-            InsertAttachmentParams.Add(new DBParameter(Attachment.AttachTable.FileName, Attachment.FileName));
-            InsertAttachmentParams.Add(new DBParameter(Attachment.AttachTable.FileType, Attachment.Extension));
-            InsertAttachmentParams.Add(new DBParameter(Attachment.AttachTable.FileSize, Attachment.Filesize));
-            InsertAttachmentParams.Add(new DBParameter(Attachment.AttachTable.FileUID, Attachment.FileUID));
-            InsertAttachmentParams.Add(new DBParameter(Attachment.AttachTable.FileHash, Attachment.MD5));
-            InsertAttachmentParams.Add(new DBParameter(Attachment.AttachTable.Folder, Attachment.FolderName));
-            DBFactory.GetDatabase().InsertFromParameters(Attachment.AttachTable.TableName, InsertAttachmentParams, transaction);
+            ParamCollection insertParams = new ParamCollection();
+            insertParams.Add(Attachment.AttachTable.FKey, Attachment.FolderGUID);
+            insertParams.Add(Attachment.AttachTable.FileName, Attachment.FileName);
+            insertParams.Add(Attachment.AttachTable.FileType, Attachment.Extension);
+            insertParams.Add(Attachment.AttachTable.FileSize, Attachment.Filesize);
+            insertParams.Add(Attachment.AttachTable.FileUID, Attachment.FileUID);
+            insertParams.Add(Attachment.AttachTable.FileHash, Attachment.MD5);
+            insertParams.Add(Attachment.AttachTable.Folder, Attachment.FolderName);
+            DBFactory.GetDatabase().InsertFromParameters(Attachment.AttachTable.TableName, insertParams.Parameters, transaction);
         }
 
         private async Task<bool> MakeDirectory(string FolderGUID)

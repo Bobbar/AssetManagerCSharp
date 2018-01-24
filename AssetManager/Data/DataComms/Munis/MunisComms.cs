@@ -98,19 +98,22 @@ namespace AssetManager.Data.Communications
         public object ReturnSqlValue(string table, object fieldIn, object valueIn, string fieldOut, object fieldIn2 = null, object valueIn2 = null)
         {
             string sqlQRY = "";
-            List<DBQueryParameter> Params = new List<DBQueryParameter>();
+            QueryParamCollection queryParams = new QueryParamCollection();
+
             if (fieldIn2 != null && valueIn2 != null)
             {
-                sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table; // & fieldIN.ToString & " = '" & valueIN.ToString & "' AND " & fieldIN2.ToString & " = '" & ValueIN2.ToString & "'"
-                @Params.Add(new DBQueryParameter(fieldIn.ToString(), valueIn.ToString(), true));
-                @Params.Add(new DBQueryParameter(fieldIn2.ToString(), valueIn2.ToString(), true));
+                sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table;
+
+                queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
+                queryParams.Add(fieldIn2.ToString(), valueIn2.ToString(), true);
             }
             else
             {
-                sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table; // & fieldIN.ToString & " = '" & valueIN.ToString & "'"
-                @Params.Add(new DBQueryParameter(fieldIn.ToString(), valueIn.ToString(), true));
+                sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table;
+
+                queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
             }
-            using (var cmd = GetSqlCommandFromParams(sqlQRY, @Params))
+            using (var cmd = GetSqlCommandFromParams(sqlQRY, queryParams.Parameters))
             {
                 using (var conn = cmd.Connection)
                 {
@@ -118,7 +121,6 @@ namespace AssetManager.Data.Communications
                     return cmd.ExecuteScalar();
                 }
             }
-
         }
 
         public async Task<string> ReturnSqlValueAsync(string table, object fieldIn, object valueIn, string fieldOut, object fieldIn2 = null, object valueIn2 = null)
@@ -126,32 +128,34 @@ namespace AssetManager.Data.Communications
             try
             {
                 string sqlQRY = "";
-                List<DBQueryParameter> Params = new List<DBQueryParameter>();
+
+                QueryParamCollection queryParams = new QueryParamCollection();
+
                 if (fieldIn2 != null && valueIn2 != null)
                 {
-                    sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table; // & fieldIN.ToString & " = '" & valueIN.ToString & "' AND " & fieldIN2.ToString & " = '" & ValueIN2.ToString & "'"
-                    @Params.Add(new DBQueryParameter(fieldIn.ToString(), valueIn.ToString(), true));
-                    @Params.Add(new DBQueryParameter(fieldIn2.ToString(), valueIn2.ToString(), true));
+                    sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table;
+
+                    queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
+                    queryParams.Add(fieldIn2.ToString(), valueIn2.ToString(), true);
                 }
                 else
                 {
-                    sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table; // & fieldIN.ToString & " = '" & valueIN.ToString & "'"
-                    @Params.Add(new DBQueryParameter(fieldIn.ToString(), valueIn.ToString(), true));
+                    sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table;
+
+                    queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
                 }
-                using (var cmd = GetSqlCommandFromParams(sqlQRY, @Params))
+                using (var cmd = GetSqlCommandFromParams(sqlQRY, queryParams.Parameters))
                 {
                     using (var conn = cmd.Connection)
                     {
                         await cmd.Connection.OpenAsync();
                         var Value = await cmd.ExecuteScalarAsync();
-                        //StopTimer()
                         if (Value != null)
                         {
                             return Value.ToString();
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {

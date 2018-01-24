@@ -1,16 +1,14 @@
-﻿using AssetManager.UserInterface.CustomControls;
+﻿using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Helpers;
+using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms;
+using AssetManager.UserInterface.Forms.AssetManagement;
 using MyDialogLib;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AssetManager.UserInterface.Forms.AssetManagement;
-using AssetManager.Data.Communications;
-using AssetManager.Data.Classes;
-using AssetManager.Helpers;
-using AssetDatabase.Data;
 
 namespace AssetManager.Data.Functions
 {
@@ -420,35 +418,35 @@ namespace AssetManager.Data.Functions
                 string GLColumns = " glma_org, glma_obj, glma_desc, glma_seg5, glma_bud_yr, glma_orig_bud_cy, glma_rev_bud_cy, glma_encumb_cy, glma_memo_bal_cy, glma_rev_bud_cy-glma_encumb_cy-glma_memo_bal_cy AS 'Funds Available' ";
                 string GLMasterQry = "Select TOP " + intMaxResults + " " + GLColumns + "FROM glmaster";
 
-                List<DBQueryParameter> GL_Params = new List<DBQueryParameter>();
-                GL_Params.Add(new DBQueryParameter("glma_org", org, true));
+                QueryParamCollection glParams = new QueryParamCollection();
+                glParams.Add("glma_org", org, true);
 
                 if (!string.IsNullOrEmpty(obj)) //Show Rollup info for Object
                 {
-                    GL_Params.Add(new DBQueryParameter("glma_obj", obj, true));
+                    glParams.Add("glma_obj", obj, true);
 
                     string RollUpCode = await MunisComms.ReturnSqlValueAsync("gl_budget_rollup", "a_org", org, "a_rollup_code");
                     string RollUpByCodeQry = "SELECT TOP " + intMaxResults + " * FROM gl_budget_rollup WHERE a_rollup_code = '" + RollUpCode + "'";
                     string BudgetQry = "SELECT TOP " + intMaxResults + " a_projection_no,a_org,a_object,db_line,db_bud_desc_line1,db_bud_reason_desc,db_bud_req_qty5,db_bud_unit_cost,db_bud_req_amt5,a_account_id FROM gl_budget_detail_2"; // WHERE a_projection_no='" & FY & "' AND a_org='" & Org & "' AND a_object='" & Obj & "'"
 
-                    List<DBQueryParameter> Budget_Params = new List<DBQueryParameter>();
-                    Budget_Params.Add(new DBQueryParameter("a_projection_no", FY, true));
-                    Budget_Params.Add(new DBQueryParameter("a_org", org, true));
-                    Budget_Params.Add(new DBQueryParameter("a_object", obj, true));
+                    QueryParamCollection budgetParams = new QueryParamCollection();
+                    budgetParams.Add("a_projection_no", FY, true);
+                    budgetParams.Add("a_org", org, true);
+                    budgetParams.Add("a_object", obj, true);
 
-                    NewGridForm.AddGrid("OrgGrid", "GL Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(GLMasterQry, GL_Params)));
+                    NewGridForm.AddGrid("OrgGrid", "GL Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(GLMasterQry, glParams.Parameters)));
                     NewGridForm.AddGrid("RollupGrid", "Rollup Info:", await MunisComms.ReturnSqlTableAsync(RollUpByCodeQry));
-                    NewGridForm.AddGrid("BudgetGrid", "Budget Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(BudgetQry, Budget_Params)));
+                    NewGridForm.AddGrid("BudgetGrid", "Budget Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(BudgetQry, budgetParams.Parameters)));
                 }
                 else // Show Rollup info for all Objects in Org
                 {
                     string RollUpAllQry = "SELECT TOP " + intMaxResults + " * FROM gl_budget_rollup";
 
-                    List<DBQueryParameter> Roll_Params = new List<DBQueryParameter>();
-                    Roll_Params.Add(new DBQueryParameter("a_org", org, true));
+                    QueryParamCollection rollUpParams = new QueryParamCollection();
+                    rollUpParams.Add("a_org", org, true);
 
-                    NewGridForm.AddGrid("OrgGrid", "GL Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(GLMasterQry, GL_Params))); //MunisComms.Return_MSSQLTableAsync(Qry))
-                    NewGridForm.AddGrid("RollupGrid", "Rollup Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(RollUpAllQry, Roll_Params))); //MunisComms.Return_MSSQLTableAsync("SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
+                    NewGridForm.AddGrid("OrgGrid", "GL Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(GLMasterQry, glParams.Parameters))); //MunisComms.Return_MSSQLTableAsync(Qry))
+                    NewGridForm.AddGrid("RollupGrid", "Rollup Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(RollUpAllQry, rollUpParams.Parameters))); //MunisComms.Return_MSSQLTableAsync("SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
                 }
                 NewGridForm.Show();
             }
@@ -472,12 +470,12 @@ namespace AssetManager.Data.Functions
 FROM pr_employee_master e
 INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
 
-                List<DBQueryParameter> Params = new List<DBQueryParameter>();
-                @Params.Add(new DBQueryParameter("e.a_name_last", name.ToUpper(), "OR"));
-                @Params.Add(new DBQueryParameter("e.a_name_first", name.ToUpper(), "OR"));
+                QueryParamCollection searchParams = new QueryParamCollection();
+                searchParams.Add("e.a_name_last", name.ToUpper(), "OR");
+                searchParams.Add("e.a_name_first", name.ToUpper(), "OR");
 
                 GridForm NewGridForm = new GridForm(parentForm, "MUNIS Employee Info");
-                using (var cmd = MunisComms.GetSqlCommandFromParams(strQRY, @Params))
+                using (var cmd = MunisComms.GetSqlCommandFromParams(strQRY, searchParams.Parameters))
                 {
                     using (var results = await MunisComms.ReturnSqlTableFromCmdAsync(cmd))
                     {
@@ -511,11 +509,11 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
                 string strQRY = "SELECT TOP " + intMaxResults + @" pohd_pur_no, pohd_fsc_yr, pohd_req_no, pohd_gen_cm, pohd_buy_id, pohd_pre_dt, pohd_exp_dt, pohd_sta_cd, pohd_vnd_cd, pohd_dep_cd, pohd_shp_cd, pohd_tot_amt, pohd_serial
 FROM poheader";
 
-                List<DBQueryParameter> Params = new List<DBQueryParameter>();
-                @Params.Add(new DBQueryParameter("pohd_pur_no", PO, true));
+                QueryParamCollection searchParams = new QueryParamCollection();
+                searchParams.Add("pohd_pur_no", PO, true);
 
                 GridForm NewGridForm = new GridForm(parentForm, "MUNIS PO Info");
-                using (var cmd = MunisComms.GetSqlCommandFromParams(strQRY, @Params))
+                using (var cmd = MunisComms.GetSqlCommandFromParams(strQRY, searchParams.Parameters))
                 {
                     using (var results = await MunisComms.ReturnSqlTableFromCmdAsync(cmd))
                     {
@@ -594,18 +592,18 @@ FROM poheader";
                 return null;
             }
             string Query = "SELECT TOP " + intMaxResults + " * FROM rqheader";
-            List<DBQueryParameter> Params = new List<DBQueryParameter>();
-            @Params.Add(new DBQueryParameter("rqhd_req_no", reqNumber, true));
-            @Params.Add(new DBQueryParameter("rqhd_fsc_yr", fiscalYr, true));
 
-            DataTable results = await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(Query, @Params));
+            QueryParamCollection searchParams = new QueryParamCollection();
+            searchParams.Add("rqhd_req_no", reqNumber, true);
+            searchParams.Add("rqhd_fsc_yr", fiscalYr, true);
+
+            DataTable results = await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(Query, searchParams.Parameters));
 
             if (results.Rows.Count > 0)
             {
                 return results;
             }
             return null;
-            //return await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(Query, @Params));
         }
 
         private async Task<DataTable> GetReqLineItemsFromReqNum(string reqNumber, string fiscalYr)
@@ -624,10 +622,12 @@ FROM poheader";
 '" + VendorName + "' AS a_vendor_name, '" + VendorNum + @"' AS a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr, dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln, dbo.rqdetail.rqdt_vdr_part_no
 FROM dbo.rq_gl_info INNER JOIN
 dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr";
-            List<DBQueryParameter> Params = new List<DBQueryParameter>();
-            @Params.Add(new DBQueryParameter("dbo.rq_gl_info.a_requisition_no", reqNumber, true));
-            @Params.Add(new DBQueryParameter("dbo.rq_gl_info.rg_fiscal_year", fiscalYr, true));
-            var ReqTable = await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(strQRY, @Params));
+
+            QueryParamCollection searchParams = new QueryParamCollection();
+            searchParams.Add("dbo.rq_gl_info.a_requisition_no", reqNumber, true);
+            searchParams.Add("dbo.rq_gl_info.rg_fiscal_year", fiscalYr, true);
+
+            var ReqTable = await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(strQRY, searchParams.Parameters));
             if (ReqTable.Rows.Count > 0)
             {
                 return ReqTable;
@@ -693,7 +693,6 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
                     {
                         NewGridForm.Dispose();
                     }
-                   
                 }
                 else if (ReferenceEquals(InventoryTable, null) && ReferenceEquals(ReqLinesTable, null))
                 {
@@ -721,7 +720,6 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
                 return results;
             }
             return null;
-            //return await MunisComms.ReturnSqlTableAsync(Query);
         }
 
         public MunisEmployee MunisUserSearch(ExtendedForm parentForm)

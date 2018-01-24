@@ -1,19 +1,16 @@
-using AssetManager.Data;
-using AssetManager.Data.Communications;
-using AssetManager.Security;
 using AssetDatabase.Data;
+using AssetManager.Data;
+using AssetManager.Security;
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Data.SqlClient;
-using System.Data.SQLite;
 using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Collections;
-using System.Collections.Generic;
 
 
 namespace AssetManager.Helpers
@@ -52,10 +49,9 @@ namespace AssetManager.Helpers
                     var SQLEx = (SqlException)ex;
                     ErrorResult = handleSQLException(SQLEx, Method);
                 }
-                else if (ex is SQLiteException)
+                else if (ex.GetType().Name == "SQLiteException")
                 {
-                    var SQLiteEx = (SQLiteException)ex;
-                    ErrorResult = handleSQLiteException(SQLiteEx, Method);
+                    ErrorResult = handleSQLiteException(ex, Method);
                 }
                 else if (ex is InvalidCastException)
                 {
@@ -397,18 +393,10 @@ namespace AssetManager.Helpers
             }
         }
 
-        private static bool handleSQLiteException(SQLiteException ex, MethodBase Method)
+        private static bool handleSQLiteException(Exception ex, MethodBase Method)
         {
-            switch (ex.ErrorCode)
-            {
-                case 1:
-                    Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.ErrorCode + "  Message:" + ex.Message);
-                    return true;
-
-                default:
-                    UnHandledError(ex, ex.ErrorCode, Method);
-                    return false;
-            }
+            Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message);
+            return true;
         }
 
         private static bool handleNoPingException(NoPingException ex, MethodBase Method)

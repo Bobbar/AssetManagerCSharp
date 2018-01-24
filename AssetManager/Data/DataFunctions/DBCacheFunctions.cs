@@ -1,16 +1,11 @@
-﻿using System;
+﻿using AssetManager.Helpers;
+using AssetManager.Security;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using System.Data.Common;
-using System.Data.SQLite;
 using System.IO;
-using AssetManager.Helpers;
-using AssetManager.Data.Communications;
-using AssetDatabase.Data;
-using AssetManager.Security;
+using System.Threading.Tasks;
 
 namespace AssetManager.Data.Functions
 {
@@ -128,8 +123,15 @@ namespace AssetManager.Data.Functions
 
         public static int GetSchemaVersion()
         {
-            var query = "pragma schema_version";
-            return System.Convert.ToInt32(DBFactory.GetSqliteDatabase().ExecuteScalarFromQueryString(query));
+            try
+            {
+                var query = "pragma schema_version";
+                return System.Convert.ToInt32(DBFactory.GetSqliteDatabase().ExecuteScalarFromQueryString(query));
+            }
+            catch
+            {
+                return -1;
+            }
         }
 
         public static void RefreshSqlCache()
@@ -294,7 +296,6 @@ namespace AssetManager.Data.Functions
                 adapter.SelectCommand.Connection.Close();
                 return results;
             }
-
         }
 
         private static DataTable GetTableColumns(string tableName)

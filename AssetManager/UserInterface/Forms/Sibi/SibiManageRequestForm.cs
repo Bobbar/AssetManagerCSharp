@@ -14,7 +14,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AssetDatabase.Data;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
@@ -240,11 +239,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             string NoteUID = Guid.NewGuid().ToString();
             try
             {
-                List<DBParameter> NewNoteParams = new List<DBParameter>();
-                NewNoteParams.Add(new DBParameter(SibiNotesCols.RequestUID, RequestUID));
-                NewNoteParams.Add(new DBParameter(SibiNotesCols.NoteUID, NoteUID));
-                NewNoteParams.Add(new DBParameter(SibiNotesCols.Note, Note));
-                if (DBFactory.GetDatabase().InsertFromParameters(SibiNotesCols.TableName, NewNoteParams) > 0)
+                ParamCollection noteParams = new ParamCollection();
+                noteParams.Add(SibiNotesCols.RequestUID, RequestUID);
+                noteParams.Add(SibiNotesCols.NoteUID, NoteUID);
+                noteParams.Add(SibiNotesCols.Note, Note);
+                if (DBFactory.GetDatabase().InsertFromParameters(SibiNotesCols.TableName, noteParams.Parameters) > 0)
                 {
                     return true;
                 }

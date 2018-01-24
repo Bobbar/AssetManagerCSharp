@@ -6,7 +6,7 @@ using AssetManager.Security;
 using System;
 using System.Threading;
 using System.Windows.Forms;
-using AssetDatabase.Data;
+
 namespace AssetManager
 {
     internal static class StartProgram
@@ -87,10 +87,9 @@ namespace AssetManager
         {
             try
             {
-                IDataBase SQLComms = DBFactory.GetMySqlDatabase();
-                using (var conn = SQLComms.NewConnection())
+                using (var conn = DBFactory.GetMySqlDatabase().NewConnection())
                 {
-                    return SQLComms.OpenConnection(conn, true);
+                    return DBFactory.GetMySqlDatabase().OpenConnection(conn, true);
                 }
             }
             catch
