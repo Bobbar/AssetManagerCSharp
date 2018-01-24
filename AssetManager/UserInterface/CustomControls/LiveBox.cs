@@ -314,12 +314,10 @@ namespace AssetManager.UserInterface.CustomControls
             try
             {
                 if (queryRunning) return;
-                previousSearchString = searchString;
                 queryRunning = true;
                 DataTable Results = await Task.Run(() =>
                 {
                     string strQry;
-                    //strQry = "SELECT " + DevicesCols.DeviceUID + "," + IIf(CurrentLiveBoxArgs.ValueMember == null, CurrentLiveBoxArgs.DisplayMember, CurrentLiveBoxArgs.DisplayMember + "," + CurrentLiveBoxArgs.ValueMember).ToString + " FROM " + DevicesCols.TableName + " WHERE " + CurrentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + CurrentLiveBoxArgs.DisplayMember + " ORDER BY " + CurrentLiveBoxArgs.DisplayMember + " LIMIT " + RowLimit;
 
                     if (CurrentLiveBoxArgs.ValueMember == null)
                     {
@@ -336,16 +334,14 @@ namespace AssetManager.UserInterface.CustomControls
                         return DBFactory.GetDatabase().DataTableFromCommand(cmd);
                     }
                 });
-
+                previousSearchString = searchString;
+                queryRunning = false;
                 DrawLiveBox(Results);
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
-            finally
-            {
                 queryRunning = false;
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
             }
         }
 
