@@ -25,11 +25,7 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                 //GlobalSwitches.BuildingCache = True
-                //using (SqliteDatabase conn = new SqliteDatabase(false))
-                //{
-                    RefreshSqlCache();
-                //}
+                RefreshSqlCache();
             }
             catch (Exception ex)
             {
@@ -50,25 +46,18 @@ namespace AssetManager.Data.Functions
         {
             if (!cachedMode)
             {
-                if (RemoteTableHashes == null)
-                    return false;
+                if (RemoteTableHashes == null) return false;
+
                 return await Task.Run(() =>
                 {
                     List<string> LocalHashes = new List<string>();
-                    //using (SQLiteDatabase SQLiteComms = new SQLiteDatabase())
-                    //{
-                        LocalHashes = LocalTableHashList();
-                        return CompareTableHashes(LocalHashes, RemoteTableHashes);
-                    //}
+                    LocalHashes = LocalTableHashList();
+                    return CompareTableHashes(LocalHashes, RemoteTableHashes);
                 });
             }
             else
             {
-                //using (SQLiteDatabase SQLiteComms = new SQLiteDatabase())
-                //{
-                    if (GetSchemaVersion() > 0)
-                        return true;
-                //}
+                if (GetSchemaVersion() > 0) return true;
             }
             return false;
         }
@@ -82,41 +71,30 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                //using (SQLiteDatabase SQLiteComms = new SQLiteDatabase())
-                //{
-                    if (GetSchemaVersion() > 0)
+                if (GetSchemaVersion() > 0)
+                {
+                    if (connectedToDB)
                     {
-                        if (connectedToDB)
-                        {
-                            SQLiteTableHashes = LocalTableHashList();
-                            RemoteTableHashes = RemoteTableHashList();
-                            return CompareTableHashes(SQLiteTableHashes, RemoteTableHashes);
-                        }
-                        else
-                        {
-                            return true;
-                        }
+                        SQLiteTableHashes = LocalTableHashList();
+                        RemoteTableHashes = RemoteTableHashList();
+                        return CompareTableHashes(SQLiteTableHashes, RemoteTableHashes);
                     }
                     else
                     {
-                        SQLiteTableHashes = null;
-                        return false;
+                        return true;
                     }
-                //}
+                }
+                else
+                {
+                    SQLiteTableHashes = null;
+                    return false;
+                }
             }
             catch
             {
                 return false;
             }
         }
-
-
-
-
-        // Stuff from SQLiteComms.
-
-
-
 
         public static bool CheckLocalCacheHash()
         {
@@ -150,18 +128,8 @@ namespace AssetManager.Data.Functions
 
         public static int GetSchemaVersion()
         {
-
             var query = "pragma schema_version";
             return System.Convert.ToInt32(DBFactory.GetSqliteDatabase().ExecuteScalarFromQueryString(query));
-
-
-
-            //using (var db = DBFactory.GetSqliteDatabase())
-            //using (DbCommand cmd = db.GetCommand("pragma schema_version"))//new SqliteCommand("pragma schema_version"))
-            //{
-            //    cmd.Connection = db.NewConnection();
-            //    return System.Convert.ToInt32(cmd.ExecuteScalar());
-            //}
         }
 
         public static void RefreshSqlCache()
@@ -174,7 +142,6 @@ namespace AssetManager.Data.Functions
                 }
 
                 Logging.Logger("Rebuilding local DB cache...");
-                //CloseConnection();
                 GC.Collect();
                 if (!File.Exists(Paths.SQLiteDir))
                 {
@@ -185,13 +152,6 @@ namespace AssetManager.Data.Functions
                     File.Delete(Paths.SQLitePath);
                 }
 
-                 //var db = DBFactory.GetSqliteDataBase();
-
-                // SqliteConnection.CreateFile(Paths.SqlitePath);
-         
-                //Connection.SetPassword(SecurityTools.DecodePassword(EncSqlitePass));
-                //OpenConnection();
-                //using (var trans = connection.BeginTransaction())
                 using (var trans = DBFactory.GetSqliteDatabase().StartTransaction())
                 {
                     foreach (var table in TableList())
@@ -236,8 +196,6 @@ namespace AssetManager.Data.Functions
         public static List<string> RemoteTableHashList()
         {
             List<string> hashList = new List<string>();
-            //using (MySQLDatabase MySQLDB = new MySQLDatabase())
-            //{
 
             var MySQLDB = DBFactory.GetMySqlDatabase();
             foreach (var table in TableList())
@@ -249,7 +207,6 @@ namespace AssetManager.Data.Functions
                 }
             }
             return hashList;
-            //}
         }
 
         private static void AddTable(string tableName, DbTransaction transaction)
@@ -323,16 +280,7 @@ namespace AssetManager.Data.Functions
             {
                 createQry = BuildCreateStatement(tableColumns);
             }
-
             DBFactory.GetSqliteDatabase().ExecuteNonQuery(createQry, transaction);
-
-
-            //using (DbCommand cmd = new SqliteCommand(createQry, Connection))
-            //{
-            //    cmd.Transaction = transaction;
-            //    cmd.ExecuteNonQuery();
-            //}
-
         }
 
         private static DataTable GetRemoteDBTable(string tableName)
@@ -343,41 +291,20 @@ namespace AssetManager.Data.Functions
             using (DataTable results = new DataTable(tableName))
             {
                 adapter.Fill(results);
+                adapter.SelectCommand.Connection.Close();
                 return results;
             }
 
-            ////using (var MySQLDB = DBFactory.GetMySqlDatabase())
-            ////{
-            //var MySQLDB = DBFactory.GetMySqlDatabase();
-
-            //using (DataTable results = new DataTable())
-            //    {
-            //        using (var conn = MySQLDB.NewConnection())
-            //        {
-            //            using (var adapter = MySQLDB.ReturnMySqlAdapter(qry, conn))
-            //            {
-            //                adapter.AcceptChangesDuringFill = false;
-            //                adapter.Fill(results);
-            //                results.TableName = tableName;
-            //                return results;
-            //            }
-            //        }
-            //    }
-            // }
         }
 
         private static DataTable GetTableColumns(string tableName)
         {
             string qry = "SHOW FULL COLUMNS FROM " + tableName;
-            //using (MySQLDatabase MySQLDB = new MySQLDatabase())
-            //{
-
-                using (var results = DBFactory.GetMySqlDatabase().DataTableFromQueryString(qry))
-                {
-                    results.TableName = tableName;
-                    return results;
-                }
-            //}
+            using (var results = DBFactory.GetMySqlDatabase().DataTableFromQueryString(qry))
+            {
+                results.TableName = tableName;
+                return results;
+            }
         }
 
         private static void ImportDatabase(string tableName, DbTransaction transaction)
@@ -388,23 +315,6 @@ namespace AssetManager.Data.Functions
             {
                 DBFactory.GetSqliteDatabase().UpdateTable(query, remoteTable, transaction);
             }
-
-
-
-
-            //OpenConnection();
-            //using (var cmd = Connection.CreateCommand())
-            //{
-            //    using (var adapter = new SqliteDataAdapter(cmd))
-            //    {
-            //        using (SqliteCommandBuilder builder = new SqliteCommandBuilder(adapter))
-            //        {
-            //            cmd.Transaction = transaction;
-            //            cmd.CommandText = "SELECT * FROM " + tableName;
-            //            adapter.Update(GetRemoteDBTable(tableName));
-            //        }
-            //    }
-            //}
         }
 
         private static List<string> TableList()
