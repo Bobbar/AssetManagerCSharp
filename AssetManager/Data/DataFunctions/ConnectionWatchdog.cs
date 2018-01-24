@@ -12,7 +12,7 @@ namespace AssetManager.Data.Functions
 
         public ConnectionWatchdog(bool cachedMode)
         {
-            InCachedMode = cachedMode;
+            inCachedMode = cachedMode;
         }
 
         public event EventHandler StatusChanged;
@@ -45,27 +45,28 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        private int FailedPings = 0;
+        private int failedPings = 0;
 
-        private int Cycles = 0;
-        private bool ServerIsOnline;
-        private bool CacheIsAvailable;
+        private int cycles = 0;
+        private bool serverIsOnline;
+        private bool cacheIsAvailable;
 
-        private bool InCachedMode;
-        private WatchDogConnectionStatus CurrentWatchdogStatus = WatchDogConnectionStatus.Online;
+        private bool inCachedMode;
+        private WatchDogConnectionStatus currentWatchdogStatus = WatchDogConnectionStatus.Online;
 
-        private WatchDogConnectionStatus PreviousWatchdogStatus;
-        const int MaxFailedPings = 2;
-        const int CyclesTillHashCheck = 60;
-        const int WatcherInterval = 5000;
+        private WatchDogConnectionStatus previousWatchdogStatus;
+        const int maxFailedPings = 2;
+        const int cyclesTillHashCheck = 60;
+        const int watcherInterval = 5000;
 
-        private Task WatcherTask;// = new Task(() => Watcher());
+        private Task watcherTask;// = new Task(() => Watcher());
         public void StartWatcher()
         {
-            WatcherTask = new Task(() => Watcher());
-            WatcherTask.Start();
-            if (InCachedMode)
+            watcherTask = new Task(() => Watcher());
+            watcherTask.Start();
+            if (inCachedMode)
             {
+                currentWatchdogStatus = WatchDogConnectionStatus.CachedMode;
                 OnStatusChanged(new WatchDogStatusEventArgs(WatchDogConnectionStatus.CachedMode));
             }
         }
@@ -74,17 +75,17 @@ namespace AssetManager.Data.Functions
         {
             while (!(disposedValue))
             {
-                ServerIsOnline = await GetServerStatus();
-                CacheIsAvailable = await DBCacheFunctions.VerifyLocalCacheHashOnly(InCachedMode);
+                serverIsOnline = await GetServerStatus();
+                cacheIsAvailable = await DBCacheFunctions.VerifyLocalCacheHashOnly(inCachedMode);
 
                 var Status = GetWatchdogStatus();
-                if (Status != CurrentWatchdogStatus)
+                if (Status != currentWatchdogStatus)
                 {
-                    CurrentWatchdogStatus = Status;
-                    OnStatusChanged(new WatchDogStatusEventArgs(CurrentWatchdogStatus));
+                    currentWatchdogStatus = Status;
+                    OnStatusChanged(new WatchDogStatusEventArgs(currentWatchdogStatus));
                 }
 
-                if (ServerIsOnline)
+                if (serverIsOnline)
                 {
                     //Fire tick event to update server datatime.
                     OnWatcherTick(new WatchDogTickEventArgs(await GetServerTime()));
@@ -92,20 +93,20 @@ namespace AssetManager.Data.Functions
 
                 CheckForCacheRebuild();
 
-                await Task.Delay(WatcherInterval);
+                await Task.Delay(watcherInterval);
             }
         }
 
         private void CheckForCacheRebuild()
         {
-            if (CurrentWatchdogStatus == WatchDogConnectionStatus.Online)
+            if (currentWatchdogStatus == WatchDogConnectionStatus.Online)
             {
-                if (CacheIsAvailable)
+                if (cacheIsAvailable)
                 {
-                    Cycles += 1;
-                    if (Cycles >= CyclesTillHashCheck)
+                    cycles += 1;
+                    if (cycles >= cyclesTillHashCheck)
                     {
-                        Cycles = 0;
+                        cycles = 0;
                         OnRebuildCache(new EventArgs());
                     }
                 }
@@ -113,12 +114,12 @@ namespace AssetManager.Data.Functions
                 {
                     OnRebuildCache(new EventArgs());
                 }
-                if (PreviousWatchdogStatus == WatchDogConnectionStatus.CachedMode | PreviousWatchdogStatus == WatchDogConnectionStatus.Offline)
+                if (previousWatchdogStatus == WatchDogConnectionStatus.CachedMode | previousWatchdogStatus == WatchDogConnectionStatus.Offline)
                 {
                     OnRebuildCache(new EventArgs());
                 }
             }
-            PreviousWatchdogStatus = CurrentWatchdogStatus;
+            previousWatchdogStatus = currentWatchdogStatus;
         }
 
         private async Task<string> GetServerTime()
@@ -127,10 +128,7 @@ namespace AssetManager.Data.Functions
             {
                 return await Task.Run(() =>
                 {
-                    //using (MySQLDatabase MySQLDB = new MySQLDatabase())
-                    //{
-                        return DBFactory.GetMySqlDatabase().ExecuteScalarFromQueryString("SELECT NOW()").ToString();
-                    //}
+                    return DBFactory.GetMySqlDatabase().ExecuteScalarFromQueryString("SELECT NOW()").ToString();
                 });
             }
             catch
@@ -143,19 +141,19 @@ namespace AssetManager.Data.Functions
         {
             return await Task.Run(() =>
             {
-                for (int i = 0; i <= MaxFailedPings; i++)
+                for (int i = 0; i <= maxFailedPings; i++)
                 {
                     if (!CanTalkToServer())
                     {
-                        FailedPings += 1;
-                        if (FailedPings >= MaxFailedPings)
+                        failedPings += 1;
+                        if (failedPings >= maxFailedPings)
                         {
                             return false;
                         }
                     }
                     else
                     {
-                        FailedPings = 0;
+                        failedPings = 0;
                         return true;
                     }
                     Task.Delay(1000);
@@ -186,17 +184,10 @@ namespace AssetManager.Data.Functions
                     //If server pinging, try to open a connection.
                     if (CanPing)
                     {
-                       // using (MySQLDatabase MySQLDB = new MySQLDatabase())
                         using (var conn = DBFactory.GetMySqlDatabase().NewConnection())
                         {
                             return DBFactory.GetMySqlDatabase().OpenConnection(conn, true);
                         }
-
-                        //using (MySQLDatabase MySQLDB = new MySQLDatabase())
-                        //using (MySqlConnection conn = MySQLDB.NewConnection())
-                        //{
-                        //    return MySQLDB.OpenConnection(conn, true);
-                        //}
                     }
                     else
                     {
@@ -215,25 +206,25 @@ namespace AssetManager.Data.Functions
         private WatchDogConnectionStatus GetWatchdogStatus()
         {
 
-            if (ServerIsOnline & !InCachedMode)
+            if (serverIsOnline & !inCachedMode)
             {
                 return WatchDogConnectionStatus.Online;
             }
-            else if (ServerIsOnline & InCachedMode)
+            else if (serverIsOnline & inCachedMode)
             {
-                InCachedMode = false;
+                inCachedMode = false;
                 return WatchDogConnectionStatus.Online;
             }
-            else if (!ServerIsOnline & CacheIsAvailable)
+            else if (!serverIsOnline & cacheIsAvailable)
             {
-                InCachedMode = true;
+                inCachedMode = true;
                 return WatchDogConnectionStatus.CachedMode;
             }
             else
             {
                 return WatchDogConnectionStatus.Offline;
             }
-                     
+
         }
 
         #region "IDisposable Support"
@@ -249,7 +240,7 @@ namespace AssetManager.Data.Functions
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                   if (WatcherTask != null) WatcherTask.Dispose();
+                    if (watcherTask != null) watcherTask.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.

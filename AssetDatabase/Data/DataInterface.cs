@@ -9,9 +9,20 @@ namespace AssetDatabase.Data
 
         DbConnection NewConnection();
 
-        bool OpenConnection(DbConnection connection, bool overrideNoPing = false);
+        /// <summary>
+        /// Trys to open the specified connection. Returns true if successful.
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="overrideNoPing">True if connection will try to be opened even if a server-offline flag is set.</param>
+        /// <returns></returns>
+        bool OpenConnection(DbConnection connection, bool overrideNoPing);
 
-        bool OpenConnection();
+        /// <summary>
+        /// Trys to open the specified connection. Returns true if successful.
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <returns></returns>
+        bool OpenConnection(DbConnection connection);
 
         /// <summary>
         /// Returns a new <see cref="DbTransaction"/>.
@@ -109,6 +120,13 @@ namespace AssetDatabase.Data
         DbCommand GetCommandFromParams(string query, List<DBQueryParameter> @params);
 
 
+        /// <summary>
+        /// Returns a new data adapter.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="acceptChanges">False if rows returned by this adapter will be marked as new or added. 
+        /// Useful for inserting data from this adapter into another database.</param>
+        /// <returns></returns>
         DbDataAdapter GetDataAdapter(string query, bool acceptChanges = true);
 
     }

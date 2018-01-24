@@ -1,8 +1,8 @@
-﻿using System.Data.SQLite;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.SQLite;
 
 namespace AssetDatabase.Data
 {
@@ -13,26 +13,22 @@ namespace AssetDatabase.Data
         public string SqlitePath { get; set; } = string.Empty;
         public string SqlitePass { get; set; } = string.Empty;
 
-
-
-        private SQLiteConnection Connection { get; set; }
-        private string SqliteConnectString;
+        private string sqliteConnectString
+        {
+            get
+            {
+                return "Data Source=" + SqlitePath + ";Password=" + SqlitePass;
+            }
+        }
 
         #endregion Fields
 
         #region Constructors
 
-        public SqliteDatabase(bool openConnectionOnCall = true)
+        public SqliteDatabase(string dbpath, string dbpass = "")
         {
-
-            SqliteConnectString = "Data Source=" + SqlitePath + ";Password=" + SqlitePass;
-
-            if (openConnectionOnCall)
-            {
-                if (!OpenConnection())
-                {
-                }
-            }
+            SqlitePath = dbpath;
+            SqlitePass = dbpass;
         }
 
         #endregion Constructors
@@ -41,40 +37,38 @@ namespace AssetDatabase.Data
 
         #region Connection Methods
 
-        public void CloseConnection()
+        public void CloseConnection(DbConnection connection)
         {
-            if (Connection != null)
+            if (connection != null)
             {
-
-                Connection.Close();
-                Connection.Dispose();
+                connection.Close();
+                connection.Dispose();
             }
         }
 
         public DbConnection NewConnection()
         {
-            SqliteConnectString = "Data Source=" + SqlitePath;
-            return new SQLiteConnection(SqliteConnectString);
+            return new SQLiteConnection(sqliteConnectString);
         }
 
-        public bool OpenConnection()
+        public bool OpenConnection(DbConnection connection)
         {
-            if (ReferenceEquals(Connection, null))
+            var sqliteConnection = (SQLiteConnection)connection;
+
+            if (ReferenceEquals(sqliteConnection, null))
             {
-                Connection = (SQLiteConnection)NewConnection();
+                sqliteConnection = (SQLiteConnection)NewConnection();
+            }
+            if (sqliteConnection.State != ConnectionState.Open)
+            {
                 if (!string.IsNullOrEmpty(SqlitePass))
                 {
-                    Connection.SetPassword(SqlitePass);
+                    sqliteConnection.SetPassword(SqlitePass);
                 }
 
+                sqliteConnection.Open();
             }
-            if (Connection.State != ConnectionState.Open)
-            {
-                CloseConnection();
-                Connection = (SQLiteConnection)NewConnection();
-                Connection.Open();
-            }
-            if (Connection.State == ConnectionState.Open)
+            if (sqliteConnection.State == ConnectionState.Open)
             {
                 return true;
             }
@@ -84,321 +78,20 @@ namespace AssetDatabase.Data
             }
         }
 
-        public bool OpenConnection(DbConnection connection, bool overrideNoPing = false)
+        public bool OpenConnection(DbConnection connection, bool overrideNoPing)
         {
             throw new NotImplementedException();
         }
 
         #endregion Connection Methods
 
-        #region CacheManagement
-
-        public void CreateFile(string path)
-        {
-            using (SQLiteConnection conn = (SQLiteConnection)NewConnection())
-            {
-                conn.Open();
-            }
-        }
-
-        //public bool CheckLocalCacheHash()
-        //{
-        //    List<string> RemoteHashes = new List<string>();
-        //    RemoteHashes = RemoteTableHashList();
-        //    return CompareTableHashes(RemoteHashes, DBCacheFunctions.SqliteTableHashes);
-        //}
-
-        //public bool CompareTableHashes(List<string> tableHashesA, List<string> tableHashesB)
-        //{
-        //    try
-        //    {
-        //        if (ReferenceEquals(tableHashesA, null) || ReferenceEquals(tableHashesB, null))
-        //        {
-        //            return false;
-        //        }
-        //        for (int i = 0; i <= tableHashesA.Count - 1; i++)
-        //        {
-        //            if (tableHashesA[i] != tableHashesB[i])
-        //            {
-        //                return false;
-        //            }
-        //        }
-        //        return true;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return false;
-        //    }
-        //}
-
-        //public int GetSchemaVersion()
-        //{
-        //    using (SqliteCommand cmd = new SqliteCommand("pragma schema_version"))
-        //    {
-        //        cmd.Connection = Connection;
-        //        return System.Convert.ToInt32(cmd.ExecuteScalar());
-        //    }
-        //}
-
-        //public void RefreshSqlCache()
-        //{
-        //    try
-        //    {
-        //        if (DBCacheFunctions.SqliteTableHashes != null && CheckLocalCacheHash())
-        //        {
-        //            return;
-        //        }
-
-        //        Logging.Logger("Rebuilding local DB cache...");
-        //        CloseConnection();
-        //        GC.Collect();
-        //        if (!File.Exists(Paths.SqliteDir))
-        //        {
-        //            Directory.CreateDirectory(Paths.SqliteDir);
-        //        }
-        //        if (File.Exists(Paths.SqlitePath))
-        //        {
-        //            File.Delete(Paths.SqlitePath);
-        //        }
-        //        SqliteConnection.CreateFile(Paths.SqlitePath);
-        //        Connection = NewConnection();
-        //        Connection.SetPassword(SecurityTools.DecodePassword(EncSqlitePass));
-        //        OpenConnection();
-        //        using (var trans = Connection.BeginTransaction())
-        //        {
-        //            foreach (var table in TableList())
-        //            {
-        //                AddTable(table, trans);
-        //            }
-        //            trans.Commit();
-        //        }
-
-        //        DBCacheFunctions.SqliteTableHashes = LocalTableHashList();
-        //        DBCacheFunctions.RemoteTableHashes = RemoteTableHashList();
-        //        Logging.Logger("Local DB cache complete...");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logging.Logger("Errors during cache rebuild!");
-        //        Logging.Logger("STACK TRACE: " + ex.ToString());
-        //    }
-        //}
-
-        //public List<string> LocalTableHashList()
-        //{
-        //    try
-        //    {
-        //        List<string> hashList = new List<string>();
-        //        foreach (var table in TableList())
-        //        {
-        //            using (var results = ToStringTable(DataTableFromQueryString("SELECT * FROM " + table)))
-        //            {
-        //                results.TableName = table;
-        //                hashList.Add(SecurityTools.GetSHAOfTable(results));
-        //            }
-        //        }
-        //        return hashList;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return default(List<string>);
-        //    }
-        //}
-
-        //public List<string> RemoteTableHashList()
-        //{
-        //    List<string> hashList = new List<string>();
-        //    using (MySQLDatabase MySQLDB = new MySQLDatabase())
-        //    {
-        //        foreach (var table in TableList())
-        //        {
-        //            using (var results = ToStringTable(MySQLDB.DataTableFromQueryString("SELECT * FROM " + table)))
-        //            {
-        //                results.TableName = table;
-        //                hashList.Add(SecurityTools.GetSHAOfTable(results));
-        //            }
-        //        }
-        //        return hashList;
-        //    }
-        //}
-
-        //private void AddTable(string tableName, SqliteTransaction transaction)
-        //{
-        //    CreateCacheTable(tableName, transaction);
-        //    ImportDatabase(tableName, transaction);
-        //}
-
-        ///// <summary>
-        ///// Builds a Sqlite compatible CREATE statement from a MySQL 'SHOW FULL COLUMNS FROM' query result.
-        ///// </summary>
-        ///// <param name="columnResults"></param>
-        ///// <returns></returns>
-        //private string BuildCreateStatement(DataTable columnResults)
-        //{
-
-        //    // List for primary keys.
-        //    var keys = new List<string>();
-
-        //    string statement = "CREATE TABLE ";
-
-        //    // Add the table name from the results parameter.
-        //    // **REMEMEBER TO ADD THE TABLE NAME TO THE RESULTS DATATABLE BEFORE CALLING THIS FUNCTION**
-        //    statement += " `" + columnResults.TableName + "` ( ";
-
-        //    // Iterate through the table rows.
-        //    foreach (DataRow row in columnResults.Rows)
-        //    {
-        //        // Add the field/column name and data type to the statement.
-        //        statement += "`" + row["Field"].ToString() + "` ";
-        //        statement += row["Type"].ToString();
-
-        //        // If the current field/column is a primary key, add it to the keys list.
-        //        if (row["Key"].ToString() == "PRI")
-        //        {
-        //            keys.Add(row["Field"].ToString());
-        //        }
-
-        //        // Add a column delimiter if we are not on the last item.
-        //        if (columnResults.Rows.IndexOf(row) != (columnResults.Rows.Count - 1)) statement += ", ";
-        //    }
-
-
-        //    // Add primary keys declaration.
-        //    if (keys.Count > 0)
-        //    {
-        //        // Declaration header and open parentheses.
-        //        statement += ", PRIMARY KEY (";
-
-        //        foreach (string key in keys)
-        //        {
-        //            // Add keys string and delimiter, if needed.
-        //            statement += key;
-        //            if (keys.IndexOf(key) != (keys.Count - 1)) statement += ", ";
-        //        }
-
-        //        // Close parentheses.
-        //        statement += ")";
-        //    }
-
-        //    // End of statement close parentheses.
-        //    statement += ");";
-
-        //    return statement;
-        //}
-
-        //private void CreateCacheTable(string tableName, SqliteTransaction transaction)
-        //{
-        //    string createQry;
-        //    using (DataTable tableColumns = GetTableColumns(tableName))
-        //    {
-        //        createQry = BuildCreateStatement(tableColumns);
-        //    }
-
-        //    using (SqliteCommand cmd = new SqliteCommand(createQry, Connection))
-        //    {
-        //        cmd.Transaction = transaction;
-        //        cmd.ExecuteNonQuery();
-        //    }
-
-        //}
-
-        //private DataTable GetRemoteDBTable(string tableName)
-        //{
-        //    string qry = "SELECT * FROM " + tableName;
-        //    using (MySQLDatabase MySQLDB = new MySQLDatabase())
-        //    {
-        //        using (DataTable results = new DataTable())
-        //        {
-        //            using (var conn = MySQLDB.NewConnection())
-        //            {
-        //                using (var adapter = MySQLDB.ReturnMySqlAdapter(qry, conn))
-        //                {
-        //                    adapter.AcceptChangesDuringFill = false;
-        //                    adapter.Fill(results);
-        //                    results.TableName = tableName;
-        //                    return results;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private DataTable GetTableColumns(string tableName)
-        //{
-        //    string qry = "SHOW FULL COLUMNS FROM " + tableName;
-        //    using (MySQLDatabase MySQLDB = new MySQLDatabase())
-        //    {
-        //        using (var results = MySQLDB.DataTableFromQueryString(qry))
-        //        {
-        //            results.TableName = tableName;
-        //            return results;
-        //        }
-        //    }
-        //}
-
-        //private void ImportDatabase(string tableName, SqliteTransaction transaction)
-        //{
-        //    OpenConnection();
-        //    using (var cmd = Connection.CreateCommand())
-        //    {
-        //        using (var adapter = new SqliteDataAdapter(cmd))
-        //        {
-        //            using (SqliteCommandBuilder builder = new SqliteCommandBuilder(adapter))
-        //            {
-        //                cmd.Transaction = transaction;
-        //                cmd.CommandText = "SELECT * FROM " + tableName;
-        //                adapter.Update(GetRemoteDBTable(tableName));
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private List<string> TableList()
-        //{
-        //    List<string> list = new List<string>();
-        //    list.Add(DevicesCols.TableName);
-        //    list.Add(HistoricalDevicesCols.TableName);
-        //    list.Add(TrackablesCols.TableName);
-        //    list.Add(SibiRequestCols.TableName);
-        //    list.Add(SibiRequestItemsCols.TableName);
-        //    list.Add(SibiNotesCols.TableName);
-        //    list.Add(DeviceComboCodesCols.TableName);
-        //    list.Add(SibiComboCodesCols.TableName);
-        //    list.Add("munis_codes");
-        //    list.Add(SecurityCols.TableName);
-        //    list.Add(UsersCols.TableName);
-        //    list.Add("device_ping_history");
-        //    list.Add("munis_departments");
-        //    return list;
-        //}
-
-        //private DataTable ToStringTable(DataTable table)
-        //{
-        //    DataTable tmpTable = table.Clone();
-        //    for (var i = 0; i <= tmpTable.Columns.Count - 1; i++)
-        //    {
-        //        tmpTable.Columns[i].DataType = typeof(string);
-        //    }
-        //    foreach (DataRow row in table.Rows)
-        //    {
-        //        tmpTable.ImportRow(row);
-        //    }
-        //    table.Dispose();
-        //    return tmpTable;
-        //}
-
-        #endregion CacheManagement
-
         #region IDataBase
 
         public DbTransaction StartTransaction()
         {
-
             var conn = (SQLiteConnection)NewConnection();
-            conn.Open();
+            OpenConnection(conn);
             return conn.BeginTransaction();
-
-            //throw (new NotImplementedException());
         }
 
         public DataTable DataTableFromQueryString(string query)
@@ -413,7 +106,6 @@ namespace AssetDatabase.Data
                 da.Fill(results);
                 da.SelectCommand.Connection.Dispose();
                 return results;
-
             }
         }
 
@@ -452,7 +144,7 @@ namespace AssetDatabase.Data
                 using (var conn = NewConnection())
                 {
                     command.Connection = conn;
-                    command.Connection.Open();
+                    OpenConnection(command.Connection);
                     return command.ExecuteScalar();
                 }
             }
@@ -467,7 +159,7 @@ namespace AssetDatabase.Data
             using (var conn = (SQLiteConnection)NewConnection())
             using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
             {
-                cmd.Connection.Open();
+                OpenConnection(cmd.Connection);
                 return cmd.ExecuteScalar();
             }
         }
@@ -479,22 +171,18 @@ namespace AssetDatabase.Data
                 using (var conn = (SQLiteConnection)NewConnection())
                 using (var cmd = new SQLiteCommand(query, conn))
                 {
-                    conn.Open();
+                    OpenConnection(conn);
                     return cmd.ExecuteNonQuery();
                 }
-
             }
             else
             {
                 var conn = (SQLiteConnection)transaction.Connection;
                 using (var cmd = new SQLiteCommand(query, conn))
                 {
-                    //conn.Open();
                     return cmd.ExecuteNonQuery();
                 }
             }
-
-            //throw (new NotImplementedException());
         }
 
         public int InsertFromParameters(string tableName, List<DBParameter> @params, DbTransaction transaction = null)
@@ -511,7 +199,6 @@ namespace AssetDatabase.Data
                 using (var Adapter = new SQLiteDataAdapter(cmd))
                 using (var Builder = new SQLiteCommandBuilder(Adapter))
                 {
-
                     return Adapter.Update(table);
                 }
             }
@@ -521,14 +208,10 @@ namespace AssetDatabase.Data
                 using (var Adapter = new SQLiteDataAdapter(selectQuery, conn))
                 using (var Builder = new SQLiteCommandBuilder(Adapter))
                 {
-                    conn.Open();
+                    OpenConnection(conn);
                     return Adapter.Update(table);
                 }
             }
-
-
-
-            // throw (new NotImplementedException());
         }
 
         public int UpdateValue(string tableName, string fieldIn, object valueIn, string idField, string idValue, DbTransaction transaction = null)
@@ -579,6 +262,7 @@ namespace AssetDatabase.Data
         {
             throw (new NotImplementedException());
         }
+
         #endregion IDataBase
 
         #endregion Methods
@@ -605,7 +289,6 @@ namespace AssetDatabase.Data
                 {
                     // TODO: dispose managed state (managed objects).
                 }
-                CloseConnection();
 
                 // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
                 // TODO: set large fields to null.

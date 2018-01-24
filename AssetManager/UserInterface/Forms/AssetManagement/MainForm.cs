@@ -195,9 +195,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     ViewDeviceForm NewView = new ViewDeviceForm(this, new Device(deviceGUID));
                 }
             }
-            catch (IndexOutOfRangeException)
+            catch (Exception ex)
             {
-                OtherFunctions.Message("That device was not found!  It may have been deleted.  Re-execute your search.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Not Found", this);
+                if (ex is IndexOutOfRangeException)
+                {
+                    OtherFunctions.Message("That device was not found!  It may have been deleted.  Re-execute your search.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Not Found", this);
+                }
+                else
+                {
+                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                }
             }
             finally
             {

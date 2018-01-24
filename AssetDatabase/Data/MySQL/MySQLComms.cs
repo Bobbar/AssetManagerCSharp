@@ -1,10 +1,8 @@
 ﻿using MySql.Data.MySqlClient;
-using MySql.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-
 
 namespace AssetDatabase.Data
 {
@@ -39,13 +37,6 @@ namespace AssetDatabase.Data
             disposedValue = true;
         }
 
-        // TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
-        //Protected Overrides Sub Finalize()
-        //    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-        //    Dispose(False)
-        //    MyBase.Finalize()
-        //End Sub
-
         #endregion IDisposable Support
 
         #region Fields
@@ -54,17 +45,20 @@ namespace AssetDatabase.Data
         private string dbPassword = string.Empty;
         private string dbUser = string.Empty;
 
-
-        private const string EncMySqlPass = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG";
         private string MySQLConnectString;
 
         #endregion Fields
 
         #region Properties
 
+        /// <summary>
+        /// If false, OpenConnection calls will always return false. This is set by a connection watchdog.
+        /// By skipping the connection attempt when it is already known that we cannot reach the server,
+        /// we save a lot of time by not waiting for another timeout exception to occur.
+        /// </summary>
         public bool ServerPinging { get; set; } = true;
-        public string CurrentDatabase { get; set; } = string.Empty;
 
+        public string CurrentDatabase { get; set; } = string.Empty;
 
         #endregion Properties
 
@@ -89,7 +83,7 @@ namespace AssetDatabase.Data
             return new MySqlConnection(GetConnectString());
         }
 
-        public bool OpenConnection(DbConnection connection, bool overrideNoPing = false)
+        public bool OpenConnection(DbConnection connection, bool overrideNoPing)
         {
             if (!ServerPinging) //Server not pinging.
             {
@@ -108,9 +102,9 @@ namespace AssetDatabase.Data
             }
         }
 
-        public bool OpenConnection()
+        public bool OpenConnection(DbConnection connection)
         {
-            throw new NotImplementedException();
+            return OpenConnection(connection, false);
         }
 
         private bool TryOpenConnection(DbConnection connection)
@@ -137,8 +131,6 @@ namespace AssetDatabase.Data
         {
             return MySQLConnectString + CurrentDatabase;
         }
-
-      
 
         #endregion Methods
 
@@ -244,7 +236,6 @@ namespace AssetDatabase.Data
                     OpenConnection(conn);
                     return cmd.ExecuteNonQuery();
                 }
-
             }
             else
             {
@@ -253,9 +244,7 @@ namespace AssetDatabase.Data
                 {
                     return cmd.ExecuteNonQuery();
                 }
-
             }
-
         }
 
         public int InsertFromParameters(string tableName, List<DBParameter> @params, DbTransaction transaction = null)
@@ -389,9 +378,8 @@ namespace AssetDatabase.Data
             var adapter = new MySqlDataAdapter(query, conn);
             adapter.AcceptChangesDuringFill = acceptChanges;
             return adapter;
-
-            //return new MySqlDataAdapter(sqlQry, connection);
         }
+
         #endregion IDataBase
     }
 }

@@ -12,6 +12,9 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Collections;
+using System.Collections.Generic;
+
 
 namespace AssetManager.Helpers
 {
@@ -19,9 +22,9 @@ namespace AssetManager.Helpers
     {
         //Suppress additional messages to user.
 
-        private static bool SuppressAdditionalMessages = false;
+        private static bool suppressAdditionalMessages = false;
 
-        public static bool ErrHandle(Exception ex, MethodBase Method)
+        public static bool ErrHandle(Exception ex, MethodBase Method)//, bool suppressMessages = false)
         {
             //Recursive error handler. Returns False for undesired or dangerous errors, True if safe to continue.
             try
@@ -40,11 +43,10 @@ namespace AssetManager.Helpers
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + handEx.HResult + "  Message:" + handEx.Message);
                     ErrorResult = true;
                 }
-                //else if (ex is MySqlException)
-                //{
-                //    var MySQLEx = (MySqlException)ex;
-                //    ErrorResult = handleMySQLException(MySQLEx, Method);
-                //}
+                else if (ex.GetType().Name == "MySqlException")
+                {
+                    ErrorResult = handleMySQLException(ex, Method);
+                }
                 else if (ex is SqlException)
                 {
                     var SQLEx = (SqlException)ex;
@@ -125,7 +127,7 @@ namespace AssetManager.Helpers
             }
             finally
             {
-                SuppressAdditionalMessages = false;
+                suppressAdditionalMessages = false;
             }
         }
 
@@ -186,39 +188,59 @@ namespace AssetManager.Helpers
             return false;
         }
 
-        //private static bool handleMySQLException(MySqlException ex, MethodBase Method)
-        //{
-        //    Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message);
-        //    switch (ex.Number)
-        //    {
-        //        case 1042:
-        //            // ConnectionReady()
-        //            PromptUser("Unable to connect to server.  Check connection and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Connection Lost");
-        //            return true;
+        private static bool handleMySQLException(Exception ex, MethodBase Method)
+        {
+            if (ex.Data.Count > 0)
+            {
+                Logging.Logger("MySQLException Data:");
+                foreach (DictionaryEntry item in ex.Data)
+                {
+                    Console.WriteLine(item.Key.ToString() + " - " + item.Value.ToString());
+                    Logging.Logger(item.Key.ToString() + " - " + item.Value.ToString());
+                }
+            }
 
-        //        case 0:
-        //            // ConnectionReady()
-        //            PromptUser("Unable to connect to server.  Check connection and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Connection Lost");
-        //            return true;
 
-        //        case 1064:
-        //            PromptUser("Something went wrong with the SQL command. See log for details.  Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Error, "SQL Syntax Error");
-        //            return true;
+            int errorNumber = 0;
 
-        //        case 1406:
-        //            PromptUser(ex.Message + Environment.NewLine + Environment.NewLine + "Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "SQL Error");
-        //            return true;
+            if (ex.Data.Contains("Server Error Code"))
+            {
+                errorNumber = Convert.ToInt32(ex.Data["Server Error Code"]);
+            }
 
-        //        case 1292:
-        //            PromptUser("Something went wrong with the SQL command. See log for details.  Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Error, "SQL Syntax Error");
-        //            return true;
 
-        //        default:
-        //            UnHandledError(ex, ex.Number, Method);
-        //            break;
-        //    }
-        //    return false;
-        //}
+            Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + errorNumber + "  Message:" + ex.Message);
+            switch (errorNumber)
+            {
+                case 1042:
+                    PromptUser("Unable to connect to server.  Check connection and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Connection Lost");
+                    suppressAdditionalMessages = true;
+                    return true;
+
+                case 0:
+                    PromptUser("Unable to connect to server.  Check connection and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Connection Lost");
+                    suppressAdditionalMessages = true;
+                    return true;
+
+                case 1064:
+                    PromptUser("Something went wrong with the SQL command. See log for details.  Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Error, "SQL Syntax Error");
+                    return true;
+
+                case 1406:
+                    PromptUser(ex.Message + Environment.NewLine + Environment.NewLine + "Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "SQL Error");
+                    return true;
+
+                case 1292:
+                    PromptUser("Something went wrong with the SQL command. See log for details.  Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Error, "SQL Syntax Error");
+                    return true;
+
+                default:
+                    UnHandledError(ex, errorNumber, Method);
+                    break;
+            }
+
+            return false;
+        }
 
         private static bool handlePingException(System.Net.NetworkInformation.PingException ex, MethodBase Method)
         {
@@ -366,7 +388,7 @@ namespace AssetManager.Helpers
                 case 53:
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message);
                     PromptUser("Could not connect to MUNIS database.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Network Error");
-                    SuppressAdditionalMessages = true;
+                    suppressAdditionalMessages = true;
                     return true;
 
                 default:
@@ -429,7 +451,7 @@ namespace AssetManager.Helpers
 
         private static void PromptUser(string Prompt, int Buttons = (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, string Title = null, Form ParentFrm = null)
         {
-            if (!SuppressAdditionalMessages)
+            if (!suppressAdditionalMessages)
             {
                 OtherFunctions.Message(Prompt, Buttons, Title, ParentFrm);
             }

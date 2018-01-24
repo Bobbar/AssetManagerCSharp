@@ -87,15 +87,11 @@ namespace AssetManager
         {
             try
             {
-                //using (MySQLDatabase SQLComms = new MySQLDatabase())
-                //using (MySQLDatabase SQLComms = DBFactory.GetMySQLDB())
-                //{
                 IDataBase SQLComms = DBFactory.GetMySqlDatabase();
                 using (var conn = SQLComms.NewConnection())
-                    {
-                        return SQLComms.OpenConnection(conn, true);
-                    }
-                //}
+                {
+                    return SQLComms.OpenConnection(conn, true);
+                }
             }
             catch
             {
