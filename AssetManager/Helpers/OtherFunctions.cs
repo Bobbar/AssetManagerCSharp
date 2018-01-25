@@ -39,6 +39,7 @@ namespace AssetManager.Helpers
             GlobalSwitches.ProgramEnding = true;
             Logging.Logger("Ending Program...");
             PurgeTempDir();
+            Application.Exit();
         }
 
         public static void PurgeTempDir()
