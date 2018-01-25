@@ -1,15 +1,11 @@
-﻿using AssetManager.Data.Communications;
-using System;
+﻿using System;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
-using System.Data.Common;
 
 namespace AssetManager.Data.Functions
 {
-
     public class ConnectionWatchdog : IDisposable
     {
-
         public ConnectionWatchdog(bool cachedMode)
         {
             inCachedMode = cachedMode;
@@ -54,10 +50,11 @@ namespace AssetManager.Data.Functions
         private WatchDogConnectionStatus currentWatchdogStatus = WatchDogConnectionStatus.Online;
 
         private WatchDogConnectionStatus previousWatchdogStatus;
-        const int maxFailedPings = 2;
-        const int watcherInterval = 5000;
+        private const int maxFailedPings = 2;
+        private const int watcherInterval = 5000;
 
         private Task watcherTask;
+
         public void StartWatcher()
         {
             watcherTask = new Task(() => Watcher());
@@ -73,8 +70,8 @@ namespace AssetManager.Data.Functions
         {
             while (!disposedValue)
             {
-                serverIsOnline = await GetServerStatus();
-                cacheIsAvailable = await DBCacheFunctions.CacheAvailable(inCachedMode);
+                serverIsOnline = ServerPinging();
+                cacheIsAvailable = DBCacheFunctions.CacheAvailable(inCachedMode);
 
                 var Status = GetWatchdogStatus();
                 if (Status != currentWatchdogStatus)
@@ -86,7 +83,7 @@ namespace AssetManager.Data.Functions
                 if (serverIsOnline)
                 {
                     //Fire tick event to update server datatime.
-                    OnWatcherTick(new WatchDogTickEventArgs(await GetServerTime()));
+                    OnWatcherTick(new WatchDogTickEventArgs(GetServerTime()));
                 }
 
                 CheckForCacheRebuild();
@@ -111,14 +108,11 @@ namespace AssetManager.Data.Functions
             previousWatchdogStatus = currentWatchdogStatus;
         }
 
-        private async Task<string> GetServerTime()
+        private string GetServerTime()
         {
             try
             {
-                return await Task.Run(() =>
-                {
-                    return DBFactory.GetMySqlDatabase().ExecuteScalarFromQueryString("SELECT NOW()").ToString();
-                });
+                return DBFactory.GetMySqlDatabase().ExecuteScalarFromQueryString("SELECT NOW()").ToString();
             }
             catch
             {
@@ -126,29 +120,26 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        private async Task<bool> GetServerStatus()
+        private bool ServerPinging()
         {
-            return await Task.Run(() =>
+            for (int i = 0; i <= maxFailedPings; i++)
             {
-                for (int i = 0; i <= maxFailedPings; i++)
+                if (!CanTalkToServer())
                 {
-                    if (!CanTalkToServer())
+                    failedPings += 1;
+                    if (failedPings >= maxFailedPings)
                     {
-                        failedPings += 1;
-                        if (failedPings >= maxFailedPings)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
-                    else
-                    {
-                        failedPings = 0;
-                        return true;
-                    }
-                    Task.Delay(1000);
                 }
-                return true;
-            });
+                else
+                {
+                    failedPings = 0;
+                    return true;
+                }
+                Task.Delay(1000).Wait();
+            }
+            return true;
         }
 
         private bool CanTalkToServer()
@@ -194,7 +185,6 @@ namespace AssetManager.Data.Functions
 
         private WatchDogConnectionStatus GetWatchdogStatus()
         {
-
             if (serverIsOnline & !inCachedMode)
             {
                 return WatchDogConnectionStatus.Online;
@@ -213,7 +203,6 @@ namespace AssetManager.Data.Functions
             {
                 return WatchDogConnectionStatus.Offline;
             }
-
         }
 
         #region "IDisposable Support"
@@ -254,8 +243,7 @@ namespace AssetManager.Data.Functions
             // GC.SuppressFinalize(Me)
         }
 
-        #endregion
-
+        #endregion "IDisposable Support"
     }
 
     public class WatchDogTickEventArgs : EventArgs
@@ -266,7 +254,6 @@ namespace AssetManager.Data.Functions
         {
             this.ServerTime = serverTime;
         }
-
     }
 
     public class WatchDogStatusEventArgs : EventArgs
@@ -277,7 +264,6 @@ namespace AssetManager.Data.Functions
         {
             this.ConnectionStatus = connectionStatus;
         }
-
     }
 
     public enum WatchDogConnectionStatus
@@ -286,5 +272,4 @@ namespace AssetManager.Data.Functions
         Offline,
         CachedMode
     }
-
 }

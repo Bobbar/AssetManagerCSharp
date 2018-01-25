@@ -33,14 +33,11 @@ namespace AssetManager.Data.Functions
         /// </summary>
         /// <param name="cachedMode">When true, only checks for Schema Version since a remote table hash will likely be unavailable.</param>
         /// <returns></returns>
-        public static async Task<bool> CacheAvailable(bool cachedMode)
+        public static bool CacheAvailable(bool cachedMode)
         {
             if (!cachedMode)
             {
-                return await Task.Run(() =>
-                {
-                    return CacheUpToDate();
-                });
+                return CacheUpToDate();
             }
             else
             {
