@@ -8,9 +8,9 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
     public partial class PackFileForm : ExtendedForm
     {
         public bool PackVerified { get; set; }
-        private bool Working = false;
+        private bool working = false;
 
-        private ManagePackFile PackFunc = new ManagePackFile();
+        private ManagePackFile packManager = new ManagePackFile();
 
         public PackFileForm(bool showFunctions)
         {
@@ -27,9 +27,9 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         {
             try
             {
-                Working = true;
-                PackVerified = await PackFunc.ProcessPackFile();
-                Working = false;
+                working = true;
+                PackVerified = await packManager.ProcessPackFile();
+                working = false;
                 if (this.Modal)
                     this.Close();
             }
@@ -43,22 +43,22 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         {
             try
             {
-                if (PackFunc.Progress.Percent > 0)
+                if (packManager.Progress.Percent > 0 && working)
                 {
-                    ProgressBar.Value = PackFunc.Progress.Percent;
-                    PackFunc.Progress.Tick();
-                    if (PackFunc.Progress.Throughput > 0 & PackFunc.Progress.Percent < 100)
+                    ProgressBar.Value = packManager.Progress.Percent;
+                    packManager.Progress.Tick();
+                    if (packManager.Progress.Throughput > 0 & packManager.Progress.Percent < 100)
                     {
                         if (!SpeedLabel.Visible)
                             SpeedLabel.Visible = true;
-                        SpeedLabel.Text = PackFunc.Progress.Throughput.ToString() + " MB/s";
+                        SpeedLabel.Text = packManager.Progress.Throughput.ToString() + " MB/s";
                     }
                     else
                     {
                         SpeedLabel.Visible = false;
                     }
                 }
-                StatusLabel.Text = PackFunc.Status;
+                StatusLabel.Text = packManager.Status;
             }
             catch (Exception ex)
             {
@@ -68,6 +68,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         private void VerifyPackButton_Click(object sender, EventArgs e)
         {
+            if (working) return;
             try
             {
                 var GKFormInstance = Helpers.ChildFormControl.GKUpdaterInstance();
@@ -90,12 +91,12 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         {
             try
             {
-                Working = true;
-                if (!await PackFunc.CreateNewPackFile())
+                working = true;
+                if (!await packManager.CreateNewPackFile())
                 {
                     OtherFunctions.Message("Error while creating a new pack file.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
                 }
-                Working = false;
+                working = false;
             }
             catch (Exception ex)
             {
@@ -107,7 +108,13 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         {
             try
             {
-                NewPackFile();
+                if (working) return;
+
+                var prompt = OtherFunctions.Message("Are you sure? This will replace the packfile on the server with a new one created from the local GK Directory.", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Warning, "Warning", this);
+                if (prompt == DialogResult.OK)
+                {
+                    NewPackFile();
+                }
             }
             catch (Exception ex)
             {
@@ -117,7 +124,20 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         private void PackFileForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = Working;
+            if (working)
+            {
+                var prompt = OtherFunctions.Message("Are you sure you want to cancel the operation?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Cancel?", this);
+
+                if (prompt == DialogResult.Yes)
+                {
+                    packManager.CancelCopy();
+                    e.Cancel = true;
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
         }
     }
 }

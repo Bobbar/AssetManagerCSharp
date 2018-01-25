@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace AssetManager.UserInterface.Forms.GK_Updater
 {
-
     public class ManagePackFile
     {
+        private bool cancelCopy = false;
+
         public ProgressCounter Progress;
 
         public string Status = "";
+
         public ManagePackFile()
         {
             Progress = new ProgressCounter();
@@ -64,7 +66,6 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                 if (!File.Exists(Paths.GKPackFileFullPath))
                 {
                     return false;
-
                 }
                 else
                 {
@@ -129,6 +130,11 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             });
         }
 
+        public void CancelCopy()
+        {
+            cancelCopy = true;
+        }
+
         /// <summary>
         /// Performs a buffered file stream transfer.
         /// </summary>
@@ -145,7 +151,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             using (FileStream destFile = new FileStream(Dest, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, BufferSize, FileOptions.None))
             {
                 Progress.BytesToTransfer = (int)fStream.Length;
-                while (!(bytesIn < 1))
+                while (!(bytesIn < 1) && !cancelCopy)
                 {
                     bytesIn = fStream.Read(buffer, 0, BufferSize);
                     if (bytesIn > 0)
@@ -232,14 +238,14 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         {
             bool PackFileOK = false;
             Status = "Verifying Pack File...";
-            if (await VerifyPackFile())
+            if (await VerifyPackFile() && !cancelCopy)
             {
                 PackFileOK = await UnPackGKDir();
             }
             else
             {
                 Status = "Downloading Pack File...";
-                if (await DownloadPack())
+                if (await DownloadPack() && !cancelCopy)
                 {
                     PackFileOK = await UnPackGKDir();
                 }
@@ -252,10 +258,14 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
             else
             {
+                if (cancelCopy)
+                {
+                    Status = "Canceled.";
+                    return false;
+                }
                 Status = "ERROR!";
                 return false;
             }
-
         }
 
         /// <summary>
@@ -311,6 +321,5 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
             return true;
         }
-
     }
 }
