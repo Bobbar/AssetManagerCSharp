@@ -1074,7 +1074,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             else
             {
-                ExpandSplitter();
+                ExpandSplitter(TrackingBox.Visible);
             }
         }
 

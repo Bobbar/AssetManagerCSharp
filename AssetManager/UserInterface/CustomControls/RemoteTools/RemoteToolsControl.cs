@@ -265,7 +265,7 @@ namespace AssetManager.UserInterface.CustomControls
                 OnVisibleChanging(true);
                 this.Visible = true;
             }
-            if (failedPings > 10 && this.Visible)
+            if (failedPings > 60 && this.Visible)
             {
                 OnVisibleChanging(false);
                 this.Visible = false;
