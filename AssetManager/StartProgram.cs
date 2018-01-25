@@ -44,7 +44,7 @@ namespace AssetManager
             Status("Checking Local Cache...");
             if (ConnectionSuccessful)
             {
-                if (!DBCacheFunctions.VerifyCacheHashes())
+                if (!DBCacheFunctions.CacheUpToDate())
                 {
                     Status("Building Cache DB...");
                     DBCacheFunctions.RefreshLocalDBCache();
@@ -52,7 +52,7 @@ namespace AssetManager
             }
             else
             {
-                CacheAvailable = DBCacheFunctions.VerifyCacheHashes(ConnectionSuccessful);
+                CacheAvailable = DBCacheFunctions.CacheUpToDate(ConnectionSuccessful);
             }
             if (!ConnectionSuccessful & !CacheAvailable)
             {

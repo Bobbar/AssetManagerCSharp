@@ -47,7 +47,6 @@ namespace AssetManager.Data.Functions
 
         private int failedPings = 0;
 
-        private int cycles = 0;
         private bool serverIsOnline;
         private bool cacheIsAvailable;
 
@@ -56,10 +55,9 @@ namespace AssetManager.Data.Functions
 
         private WatchDogConnectionStatus previousWatchdogStatus;
         const int maxFailedPings = 2;
-        const int cyclesTillHashCheck = 60;
         const int watcherInterval = 5000;
 
-        private Task watcherTask;// = new Task(() => Watcher());
+        private Task watcherTask;
         public void StartWatcher()
         {
             watcherTask = new Task(() => Watcher());
@@ -73,10 +71,10 @@ namespace AssetManager.Data.Functions
 
         private async void Watcher()
         {
-            while (!(disposedValue))
+            while (!disposedValue)
             {
                 serverIsOnline = await GetServerStatus();
-                cacheIsAvailable = await DBCacheFunctions.VerifyLocalCacheHashOnly(inCachedMode);
+                cacheIsAvailable = await DBCacheFunctions.CacheAvailable(inCachedMode);
 
                 var Status = GetWatchdogStatus();
                 if (Status != currentWatchdogStatus)
@@ -101,20 +99,11 @@ namespace AssetManager.Data.Functions
         {
             if (currentWatchdogStatus == WatchDogConnectionStatus.Online)
             {
-                if (cacheIsAvailable)
-                {
-                    cycles += 1;
-                    if (cycles >= cyclesTillHashCheck)
-                    {
-                        cycles = 0;
-                        OnRebuildCache(new EventArgs());
-                    }
-                }
-                else
+                if (!cacheIsAvailable)
                 {
                     OnRebuildCache(new EventArgs());
                 }
-                if (previousWatchdogStatus == WatchDogConnectionStatus.CachedMode | previousWatchdogStatus == WatchDogConnectionStatus.Offline)
+                if (previousWatchdogStatus == WatchDogConnectionStatus.CachedMode || previousWatchdogStatus == WatchDogConnectionStatus.Offline)
                 {
                     OnRebuildCache(new EventArgs());
                 }

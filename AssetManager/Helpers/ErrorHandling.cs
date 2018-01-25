@@ -21,110 +21,120 @@ namespace AssetManager.Helpers
 
         private static bool suppressAdditionalMessages = false;
 
-        public static bool ErrHandle(Exception ex, MethodBase Method)//, bool suppressMessages = false)
+        public static bool ErrHandle(Exception ex, MethodBase method)//, bool suppressMessages = false)
         {
             //Recursive error handler. Returns False for undesired or dangerous errors, True if safe to continue.
             try
             {
                 Logging.Logger("ERR STACK TRACE: " + ex.ToString());
-                bool ErrorResult = false;
+                bool errorResult = false;
 
                 if (ex is WebException)
                 {
                     var WebEx = (WebException)ex;
-                    ErrorResult = handleWebException(WebEx, Method);
+                    errorResult = handleWebException(WebEx, method);
                 }
                 else if (ex is IndexOutOfRangeException)
                 {
                     IndexOutOfRangeException handEx = (IndexOutOfRangeException)ex;
-                    Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + handEx.HResult + "  Message:" + handEx.Message);
-                    ErrorResult = true;
+                    Logging.Logger("ERROR:  MethodName=" + method.Name + "  Type: " + ex.GetType().Name + "  #:" + handEx.HResult + "  Message:" + handEx.Message);
+                    errorResult = true;
                 }
                 else if (ex.GetType().Name == "MySqlException")
                 {
-                    ErrorResult = handleMySQLException(ex, Method);
+                    errorResult = handleMySQLException(ex, method);
                 }
                 else if (ex is SqlException)
                 {
                     var SQLEx = (SqlException)ex;
-                    ErrorResult = handleSQLException(SQLEx, Method);
+                    errorResult = handleSQLException(SQLEx, method);
                 }
                 else if (ex.GetType().Name == "SQLiteException")
                 {
-                    ErrorResult = handleSQLiteException(ex, Method);
+                    errorResult = handleSQLiteException(ex, method);
                 }
                 else if (ex is InvalidCastException)
                 {
                     InvalidCastException handEx = (InvalidCastException)ex;
-                    Logging.Logger("CAST ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + handEx.HResult + "  Message:" + handEx.Message);
+                    Logging.Logger("CAST ERROR:  MethodName=" + method.Name + "  Type: " + ex.GetType().Name + "  #:" + handEx.HResult + "  Message:" + handEx.Message);
                     //  PromptUser("An object was cast to an unmatched type.  See log for details.  Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Invalid Cast Error");
                     PromptUser("An object was cast to an unmatched type.  See log for details.  Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Invalid Cast Error");
                     if (handEx.HResult == -2147467262)
                     {
-                        ErrorResult = true;
+                        errorResult = true;
                     }
                 }
                 else if (ex is IOException)
                 {
                     var IOEx = (IOException)ex;
-                    ErrorResult = handleIOException(IOEx, Method);
+                    errorResult = handleIOException(IOEx, method);
                 }
                 else if (ex is PingException)
                 {
                     var PingEx = (PingException)ex;
-                    ErrorResult = handlePingException(PingEx, Method);
+                    errorResult = handlePingException(PingEx, method);
                 }
                 else if (ex is SocketException)
                 {
                     var SocketEx = (SocketException)ex;
-                    ErrorResult = handleSocketException(SocketEx, Method);
+                    errorResult = handleSocketException(SocketEx, method);
                 }
                 else if (ex is FormatException)
                 {
                     var FormatEx = (FormatException)ex;
-                    ErrorResult = handleFormatException(FormatEx, Method);
+                    errorResult = handleFormatException(FormatEx, method);
                 }
                 else if (ex is Win32Exception)
                 {
                     var Win32Ex = (Win32Exception)ex;
-                    ErrorResult = handleWin32Exception(Win32Ex, Method);
+                    errorResult = handleWin32Exception(Win32Ex, method);
                 }
                 else if (ex is InvalidOperationException)
                 {
                     var InvalidOpEx = (InvalidOperationException)ex;
-                    ErrorResult = handleOperationException(InvalidOpEx, Method);
+                    errorResult = handleOperationException(InvalidOpEx, method);
                 }
                 else if (ex is NoPingException)
                 {
                     var NoPingEx = (NoPingException)ex;
-                    ErrorResult = handleNoPingException(NoPingEx, Method);
+                    errorResult = handleNoPingException(NoPingEx, method);
                 }
                 else if (ex is NullReferenceException)
                 {
                     var NullRefEx = (NullReferenceException)ex;
-                    ErrorResult = handleNullReferenceException(NullRefEx, Method);
+                    errorResult = handleNullReferenceException(NullRefEx, method);
                 }
                 else if (ex is NotImplementedException)
                 {
                     var NotImplementedEx = (NotImplementedException)ex;
-                    ErrorResult = handleNotImplementedException(NotImplementedEx, Method);
+                    errorResult = handleNotImplementedException(NotImplementedEx, method);
+                }
+                else if (ex is TimeoutException)
+                {
+                    errorResult = handleTimeoutException((TimeoutException)ex, method);
                 }
                 else
                 {
-                    UnHandledError(ex, ex.HResult, Method);
-                    ErrorResult = false;
+                    UnHandledError(ex, ex.HResult, method);
+                    errorResult = false;
                 }
 
                 if (ex.InnerException != null)
                 {
-                    ErrorResult = ErrHandle(ex.InnerException, Method);
+                    errorResult = ErrHandle(ex.InnerException, method);
                 }
-                return ErrorResult;
+                return errorResult;
             }
             finally
             {
                 suppressAdditionalMessages = false;
             }
+        }
+
+        private static bool handleTimeoutException(TimeoutException ex, MethodBase Method)
+        {
+            Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message);
+            return false; 
         }
 
         private static bool handleNotImplementedException(NotImplementedException ex, MethodBase Method)

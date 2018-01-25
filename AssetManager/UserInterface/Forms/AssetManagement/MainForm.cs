@@ -291,18 +291,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private async void WatchDogRebuildCache(object sender, EventArgs e)
         {
-            if (GlobalSwitches.BuildingCache)
-                return;
+            if (GlobalSwitches.BuildingCache) return;
+
             GlobalSwitches.BuildingCache = true;
             try
             {
                 SetStatusBar("Rebuilding DB Cache...");
                 await Task.Run(() =>
                 {
-                    if (!DBCacheFunctions.VerifyCacheHashes())
-                    {
-                        DBCacheFunctions.RefreshLocalDBCache();
-                    }
+                    DBCacheFunctions.RefreshLocalDBCache();
                 });
             }
             catch (Exception ex)

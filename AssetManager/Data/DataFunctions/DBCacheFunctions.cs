@@ -1,5 +1,4 @@
 ﻿using AssetManager.Helpers;
-using AssetManager.Security;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,10 +10,7 @@ namespace AssetManager.Data.Functions
 {
     public static class DBCacheFunctions
     {
-
-        public static List<string> SQLiteTableHashes;
-
-        public static List<string> RemoteTableHashes;
+        public static string CacheVersionGUID;
 
         public static void RefreshLocalDBCache()
         {
@@ -37,17 +33,13 @@ namespace AssetManager.Data.Functions
         /// </summary>
         /// <param name="cachedMode">When true, only checks for Schema Version since a remote table hash will likely be unavailable.</param>
         /// <returns></returns>
-        public static async Task<bool> VerifyLocalCacheHashOnly(bool cachedMode)
+        public static async Task<bool> CacheAvailable(bool cachedMode)
         {
             if (!cachedMode)
             {
-                if (RemoteTableHashes == null) return false;
-
                 return await Task.Run(() =>
                 {
-                    List<string> LocalHashes = new List<string>();
-                    LocalHashes = LocalTableHashList();
-                    return CompareTableHashes(LocalHashes, RemoteTableHashes);
+                    return CacheUpToDate();
                 });
             }
             else
@@ -57,12 +49,19 @@ namespace AssetManager.Data.Functions
             return false;
         }
 
-        /// <summary>
-        /// Builds hash lists for both local and remote tables and compares them.  Returns False for mismatch.
-        /// </summary>
-        /// <param name="connectedToDB"></param>
-        /// <returns></returns>
-        public static bool VerifyCacheHashes(bool connectedToDB = true)
+        private static string GetCacheVersion()
+        {
+            var guid = DBFactory.GetSqliteDatabase().ExecuteScalarFromQueryString("SELECT guid FROM db_guid").ToString();
+            return guid;
+        }
+
+        private static string GetDBVersion()
+        {
+            var guid = DBFactory.GetMySqlDatabase().ExecuteScalarFromQueryString("SELECT guid FROM db_guid").ToString();
+            return guid;
+        }
+
+        public static bool CacheUpToDate(bool connectedToDB = true)
         {
             try
             {
@@ -70,9 +69,17 @@ namespace AssetManager.Data.Functions
                 {
                     if (connectedToDB)
                     {
-                        SQLiteTableHashes = LocalTableHashList();
-                        RemoteTableHashes = RemoteTableHashList();
-                        return CompareTableHashes(SQLiteTableHashes, RemoteTableHashes);
+                        CacheVersionGUID = GetCacheVersion();
+                        var DBVersion = GetDBVersion();
+
+                        if (CacheVersionGUID != DBVersion)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
                     }
                     else
                     {
@@ -81,41 +88,11 @@ namespace AssetManager.Data.Functions
                 }
                 else
                 {
-                    SQLiteTableHashes = null;
+                    CacheVersionGUID = string.Empty;
                     return false;
                 }
             }
             catch
-            {
-                return false;
-            }
-        }
-
-        public static bool CheckLocalCacheHash()
-        {
-            List<string> RemoteHashes = new List<string>();
-            RemoteHashes = RemoteTableHashList();
-            return CompareTableHashes(RemoteHashes, SQLiteTableHashes);
-        }
-
-        public static bool CompareTableHashes(List<string> tableHashesA, List<string> tableHashesB)
-        {
-            try
-            {
-                if (ReferenceEquals(tableHashesA, null) || ReferenceEquals(tableHashesB, null))
-                {
-                    return false;
-                }
-                for (int i = 0; i <= tableHashesA.Count - 1; i++)
-                {
-                    if (tableHashesA[i] != tableHashesB[i])
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            catch (Exception)
             {
                 return false;
             }
@@ -138,20 +115,26 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                if (SQLiteTableHashes != null && CheckLocalCacheHash())
+                if (CacheUpToDate())
                 {
                     return;
                 }
 
+                var startTime = DateTime.Now.Ticks;
+
                 Logging.Logger("Rebuilding local DB cache...");
+
                 GC.Collect();
+                GC.WaitForPendingFinalizers();
+
                 if (!File.Exists(Paths.SQLiteDir))
                 {
                     Directory.CreateDirectory(Paths.SQLiteDir);
                 }
                 if (File.Exists(Paths.SQLitePath))
                 {
-                    File.Delete(Paths.SQLitePath);
+                    //File.Delete(Paths.SQLitePath);
+                    DropTables();
                 }
 
                 using (var trans = DBFactory.GetSqliteDatabase().StartTransaction())
@@ -163,9 +146,9 @@ namespace AssetManager.Data.Functions
                     trans.Commit();
                 }
 
-                SQLiteTableHashes = LocalTableHashList();
-                RemoteTableHashes = RemoteTableHashList();
-                Logging.Logger("Local DB cache complete...");
+                var elapTime = (DateTime.Now.Ticks - startTime) / 10000;
+
+                Logging.Logger("Local DB cache complete. (" + elapTime + "ms)");
             }
             catch (Exception ex)
             {
@@ -174,41 +157,27 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static List<string> LocalTableHashList()
+        private static void DropTables()
         {
-            try
+            string query = "SELECT * FROM sqlite_master WHERE type='table'";
+
+            using (var trans = DBFactory.GetSqliteDatabase().StartTransaction())
+            using (var results = DBFactory.GetSqliteDatabase().DataTableFromQueryString(query))
             {
-                List<string> hashList = new List<string>();
-                foreach (var table in TableList())
+                try
                 {
-                    using (var results = ToStringTable(DBFactory.GetSqliteDatabase().DataTableFromQueryString("SELECT * FROM " + table)))
+                    foreach (DataRow row in results.Rows)
                     {
-                        results.TableName = table;
-                        hashList.Add(SecurityTools.GetSHAOfTable(results));
+                        string dropQuery = "DROP TABLE " + row["name"];
+                        DBFactory.GetSqliteDatabase().ExecuteNonQuery(dropQuery, trans);
                     }
+                    trans.Commit();
                 }
-                return hashList;
-            }
-            catch (Exception)
-            {
-                return default(List<string>);
-            }
-        }
-
-        public static List<string> RemoteTableHashList()
-        {
-            List<string> hashList = new List<string>();
-
-            var MySQLDB = DBFactory.GetMySqlDatabase();
-            foreach (var table in TableList())
-            {
-                using (var results = ToStringTable(DBFactory.GetMySqlDatabase().DataTableFromQueryString("SELECT * FROM " + table)))
+                catch
                 {
-                    results.TableName = table;
-                    hashList.Add(SecurityTools.GetSHAOfTable(results));
+                    trans.Rollback();
                 }
             }
-            return hashList;
         }
 
         private static void AddTable(string tableName, DbTransaction transaction)
@@ -224,7 +193,6 @@ namespace AssetManager.Data.Functions
         /// <returns></returns>
         private static string BuildCreateStatement(DataTable columnResults)
         {
-
             // List for primary keys.
             var keys = new List<string>();
 
@@ -250,7 +218,6 @@ namespace AssetManager.Data.Functions
                 // Add a column delimiter if we are not on the last item.
                 if (columnResults.Rows.IndexOf(row) != (columnResults.Rows.Count - 1)) statement += ", ";
             }
-
 
             // Add primary keys declaration.
             if (keys.Count > 0)
@@ -334,26 +301,8 @@ namespace AssetManager.Data.Functions
             list.Add(UsersCols.TableName);
             list.Add("device_ping_history");
             list.Add("munis_departments");
+            list.Add("db_guid");
             return list;
         }
-
-        private static DataTable ToStringTable(DataTable table)
-        {
-            DataTable tmpTable = table.Clone();
-            for (var i = 0; i <= tmpTable.Columns.Count - 1; i++)
-            {
-                tmpTable.Columns[i].DataType = typeof(string);
-            }
-            foreach (DataRow row in table.Rows)
-            {
-                tmpTable.ImportRow(row);
-            }
-            table.Dispose();
-            return tmpTable;
-        }
-
-
-
-
     }
 }

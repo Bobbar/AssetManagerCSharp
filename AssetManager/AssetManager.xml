@@ -33,6 +33,16 @@
             <param name="newFile">Full path to file.</param>
             <param name="attachTable">The table that will be assigned to this instance.</param>
         </member>
+        <member name="T:AssetManager.Data.ParamCollection">
+            <summary>
+            Wrapper for DBParameter
+            </summary>
+        </member>
+        <member name="T:AssetManager.Data.QueryParamCollection">
+            <summary>
+            Wrapper for DBQueryParameter
+            </summary>
+        </member>
         <member name="M:AssetManager.Data.Communications.Queries.SelectHistoricalDeviceEntry(System.String)">
             <summary>
             SELECT * FROM <see cref="F:AssetManager.Data.HistoricalDevicesCols.TableName"/> WHERE <see cref="F:AssetManager.Data.HistoricalDevicesCols.HistoryEntryUID"/> = <paramref name="entryGUID"/>
@@ -305,18 +315,11 @@
             <param name="ftpFiles"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Functions.DBCacheFunctions.VerifyLocalCacheHashOnly(System.Boolean)">
+        <member name="M:AssetManager.Data.Functions.DBCacheFunctions.CacheAvailable(System.Boolean)">
             <summary>
             Builds local hash list and compares to previously built remote hash list. Returns False for mismatch.
             </summary>
             <param name="cachedMode">When true, only checks for Schema Version since a remote table hash will likely be unavailable.</param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.DBCacheFunctions.VerifyCacheHashes(System.Boolean)">
-            <summary>
-            Builds hash lists for both local and remote tables and compares them.  Returns False for mismatch.
-            </summary>
-            <param name="connectedToDB"></param>
             <returns></returns>
         </member>
         <member name="M:AssetManager.Data.Functions.DBCacheFunctions.BuildCreateStatement(System.Data.DataTable)">

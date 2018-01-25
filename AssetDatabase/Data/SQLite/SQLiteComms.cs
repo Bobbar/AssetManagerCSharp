@@ -159,8 +159,11 @@ namespace AssetDatabase.Data
             using (var conn = (SQLiteConnection)NewConnection())
             using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
             {
-                OpenConnection(cmd.Connection);
-                return cmd.ExecuteScalar();
+                OpenConnection(conn);
+                var value = cmd.ExecuteScalar();
+                conn.Close();
+                cmd.Connection.Close();
+                return value;
             }
         }
 
