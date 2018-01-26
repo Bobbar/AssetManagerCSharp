@@ -106,53 +106,74 @@ namespace AssetManager.Helpers
         /// <param name="targetGrid"></param>
         public static void FastAutoSizeColumns(this DataGridView targetGrid)
         {
+            Console.WriteLine("Resize");
+
+            // Padding added to final column size
+            const int widthPadding = 20;
+
             // Cast out a DataTable from the target grid datasource.
-            // We need to iterate through all the data in the grid and a DataTable supports enumeration.
+            // We need to iterate through all the data in the grid,
+            // and a DataTable supports enumeration which will allow us
+            // to access the data much more quickly than directly accessing
+            // the grid control.
             var gridTable = (DataTable)targetGrid.DataSource;
 
             // Create a graphics object from the target grid. Used for measuring text size.
             using (var gfx = targetGrid.CreateGraphics())
             {
-                // Iterate through the columns.
-                for (int i = 0; i < gridTable.Columns.Count; i++)
+                // Iterate through each column in the data grid.
+                for (int c = 0; c < targetGrid.Columns.Count; c++)
                 {
-                    // Leverage Linq enumerator to rapidly collect all the rows into a string array, making sure to exclude null values.
-                    string[] colStringCollection = gridTable.AsEnumerable().Where(r => r.Field<object>(i) != null).Select(r => r.Field<object>(i).ToString()).ToArray();
+                    // Array to hold all the row values;
+                    string[] rowStringCollection = new string[0];
+
+                    // If the column is a ComboBox type, then we need to get the full FormattedValue.
+                    // Accessing the formatted value is much slower than enumerating with the data table, 
+                    // but will yeild correct results in this case.
+                    if (targetGrid.Columns[c].CellType == typeof(DataGridViewComboBoxCell))
+                    {
+                        // Iterate through all the rows and add the formatted values to the array.
+                        rowStringCollection = new string[targetGrid.Rows.Count];
+                        for (int r = 0; r < targetGrid.Rows.Count; r++)
+                        {
+                            rowStringCollection[r] = targetGrid[c, r].FormattedValue.ToString();
+                        }
+                    }
+                    else
+                    {
+                        // Get the name of the current column.
+                        // Since the displayed grid columns can vary from the data source,
+                        // using the column name makes sure that we reference the correct
+                        // column in the gridTable.
+                        string columnName = targetGrid.Columns[c].Name;
+
+                        // Leverage Linq enumerator to rapidly collect all the rows into the array, making sure to exclude null values.
+                        rowStringCollection = gridTable.AsEnumerable().Where(r => r.Field<object>(columnName) != null).Select(r => r.Field<object>(columnName).ToString()).ToArray();
+                    }
 
                     // Make sure the Linq query returned results.
-                    if (colStringCollection.Length > 0)
+                    if (rowStringCollection.Length > 0)
                     {
                         // Measure all the strings in the column.
-                        var colStringSizeCollection = MeasureStrings(colStringCollection, gfx, targetGrid.DefaultCellStyle.Font);
+                        var rowStringSizes = MeasureStrings(rowStringCollection, gfx, targetGrid.DefaultCellStyle.Font);
 
                         // Sort the array by string widths.
-                        colStringSizeCollection = colStringSizeCollection.OrderBy((x) => x.Size.Width).ToArray();
+                        rowStringSizes = rowStringSizes.OrderBy((x) => x.Size.Width).ToArray();
 
-                        // Get the last and widest string in the array.
-                        var newColumnWidth = colStringSizeCollection.Last().Size;
+                        // Get the last and longest string in the array.
+                        var longestStringSize = rowStringSizes.Last().Size;
 
                         // Measure the width of the header text.
-                        var headerWidth = gfx.MeasureString(targetGrid.Columns[i].HeaderText, targetGrid.ColumnHeadersDefaultCellStyle.Font);
+                        var headerSize = gfx.MeasureString(targetGrid.Columns[c].HeaderText, targetGrid.ColumnHeadersDefaultCellStyle.Font);
 
-                        // Compare current header width to measured header width and choose the largest.
-                        int maxHeaderWidth = 0;
-                        if (targetGrid.Columns[i].HeaderCell.Size.Width > headerWidth.Width)
+                        // If the longest string width is larger than the header width, set to the new column width.
+                        if (longestStringSize.Width > (int)headerSize.Width)
                         {
-                            maxHeaderWidth = targetGrid.Columns[i].HeaderCell.Size.Width;
-                        }
-                        else
-                        {
-                            maxHeaderWidth = (int)headerWidth.Width;
-                        }
-
-                        // If the calulated max column width is larger than the max header width, set the new column width.
-                        if (newColumnWidth.Width > maxHeaderWidth)
-                        {
-                            targetGrid.Columns[i].Width = (int)newColumnWidth.Width;
+                            targetGrid.Columns[c].Width = (int)longestStringSize.Width + widthPadding;
                         }
                         else // Otherwise, set the column width to the header width.
                         {
-                            targetGrid.Columns[i].Width = maxHeaderWidth;
+                            targetGrid.Columns[c].Width = (int)headerSize.Width + widthPadding;
                         }
                     }
                 }

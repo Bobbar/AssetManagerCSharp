@@ -94,7 +94,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             ClearControls(this);
             HideEditControls();
-            dgvNotes.DataSource = null;
+            NotesGrid.DataSource = null;
             FillCombos();
             pnlCreate.Visible = false;
             CurrentRequest = null;
@@ -511,12 +511,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 return;
             }
-            if (dgvNotes.CurrentRow != null && dgvNotes.CurrentRow.Index > -1)
+            if (NotesGrid.CurrentRow != null && NotesGrid.CurrentRow.Index > -1)
             {
                 var blah = OtherFunctions.Message("Are you sure?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Delete Note", this);
                 if (blah == DialogResult.Yes)
                 {
-                    string NoteUID = dgvNotes.CurrentRowStringValue(SibiNotesCols.NoteUID);
+                    string NoteUID = NotesGrid.CurrentRowStringValue(SibiNotesCols.NoteUID);
                     if (!string.IsNullOrEmpty(NoteUID))
                     {
                         OtherFunctions.Message(DeleteNote(NoteUID) + " Rows affected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Delete Item", this);
@@ -563,35 +563,30 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 RequestItemsGrid.EndEdit();
+                RequestItemsGrid.ScrollBars = ScrollBars.None;
+                RequestItemsGrid.SuspendLayout();
+
                 foreach (DataGridViewRow row in RequestItemsGrid.Rows)
                 {
-                    foreach (DataGridViewCell dcell in row.Cells)
+
+                    if (string.IsNullOrEmpty(row.Cells[SibiRequestItemsCols.RequestUID].Value.ToString()))
                     {
-                        if (dcell.Value != null)
-                        {
-                            dcell.Value = dcell.Value.ToString().Trim();
-                        }
-                        else
-                        {
-                            if (dcell.OwningColumn.Name == SibiRequestItemsCols.ItemUID)
-                            {
-                                dcell.Value = Guid.NewGuid().ToString();
-                            }
-                            else
-                            {
-                                dcell.Value = DBNull.Value;
-                            }
-                        }
+                        row.Cells[SibiRequestItemsCols.RequestUID].Value = CurrentRequest.GUID;
                     }
                 }
                 SibiRequestMapObject info = new SibiRequestMapObject();
                 info.RequestItems = (DataTable)RequestItemsGrid.DataSource;
+
                 return info;
             }
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
                 return null;
+            }
+            finally
+            {
+                RequestItemsGrid.ScrollBars = ScrollBars.Both;
             }
         }
 
@@ -639,7 +634,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void dgvNotes_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void NotesGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             ViewNote();
         }
@@ -648,7 +643,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                var NoteUID = dgvNotes.CurrentRowStringValue(SibiNotesCols.NoteUID);
+                var NoteUID = NotesGrid.CurrentRowStringValue(SibiNotesCols.NoteUID);
                 if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiNotesForm), NoteUID))
                 {
                     SibiNotesForm ViewNote = new SibiNotesForm(this, NoteUID);
@@ -704,7 +699,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             RequestItemsGrid.EditMode = DataGridViewEditMode.EditProgrammatically;
             RequestItemsGrid.AllowUserToAddRows = false;
-            RequestItemsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            RequestItemsGrid.MultiSelect = true;
         }
 
         private void EnableControlsRecursive(Control control)
@@ -751,7 +746,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             RequestItemsGrid.EditMode = DataGridViewEditMode.EditOnEnter;
             RequestItemsGrid.AllowUserToAddRows = true;
-            SetColumnWidths();
+            RequestItemsGrid.MultiSelect = false;
+            RequestItemsGrid.FastAutoSizeColumns();
         }
 
         private void FillCombos()
@@ -850,13 +846,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
             controlParser.EnableFieldValidation();
 
             RequestItemsGrid.DoubleBufferedDataGrid(true);
+            NotesGrid.DoubleBufferedDataGrid(true);
             MyMunisToolBar.InsertMunisDropDown(ToolStrip);
             this.ParentForm = ParentForm;
             this.FormUID = UID;
             ImageCaching.CacheControlImages(this);
             MyWindowList.InsertWindowList(ToolStrip);
             StyleFunctions.SetGridStyle(RequestItemsGrid, GridTheme);
-            StyleFunctions.SetGridStyle(dgvNotes, GridTheme);
+            StyleFunctions.SetGridStyle(NotesGrid, GridTheme);
             ToolStrip.BackColor = Colors.SibiToolBarColor;
         }
 
@@ -878,9 +875,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiNotes(RequestUID)))
                 {
-                    dgvNotes.Populate(Results, NotesGridColumns());
+                    NotesGrid.Populate(Results, NotesGridColumns());
                 }
-                dgvNotes.ClearSelection();
+                NotesGrid.ClearSelection();
             }
             catch (Exception ex)
             {
@@ -1013,6 +1010,37 @@ namespace AssetManager.UserInterface.Forms.Sibi
             StyleFunctions.LeaveRow(RequestItemsGrid, e.RowIndex);
         }
 
+        private void RequestItemsGrid_CellValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            if (IsModifying)
+            {
+                var cell = RequestItemsGrid[e.ColumnIndex, e.RowIndex];
+                if (cell.Value != null)
+                {
+                    if (string.IsNullOrEmpty(cell.Value.ToString()))
+                    {
+                        cell.Value = null;
+                    }
+                    else
+                    {
+                        RequestItemsGrid[e.ColumnIndex, e.RowIndex].Value = RequestItemsGrid[e.ColumnIndex, e.RowIndex].Value.ToString().Trim();
+                    }
+                }
+            }
+        }
+
+        private void RequestItemsGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            var cell = RequestItemsGrid[e.ColumnIndex, e.RowIndex];
+            if (cell.Value != null)
+            {
+                if (!string.IsNullOrEmpty(cell.Value.ToString()))
+                {
+                    RequestItemsGrid.FastAutoSizeColumns();
+                }
+            }
+        }
+
         private void RequestItemsGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
             try
@@ -1122,19 +1150,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             if (!bolGridFilling)
             {
-                RequestItemsGrid.Rows[e.RowIndex].Cells[SibiRequestItemsCols.RequestUID].Value = CurrentRequest.GUID;
                 if (ReferenceEquals(RequestItemsGrid.Rows[e.RowIndex].Cells[SibiRequestItemsCols.ItemUID].Value, null))
                 {
                     RequestItemsGrid.Rows[e.RowIndex].Cells[SibiRequestItemsCols.ItemUID].Value = Guid.NewGuid().ToString();
                 }
-            }
-        }
-
-        private void RequestItemsGrid_RowLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            if (IsModifying)
-            {
-                ValidateRequestItems();
             }
         }
 
@@ -1158,21 +1177,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 bolGridFilling = true;
                 RequestItemsGrid.Populate(Results, RequestItemsColumns(), true);
                 RequestItemsGrid.ClearSelection();
+                RequestItemsGrid.FastAutoSizeColumns();
             }
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
             }
-        }
-
-        private void SetColumnWidths()
-        {
-            RequestItemsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            RequestItemsGrid.Columns[1].Width = 200;
-            RequestItemsGrid.Columns[2].Width = 50;
-            RequestItemsGrid.Columns[3].Width = 200;
-            RequestItemsGrid.Columns[4].Width = 200;
-            RequestItemsGrid.RowHeadersWidth = 57;
         }
 
         private void SetGLBudgetContextMenu()
