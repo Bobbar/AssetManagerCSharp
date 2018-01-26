@@ -186,8 +186,8 @@ namespace AssetManager.UserInterface.Forms
         {
             foreach (DataGridView grid in GridList)
             {
-                grid.FastAutoSizeColumns();
                 grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                grid.FastAutoSizeColumns();
                 grid.AllowUserToResizeColumns = true;
             }
         }

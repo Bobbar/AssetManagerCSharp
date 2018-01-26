@@ -81,7 +81,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.GroupBox3 = new System.Windows.Forms.GroupBox();
             this.Panel2 = new System.Windows.Forms.Panel();
-            this.dgvNotes = new System.Windows.Forms.DataGridView();
+            this.NotesGrid = new System.Windows.Forms.DataGridView();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.GroupBox4 = new System.Windows.Forms.GroupBox();
             this.RequestItemsGrid = new System.Windows.Forms.DataGridView();
@@ -106,7 +106,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox2.SuspendLayout();
             this.GroupBox3.SuspendLayout();
             this.Panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvNotes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NotesGrid)).BeginInit();
             this.Panel1.SuspendLayout();
             this.GroupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RequestItemsGrid)).BeginInit();
@@ -575,27 +575,27 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.Panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Panel2.Controls.Add(this.dgvNotes);
+            this.Panel2.Controls.Add(this.NotesGrid);
             this.Panel2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Panel2.Location = new System.Drawing.Point(6, 13);
             this.Panel2.Name = "Panel2";
             this.Panel2.Size = new System.Drawing.Size(436, 244);
             this.Panel2.TabIndex = 0;
             // 
-            // dgvNotes
+            // NotesGrid
             // 
-            this.dgvNotes.AllowUserToAddRows = false;
-            this.dgvNotes.AllowUserToDeleteRows = false;
-            this.dgvNotes.AllowUserToResizeRows = false;
-            this.dgvNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.NotesGrid.AllowUserToAddRows = false;
+            this.NotesGrid.AllowUserToDeleteRows = false;
+            this.NotesGrid.AllowUserToResizeRows = false;
+            this.NotesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvNotes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dgvNotes.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.dgvNotes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dgvNotes.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            this.dgvNotes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvNotes.ContextMenuStrip = this.PopupMenuNotes;
+            this.NotesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.NotesGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.NotesGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.NotesGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+            this.NotesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.NotesGrid.ContextMenuStrip = this.PopupMenuNotes;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -603,11 +603,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(39)))));
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvNotes.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvNotes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dgvNotes.Location = new System.Drawing.Point(3, 3);
-            this.dgvNotes.Name = "dgvNotes";
-            this.dgvNotes.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.NotesGrid.DefaultCellStyle = dataGridViewCellStyle1;
+            this.NotesGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.NotesGrid.Location = new System.Drawing.Point(3, 3);
+            this.NotesGrid.Name = "NotesGrid";
+            this.NotesGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -615,15 +615,15 @@ namespace AssetManager.UserInterface.Forms.Sibi
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvNotes.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvNotes.RowHeadersVisible = false;
-            this.dgvNotes.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dgvNotes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgvNotes.ShowCellErrors = false;
-            this.dgvNotes.ShowCellToolTips = false;
-            this.dgvNotes.Size = new System.Drawing.Size(430, 238);
-            this.dgvNotes.TabIndex = 19;
-            this.dgvNotes.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNotes_CellDoubleClick);
+            this.NotesGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.NotesGrid.RowHeadersVisible = false;
+            this.NotesGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.NotesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.NotesGrid.ShowCellErrors = false;
+            this.NotesGrid.ShowCellToolTips = false;
+            this.NotesGrid.Size = new System.Drawing.Size(430, 238);
+            this.NotesGrid.TabIndex = 19;
+            this.NotesGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.NotesGrid_CellDoubleClick);
             // 
             // Panel1
             // 
@@ -690,10 +690,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.RequestItemsGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellEnter);
             this.RequestItemsGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellLeave);
             this.RequestItemsGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.RequestItemsGrid_CellMouseDown);
+            this.RequestItemsGrid.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellValidated);
+            this.RequestItemsGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellValueChanged);
             this.RequestItemsGrid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.RequestItemsGrid_DataError);
             this.RequestItemsGrid.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.RequestItemsGrid_DefaultValuesNeeded);
             this.RequestItemsGrid.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_RowEnter);
-            this.RequestItemsGrid.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_RowLeave);
             this.RequestItemsGrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.RequestItemsGrid_RowPostPaint);
             this.RequestItemsGrid.DragDrop += new System.Windows.Forms.DragEventHandler(this.RequestItemsGrid_DragDrop);
             this.RequestItemsGrid.DragEnter += new System.Windows.Forms.DragEventHandler(this.RequestItemsGrid_DragEnter);
@@ -824,6 +825,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Panel4);
             this.Controls.Add(this.StatusStrip1);
+            this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(771, 443);
             this.Name = "SibiManageRequestForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -845,7 +847,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox2.PerformLayout();
             this.GroupBox3.ResumeLayout(false);
             this.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvNotes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NotesGrid)).EndInit();
             this.Panel1.ResumeLayout(false);
             this.GroupBox4.ResumeLayout(false);
             this.GroupBox4.PerformLayout();
@@ -902,7 +904,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         internal TextBox txtDescription;
         internal GroupBox GroupBox3;
         internal Panel Panel2;
-        internal DataGridView dgvNotes;
+        internal DataGridView NotesGrid;
         internal ToolStripContentPanel ContentPanel;
         internal CheckBox chkAllowDrag;
         internal ToolStripSeparator tsmSeparator;
