@@ -37,7 +37,7 @@ namespace AssetManager.Data.Functions
         {
             if (!cachedMode)
             {
-                return CacheUpToDate();
+                return CacheUpToDate(cachedMode);
             }
             else
             {
