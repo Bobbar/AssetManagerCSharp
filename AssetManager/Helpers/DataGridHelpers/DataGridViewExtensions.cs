@@ -106,8 +106,6 @@ namespace AssetManager.Helpers
         /// <param name="targetGrid"></param>
         public static void FastAutoSizeColumns(this DataGridView targetGrid)
         {
-            Console.WriteLine("Resize");
-
             // Padding added to final column size
             const int widthPadding = 20;
 
