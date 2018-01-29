@@ -12,7 +12,7 @@ namespace AssetManager.Data.Classes
         private string _fileName;
         private int _fileSize;
         private string _extention;
-        private string _folderName;
+        private Folder _folder;
         private string _folderGUID;
         private string _MD5;
         private string _computedMD5;
@@ -27,7 +27,7 @@ namespace AssetManager.Data.Classes
             _fileName = null;
             _fileSize = 0;
             _extention = null;
-            _folderName = null;
+            _folder = new Folder();
             _folderGUID = null;
             _MD5 = null;
             _computedMD5 = null;
@@ -50,7 +50,7 @@ namespace AssetManager.Data.Classes
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(_fileInfo.Length);
             _extention = _fileInfo.Extension;
-            _folderName = string.Empty;
+            _folder = new Folder();
             _folderGUID = string.Empty;
             _attachTable = attachTable;
             _dataStream = _fileInfo.OpenRead();
@@ -65,7 +65,7 @@ namespace AssetManager.Data.Classes
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(_fileInfo.Length);
             _extention = _fileInfo.Extension;
-            _folderName = string.Empty;
+            _folder = new Folder();
             _folderGUID = folderGUID;
             _attachTable = attachTable;
             _dataStream = _fileInfo.OpenRead();
@@ -83,11 +83,11 @@ namespace AssetManager.Data.Classes
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(TableRow[attachTable.FileSize]);
             _extention = TableRow[attachTable.FileType].ToString();
-            _folderName = TableRow[attachTable.Folder].ToString();
+            _folder = new Folder(TableRow[attachTable.FolderName].ToString(), TableRow[attachTable.FolderNameUID].ToString());
             _folderGUID = TableRow[attachTable.FKey].ToString();
         }
 
-        public Attachment(string newFile, string folderGUID, string selectedFolder, AttachmentsBaseCols attachTable)
+        public Attachment(string newFile, string folderGUID, Folder selectedFolder, AttachmentsBaseCols attachTable)
         {
             _fileInfo = new FileInfo(newFile);
             _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
@@ -96,13 +96,13 @@ namespace AssetManager.Data.Classes
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(_fileInfo.Length);
             _extention = _fileInfo.Extension;
-            _folderName = selectedFolder;
+            _folder = selectedFolder;
             _folderGUID = folderGUID;
             _attachTable = attachTable;
             _dataStream = _fileInfo.OpenRead();
         }
 
-        public Attachment(DataTable attachInfoTable, string selectedFolder, AttachmentsBaseCols attachTable)
+        public Attachment(DataTable attachInfoTable, Folder selectedFolder, AttachmentsBaseCols attachTable)
         {
             DataRow TableRow = attachInfoTable.Rows[0];
             _fileInfo = null;
@@ -114,7 +114,7 @@ namespace AssetManager.Data.Classes
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(TableRow[attachTable.FileSize]);
             _extention = TableRow[attachTable.FileType].ToString();
-            _folderName = TableRow[attachTable.Folder].ToString();
+            _folder = selectedFolder;
             _folderGUID = TableRow[attachTable.FKey].ToString();
         }
 
@@ -212,9 +212,9 @@ namespace AssetManager.Data.Classes
             }
         }
 
-        public string FolderName
+        public Folder FolderInfo
         {
-            get { return _folderName; }
+            get { return _folder; }
         }
 
         public string FolderGUID
@@ -255,6 +255,55 @@ namespace AssetManager.Data.Classes
             return false;
         }
 
+        public class Folder
+        {
+            private string folderName;
+            private string folderUID;
+
+            public string FolderName
+            {
+                get
+                {
+                    return folderName;
+                }
+                set
+                {
+                    folderName = value;
+                }
+            }
+
+            public string FolderNameUID
+            {
+                get
+                {
+                    return folderUID;
+                }
+
+                set
+                {
+                    folderUID = value;
+                }
+            }
+
+            public Folder()
+            {
+                this.folderName = string.Empty;
+                this.folderUID = string.Empty;
+            }
+
+            public Folder(string folderName)
+            {
+                this.folderName = folderName;
+                this.folderUID = Guid.NewGuid().ToString();
+            }
+
+            public Folder(string folderName, string folderNameUID)
+            {
+                this.folderName = folderName;
+                this.folderUID = folderNameUID;
+            }
+
+        }
 
         #region "IDisposable Support"
 

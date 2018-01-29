@@ -47,10 +47,10 @@ namespace AssetManager.UserInterface.Forms
 
         private Point MouseStartPos;
         private ProgressCounter Progress = new ProgressCounter();
-        private string PrevSelectedFolder;
-        private string _currentFolder = "";
+        private Attachment.Folder PrevSelectedFolder = new Attachment.Folder();
+        private Attachment.Folder _currentFolder = new Attachment.Folder();
 
-        private string CurrentSelectedFolder
+        private Attachment.Folder CurrentSelectedFolder
         {
             get
             {
@@ -58,11 +58,12 @@ namespace AssetManager.UserInterface.Forms
                 {
                     if (FolderListView.SelectedItems[0].Index == 0)
                     {
-                        _currentFolder = "";
+                        _currentFolder = new Attachment.Folder();
                     }
                     else
                     {
-                        _currentFolder = FolderListView.SelectedItems[0].Text;
+                        _currentFolder.FolderName = FolderListView.SelectedItems[0].Text;
+                        _currentFolder.FolderNameUID = (string)FolderListView.SelectedItems[0].Tag;
                     }
                     return _currentFolder;
                 }
@@ -74,7 +75,7 @@ namespace AssetManager.UserInterface.Forms
             set
             {
                 _currentFolder = value;
-                SetActiveFolderByName(value);
+                SetActiveFolder(value);
             }
         }
 
@@ -139,9 +140,9 @@ namespace AssetManager.UserInterface.Forms
 
         #region Methods
 
-        private void SetActiveFolderByName(string folderName)
+        private void SetActiveFolder(Attachment.Folder folder)
         {
-            if (folderName == "")
+            if (folder.FolderNameUID == "")
             {
                 FolderListView.Items[0].Selected = true;
             }
@@ -149,7 +150,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 foreach (ListViewItem item in FolderListView.Items)
                 {
-                    if (item.Text == folderName)
+                    if ((string)item.Tag == folder.FolderNameUID)
                     {
                         item.Selected = true;
                     }
@@ -376,27 +377,37 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void PopulateFolderList(string currentFolder = null)
+        private void PopulateFolderList()
         {
-            FolderListView.Items.Clear();
-            var folders = DBFactory.GetDatabase().DataTableFromQueryString("SELECT DISTINCT " + _attachTable.Folder + " FROM " + _attachTable.TableName + " WHERE " + _attachTable.FKey + "='" + AttachFolderUID + "' ORDER BY " + _attachTable.Folder);
-            var allFolderItem = new ListViewItem("*All");
-            allFolderItem.StateImageIndex = 1;
-            allFolderItem.Selected = true;
-            FolderListView.Items.Add(allFolderItem);
-            foreach (DataRow row in folders.Rows)
+            var addedFolders = new List<string>();
+            string folderQuery = "SELECT " + _attachTable.FolderName + ", " + _attachTable.FolderNameUID + " FROM " + _attachTable.TableName + " WHERE " + _attachTable.FKey + "='" + AttachFolderUID + "' ORDER BY " + _attachTable.FolderName;
+
+            using (var folders = DBFactory.GetDatabase().DataTableFromQueryString(folderQuery))
             {
-                if (row[_attachTable.Folder].ToString().Trim() != "")
+                FolderListView.Items.Clear();
+                var allFolderItem = new ListViewItem("*All");
+                allFolderItem.StateImageIndex = 1;
+                allFolderItem.Selected = true;
+                FolderListView.Items.Add(allFolderItem);
+                foreach (DataRow row in folders.Rows)
                 {
-                    var newFolderItem = new ListViewItem(row[_attachTable.Folder].ToString());
-                    newFolderItem.StateImageIndex = 0;
-                    newFolderItem.Selected = false;
-                    FolderListView.Items.Add(newFolderItem);
+                    string folderName = row[_attachTable.FolderName].ToString().Trim();
+                    string folderNameUID = row[_attachTable.FolderNameUID].ToString().Trim();
+
+                    if (!string.IsNullOrEmpty(folderName))
+                    {
+                        if (!addedFolders.Contains(folderName))
+                        {
+                            addedFolders.Add(folderName);
+
+                            var newFolderItem = new ListViewItem(folderName);
+                            newFolderItem.StateImageIndex = 0;
+                            newFolderItem.Selected = false;
+                            newFolderItem.Tag = folderNameUID;
+                            FolderListView.Items.Add(newFolderItem);
+                        }
+                    }
                 }
-            }
-            if (currentFolder != null)
-            {
-                CurrentSelectedFolder = currentFolder;
             }
         }
 
@@ -428,7 +439,7 @@ namespace AssetManager.UserInterface.Forms
             }
             else
             {
-                strQry = "Select * FROM " + _attachTable.TableName + " WHERE " + _attachTable.Folder + "='" + CurrentSelectedFolder + "' AND " + _attachTable.FKey + " ='" + AttachFolderUID + "' ORDER BY " + _attachTable.Timestamp + " DESC";
+                strQry = "Select * FROM " + _attachTable.TableName + " WHERE " + _attachTable.FolderNameUID + "='" + CurrentSelectedFolder.FolderNameUID + "' AND " + _attachTable.FKey + " ='" + AttachFolderUID + "' ORDER BY " + _attachTable.Timestamp + " DESC";
             }
 
             return strQry;
@@ -447,7 +458,7 @@ namespace AssetManager.UserInterface.Forms
             ColList.Add(new GridColumnAttrib(attachtable.FileName, "Filename", typeof(string)));
             ColList.Add(new GridColumnAttrib(attachtable.FileSize, "Size", typeof(string), ColumnFormatTypes.FileSize));
             ColList.Add(new GridColumnAttrib(attachtable.Timestamp, "Date", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(attachtable.Folder, "Folder", typeof(string)));
+            ColList.Add(new GridColumnAttrib(attachtable.FolderName, "Folder", typeof(string)));
             ColList.Add(new GridColumnAttrib(attachtable.FileUID, "AttachUID", typeof(string)));
             ColList.Add(new GridColumnAttrib(attachtable.FileHash, "MD5", typeof(string)));
             return ColList;
@@ -462,7 +473,8 @@ namespace AssetManager.UserInterface.Forms
             insertParams.Add(Attachment.AttachTable.FileSize, Attachment.Filesize);
             insertParams.Add(Attachment.AttachTable.FileUID, Attachment.FileUID);
             insertParams.Add(Attachment.AttachTable.FileHash, Attachment.MD5);
-            insertParams.Add(Attachment.AttachTable.Folder, Attachment.FolderName);
+            insertParams.Add(Attachment.AttachTable.FolderName, Attachment.FolderInfo.FolderName);
+            insertParams.Add(Attachment.AttachTable.FolderNameUID, Attachment.FolderInfo.FolderNameUID);
             DBFactory.GetDatabase().InsertFromParameters(Attachment.AttachTable.TableName, insertParams.Parameters, transaction);
         }
 
@@ -501,12 +513,6 @@ namespace AssetManager.UserInterface.Forms
         private bool MouseIsDragging(Point CurrentPos)
         {
             int intMouseMoveThreshold = 50;
-            //if (NewStartPos != null)
-            //{
-            //    MouseStartPos = NewStartPos;
-            //}
-            //else
-            //{
             var intDistanceMoved = Math.Sqrt(Math.Pow((MouseStartPos.X - CurrentPos.X), 2) + Math.Pow((MouseStartPos.Y - CurrentPos.Y), 2));
             if (System.Convert.ToInt32(intDistanceMoved) > intMouseMoveThreshold)
             {
@@ -516,11 +522,9 @@ namespace AssetManager.UserInterface.Forms
             {
                 return false;
             }
-            // }
-            //return false;
         }
 
-        private void MoveAttachToFolder(string AttachUID, string Folder, bool isNew = false)
+        private void MoveAttachToFolder(string attachUID, Attachment.Folder folder, bool isNew = false)
         {
             if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment))
             {
@@ -530,15 +534,35 @@ namespace AssetManager.UserInterface.Forms
             {
                 Waiting();
                 RightClickMenu.Close();
-                AssetManagerFunctions.UpdateSqlValue(_attachTable.TableName, _attachTable.Folder, Folder, _attachTable.FileUID, AttachUID);
+
+                int rows = 0;
+                using (var trans = DBFactory.GetDatabase().StartTransaction())
+                {
+                    rows += DBFactory.GetDatabase().UpdateValue(_attachTable.TableName, _attachTable.FolderNameUID, folder.FolderNameUID, _attachTable.FileUID, attachUID, trans);
+                    rows += DBFactory.GetDatabase().UpdateValue(_attachTable.TableName, _attachTable.FolderName, folder.FolderName, _attachTable.FileUID, attachUID, trans);
+
+                    if (rows == 2)
+                    {
+                        trans.Commit();
+                    }
+                    else
+                    {
+                        trans.Rollback();
+                        throw new Exception("Error while moving folders.");
+                    }
+                }
+
+                PopulateFolderList();
+
                 if (isNew)
                 {
-                    PopulateFolderList(Folder);
+                    CurrentSelectedFolder = folder;
                 }
                 else
                 {
-                    PopulateFolderList(CurrentSelectedFolder);
+                    CurrentSelectedFolder = PrevSelectedFolder;
                 }
+
                 ListAttachments();
             }
             catch (Exception ex)
@@ -616,7 +640,7 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void ProcessFolderListDrop(IDataObject dropObject, string folder)
+        private void ProcessFolderListDrop(IDataObject dropObject, Attachment.Folder folder)
         {
             try
             {
@@ -654,7 +678,7 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void ProcessFileDrop(IDataObject dropObject, string folder)
+        private void ProcessFileDrop(IDataObject dropObject, Attachment.Folder folder)
         {
             object File = null;
             //Outlook data object.
@@ -791,7 +815,7 @@ namespace AssetManager.UserInterface.Forms
             UploadAttachments(Files, CurrentSelectedFolder);
         }
 
-        private async void UploadAttachments(string[] files, string folder)
+        private async void UploadAttachments(string[] files, Attachment.Folder folder)
         {
             if (TransferTaskRunning)
             {
@@ -1064,7 +1088,7 @@ namespace AssetManager.UserInterface.Forms
         {
             foreach (ListViewItem item in FolderListView.Items)
             {
-                if (item.Text.ToUpper() == folderName.ToUpper())
+                if (item.Text == folderName)
                 {
                     return true;
                 }
@@ -1319,11 +1343,11 @@ namespace AssetManager.UserInterface.Forms
 
             if (dragToItem.Index == 0)
             {
-                ProcessFolderListDrop(e.Data, "");
+                ProcessFolderListDrop(e.Data, new Attachment.Folder());
             }
             else
             {
-                ProcessFolderListDrop(e.Data, dragToItem.Text);
+                ProcessFolderListDrop(e.Data, new Attachment.Folder(dragToItem.Text, (string)dragToItem.Tag));
             }
             bolDragging = false;
         }
@@ -1364,7 +1388,7 @@ namespace AssetManager.UserInterface.Forms
 
             if (!FolderNameExists(newFolderName))
             {
-                MoveAttachToFolder(SelectedAttachmentUID(), newFolderName, true);
+                MoveAttachToFolder(SelectedAttachmentUID(), new Attachment.Folder(newFolderName), true);
             }
             else
             {

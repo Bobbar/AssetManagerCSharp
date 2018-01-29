@@ -93,7 +93,7 @@ namespace AssetDatabase.Data
         int UpdateTable(string selectQuery, DataTable table, DbTransaction transaction = null);
 
         /// <summary>
-        /// Updates a single value in the database.
+        /// Updates a single value in the database. Values are parameterized before execution. 
         /// </summary>
         /// <param name="tableName"></param>
         /// <param name="fieldIn"></param>

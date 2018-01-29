@@ -83,7 +83,8 @@ namespace AssetManager.Data
         public string FileSize { get; } = "attach_file_size";
         public string FileUID { get; } = "attach_file_UID";
         public string FileHash { get; } = "attach_file_hash";
-        public string Folder { get; } = "attach_folder";
+        public string FolderName { get; } = "attach_folder_name";
+        public string FolderNameUID { get; } = "attach_folder_uid";
     }
 }
 namespace AssetManager.Data
