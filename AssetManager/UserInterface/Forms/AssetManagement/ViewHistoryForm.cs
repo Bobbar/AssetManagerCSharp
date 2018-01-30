@@ -13,18 +13,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 {
     public partial class ViewHistoryForm : ExtendedForm
     {
-        private DBControlParser DataParser;
+        private DBControlParser controlParser;
 
-        private string _DeviceGUID;
+        private string deviceGUID;
 
-        public ViewHistoryForm(ExtendedForm parentForm, string entryUID, string deviceGUID)
+        public ViewHistoryForm(ExtendedForm parentForm, string entryUID, string deviceGUID) : base(parentForm,entryUID)
         {
-            DataParser = new DBControlParser(this);
+            controlParser = new DBControlParser(this);
             InitializeComponent();
             InitDBControls();
-            this.ParentForm = parentForm;
-            FormUID = entryUID;
-            _DeviceGUID = deviceGUID;
+            this.deviceGUID = deviceGUID;
             ViewEntry(entryUID);
         }
 
@@ -54,18 +52,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             iCloudTextBox.Tag = new DBControlInfo(HistoricalDevicesCols.iCloudAccount, ParseType.DisplayOnly, false);
         }
 
-        private void FillControls(DataTable Data)
+        private void FillControls(DataTable data)
         {
-            DataParser.FillDBFields(Data);
-            this.Text = this.Text + " - " + DataConsistency.NoNull(Data.Rows[0][HistoricalDevicesCols.ActionDateTime]);
+            controlParser.FillDBFields(data);
+            this.Text = this.Text + " - " + DataConsistency.NoNull(data.Rows[0][HistoricalDevicesCols.ActionDateTime]);
         }
 
-        private void ViewEntry(string EntryUID)
+        private void ViewEntry(string entryUID)
         {
             OtherFunctions.SetWaitCursor(true, this);
             try
             {
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(EntryUID)))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryUID)))
                 {
                     HighlightChangedFields(results);
                     FillControls(results);
@@ -93,7 +91,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             List<Control> ChangedControls = new List<Control>();
             System.DateTime CurrentTimeStamp = (System.DateTime)currentData.Rows[0][HistoricalDevicesCols.ActionDateTime];
             //Query for all rows with a timestamp older than the current historical entry.
-            using (DataTable olderData = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevHistoricalEntriesOlderThan(_DeviceGUID, CurrentTimeStamp)))
+            using (DataTable olderData = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevHistoricalEntriesOlderThan(deviceGUID, CurrentTimeStamp)))
             {
                 if (olderData.Rows.Count > 0)
                 {
@@ -111,7 +109,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                     }
                     //Get a list of all the controls with DBControlInfo tags.
-                    var ControlList = DataParser.GetDBControls(this);
+                    var ControlList = controlParser.GetDBControls(this);
                     //Get a list of all the controls whose data columns match the ChangedColumns.
                     foreach (string col in ChangedColumns)
                     {

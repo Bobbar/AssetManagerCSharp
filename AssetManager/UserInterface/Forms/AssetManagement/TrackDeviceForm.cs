@@ -10,14 +10,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 {
     public partial class TrackDeviceForm : ExtendedForm
     {
-        private Device CurrentTrackingDevice = new Device();
-        private TrackingEntry CheckData = new TrackingEntry();
+        private Device currentTrackingDevice;
+        private TrackingEntry checkData;
 
-        public TrackDeviceForm(Device device, ExtendedForm parentForm)
+        public TrackDeviceForm(Device device, ExtendedForm parentForm) : base(parentForm)
         {
             InitializeComponent();
-            CurrentTrackingDevice = device;
-            this.ParentForm = parentForm;
+            currentTrackingDevice = device;
             ClearAll();
             SetDates();
             SetGroups();
@@ -27,7 +26,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private bool GetCheckData()
         {
-            if (!CurrentTrackingDevice.Tracking.IsCheckedOut)
+            checkData = new TrackingEntry();
+            if (!currentTrackingDevice.Tracking.IsCheckedOut)
             {
                 foreach (Control c in CheckOutBox.Controls)
                 {
@@ -58,30 +58,30 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     }
                 }
             }
-            CheckData.CheckoutTime = dtCheckOut.Value;
-            CheckData.DueBackTime = dtDueBack.Value;
-            CheckData.UseLocation = txtUseLocation.Text.Trim().ToUpper();
-            CheckData.UseReason = txtUseReason.Text.Trim().ToUpper();
-            CheckData.CheckinNotes = txtCheckInNotes.Text.Trim().ToUpper();
-            CheckData.GUID = CurrentTrackingDevice.GUID;
-            CheckData.CheckoutUser = NetworkInfo.LocalDomainUser;
-            CheckData.CheckinTime = dtCheckIn.Value;
-            CheckData.CheckinUser = NetworkInfo.LocalDomainUser;
+            checkData.CheckoutTime = dtCheckOut.Value;
+            checkData.DueBackTime = dtDueBack.Value;
+            checkData.UseLocation = txtUseLocation.Text.Trim().ToUpper();
+            checkData.UseReason = txtUseReason.Text.Trim().ToUpper();
+            checkData.CheckinNotes = txtCheckInNotes.Text.Trim().ToUpper();
+            checkData.GUID = currentTrackingDevice.GUID;
+            checkData.CheckoutUser = NetworkInfo.LocalDomainUser;
+            checkData.CheckinTime = dtCheckIn.Value;
+            checkData.CheckinUser = NetworkInfo.LocalDomainUser;
             return true;
         }
 
         private void LoadTracking()
         {
-            txtAssetTag.Text = CurrentTrackingDevice.AssetTag;
-            txtDescription.Text = CurrentTrackingDevice.Description;
-            txtSerial.Text = CurrentTrackingDevice.Serial;
-            txtDeviceType.Text = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.EquipType, CurrentTrackingDevice.EquipmentType);
-            if (CurrentTrackingDevice.Tracking.IsCheckedOut)
+            txtAssetTag.Text = currentTrackingDevice.AssetTag;
+            txtDescription.Text = currentTrackingDevice.Description;
+            txtSerial.Text = currentTrackingDevice.Serial;
+            txtDeviceType.Text = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.EquipType, currentTrackingDevice.EquipmentType);
+            if (currentTrackingDevice.Tracking.IsCheckedOut)
             {
-                dtCheckOut.Value = CurrentTrackingDevice.Tracking.CheckoutTime;
-                dtDueBack.Value = CurrentTrackingDevice.Tracking.DueBackTime;
-                txtUseLocation.Text = CurrentTrackingDevice.Tracking.UseLocation;
-                txtUseReason.Text = CurrentTrackingDevice.Tracking.UseReason;
+                dtCheckOut.Value = currentTrackingDevice.Tracking.CheckoutTime;
+                dtDueBack.Value = currentTrackingDevice.Tracking.DueBackTime;
+                txtUseLocation.Text = currentTrackingDevice.Tracking.UseLocation;
+                txtUseReason.Text = currentTrackingDevice.Tracking.UseReason;
             }
         }
 
@@ -113,8 +113,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void SetGroups()
         {
-            CheckInBox.Enabled = CurrentTrackingDevice.Tracking.IsCheckedOut;
-            CheckOutBox.Enabled = !CurrentTrackingDevice.Tracking.IsCheckedOut;
+            CheckInBox.Enabled = currentTrackingDevice.Tracking.IsCheckedOut;
+            CheckOutBox.Enabled = !currentTrackingDevice.Tracking.IsCheckedOut;
         }
 
         private void CheckOut()
@@ -131,16 +131,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                         OtherFunctions.SetWaitCursor(true, this);
                         int rows = 0;
-                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans);
+                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, currentTrackingDevice.GUID, trans);
 
                         ParamCollection checkParams = new ParamCollection();
                         checkParams.Add(TrackablesCols.CheckType, CheckType.Checkout);
-                        checkParams.Add(TrackablesCols.CheckoutTime, CheckData.CheckoutTime);
-                        checkParams.Add(TrackablesCols.DueBackDate, CheckData.DueBackTime);
-                        checkParams.Add(TrackablesCols.CheckoutUser, CheckData.CheckoutUser);
-                        checkParams.Add(TrackablesCols.UseLocation, CheckData.UseLocation);
-                        checkParams.Add(TrackablesCols.Notes, CheckData.UseReason);
-                        checkParams.Add(TrackablesCols.DeviceUID, CheckData.GUID);
+                        checkParams.Add(TrackablesCols.CheckoutTime, checkData.CheckoutTime);
+                        checkParams.Add(TrackablesCols.DueBackDate, checkData.DueBackTime);
+                        checkParams.Add(TrackablesCols.CheckoutUser, checkData.CheckoutUser);
+                        checkParams.Add(TrackablesCols.UseLocation, checkData.UseLocation);
+                        checkParams.Add(TrackablesCols.Notes, checkData.UseReason);
+                        checkParams.Add(TrackablesCols.DeviceUID, checkData.GUID);
                         rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
 
                         if (rows == 2)
@@ -182,19 +182,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                         OtherFunctions.SetWaitCursor(true, this);
                         int rows = 0;
-                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, CurrentTrackingDevice.GUID, trans);
+                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, currentTrackingDevice.GUID, trans);
 
                         ParamCollection checkParams = new ParamCollection();
 
                         checkParams.Add(TrackablesCols.CheckType, CheckType.Checkin);
-                        checkParams.Add(TrackablesCols.CheckoutTime, CheckData.CheckoutTime);
-                        checkParams.Add(TrackablesCols.DueBackDate, CheckData.DueBackTime);
-                        checkParams.Add(TrackablesCols.CheckinTime, CheckData.CheckinTime);
-                        checkParams.Add(TrackablesCols.CheckoutUser, CheckData.CheckoutUser);
-                        checkParams.Add(TrackablesCols.CheckinUser, CheckData.CheckinUser);
-                        checkParams.Add(TrackablesCols.UseLocation, CheckData.UseLocation);
-                        checkParams.Add(TrackablesCols.Notes, CheckData.CheckinNotes);
-                        checkParams.Add(TrackablesCols.DeviceUID, CheckData.GUID);
+                        checkParams.Add(TrackablesCols.CheckoutTime, checkData.CheckoutTime);
+                        checkParams.Add(TrackablesCols.DueBackDate, checkData.DueBackTime);
+                        checkParams.Add(TrackablesCols.CheckinTime, checkData.CheckinTime);
+                        checkParams.Add(TrackablesCols.CheckoutUser, checkData.CheckoutUser);
+                        checkParams.Add(TrackablesCols.CheckinUser, checkData.CheckinUser);
+                        checkParams.Add(TrackablesCols.UseLocation, checkData.UseLocation);
+                        checkParams.Add(TrackablesCols.Notes, checkData.CheckinNotes);
+                        checkParams.Add(TrackablesCols.DeviceUID, checkData.GUID);
                         rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
 
                         if (rows == 2)

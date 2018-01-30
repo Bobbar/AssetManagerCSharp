@@ -23,12 +23,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private const int intMaxResults = 50;
 
-        public MunisUserForm(ExtendedForm parentForm)
+        public MunisUserForm(ExtendedForm parentForm) : base(parentForm)
         {
             Shown += MunisUserForm_Shown;
             Load += MunisUser_Load;
             InitializeComponent();
-            this.ParentForm = parentForm;
             ShowDialog(parentForm);
         }
 

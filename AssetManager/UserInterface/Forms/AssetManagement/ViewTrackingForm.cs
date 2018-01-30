@@ -10,11 +10,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 {
     public partial class ViewTrackingForm : ExtendedForm
     {
-        public ViewTrackingForm(ExtendedForm parentForm, string entryGUID, Device device)
+        public ViewTrackingForm(ExtendedForm parentForm, string entryGUID, Device device) : base(parentForm,entryGUID)
         {
             InitializeComponent();
-            this.ParentForm = parentForm;
-            FormUID = entryGUID;
             ViewTrackingEntry(entryGUID, device);
             Show();
         }

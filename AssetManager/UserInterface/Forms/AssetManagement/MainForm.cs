@@ -1029,6 +1029,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void MainForm_Shown(object sender, EventArgs e)
         {
             Helpers.ChildFormControl.SplashScreenInstance().Dispose();
+            MemoryTweaks.SetWorkingSet();
         }
 
         private void CommitButton_Click(object sender, EventArgs e)

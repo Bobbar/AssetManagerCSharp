@@ -866,13 +866,13 @@
         </member>
         <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.GridTheme">
             <summary>
-            Unique identifying string used to locate specific instances of this form.
+            Gets or sets the Grid Theme for the DataGridView controls within the form.
             </summary>
             <returns></returns>
         </member>
         <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.FormUID">
             <summary>
-            Gets or sets the Grid Theme for the DataGridView controls within the form.
+            Unique identifying string used to locate specific instances of this form.
             </summary>
             <returns></returns>
         </member>
@@ -1034,7 +1034,7 @@
             <param name="currentData"></param>
             <returns></returns>
         </member>
-        <member name="F:AssetManager.UserInterface.Forms.AttachmentsForm.FTPUri">
+        <member name="F:AssetManager.UserInterface.Forms.AttachmentsForm.ftpUri">
             <summary>
             "ftp://  strServerIP  /attachments/  CurrentDB  /"
             </summary>

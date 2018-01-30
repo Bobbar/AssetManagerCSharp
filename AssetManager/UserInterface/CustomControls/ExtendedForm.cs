@@ -1,6 +1,7 @@
 using System.Windows.Forms;
 using AssetManager.Helpers;
 using AssetManager.Data.Classes;
+using AssetManager.Tools;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -28,13 +29,13 @@ namespace AssetManager.UserInterface.CustomControls
         public string DefaultFormTitle { get; set; }
 
         /// <summary>
-        /// Unique identifying string used to locate specific instances of this form.
+        /// Gets or sets the Grid Theme for the DataGridView controls within the form.
         /// </summary>
         /// <returns></returns>
         public GridTheme GridTheme { get; set; }
 
         /// <summary>
-        /// Gets or sets the Grid Theme for the DataGridView controls within the form.
+        /// Unique identifying string used to locate specific instances of this form.
         /// </summary>
         /// <returns></returns>
         public string FormUID { get; set; }
@@ -43,7 +44,6 @@ namespace AssetManager.UserInterface.CustomControls
         /// Overloads the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="GridTheme"/> from the parent form.
         /// </summary>
         /// <returns></returns>
-
         public new ExtendedForm ParentForm
         {
             get
@@ -67,20 +67,29 @@ namespace AssetManager.UserInterface.CustomControls
 
         public ExtendedForm(ExtendedForm parentForm)
         {
-            this.ParentForm = parentForm;
-            SetTheme(parentForm);
+            ParentForm = parentForm;
+            MemoryTweaks.SetWorkingSet();
         }
 
         public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject)
         {
             ParentForm = parentForm;
             FormUID = currentObject.GUID;
+            MemoryTweaks.SetWorkingSet();
+        }
+
+        public ExtendedForm(ExtendedForm parentForm, string formUID)
+        {
+            ParentForm = parentForm;
+            FormUID = formUID;
+            MemoryTweaks.SetWorkingSet();
         }
 
         public ExtendedForm(ExtendedForm parentForm, bool inheritTheme = true)
         {
             this.inheritTheme = inheritTheme;
             this.ParentForm = parentForm;
+            MemoryTweaks.SetWorkingSet();
         }
 
         public virtual bool OKToClose()

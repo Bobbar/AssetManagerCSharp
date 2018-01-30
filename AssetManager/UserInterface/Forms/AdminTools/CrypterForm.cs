@@ -7,10 +7,9 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 {
     public partial class CrypterForm : ExtendedForm
     {
-        public CrypterForm(ExtendedForm parentForm)
+        public CrypterForm(ExtendedForm parentForm) : base(parentForm)
         {
             InitializeComponent();
-            this.ParentForm = parentForm;
             Show();
         }
 

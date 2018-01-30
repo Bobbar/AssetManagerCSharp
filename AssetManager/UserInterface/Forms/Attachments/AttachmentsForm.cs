@@ -27,28 +27,26 @@ namespace AssetManager.UserInterface.Forms
     {
         #region Fields
 
-        private string AttachFolderUID;
-        private const short FileSizeMBLimit = 150;
-        private AttachmentsBaseCols _attachTable;
-        private Device AttachDevice;
-        private SibiRequestMapObject AttachRequest;
-        private bool bolAllowDrag = true;
-        private bool bolDragging = false;
-        private bool bolGridFilling;
+        private string attachFolderUID;
+        private const short fileSizeMBLimit = 150;
+        private AttachmentsBaseCols attachmentColumns;
+        private bool allowDrag = true;
+        private bool isDragging = false;
+        private bool gridFilling;
         private CancellationTokenSource taskCancelTokenSource;
-        private bool TransferTaskRunning = false;
+        private bool transferTaskRunning = false;
         private DataObject dragDropDataObj = new DataObject();
         public EventHandler AttachCountChanged;
 
         /// <summary>
         /// "ftp://  strServerIP  /attachments/  CurrentDB  /"
         /// </summary>
-        private string FTPUri;
+        private string ftpUri;
 
-        private Point MouseStartPos;
-        private ProgressCounter Progress = new ProgressCounter();
-        private Attachment.Folder PrevSelectedFolder = new Attachment.Folder();
-        private Attachment.Folder _currentFolder = new Attachment.Folder();
+        private Point mouseStartPos;
+        private ProgressCounter progress = new ProgressCounter();
+        private Attachment.Folder previousFolder = new Attachment.Folder();
+        private Attachment.Folder currentFolder = new Attachment.Folder();
 
         private Attachment.Folder CurrentSelectedFolder
         {
@@ -58,23 +56,23 @@ namespace AssetManager.UserInterface.Forms
                 {
                     if (FolderListView.SelectedItems[0].Index == 0)
                     {
-                        _currentFolder = new Attachment.Folder();
+                        currentFolder = new Attachment.Folder();
                     }
                     else
                     {
-                        _currentFolder.FolderName = FolderListView.SelectedItems[0].Text;
-                        _currentFolder.FolderNameUID = (string)FolderListView.SelectedItems[0].Tag;
+                        currentFolder.FolderName = FolderListView.SelectedItems[0].Text;
+                        currentFolder.FolderNameUID = (string)FolderListView.SelectedItems[0].Tag;
                     }
-                    return _currentFolder;
+                    return currentFolder;
                 }
                 else
                 {
-                    return _currentFolder;
+                    return currentFolder;
                 }
             }
             set
             {
-                _currentFolder = value;
+                currentFolder = value;
                 SetActiveFolder(value);
             }
         }
@@ -83,9 +81,9 @@ namespace AssetManager.UserInterface.Forms
 
         #region Constructors
 
-        public AttachmentsForm(ExtendedForm ParentForm, AttachmentsBaseCols AttachTable, object attachDataObject = null, EventHandler attachCountChangeHandler = null) : base(ParentForm)
+        public AttachmentsForm(ExtendedForm ParentForm, AttachmentsBaseCols AttachTable, MappableObject attachDataObject, EventHandler attachCountChangeHandler = null) : base(ParentForm, attachDataObject)
         {
-            FTPUri = "ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/";
+            ftpUri = "ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/";
 
             InitializeComponent();
             AttachCountChanged += attachCountChangeHandler;
@@ -93,28 +91,25 @@ namespace AssetManager.UserInterface.Forms
             AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
             AttachGrid.DoubleBufferedDataGrid(true);
             SetStatusBar("Idle...");
-            _attachTable = AttachTable;
+            attachmentColumns = AttachTable;
             if (!ReferenceEquals(attachDataObject, null))
             {
-                if (attachDataObject is SibiRequestMapObject)
+
+                attachFolderUID = attachDataObject.GUID;
+
+                if (attachDataObject is SibiRequest)
                 {
-                    AttachRequest = (SibiRequestMapObject)attachDataObject;
-                    AttachFolderUID = AttachRequest.GUID;
-                    FormUID = AttachFolderUID;
                     this.Text = "Sibi Attachments";
                     DeviceGroup.Visible = false;
                     SibiGroup.Dock = DockStyle.Top;
-                    FillSibiInfo();
+                    FillSibiInfo((SibiRequest)attachDataObject);
                 }
                 else if (attachDataObject is Device)
                 {
-                    AttachDevice = (Device)attachDataObject;
-                    AttachFolderUID = AttachDevice.GUID;
-                    FormUID = AttachFolderUID;
                     this.Text = "Device Attachments";
                     SibiGroup.Visible = false;
                     DeviceGroup.Dock = DockStyle.Top;
-                    FillDeviceInfo();
+                    FillDeviceInfo((Device)attachDataObject);
                 }
                 PopulateFolderList();
             }
@@ -159,25 +154,26 @@ namespace AssetManager.UserInterface.Forms
             SetFolderListViewStates();
         }
 
-        private void FillSibiInfo()
+        private void FillSibiInfo(SibiRequest request)
         {
-            ReqPO.Text = AttachRequest.PO;
-            ReqNumberTextBox.Text = AttachRequest.RequisitionNumber;
-            txtRequestNum.Text = AttachRequest.RequestNumber;
-            txtDescription.Text = AttachRequest.Description;
-            this.Text += " - " + AttachRequest.Description;
+            ReqPO.Text = request.PO;
+            ReqNumberTextBox.Text = request.RequisitionNumber;
+            txtRequestNum.Text = request.RequestNumber;
+            txtDescription.Text = request.Description;
+            this.Text += " - " + request.Description;
         }
 
-        private void FillDeviceInfo()
+        private void FillDeviceInfo(Device device)
         {
-            txtAssetTag.Text = AttachDevice.AssetTag;
-            txtSerial.Text = AttachDevice.Serial;
-            txtDeviceDescription.Text = AttachDevice.Description;
+            txtAssetTag.Text = device.AssetTag;
+            txtSerial.Text = device.Serial;
+            txtDeviceDescription.Text = device.Description;
+            this.Text += " - " + device.CurrentUser;
         }
 
         public bool ActiveTransfer()
         {
-            return TransferTaskRunning;
+            return transferTaskRunning;
         }
 
         public void CancelTransfers()
@@ -194,16 +190,16 @@ namespace AssetManager.UserInterface.Forms
                 strQry = GetQry();
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQry))
                 {
-                    bolGridFilling = true;
-                    AttachGrid.Populate(results, AttachGridColumns(_attachTable));
+                    gridFilling = true;
+                    AttachGrid.Populate(results, AttachGridColumns(attachmentColumns));
                 }
 
-                AttachGrid.Columns[_attachTable.FileName].DefaultCellStyle.Font = new Font("Consolas", 9.75F, FontStyle.Bold);
+                AttachGrid.Columns[attachmentColumns.FileName].DefaultCellStyle.Font = new Font("Consolas", 9.75F, FontStyle.Bold);
                 OnAttachCountChanged(new EventArgs());
                 AttachGrid.ClearSelection();
                 if (this.Visible)
                 {
-                    bolGridFilling = false;
+                    gridFilling = false;
                 }
             }
             catch (Exception ex)
@@ -261,7 +257,7 @@ namespace AssetManager.UserInterface.Forms
                 using (OpenFileDialog fd = new OpenFileDialog())
                 {
                     fd.ShowHelp = true;
-                    fd.Title = "Select File To Upload - " + FileSizeMBLimit.ToString() + "MB Limit";
+                    fd.Title = "Select File To Upload - " + fileSizeMBLimit.ToString() + "MB Limit";
                     fd.InitialDirectory = "C:\\";
                     fd.Filter = "All files (*.*)|*.*|All files (*.*)|*.*";
                     fd.FilterIndex = 2;
@@ -307,11 +303,11 @@ namespace AssetManager.UserInterface.Forms
 
         private async Task<Attachment> DownloadAttachment(string AttachUID)
         {
-            if (TransferTaskRunning)
+            if (transferTaskRunning)
             {
                 return null;
             }
-            TransferTaskRunning = true;
+            transferTaskRunning = true;
             Attachment dAttachment = new Attachment();
             try
             {
@@ -320,10 +316,10 @@ namespace AssetManager.UserInterface.Forms
                 SetStatusBar("Connecting...");
                 FtpComms LocalFTPComm = new FtpComms();
                 dAttachment = GetSQLAttachment(AttachUID);
-                string FtpRequestString = FTPUri + dAttachment.FolderGUID + "/" + AttachUID;
+                string FtpRequestString = ftpUri + dAttachment.FolderGUID + "/" + AttachUID;
                 //get file size
-                Progress = new ProgressCounter();
-                Progress.BytesToTransfer = Convert.ToInt32(LocalFTPComm.ReturnFtpResponse(FtpRequestString, WebRequestMethods.Ftp.GetFileSize).ContentLength);
+                progress = new ProgressCounter();
+                progress.BytesToTransfer = Convert.ToInt32(LocalFTPComm.ReturnFtpResponse(FtpRequestString, WebRequestMethods.Ftp.GetFileSize).ContentLength);
                 //setup download
                 SetStatusBar("Downloading...");
                 WorkerFeedback(true);
@@ -342,7 +338,7 @@ namespace AssetManager.UserInterface.Forms
                             if (bytesIn > 0)
                             {
                                 memStream.Write(buffer, 0, bytesIn); //download data to memory before saving to disk
-                                Progress.BytesMoved = bytesIn;
+                                progress.BytesMoved = bytesIn;
                             }
                         }
                         return memStream;
@@ -369,7 +365,7 @@ namespace AssetManager.UserInterface.Forms
             }
             finally
             {
-                TransferTaskRunning = false;
+                transferTaskRunning = false;
                 if (!GlobalSwitches.ProgramEnding)
                 {
                     WorkerFeedback(false);
@@ -380,7 +376,7 @@ namespace AssetManager.UserInterface.Forms
         private void PopulateFolderList()
         {
             var addedFolders = new List<string>();
-            string folderQuery = "SELECT " + _attachTable.FolderName + ", " + _attachTable.FolderNameUID + " FROM " + _attachTable.TableName + " WHERE " + _attachTable.FKey + "='" + AttachFolderUID + "' ORDER BY " + _attachTable.FolderName;
+            string folderQuery = "SELECT " + attachmentColumns.FolderName + ", " + attachmentColumns.FolderNameUID + " FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FKey + "='" + attachFolderUID + "' ORDER BY " + attachmentColumns.FolderName;
 
             using (var folders = DBFactory.GetDatabase().DataTableFromQueryString(folderQuery))
             {
@@ -391,8 +387,8 @@ namespace AssetManager.UserInterface.Forms
                 FolderListView.Items.Add(allFolderItem);
                 foreach (DataRow row in folders.Rows)
                 {
-                    string folderName = row[_attachTable.FolderName].ToString().Trim();
-                    string folderNameUID = row[_attachTable.FolderNameUID].ToString().Trim();
+                    string folderName = row[attachmentColumns.FolderName].ToString().Trim();
+                    string folderNameUID = row[attachmentColumns.FolderNameUID].ToString().Trim();
 
                     if (!string.IsNullOrEmpty(folderName))
                     {
@@ -435,11 +431,11 @@ namespace AssetManager.UserInterface.Forms
 
             if (FolderListView.SelectedIndices.Count > 0 && FolderListView.SelectedIndices[0] == 0)
             {
-                strQry = "Select * FROM " + _attachTable.TableName + " WHERE " + _attachTable.FKey + "='" + AttachFolderUID + "' ORDER BY " + _attachTable.Timestamp + " DESC";
+                strQry = "Select * FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FKey + "='" + attachFolderUID + "' ORDER BY " + attachmentColumns.Timestamp + " DESC";
             }
             else
             {
-                strQry = "Select * FROM " + _attachTable.TableName + " WHERE " + _attachTable.FolderNameUID + "='" + CurrentSelectedFolder.FolderNameUID + "' AND " + _attachTable.FKey + " ='" + AttachFolderUID + "' ORDER BY " + _attachTable.Timestamp + " DESC";
+                strQry = "Select * FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FolderNameUID + "='" + CurrentSelectedFolder.FolderNameUID + "' AND " + attachmentColumns.FKey + " ='" + attachFolderUID + "' ORDER BY " + attachmentColumns.Timestamp + " DESC";
             }
 
             return strQry;
@@ -447,8 +443,8 @@ namespace AssetManager.UserInterface.Forms
 
         private Attachment GetSQLAttachment(string AttachUID)
         {
-            string strQry = "SELECT * FROM " + _attachTable.TableName + " WHERE " + _attachTable.FileUID + "='" + AttachUID + "' LIMIT 1";
-            return new Attachment(DBFactory.GetDatabase().DataTableFromQueryString(strQry), _attachTable);
+            string strQry = "SELECT * FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FileUID + "='" + AttachUID + "' LIMIT 1";
+            return new Attachment(DBFactory.GetDatabase().DataTableFromQueryString(strQry), attachmentColumns);
         }
 
         private List<GridColumnAttrib> AttachGridColumns(AttachmentsBaseCols attachtable)
@@ -485,7 +481,7 @@ namespace AssetManager.UserInterface.Forms
                 try
                 {
                     FtpComms LocalFTPComm = new FtpComms();
-                    using (var MkDirResp = (FtpWebResponse)(LocalFTPComm.ReturnFtpResponse(FTPUri + FolderGUID, WebRequestMethods.Ftp.MakeDirectory)))
+                    using (var MkDirResp = (FtpWebResponse)(LocalFTPComm.ReturnFtpResponse(ftpUri + FolderGUID, WebRequestMethods.Ftp.MakeDirectory)))
                     {
                         if (MkDirResp.StatusCode == FtpStatusCode.PathnameCreated)
                         {
@@ -513,7 +509,7 @@ namespace AssetManager.UserInterface.Forms
         private bool MouseIsDragging(Point CurrentPos)
         {
             int intMouseMoveThreshold = 50;
-            var intDistanceMoved = Math.Sqrt(Math.Pow((MouseStartPos.X - CurrentPos.X), 2) + Math.Pow((MouseStartPos.Y - CurrentPos.Y), 2));
+            var intDistanceMoved = Math.Sqrt(Math.Pow((mouseStartPos.X - CurrentPos.X), 2) + Math.Pow((mouseStartPos.Y - CurrentPos.Y), 2));
             if (System.Convert.ToInt32(intDistanceMoved) > intMouseMoveThreshold)
             {
                 return true;
@@ -538,8 +534,8 @@ namespace AssetManager.UserInterface.Forms
                 int rows = 0;
                 using (var trans = DBFactory.GetDatabase().StartTransaction())
                 {
-                    rows += DBFactory.GetDatabase().UpdateValue(_attachTable.TableName, _attachTable.FolderNameUID, folder.FolderNameUID, _attachTable.FileUID, attachUID, trans);
-                    rows += DBFactory.GetDatabase().UpdateValue(_attachTable.TableName, _attachTable.FolderName, folder.FolderName, _attachTable.FileUID, attachUID, trans);
+                    rows += DBFactory.GetDatabase().UpdateValue(attachmentColumns.TableName, attachmentColumns.FolderNameUID, folder.FolderNameUID, attachmentColumns.FileUID, attachUID, trans);
+                    rows += DBFactory.GetDatabase().UpdateValue(attachmentColumns.TableName, attachmentColumns.FolderName, folder.FolderName, attachmentColumns.FileUID, attachUID, trans);
 
                     if (rows == 2)
                     {
@@ -560,7 +556,7 @@ namespace AssetManager.UserInterface.Forms
                 }
                 else
                 {
-                    CurrentSelectedFolder = PrevSelectedFolder;
+                    CurrentSelectedFolder = previousFolder;
                 }
 
                 ListAttachments();
@@ -578,7 +574,7 @@ namespace AssetManager.UserInterface.Forms
         private bool OKFileSize(Attachment File)
         {
             var FileSizeMB = System.Convert.ToInt32(File.Filesize / (float)(1024 * 1024));
-            if (FileSizeMB > FileSizeMBLimit)
+            if (FileSizeMB > fileSizeMBLimit)
             {
                 return false;
             }
@@ -636,7 +632,7 @@ namespace AssetManager.UserInterface.Forms
             }
             finally
             {
-                bolDragging = false;
+                isDragging = false;
             }
         }
 
@@ -651,8 +647,8 @@ namespace AssetManager.UserInterface.Forms
                     {
                         //Cast out the datarow, get the attach UID, and move the attachment to the new folder.
                         var DragRow = (DataGridViewRow)(dropObject.GetData(typeof(DataGridViewRow)));
-                        CurrentSelectedFolder = PrevSelectedFolder;
-                        MoveAttachToFolder(DragRow.Cells[_attachTable.FileUID].Value.ToString(), folder);
+                        CurrentSelectedFolder = previousFolder;
+                        MoveAttachToFolder(DragRow.Cells[attachmentColumns.FileUID].Value.ToString(), folder);
                     }
                     else
                     {
@@ -674,7 +670,7 @@ namespace AssetManager.UserInterface.Forms
             }
             finally
             {
-                bolDragging = false;
+                isDragging = false;
             }
         }
 
@@ -725,7 +721,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void UpdateDbAttachementName(string AttachUID, string NewFileName)
         {
-            AssetManagerFunctions.UpdateSqlValue(_attachTable.TableName, _attachTable.FileName, NewFileName, _attachTable.FileUID, AttachUID);
+            AssetManagerFunctions.UpdateSqlValue(attachmentColumns.TableName, attachmentColumns.FileName, NewFileName, attachmentColumns.FileUID, AttachUID);
         }
 
         private void BeginRenameAttachment()
@@ -737,8 +733,8 @@ namespace AssetManager.UserInterface.Forms
             //Enable read/write mode, set current cell to the filename cell and begin edit.
             AttachGrid.ReadOnly = false;
             AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            AttachGrid.CurrentRow.Cells[_attachTable.FileName].ReadOnly = false;
-            AttachGrid.CurrentCell = AttachGrid.CurrentRow.Cells[_attachTable.FileName];
+            AttachGrid.CurrentRow.Cells[attachmentColumns.FileName].ReadOnly = false;
+            AttachGrid.CurrentCell = AttachGrid.CurrentRow.Cells[attachmentColumns.FileName];
             AttachGrid.BeginEdit(true);
         }
 
@@ -752,13 +748,13 @@ namespace AssetManager.UserInterface.Forms
             try
             {
                 //The current (old) value is pulled from the DataGrid indexer.
-                string oldFilename = AttachGrid[_attachTable.FileName, row].Value.ToString().Trim();
+                string oldFilename = AttachGrid[attachmentColumns.FileName, row].Value.ToString().Trim();
 
                 //Make sure filename has changed.
                 if (newFilename != oldFilename && !string.IsNullOrEmpty(newFilename))
                 {
                     //Get the UID of the attachment for the update method.
-                    string renamedUID = AttachGrid[_attachTable.FileUID, row].Value.ToString();
+                    string renamedUID = AttachGrid[attachmentColumns.FileUID, row].Value.ToString();
                     UpdateDbAttachementName(renamedUID, newFilename);
                 }
                 else
@@ -784,7 +780,7 @@ namespace AssetManager.UserInterface.Forms
                 {
                     return;
                 }
-                string strFilename = AttachGrid.CurrentRowStringValue(_attachTable.FileName);
+                string strFilename = AttachGrid.CurrentRowStringValue(attachmentColumns.FileName);
                 var blah = OtherFunctions.Message("Are you sure you want to delete '" + strFilename + "'?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Confirm Delete", this);
                 if (blah == DialogResult.Yes)
                 {
@@ -817,11 +813,11 @@ namespace AssetManager.UserInterface.Forms
 
         private async void UploadAttachments(string[] files, Attachment.Folder folder)
         {
-            if (TransferTaskRunning)
+            if (transferTaskRunning)
             {
                 return;
             }
-            TransferTaskRunning = true;
+            transferTaskRunning = true;
             Attachment CurrentAttachment = new Attachment();
             try
             {
@@ -831,11 +827,11 @@ namespace AssetManager.UserInterface.Forms
                 WorkerFeedback(true);
                 foreach (string file in files)
                 {
-                    CurrentAttachment = new Attachment(file, AttachFolderUID, folder, _attachTable);
+                    CurrentAttachment = new Attachment(file, attachFolderUID, folder, attachmentColumns);
                     if (!OKFileSize(CurrentAttachment))
                     {
                         CurrentAttachment.Dispose();
-                        OtherFunctions.Message("The file is too large.   Please select a file less than " + FileSizeMBLimit.ToString() + "MB.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Size Limit Exceeded", this);
+                        OtherFunctions.Message("The file is too large.   Please select a file less than " + fileSizeMBLimit.ToString() + "MB.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Size Limit Exceeded", this);
                         continue;
                     }
                     SetStatusBar("Creating Directory...");
@@ -847,7 +843,7 @@ namespace AssetManager.UserInterface.Forms
                     }
                     var fileList = new List<string>(files);
                     SetStatusBar("Uploading... " + (fileList.IndexOf(file) + 1).ToString() + " of " + files.Length.ToString());
-                    Progress = new ProgressCounter();
+                    progress = new ProgressCounter();
                     using (var trans = DBFactory.GetDatabase().StartTransaction())
                     {
                         using (var conn = trans.Connection)
@@ -858,18 +854,18 @@ namespace AssetManager.UserInterface.Forms
                                 {
                                     using (FileStream FileStream = (FileStream)(CurrentAttachment.DataStream))
                                     {
-                                        using (System.IO.Stream FTPStream = LocalFTPComm.ReturnFtpRequestStream(FTPUri + CurrentAttachment.FolderGUID + "/" + CurrentAttachment.FileUID, WebRequestMethods.Ftp.UploadFile))
+                                        using (System.IO.Stream FTPStream = LocalFTPComm.ReturnFtpRequestStream(ftpUri + CurrentAttachment.FolderGUID + "/" + CurrentAttachment.FileUID, WebRequestMethods.Ftp.UploadFile))
                                         {
                                             byte[] buffer = new byte[1024];
                                             int bytesIn = 1;
-                                            Progress.BytesToTransfer = System.Convert.ToInt32(FileStream.Length);
+                                            progress.BytesToTransfer = System.Convert.ToInt32(FileStream.Length);
                                             while (!(bytesIn < 1 || cancelToken.IsCancellationRequested))
                                             {
                                                 bytesIn = FileStream.Read(buffer, 0, 1024);
                                                 if (bytesIn > 0)
                                                 {
                                                     FTPStream.Write(buffer, 0, bytesIn);
-                                                    Progress.BytesMoved = bytesIn;
+                                                    progress.BytesMoved = bytesIn;
                                                 }
                                             }
                                         }
@@ -900,7 +896,7 @@ namespace AssetManager.UserInterface.Forms
             }
             finally
             {
-                TransferTaskRunning = false;
+                transferTaskRunning = false;
                 if (!GlobalSwitches.ProgramEnding && !this.IsDisposed)
                 {
                     if (CurrentAttachment != null)
@@ -955,7 +951,7 @@ namespace AssetManager.UserInterface.Forms
 
         private async void AddAttachmentFileToDragDropObject(string attachUID)
         {
-            if (!dragDropDataObj.GetDataPresent(DataFormats.FileDrop) && !TransferTaskRunning)
+            if (!dragDropDataObj.GetDataPresent(DataFormats.FileDrop) && !transferTaskRunning)
             {
                 Waiting();
                 using (var saveAttachment = await DownloadAttachment(attachUID))
@@ -973,7 +969,7 @@ namespace AssetManager.UserInterface.Forms
                     AttachGrid.DoDragDrop(dragDropDataObj, DragDropEffects.All);
                 }
 
-                bolDragging = false;
+                isDragging = false;
                 DoneWaiting();
             }
         }
@@ -1043,7 +1039,7 @@ namespace AssetManager.UserInterface.Forms
                 }
                 else
                 {
-                    Progress = new ProgressCounter();
+                    progress = new ProgressCounter();
                     ProgressBar1.Value = 0;
                     ProgressBar1.Visible = false;
                     cmdCancel.Visible = false;
@@ -1058,7 +1054,7 @@ namespace AssetManager.UserInterface.Forms
 
         private string SelectedAttachmentUID()
         {
-            string AttachUID = AttachGrid.CurrentRowStringValue(_attachTable.FileUID);
+            string AttachUID = AttachGrid.CurrentRowStringValue(attachmentColumns.FileUID);
             if (!string.IsNullOrEmpty(AttachUID))
             {
                 return AttachUID;
@@ -1071,8 +1067,8 @@ namespace AssetManager.UserInterface.Forms
 
         private void ToggleDragMode()
         {
-            bolAllowDrag = !bolAllowDrag;
-            AttachGrid.MultiSelect = !bolAllowDrag;
+            allowDrag = !allowDrag;
+            AttachGrid.MultiSelect = !allowDrag;
             if (AttachGrid.MultiSelect)
             {
                 AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect;
@@ -1081,7 +1077,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 AttachGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             }
-            AllowDragCheckBox.Checked = bolAllowDrag;
+            AllowDragCheckBox.Checked = allowDrag;
         }
 
         private bool FolderNameExists(string folderName)
@@ -1101,7 +1097,7 @@ namespace AssetManager.UserInterface.Forms
         private void AttachmentsForm_Shown(object sender, EventArgs e)
         {
             AttachGrid.ClearSelection();
-            bolGridFilling = false;
+            gridFilling = false;
         }
 
         private void AttachmentsForm_Load(object sender, EventArgs e)
@@ -1120,7 +1116,7 @@ namespace AssetManager.UserInterface.Forms
         private void AttachGrid_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             //Must do this to keep the current cell selection highlight from sticking.
-            if (bolAllowDrag)
+            if (allowDrag)
             {
                 AttachGrid.ClearSelection();
             }
@@ -1140,7 +1136,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void AttachGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (!bolGridFilling)
+            if (!gridFilling)
             {
                 StyleFunctions.HighlightRow(AttachGrid, GridTheme, e.RowIndex);
             }
@@ -1165,7 +1161,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void AttachGrid_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
         {
-            bolDragging = false;
+            isDragging = false;
         }
 
         private void AttachGrid_DragDrop(object sender, DragEventArgs e)
@@ -1175,7 +1171,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void AttachGrid_DragLeave(object sender, EventArgs e)
         {
-            bolDragging = false;
+            isDragging = false;
         }
 
         private void AttachGrid_DragOver(object sender, DragEventArgs e)
@@ -1185,23 +1181,23 @@ namespace AssetManager.UserInterface.Forms
 
         private void AttachGrid_MouseDown(object sender, MouseEventArgs e)
         {
-            if (bolAllowDrag)
+            if (allowDrag)
             {
-                MouseStartPos = e.Location;
+                mouseStartPos = e.Location;
                 //MouseIsDragging(e.Location);
             }
         }
 
         private void AttachGrid_MouseMove(object sender, MouseEventArgs e)
         {
-            if (bolAllowDrag && !bolDragging && !TransferTaskRunning)
+            if (allowDrag && !isDragging && !transferTaskRunning)
             {
                 if (e.Button == MouseButtons.Left)
                 {
                     if (MouseIsDragging(CurrentPos: e.Location) && AttachGrid.CurrentRow != null)
                     {
-                        bolDragging = true;
-                        PrevSelectedFolder = CurrentSelectedFolder;
+                        isDragging = true;
+                        previousFolder = CurrentSelectedFolder;
                         StartDragDropAttachment();
                     }
                 }
@@ -1240,17 +1236,17 @@ namespace AssetManager.UserInterface.Forms
 
         private void ProgTimer_Tick(object sender, EventArgs e)
         {
-            Progress.Tick();
-            if (Progress.BytesMoved > 0)
+            progress.Tick();
+            if (progress.BytesMoved > 0)
             {
-                statMBPS.Text = Progress.Throughput.ToString("0.00") + " MB/s";
+                statMBPS.Text = progress.Throughput.ToString("0.00") + " MB/s";
 
-                ProgressBar1.Value = Progress.Percent;
-                if (Progress.Percent > 1)
+                ProgressBar1.Value = progress.Percent;
+                if (progress.Percent > 1)
                 {
                     ProgressBar1.Value -= 1; //doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
                 }
-                ProgressBar1.Value = Progress.Percent;
+                ProgressBar1.Value = progress.Percent;
             }
             else
             {
@@ -1286,14 +1282,14 @@ namespace AssetManager.UserInterface.Forms
             }
             if (FolderListView.SelectedIndices.Count > 0)
             {
-                PrevSelectedFolder = CurrentSelectedFolder;
+                previousFolder = CurrentSelectedFolder;
             }
             ListAttachments();
         }
 
         private void FolderListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            if (bolDragging)
+            if (isDragging)
             {
                 SetFolderListViewStates();
             }
@@ -1316,7 +1312,7 @@ namespace AssetManager.UserInterface.Forms
         private void FolderListView_DragOver(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Copy;
-            bolDragging = true;
+            isDragging = true;
             Point p = FolderListView.PointToClient(new Point(e.X, e.Y));
             ListViewItem dragToItem = FolderListView.GetItemAt(p.X, p.Y);
             if (dragToItem != null)
@@ -1349,7 +1345,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 ProcessFolderListDrop(e.Data, new Attachment.Folder(dragToItem.Text, (string)dragToItem.Tag));
             }
-            bolDragging = false;
+            isDragging = false;
         }
 
         private void AttachGrid_KeyDown(object sender, KeyEventArgs e)
@@ -1398,7 +1394,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void FolderListView_DragLeave(object sender, EventArgs e)
         {
-            CurrentSelectedFolder = PrevSelectedFolder;
+            CurrentSelectedFolder = previousFolder;
         }
 
         private void AttachGrid_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
@@ -1416,7 +1412,7 @@ namespace AssetManager.UserInterface.Forms
                 }
                 else
                 {
-                    if (bolDragging && TransferTaskRunning)
+                    if (isDragging && transferTaskRunning)
                     {
                         CancelTransfers();
                     }

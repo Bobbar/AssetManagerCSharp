@@ -15,11 +15,10 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         private string TargetDirectory;
         private GKProgressControl PushFilesControl;
         private bool Cancel = false;
-        public CopyFilesForm(ExtendedForm parentForm, Device targetDevice, string sourceDirectory, string targetDirectory)
+        public CopyFilesForm(ExtendedForm parentForm, Device targetDevice, string sourceDirectory, string targetDirectory) : base(parentForm)
         {
             InitializeComponent();
             ImageCaching.CacheControlImages(this);
-            this.ParentForm = parentForm;
             this.Owner = parentForm;
             this.TargetDevice = targetDevice;
             this.SourceDirectory = sourceDirectory;

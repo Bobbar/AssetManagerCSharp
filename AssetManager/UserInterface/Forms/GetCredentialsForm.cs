@@ -19,12 +19,12 @@ namespace AssetManager.UserInterface.Forms
             get { return MyCreds; }
         }
 
-        public GetCredentialsForm()
+        public GetCredentialsForm() : base()
         {
             InitializeComponent();
         }
 
-        public GetCredentialsForm(string credentialDescription)
+        public GetCredentialsForm(string credentialDescription) : base()
         {
             InitializeComponent();
             this.Icon = Properties.Resources.asset_icon;

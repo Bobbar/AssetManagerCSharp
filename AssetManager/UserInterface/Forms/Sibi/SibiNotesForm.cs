@@ -13,9 +13,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
     public partial class SibiNotesForm : ExtendedForm
     {
 
-        private SibiRequestMapObject sibiRequest;
+        private SibiRequest sibiRequest;
 
-        public SibiRequestMapObject Request
+        public SibiRequest Request
         {
             get { return sibiRequest; }
         }
@@ -25,19 +25,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
             get { return NotesTextBox.Rtf.Trim(); }
         }
 
-        public SibiNotesForm(ExtendedForm parentForm, SibiRequestMapObject request)
+        public SibiNotesForm(ExtendedForm parentForm, SibiRequest request) : base(parentForm, request)
         {
             InitializeComponent();
-            this.ParentForm = parentForm;
             sibiRequest = request;
             ShowDialog(parentForm);
         }
 
-        public SibiNotesForm(ExtendedForm parentForm, string noteUID)
+        public SibiNotesForm(ExtendedForm parentForm, string noteUID) : base(parentForm,noteUID)
         {
             InitializeComponent();
-            this.ParentForm = parentForm;
-            FormUID = noteUID;
             ViewNote(noteUID);
         }
 

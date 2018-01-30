@@ -15,10 +15,10 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         private AdvancedSearch AdvSearch = new AdvancedSearch();
 
 
-        public AdvancedSearchForm(ExtendedForm parentForm)
+        public AdvancedSearchForm(ExtendedForm parentForm) : base(parentForm)
         {
             InitializeComponent();
-            this.ParentForm = parentForm;
+           // this.ParentForm = parentForm;
             PopulateTableTree();
             this.Show();
         }

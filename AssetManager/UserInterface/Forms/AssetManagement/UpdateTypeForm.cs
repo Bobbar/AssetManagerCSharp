@@ -16,10 +16,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private DeviceUpdateInfo NewUpdateInfo;
 
-        public UpdateDev(ExtendedForm parentForm, bool isNoteOnly = false)
+        public UpdateDev(ExtendedForm parentForm, bool isNoteOnly = false) : base(parentForm)
         {
             InitializeComponent();
-            this.ParentForm = parentForm;
             AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.ChangeType, UpdateTypeCombo);
             if (isNoteOnly)
             {

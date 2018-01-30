@@ -2,7 +2,7 @@
 
 namespace AssetManager.Data.Classes
 {
-    public class SibiRequestMapObject : MappableObject
+    public class SibiRequest : MappableObject
     {
         #region Fields
 
@@ -12,12 +12,12 @@ namespace AssetManager.Data.Classes
 
         #region Constructors
 
-        public SibiRequestMapObject()
+        public SibiRequest()
         {
             this.GUID = System.Guid.NewGuid().ToString();
         }
 
-        public SibiRequestMapObject(DataTable data) : base(data)
+        public SibiRequest(DataTable data) : base(data)
         {
         }
 

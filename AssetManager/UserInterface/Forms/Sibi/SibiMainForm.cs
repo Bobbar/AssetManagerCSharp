@@ -26,13 +26,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private List<StatusColumnColor> StatusColors;
 
-        public SibiMainForm(ExtendedForm parentForm)
+        public SibiMainForm(ExtendedForm parentForm) : base(parentForm, false)
         {
             MyWindowList = new WindowList(this);
             Disposed += SibiMainForm_Disposed;
-            Closing += frmSibiMain_Closing;
-            this.InheritTheme = false;
-            this.ParentForm = parentForm;
+            Closing += SibiMainForm_Closing;
             // This call is required by the designer.
             InitializeComponent();
 
@@ -452,7 +450,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             return CanClose;
         }
 
-        private void frmSibiMain_Closing(object sender, CancelEventArgs e)
+        private void SibiMainForm_Closing(object sender, CancelEventArgs e)
         {
             if (!OKToClose())
             {

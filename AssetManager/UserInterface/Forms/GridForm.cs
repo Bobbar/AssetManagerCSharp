@@ -21,13 +21,12 @@ namespace AssetManager.UserInterface.Forms
 
         #region "Constructors"
 
-        public GridForm(ExtendedForm parentForm, string title = "")
+        public GridForm(ExtendedForm parentForm, string title = "") : base(parentForm)
         {
             Load += GridForm_Load;
             Disposed += GridForm_Disposed;
             Resize += GridForm_Resize;
             Closing += GridForm_Closing;
-            this.ParentForm = parentForm;
             // This call is required by the designer.
             InitializeComponent();
             if (!string.IsNullOrEmpty(title))

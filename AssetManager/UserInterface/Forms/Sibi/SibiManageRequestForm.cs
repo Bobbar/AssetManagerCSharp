@@ -21,7 +21,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
     {
         #region Fields
 
-        private SibiRequestMapObject CurrentRequest = new SibiRequestMapObject();
+        private SibiRequest CurrentRequest = new SibiRequest();
         private string CurrentHash;
         private bool IsModifying = false;
         private bool IsNewRequest = false;
@@ -39,7 +39,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         #region Constructors
 
-        public SibiManageRequestForm(ExtendedForm parentForm, string requestUID)
+        public SibiManageRequestForm(ExtendedForm parentForm, string requestUID) : base(parentForm, requestUID)
         {
             MyMunisToolBar = new MunisToolBar(this);
             MyWindowList = new WindowList(this);
@@ -50,7 +50,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             OpenRequest(requestUID);
         }
 
-        public SibiManageRequestForm(ExtendedForm parentForm)
+        public SibiManageRequestForm(ExtendedForm parentForm) : base(parentForm)
         {
             controlParser = new DBControlParser(this);
             MyMunisToolBar = new MunisToolBar(this);
@@ -131,7 +131,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 ClearAll();
                 IsNewRequest = true;
                 SetTitle(true);
-                CurrentRequest = new SibiRequestMapObject();
+                CurrentRequest = new SibiRequest();
                 this.FormUID = CurrentRequest.GUID;
                 IsModifying = true;
                 //Set the datasource to a new empty DB table.
@@ -266,7 +266,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 return;
             }
-            SibiRequestMapObject RequestData = CollectData();
+            SibiRequest RequestData = CollectData();
             using (var trans = DBFactory.GetDatabase().StartTransaction())
             {
                 using (var conn = trans.Connection)
@@ -558,7 +558,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             ModifyRequest();
         }
 
-        private SibiRequestMapObject CollectData()
+        private SibiRequest CollectData()
         {
             try
             {
@@ -574,7 +574,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         row.Cells[SibiRequestItemsCols.RequestUID].Value = CurrentRequest.GUID;
                     }
                 }
-                SibiRequestMapObject info = new SibiRequestMapObject();
+                SibiRequest info = new SibiRequest();
                 info.RequestItems = (DataTable)RequestItemsGrid.DataSource;
 
                 return info;
@@ -594,7 +594,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                CurrentRequest = new SibiRequestMapObject(RequestResults);
+                CurrentRequest = new SibiRequest(RequestResults);
                 CurrentRequest.RequestItems = RequestItemsResults;
             }
             catch (Exception ex)
@@ -835,7 +835,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             txtCreateDate.Tag = new DBControlInfo(SibiRequestCols.DateStamp, ParseType.DisplayOnly, false);
         }
 
-        private void InitForm(ExtendedForm ParentForm, string UID = "")
+        private void InitForm(ExtendedForm parentForm, string UID = "")
         {
             StatusSlider = new SliderLabel();
             StatusStrip1.Items.Insert(0, StatusSlider.ToToolStripControl(StatusStrip1));
@@ -848,8 +848,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             RequestItemsGrid.DoubleBufferedDataGrid(true);
             NotesGrid.DoubleBufferedDataGrid(true);
             MyMunisToolBar.InsertMunisDropDown(ToolStrip);
-            this.ParentForm = ParentForm;
-            this.FormUID = UID;
             ImageCaching.CacheControlImages(this);
             MyWindowList.InsertWindowList(ToolStrip);
             StyleFunctions.SetGridStyle(RequestItemsGrid, GridTheme);
@@ -1494,7 +1492,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                             OtherFunctions.Message("It appears that someone else has modified this request. Please refresh and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Concurrency Failure", this);
                             return;
                         }
-                        SibiRequestMapObject RequestData = CollectData();
+                        SibiRequest RequestData = CollectData();
                         RequestData.GUID = CurrentRequest.GUID;
                         if (ReferenceEquals(RequestData.RequestItems, null))
                         {

@@ -12,7 +12,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         private ManagePackFile packManager = new ManagePackFile();
 
-        public PackFileForm(bool showFunctions)
+        public PackFileForm(bool showFunctions) : base()
         {
             InitializeComponent();
             this.Icon = Properties.Resources.asset_icon;

@@ -41,13 +41,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #region Methods
 
-        public NewDeviceForm(ExtendedForm parentForm)
+        public NewDeviceForm(ExtendedForm parentForm) : base(parentForm)
         {
             InitializeComponent();
             InitDBControls();
             controlParser = new DBControlParser(this);
             controlParser.EnableFieldValidation();
-            this.ParentForm = parentForm;
             this.Owner = parentForm;
             ClearAll();
             this.Show();

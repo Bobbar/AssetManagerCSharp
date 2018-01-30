@@ -17,11 +17,10 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         private List<AccessGroup> ModuleIndex = new List<AccessGroup>();
         private int SelectedRow;
 
-        public UserManagerForm(ExtendedForm parentForm)
+        public UserManagerForm(ExtendedForm parentForm) : base(parentForm)
         {
             Load += frmUserManager_Load;
             InitializeComponent();
-            this.ParentForm = parentForm;
             StyleFunctions.SetGridStyle(UserGrid, GridTheme);
             Show();
         }
