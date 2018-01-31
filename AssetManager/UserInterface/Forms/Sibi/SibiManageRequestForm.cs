@@ -564,7 +564,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 RequestItemsGrid.EndEdit();
                 RequestItemsGrid.ScrollBars = ScrollBars.None;
-                RequestItemsGrid.SuspendLayout();
 
                 foreach (DataGridViewRow row in RequestItemsGrid.Rows)
                 {
