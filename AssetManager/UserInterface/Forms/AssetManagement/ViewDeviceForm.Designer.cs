@@ -31,7 +31,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.HostnameTextBox = new System.Windows.Forms.TextBox();
             this.Label15 = new System.Windows.Forms.Label();
             this.PhoneNumberTextBox = new System.Windows.Forms.MaskedTextBox();
@@ -112,7 +112,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.iCloudTextBox = new System.Windows.Forms.TextBox();
             this.Label17 = new System.Windows.Forms.Label();
             this.RemoteTrackingPanel = new System.Windows.Forms.Panel();
-            this.remoteToolsControl = new RemoteToolsControl();
+            this.remoteToolsControl = new AssetManager.UserInterface.CustomControls.RemoteToolsControl();
             this.ToolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.TrackingToolStrip = new System.Windows.Forms.ToolStrip();
             this.TrackingDropDown = new System.Windows.Forms.ToolStripDropDownButton();
@@ -348,6 +348,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.CurrentUserTextBox.Name = "CurrentUserTextBox";
             this.CurrentUserTextBox.Size = new System.Drawing.Size(134, 23);
             this.CurrentUserTextBox.TabIndex = 2;
+            this.CurrentUserTextBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.CurrentUserTextBox_MouseDoubleClick);
             // 
             // StatusComboBox
             // 
@@ -533,15 +534,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.DataGridHistory.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.DataGridHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGridHistory.ContextMenuStrip = this.RightClickMenu;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(10);
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.DataGridHistory.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(10);
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.DataGridHistory.DefaultCellStyle = dataGridViewCellStyle1;
             this.DataGridHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DataGridHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.DataGridHistory.Location = new System.Drawing.Point(3, 3);
@@ -1087,7 +1088,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.remoteToolsControl.Name = "remoteToolsControl";
             this.remoteToolsControl.Size = new System.Drawing.Size(422, 103);
             this.remoteToolsControl.TabIndex = 42;
-            this.remoteToolsControl.NewStatusPrompt += new System.EventHandler<RemoteToolsControl.StatusPrompt>(this.remoteToolsControl_NewStatusPrompt);
+            this.remoteToolsControl.NewStatusPrompt += new System.EventHandler<AssetManager.UserInterface.CustomControls.RemoteToolsControl.StatusPrompt>(this.remoteToolsControl_NewStatusPrompt);
             this.remoteToolsControl.VisibleChanging += new System.EventHandler<bool>(this.remoteToolsControl_VisibleChanging);
             // 
             // ToolStripContainer1

@@ -253,8 +253,8 @@ namespace AssetManager.UserInterface.CustomControls
                 if (CurrentLiveBoxArgs.Control.FindForm() is ViewDeviceForm)
                 {
                     ViewDeviceForm FrmSetData = (ViewDeviceForm)CurrentLiveBoxArgs.Control.FindForm();
-                    FrmSetData.MunisUser.Name = SelectedText;
-                    FrmSetData.MunisUser.Number = SelectedValue;
+                    var munisUser = new MunisEmployee(SelectedText, SelectedValue);
+                    FrmSetData.MunisUser = munisUser;
                 }
                 else if (CurrentLiveBoxArgs.Control.FindForm() is NewDeviceForm)
                 {

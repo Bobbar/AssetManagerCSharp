@@ -155,6 +155,10 @@ namespace AssetManager.Data.Functions
         private Form ParentForm;
         private ErrorProvider errorProvider;
 
+        public ErrorProvider ErrorProvider
+        {
+            get { return errorProvider; }
+        }
         #endregion "Fields"
 
         #region "Constructors"
@@ -301,7 +305,7 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        private void ValidateControl(Control control)
+        private bool ValidateControl(Control control)
         {
             var dbInfo = (DBControlInfo)control.Tag;
 
@@ -313,24 +317,36 @@ namespace AssetManager.Data.Functions
                     if (dbCmb.SelectedIndex < 0)
                     {
                         SetError(dbCmb, false);
+                        return false;
                     }
                     else
                     {
                         SetError(dbCmb, true);
+                        return true;
                     }
                 }
                 else
                 {
+                    // Don't validate read-only textboxes.
+                    if (control is TextBox)
+                    {
+                        var txtBox = (TextBox)control;
+                        if (txtBox.ReadOnly) return true;
+                    }
+
                     if (string.IsNullOrEmpty(control.Text.Trim()))
                     {
                         SetError(control, false);
+                        return false;
                     }
                     else
                     {
                         SetError(control, true);
+                        return true;
                     }
                 }
             }
+            return true;
         }
 
         public bool ValidateFields()
@@ -338,35 +354,9 @@ namespace AssetManager.Data.Functions
             bool fieldsValid = true;
             foreach (Control ctl in GetDBControls(ParentForm))
             {
-                var DBInfo = (DBControlInfo)ctl.Tag;
-
-                if (DBInfo.Required)
+                if (!ValidateControl(ctl))
                 {
-                    if (ctl is ComboBox)
-                    {
-                        ComboBox dbCmb = (ComboBox)ctl;
-                        if (dbCmb.SelectedIndex < 0)
-                        {
-                            SetError(dbCmb, false);
-                            fieldsValid = false;
-                        }
-                        else
-                        {
-                            SetError(dbCmb, true);
-                        }
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(ctl.Text.Trim()))
-                        {
-                            SetError(ctl, false);
-                            fieldsValid = false;
-                        }
-                        else
-                        {
-                            SetError(ctl, true);
-                        }
-                    }
+                    fieldsValid = false;
                 }
             }
             return fieldsValid;

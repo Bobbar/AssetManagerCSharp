@@ -20,7 +20,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
     {
         #region Fields
 
-        public MunisEmployee MunisUser = new MunisEmployee();
+        private MunisEmployee munisUser = new MunisEmployee();
+
+        public MunisEmployee MunisUser
+        {
+            get { return munisUser; }
+
+            set
+            {
+                munisUser = value;
+                SetMunisEmpStatus();
+            }
+        }
         private bool gridFilling = false;
         private string currentHash;
         private Device currentViewDevice;
@@ -235,7 +246,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             bool fieldsValid = true;
             fieldsValid = controlParser.ValidateFields();
-
             if (!DataConsistency.ValidPhoneNumber(PhoneNumberTextBox.Text))
             {
                 fieldsValid = false;
@@ -338,6 +348,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 this.editMode = true;
                 EnableControlsRecursive(this);
+                SetMunisEmpStatus();
                 ActiveDirectoryBox.Visible = false;
                 MunisSibiPanel.Visible = false;
                 MunisSearchButton.Visible = true;
@@ -553,7 +564,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DBRow[DevicesCols.SibiLinkUID] = DataConsistency.CleanDBValue(currentViewDevice.SibiLink);
             DBRow[DevicesCols.LastModUser] = NetworkInfo.LocalDomainUser;
             DBRow[DevicesCols.LastModDate] = DateTime.Now;
-            MunisUser = new MunisEmployee();//null;
             return tmpTable;
         }
 
@@ -603,6 +613,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 currentHash = GetHash(currentViewDevice.PopulatingTable, HistoricalResults);
                 controlParser.FillDBFields(currentViewDevice.PopulatingTable);
+                MunisUser = new MunisEmployee(currentViewDevice.CurrentUser, currentViewDevice.CurrentUserEmpNum);
                 SetMunisEmpStatus();
 
                 DataGridHistory.SuspendLayout();
@@ -737,11 +748,40 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void SetMunisEmpStatus()
         {
-            ToolTip1.SetToolTip(CurrentUserTextBox, "");
-            if (!string.IsNullOrEmpty(currentViewDevice.CurrentUserEmpNum))
+            ToolTip1.SetToolTip(CurrentUserTextBox, string.Empty);
+            if (MunisUser != null)
             {
-                CurrentUserTextBox.BackColor = Colors.EditColor;
-                ToolTip1.SetToolTip(CurrentUserTextBox, "Munis Linked Employee");
+                CurrentUserTextBox.Text = MunisUser.Name;
+
+                if (!string.IsNullOrEmpty(MunisUser.Number))
+                {
+                    if (editMode)
+                    {
+                        CurrentUserTextBox.ReadOnly = true;
+                        CurrentUserTextBox.BackColor = Colors.EditColor;
+                        ToolTip1.SetToolTip(CurrentUserTextBox, "Double-Click to change.");
+                    }
+                    else
+                    {
+                        CurrentUserTextBox.ReadOnly = true;
+                        CurrentUserTextBox.BackColor = Colors.EditColor;
+                        ToolTip1.SetToolTip(CurrentUserTextBox, "Munis Linked Employee");
+                    }
+                    controlParser.ErrorProvider.SetError(CurrentUserTextBox, string.Empty);
+                }
+                else
+                {
+                    if (editMode)
+                    {
+                        CurrentUserTextBox.ReadOnly = false;
+                        CurrentUserTextBox.BackColor = Color.Empty;
+                    }
+                    else
+                    {
+                        CurrentUserTextBox.ReadOnly = true;
+                        CurrentUserTextBox.BackColor = Color.Empty;
+                    }
+                }
             }
         }
 
@@ -918,11 +958,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void MunisSearchButton_Click(object sender, EventArgs e)
         {
             MunisUser = GlobalInstances.MunisFunc.MunisUserSearch(this);
-            if (!string.IsNullOrEmpty(MunisUser.Name))
-            {
-                CurrentUserTextBox.Text = MunisUser.Name;
-                CurrentUserTextBox.ReadOnly = true;
-            }
         }
 
         private void SibiViewButton_Click(object sender, EventArgs e)
@@ -1082,7 +1117,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             statusSlider.NewSlideMessage(e.Message, e.DisplayTime);
         }
-
+        private void CurrentUserTextBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (editMode)
+            {
+                MunisUser = new MunisEmployee();
+            }
+        }
         #endregion Control Events
 
         #endregion Methods

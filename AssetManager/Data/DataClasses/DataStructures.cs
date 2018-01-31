@@ -76,6 +76,12 @@ namespace AssetManager.Data.Classes
             this.Number = string.Empty;
             this.GUID = string.Empty;
         }
+
+        public override string ToString()
+        {
+            string infoString = "{ Name: " + this.Name + " }  { Number: " + this.Number + "}";
+            return infoString;
+        }
     }
 }
 namespace AssetManager.Data.Classes

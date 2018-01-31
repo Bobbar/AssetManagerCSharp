@@ -199,7 +199,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void ClearAll()
         {
             RefreshCombos();
-            MunisUser = new MunisEmployee();  //null;
+            MunisUser = new MunisEmployee();
             ClearFields(this);
             PurchaseDatePicker.Value = DateTime.Now;
             StatusComboBox.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(GlobalInstances.DeviceAttribute.StatusType, "INSRV");
