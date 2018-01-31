@@ -567,11 +567,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
                 foreach (DataGridViewRow row in RequestItemsGrid.Rows)
                 {
-
-                    if (string.IsNullOrEmpty(row.Cells[SibiRequestItemsCols.RequestUID].Value.ToString()))
-                    {
-                        row.Cells[SibiRequestItemsCols.RequestUID].Value = CurrentRequest.GUID;
-                    }
+                    row.Cells[SibiRequestItemsCols.RequestUID].Value = CurrentRequest.GUID;
                 }
                 SibiRequest info = new SibiRequest();
                 info.RequestItems = (DataTable)RequestItemsGrid.DataSource;
@@ -1016,7 +1012,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     if (string.IsNullOrEmpty(cell.Value.ToString()))
                     {
-                        cell.Value = null;
+                        // cell.Value = null; // This is causing extra rows to be added for some reason. I'll revisit later.
                     }
                     else
                     {
@@ -1042,15 +1038,18 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                if (e.ColumnIndex >= -1 && e.RowIndex >= 0)
+                if (e.Button == MouseButtons.Right)
                 {
-                    int ColIndex = (e.ColumnIndex == -1 ? 0 : e.ColumnIndex);
-                    if (!RequestItemsGrid[ColIndex, e.RowIndex].Selected)
+                    if (e.ColumnIndex >= -1 && e.RowIndex >= 0)
                     {
-                        RequestItemsGrid.Rows[e.RowIndex].Selected = true;
-                        RequestItemsGrid.CurrentCell = RequestItemsGrid[ColIndex, e.RowIndex];
+                        int ColIndex = (e.ColumnIndex == -1 ? 0 : e.ColumnIndex);
+                        if (!RequestItemsGrid[ColIndex, e.RowIndex].Selected)
+                        {
+                            RequestItemsGrid.Rows[e.RowIndex].Selected = true;
+                            RequestItemsGrid.CurrentCell = RequestItemsGrid[ColIndex, e.RowIndex];
+                        }
+                        SetToolStripItems();
                     }
-                    SetToolStripItems();
                 }
             }
             catch (Exception ex)
