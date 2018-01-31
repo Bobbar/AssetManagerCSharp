@@ -539,6 +539,13 @@
             </summary>
             <param name="targetGrid"></param>
         </member>
+        <member name="M:AssetManager.Helpers.DataGridViewExtensions.SetComboDropWidth(System.Windows.Forms.DataGridViewComboBoxColumn,System.Drawing.Graphics)">
+            <summary>
+            Sets the drop down width of the specified <see cref="T:System.Windows.Forms.DataGridViewComboBoxColumn"/> to fit all the drop down items.
+            </summary>
+            <param name="comboColumn"></param>
+            <param name="gfx"></param>
+        </member>
         <member name="M:AssetManager.Helpers.Colors.ColorAlphaBlend(System.Drawing.Color,System.Drawing.Color)">
             <summary>
             Alpha blend two colors.

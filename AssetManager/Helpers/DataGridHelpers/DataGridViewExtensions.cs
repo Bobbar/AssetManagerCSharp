@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using AssetManager.UserInterface.Forms;
 using AssetManager.UserInterface.CustomControls;
+using AssetManager.Data.Classes;
 
 namespace AssetManager.Helpers
 {
@@ -130,6 +131,9 @@ namespace AssetManager.Helpers
                     // but will yeild correct results in this case.
                     if (targetGrid.Columns[c].CellType == typeof(DataGridViewComboBoxCell))
                     {
+                        // Set drop down width for combobox column.
+                        SetComboDropWidth((DataGridViewComboBoxColumn)targetGrid.Columns[c], gfx);
+
                         // Iterate through all the rows and add the formatted values to the array.
                         rowStringCollection = new string[targetGrid.Rows.Count];
                         for (int r = 0; r < targetGrid.Rows.Count; r++)
@@ -176,6 +180,26 @@ namespace AssetManager.Helpers
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Sets the drop down width of the specified <see cref="DataGridViewComboBoxColumn"/> to fit all the drop down items.
+        /// </summary>
+        /// <param name="comboColumn"></param>
+        /// <param name="gfx"></param>
+        private static void SetComboDropWidth(DataGridViewComboBoxColumn comboColumn, Graphics gfx)
+        {
+            var comboData = (CodeAttribute[])comboColumn.DataSource;
+            var itemsArray = new string[comboData.Length];
+
+            for (int i = 0; i < itemsArray.Length; i++)
+            {
+                itemsArray[i] = comboData[i].DisplayValue;
+            }
+
+            itemsArray = itemsArray.OrderBy((x) => x.Length).ToArray();
+            var maxSize = gfx.MeasureString(itemsArray.Last(), comboColumn.InheritedStyle.Font);
+            comboColumn.DropDownWidth = (int)maxSize.Width;
         }
 
         private static StringSize[] MeasureStrings(string[] stringArray, Graphics gfx, Font font)
