@@ -278,9 +278,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             txtAssetTagSearch.Clear();
             txtSerial.Clear();
             txtSerialSearch.Clear();
-            cmbEquipType.Items.Clear();
-            cmbOSType.Items.Clear();
-            cmbLocation.Items.Clear();
             txtCurUser.Clear();
             txtDescription.Clear();
             txtReplaceYear.Clear();

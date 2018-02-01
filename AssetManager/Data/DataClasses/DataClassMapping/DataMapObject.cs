@@ -171,7 +171,7 @@ namespace AssetManager.Data.Classes
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    PopulatingTable.Dispose();
+                   if (PopulatingTable != null) PopulatingTable.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

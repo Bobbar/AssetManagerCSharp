@@ -124,17 +124,15 @@ namespace AssetManager.Helpers
             }
         }
 
+        private static RichTextBox rtfBox = new RichTextBox();
         public static string RTFToPlainText(string rtfText)
         {
             try
             {
                 if (rtfText.StartsWith("{\\rtf"))
                 {
-                    using (RichTextBox rtBox = new RichTextBox())
-                    {
-                        rtBox.Rtf = rtfText;
-                        return rtBox.Text;
-                    }
+                    rtfBox.Rtf = rtfText;
+                    return rtfBox.Text;
                 }
                 else
                 {
@@ -148,7 +146,7 @@ namespace AssetManager.Helpers
             }
         }
 
-       
+
 
     }
 }

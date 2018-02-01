@@ -590,11 +590,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.NotesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.NotesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.NotesGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.NotesGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.NotesGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            this.NotesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.NotesGrid.ColumnHeadersHeight = 25;
+            this.NotesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.NotesGrid.ContextMenuStrip = this.PopupMenuNotes;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -623,6 +623,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.NotesGrid.ShowCellToolTips = false;
             this.NotesGrid.Size = new System.Drawing.Size(430, 238);
             this.NotesGrid.TabIndex = 19;
+            this.NotesGrid.VirtualMode = true;
             this.NotesGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.NotesGrid_CellDoubleClick);
             // 
             // Panel1
@@ -660,7 +661,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             | System.Windows.Forms.AnchorStyles.Right)));
             this.RequestItemsGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.RequestItemsGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.RequestItemsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.RequestItemsGrid.ColumnHeadersHeight = 38;
+            this.RequestItemsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.RequestItemsGrid.ContextMenuStrip = this.PopupMenuItems;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -687,6 +689,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.RequestItemsGrid.ShowCellToolTips = false;
             this.RequestItemsGrid.Size = new System.Drawing.Size(1046, 340);
             this.RequestItemsGrid.TabIndex = 18;
+            this.RequestItemsGrid.VirtualMode = true;
             this.RequestItemsGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellEnter);
             this.RequestItemsGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellLeave);
             this.RequestItemsGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.RequestItemsGrid_CellMouseDown);

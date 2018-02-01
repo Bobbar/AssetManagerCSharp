@@ -70,7 +70,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             if (IsModifying)
             {
-                this.WindowState = FormWindowState.Normal;
+                if (WindowState == FormWindowState.Minimized) WindowState = FormWindowState.Normal;
                 this.Activate();
                 var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Discard Changes?", this);
                 if (blah == DialogResult.Yes)
@@ -81,8 +81,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     }
                     else
                     {
-                        HideEditControls();
-                        OpenRequest(CurrentRequest.GUID);
+                        RefreshData();
                         return true;
                     }
                 }
@@ -92,11 +91,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void ClearAll()
         {
+            this.SuspendLayout();
             ClearControls(this);
             HideEditControls();
             NotesGrid.DataSource = null;
             FillCombos();
             pnlCreate.Visible = false;
+            CurrentRequest.Dispose();
             CurrentRequest = null;
             DisableControls();
             ToolStrip.BackColor = Colors.SibiToolBarColor;
@@ -105,6 +106,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             controlParser.ClearErrors();
             ClearAttachCount();
             SetMunisStatus();
+            this.ResumeLayout();
         }
 
         private void NewRequest()
@@ -158,25 +160,22 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 using (DataTable RequestResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(RequestUID)))
+                using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), RequestUID)))
                 {
-                    using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), RequestUID)))
-                    {
-                        RequestResults.TableName = SibiRequestCols.TableName;
-                        RequestItemsResults.TableName = SibiRequestItemsCols.TableName;
-                        CurrentHash = GetHash(RequestResults, RequestItemsResults);
-                        ClearAll();
-                        CollectRequestInfo(RequestResults, RequestItemsResults);
-                        controlParser.FillDBFields(RequestResults);
-                        SendToGrid(RequestItemsResults);
-                        LoadNotes(CurrentRequest.GUID);
-                        DisableControls();
-                        SetTitle(false);
-                        UpdateAttachCountHandler(this, new EventArgs());
-                        this.Show();
-                        this.Activate();
-                        SetMunisStatus();
-                        bolGridFilling = false;
-                    }
+                    RequestResults.TableName = SibiRequestCols.TableName;
+                    RequestItemsResults.TableName = SibiRequestItemsCols.TableName;
+                    CurrentHash = GetHash(RequestResults, RequestItemsResults);
+                    ClearAll();
+                    CollectRequestInfo(RequestResults, RequestItemsResults);
+                    controlParser.FillDBFields(RequestResults);
+                    SendToGrid(RequestItemsResults);
+                    LoadNotes(CurrentRequest.GUID);
+                    SetTitle(false);
+                    UpdateAttachCountHandler(this, new EventArgs());
+                    this.Show();
+                    this.Activate();
+                    SetMunisStatus();
+                    bolGridFilling = false;
                 }
             }
             catch (Exception ex)
@@ -274,8 +273,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         trans.Commit();
                         IsModifying = false;
                         IsNewRequest = false;
-                        OpenRequest(CurrentRequest.GUID);
                         ParentForm.RefreshData();
+                        this.RefreshData();
                         OtherFunctions.Message("New Request Added.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Complete", this);
                     }
                     catch (Exception ex)
@@ -346,55 +345,35 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void ClearCheckBox(Control control)
-        {
-            if (control is CheckBox)
-            {
-                var chk = (CheckBox)control;
-                chk.Checked = false;
-            }
-        }
-
-        private void ClearCombos(Control control)
-        {
-            if (control is ComboBox)
-            {
-                var cmb = (ComboBox)control;
-                cmb.SelectedIndex = -1;
-                cmb.Text = null;
-            }
-        }
-
         private void ClearControls(Control control)
         {
             foreach (Control c in control.Controls)
             {
-                ClearTextBoxes(c);
-                ClearCombos(c);
-                ClearDTPicker(c);
-                ClearCheckBox(c);
+                if (c is TextBox)
+                {
+                    var txt = (TextBox)c;
+                    txt.Clear();
+                }
+                else if (c is ComboBox)
+                {
+                    var cmb = (ComboBox)c;
+                    cmb.SelectedIndex = -1;
+                    cmb.Text = null;
+                }
+                else if (c is DateTimePicker)
+                {
+                    var dtp = (DateTimePicker)c;
+                    dtp.Value = DateTime.Now;
+                }
+                else if (c is CheckBox)
+                {
+                    var chk = (CheckBox)c;
+                    chk.Checked = false;
+                }
                 if (c.HasChildren)
                 {
                     ClearControls(c);
                 }
-            }
-        }
-
-        private void ClearDTPicker(Control control)
-        {
-            if (control is DateTimePicker)
-            {
-                var dtp = (DateTimePicker)control;
-                dtp.Value = DateTime.Now;
-            }
-        }
-
-        private void ClearTextBoxes(Control control)
-        {
-            if (control is TextBox)
-            {
-                var txt = (TextBox)control;
-                txt.Clear();
             }
         }
 
@@ -542,7 +521,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             if (!string.IsNullOrEmpty(CurrentRequest.GUID) && !IsModifying)
             {
-                SetModifyMode(IsModifying);
+                SetModifyMode();
             }
         }
 
@@ -894,18 +873,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void LoadNotes(string RequestUID)
         {
-            try
+            NotesGrid.SuspendLayout();
+            using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiNotes(RequestUID)))
             {
-                using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiNotes(RequestUID)))
-                {
-                    NotesGrid.Populate(Results, NotesGridColumns());
-                }
-                NotesGrid.ClearSelection();
+                NotesGrid.Populate(Results, NotesGridColumns());
             }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
+            NotesGrid.FastAutoSizeColumns();
+            NotesGrid.ClearSelection();
+            NotesGrid.ResumeLayout();
         }
 
         private bool MouseIsDragging(Point CurrentPos)
@@ -937,7 +912,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     if (!string.IsNullOrEmpty(Serial))
                     {
                         AssetManagerFunctions.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.NewSerial, Serial, SibiRequestItemsCols.ItemUID, ItemUID);
-                        RefreshRequest();
+                        RefreshData();
                     }
                 }
                 else if (ColumnName == SibiRequestItemsCols.NewAsset)
@@ -950,7 +925,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     if (!string.IsNullOrEmpty(Asset))
                     {
                         AssetManagerFunctions.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.NewAsset, Asset, SibiRequestItemsCols.ItemUID, ItemUID);
-                        RefreshRequest();
+                        RefreshData();
                     }
                 }
                 else if (ColumnName == SibiRequestItemsCols.ReplaceSerial)
@@ -963,7 +938,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     if (!string.IsNullOrEmpty(Serial))
                     {
                         AssetManagerFunctions.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.ReplaceSerial, Serial, SibiRequestItemsCols.ItemUID, ItemUID);
-                        RefreshRequest();
+                        RefreshData();
                     }
                 }
                 else if (ColumnName == SibiRequestItemsCols.ReplaceAsset)
@@ -976,7 +951,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     if (!string.IsNullOrEmpty(Asset))
                     {
                         AssetManagerFunctions.UpdateSqlValue(SibiRequestItemsCols.TableName, SibiRequestItemsCols.ReplaceAsset, Asset, SibiRequestItemsCols.ItemUID, ItemUID);
-                        RefreshRequest();
+                        RefreshData();
                     }
                 }
             }
@@ -990,7 +965,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void RefreshRequest()
+        public override void RefreshData()
         {
             OpenRequest(CurrentRequest.GUID);
         }
@@ -1189,9 +1164,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void SendToGrid(DataTable Results)
         {
             bolGridFilling = true;
+            RequestItemsGrid.SuspendLayout();
             RequestItemsGrid.Populate(Results, RequestItemsColumns(), true);
             RequestItemsGrid.ClearSelection();
             RequestItemsGrid.FastAutoSizeColumns();
+            RequestItemsGrid.ResumeLayout();
         }
 
         private void SetGLBudgetContextMenu()
@@ -1466,28 +1443,17 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void SetModifyMode(bool Enable)
+        private void SetModifyMode()
         {
-            if (!Enable)
+            if (!ConcurrencyCheck())
             {
-                if (!ConcurrencyCheck())
-                {
-                    RefreshRequest();
-                    OtherFunctions.Message("This request has been modified since it's been open and has been refreshed with the current data.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Concurrency Check", this);
-                }
-                EnableControls();
-                ToolStrip.BackColor = Colors.EditColor;
-                ShowEditControls();
-                IsModifying = true;
+                RefreshData();
+                OtherFunctions.Message("This request has been modified since it's been open and has been refreshed with the current data.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Concurrency Check", this);
             }
-            else
-            {
-                DisableControls();
-                ToolStrip.BackColor = Colors.SibiToolBarColor;
-                HideEditControls();
-                UpdateRequest();
-                IsModifying = false;
-            }
+            EnableControls();
+            ToolStrip.BackColor = Colors.EditColor;
+            ShowEditControls();
+            IsModifying = true;
         }
 
         private void UpdateRequest()
@@ -1515,9 +1481,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans);
 
                         trans.Commit();
-
                         ParentForm.RefreshData();
-                        OpenRequest(CurrentRequest.GUID);
+                        this.RefreshData();
                         StatusSlider.NewSlideMessage("Update successful!");
                     }
                     catch (Exception ex)

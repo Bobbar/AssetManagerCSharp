@@ -15,13 +15,17 @@ namespace AssetManager.Data.Functions
 
         public static void FillComboBox(CodeAttribute[] IndexType, ComboBox combo)
         {
-            combo.Items.Clear();
+            combo.SuspendLayout();
+            combo.BeginUpdate();
+            combo.DataSource = null;
             combo.Text = "";
             AddAutoSizeDropWidthHandler(combo);
-            foreach (CodeAttribute ComboItem in IndexType)
-            {
-                combo.Items.Add(ComboItem.DisplayValue);
-            }
+            combo.DisplayMember = nameof(CodeAttribute.DisplayValue);
+            combo.ValueMember = nameof(CodeAttribute.Code);
+            combo.DataSource = IndexType;
+            combo.SelectedIndex = -1;
+            combo.EndUpdate();
+            combo.ResumeLayout();
         }
 
         public static void AddAutoSizeDropWidthHandler(ComboBox combo)
@@ -46,9 +50,9 @@ namespace AssetManager.Data.Functions
                 {
                     vertScrollBarWidth = 0;
                 }
-                foreach (string s in senderComboBox.Items)
+                foreach (var s in senderComboBox.Items)
                 {
-                    newWidth = Convert.ToInt32(gfx.MeasureString(s, senderComboBox.Font).Width) + vertScrollBarWidth;
+                    newWidth = Convert.ToInt32(gfx.MeasureString(s.ToString(), senderComboBox.Font).Width) + vertScrollBarWidth;
                     if (correctWidth < newWidth)
                     {
                         correctWidth = newWidth;

@@ -23,6 +23,11 @@ namespace AssetManager.Data.Classes
             this.ID = id;
             this.Color = color;
         }
+
+        public override string ToString()
+        {
+            return DisplayValue;
+        }
     }
 }
 namespace AssetManager.Data.Classes

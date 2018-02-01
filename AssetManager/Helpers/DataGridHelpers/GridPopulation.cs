@@ -19,8 +19,7 @@ namespace AssetManager.Helpers
                 grid.DataSource = BuildDataSource(data, columns, forceRawData);
             }
         }
-
-
+        
         private static void SetupGrid(DataGridView grid, List<GridColumnAttrib> columns)
         {
             grid.DataSource = null;
@@ -33,11 +32,10 @@ namespace AssetManager.Helpers
             }
         }
 
-
         private static DataTable BuildDataSource(DataTable data, List<GridColumnAttrib> columns, bool forceRawData)
         {
-            var NeedsRebuilt = ColumnsRequireRebuild(columns);
-            if (NeedsRebuilt & !forceRawData)
+            var needsRebuilt = ColumnsRequireRebuild(columns);
+            if (needsRebuilt & !forceRawData)
             {
                 DataTable NewTable = new DataTable();
                 foreach (GridColumnAttrib col in columns)
@@ -110,8 +108,6 @@ namespace AssetManager.Helpers
             return RebuildRequired;
         }
 
-       
-
         private static DataGridViewColumn GetColumn(GridColumnAttrib column)
         {
             switch (column.ColumnFormatType)
@@ -175,7 +171,7 @@ namespace AssetManager.Helpers
             return NewCombo;
         }
 
-       
+
 
     }
 }
