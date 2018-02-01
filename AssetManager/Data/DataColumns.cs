@@ -145,6 +145,8 @@ namespace AssetManager.Data
         public const string ObjectCode = "sibi_items_object_code";
         public const string Qty = "sibi_items_qty";
         public const string Timestamp = "sibi_items_timestamp";
+        public const string ModifiedDate = "sibi_items_modified";
+        public const string ModifiedBy = "sibi_items_modifiedby";
     }
 }
 namespace AssetManager.Data

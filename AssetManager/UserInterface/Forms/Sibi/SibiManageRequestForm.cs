@@ -200,26 +200,19 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private bool ConcurrencyCheck()
         {
-            try
+            using (var RequestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID)))
             {
-                using (var RequestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID)))
+                using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
                 {
-                    using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
+                    RequestTable.TableName = SibiRequestCols.TableName;
+                    ItemTable.TableName = SibiRequestItemsCols.TableName;
+                    string DBHash = GetHash(RequestTable, ItemTable);
+                    if (DBHash != CurrentHash)
                     {
-                        RequestTable.TableName = SibiRequestCols.TableName;
-                        ItemTable.TableName = SibiRequestItemsCols.TableName;
-                        string DBHash = GetHash(RequestTable, ItemTable);
-                        if (DBHash != CurrentHash)
-                        {
-                            return false;
-                        }
-                        return true;
+                        return false;
                     }
+                    return true;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
             }
         }
 
@@ -266,7 +259,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 return;
             }
-            SibiRequest RequestData = CollectData();
+            SibiRequest RequestData = GetRequestItems();
             using (var trans = DBFactory.GetDatabase().StartTransaction())
             {
                 using (var conn = trans.Connection)
@@ -558,30 +551,67 @@ namespace AssetManager.UserInterface.Forms.Sibi
             ModifyRequest();
         }
 
-        private SibiRequest CollectData()
+        private SibiRequest GetRequestItems()
         {
-            try
-            {
-                RequestItemsGrid.EndEdit();
-                RequestItemsGrid.ScrollBars = ScrollBars.None;
+            RequestItemsGrid.EndEdit();
 
-                foreach (DataGridViewRow row in RequestItemsGrid.Rows)
+            SibiRequest request = new SibiRequest();
+            request.RequestItems = (DataTable)RequestItemsGrid.DataSource;
+            request.GUID = CurrentRequest.GUID;
+
+            MarkupRequestItems(request.RequestItems);
+
+            return request;
+        }
+
+        /// <summary>
+        /// Cleans up the request items data in prep for DB insertion.
+        /// </summary>
+        /// <param name="itemsData"></param>
+        private void MarkupRequestItems(DataTable itemsData)
+        {
+            foreach (DataRow row in itemsData.Rows)
+            {
+                foreach (DataColumn col in itemsData.Columns)
                 {
-                    row.Cells[SibiRequestItemsCols.RequestUID].Value = CurrentRequest.GUID;
-                }
-                SibiRequest info = new SibiRequest();
-                info.RequestItems = (DataTable)RequestItemsGrid.DataSource;
+                    // If the row has been modified.
+                    if (row.RowState != DataRowState.Unchanged)
+                    {
+                        // Add the request UID to the row if needed.
+                        if (col.ColumnName == SibiRequestItemsCols.RequestUID)
+                        {
+                            if (row[col] == null || string.IsNullOrEmpty(row[col].ToString()))
+                            {
+                                row[SibiRequestItemsCols.RequestUID] = CurrentRequest.GUID;
+                            }
+                        }
 
-                return info;
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-                return null;
-            }
-            finally
-            {
-                RequestItemsGrid.ScrollBars = ScrollBars.Both;
+                        if (row[col] != null)
+                        {
+                            // If the cell is empty, set it to DBNull.
+                            if (string.IsNullOrEmpty(row[col].ToString()))
+                            {
+                                row[col] = DBNull.Value;
+                            }
+                            else
+                            {
+                                // Otherwise, trim the cell text if it's a string type column.
+                                if (row[col] is string)
+                                {
+                                    row[col] = row[col].ToString().Trim();
+                                }
+                            }
+                        }
+
+                        // Add the modified time and user.
+                        if (row.RowState == DataRowState.Added || row.RowState == DataRowState.Modified)
+                        {
+                            row[SibiRequestItemsCols.ModifiedBy] = NetworkInfo.LocalDomainUser;
+                            row[SibiRequestItemsCols.ModifiedDate] = DateTime.Now;
+                        }
+
+                    }
+                }
             }
         }
 
@@ -988,8 +1018,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
             ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewSerial, "New Serial", typeof(string)));
             ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.OrgCode, "Org Code", typeof(string)));
             ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ObjectCode, "Object Code", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Timestamp, "Created", typeof(DateTime), true, true));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ModifiedDate, "Modified", typeof(DateTime), true, true));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ModifiedBy, "Modified By", typeof(string), true, true));
             ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ItemUID, "Item UID", typeof(string), true, true));
             ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.RequestUID, "Request UID", typeof(string), true, false));
+
             return ColList;
         }
 
@@ -1003,35 +1037,20 @@ namespace AssetManager.UserInterface.Forms.Sibi
             StyleFunctions.LeaveRow(RequestItemsGrid, e.RowIndex);
         }
 
-        private void RequestItemsGrid_CellValidated(object sender, DataGridViewCellEventArgs e)
+        private void RequestItemsGrid_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            if (IsModifying)
+            if (RequestItemsGrid[e.ColumnIndex, e.RowIndex].OwningColumn is DataGridViewComboBoxColumn)
             {
-                var cell = RequestItemsGrid[e.ColumnIndex, e.RowIndex];
-                if (cell.Value != null)
+                if (!string.IsNullOrEmpty(e.FormattedValue.ToString()))
                 {
-                    if (string.IsNullOrEmpty(cell.Value.ToString()))
-                    {
-                        // cell.Value = null; // This is causing extra rows to be added for some reason. I'll revisit later.
-                    }
-                    else
-                    {
-                        RequestItemsGrid[e.ColumnIndex, e.RowIndex].Value = RequestItemsGrid[e.ColumnIndex, e.RowIndex].Value.ToString().Trim();
-                    }
+                    RequestItemsGrid[e.ColumnIndex, e.RowIndex].ErrorText = null;
                 }
             }
         }
 
         private void RequestItemsGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            var cell = RequestItemsGrid[e.ColumnIndex, e.RowIndex];
-            if (cell.Value != null)
-            {
-                if (!string.IsNullOrEmpty(cell.Value.ToString()))
-                {
-                    RequestItemsGrid.FastAutoSizeColumns();
-                }
-            }
+            RequestItemsGrid.FastAutoSizeColumns();
         }
 
         private void RequestItemsGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
@@ -1108,8 +1127,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
             }
         }
 
@@ -1168,17 +1188,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void SendToGrid(DataTable Results)
         {
-            try
-            {
-                bolGridFilling = true;
-                RequestItemsGrid.Populate(Results, RequestItemsColumns(), true);
-                RequestItemsGrid.ClearSelection();
-                RequestItemsGrid.FastAutoSizeColumns();
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
+            bolGridFilling = true;
+            RequestItemsGrid.Populate(Results, RequestItemsColumns(), true);
+            RequestItemsGrid.ClearSelection();
+            RequestItemsGrid.FastAutoSizeColumns();
         }
 
         private void SetGLBudgetContextMenu()
@@ -1490,8 +1503,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                             OtherFunctions.Message("It appears that someone else has modified this request. Please refresh and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Concurrency Failure", this);
                             return;
                         }
-                        SibiRequest RequestData = CollectData();
-                        RequestData.GUID = CurrentRequest.GUID;
+                        SibiRequest RequestData = GetRequestItems();
                         if (ReferenceEquals(RequestData.RequestItems, null))
                         {
                             return;

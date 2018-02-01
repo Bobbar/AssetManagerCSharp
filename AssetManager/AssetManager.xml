@@ -1185,5 +1185,11 @@
             <param name="code"></param>
             <returns></returns>
         </member>
+        <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiManageRequestForm.MarkupRequestItems(System.Data.DataTable)">
+            <summary>
+            Cleans up the request items data in prep for DB insertion.
+            </summary>
+            <param name="itemsData"></param>
+        </member>
     </members>
 </doc>
