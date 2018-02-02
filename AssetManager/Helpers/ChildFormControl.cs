@@ -57,7 +57,7 @@ namespace AssetManager.Helpers
 
         public static void LookupDevice(ExtendedForm parentForm, Device device)
         {
-            if (device.GUID != null)
+            if (device != null)
             {
                 if (!FormIsOpenByUID(typeof(ViewDeviceForm), device.GUID))
                 {
