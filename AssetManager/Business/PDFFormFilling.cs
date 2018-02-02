@@ -80,8 +80,17 @@ namespace AssetManager.Business
             {
                 Directory.CreateDirectory(Paths.DownloadPath);
                 string strTimeStamp = DateTime.Now.ToString("_hhmmss");
-                string newFile = Paths.DownloadPath + CurrentDevice.AssetTag + " - " + CurrentDevice.Description + strTimeStamp + ".pdf";
+                string newFile;
 
+                if (CurrentDevice.AssetTag == "NA")
+                {
+                    newFile = Paths.DownloadPath + CurrentDevice.Serial + " - " + CurrentDevice.Description + strTimeStamp + ".pdf";
+                }
+                else
+                {
+                    newFile = Paths.DownloadPath + CurrentDevice.AssetTag + " - " + CurrentDevice.Description + strTimeStamp + ".pdf";
+                }
+                
                 if (Type == PdfFormType.InputForm)
                 {
                     using (PdfReader pdfReader = new PdfReader(Properties.Resources.Exh_K_01_Asset_Input_Formnew))
@@ -256,14 +265,14 @@ namespace AssetManager.Business
             tmpFields.SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD");
             // .SetField("topmostSubform[0].Page1[0].Asterisked_items_____must_be_completed_by_the_department[0]", CurrentDevice.strAssetTag)
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined[0]", Device.Serial);
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_2[0]",GlobalInstances.MunisFunc.GetVendorNameFromPO(Device.PO));
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_2[0]", GlobalInstances.MunisFunc.GetVendorNameFromPO(Device.PO));
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_3[0]", Device.Description);
             //.SetField("topmostSubform[0].Page1[0]._1[0]", "6")
             // .SetField("topmostSubform[0].Page1[0]._2[0]", "7")
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_4[0]", Device.PO);
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_5[0]",AssetManagerFunctions.GetMunisCodeFromAssetCode(Device.Location));
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_5[0]", AssetManagerFunctions.GetMunisCodeFromAssetCode(Device.Location));
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_6[0]", AttributeFunctions.DepartmentOf(Device.Location));
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_7[0]",AssetManagerFunctions.GetMunisCodeFromAssetCode(Device.EquipmentType));
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_7[0]", AssetManagerFunctions.GetMunisCodeFromAssetCode(Device.EquipmentType));
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_8[0]", "GP");
             //.SetField("topmostSubform[0].Page1[0].undefined_9[0]", "13")
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_10[0]", "1");
@@ -301,7 +310,7 @@ namespace AssetManager.Business
                 string fromLocDescription = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.Locations, fromLocationCode);
                 string toLocationCode = AttributeFunctions.GetDBValue(GlobalInstances.DeviceAttribute.Locations, (int)(newDialog.GetControlValue("cmbToLoc")));
                 string toLocDescription = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.Locations, toLocationCode);
-                
+
                 tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.AssetTag);
                 tmpFields.SetField("topmostSubform[0].Page1[0].Serial_number[0]", Device.Serial);
                 tmpFields.SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.Description);
