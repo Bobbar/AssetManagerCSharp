@@ -28,24 +28,6 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        /// <summary>
-        /// Builds local hash list and compares to previously built remote hash list. Returns False for mismatch.
-        /// </summary>
-        /// <param name="cachedMode">When true, only checks for Schema Version since a remote table hash will likely be unavailable.</param>
-        /// <returns></returns>
-        public static bool CacheAvailable(bool cachedMode)
-        {
-            if (!cachedMode)
-            {
-                return CacheUpToDate(cachedMode);
-            }
-            else
-            {
-                if (GetSchemaVersion() > 0) return true;
-            }
-            return false;
-        }
-
         private static string GetCacheVersion()
         {
             var guid = DBFactory.GetSqliteDatabase().ExecuteScalarFromQueryString("SELECT guid FROM db_guid").ToString();

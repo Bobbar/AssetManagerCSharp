@@ -70,13 +70,17 @@ namespace AssetManager.Data.Functions
         {
             while (!disposedValue)
             {
+                // Can we talk to the server?
                 serverIsOnline = ServerPinging();
-                cacheIsAvailable = DBCacheFunctions.CacheAvailable(inCachedMode);
 
-                var Status = GetWatchdogStatus();
-                if (Status != currentWatchdogStatus)
+                // Is the DB Cache available?
+                cacheIsAvailable = DBCacheFunctions.CacheUpToDate(serverIsOnline);
+                
+                // Get status based on values of server online and cache mode.
+                var status = GetWatchdogStatus();
+                if (status != currentWatchdogStatus)
                 {
-                    currentWatchdogStatus = Status;
+                    currentWatchdogStatus = status;
                     OnStatusChanged(new WatchDogStatusEventArgs(currentWatchdogStatus));
                 }
 
@@ -146,23 +150,23 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                using (Ping ServerPing = new Ping())
+                using (Ping pinger = new Ping())
                 {
-                    bool CanPing = false;
-                    var Reply = ServerPing.Send(ServerInfo.MySQLServerIP);
-                    if (Reply.Status == IPStatus.Success)
+                    bool canPing = false;
+                    var reply = pinger.Send(ServerInfo.MySQLServerIP);
+                    if (reply.Status == IPStatus.Success)
                     {
-                        CanPing = true;
+                        canPing = true;
                     }
                     else
                     {
-                        CanPing = false;
+                        canPing = false;
                     }
 
-                    Reply = null;
+                    reply = null;
 
                     //If server pinging, try to open a connection.
-                    if (CanPing)
+                    if (canPing)
                     {
                         using (var conn = DBFactory.GetMySqlDatabase().NewConnection())
                         {
