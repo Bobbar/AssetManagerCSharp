@@ -71,7 +71,7 @@ namespace AssetDatabase.Data
             dbPassword = password;
             CurrentDatabase = database;
 
-            MySQLConnectString = "server=" + serverIp + ";uid=" + dbUser + ";pwd=" + dbPassword + ";ConnectionTimeout=5;TreatTinyAsBoolean=false;Encrypt=false;database=";
+            MySQLConnectString = "server=" + serverIp + ";uid=" + dbUser + ";pwd=" + dbPassword + ";ConnectionTimeout=5;TreatTinyAsBoolean=false;SslMode=none;database=";
         }
 
         #endregion Constructors
