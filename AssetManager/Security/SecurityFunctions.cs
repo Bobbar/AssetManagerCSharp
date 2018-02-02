@@ -219,23 +219,24 @@ namespace AssetManager.Security
             return false;
         }
 
-        public static bool CheckForAccess(string recModule)
+        /// <summary>
+        /// Checks if current user has access to the specified module. Throws a <see cref="InvalidAccessException"/> if they do not. 
+        /// </summary>
+        /// <param name="recModule"></param>
+        public static void CheckForAccess(string recModule)
         {
             if (!CanAccess(recModule))
             {
                 if (GlobalSwitches.CachedMode)
                 {
-                    OtherFunctions.Message("You cannot access this function. Some features are disabled while running in cached mode.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Access Denied/Disabled");
+                    string errMessage = "You cannot access this function. Some features are disabled while running in cached mode.";
+                    throw new InvalidAccessException(errMessage);
                 }
                 else
                 {
-                    OtherFunctions.Message("You do not have the required rights for this function. Must have access to '" + recModule + "'.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Access Denied");
+                    string errMessage = "You do not have the required rights for this function. Must have access to '" + recModule + "'.";
+                    throw new InvalidAccessException(errMessage);
                 }
-                return false;
-            }
-            else
-            {
-                return true;
             }
         }
 

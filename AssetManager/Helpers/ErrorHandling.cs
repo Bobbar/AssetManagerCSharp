@@ -113,6 +113,10 @@ namespace AssetManager.Helpers
                 {
                     errorResult = handleTimeoutException((TimeoutException)ex, method);
                 }
+                else if (ex is InvalidAccessException)
+                {
+                    errorResult = handleInvalidAccessException((InvalidAccessException)ex, method);
+                }
                 else
                 {
                     UnHandledError(ex, ex.HResult, method);
@@ -129,6 +133,15 @@ namespace AssetManager.Helpers
             {
                 suppressAdditionalMessages = false;
             }
+        }
+
+        private static bool handleInvalidAccessException(InvalidAccessException ex, MethodBase Method)
+        {
+            Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message);
+
+            PromptUser(ex.Message, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Access Denied");
+
+            return true;
         }
 
         private static bool handleTimeoutException(TimeoutException ex, MethodBase Method)

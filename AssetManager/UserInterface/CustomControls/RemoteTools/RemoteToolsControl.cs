@@ -136,10 +136,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void DeployTeamViewer(Device device)
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin))
-            {
-                return;
-            }
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
+           
             if (OtherFunctions.Message("Deploy TeamViewer to this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
                 return;
@@ -286,10 +284,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void UpdateChrome(Device device)
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin))
-            {
-                return;
-            }
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
+          
             if (OtherFunctions.Message("Update/Install Chrome on this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
                 return;

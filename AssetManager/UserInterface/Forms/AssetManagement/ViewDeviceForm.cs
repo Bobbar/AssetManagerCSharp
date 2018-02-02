@@ -195,10 +195,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice))
-                {
-                    return;
-                }
+                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice);
+
                 using (UpdateDev UpdateDia = new UpdateDev(this, true))
                 {
                     if (UpdateDia.DialogResult == DialogResult.OK)
@@ -284,10 +282,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DeleteDevice()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.DeleteDevice))
-            {
-                return;
-            }
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.DeleteDevice);
+
             var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "WARNING", this);
             if (blah == DialogResult.Yes)
             {
@@ -313,10 +309,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DeleteSelectedHistoricalEntry()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice))
-            {
-                return;
-            }
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice);
+
             try
             {
                 string entryGUID = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryUID);
@@ -651,10 +645,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ModifyDevice()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice))
-            {
-                return;
-            }
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice);
+
             SetEditMode(true);
         }
 
@@ -680,10 +672,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi))
-                {
-                    return;
-                }
+                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi);
+                
                 if (string.IsNullOrEmpty(LinkDevice.PO))
                 {
                     OtherFunctions.Message("A valid PO Number is required.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Missing Info", this);
@@ -827,10 +817,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void StartTrackDeviceForm()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.Tracking))
-            {
-                return;
-            }
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.Tracking);
+           
             Waiting();
             TrackDeviceForm NewTracking = new TrackDeviceForm(currentViewDevice, this);
             DoneWaiting();
@@ -893,10 +881,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ViewAttachments()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewAttachment))
-            {
-                return;
-            }
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewAttachment);
+            
             if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
                 AttachmentsForm NewAttachments = new AttachmentsForm(this, new DeviceAttachmentsCols(), currentViewDevice, UpdateAttachCountHandler);

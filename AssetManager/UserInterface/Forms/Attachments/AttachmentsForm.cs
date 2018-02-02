@@ -250,10 +250,8 @@ namespace AssetManager.UserInterface.Forms
         {
             try
             {
-                if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment))
-                {
-                    return;
-                }
+                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
+                
                 using (OpenFileDialog fd = new OpenFileDialog())
                 {
                     fd.ShowHelp = true;
@@ -522,10 +520,8 @@ namespace AssetManager.UserInterface.Forms
 
         private void MoveAttachToFolder(string attachUID, Attachment.Folder folder, bool isNew = false)
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment))
-            {
-                return;
-            }
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
+            
             try
             {
                 Waiting();
@@ -726,10 +722,8 @@ namespace AssetManager.UserInterface.Forms
 
         private void BeginRenameAttachment()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment))
-            {
-                return;
-            }
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
+            
             //Enable read/write mode, set current cell to the filename cell and begin edit.
             AttachGrid.ReadOnly = false;
             AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect;
@@ -776,10 +770,8 @@ namespace AssetManager.UserInterface.Forms
         {
             try
             {
-                if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment))
-                {
-                    return;
-                }
+                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
+                
                 string strFilename = AttachGrid.CurrentRowStringValue(attachmentColumns.FileName);
                 var blah = OtherFunctions.Message("Are you sure you want to delete '" + strFilename + "'?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Confirm Delete", this);
                 if (blah == DialogResult.Yes)
@@ -1363,10 +1355,8 @@ namespace AssetManager.UserInterface.Forms
 
         private void NewFolderMenuItem_Click(object sender, EventArgs e)
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment))
-            {
-                return;
-            }
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
+            
             string newFolderName;
             using (AdvancedDialog FolderDialog = new AdvancedDialog(this))
             {

@@ -208,6 +208,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Security\Crypto.cs" />
+    <Compile Include="Security\InvalidAccessException.cs" />
     <Compile Include="Security\SecurityFunctions.cs" />
     <Compile Include="StartProgram.cs" />
     <Compile Include="Tools\ActiveDirectory\ActiveDirectoryWrapper.cs" />

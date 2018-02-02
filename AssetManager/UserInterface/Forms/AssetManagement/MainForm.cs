@@ -91,8 +91,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void StartTransaction()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.CanStartTransaction))
-                return;
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.CanStartTransaction);
+            
             if (OtherFunctions.Message("This will allow unchecked changes to the database. Incorrect inputs WILL BREAK THINGS! \r\n" + Environment.NewLine + "Changes must be 'applied' and 'committed' before they will be permanently stored in the database.", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Exclamation, "WARNING", this) == DialogResult.OK)
             {
                 CurrentTransaction = DBFactory.GetDatabase().StartTransaction();
@@ -218,7 +218,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void AddNewDevice()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice)) return;
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice);
 
             var NewDevForm = Helpers.ChildFormControl.GetChildOfType(this, typeof(NewDeviceForm));
             if (NewDevForm == null)
@@ -461,8 +461,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void NewTextCrypterForm()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin))
-                return;
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
             CrypterForm NewEncryp = new CrypterForm(this);
         }
 
@@ -470,8 +469,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi))
-                    return;
+                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi);
+
                 Waiting();
                 var SibiForm = Helpers.ChildFormControl.GetChildOfType(this, typeof(Sibi.SibiMainForm));
                 if (SibiForm == null)
@@ -561,15 +560,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void StartAdvancedSearch()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AdvancedSearch))
-                return;
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AdvancedSearch);
+
             AdvancedSearchForm NewAdvancedSearch = new AdvancedSearchForm(this);
         }
 
         private void StartAttachScan()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment))
-                return;
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
             GlobalInstances.FTPFunc.ScanAttachements();
         }
 
@@ -605,8 +603,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void StartUserManager()
         {
-            if (!SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin))
-                return;
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
             UserManagerForm NewUserMan = new UserManagerForm(this);
         }
 
