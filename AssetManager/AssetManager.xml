@@ -653,6 +653,11 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:AssetManager.Properties.Resources.EventIcon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:AssetManager.Properties.Resources.Exh_K_01_Asset_Input_Formnew">
             <summary>
               Looks up a localized resource of type System.Byte[].

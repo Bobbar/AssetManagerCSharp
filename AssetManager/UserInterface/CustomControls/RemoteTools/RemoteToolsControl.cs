@@ -80,7 +80,13 @@ namespace AssetManager.UserInterface.CustomControls
             base.Dispose(disposing);
         }
 
-
+        private void EventViewer()
+        {
+            ProcessStartInfo pInfo = new ProcessStartInfo();
+            pInfo.FileName = "eventvwr.exe";
+            pInfo.Arguments = this.device.HostName;
+            Process.Start(pInfo);
+        }
 
         private async void BrowseFiles()
         {
@@ -137,7 +143,7 @@ namespace AssetManager.UserInterface.CustomControls
         private async void DeployTeamViewer(Device device)
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
-           
+
             if (OtherFunctions.Message("Deploy TeamViewer to this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
                 return;
@@ -285,7 +291,7 @@ namespace AssetManager.UserInterface.CustomControls
         private async void UpdateChrome(Device device)
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
-          
+
             if (OtherFunctions.Message("Update/Install Chrome on this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
                 return;
@@ -386,6 +392,11 @@ namespace AssetManager.UserInterface.CustomControls
                 Message = message;
                 DisplayTime = displayTime;
             }
+        }
+
+        private void EventViewerButton_Click(object sender, EventArgs e)
+        {
+            EventViewer();
         }
     }
 }

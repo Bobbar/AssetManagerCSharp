@@ -491,13 +491,11 @@
     <None Include="Resources\CheckedBoxIcon.png" />
     <None Include="Resources\checked_checkbox-green.png" />
     <None Include="Resources\checked_checkbox-red.png" />
-    <None Include="Resources\checked_checkbox.png" />
     <None Include="Resources\CheckForTVRegistryValue.ps1" />
     <None Include="Resources\check_alt-128.png" />
     <None Include="Resources\ChromeIcon.png" />
     <None Include="Resources\clip-512.png" />
     <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
-    <None Include="Resources\CoinIcon.png" />
     <None Include="Resources\copy-icon.png" />
     <None Include="Resources\critical_funny.png" />
     <None Include="Resources\critical_funny_crop.png" />
@@ -597,6 +595,7 @@
   <ItemGroup>
     <None Include="Resources\Image1.bmp" />
     <None Include="Resources\fieldErrorIcon.Icon.ico" />
+    <None Include="Resources\EventIcon.png" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -16,6 +16,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RemoteToolsControl));
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.ShowIPButton = new System.Windows.Forms.Button();
             this.FlowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -25,7 +26,9 @@
             this.StartRDPButton = new System.Windows.Forms.Button();
             this.DeployTVButton = new System.Windows.Forms.Button();
             this.UpdateChromeButton = new System.Windows.Forms.Button();
+            this.EventViewerButton = new System.Windows.Forms.Button();
             this.RemoteToolsTimer = new System.Windows.Forms.Timer(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox.SuspendLayout();
             this.FlowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).BeginInit();
@@ -70,6 +73,7 @@
             this.FlowLayoutPanel1.Controls.Add(this.StartRDPButton);
             this.FlowLayoutPanel1.Controls.Add(this.DeployTVButton);
             this.FlowLayoutPanel1.Controls.Add(this.UpdateChromeButton);
+            this.FlowLayoutPanel1.Controls.Add(this.EventViewerButton);
             this.FlowLayoutPanel1.Location = new System.Drawing.Point(5, 14);
             this.FlowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.FlowLayoutPanel1.Name = "FlowLayoutPanel1";
@@ -85,6 +89,7 @@
             this.GKUpdateButton.Name = "GKUpdateButton";
             this.GKUpdateButton.Size = new System.Drawing.Size(45, 45);
             this.GKUpdateButton.TabIndex = 55;
+            this.toolTip.SetToolTip(this.GKUpdateButton, "Enqueue GK Update");
             this.GKUpdateButton.UseVisualStyleBackColor = true;
             this.GKUpdateButton.Click += new System.EventHandler(this.GKUpdateButton_Click);
             // 
@@ -97,6 +102,7 @@
             this.BrowseFilesButton.Name = "BrowseFilesButton";
             this.BrowseFilesButton.Size = new System.Drawing.Size(45, 45);
             this.BrowseFilesButton.TabIndex = 52;
+            this.toolTip.SetToolTip(this.BrowseFilesButton, "Browse Files");
             this.BrowseFilesButton.UseVisualStyleBackColor = true;
             this.BrowseFilesButton.Click += new System.EventHandler(this.BrowseFilesButton_Click);
             // 
@@ -112,6 +118,7 @@
             this.RestartDeviceButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.RestartDeviceButton.TabIndex = 56;
             this.RestartDeviceButton.TabStop = false;
+            this.toolTip.SetToolTip(this.RestartDeviceButton, "Restart Computer");
             this.RestartDeviceButton.Click += new System.EventHandler(this.RestartDeviceButton_Click);
             // 
             // StartRDPButton
@@ -124,6 +131,7 @@
             this.StartRDPButton.Name = "StartRDPButton";
             this.StartRDPButton.Size = new System.Drawing.Size(45, 45);
             this.StartRDPButton.TabIndex = 46;
+            this.toolTip.SetToolTip(this.StartRDPButton, "Start Remote Desktop");
             this.StartRDPButton.UseVisualStyleBackColor = true;
             this.StartRDPButton.Click += new System.EventHandler(this.StartRDPButton_Click);
             // 
@@ -137,6 +145,7 @@
             this.DeployTVButton.Name = "DeployTVButton";
             this.DeployTVButton.Size = new System.Drawing.Size(45, 45);
             this.DeployTVButton.TabIndex = 57;
+            this.toolTip.SetToolTip(this.DeployTVButton, "Deploy TeamViewer");
             this.DeployTVButton.UseVisualStyleBackColor = true;
             this.DeployTVButton.Click += new System.EventHandler(this.DeployTVButton_Click);
             // 
@@ -150,8 +159,23 @@
             this.UpdateChromeButton.Name = "UpdateChromeButton";
             this.UpdateChromeButton.Size = new System.Drawing.Size(45, 45);
             this.UpdateChromeButton.TabIndex = 58;
+            this.toolTip.SetToolTip(this.UpdateChromeButton, "Update/Install Chrome");
             this.UpdateChromeButton.UseVisualStyleBackColor = true;
             this.UpdateChromeButton.Click += new System.EventHandler(this.UpdateChromeButton_Click);
+            // 
+            // EventViewerButton
+            // 
+            this.EventViewerButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("EventViewerButton.BackgroundImage")));
+            this.EventViewerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.EventViewerButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.EventViewerButton.Location = new System.Drawing.Point(1, 48);
+            this.EventViewerButton.Margin = new System.Windows.Forms.Padding(1);
+            this.EventViewerButton.Name = "EventViewerButton";
+            this.EventViewerButton.Size = new System.Drawing.Size(45, 45);
+            this.EventViewerButton.TabIndex = 59;
+            this.toolTip.SetToolTip(this.EventViewerButton, "View Event Logs");
+            this.EventViewerButton.UseVisualStyleBackColor = true;
+            this.EventViewerButton.Click += new System.EventHandler(this.EventViewerButton_Click);
             // 
             // RemoteToolsTimer
             // 
@@ -189,5 +213,7 @@
         internal System.Windows.Forms.Button UpdateChromeButton;
         internal System.Windows.Forms.Button ShowIPButton;
         internal System.Windows.Forms.Timer RemoteToolsTimer;
+        internal System.Windows.Forms.Button EventViewerButton;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
