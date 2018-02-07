@@ -87,7 +87,6 @@ namespace AssetManager.Tools
 
                 using (Runspace remoteRunSpace = RunspaceFactory.CreateRunspace(connInfo))
                 {
-                    //(connInfo)
                     remoteRunSpace.Open();
                     remoteRunSpace.SessionStateProxy.SetVariable("cred", psCreds);
 
@@ -99,7 +98,7 @@ namespace AssetManager.Tools
                         CurrentPowerShellObject = powerSh;
 
                         Collection<PSObject> results = powerSh.Invoke();
-                        //Task.Delay(10000).Wait()
+
                         StringBuilder stringBuilder = new StringBuilder();
 
                         foreach (var obj in results)
@@ -108,7 +107,6 @@ namespace AssetManager.Tools
                         }
 
                         return DataConsistency.CleanDBValue((stringBuilder.ToString())).ToString();
-
 
                     }
 
@@ -130,13 +128,68 @@ namespace AssetManager.Tools
             }
         }
 
+        public async Task<bool> InvokePowerShellSession(PowerShell session)
+        {
+            CurrentPowerShellObject = session;
+
+            try
+            {
+                var psResults = await Task.Run(() =>
+                {
+                    Collection<PSObject> results = session.Invoke();
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    foreach (var obj in results)
+                    {
+                        stringBuilder.AppendLine(obj.ToString());
+                    }
+                    return DataConsistency.CleanDBValue((stringBuilder.ToString())).ToString();
+                });
+
+                if (!string.IsNullOrEmpty(psResults))
+                {
+                    OtherFunctions.Message(psResults, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error Running Script");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            finally
+            {
+                session.Dispose();
+            }
+        }
+
+        public PowerShell GetNewPSSession(string hostname, NetworkCredential credentials)
+        {
+            var psCreds = new PSCredential(credentials.UserName, credentials.SecurePassword);
+            string shellUri = "http://schemas.microsoft.com/powershell/Microsoft.PowerShell";
+
+            WSManConnectionInfo connInfo = new WSManConnectionInfo(false, hostname, 5985, "/wsman", shellUri, psCreds);
+
+            Runspace remoteRunSpace = RunspaceFactory.CreateRunspace(connInfo);
+            remoteRunSpace.Open();
+            remoteRunSpace.SessionStateProxy.SetVariable("cred", psCreds);
+
+            var powerSh = PowerShell.Create();
+            powerSh.Runspace = remoteRunSpace;
+            powerSh.Streams.Error.DataAdded += PSEventHandler;
+
+            return powerSh;
+        }
+
         public async Task<bool> ExecutePowerShellScript(string hostname, byte[] scriptByte)
         {
-            //  Dim PSWrapper As New PowerShellWrapper
-            var UpdateResult = await Task.Run(() => { return ExecuteRemotePSScript(hostname, scriptByte, SecurityTools.AdminCreds); });
-            if (!string.IsNullOrEmpty(UpdateResult))
+            var scriptResult = await Task.Run(() => { return ExecuteRemotePSScript(hostname, scriptByte, SecurityTools.AdminCreds); });
+            if (!string.IsNullOrEmpty(scriptResult))
             {
-                OtherFunctions.Message(UpdateResult, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error Running Script");
+                OtherFunctions.Message(scriptResult, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error Running Script");
                 return false;
             }
             else
@@ -147,11 +200,10 @@ namespace AssetManager.Tools
 
         public async Task<bool> InvokePowerShellCommand(string hostname, Command PScommand)
         {
-            // Dim PSWrapper As New PowerShellWrapper
-            var UpdateResult = await Task.Run(() => { return InvokeRemotePSCommand(hostname, SecurityTools.AdminCreds, PScommand); });
-            if (!string.IsNullOrEmpty(UpdateResult))
+            var scriptResult = await Task.Run(() => { return InvokeRemotePSCommand(hostname, SecurityTools.AdminCreds, PScommand); });
+            if (!string.IsNullOrEmpty(scriptResult))
             {
-                OtherFunctions.Message(UpdateResult, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error Running Script");
+                OtherFunctions.Message(scriptResult, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error Running Script");
                 return false;
             }
             else
@@ -193,7 +245,7 @@ namespace AssetManager.Tools
 
         private void PSEventHandler(object sender, DataAddedEventArgs e)
         {
-           //TODO: Fix or remove this.
+            //TODO: Fix or remove this.
             //ErrorRecord newRecord = (PSDataCollection<ErrorRecord>)sender(e.Index);
 
             //Debug.Print(newRecord.Exception.Message);

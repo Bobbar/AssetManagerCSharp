@@ -40,6 +40,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(426, 316);
             this.Name = "CopyFilesForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Push Files";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CopyFilesForm_FormClosed);
             this.ResumeLayout(false);

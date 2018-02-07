@@ -8,19 +8,24 @@ using AssetManager.UserInterface.Forms.AdminTools;
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AssetManager.Tools.TeamViewer
+namespace AssetManager.Tools.Office
 {
-    public class TeamViewerDeploy : IDisposable
+    public class OfficeDeploy : IDisposable
     {
+
+
         #region Fields
 
-        private const string deploymentFilesDirectory = "\\\\core.co.fairfield.oh.us\\dfs1\\fcdd\\files\\Information Technology\\Software\\Tools\\TeamViewer\\Deploy";
-        private const string deployTempDirectory = "\\Temp\\TVDeploy";
+        private const string deploymentFilesDirectory = "\\\\core.co.fairfield.oh.us\\dfs1\\fcdd\\files\\Information Technology\\Software\\Office\\RemoteDeploy";
+        private const string deployTempDirectory = "\\Temp\\OfficeDeploy";
+        private const string fullDeployTempDir = "C:" + deployTempDirectory;
+        private const string removeOfficeScriptPath = fullDeployTempDir + "\\Remove-PreviousOfficeInstalls";
         private bool cancelOperation = false;
         private bool finished = false;
         private long lastActivity;
@@ -42,7 +47,7 @@ namespace AssetManager.Tools.TeamViewer
 
         #region Constructors
 
-        public TeamViewerDeploy()
+        public OfficeDeploy()
         {
             watchDogCancelTokenSource = new CancellationTokenSource();
             watchDogTask = new Task(() => WatchDog(watchDogCancelTokenSource.Token), watchDogCancelTokenSource.Token);
@@ -54,15 +59,16 @@ namespace AssetManager.Tools.TeamViewer
 
         public async Task<bool> DeployToDevice(ExtendedForm parentForm, Device targetDevice)
         {
+            long startTime = 0;
             try
             {
                 if (targetDevice != null && !string.IsNullOrEmpty(targetDevice.HostName))
                 {
-                    bool TVExists = false;
+                    startTime = DateTime.Now.Ticks;
 
                     InitLogWindow(parentForm);
 
-                    DepLog("Starting new TeamViewer deployment to " + targetDevice.HostName);
+                    DepLog("Starting new Office 365 deployment to " + targetDevice.HostName);
                     DepLog("-------------------");
 
                     watchDogTask.Start();
@@ -83,64 +89,27 @@ namespace AssetManager.Tools.TeamViewer
                         }
                     }
 
-                    DepLog("Checking for previous installation...");
-
-                    TVExists = await TeamViewerInstalled(targetDevice);
-                    if (TVExists)
+                    DepLog("Removing previous Office installations...");
+                    if (await PSWrapper.InvokePowerShellSession(GetRemoveOfficeSession(targetDevice)))
                     {
-                        DepLog("TeamViewer already installed.");
+                        DepLog("Previous Office installations removed.");
                     }
                     else
                     {
-                        DepLog("TeamViewer not installed.");
+                        DepLog("Failed to remove previous installations!");
+                        OtherFunctions.Message("Error occurred while executing deployment command!");
+                        return false;
                     }
 
-                    if (TVExists)
+                    DepLog("Starting Office 356 deployment...");
+                    if (await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetO365InstallCommand()))
                     {
-                        DepLog("Reinstalling TeamViewer...");
-
-                        if (await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetTVReinstallCommand()))
-                        {
-                            DepLog("Deployment complete!");
-                        }
-                        else
-                        {
-                            DepLog("Deployment failed!");
-                            OtherFunctions.Message("Error occurred while executing deployment command!");
-                            return false;
-                        }
+                        DepLog("Deployment complete!");
                     }
                     else
                     {
-                        DepLog("Starting TeamViewer deployment...");
-                        if (await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetTVInstallCommand()))
-                        {
-                            DepLog("Deployment complete!");
-                        }
-                        else
-                        {
-                            DepLog("Deployment failed!");
-                            OtherFunctions.Message("Error occurred while executing deployment command!");
-                            return false;
-                        }
-                    }
-
-                    DepLog("Waiting 10 seconds.");
-                    for (var i = 10; i >= 1; i--)
-                    {
-                        await Task.Delay(1000);
-                        DepLog(i + "...");
-                    }
-
-                    DepLog("Starting TeamViewer assignment...");
-                    if (await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetTVAssignCommand()))
-                    {
-                        DepLog("Assignment complete!");
-                    }
-                    else
-                    {
-                        DepLog("Assignment failed!");
-                        OtherFunctions.Message("Error occurred while executing assignment command!");
+                        DepLog("Deployment failed!");
+                        OtherFunctions.Message("Error occurred while executing deployment command!");
                         return false;
                     }
 
@@ -153,8 +122,7 @@ namespace AssetManager.Tools.TeamViewer
 
                     DepLog("Done.");
                     DepLog("-------------------");
-                    DepLog("TeamView deployment is complete!");
-                    DepLog("NOTE: The target computer may need rebooted or the user may need to open the application before TeamViewer will connect.");
+                    DepLog("Office 365 deployment is complete!");
                     return true;
                 }
                 else
@@ -170,6 +138,12 @@ namespace AssetManager.Tools.TeamViewer
             }
             finally
             {
+                if (startTime > 0)
+                {
+                    var runTimeSeconds = ((DateTime.Now.Ticks - startTime) / 10000) / 1000;
+                    DepLog("Run Time: " + runTimeSeconds + " s");
+                }
+
                 DoneOrError();
             }
         }
@@ -194,32 +168,29 @@ namespace AssetManager.Tools.TeamViewer
             }
         }
 
-        private Command GetTVAssignCommand()
+        private PowerShell GetRemoveOfficeSession(Device targetDevice)
         {
-            string ApiToken = AssetManagerFunctions.GetTVApiToken();
-            var cmd = new Command("Start-Process", false, true);
-            cmd.Parameters.Add("FilePath", "C:\\Temp\\TVDeploy\\Assignment\\TeamViewer_Assignment.exe");
-            cmd.Parameters.Add("ArgumentList", "-apitoken " + ApiToken + " -datafile ${ProgramFiles}\\TeamViewer\\AssignmentData.json");
-            cmd.Parameters.Add("Wait");
-            cmd.Parameters.Add("NoNewWindow");
-            return cmd;
+            var session = PSWrapper.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
+
+            // Change directory to script location.
+            var setLocationCommand = new Command("Set-Location");
+            setLocationCommand.Parameters.Add("Path", removeOfficeScriptPath);
+            session.Commands.AddCommand(setLocationCommand);
+
+            // Execute the remove office script.
+            var removeCommand = new Command(removeOfficeScriptPath + "\\Remove-PreviousOfficeInstalls.ps1", true, true);
+            removeCommand.Parameters.Add("Wait");
+            removeCommand.Parameters.Add("NoNewWindow");
+            session.Commands.AddCommand(removeCommand);
+
+            return session;
         }
 
-        private Command GetTVReinstallCommand()
+        private Command GetO365InstallCommand()
         {
             var cmd = new Command("Start-Process", false, true);
-            cmd.Parameters.Add("FilePath", "msiexec.exe");
-            cmd.Parameters.Add("ArgumentList", "/i C:\\Temp\\TVDeploy\\TeamViewer_Host-idcjnfzfgb.msi REINSTALL=ALL REINSTALLMODE=omus /qn");
-            cmd.Parameters.Add("Wait");
-            cmd.Parameters.Add("NoNewWindow");
-            return cmd;
-        }
-
-        private Command GetTVInstallCommand()
-        {
-            var cmd = new Command("Start-Process", false, true);
-            cmd.Parameters.Add("FilePath", "msiexec.exe");
-            cmd.Parameters.Add("ArgumentList", "/i C:\\Temp\\TVDeploy\\TeamViewer_Host-idcjnfzfgb.msi /qn");
+            cmd.Parameters.Add("FilePath", fullDeployTempDir + "\\setup.exe");
+            cmd.Parameters.Add("ArgumentList", "/configure " + fullDeployTempDir + "\\configuration.xml");
             cmd.Parameters.Add("Wait");
             cmd.Parameters.Add("NoNewWindow");
             return cmd;
@@ -230,25 +201,8 @@ namespace AssetManager.Tools.TeamViewer
             var cmd = new Command("Remove-Item", false, true);
             cmd.Parameters.Add("Recurse");
             cmd.Parameters.Add("Force");
-            cmd.Parameters.Add("Path", "C:\\Temp\\TVDeploy\\");
+            cmd.Parameters.Add("Path", fullDeployTempDir);
             return cmd;
-        }
-
-        private async Task<bool> TeamViewerInstalled(Device targetDevice)
-        {
-            try
-            {
-                var resultString = await Task.Run(() =>
-                {
-                    return PSWrapper.ExecuteRemotePSScript(targetDevice.HostName, Properties.Resources.CheckForTVRegistryValue, SecurityTools.AdminCreds);
-                });
-                var result = Convert.ToBoolean(resultString);
-                return result;
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
         }
 
         private void InitLogWindow(ExtendedForm parentForm)
@@ -332,7 +286,7 @@ namespace AssetManager.Tools.TeamViewer
                     {
                         if (!TimeoutMessageSent)
                         {
-                            DepLog("The operation is taking a long time...");
+                            DepLog("Still waiting...");
                             TimeoutMessageSent = true;
                         }
                     }
@@ -396,8 +350,7 @@ namespace AssetManager.Tools.TeamViewer
         }
 
         // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~TeamViewerDeploy() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
         //   Dispose(false);
         // }
 
@@ -410,5 +363,7 @@ namespace AssetManager.Tools.TeamViewer
             // GC.SuppressFinalize(this);
         }
         #endregion
+
+
     }
 }

@@ -713,6 +713,11 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:AssetManager.Properties.Resources.O365SquareLogo">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:AssetManager.Properties.Resources.PaperClipIcon">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.

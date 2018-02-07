@@ -5,6 +5,7 @@ using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.Tools;
 using AssetManager.Tools.TeamViewer;
+using AssetManager.Tools.Office;
 using PingVisLib;
 using System;
 using System.ComponentModel;
@@ -172,6 +173,40 @@ namespace AssetManager.UserInterface.CustomControls
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
             }
         }
+
+        private async void DeployOffice(Device device)
+        {
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
+
+            if (OtherFunctions.Message("Deploy Office 365 to this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
+            {
+                return;
+            }
+            try
+            {
+                if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
+                {
+                    using (OfficeDeploy newOfficeDeploy = new OfficeDeploy())
+                    {
+                        OnStatusPrompt("Deploying Office 365...", 0);
+                        if (await newOfficeDeploy.DeployToDevice(hostForm, this.device))
+                        {
+                            OnStatusPrompt("Office 365 deployment complete!");
+                        }
+                        else
+                        {
+                            OnStatusPrompt("Office 365 deployment failed...");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OnStatusPrompt("Office 365 deployment failed...");
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+            }
+        }
+
 
         private void LaunchRDP()
         {
@@ -397,6 +432,11 @@ namespace AssetManager.UserInterface.CustomControls
         private void EventViewerButton_Click(object sender, EventArgs e)
         {
             EventViewer();
+        }
+
+        private void DeployOfficeButton_Click(object sender, EventArgs e)
+        {
+            DeployOffice(this.device);
         }
     }
 }

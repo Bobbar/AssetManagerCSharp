@@ -363,6 +363,16 @@ namespace AssetManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap O365SquareLogo {
+            get {
+                object obj = ResourceManager.GetObject("O365SquareLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PaperClipIcon {
             get {
                 object obj = ResourceManager.GetObject("PaperClipIcon", resourceCulture);
