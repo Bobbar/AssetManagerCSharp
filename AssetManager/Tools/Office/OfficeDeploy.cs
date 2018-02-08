@@ -49,6 +49,7 @@ namespace AssetManager.Tools.Office
 
         public OfficeDeploy()
         {
+            PSWrapper.InvocationStateChanged += SessionStateChanged;
             watchDogCancelTokenSource = new CancellationTokenSource();
             watchDogTask = new Task(() => WatchDog(watchDogCancelTokenSource.Token), watchDogCancelTokenSource.Token);
         }
@@ -90,7 +91,12 @@ namespace AssetManager.Tools.Office
                     }
 
                     DepLog("Removing previous Office installations...");
-                    if (await PSWrapper.InvokePowerShellSession(GetRemoveOfficeSession(targetDevice)))
+
+                    DepLog("Starting remote session...");
+                    var officeDeploySession = await GetRemoveOfficeSession(targetDevice);
+
+                    DepLog("Invoking removal script...");
+                    if (await PSWrapper.InvokePowerShellSession(officeDeploySession))
                     {
                         DepLog("Previous Office installations removed.");
                     }
@@ -168,9 +174,9 @@ namespace AssetManager.Tools.Office
             }
         }
 
-        private PowerShell GetRemoveOfficeSession(Device targetDevice)
+        private async Task<PowerShell> GetRemoveOfficeSession(Device targetDevice)
         {
-            var session = PSWrapper.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
+            var session = await PSWrapper.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
 
             // Change directory to script location.
             var setLocationCommand = new Command("Set-Location");
@@ -185,7 +191,7 @@ namespace AssetManager.Tools.Office
 
             return session;
         }
-
+        
         private Command GetO365InstallCommand()
         {
             var cmd = new Command("Start-Process", false, true);
@@ -259,6 +265,12 @@ namespace AssetManager.Tools.Office
             }
         }
 
+        private void SessionStateChanged(object sender, EventArgs e)
+        {
+            var args = (PSInvocationStateChangedEventArgs)e;
+            DepLog("Session state: " + args.InvocationStateInfo.State.ToString());
+        }
+        
         private void ActivityTick()
         {
             lastActivity = DateTime.Now.Ticks;

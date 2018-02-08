@@ -17,6 +17,17 @@ namespace AssetManager.Tools
 {
     public class PowerShellWrapper
     {
+
+        public event EventHandler InvocationStateChanged;
+
+        protected virtual void OnInvocationStateChanged(PSInvocationStateChangedEventArgs e)
+        {
+            if (InvocationStateChanged != null)
+            {
+                InvocationStateChanged(this, e);
+            }
+        }
+
         private PowerShell CurrentPowerShellObject;
 
         private Pipeline CurrentPipelineObject;
@@ -93,10 +104,10 @@ namespace AssetManager.Tools
                     using (var powerSh = PowerShell.Create())
                     {
                         powerSh.Runspace = remoteRunSpace;
-                        powerSh.Streams.Error.DataAdded += PSEventHandler;
+                        powerSh.InvocationStateChanged -= Powershell_InvocationStateChanged;
+                        powerSh.InvocationStateChanged += Powershell_InvocationStateChanged;
                         powerSh.Commands.AddCommand(PScommand);
                         CurrentPowerShellObject = powerSh;
-
                         Collection<PSObject> results = powerSh.Invoke();
 
                         StringBuilder stringBuilder = new StringBuilder();
@@ -131,6 +142,8 @@ namespace AssetManager.Tools
         public async Task<bool> InvokePowerShellSession(PowerShell session)
         {
             CurrentPowerShellObject = session;
+            session.InvocationStateChanged -= Powershell_InvocationStateChanged;
+            session.InvocationStateChanged += Powershell_InvocationStateChanged;
 
             try
             {
@@ -166,22 +179,27 @@ namespace AssetManager.Tools
             }
         }
 
-        public PowerShell GetNewPSSession(string hostname, NetworkCredential credentials)
+        public async Task<PowerShell> GetNewPSSession(string hostname, NetworkCredential credentials)
         {
-            var psCreds = new PSCredential(credentials.UserName, credentials.SecurePassword);
-            string shellUri = "http://schemas.microsoft.com/powershell/Microsoft.PowerShell";
+            var newPsSession = await Task.Run(() =>
+            {
+                var psCreds = new PSCredential(credentials.UserName, credentials.SecurePassword);
+                string shellUri = "http://schemas.microsoft.com/powershell/Microsoft.PowerShell";
 
-            WSManConnectionInfo connInfo = new WSManConnectionInfo(false, hostname, 5985, "/wsman", shellUri, psCreds);
+                WSManConnectionInfo connInfo = new WSManConnectionInfo(false, hostname, 5985, "/wsman", shellUri, psCreds);
 
-            Runspace remoteRunSpace = RunspaceFactory.CreateRunspace(connInfo);
-            remoteRunSpace.Open();
-            remoteRunSpace.SessionStateProxy.SetVariable("cred", psCreds);
+                Runspace remoteRunSpace = RunspaceFactory.CreateRunspace(connInfo);
+                remoteRunSpace.Open();
+                //remoteRunSpace.SessionStateProxy.SetVariable("cred", psCreds);
 
-            var powerSh = PowerShell.Create();
-            powerSh.Runspace = remoteRunSpace;
-            powerSh.Streams.Error.DataAdded += PSEventHandler;
+                var powerSh = PowerShell.Create();
+                powerSh.Runspace = remoteRunSpace;
+                powerSh.Streams.Error.DataAdded += PSEventHandler;
 
-            return powerSh;
+                return powerSh;
+            });
+
+            return newPsSession;
         }
 
         public async Task<bool> ExecutePowerShellScript(string hostname, byte[] scriptByte)
@@ -210,6 +228,11 @@ namespace AssetManager.Tools
             {
                 return true;
             }
+        }
+
+        private void Powershell_InvocationStateChanged(object sender, PSInvocationStateChangedEventArgs e)
+        {
+            OnInvocationStateChanged(e);
         }
 
         public void StopPowerShellCommand()
