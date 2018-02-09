@@ -153,18 +153,19 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-                    using (TeamViewerDeploy NewTVDeploy = new TeamViewerDeploy())
+
+                    DeployTeamViewer newTVDeploy = new DeployTeamViewer(hostForm);
+
+                    OnStatusPrompt("Deploying TeamViewer...", 0);
+                    if (await newTVDeploy.DeployToDevice(this.device))
                     {
-                        OnStatusPrompt("Deploying TeamViewer...", 0);
-                        if (await NewTVDeploy.DeployToDevice(hostForm, this.device))
-                        {
-                            OnStatusPrompt("TeamViewer deployment complete!");
-                        }
-                        else
-                        {
-                            OnStatusPrompt("TeamViewer deployment failed...");
-                        }
+                        OnStatusPrompt("TeamViewer deployment complete!");
                     }
+                    else
+                    {
+                        OnStatusPrompt("TeamViewer deployment failed...");
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -186,18 +187,18 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-                    using (OfficeDeploy newOfficeDeploy = new OfficeDeploy())
+                    DeployOffice newOfficeDeploy = new DeployOffice(hostForm);
+
+                    OnStatusPrompt("Deploying Office 365...", 0);
+                    if (await newOfficeDeploy.DeployToDevice(this.device))
                     {
-                        OnStatusPrompt("Deploying Office 365...", 0);
-                        if (await newOfficeDeploy.DeployToDevice(hostForm, this.device))
-                        {
-                            OnStatusPrompt("Office 365 deployment complete!");
-                        }
-                        else
-                        {
-                            OnStatusPrompt("Office 365 deployment failed...");
-                        }
+                        OnStatusPrompt("Office 365 deployment complete!");
                     }
+                    else
+                    {
+                        OnStatusPrompt("Office 365 deployment failed...");
+                    }
+
                 }
             }
             catch (Exception ex)

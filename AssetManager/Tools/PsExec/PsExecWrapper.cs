@@ -62,7 +62,7 @@ namespace AssetManager.Tools
                       p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
                       p.StartInfo.FileName = Paths.PsExecPath;
 
-                      p.StartInfo.Arguments = "\\\\" + targetDevice.HostName + " -i -h -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
+                      p.StartInfo.Arguments = "\\\\" + targetDevice.HostName + " -nobanner -h -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
 
                       p.OutputDataReceived += P_OutputDataReceived;
                       p.ErrorDataReceived += P_ErrorDataReceived;

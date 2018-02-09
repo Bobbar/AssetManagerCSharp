@@ -212,16 +212,17 @@
     <Compile Include="Security\SecurityFunctions.cs" />
     <Compile Include="StartProgram.cs" />
     <Compile Include="Tools\ActiveDirectory\ActiveDirectoryWrapper.cs" />
+    <Compile Include="Tools\Deployment\DeployChrome.cs" />
     <Compile Include="Tools\FileIcon.cs" />
     <Compile Include="Data\NetworkInfo.cs" />
-    <Compile Include="Tools\Office\OfficeDeploy.cs" />
+    <Compile Include="Tools\Deployment\DeployOffice.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedImages.cs" />
     <Compile Include="Tools\PerformanceTweaks\MemoryTweaks.cs" />
     <Compile Include="Tools\PowerShellWrapper.cs" />
     <Compile Include="Tools\ProgressCounter.cs" />
     <Compile Include="Tools\PsExec\PsExecWrapper.cs" />
-    <Compile Include="Tools\RemoteCommands\DeploymentFunctions.cs" />
-    <Compile Include="Tools\TeamViewer\TeamViewerDeploy.cs" />
+    <Compile Include="Tools\Deployment\DeploymentUI\DeploymentFunctions.cs" />
+    <Compile Include="Tools\Deployment\DeployTeamViewer.cs" />
     <Compile Include="UserInterface\CustomControls\CorrectedTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -608,7 +609,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Tools\Chrome\" />
+    <Folder Include="Tools\Office\" />
+    <Folder Include="Tools\RemoteCommands\" />
+    <Folder Include="Tools\TeamViewer\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -50,20 +50,24 @@ namespace AssetManager.Tools
                 using (Runspace remoteRunSpace = RunspaceFactory.CreateRunspace(connInfo))
                 {
                     remoteRunSpace.Open();
-                    using (Pipeline MyPipline = remoteRunSpace.CreatePipeline())
+                    using (Pipeline pline = remoteRunSpace.CreatePipeline())
                     {
-                        MyPipline.Commands.AddScript(scriptText);
-                        MyPipline.Commands.Add("Out-String");
+                        pline.Commands.AddScript(scriptText);
+                        pline.Commands.Add("Out-String");
 
-                        CurrentPipelineObject = MyPipline;
+                        CurrentPipelineObject = pline;
 
-                        Collection<PSObject> results = MyPipline.Invoke();
+                        Collection<PSObject> results = pline.Invoke();
                         StringBuilder stringBuilder = new StringBuilder();
 
                         foreach (var obj in results)
                         {
                             stringBuilder.AppendLine(obj.ToString());
                         }
+
+                        remoteRunSpace.Close();
+                        pline.Stop();
+
 
                         return DataConsistency.CleanDBValue((stringBuilder.ToString())).ToString();
 
