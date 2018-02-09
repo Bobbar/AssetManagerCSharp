@@ -8,9 +8,11 @@ namespace AssetManager
 	{
 
 		//Application paths
+       
 
 		public static readonly string AppDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\AssetManager\\";
-		public const string LogName = "log.log";
+        public static readonly string PsExecPath = AppDomain.CurrentDomain.BaseDirectory + "Tools\\PsExec\\PsExec.exe";
+        public const string LogName = "log.log";
 		public static readonly string LogPath = AppDir + LogName;
 
 		public static readonly string DownloadPath = AppDir + "temp\\";

@@ -345,7 +345,6 @@ namespace AssetManager.Helpers
                 case SocketError.HostUnreachable:
                     //10065 'host unreachable
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.SocketErrorCode + "  Message:" + ex.Message);
-                    //Dim blah = PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" & strLogPath & "'", vbOKOnly + vbExclamation, "Network Socket Timeout")
                     return true;
 
                 case SocketError.ConnectionAborted:
@@ -396,7 +395,6 @@ namespace AssetManager.Helpers
 
                 case 245:
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message);
-                    //Dim blah = PromptUser("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.Number & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "ERROR")
                     return false;
 
                 case 248:

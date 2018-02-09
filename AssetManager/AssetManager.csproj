@@ -219,6 +219,8 @@
     <Compile Include="Tools\PerformanceTweaks\MemoryTweaks.cs" />
     <Compile Include="Tools\PowerShellWrapper.cs" />
     <Compile Include="Tools\ProgressCounter.cs" />
+    <Compile Include="Tools\PsExec\PsExecWrapper.cs" />
+    <Compile Include="Tools\RemoteCommands\DeploymentFunctions.cs" />
     <Compile Include="Tools\TeamViewer\TeamViewerDeploy.cs" />
     <Compile Include="UserInterface\CustomControls\CorrectedTreeView.cs">
       <SubType>Component</SubType>
@@ -596,6 +598,9 @@
     <None Include="Resources\fieldErrorIcon.Icon.ico" />
     <None Include="Resources\EventIcon.png" />
     <None Include="Resources\O365SquareLogo.png" />
+    <Content Include="Tools\PsExec\PsExec.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

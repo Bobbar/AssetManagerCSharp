@@ -36,6 +36,8 @@ namespace AssetManager.Data
         /// <returns></returns>
         public static object CleanDBValue(string Value)
         {
+            if (Value == null) return DBNull.Value;
+
             string CleanString = Regex.Replace(Value.Trim(), "[/\\r?\\n|\\r]+", string.Empty);
             if (CleanString == string.Empty)
             {

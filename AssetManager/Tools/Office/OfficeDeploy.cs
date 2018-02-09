@@ -1,13 +1,12 @@
-﻿using AssetManager.Data.Classes;
-using AssetManager.Data.Communications;
-using AssetManager.Data.Functions;
+﻿using AssetManager.Data;
+using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AdminTools;
 using System;
 using System.ComponentModel;
-using System.IO;
+using System.Diagnostics;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Threading;
@@ -18,8 +17,6 @@ namespace AssetManager.Tools.Office
 {
     public class OfficeDeploy : IDisposable
     {
-
-
         #region Fields
 
         private const string deploymentFilesDirectory = "\\\\core.co.fairfield.oh.us\\dfs1\\fcdd\\files\\Information Technology\\Software\\Office\\RemoteDeploy";
@@ -31,7 +28,8 @@ namespace AssetManager.Tools.Office
         private long lastActivity;
         private ExtendedForm logView;
         private ExtendedForm parentForm;
-        private PowerShellWrapper PSWrapper = new PowerShellWrapper();
+        private PowerShellWrapper powerShellWrapper = new PowerShellWrapper();
+        private PsExecWrapper psExecWrapper = new PsExecWrapper();
         private RichTextBox RTBLog;
         private int timeoutSeconds = 120;
         private Task watchDogTask;
@@ -49,7 +47,11 @@ namespace AssetManager.Tools.Office
 
         public OfficeDeploy()
         {
-            PSWrapper.InvocationStateChanged += SessionStateChanged;
+            powerShellWrapper.InvocationStateChanged += SessionStateChanged;
+
+            psExecWrapper.ErrorReceived += PsExecErrorReceived;
+            psExecWrapper.OutputReceived += PsExecOutputReceived;
+
             watchDogCancelTokenSource = new CancellationTokenSource();
             watchDogTask = new Task(() => WatchDog(watchDogCancelTokenSource.Token), watchDogCancelTokenSource.Token);
         }
@@ -93,10 +95,10 @@ namespace AssetManager.Tools.Office
                     DepLog("Removing previous Office installations...");
 
                     DepLog("Starting remote session...");
-                    var officeDeploySession = await GetRemoveOfficeSession(targetDevice);
+                    var officeRemoveSession = await GetRemoveOfficeSession(targetDevice);
 
                     DepLog("Invoking removal script...");
-                    if (await PSWrapper.InvokePowerShellSession(officeDeploySession))
+                    if (await powerShellWrapper.InvokePowerShellSession(officeRemoveSession))
                     {
                         DepLog("Previous Office installations removed.");
                     }
@@ -108,19 +110,21 @@ namespace AssetManager.Tools.Office
                     }
 
                     DepLog("Starting Office 356 deployment...");
-                    if (await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetO365InstallCommand()))
+
+                    var installExitCode = await psExecWrapper.ExecuteRemoteCommand(targetDevice, GetO365InstallString());
+                    if (installExitCode == 0)
                     {
                         DepLog("Deployment complete!");
                     }
                     else
                     {
-                        DepLog("Deployment failed!");
+                        DepLog("Deployment failed! Exit code: " + installExitCode.ToString());
                         OtherFunctions.Message("Error occurred while executing deployment command!");
                         return false;
                     }
 
                     DepLog("Deleting temp files...");
-                    if (!await PSWrapper.InvokePowerShellCommand(targetDevice.HostName, GetDeleteDirectoryCommand()))
+                    if (!await powerShellWrapper.InvokePowerShellCommand(targetDevice.HostName, GetDeleteDirectoryCommand()))
                     {
                         DepLog("Delete failed!");
                         return false;
@@ -176,7 +180,7 @@ namespace AssetManager.Tools.Office
 
         private async Task<PowerShell> GetRemoveOfficeSession(Device targetDevice)
         {
-            var session = await PSWrapper.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
+            var session = await powerShellWrapper.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
 
             // Change directory to script location.
             var setLocationCommand = new Command("Set-Location");
@@ -191,7 +195,13 @@ namespace AssetManager.Tools.Office
 
             return session;
         }
-        
+
+        private string GetO365InstallString()
+        {
+            string installString = fullDeployTempDir + "\\setup.exe /configure " + fullDeployTempDir + "\\configuration_lan.xml";
+            return installString;
+        }
+
         private Command GetO365InstallCommand()
         {
             var cmd = new Command("Start-Process", false, true);
@@ -236,8 +246,7 @@ namespace AssetManager.Tools.Office
                     if (OtherFunctions.Message("Cancel the current operation?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Cancel?", parentForm) == DialogResult.Yes)
                     {
                         cancelOperation = true;
-                        PSWrapper.StopPowerShellCommand();
-                        PSWrapper.StopPiplineCommand();
+                        StopRemoteProcesses();
                     }
                     e.Cancel = true;
                 }
@@ -251,8 +260,7 @@ namespace AssetManager.Tools.Office
                     {
                         if (SecondsSinceLastActivity() > timeoutSeconds)
                         {
-                            PSWrapper.StopPowerShellCommand();
-                            PSWrapper.StopPiplineCommand();
+                            StopRemoteProcesses();
                         }
 
                         e.Cancel = true;
@@ -265,12 +273,33 @@ namespace AssetManager.Tools.Office
             }
         }
 
+        private void StopRemoteProcesses()
+        {
+            powerShellWrapper.StopPowerShellCommand();
+            powerShellWrapper.StopPiplineCommand();
+            psExecWrapper.StopProcess();
+        }
+
         private void SessionStateChanged(object sender, EventArgs e)
         {
             var args = (PSInvocationStateChangedEventArgs)e;
             DepLog("Session state: " + args.InvocationStateInfo.State.ToString());
         }
-        
+
+        private void PsExecOutputReceived(object sender, EventArgs e)
+        {
+            var args = (DataReceivedEventArgs)e;
+            var dataString = DataConsistency.CleanDBValue(args.Data).ToString();
+            DepLog("PsExec Output: " + dataString);
+        }
+
+        private void PsExecErrorReceived(object sender, EventArgs e)
+        {
+            var args = (DataReceivedEventArgs)e;
+            var dataString = DataConsistency.CleanDBValue(args.Data).ToString();
+            DepLog("PsExec Output: " + dataString);
+        }
+
         private void ActivityTick()
         {
             lastActivity = DateTime.Now.Ticks;
@@ -313,7 +342,6 @@ namespace AssetManager.Tools.Office
                     }
                     Task.Delay(1000).Wait(cancelToken);
                 }
-
             }
             catch (TaskCanceledException)
             {
@@ -343,6 +371,7 @@ namespace AssetManager.Tools.Office
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
@@ -374,8 +403,7 @@ namespace AssetManager.Tools.Office
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
-        #endregion
 
-
+        #endregion IDisposable Support
     }
 }

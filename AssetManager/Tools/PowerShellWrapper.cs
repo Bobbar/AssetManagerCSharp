@@ -117,6 +117,8 @@ namespace AssetManager.Tools
                             stringBuilder.AppendLine(obj.ToString());
                         }
 
+                        remoteRunSpace.Close();
+                        powerSh.Stop();
                         return DataConsistency.CleanDBValue((stringBuilder.ToString())).ToString();
 
                     }
@@ -175,6 +177,8 @@ namespace AssetManager.Tools
             }
             finally
             {
+                session.Runspace.Close();
+                session.Runspace.Dispose();
                 session.Dispose();
             }
         }
@@ -280,7 +284,6 @@ namespace AssetManager.Tools
             {
                 // Create an instance of StreamReader to read from our file.
                 // The using statement also closes the StreamReader.
-                // Dim sr As New StreamReader(filename)
                 using (StreamReader sr = new StreamReader(new MemoryStream(scriptBytes), Encoding.ASCII))
                 {
                     // use a string builder to get all our lines from the file

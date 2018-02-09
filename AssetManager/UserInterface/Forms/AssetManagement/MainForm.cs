@@ -92,7 +92,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void StartTransaction()
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.CanStartTransaction);
-            
+
             if (OtherFunctions.Message("This will allow unchecked changes to the database. Incorrect inputs WILL BREAK THINGS! \r\n" + Environment.NewLine + "Changes must be 'applied' and 'committed' before they will be permanently stored in the database.", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Exclamation, "WARNING", this) == DialogResult.OK)
             {
                 CurrentTransaction = DBFactory.GetDatabase().StartTransaction();
@@ -724,7 +724,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                //Dim Hostname As String
                 if (string.IsNullOrEmpty(hostName))
                 {
                     using (AdvancedDialog GetHostnameDialog = new AdvancedDialog(this))
