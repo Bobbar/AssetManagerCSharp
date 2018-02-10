@@ -1,25 +1,22 @@
-﻿using AssetManager.Data;
-using AssetManager.Data.Classes;
+﻿using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AdminTools;
+using MyDialogLib;
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.IO;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 
 namespace AssetManager.Tools.Deployment
 {
     public class DeployOffice
     {
-
-        private const string deploymentFilesDirectory = "\\\\core.co.fairfield.oh.us\\dfs1\\fcdd\\files\\Information Technology\\Software\\Office\\RemoteDeploy";
+        private const string deploymentFilesDirectory = "\\\\svr-file1\\dd_files\\Information Technology\\Software\\Office\\RemoteDeploy";// "\\\\core.co.fairfield.oh.us\\dfs1\\fcdd\\files\\Information Technology\\Software\\Office\\RemoteDeploy";
         private const string deployTempDirectory = "\\Temp\\OfficeDeploy";
         private const string fullDeployTempDir = "C:" + deployTempDirectory;
         private const string removeOfficeScriptPath = fullDeployTempDir + "\\Remove-PreviousOfficeInstalls";
@@ -33,20 +30,63 @@ namespace AssetManager.Tools.Deployment
             deploy = new DeploymentUI(parentForm);
             deploy.UsePowerShell();
             deploy.UsePsExec();
-
         }
 
+        private List<string> GetConfigFiles()
+        {
+            var files = Directory.GetFiles(deploymentFilesDirectory, "*.xml", SearchOption.TopDirectoryOnly);
+            var configFiles = new List<string>();
+
+            if (files.Length > 0)
+            {
+                foreach (var file in files)
+                {
+                    var fileInfo = new FileInfo(file);
+                    configFiles.Add(fileInfo.Name);
+                }
+            }
+
+            return configFiles;
+        }
+
+        private string SelectConfigFile()
+        {
+            var configFiles = GetConfigFiles();
+
+            var fileCombo = new ComboBox();
+            fileCombo.Name = "fileCombo";
+            fileCombo.DataSource = configFiles;
+            fileCombo.Width = 250;
+
+            using (AdvancedDialog selectDialog = new AdvancedDialog(parentForm))
+            {
+                selectDialog.Text = "Choose Install Configuration File";
+                selectDialog.AddCustomControl("fileCombo", "Config Files:", fileCombo);
+                selectDialog.ShowDialog();
+                if (selectDialog.DialogResult == DialogResult.OK)
+                {
+                    return fileCombo.SelectedValue.ToString();
+                }
+            }
+            return string.Empty;
+        }
 
         public async Task<bool> DeployToDevice(Device targetDevice)
         {
             long startTime = 0;
+
             try
             {
                 if (targetDevice != null && !string.IsNullOrEmpty(targetDevice.HostName))
                 {
+                    string configFile = SelectConfigFile();
+
+                    if (string.IsNullOrEmpty(configFile)) return false;
+
                     startTime = DateTime.Now.Ticks;
 
                     deploy.LogMessage("Starting new Office 365 deployment to " + targetDevice.HostName);
+                    deploy.LogMessage("Config = '" + deploymentFilesDirectory + "\\" + configFile + "'");
                     deploy.LogMessage("-------------------");
 
                     using (CopyFilesForm PushForm = new CopyFilesForm(parentForm, targetDevice, deploymentFilesDirectory, deployTempDirectory))
@@ -84,7 +124,7 @@ namespace AssetManager.Tools.Deployment
 
                     deploy.LogMessage("Starting Office 356 deployment...");
 
-                    var installExitCode = await deploy.PsExecWrap.ExecuteRemoteCommand(targetDevice, GetO365InstallString());
+                    var installExitCode = await deploy.PsExecWrap.ExecuteRemoteCommand(targetDevice, GetO365InstallString(configFile));
                     if (installExitCode == 0)
                     {
                         deploy.LogMessage("Deployment complete!");
@@ -131,7 +171,6 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
-
         private async Task<PowerShell> GetRemoveOfficeSession(Device targetDevice)
         {
             var session = await deploy.PowerShellWrap.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
@@ -150,9 +189,9 @@ namespace AssetManager.Tools.Deployment
             return session;
         }
 
-        private string GetO365InstallString()
+        private string GetO365InstallString(string configFile)
         {
-            string installString = fullDeployTempDir + "\\setup.exe /configure " + fullDeployTempDir + "\\configuration_lan.xml";
+            string installString = fullDeployTempDir + "\\setup.exe /configure " + fullDeployTempDir + "\\" + configFile;
             return installString;
         }
 
@@ -164,7 +203,5 @@ namespace AssetManager.Tools.Deployment
             cmd.Parameters.Add("Path", fullDeployTempDir);
             return cmd;
         }
-
-
     }
 }
