@@ -2,7 +2,6 @@
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.Security;
-using AssetManager.Tools.RemoteCommands;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AdminTools;
 using System;
@@ -10,7 +9,7 @@ using System.Management.Automation.Runspaces;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AssetManager.Tools.TeamViewer
+namespace AssetManager.Tools.Deployment
 {
     public class DeployTeamViewer
     {

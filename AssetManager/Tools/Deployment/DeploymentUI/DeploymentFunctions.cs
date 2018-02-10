@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AssetManager.Tools.RemoteCommands
+namespace AssetManager.Tools.Deployment
 {
     public class DeploymentUI : IDisposable
     {

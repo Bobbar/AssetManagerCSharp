@@ -12,10 +12,9 @@ using System.Management.Automation.Runspaces;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AssetManager.Tools.RemoteCommands;
 
 
-namespace AssetManager.Tools.Office
+namespace AssetManager.Tools.Deployment
 {
     public class DeployOffice
     {

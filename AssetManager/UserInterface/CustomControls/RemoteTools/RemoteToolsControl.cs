@@ -3,9 +3,7 @@ using AssetManager.Data.Classes;
 using AssetManager.Data.Communications;
 using AssetManager.Helpers;
 using AssetManager.Security;
-using AssetManager.Tools;
-using AssetManager.Tools.TeamViewer;
-using AssetManager.Tools.Office;
+using AssetManager.Tools.Deployment;
 using PingVisLib;
 using System;
 using System.ComponentModel;
@@ -24,6 +22,7 @@ namespace AssetManager.UserInterface.CustomControls
         private PingVis pingVis;
         private ExtendedForm hostForm;
         private Device device;
+
         public Device Device
         {
             get
@@ -65,7 +64,6 @@ namespace AssetManager.UserInterface.CustomControls
         {
             VisibleChanging(this, newState);
         }
-
 
         #endregion Properties
 
@@ -153,7 +151,6 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-
                     DeployTeamViewer newTVDeploy = new DeployTeamViewer(hostForm);
 
                     OnStatusPrompt("Deploying TeamViewer...", 0);
@@ -165,7 +162,6 @@ namespace AssetManager.UserInterface.CustomControls
                     {
                         OnStatusPrompt("TeamViewer deployment failed...");
                     }
-
                 }
             }
             catch (Exception ex)
@@ -198,7 +194,6 @@ namespace AssetManager.UserInterface.CustomControls
                     {
                         OnStatusPrompt("Office 365 deployment failed...");
                     }
-
                 }
             }
             catch (Exception ex)
@@ -207,7 +202,6 @@ namespace AssetManager.UserInterface.CustomControls
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
             }
         }
-
 
         private void LaunchRDP()
         {
@@ -311,6 +305,7 @@ namespace AssetManager.UserInterface.CustomControls
                 this.Visible = false;
             }
         }
+
         private void ShowIP()
         {
             if (pingVis.CurrentResult != null)
@@ -337,11 +332,11 @@ namespace AssetManager.UserInterface.CustomControls
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
                     OnStatusPrompt("Installing Chrome...", 0);
-                    PowerShellWrapper PSWrapper = new PowerShellWrapper();
-                    if (await PSWrapper.ExecutePowerShellScript(this.device.HostName, Properties.Resources.UpdateChrome))
+                    DeployChrome newChromeDeploy = new DeployChrome(hostForm);
+
+                    if (await newChromeDeploy.DeployToDevice(this.device))
                     {
                         OnStatusPrompt("Chrome install complete!");
-                        OtherFunctions.Message("Command successful.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Done", hostForm);
                     }
                     else
                     {
@@ -359,6 +354,7 @@ namespace AssetManager.UserInterface.CustomControls
         #endregion Methods
 
         #region Control Events
+
         private void BrowseFilesButton_Click(object sender, EventArgs e)
         {
             BrowseFiles();
@@ -406,6 +402,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             LaunchRDP();
         }
+
         private void UpdateChromeButton_Click(object sender, EventArgs e)
         {
             UpdateChrome(this.device);
@@ -415,14 +412,14 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (this.ParentForm != null) hostForm = (ExtendedForm)this.ParentForm;
         }
+
         #endregion Control Events
-
-
 
         public class StatusPrompt
         {
             public string Message { get; set; }
             public int DisplayTime { get; set; }
+
             public StatusPrompt(string message, int displayTime)
             {
                 Message = message;
