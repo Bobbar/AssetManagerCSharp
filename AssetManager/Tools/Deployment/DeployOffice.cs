@@ -152,7 +152,7 @@ namespace AssetManager.Tools.Deployment
 
         private string GetO365InstallString()
         {
-            string installString = fullDeployTempDir + "\\setup.exe /configure " + fullDeployTempDir + "\\configuration_local1.xml";
+            string installString = fullDeployTempDir + "\\setup.exe /configure " + fullDeployTempDir + "\\configuration_lan.xml";
             return installString;
         }
 
