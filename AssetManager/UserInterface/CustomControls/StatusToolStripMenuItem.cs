@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing;
-using AssetManager.UserInterface.CustomControls;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.CustomControls
 {
     partial class StatusToolStripMenuItem : ToolStripMenuItem
     {
-
         public bool HostOnline = false;
 
         private const int onlineLightSize = 10;
@@ -34,7 +28,9 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        public StatusToolStripMenuItem() : base() { }
+        public StatusToolStripMenuItem() : base()
+        {
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -51,9 +47,11 @@ namespace AssetManager.UserInterface.CustomControls
         public void HostOnlineStatusChanged(object sender, EventArgs e)
         {
             var statusArgs = (ExtendedForm.OnlineStatusChangedEventArgs)e;
-            HostOnline = statusArgs.OnlineStatus;
-            this.Invalidate();
+            if (statusArgs.OnlineStatus != HostOnline)
+            {
+                HostOnline = statusArgs.OnlineStatus;
+                this.Invalidate();
+            }
         }
-
     }
 }
