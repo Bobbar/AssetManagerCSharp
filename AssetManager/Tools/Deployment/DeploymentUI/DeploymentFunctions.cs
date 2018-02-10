@@ -154,9 +154,16 @@ namespace AssetManager.Tools.Deployment
 
         private void StopRemoteProcesses()
         {
-            powerShellWrapper.StopPowerShellCommand();
-            powerShellWrapper.StopPiplineCommand();
-            psExecWrapper.StopProcess();
+            if (powerShellWrapper != null)
+            {
+                powerShellWrapper.StopPowerShellCommand();
+                powerShellWrapper.StopPiplineCommand();
+            }
+
+            if (psExecWrapper != null)
+            {
+                psExecWrapper.StopProcess();
+            }
         }
 
         private int SecondsSinceLastActivity()

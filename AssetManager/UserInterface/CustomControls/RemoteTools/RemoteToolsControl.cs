@@ -368,6 +368,24 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region Control Events
 
+        private void RemoteToolsControl_VisibleChanged(object sender, EventArgs e)
+        {
+            // If control is hidden, dispose the pingVis instance to reset the ping result collections.
+            if (!this.Visible)
+            {
+                if (pingVis != null)
+                {
+                    pingVis.Dispose();
+                    pingVis = null;
+                }
+            }
+        }
+
+        private void RemoteToolsControl_Load(object sender, EventArgs e)
+        {
+            if (this.ParentForm != null) hostForm = (ExtendedForm)this.ParentForm;
+        }
+
         private void BrowseFilesButton_Click(object sender, EventArgs e)
         {
             BrowseFiles();
@@ -381,19 +399,6 @@ namespace AssetManager.UserInterface.CustomControls
         private void GKUpdateButton_Click(object sender, EventArgs e)
         {
             QueueGKUpdate();
-        }
-
-        private void RemoteToolsControl_VisibleChanged(object sender, EventArgs e)
-        {
-            // If control is hidden, dispose the pingVis instance to reset the ping result collections.
-            if (!this.Visible)
-            {
-                if (pingVis != null)
-                {
-                    pingVis.Dispose();
-                    pingVis = null;
-                }
-            }
         }
 
         private void RemoteToolsTimer_Tick(object sender, EventArgs e)
@@ -421,9 +426,14 @@ namespace AssetManager.UserInterface.CustomControls
             UpdateChrome(this.device);
         }
 
-        private void RemoteToolsControl_Load(object sender, EventArgs e)
+        private void EventViewerButton_Click(object sender, EventArgs e)
         {
-            if (this.ParentForm != null) hostForm = (ExtendedForm)this.ParentForm;
+            EventViewer();
+        }
+
+        private void DeployOfficeButton_Click(object sender, EventArgs e)
+        {
+            DeployOffice(this.device);
         }
 
         #endregion Control Events
@@ -438,16 +448,6 @@ namespace AssetManager.UserInterface.CustomControls
                 Message = message;
                 DisplayTime = displayTime;
             }
-        }
-
-        private void EventViewerButton_Click(object sender, EventArgs e)
-        {
-            EventViewer();
-        }
-
-        private void DeployOfficeButton_Click(object sender, EventArgs e)
-        {
-            DeployOffice(this.device);
         }
     }
 }
