@@ -2,6 +2,7 @@ using System.Windows.Forms;
 using AssetManager.Helpers;
 using AssetManager.Data.Classes;
 using AssetManager.Tools;
+using System;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -11,6 +12,20 @@ namespace AssetManager.UserInterface.CustomControls
     public class ExtendedForm : Form
     {
         private bool inheritTheme = true;
+
+        private bool onlineStatus = false;
+
+        public bool OnlineStatus
+        {
+            get
+            {
+                return onlineStatus;
+            }
+            set
+            {
+                this.onlineStatus = value;
+            }
+        }
 
         public bool InheritTheme
         {
@@ -24,6 +39,8 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
+        public event EventHandler OnlineStatusChanged;
+        
         private ExtendedForm myParentForm;
 
         public string DefaultFormTitle { get; set; }
@@ -105,10 +122,26 @@ namespace AssetManager.UserInterface.CustomControls
             this.Refresh();
         }
 
+        public virtual void OnOnlineStatusChanged(OnlineStatusChangedEventArgs e)
+        {
+            OnlineStatusChanged(this, e);
+            onlineStatus = e.OnlineStatus;
+        }
+        
         private void SetTheme(ExtendedForm parentForm)
         {
             Icon = parentForm.Icon;
             GridTheme = parentForm.GridTheme;
+        }
+        
+        public class OnlineStatusChangedEventArgs : EventArgs
+        {
+            public bool OnlineStatus { get; set; }
+            
+            public OnlineStatusChangedEventArgs(bool isOnline)
+            {
+                OnlineStatus = isOnline;
+            }
         }
     }
 }

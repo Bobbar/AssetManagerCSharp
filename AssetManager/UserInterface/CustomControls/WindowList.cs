@@ -56,7 +56,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (HasChildren(frm))
                 {
-                    ToolStripMenuItem NewDropDown = NewMenuItem(frm);
+                    var NewDropDown = NewMenuItem(frm);
                     if (frm is SibiMainForm)
                     {
                         targetMenuItem.Insert(0, NewDropDown);
@@ -155,13 +155,15 @@ namespace AssetManager.UserInterface.CustomControls
             RefreshTimer.Tick += RefreshTimer_Tick;
         }
 
-        private ToolStripMenuItem NewMenuItem(Form frm)
+        private StatusToolStripMenuItem NewMenuItem(ExtendedForm frm)
         {
-            ToolStripMenuItem newitem = new ToolStripMenuItem();
+            StatusToolStripMenuItem newitem = new StatusToolStripMenuItem();
             newitem.Font = DropDownControl.Font;
             newitem.Text = frm.Text;
             newitem.Image = frm.Icon.ToBitmap();
             newitem.Tag = frm;
+            // TODO: Switch everything from .Tag to .LinkedForm
+            newitem.LinkedForm = frm;
             newitem.ToolTipText = "Right-Click to close.";
             newitem.MouseDown += WindowClick;
             return newitem;

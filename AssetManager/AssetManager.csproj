@@ -249,6 +249,9 @@
     <Compile Include="UserInterface\CustomControls\SliderLabel.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserInterface\CustomControls\StatusToolStripMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserInterface\CustomControls\WindowList.cs" />
     <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.cs">
       <SubType>Form</SubType>

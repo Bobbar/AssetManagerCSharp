@@ -293,6 +293,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 failedPings = 0;
             }
+
             if (!this.Visible && PingResults.Status == IPStatus.Success)
             {
                 ShowIPButton.Tag = PingResults.Address;
@@ -303,6 +304,18 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 OnVisibleChanging(false);
                 this.Visible = false;
+            }
+
+            if (hostForm != null)
+            {
+                if (PingResults.Status == IPStatus.Success)
+                {
+                    hostForm.OnOnlineStatusChanged(new ExtendedForm.OnlineStatusChangedEventArgs(true));
+                }
+                else
+                {
+                    hostForm.OnOnlineStatusChanged(new ExtendedForm.OnlineStatusChangedEventArgs(false));
+                }
             }
         }
 
