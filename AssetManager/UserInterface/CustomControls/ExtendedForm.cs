@@ -40,7 +40,7 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         public event EventHandler OnlineStatusChanged;
-        
+
         private ExtendedForm myParentForm;
 
         public string DefaultFormTitle { get; set; }
@@ -111,6 +111,14 @@ namespace AssetManager.UserInterface.CustomControls
 
         public virtual bool OKToClose()
         {
+            if (this.Owner != null)
+            {
+                this.Owner.Activate();
+                this.Owner.WindowState = FormWindowState.Normal;
+                this.Focus();
+                return false;
+            }
+
             return true;
         }
 
@@ -127,17 +135,17 @@ namespace AssetManager.UserInterface.CustomControls
             OnlineStatusChanged(this, e);
             onlineStatus = e.OnlineStatus;
         }
-        
+
         private void SetTheme(ExtendedForm parentForm)
         {
             Icon = parentForm.Icon;
             GridTheme = parentForm.GridTheme;
         }
-        
+
         public class OnlineStatusChangedEventArgs : EventArgs
         {
             public bool OnlineStatus { get; set; }
-            
+
             public OnlineStatusChangedEventArgs(bool isOnline)
             {
                 OnlineStatus = isOnline;

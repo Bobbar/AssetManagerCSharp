@@ -411,7 +411,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Cannot Close");
             }
 
-            if (!OtherFunctions.OKToEnd() | !Helpers.ChildFormControl.OKToCloseChildren(this) | CurrentTransaction != null)
+            if (!OtherFunctions.OKToEnd() || !Helpers.ChildFormControl.OKToCloseChildren(this) || CurrentTransaction != null)
             {
                 e.Cancel = true;
             }
