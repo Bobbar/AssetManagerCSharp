@@ -21,13 +21,11 @@ namespace AssetManager.Tools.Deployment
 
         public async Task<bool> DeployToDevice(Device targetDevice)
         {
-            long startTime = 0;
-
             try
             {
                 if (targetDevice != null && !string.IsNullOrEmpty(targetDevice.HostName))
                 {
-                    startTime = DateTime.Now.Ticks;
+                    deploy.StartTimer();
 
                     deploy.LogMessage("Starting Chrome deployment to: " + targetDevice.HostName);
                     if (await deploy.PowerShellWrap.ExecutePowerShellScript(targetDevice.HostName, Properties.Resources.UpdateChrome))
@@ -50,12 +48,6 @@ namespace AssetManager.Tools.Deployment
             }
             finally
             {
-                if (startTime > 0)
-                {
-                    var runTimeSeconds = ((DateTime.Now.Ticks - startTime) / 10000) / 1000;
-                    deploy.LogMessage("Run Time: " + runTimeSeconds + " s");
-                }
-
                 deploy.DoneOrError();
             }
         }

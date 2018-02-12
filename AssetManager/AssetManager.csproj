@@ -221,7 +221,7 @@
     <Compile Include="Tools\PowerShellWrapper.cs" />
     <Compile Include="Tools\ProgressCounter.cs" />
     <Compile Include="Tools\PsExec\PsExecWrapper.cs" />
-    <Compile Include="Tools\Deployment\DeploymentUI\DeploymentFunctions.cs" />
+    <Compile Include="Tools\Deployment\DeploymentUI\DeploymentUI.cs" />
     <Compile Include="Tools\Deployment\DeployTeamViewer.cs" />
     <Compile Include="UserInterface\CustomControls\CorrectedTreeView.cs">
       <SubType>Component</SubType>

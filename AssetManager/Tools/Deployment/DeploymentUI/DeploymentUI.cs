@@ -16,6 +16,7 @@ namespace AssetManager.Tools.Deployment
         private bool cancelOperation = false;
         private bool finished = false;
         private long lastActivity;
+        private long startTime = 0;
         private ExtendedForm logView;
         private ExtendedForm parentForm;
         private PowerShellWrapper powerShellWrapper;
@@ -146,8 +147,25 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
+        public void StartTimer()
+        {
+            startTime = DateTime.Now.Ticks;
+        }
+
+        private void PrintElapsedTime()
+        {
+            if (startTime > 0)
+            {
+                double runTimeSeconds = ((DateTime.Now.Ticks - startTime) / 10000f) / 1000f;
+                var timeSpan = TimeSpan.FromSeconds(runTimeSeconds);
+                string elapTimeString = string.Format("Run Time: {0}h:{1}m:{2}s", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                LogMessage(elapTimeString);
+            }
+        }
+
         public void DoneOrError()
         {
+            PrintElapsedTime();
             finished = true;
             watchDogCancelTokenSource.Cancel();
         }
