@@ -81,10 +81,21 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void EventViewer()
         {
-            ProcessStartInfo pInfo = new ProcessStartInfo();
-            pInfo.FileName = "eventvwr.exe";
-            pInfo.Arguments = this.device.HostName;
-            Process.Start(pInfo);
+            if (SecurityTools.VerifyAdminCreds())
+            {
+                using (var p = new Process())
+                {
+                    p.StartInfo.Domain = SecurityTools.AdminCreds.Domain;
+                    p.StartInfo.UserName = SecurityTools.AdminCreds.UserName;
+                    p.StartInfo.Password = SecurityTools.AdminCreds.SecurePassword;
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                    p.StartInfo.FileName = "cmd.exe";
+                    p.StartInfo.Arguments = "/c eventvwr.exe " + this.device.HostName;
+                    p.Start();
+                }
+            }
         }
 
         private async void BrowseFiles()
