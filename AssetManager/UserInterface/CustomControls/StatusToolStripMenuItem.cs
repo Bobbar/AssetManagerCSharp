@@ -40,6 +40,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 int lightXPos = this.Bounds.Width - 20;
                 int lightYPos = (this.Bounds.Height / 2) - (onlineLightSize / 2);
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                 e.Graphics.FillEllipse(Brushes.LimeGreen, lightXPos, lightYPos, onlineLightSize, onlineLightSize);
             }
         }

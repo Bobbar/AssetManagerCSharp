@@ -38,7 +38,7 @@ namespace AssetManager.UserInterface.CustomControls
         private const SlideDirection defaultSlideInDirection = SlideDirection.Up;
         private const SlideDirection defaultSlideOutDirection = SlideDirection.Left;
 
-        private float slideAcceleration = (float)(0.5F);
+        private float slideAcceleration = 0.5F;
 
         private List<MessageParameters> messageQueue = new List<MessageParameters>();
         private MessageParameters currentMessage = new MessageParameters();
@@ -249,10 +249,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (pauseCancel != null) pauseCancel.Dispose();
             pauseCancel = new CancellationTokenSource();
-            return Task.Run(() =>
-            {
-                Task.Delay(pauseTime * 1000, pauseCancel.Token).Wait();
-            });
+            return Task.Delay(pauseTime * 1000, pauseCancel.Token);
         }
 
         /// <summary>
@@ -270,7 +267,7 @@ namespace AssetManager.UserInterface.CustomControls
                 }
                 // If the state is hold, then a permanent message is currently displayed. 
                 // Trigger a slide out animation, which will change the state to done once complete.
-                else if (currentMessage.SlideState == SlideState.Hold) 
+                else if (currentMessage.SlideState == SlideState.Hold)
                 {
                     StartSlideOutAnimation();
                 }
@@ -476,7 +473,7 @@ namespace AssetManager.UserInterface.CustomControls
             // If current state is slide-in and display time is not forever.
             if (currentMessage.SlideState == SlideState.SlideIn & currentMessage.DisplayTime > 0)
             {
-                //S top the animation timer, change state to paused, and pause for the specified display time.
+                // Stop the animation timer, change state to paused, and pause for the specified display time.
                 slideTimer.Stop();
                 currentMessage.SlideState = SlideState.Paused;
 
