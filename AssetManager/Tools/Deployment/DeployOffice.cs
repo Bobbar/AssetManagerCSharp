@@ -153,8 +153,10 @@ namespace AssetManager.Tools.Deployment
 
                 return false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logging.Logger(ex.ToString());
+                deploy.LogMessage("Error: " + ex.Message);
                 return false;
             }
             finally

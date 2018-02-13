@@ -13,6 +13,7 @@ using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
+using System.Security.Principal;
 
 namespace AssetManager.Security
 {
@@ -71,10 +72,20 @@ namespace AssetManager.Security
             return valid;
         }
 
+        public static bool IsAdministrator()
+        {
+            var identity = WindowsIdentity.GetCurrent();
+            var principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+        
         public static void ClearAdminCreds()
         {
             AdminCreds = null;
         }
+
+
+
 
         public static string DecodePassword(string cypherString)
         {

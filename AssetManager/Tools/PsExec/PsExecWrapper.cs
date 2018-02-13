@@ -52,9 +52,13 @@ namespace AssetManager.Tools
                   {
                       currentProcess = p;
 
-                      p.StartInfo.Domain = SecurityTools.AdminCreds.Domain;
-                      p.StartInfo.UserName = SecurityTools.AdminCreds.UserName;
-                      p.StartInfo.Password = SecurityTools.AdminCreds.SecurePassword;
+                      if (!SecurityTools.IsAdministrator())
+                      {
+                          p.StartInfo.Domain = SecurityTools.AdminCreds.Domain;
+                          p.StartInfo.UserName = SecurityTools.AdminCreds.UserName;
+                          p.StartInfo.Password = SecurityTools.AdminCreds.SecurePassword;
+                      }
+
                       p.StartInfo.UseShellExecute = false;
                       p.StartInfo.RedirectStandardOutput = true;
                       p.StartInfo.RedirectStandardError = true;
@@ -62,7 +66,7 @@ namespace AssetManager.Tools
                       p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
                       p.StartInfo.FileName = Paths.PsExecPath;
 
-                      p.StartInfo.Arguments = "\\\\" + targetDevice.HostName + " -nobanner -h -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
+                      p.StartInfo.Arguments = "\\\\" + targetDevice.HostName + " -accepteula -nobanner -h -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
 
                       p.OutputDataReceived += P_OutputDataReceived;
                       p.ErrorDataReceived += P_ErrorDataReceived;
