@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{D7EFCEAD-2468-46A3-9381-64D12F18406B}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetManager", "AssetManager\AssetManager.csproj", "{205C062A-ECE5-4E01-9842-2FBD9F98FB10}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetDatabase", "AssetDatabase\AssetDatabase.csproj", "{32BCF1FC-0F86-4FAC-8D01-05F84FA0D736}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PingVisualizer", "PingVisualizer\PingVisualizer.csproj", "{D6059DE1-47C1-471B-BB28-88B9B655CEB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,14 @@ Global
 		{32BCF1FC-0F86-4FAC-8D01-05F84FA0D736}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32BCF1FC-0F86-4FAC-8D01-05F84FA0D736}.Release|x86.ActiveCfg = Release|Any CPU
 		{32BCF1FC-0F86-4FAC-8D01-05F84FA0D736}.Release|x86.Build.0 = Release|Any CPU
+		{D6059DE1-47C1-471B-BB28-88B9B655CEB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6059DE1-47C1-471B-BB28-88B9B655CEB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6059DE1-47C1-471B-BB28-88B9B655CEB0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D6059DE1-47C1-471B-BB28-88B9B655CEB0}.Debug|x86.Build.0 = Debug|Any CPU
+		{D6059DE1-47C1-471B-BB28-88B9B655CEB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6059DE1-47C1-471B-BB28-88B9B655CEB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6059DE1-47C1-471B-BB28-88B9B655CEB0}.Release|x86.ActiveCfg = Release|Any CPU
+		{D6059DE1-47C1-471B-BB28-88B9B655CEB0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +81,7 @@ Global
 		{583F28B2-C2F5-4422-BAC8-E3D15CB61DF0} = {D7EFCEAD-2468-46A3-9381-64D12F18406B}
 		{BC3270C0-62BA-42E4-8DB3-8ADCFE61DBC4} = {D7EFCEAD-2468-46A3-9381-64D12F18406B}
 		{5A65F4BF-4B06-44E4-AE55-5935E03955F6} = {D7EFCEAD-2468-46A3-9381-64D12F18406B}
+		{D6059DE1-47C1-471B-BB28-88B9B655CEB0} = {D7EFCEAD-2468-46A3-9381-64D12F18406B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78C10474-D84F-462F-958B-9F031FAFE86A}

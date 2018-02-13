@@ -243,7 +243,6 @@ Public Class PingVis : Implements IDisposable
             End Using
         End If
     End Sub
-
     Private Function CanDraw(timeStamp As Integer) As Boolean
         Dim ElapTime As Integer = timeStamp - LastDraw
         If ElapTime >= MaxDrawRatePerMilliseconds Then
