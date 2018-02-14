@@ -3,6 +3,7 @@ using AssetManager.Security;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace AssetManager.Tools
 {
@@ -24,6 +25,7 @@ namespace AssetManager.Tools
 
         public PsExecWrapper()
         {
+            StageExecutable();
         }
 
         protected virtual void OnErrorReceived(DataReceivedEventArgs e)
@@ -39,6 +41,19 @@ namespace AssetManager.Tools
             if (OutputReceived != null)
             {
                 OutputReceived(this, e);
+            }
+        }
+
+        private async void StageExecutable()
+        {
+            if (!Directory.Exists(Paths.PsExecTempDir))
+            {
+                Directory.CreateDirectory(Paths.PsExecTempDir);
+            }
+
+            if (!File.Exists(Paths.PsExecTempPath))
+            {
+                File.Copy(Paths.PsExecPath, Paths.PsExecTempPath);
             }
         }
 
@@ -64,7 +79,8 @@ namespace AssetManager.Tools
                       p.StartInfo.RedirectStandardError = true;
                       p.StartInfo.CreateNoWindow = true;
                       p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                      p.StartInfo.FileName = Paths.PsExecPath;
+                      p.StartInfo.WorkingDirectory = Paths.PsExecTempDir;
+                      p.StartInfo.FileName = Paths.PsExecTempPath;
 
                       p.StartInfo.Arguments = "\\\\" + targetDevice.HostName + " -accepteula -nobanner -h -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
 
