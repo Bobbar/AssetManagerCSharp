@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using System.Threading.Tasks;
-using System.Linq;
 using System.Drawing;
 using AssetManager.Helpers;
 using AssetManager.Data.Communications;
@@ -22,6 +21,7 @@ namespace AssetManager.Data.Functions
             AddAutoSizeDropWidthHandler(combo);
             combo.DisplayMember = nameof(CodeAttribute.DisplayValue);
             combo.ValueMember = nameof(CodeAttribute.Code);
+            combo.BindingContext = new BindingContext();
             combo.DataSource = IndexType;
             combo.SelectedIndex = -1;
             combo.EndUpdate();
