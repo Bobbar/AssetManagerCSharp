@@ -334,8 +334,12 @@ Public Class PingVis : Implements IDisposable
         Dim FadeColor As Integer
         Dim Color1, Color2 As Integer
         Dim r1, g1, b1, r2, g2, b2 As Long
+
+        roundTrip = 136
+
         FadeColor = Color.Green.ToArgb 'low ping color
         Color1 = FadeColor
+
         r1 = Color1 And (Not &HFFFFFF00)
         g1 = (Color1 And (Not &HFFFF00FF)) \ &H100&
         b1 = (Color1 And (Not &HFF00FFFF)) \ &HFFFF&
@@ -347,7 +351,12 @@ Public Class PingVis : Implements IDisposable
         Dim iSteps As Integer = 255
         Dim iStep As Integer = CInt(255 / ((Timeout / 3) / roundTrip)) 'Convert ping time to ratio of 255. 255 being the maximum levels of blending.
         If iStep > iSteps Then iStep = iSteps
-        FadeColor = RGB(CInt(r1 + (r2 - r1) / iSteps * iStep), CInt(g1 + (g2 - g1) / iSteps * iStep), CInt(b1 + (b2 - b1) / iSteps * iStep))
+        Dim nR, nG, nB As Integer
+        nR = CInt(r1 + (r2 - r1) / iSteps * iStep)
+        nG = CInt(g1 + (g2 - g1) / iSteps * iStep)
+        nB = CInt(b1 + (b2 - b1) / iSteps * iStep)
+        FadeColor = RGB(nR, nG, nB)
+        'FadeColor = RGB(CInt(r1 + (r2 - r1) / iSteps * iStep), CInt(g1 + (g2 - g1) / iSteps * iStep), CInt(b1 + (b2 - b1) / iSteps * iStep))
         Dim NewColor = ColorTranslator.FromOle(FadeColor)
         Dim AlphaColor = Color.FromArgb(220, NewColor)
         Return New SolidBrush(AlphaColor)
