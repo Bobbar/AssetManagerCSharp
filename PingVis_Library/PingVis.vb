@@ -351,11 +351,12 @@ Public Class PingVis : Implements IDisposable
         Dim iSteps As Integer = 255
         Dim iStep As Integer = CInt(255 / ((Timeout / 3) / roundTrip)) 'Convert ping time to ratio of 255. 255 being the maximum levels of blending.
         If iStep > iSteps Then iStep = iSteps
-        Dim nR, nG, nB As Integer
+        Dim nR, nG, nB As Double
         nR = CInt(r1 + (r2 - r1) / iSteps * iStep)
-        nG = CInt(g1 + (g2 - g1) / iSteps * iStep)
+        nG = (g1 + (g2 - g1) / iSteps * iStep)
+        'nG = CInt(g1 + (g2 - g1) / iSteps * iStep)
         nB = CInt(b1 + (b2 - b1) / iSteps * iStep)
-        FadeColor = RGB(nR, nG, nB)
+        FadeColor = Nothing 'RGB(nR, nG, nB)
         'FadeColor = RGB(CInt(r1 + (r2 - r1) / iSteps * iStep), CInt(g1 + (g2 - g1) / iSteps * iStep), CInt(b1 + (b2 - b1) / iSteps * iStep))
         Dim NewColor = ColorTranslator.FromOle(FadeColor)
         Dim AlphaColor = Color.FromArgb(220, NewColor)

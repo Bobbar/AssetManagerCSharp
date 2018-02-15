@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+
 //using System.Threading;
 
 namespace PingVisualizer
@@ -33,10 +34,10 @@ namespace PingVisualizer
         private float currentScale;
 
         private const int timeOut = 1000;
-        private const int goodPingInterval = 1000;
+        private const int maxBadPing = 300; // Ping time at which the bar color will be fully red.
+        private const int goodPingInterval = 250;//1000;
         private const int noPingInterval = 3000;
         private int currentPingInterval = goodPingInterval;
-
 
         private const int maxDrawScale = 10;
         private const float barGap = 0;
@@ -45,11 +46,9 @@ namespace PingVisualizer
         private const float barTopPadding = 0;
         private const float barBottomPadding = 4;
 
-
         private const int maxStoredResults = 1000000;
         private const int maxDrawRatePerMilliseconds = 10;
         private int imageScaleMulti = 5;
-
 
         public PingInfo CurrentResult
         {
@@ -65,7 +64,6 @@ namespace PingVisualizer
                 }
             }
         }
-
 
         public PingVis(Control targetControl, string hostName)
         {
@@ -153,13 +151,13 @@ namespace PingVisualizer
                 {
                     this.Dispose();
                 }
-
             }
             finally
             {
-                if (!mouseIsScrolling) DrawBars(targetControl, GetPingBars(), mouseOverBar);
+                if (!mouseIsScrolling && !this.disposedValue) DrawBars(targetControl, GetPingBars(), mouseOverBar);
             }
         }
+
         private async Task<PingReply> GetPingReply(string hostname)
         {
             try
@@ -192,7 +190,6 @@ namespace PingVisualizer
             mouseOverBar = null;
             if (scrollBarList != null) scrollBarList.Clear();
             DrawBars(targetControl, GetPingBars(), mouseOverBar);
-
         }
 
         private void ControlMouseWheel(object sender, MouseEventArgs e)
@@ -203,9 +200,14 @@ namespace PingVisualizer
                 mouseIsScrolling = true;
                 if (e.Delta < 0) // Scroll up.
                 {
-                    newIdx = pingReplies.Count - maxBars;
-                    mouseIsScrolling = false;
-                    DrawBars(targetControl, GetPingBars()); // <--- #1
+                    newIdx = topIndex + 1;
+                    //if the scroll index returns to the end (bottom) of the results, disable scrolling and return to normal display
+                    if (newIdx > pingReplies.Count - maxBars)
+                    {
+                        newIdx = pingReplies.Count - maxBars;
+                        mouseIsScrolling = false;
+                        DrawBars(targetControl, GetPingBars());
+                    }
                 }
                 else if (e.Delta > 0) // Scroll down.
                 {
@@ -218,7 +220,7 @@ namespace PingVisualizer
                 if (topIndex != newIdx)
                 {
                     topIndex = newIdx;
-                    DrawBars(targetControl, GetPingBars()); // <--- #2  Drawing twice?
+                    DrawBars(targetControl, GetPingBars());
                 }
             }
         }
@@ -251,9 +253,7 @@ namespace PingVisualizer
         {
             if (pingReplies.Count < 1 || !CanDraw(Environment.TickCount))
             {
-
                 return;
-
             }
             else
             {
@@ -262,8 +262,7 @@ namespace PingVisualizer
                     if (targetControl.FindForm().WindowState == FormWindowState.Minimized) return;
                 }
             }
-            //try
-            //{
+
             using (var bm = new Bitmap(scaledImageWidth, scaledImageHeight, PixelFormat.Format32bppPArgb))
             using (var gfx = Graphics.FromImage(bm))
             {
@@ -287,11 +286,6 @@ namespace PingVisualizer
                 SetControlImage(targetControl, resizedBitmap);
                 DisposeBarList(bars);
             }
-            //}
-            //catch
-            //{
-
-            //}
         }
 
         private void DisposeBarList(List<PingBar> bars)
@@ -310,12 +304,12 @@ namespace PingVisualizer
             {
                 using (var scrollBrush = new SolidBrush(Color.White))
                 {
-                    int scrollLocation = 0;
+                    float scrollLocation = 0;
                     if (topIndex > 0)
                     {
-                        scrollLocation = (scaledImageHeight / (pingReplies.Count / topIndex));
+                        scrollLocation = (scaledImageHeight / (float)(pingReplies.Count / (float)topIndex));
                     }
-                     
+
                     gfx.FillRectangle(scrollBrush, new RectangleF(scaledImageWidth - (20 + imageScaleMulti), scrollLocation, 10 + imageScaleMulti, 5 + imageScaleMulti));
                 }
             }
@@ -334,20 +328,19 @@ namespace PingVisualizer
 
         private void DrawPingText(Graphics gfx, MouseOverInfo mouseOverBar = null)
         {
-            float infoFontSize = (float)8 * imageScaleMulti;
+            float infoFontSize = 8 * imageScaleMulti;
             float overInfoFontSize = 7 * imageScaleMulti;
+
+            gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            gfx.TextContrast = 0;
 
             if (mouseOverBar != null)
             {
                 string overInfoText = GetReplyStatusText(mouseOverBar.PingReply);
-
                 using (Font overFont = new Font("Tahoma", overInfoFontSize, FontStyle.Regular))
                 {
                     SizeF textSize = gfx.MeasureString(overInfoText, overFont);
-                    gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit; // < Duplicates
-                    gfx.TextContrast = 0; // Duplicate
-                    gfx.DrawString(overInfoText, overFont, new SolidBrush(Color.FromArgb(240, Color.White)), new PointF(mouseOverBar.MouseLoc.X + (textSize.Width / 2), mouseOverBar.MouseLoc.Y - (textSize.Height / 2)));
-                    // ^ Watch this shit for correctness.
+                    gfx.DrawString(overInfoText, overFont, new SolidBrush(Color.FromArgb(240, Color.White)), new PointF(mouseOverBar.MouseLoc.X + (textSize.Width / 2f), mouseOverBar.MouseLoc.Y - (textSize.Height / 2f)));
                 }
             }
             if (!mouseIsScrolling)
@@ -356,8 +349,6 @@ namespace PingVisualizer
                 using (Font infoFont = new Font("Tahoma", infoFontSize, FontStyle.Bold))
                 {
                     SizeF textSize = gfx.MeasureString(infoText, infoFont);
-                    gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit; // < Dupliucates
-                    gfx.TextContrast = 0; // Duplicate
                     gfx.DrawString(infoText, infoFont, Brushes.White, new PointF((scaledImageWidth - 5) - (textSize.Width), scaledImageHeight - (textSize.Height + 5)));
                 }
             }
@@ -365,20 +356,17 @@ namespace PingVisualizer
 
         private string GetReplyStatusText(PingInfo reply)
         {
-
             switch (reply.Status)
             {
                 case IPStatus.Success:
                     return reply.RoundTripTime + "ms";
-                    break;
+
                 case IPStatus.TimedOut:
                     return "T/O";
-                    break;
+
                 default:
                     return "ERR";
-
             }
-
         }
 
         private void DrawPingBars(Graphics gfx, List<PingBar> bars)
@@ -393,7 +381,7 @@ namespace PingVisualizer
         {
             var newBars = new List<PingBar>();
             float currentYPos = barTopPadding;
-            float barHeight = (scaledImageHeight - barBottomPadding - barTopPadding - (barGap * maxBars)) / maxBars;
+            float barHeight = (scaledImageHeight - barBottomPadding - barTopPadding - (barGap * maxBars)) / (float)maxBars;
 
             SetScale();
 
@@ -447,39 +435,36 @@ namespace PingVisualizer
             int color1, color2;
             long r1, g1, b1, r2, g2, b2;
 
-            roundTripTime = 136;
-
-            //fadeColor = Color.Green.ToArgb();
-            //color1 = fadeColor;
-            color1 = Color.Green.ToArgb();
+            color1 = Color.Green.ToArgb(); // Low ping color
             r1 = color1 & (~0xFFFFFF00);
             g1 = (color1 & (~0xFFFF00FF)) / 0x100;
             b1 = (color1 & (~0xFF00FFFF)) / 0xFFFF;
 
-            //fadeColor = Color.Red.ToArgb();
-            //color2 = fadeColor;
-            color2 = Color.Blue.ToArgb();
+            color2 = Color.Red.ToArgb(); // High ping color
             r2 = color2 & (~0xFFFFFF00);
             g2 = (color2 & (~0xFFFF00FF)) / 0x100;
             b2 = (color2 & (~0xFF00FFFF)) / 0xFFFF;
 
-            int maxSteps = 255;
-            float step = 0;
+            int maxIntensity = 255;
+            int intensity = 0;
             if (roundTripTime > 0)
             {
-                step = (255 / ((timeOut / 3f) / (int)roundTripTime));
+                // Compute the intensity of the high ping color.
+                intensity = (int)(maxIntensity / (maxBadPing / (float)roundTripTime));
             }
 
-            step = (int)step;
-            if (step > maxSteps) step = maxSteps;
-            int nR, nG, nB;
-            nR = (int)(r1 + (r2 - r1) / maxSteps * step);
-            nG = (int)(g1 + (g2 - g1) / maxSteps * step);
-            nB = (int)(b1 + (b2 - b1) / maxSteps * step);
+            // Clamp the intensity within the max.
+            if (intensity > maxIntensity) intensity = maxIntensity;
 
-            fadeColor = Color.FromArgb((int)(r1 + (r2 - r1) / maxSteps * step), (int)(g1 + (g2 - g1) / maxSteps * step), (int)(b1 + (b2 - b1) / maxSteps * step)).ToArgb();
+            // Calculate the new RGB values from the intensity.
+            int newR, newG, newB;
+            newR = (int)(r1 + (r2 - r1) / (float)maxIntensity * intensity);
+            newG = (int)(g1 + (g2 - g1) / (float)maxIntensity * intensity);
+            newB = (int)(b1 + (b2 - b1) / (float)maxIntensity * intensity);
+
+            // Convert the RGB values in to a color; adding alpha.
+            fadeColor = Color.FromArgb(newR, newG, newB).ToArgb();
             var newColor = ColorTranslator.FromOle(fadeColor);
-            //Is all this needed? ^
             var alphaColor = Color.FromArgb(200, newColor);
             return new SolidBrush(alphaColor);
         }
@@ -677,7 +662,9 @@ namespace PingVisualizer
                 }
             }
 
-            public PingBar() { }
+            public PingBar()
+            {
+            }
 
             public PingBar(float length, Brush brush, RectangleF rectangle, float positionY, PingInfo pingInfo)
             {
@@ -701,11 +688,8 @@ namespace PingVisualizer
             }
         }
 
-
-
-
-
         #region IDisposable Support
+
         private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
@@ -751,9 +735,7 @@ namespace PingVisualizer
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
-        #endregion
 
-
-
+        #endregion IDisposable Support
     }
 }
