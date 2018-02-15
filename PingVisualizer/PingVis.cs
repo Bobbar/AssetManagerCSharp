@@ -10,8 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-//using System.Threading;
-
 namespace PingVisualizer
 {
     public class PingVis : IDisposable
@@ -21,6 +19,7 @@ namespace PingVisualizer
         private string hostname;
         private bool pingRunning = false;
         private Timer pingTimer = new Timer();
+        private Timer scaleTimer = new Timer();
         private Control targetControl;
         private int scaledImageWidth;
         private int scaledImageHeight;
@@ -31,11 +30,12 @@ namespace PingVisualizer
         private MouseOverInfo mouseOverBar;
         private long lastDrawTime = 0;
         private List<PingBar> scrollBarList;
+        private float targetScale;
         private float currentScale;
 
         private const int timeOut = 1000;
         private const int maxBadPing = 300; // Ping time at which the bar color will be fully red.
-        private const int goodPingInterval = 250;//1000;
+        private const int goodPingInterval = 1000;
         private const int noPingInterval = 3000;
         private int currentPingInterval = goodPingInterval;
 
@@ -69,7 +69,7 @@ namespace PingVisualizer
         {
             InitControl(targetControl);
             this.hostname = hostName;
-
+            InitScaleTimer();
             InitPing();
         }
 
@@ -95,11 +95,11 @@ namespace PingVisualizer
         private void InitPing()
         {
             ServicePointManager.DnsRefreshTimeout = 0;
-            InitTimer();
+            InitPingTimer();
             StartPing();
         }
 
-        private void InitTimer()
+        private void InitPingTimer()
         {
             if (!this.disposedValue)
             {
@@ -116,10 +116,81 @@ namespace PingVisualizer
             }
         }
 
+        private void InitScaleTimer()
+        {
+            scaleTimer.Tick += ScaleTimer_Tick;
+            scaleTimer.Interval = 100;
+            scaleTimer.Enabled = true;
+        }
+
+        private void ScaleTimer_Tick(object sender, EventArgs e)
+        {
+            if (this.disposedValue) return;
+            EaseScaleChange();
+        }
+
         private void PingTimer_Tick(object sender, EventArgs e)
         {
             StartPing();
             pingTimer.Interval = currentPingInterval;
+        }
+
+        private void SetScale()
+        {
+            if (CurrentDisplayResults().Count > 0)
+            {
+                long maxPing = CurrentDisplayResults().OrderByDescending(p => p.RoundTripTime).FirstOrDefault().RoundTripTime;
+                if (maxPing <= 0) maxPing = 1;
+                float newScale = ((scaledImageWidth / 2f) / maxPing);
+                if (newScale > maxDrawScale) newScale = maxDrawScale;
+
+                if (targetScale != newScale)
+                {
+                    targetScale = newScale;
+                }
+
+                targetScale = newScale;
+            }
+        }
+
+        /// <summary>
+        /// Smoothly eases between scale changes.
+        /// </summary>
+        private void EaseScaleChange()
+        {
+            if (currentScale != targetScale)
+            {
+                if (!mouseIsScrolling)
+                {
+                    // Get the diffence between the current and target.
+                    float diff = currentScale - targetScale;
+                    float diffAbs = Math.Abs(diff);
+
+                    // If the absolute difference above a certain amount begin/continue easing.
+                    if (diffAbs > 0.02)
+                    {
+                        // Simple easing calulation.
+                        if (currentScale > targetScale)
+                        {
+                            currentScale -= (diffAbs / 5f);
+                        }
+                        else if (currentScale < targetScale)
+                        {
+                            currentScale += (diffAbs / 5f);
+                        }
+                    }
+                    else
+                    {
+                        // Set to final scale
+                        currentScale = targetScale;
+                    }
+                    DrawBars(targetControl, GetPingBars());
+                }
+                else
+                {
+                    currentScale = targetScale;
+                }
+            }
         }
 
         private async void StartPing()
@@ -174,13 +245,12 @@ namespace PingVisualizer
             }
         }
 
-        // Do this in property?
         private void SetPingInterval(int interval)
         {
             if (currentPingInterval != interval)
             {
                 currentPingInterval = interval;
-                InitTimer();
+                InitPingTimer();
             }
         }
 
@@ -431,19 +501,19 @@ namespace PingVisualizer
         private Brush GetBarBrush(long roundTripTime)
         {
             // Alpha blending two colors. As ping times go up, the returned color becomes more red.
-            int fadeColor;
-            int color1, color2;
+            Color barColor;
+            Color lowColor, highColor;
             long r1, g1, b1, r2, g2, b2;
 
-            color1 = Color.Green.ToArgb(); // Low ping color
-            r1 = color1 & (~0xFFFFFF00);
-            g1 = (color1 & (~0xFFFF00FF)) / 0x100;
-            b1 = (color1 & (~0xFF00FFFF)) / 0xFFFF;
+            lowColor = Color.Green; // Low ping color
+            r1 = lowColor.R;
+            g1 = lowColor.G;
+            b1 = lowColor.B;
 
-            color2 = Color.Red.ToArgb(); // High ping color
-            r2 = color2 & (~0xFFFFFF00);
-            g2 = (color2 & (~0xFFFF00FF)) / 0x100;
-            b2 = (color2 & (~0xFF00FFFF)) / 0xFFFF;
+            highColor = Color.Red; // High ping color
+            r2 = highColor.R;
+            g2 = highColor.G;
+            b2 = highColor.B;
 
             int maxIntensity = 255;
             int intensity = 0;
@@ -462,11 +532,8 @@ namespace PingVisualizer
             newG = (int)(g1 + (g2 - g1) / (float)maxIntensity * intensity);
             newB = (int)(b1 + (b2 - b1) / (float)maxIntensity * intensity);
 
-            // Convert the RGB values in to a color; adding alpha.
-            fadeColor = Color.FromArgb(newR, newG, newB).ToArgb();
-            var newColor = ColorTranslator.FromOle(fadeColor);
-            var alphaColor = Color.FromArgb(200, newColor);
-            return new SolidBrush(alphaColor);
+            barColor = Color.FromArgb(200, newR, newG, newB);
+            return new SolidBrush(barColor);
         }
 
         private void DrawScaleLines(Graphics gfx)
@@ -487,18 +554,6 @@ namespace PingVisualizer
             if (pingReplies.Count > maxStoredResults)
             {
                 pingReplies = pingReplies.GetRange(pingReplies.Count - maxStoredResults, maxStoredResults);
-            }
-        }
-
-        private void SetScale()
-        {
-            if (CurrentDisplayResults().Count > 0)
-            {
-                long maxPing = CurrentDisplayResults().OrderByDescending(p => p.RoundTripTime).FirstOrDefault().RoundTripTime;
-                if (maxPing <= 0) maxPing = 1;
-                float newScale = ((scaledImageWidth / 2f) / maxPing);
-                if (newScale > maxDrawScale) newScale = maxDrawScale;
-                currentScale = newScale;
             }
         }
 
@@ -523,7 +578,7 @@ namespace PingVisualizer
                     var but = (Button)targetControl;
                     if (but.Image != null) but.Image.Dispose();
                     but.Image = image;
-                    but.Invalidate();
+                    //   but.Invalidate();
                 }
                 else if (targetControl is PictureBox)
                 {
@@ -702,6 +757,11 @@ namespace PingVisualizer
                     pingTimer.Tick -= PingTimer_Tick;
                     pingTimer.Dispose();
                     pingTimer = null;
+
+                    scaleTimer.Enabled = false;
+                    scaleTimer.Tick -= ScaleTimer_Tick;
+                    scaleTimer.Dispose();
+                    scaleTimer = null;
 
                     targetControl.MouseWheel -= ControlMouseWheel;
                     targetControl.MouseLeave -= ControlMouseLeave;
