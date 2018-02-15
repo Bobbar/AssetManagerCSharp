@@ -570,10 +570,6 @@
       <Project>{d6059de1-47c1-471b-bb28-88b9b655ceb0}</Project>
       <Name>PingVisualizer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PingVis_Library\PingVisLib.vbproj">
-      <Project>{bc3270c0-62ba-42e4-8db3-8adcfe61dbc4}</Project>
-      <Name>PingVisLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PublishFile Include="Microsoft.Management.Infrastructure">
