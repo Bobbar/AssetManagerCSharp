@@ -14,6 +14,10 @@ namespace PingVisualizer
 {
     public class PingVis : IDisposable
     {
+        private Graphics pingGraphics;
+        private Bitmap pingImage;
+        private Graphics controlGraphics;
+        private Bitmap controlImage;
         private Ping ping = new Ping();
         private List<PingInfo> pingReplies = new List<PingInfo>();
         private string hostname;
@@ -69,8 +73,25 @@ namespace PingVisualizer
         {
             InitControl(targetControl);
             this.hostname = hostName;
+            InitGraphics();
             InitScaleTimer();
             InitPing();
+        }
+
+        private void InitGraphics()
+        {
+            pingImage = new Bitmap(scaledImageWidth, scaledImageHeight, PixelFormat.Format32bppPArgb);
+            pingGraphics = Graphics.FromImage(pingImage);
+
+            controlImage = new Bitmap(origImageWidth, origImageHeight);
+            controlImage.SetResolution(pingImage.HorizontalResolution, pingImage.VerticalResolution);
+
+            controlGraphics = Graphics.FromImage(controlImage);
+            controlGraphics.CompositingMode = CompositingMode.SourceCopy;
+            controlGraphics.CompositingQuality = CompositingQuality.HighSpeed;
+            controlGraphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
+            controlGraphics.SmoothingMode = SmoothingMode.None;
+            controlGraphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
         }
 
         private void InitControl(Control targetControl)
@@ -333,67 +354,45 @@ namespace PingVisualizer
                 }
             }
 
-            using (var bm = new Bitmap(scaledImageWidth, scaledImageHeight, PixelFormat.Format32bppPArgb))
-            using (var gfx = Graphics.FromImage(bm))
+            pingGraphics.SmoothingMode = SmoothingMode.None;
+
+            if (!mouseIsScrolling)
             {
-                gfx.SmoothingMode = SmoothingMode.None;
+                pingGraphics.Clear(targetControl.BackColor);
+            }
+            else
+            {
+                pingGraphics.Clear(Color.FromArgb(48, 53, 61));
+            }
+            DrawScaleLines(pingGraphics);
+            DrawPingBars(pingGraphics, bars);
+            DrawPingText(pingGraphics, mouseOverBar);
+            DrawScrollBar(pingGraphics);
+            TrimPingList();
+            ResizeImage();
+            SetControlImage(targetControl, controlImage);
+            DisposeBarList(bars);
+        }
 
-                if (!mouseIsScrolling)
-                {
-                    gfx.Clear(targetControl.BackColor);
-                }
-                else
-                {
-                    gfx.Clear(Color.FromArgb(48, 53, 61));
-                }
-                DrawScaleLines(gfx);
-                DrawPingBars(gfx, bars);
-                DrawPingText(gfx, mouseOverBar);
-                DrawScrollBar(gfx);
-                TrimPingList();
+        private void DrawScaleLines(Graphics gfx)
+        {
+            float scaleXPos = 0;
+            float stepSize = (int)(currentScale * 15);
+            int numOfLines = (int)(scaledImageWidth / stepSize);
 
-                var resizedBitmap = ResizeImage(bm, origImageWidth, origImageHeight);
-                SetControlImage(targetControl, resizedBitmap);
-                DisposeBarList(bars);
+            for (int a = 0; a < numOfLines; a++)
+            {
+                gfx.DrawLine(Pens.White, new PointF(scaleXPos, 0), new PointF(scaleXPos, scaledImageHeight));
+                scaleXPos += stepSize;
             }
         }
 
-        private void DisposeBarList(List<PingBar> bars)
+        private void DrawPingBars(Graphics gfx, List<PingBar> bars)
         {
             foreach (var bar in bars)
             {
-                // Those brushes are memory heavy.
-                bar.Brush.Dispose();
+                gfx.FillRectangle(bar.Brush, bar.Rectangle);
             }
-            bars.Clear();
-        }
-
-        private void DrawScrollBar(Graphics gfx)
-        {
-            if (mouseIsScrolling)
-            {
-                using (var scrollBrush = new SolidBrush(Color.White))
-                {
-                    float scrollLocation = 0;
-                    if (topIndex > 0)
-                    {
-                        scrollLocation = (scaledImageHeight / (float)(pingReplies.Count / (float)topIndex));
-                    }
-
-                    gfx.FillRectangle(scrollBrush, new RectangleF(scaledImageWidth - (20 + imageScaleMulti), scrollLocation, 10 + imageScaleMulti, 5 + imageScaleMulti));
-                }
-            }
-        }
-
-        private bool CanDraw(long timeTick)
-        {
-            long elapTime = timeTick - lastDrawTime;
-            if (elapTime >= maxDrawRatePerMilliseconds)
-            {
-                lastDrawTime = timeTick;
-                return true;
-            }
-            return false;
         }
 
         private void DrawPingText(Graphics gfx, MouseOverInfo mouseOverBar = null)
@@ -424,6 +423,54 @@ namespace PingVisualizer
             }
         }
 
+        private void DrawScrollBar(Graphics gfx)
+        {
+            if (mouseIsScrolling)
+            {
+                using (var scrollBrush = new SolidBrush(Color.White))
+                {
+                    float scrollLocation = 0;
+                    if (topIndex > 0)
+                    {
+                        scrollLocation = (scaledImageHeight / (float)(pingReplies.Count / (float)topIndex));
+                    }
+
+                    gfx.FillRectangle(scrollBrush, new RectangleF(scaledImageWidth - (20 + imageScaleMulti), scrollLocation, 10 + imageScaleMulti, 5 + imageScaleMulti));
+                }
+            }
+        }
+
+        private void ResizeImage()
+        {
+            var destRect = new Rectangle(0, 0, origImageWidth, origImageHeight);
+            using (var wrapMode = new ImageAttributes())
+            {
+                wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                controlGraphics.DrawImage(pingImage, destRect, 0, 0, pingImage.Width, pingImage.Height, GraphicsUnit.Pixel, wrapMode);
+            }
+        }
+
+        private void DisposeBarList(List<PingBar> bars)
+        {
+            foreach (var bar in bars)
+            {
+                // Those brushes are memory heavy.
+                bar.Brush.Dispose();
+            }
+            bars.Clear();
+        }
+
+        private bool CanDraw(long timeTick)
+        {
+            long elapTime = timeTick - lastDrawTime;
+            if (elapTime >= maxDrawRatePerMilliseconds)
+            {
+                lastDrawTime = timeTick;
+                return true;
+            }
+            return false;
+        }
+
         private string GetReplyStatusText(PingInfo reply)
         {
             switch (reply.Status)
@@ -436,14 +483,6 @@ namespace PingVisualizer
 
                 default:
                     return "ERR";
-            }
-        }
-
-        private void DrawPingBars(Graphics gfx, List<PingBar> bars)
-        {
-            foreach (var bar in bars)
-            {
-                gfx.FillRectangle(bar.Brush, bar.Rectangle);
             }
         }
 
@@ -500,7 +539,6 @@ namespace PingVisualizer
 
         private Brush GetBarBrush(long roundTripTime)
         {
-            // Alpha blending two colors. As ping times go up, the returned color becomes more red.
             Color barColor;
             Color lowColor, highColor;
             long r1, g1, b1, r2, g2, b2;
@@ -536,19 +574,6 @@ namespace PingVisualizer
             return new SolidBrush(barColor);
         }
 
-        private void DrawScaleLines(Graphics gfx)
-        {
-            float scaleXPos = 0;
-            float stepSize = (int)(currentScale * 15);
-            int numOfLines = (int)(scaledImageWidth / stepSize);
-
-            for (int a = 0; a < numOfLines; a++)
-            {
-                gfx.DrawLine(Pens.White, new PointF(scaleXPos, 0), new PointF(scaleXPos, scaledImageHeight));
-                scaleXPos += stepSize;
-            }
-        }
-
         private void TrimPingList()
         {
             if (pingReplies.Count > maxStoredResults)
@@ -576,9 +601,9 @@ namespace PingVisualizer
                 if (targetControl is Button)
                 {
                     var but = (Button)targetControl;
-                    if (but.Image != null) but.Image.Dispose();
+                    // if (but.Image != null) but.Image.Dispose();
                     but.Image = image;
-                    //   but.Invalidate();
+                    but.Invalidate();
                 }
                 else if (targetControl is PictureBox)
                 {
@@ -594,30 +619,6 @@ namespace PingVisualizer
                 targetControl.BackgroundImage = image;
                 targetControl.Invalidate();
             }
-        }
-
-        private Bitmap ResizeImage(Image image, int newWidth, int newHeight)
-        {
-            var destRect = new Rectangle(0, 0, newWidth, newHeight);
-            var destImage = new Bitmap(newWidth, newHeight);
-
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var gfx = Graphics.FromImage(destImage))
-            {
-                gfx.CompositingMode = CompositingMode.SourceCopy;
-                gfx.CompositingQuality = CompositingQuality.HighSpeed;
-                gfx.InterpolationMode = InterpolationMode.HighQualityBilinear;
-                gfx.SmoothingMode = SmoothingMode.None;
-                gfx.PixelOffsetMode = PixelOffsetMode.HighSpeed;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    gfx.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-            return destImage;
         }
 
         public class PingInfo
@@ -770,6 +771,12 @@ namespace PingVisualizer
                     ping.Dispose();
                     pingReplies.Clear();
                     pingReplies = null;
+
+                    pingImage.Dispose();
+                    pingGraphics.Dispose();
+
+                    controlImage.Dispose();
+                    controlGraphics.Dispose();
 
                     // TODO: dispose managed state (managed objects).
                 }
