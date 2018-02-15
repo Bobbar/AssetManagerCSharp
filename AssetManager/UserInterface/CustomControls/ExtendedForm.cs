@@ -109,6 +109,17 @@ namespace AssetManager.UserInterface.CustomControls
             MemoryTweaks.SetWorkingSet();
         }
 
+        protected override CreateParams CreateParams
+        {
+            // Enables double-buffering.
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+                return cp;
+            }
+        }
+
         public virtual bool OKToClose()
         {
             if (this.Owner != null)

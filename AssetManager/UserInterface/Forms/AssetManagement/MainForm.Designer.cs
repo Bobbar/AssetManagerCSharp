@@ -901,7 +901,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Controls.Add(this.ToolStrip1);
             this.Controls.Add(this.StatusStrip1);
             this.Controls.Add(this.GroupBox1);
-            this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(1256, 443);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
