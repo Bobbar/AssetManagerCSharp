@@ -150,14 +150,16 @@ namespace PingVisualizer
         private void InitScaleTimer()
         {
             scaleTimer.Tick += ScaleTimer_Tick;
-            scaleTimer.Interval = 100;
+            scaleTimer.Interval = 50;
             scaleTimer.Enabled = true;
         }
 
         private void ScaleTimer_Tick(object sender, EventArgs e)
         {
-            if (this.disposedValue) return;
-            EaseScaleChange();
+            if (!this.disposedValue)
+            {
+                EaseScaleChange();
+            }
         }
 
         private void PingTimer_Tick(object sender, EventArgs e)
@@ -178,7 +180,9 @@ namespace PingVisualizer
                 if (targetScale != newScale)
                 {
                     targetScale = newScale;
+                    scaleTimer.Enabled = true;
                 }
+                if (mouseIsScrolling) currentScale = targetScale;
             }
         }
 
@@ -210,8 +214,9 @@ namespace PingVisualizer
                     }
                     else
                     {
-                        // Set to final scale
+                        // Set to final scale and stop timer.
                         currentScale = targetScale;
+                        scaleTimer.Enabled = false;
                     }
                     DrawBars();
                 }
@@ -367,7 +372,6 @@ namespace PingVisualizer
 
         private void DrawBars(bool forceDraw = false)
         {
-
             if (pingReplies.Count < 1)
             {
                 return;
