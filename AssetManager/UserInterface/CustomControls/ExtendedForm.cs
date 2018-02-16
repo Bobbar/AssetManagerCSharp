@@ -3,6 +3,7 @@ using AssetManager.Helpers;
 using AssetManager.Data.Classes;
 using AssetManager.Tools;
 using System;
+using System.ComponentModel;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -114,8 +115,17 @@ namespace AssetManager.UserInterface.CustomControls
             // Enables double-buffering.
             get
             {
+                bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+                bool terminalSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+
+                if (!designMode)
+                {
+                    if (!terminalSession)
+                    {
+                        cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+                    }
+                }
                 return cp;
             }
         }
