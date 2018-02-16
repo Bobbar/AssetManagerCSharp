@@ -205,7 +205,7 @@ namespace AssetManager.Tools.Deployment
                     {
                         if (!TimeoutMessageSent)
                         {
-                            LogMessage("Still waiting...");
+                            LogMessage("Still running...");
                             TimeoutMessageSent = true;
                         }
                     }
