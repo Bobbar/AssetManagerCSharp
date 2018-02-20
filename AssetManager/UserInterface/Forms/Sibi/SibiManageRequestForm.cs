@@ -294,6 +294,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         LoadNotes(CurrentRequest.GUID);
                     }
                 }
+                else
+                {
+                    if (IsNewRequest)
+                    {
+                        OtherFunctions.Message("You must create a new request before adding notes.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Error", this);
+                    }
+                }
             }
             catch (Exception ex)
             {
