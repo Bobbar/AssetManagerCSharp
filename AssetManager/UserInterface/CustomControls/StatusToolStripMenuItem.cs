@@ -38,10 +38,8 @@ namespace AssetManager.UserInterface.CustomControls
 
             if (HostOnline)
             {
-                int lightXPos = this.Bounds.Width - 30;
-                int lightYPos = (this.Bounds.Height / 2) - (onlineLightSize / 2);
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                e.Graphics.FillEllipse(Brushes.LimeGreen, lightXPos, lightYPos, onlineLightSize, onlineLightSize);
+                e.Graphics.FillRectangle(Brushes.LimeGreen, this.Image.Width, 0, 3, this.Bounds.Height);
             }
         }
 

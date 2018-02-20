@@ -15,7 +15,6 @@ namespace PingVisualizer
     public class PingVis : IDisposable
     {
         private Graphics scaledGraphics;
-
         private Bitmap scaledImage;
         private int imageScaleMulti = 5;
         private int scaledImageWidth;
