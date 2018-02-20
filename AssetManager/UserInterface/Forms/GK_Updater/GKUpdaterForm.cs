@@ -80,7 +80,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                 }
                 else
                 {
-                    var blah = OtherFunctions.Message("An update for device " + device.Serial + " already exists.  Do you want to restart the update for this device?", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Exclamation, "Duplicate Update", this);
+                    var blah = OtherFunctions.Message("An update for device " + device.Serial + " already exists.  Do you want to restart the update for this device?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "Duplicate Update", this);
                     if (blah == DialogResult.OK)
                     {
                         StartUpdateByDevice(device);
@@ -187,7 +187,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         private void CriticalStop(object sender, EventArgs e)
         {
             StopQueue();
-            OtherFunctions.Message("The queue was stopped because of an access error. Please re-enter your credentials.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Queue Stopped", this);
+            OtherFunctions.Message("The queue was stopped because of an access error. Please re-enter your credentials.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Queue Stopped", this);
             SecurityTools.ClearAdminCreds();
 
             if (SecurityTools.VerifyAdminCreds())
@@ -200,7 +200,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         {
             if (ActiveUpdates())
             {
-                OtherFunctions.Message("There are still updates running!  Cancel the updates or wait for them to finish.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Close Aborted", this);
+                OtherFunctions.Message("There are still updates running!  Cancel the updates or wait for them to finish.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Close Aborted", this);
                 this.Activate();
                 this.WindowState = FormWindowState.Normal;
                 return false;
@@ -356,7 +356,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             if (!PackFileReady)
             {
                 CancelAll();
-                OtherFunctions.Message("The local pack file does not match the server. All running updates will be stopped and a new copy will now be downloaded and unpacked.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Pack file out of date", this);
+                OtherFunctions.Message("The local pack file does not match the server. All running updates will be stopped and a new copy will now be downloaded and unpacked.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Pack file out of date", this);
                 ProcessPackFile();
             }
             return true;

@@ -355,7 +355,7 @@ namespace AssetManager.Data.Functions
                         }
                         else
                         {
-                            OtherFunctions.Message("Invalid year.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Invalid", parentForm);
+                            OtherFunctions.Message("Invalid year.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Invalid", parentForm);
                         }
                     }
                 }
@@ -580,7 +580,7 @@ FROM poheader";
             }
             else
             {
-                OtherFunctions.Message("No results found.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "No results", parentForm);
+                OtherFunctions.Message("No results found.", MessageBoxButtons.OK, MessageBoxIcon.Information, "No results", parentForm);
                 return false;
             }
         }
@@ -669,7 +669,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
                     GridForm NewGridForm = new GridForm(parentForm, "MUNIS Info");
                     if (ReferenceEquals(InventoryTable, null))
                     {
-                        OtherFunctions.Message("Munis Fixed Asset info. not found.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "No FA Record");
+                        OtherFunctions.Message("Munis Fixed Asset info. not found.", MessageBoxButtons.OK, MessageBoxIcon.Information, "No FA Record");
                     }
                     else
                     {
@@ -677,7 +677,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
                     }
                     if (ReferenceEquals(ReqLinesTable, null))
                     {
-                        OtherFunctions.Message("Could not resolve PO from Asset Tag or Serial. Please add a valid PO if possible.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "No Req. Record");
+                        OtherFunctions.Message("Could not resolve PO from Asset Tag or Serial. Please add a valid PO if possible.", MessageBoxButtons.OK, MessageBoxIcon.Information, "No Req. Record");
                     }
                     else
                     {
@@ -696,7 +696,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
                 }
                 else if (ReferenceEquals(InventoryTable, null) && ReferenceEquals(ReqLinesTable, null))
                 {
-                    OtherFunctions.Message("Could not resolve any purchase or Fixed Asset info.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Nothing Found");
+                    OtherFunctions.Message("Could not resolve any purchase or Fixed Asset info.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Nothing Found");
                 }
             }
             catch (Exception ex)

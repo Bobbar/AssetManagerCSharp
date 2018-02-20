@@ -66,7 +66,7 @@ namespace AssetManager.Helpers
             }
             else
             {
-                OtherFunctions.Message("Device not found.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", parentForm);
+                OtherFunctions.Message("Device not found.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", parentForm);
             }
         }
 

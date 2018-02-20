@@ -162,7 +162,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 if (!FieldsValid())
                 {
-                    OtherFunctions.Message("Some required fields are missing or invalid.  Please check and fill all highlighted fields.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Data", this);
+                    OtherFunctions.Message("Some required fields are missing or invalid.  Please check and fill all highlighted fields.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Missing Data", this);
                     return;
                 }
                 using (UpdateDev UpdateDia = new UpdateDev(this))
@@ -228,7 +228,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 this.WindowState = FormWindowState.Normal;
                 this.Activate();
-                var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Discard Changes?", this);
+                var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Discard Changes?", this);
                 if (blah == DialogResult.Yes)
                 {
                     controlParser.ClearErrors();
@@ -272,7 +272,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     var DBHash = GetHash(DeviceResults, HistoricalResults);
                     if (DBHash != currentHash)
                     {
-                        OtherFunctions.Message("This record appears to have been modified by someone else since the start of this modification.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Concurrency Error", this);
+                        OtherFunctions.Message("This record appears to have been modified by someone else since the start of this modification.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Concurrency Error", this);
                         return false;
                     }
                     return true;
@@ -284,19 +284,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.DeleteDevice);
 
-            var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "WARNING", this);
+            var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "WARNING", this);
             if (blah == DialogResult.Yes)
             {
                 if (AssetManagerFunctions.DeleteDevice(currentViewDevice.GUID))
                 {
-                    OtherFunctions.Message("Device deleted successfully.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Device Deleted", this);
+                    OtherFunctions.Message("Device deleted successfully.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Device Deleted", this);
                     currentViewDevice = null;
                     Helpers.ChildFormControl.MainFormInstance().RefreshData();
                 }
                 else
                 {
                     Logging.Logger("*****DELETION ERROR******: " + currentViewDevice.GUID);
-                    OtherFunctions.Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Stop, "Delete Failed", this);
+                    OtherFunctions.Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", MessageBoxButtons.OK, MessageBoxIcon.Error, "Delete Failed", this);
                     currentViewDevice = null;
                 }
                 this.Dispose();
@@ -318,7 +318,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     string dateStamp = results.Rows[0][HistoricalDevicesCols.ActionDateTime].ToString();
                     string actionType = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, results.Rows[0][HistoricalDevicesCols.ChangeType].ToString());
-                    var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + dateStamp + " - " + actionType + " - " + entryGUID, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Are you sure?", this);
+                    var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + dateStamp + " - " + actionType + " - " + entryGUID, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "Are you sure?", this);
                     if (blah == DialogResult.Yes)
                     {
                         int affectedRows = DBFactory.GetDatabase().ExecuteNonQuery(Queries.DeleteHistoricalEntryByGUID(entryGUID));
@@ -676,7 +676,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 
                 if (string.IsNullOrEmpty(LinkDevice.PO))
                 {
-                    OtherFunctions.Message("A valid PO Number is required.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Missing Info", this);
+                    OtherFunctions.Message("A valid PO Number is required.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Missing Info", this);
                     return;
                 }
                 else
@@ -685,7 +685,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
                     if (string.IsNullOrEmpty(SibiUID))
                     {
-                        OtherFunctions.Message("No Sibi request found with matching PO number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Not Found", this);
+                        OtherFunctions.Message("No Sibi request found with matching PO number.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Not Found", this);
                     }
                     else
                     {
@@ -864,7 +864,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         {
                             trans.Rollback();
                             RefreshData();
-                            OtherFunctions.Message("Unsuccessful! The number of affected rows was not what was expected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Unexpected Result", this);
+                            OtherFunctions.Message("Unsuccessful! The number of affected rows was not what was expected.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Unexpected Result", this);
                         }
                     }
                     catch (Exception ex)
@@ -985,7 +985,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void GUIDLabel_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(GUIDLabel.Text);
-            OtherFunctions.Message("GUID Copied to clipboard.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Clipboard", this);
+            OtherFunctions.Message("GUID Copied to clipboard.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Clipboard", this);
         }
 
         private void RefreshToolButton_Click(object sender, EventArgs e)
@@ -1045,7 +1045,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             else
             {
-                OtherFunctions.Message("Please add a valid PO number to this device.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Info", this);
+                OtherFunctions.Message("Please add a valid PO number to this device.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Missing Info", this);
             }
         }
 
@@ -1058,7 +1058,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (PhoneNumberTextBox.Text.Trim() != "" && !DataConsistency.ValidPhoneNumber(PhoneNumberTextBox.Text))
             {
-                OtherFunctions.Message("Invalid phone number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
+                OtherFunctions.Message("Invalid phone number.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
             }
         }
 

@@ -87,20 +87,20 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 if (!CheckFields())
                 {
-                    OtherFunctions.Message("Some required fields are missing or invalid.  Please fill and/or verify all highlighted fields.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Data", this);
+                    OtherFunctions.Message("Some required fields are missing or invalid.  Please fill and/or verify all highlighted fields.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Missing Data", this);
                     return;
                 }
                 else
                 {
                     if (AssetManagerFunctions.DeviceExists(AssetTagTextBox.Text.ToString().Trim(), SerialTextBox.Text.ToString().Trim()))
                     {
-                        OtherFunctions.Message("A device with that serial and/or asset tag already exists.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Duplicate Device", this);
+                        OtherFunctions.Message("A device with that serial and/or asset tag already exists.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Duplicate Device", this);
                         return;
                     }
                     bool Success = AddNewDevice();
                     if (Success)
                     {
-                        var blah = OtherFunctions.Message("New Device Added.   Add another?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Information, "Complete", this);
+                        var blah = OtherFunctions.Message("New Device Added.   Add another?", MessageBoxButtons.YesNo, MessageBoxIcon.Information, "Complete", this);
                         if (!NoClearCheckBox.Checked)
                         {
                             ClearAll();
@@ -113,7 +113,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     }
                     else
                     {
-                        OtherFunctions.Message("Something went wrong while adding a new device.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Unexpected Result", this);
+                        OtherFunctions.Message("Something went wrong while adding a new device.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Unexpected Result", this);
                     }
 
                     return;
@@ -122,7 +122,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-                OtherFunctions.Message("Unable to add new device.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
+                OtherFunctions.Message("Unable to add new device.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
             }
         }
 
@@ -174,7 +174,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 validFields = false;
                 controlParser.SetError(PhoneNumTextBox, false);
-                OtherFunctions.Message("Invalid phone number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
+                OtherFunctions.Message("Invalid phone number.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
             }
 
             return validFields;
@@ -324,7 +324,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (PhoneNumTextBox.Text.ToString().Trim() != "" && !DataConsistency.ValidPhoneNumber(PhoneNumTextBox.Text))
             {
-                OtherFunctions.Message("Invalid phone number.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
+                OtherFunctions.Message("Invalid phone number.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
                 PhoneNumTextBox.Focus();
             }
         }

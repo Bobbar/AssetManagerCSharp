@@ -62,7 +62,7 @@ namespace AssetManager.Business
         {
             try
             {
-                OtherFunctions.Message("Please Double-Click a MUNIS line item on the following window.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Input Needed");
+                OtherFunctions.Message("Please Double-Click a MUNIS line item on the following window.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Input Needed");
                 var SelectedPrice = await GlobalInstances.MunisFunc.NewMunisReqSearch(GlobalInstances.MunisFunc.GetReqNumberFromPO(CurrentDevice.PO), GlobalInstances.MunisFunc.GetFYFromPO(CurrentDevice.PO), ParentForm, true);
                 decimal decPrice = Convert.ToDecimal(SelectedPrice);
                 var SelectedUnitPrice = decPrice.ToString("C");
@@ -141,7 +141,7 @@ namespace AssetManager.Business
 
         private bool FlattenPrompt()
         {
-            var blah = OtherFunctions.Message("Select 'Yes' to save the PDF as an editable form. Select 'No' to save the PDF as a flattened, ready to print document.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "PDF Type");
+            var blah = OtherFunctions.Message("Select 'Yes' to save the PDF as an editable form. Select 'No' to save the PDF as a flattened, ready to print document.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "PDF Type");
             if (blah == DialogResult.Yes)
             {
                 return false;

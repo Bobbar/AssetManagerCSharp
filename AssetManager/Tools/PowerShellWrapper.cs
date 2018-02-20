@@ -167,7 +167,7 @@ namespace AssetManager.Tools
 
                 if (!string.IsNullOrEmpty(psResults))
                 {
-                    OtherFunctions.Message(psResults, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error Running Script");
+                    OtherFunctions.Message(psResults, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error Running Script");
                     return false;
                 }
                 else
@@ -215,7 +215,7 @@ namespace AssetManager.Tools
             var scriptResult = await Task.Run(() => { return ExecuteRemotePSScript(hostname, scriptByte, SecurityTools.AdminCreds); });
             if (!string.IsNullOrEmpty(scriptResult))
             {
-                OtherFunctions.Message(scriptResult, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error Running Script");
+                OtherFunctions.Message(scriptResult, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error Running Script");
                 return false;
             }
             else
@@ -229,7 +229,7 @@ namespace AssetManager.Tools
             var scriptResult = await Task.Run(() => { return InvokeRemotePSCommand(hostname, SecurityTools.AdminCreds, PScommand); });
             if (!string.IsNullOrEmpty(scriptResult))
             {
-                OtherFunctions.Message(scriptResult, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error Running Script");
+                OtherFunctions.Message(scriptResult, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error Running Script");
                 return false;
             }
             else

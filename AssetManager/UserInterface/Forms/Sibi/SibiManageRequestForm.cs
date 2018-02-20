@@ -72,7 +72,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (WindowState == FormWindowState.Minimized) WindowState = FormWindowState.Normal;
                 this.Activate();
-                var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Discard Changes?", this);
+                var blah = OtherFunctions.Message("Are you sure you want to discard all changes?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Discard Changes?", this);
                 if (blah == DialogResult.Yes)
                 {
                     if (IsNewRequest)
@@ -119,7 +119,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
                 if (IsModifying)
                 {
-                    var blah = OtherFunctions.Message("All current changes will be lost. Are you sure you want to create a new request?", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Question, "Create New Request", this);
+                    var blah = OtherFunctions.Message("All current changes will be lost. Are you sure you want to start a new request?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, "Create New Request", this);
                     if (blah != DialogResult.OK)
                     {
                         return;
@@ -175,7 +175,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             catch (Exception ex)
             {
-                OtherFunctions.Message("An error occurred while opening the request. It may have been deleted.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
+                OtherFunctions.Message("An error occurred while opening the request. It may have been deleted.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
                 this.Dispose();
             }
@@ -268,7 +268,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         IsNewRequest = false;
                         ParentForm.RefreshData();
                         this.RefreshData();
-                        OtherFunctions.Message("New Request Added.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Complete", this);
+                        OtherFunctions.Message("New Request Added.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Complete", this);
                     }
                     catch (Exception ex)
                     {
@@ -284,7 +284,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
-                
+
                 if (!string.IsNullOrEmpty(CurrentRequest.GUID) && !IsNewRequest)
                 {
                     SibiNotesForm NewNote = new SibiNotesForm(this, CurrentRequest);
@@ -298,7 +298,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     if (IsNewRequest)
                     {
-                        OtherFunctions.Message("You must create a new request before adding notes.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Error", this);
+                        OtherFunctions.Message("You must create a new request before adding notes.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Error", this);
                     }
                 }
             }
@@ -315,7 +315,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 string GetPO = await GlobalInstances.MunisFunc.GetPOFromReqNumberAsync(CurrentRequest.RequisitionNumber, CurrentRequest.NeedByDate.Year.ToString());
                 if (GetPO != null && GetPO.Length > 1)
                 {
-                    var blah = OtherFunctions.Message("PO Number " + GetPO + " was detected in the Requisition. Do you wish to add it to this request?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "New PO Detected", this);
+                    var blah = OtherFunctions.Message("PO Number " + GetPO + " was detected in the Requisition. Do you wish to add it to this request?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "New PO Detected", this);
                     if (blah == DialogResult.Yes)
                     {
                         InsertPONumber(GetPO);
@@ -402,7 +402,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void ViewAttachments()
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewAttachment);
-            
+
             if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
                 if (!string.IsNullOrEmpty(CurrentRequest.GUID) && !IsNewRequest)
@@ -427,18 +427,18 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 SecurityTools.CheckForAccess(SecurityTools.AccessGroup.DeleteSibi);
-                
+
                 if (ReferenceEquals(CurrentRequest.RequestItems, null))
                 {
                     return;
                 }
-                var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "WARNING", this);
+                var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "WARNING", this);
                 if (blah == DialogResult.Yes)
                 {
                     OtherFunctions.SetWaitCursor(true, this);
                     if (AssetManagerFunctions.DeleteSibiRequest(CurrentRequest.GUID))
                     {
-                        OtherFunctions.Message("Sibi Request deleted successfully.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Device Deleted", this);
+                        OtherFunctions.Message("Sibi Request deleted successfully.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Device Deleted", this);
                         CurrentRequest = null;
                         ParentForm.RefreshData();
                         this.Dispose();
@@ -446,7 +446,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     else
                     {
                         Logging.Logger("*****DELETION ERROR******: " + CurrentRequest.GUID);
-                        OtherFunctions.Message("Failed to delete request successfully!  Please let Bobby Lovell know about this.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Stop, "Delete Failed", this);
+                        OtherFunctions.Message("Failed to delete request successfully!  Please let Bobby Lovell know about this.", MessageBoxButtons.OK, MessageBoxIcon.Error, "Delete Failed", this);
                         CurrentRequest = null;
                         this.Dispose();
                     }
@@ -474,16 +474,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void DeleteCurrentNote()
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
-            
+
             if (NotesGrid.CurrentRow != null && NotesGrid.CurrentRow.Index > -1)
             {
-                var blah = OtherFunctions.Message("Are you sure?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Delete Note", this);
+                var blah = OtherFunctions.Message("Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Delete Note", this);
                 if (blah == DialogResult.Yes)
                 {
                     string NoteUID = NotesGrid.CurrentRowStringValue(SibiNotesCols.NoteUID);
                     if (!string.IsNullOrEmpty(NoteUID))
                     {
-                        OtherFunctions.Message(DeleteNote(NoteUID) + " Rows affected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Delete Item", this);
+                        OtherFunctions.Message(DeleteNote(NoteUID) + " Rows affected.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Delete Item", this);
                         OpenRequest(CurrentRequest.GUID);
                     }
                 }
@@ -508,7 +508,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void ModifyRequest()
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
-            
+
             if (!string.IsNullOrEmpty(CurrentRequest.GUID) && !IsModifying)
             {
                 SetModifyMode();
@@ -1044,7 +1044,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void RequestItemsGrid_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            OtherFunctions.Message("DataGrid Error: " + "\u0022" + e.Exception.Message + "\u0022" + "   Col/Row:" + e.ColumnIndex + "/" + e.RowIndex, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "DataGrid Error", this);
+            OtherFunctions.Message("DataGrid Error: " + "\u0022" + e.Exception.Message + "\u0022" + "   Col/Row:" + e.ColumnIndex + "/" + e.RowIndex, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "DataGrid Error", this);
         }
 
         private void RequestItemsGrid_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
@@ -1088,7 +1088,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     if (!bolDragging)
                     {
-                        OtherFunctions.Message("You must be modifying this request before you can drag-drop rows from another request.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Not Allowed", this);
+                        OtherFunctions.Message("You must be modifying this request before you can drag-drop rows from another request.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Not Allowed", this);
                     }
                 }
             }
@@ -1302,13 +1302,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
-                
-                var blah = OtherFunctions.Message("Delete selected row?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Delete Item Row", this);
+
+                var blah = OtherFunctions.Message("Delete selected row?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Delete Item Row", this);
                 if (blah == DialogResult.Yes)
                 {
                     if (!DeleteItem_FromLocal(RequestItemsGrid.CurrentRow.Index))
                     {
-                        blah = OtherFunctions.Message("Failed to delete row.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
+                        blah = OtherFunctions.Message("Failed to delete row.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
                     }
                 }
                 else
@@ -1364,7 +1364,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void PopulateCurrentFAItem()
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
-            
+
             try
             {
                 if (ValidColumn())
@@ -1434,7 +1434,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             if (!ConcurrencyCheck())
             {
                 RefreshData();
-                OtherFunctions.Message("This request has been modified since it's been open and has been refreshed with the current data.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Concurrency Check", this);
+                OtherFunctions.Message("This request has been modified since it's been open and has been refreshed with the current data.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Concurrency Check", this);
             }
             EnableControls();
             ToolStrip.BackColor = Colors.EditColor;
@@ -1452,7 +1452,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     {
                         if (!ConcurrencyCheck())
                         {
-                            OtherFunctions.Message("It appears that someone else has modified this request. Please refresh and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Concurrency Failure", this);
+                            OtherFunctions.Message("It appears that someone else has modified this request. Please refresh and try again.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Concurrency Failure", this);
                             return;
                         }
                         SibiRequest RequestData = GetRequestItems();
@@ -1489,7 +1489,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             if (!validFields)
             {
-                OtherFunctions.Message("Some required fields are missing. Please enter data into all require fields.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Data", this);
+                OtherFunctions.Message("Some required fields are missing. Please enter data into all require fields.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Missing Data", this);
             }
             return validFields;
         }
@@ -1578,7 +1578,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void NewDeviceMenuItem_Click(object sender, EventArgs e)
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice);
-           
+
             NewDeviceForm NewDev = new NewDeviceForm(this);
             NewDev.ImportFromSibi(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemUID));
         }

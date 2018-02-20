@@ -47,7 +47,7 @@ namespace AssetManager.Security
             if (!ValidCreds)
             {
                 ClearAdminCreds();
-                if (OtherFunctions.Message("Could not authenticate with provided credentials.  Do you wish to re-enter?", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Exclamation, "Auth Error") == DialogResult.OK)
+                if (OtherFunctions.Message("Could not authenticate with provided credentials.  Do you wish to re-enter?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "Auth Error") == DialogResult.OK)
                 {
                     return VerifyAdminCreds(credentialDescription);
                 }
@@ -245,7 +245,7 @@ namespace AssetManager.Security
                 }
                 else
                 {
-                    string errMessage = "You do not have the required rights for this function. Must have access to '" + recModule + "'.";
+                    string errMessage = "You do not have the required access rights for this function. Must have access to '" + recModule + "'.";
                     throw new InvalidAccessException(errMessage);
                 }
             }

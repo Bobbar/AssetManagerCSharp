@@ -78,7 +78,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                 }
                 else
                 {
-                    OtherFunctions.Message("This process will interfere with the active running updates. Please stop all updates and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Cannot Continue", this);
+                    OtherFunctions.Message("This process will interfere with the active running updates. Please stop all updates and try again.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Continue", this);
                 }
             }
             catch (Exception ex)
@@ -94,7 +94,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                 working = true;
                 if (!await packManager.CreateNewPackFile())
                 {
-                    OtherFunctions.Message("Error while creating a new pack file.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Error", this);
+                    OtherFunctions.Message("Error while creating a new pack file.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
                 }
                 working = false;
             }
@@ -110,7 +110,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             {
                 if (working) return;
 
-                var prompt = OtherFunctions.Message("Are you sure? This will replace the packfile on the server with a new one created from the local GK Directory.", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Warning, "Warning", this);
+                var prompt = OtherFunctions.Message("Are you sure? This will replace the packfile on the server with a new one created from the local GK Directory.", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "Warning", this);
                 if (prompt == DialogResult.OK)
                 {
                     NewPackFile();
@@ -126,7 +126,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         {
             if (working)
             {
-                var prompt = OtherFunctions.Message("Are you sure you want to cancel the operation?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Cancel?", this);
+                var prompt = OtherFunctions.Message("Are you sure you want to cancel the operation?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Cancel?", this);
 
                 if (prompt == DialogResult.Yes)
                 {

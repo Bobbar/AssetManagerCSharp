@@ -56,7 +56,7 @@ namespace AssetManager
             }
             if (!ConnectionSuccessful & !CacheAvailable)
             {
-                OtherFunctions.Message("Could not connect to server and the local DB cache is unavailable.  The application will now close.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "No Connection");
+                OtherFunctions.Message("Could not connect to server and the local DB cache is unavailable.  The application will now close.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "No Connection");
                 // e.Cancel = true;
                 Application.Exit();
                 return;
@@ -64,7 +64,7 @@ namespace AssetManager
             else if (!ConnectionSuccessful & CacheAvailable)
             {
                 GlobalSwitches.CachedMode = true;
-                OtherFunctions.Message("Could not connect to server. Running from local DB cache.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Cached Mode");
+                OtherFunctions.Message("Could not connect to server. Running from local DB cache.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cached Mode");
             }
 
             Status("Loading Indexes...");
@@ -74,7 +74,7 @@ namespace AssetManager
             SecurityTools.GetUserAccess();
             if (!SecurityTools.CanAccess(SecurityTools.AccessGroup.CanRun))
             {
-                OtherFunctions.Message("You do not have permission to run this software.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Access Denied");
+                OtherFunctions.Message("You do not have permission to run this software.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Access Denied");
                 // e.Cancel = true;
                 Application.Exit();
                 return;

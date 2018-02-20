@@ -124,7 +124,7 @@ SQL:
 Missing Dirs: " + MissingSQLDirs.Count + @"
 Missing Files: " + MissingSQLFiles.Count;
 
-                    var blah = OtherFunctions.Message(StatsText, (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Orphans Found");
+                    var blah = OtherFunctions.Message(StatsText, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "Orphans Found");
                     if (blah == DialogResult.Yes)
                     {
                         //clean it up
@@ -134,14 +134,14 @@ Missing Files: " + MissingSQLFiles.Count;
                         itemsCleaned += CleanFTPDirs(MissingFTPDirs);
                         itemsCleaned += CleanSQLFiles(MissingSQLFiles);
                         itemsCleaned += CleanSQLEntries(MissingSQLDirs);
-                        OtherFunctions.Message("Cleaned " + itemsCleaned.ToString() + " orphans.");
+                        OtherFunctions.Message("Cleaned " + itemsCleaned.ToString() + " orphans.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ScanAttachements();
                     }
                 }
                 else
                 {
                     Logging.Logger("No Orphans Found.");
-                    OtherFunctions.Message("No issues found.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Scan OK");
+                    OtherFunctions.Message("No issues found.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Scan OK");
                 }
                 Logging.Logger("**********End Scan Results*********");
                 Logging.Logger("***********************************");

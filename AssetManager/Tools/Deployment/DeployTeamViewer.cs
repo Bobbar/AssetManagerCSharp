@@ -49,7 +49,7 @@ namespace AssetManager.Tools.Deployment
                         else
                         {
                             deploy.LogMessage("Push failed!");
-                            OtherFunctions.Message("Error occurred while pushing deployment files to device!");
+                            OtherFunctions.Message("Error occurred while pushing deployment files to device!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             return false;
                         }
                     }
@@ -77,7 +77,7 @@ namespace AssetManager.Tools.Deployment
                         else
                         {
                             deploy.LogMessage("Deployment failed!");
-                            OtherFunctions.Message("Error occurred while executing deployment command!");
+                            OtherFunctions.Message("Error occurred while executing deployment command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             return false;
                         }
                     }
@@ -91,7 +91,7 @@ namespace AssetManager.Tools.Deployment
                         else
                         {
                             deploy.LogMessage("Deployment failed!");
-                            OtherFunctions.Message("Error occurred while executing deployment command!");
+                            OtherFunctions.Message("Error occurred while executing deployment command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             return false;
                         }
                     }
@@ -111,7 +111,7 @@ namespace AssetManager.Tools.Deployment
                     else
                     {
                         deploy.LogMessage("Assignment failed!");
-                        OtherFunctions.Message("Error occurred while executing assignment command!");
+                        OtherFunctions.Message("Error occurred while executing assignment command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return false;
                     }
 
@@ -130,7 +130,7 @@ namespace AssetManager.Tools.Deployment
                 }
                 else
                 {
-                    OtherFunctions.Message("The target device is null or does not have a hostname.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Missing Info", parentForm);
+                    OtherFunctions.Message("The target device is null or does not have a hostname.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Missing Info", parentForm);
                 }
 
                 return false;

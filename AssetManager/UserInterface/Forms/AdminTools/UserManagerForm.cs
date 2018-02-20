@@ -129,7 +129,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         {
             try
             {
-                var blah = OtherFunctions.Message("Are you sure?  Committed changes cannot be undone.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Commit Changes", this);
+                var blah = OtherFunctions.Message("Are you sure?  Committed changes cannot be undone.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Commit Changes", this);
                 if (blah == DialogResult.Yes)
                 {
                     UserGrid.EndEdit();

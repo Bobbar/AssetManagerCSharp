@@ -93,7 +93,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.CanStartTransaction);
 
-            if (OtherFunctions.Message("This will allow unchecked changes to the database. Incorrect inputs WILL BREAK THINGS! \r\n" + Environment.NewLine + "Changes must be 'applied' and 'committed' before they will be permanently stored in the database.", (int)MessageBoxButtons.OKCancel + (int)MessageBoxIcon.Exclamation, "WARNING", this) == DialogResult.OK)
+            if (OtherFunctions.Message("This will allow unchecked changes to the database. Incorrect inputs WILL BREAK THINGS! \r\n" + Environment.NewLine + "Changes must be 'applied' and 'committed' before they will be permanently stored in the database.", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "WARNING", this) == DialogResult.OK)
             {
                 CurrentTransaction = DBFactory.GetDatabase().StartTransaction();
                 RefreshData();
@@ -106,7 +106,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (CurrentTransaction != null)
             {
-                if (OtherFunctions.Message("Are you sure? This will permanently apply the changes to the database.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Commit Transaction", this) == DialogResult.Yes)
+                if (OtherFunctions.Message("Are you sure? This will permanently apply the changes to the database.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Commit Transaction", this) == DialogResult.Yes)
                 {
                     CurrentTransaction.Commit();
                     CurrentTransaction.Dispose();
@@ -122,7 +122,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (CurrentTransaction != null)
             {
-                if (OtherFunctions.Message("Restore database to original state?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Rollback Transaction", this) == DialogResult.Yes)
+                if (OtherFunctions.Message("Restore database to original state?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Rollback Transaction", this) == DialogResult.Yes)
                 {
                     CurrentTransaction.Rollback();
                     CurrentTransaction.Dispose();
@@ -198,7 +198,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 if (ex is IndexOutOfRangeException)
                 {
-                    OtherFunctions.Message("That device was not found!  It may have been deleted.  Re-execute your search.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Not Found", this);
+                    OtherFunctions.Message("That device was not found!  It may have been deleted.  Re-execute your search.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Not Found", this);
                 }
                 else
                 {
@@ -408,7 +408,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (CurrentTransaction != null)
             {
-                OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Cannot Close");
+                OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Close");
             }
 
             if (!OtherFunctions.OKToEnd() || !Helpers.ChildFormControl.OKToCloseChildren(this) || CurrentTransaction != null)
@@ -645,7 +645,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         if (database != ServerInfo.CurrentDataBase)
                         {
-                            var blah = OtherFunctions.Message("Are you sure? This will close all open forms.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Change Database", this);
+                            var blah = OtherFunctions.Message("Are you sure? This will close all open forms.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Change Database", this);
                             if (blah == DialogResult.Yes)
                             {
                                 if (Helpers.ChildFormControl.OKToCloseChildren(this))
@@ -667,12 +667,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     }
                     else
                     {
-                        OtherFunctions.Message("Cannot switch database while Offline or in Cached Mode.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Unavailable", this);
+                        OtherFunctions.Message("Cannot switch database while Offline or in Cached Mode.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Unavailable", this);
                     }
                 }
                 else
                 {
-                    OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before switching databases.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Stop");
+                    OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before switching databases.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Stop");
                 }
             }
             finally
@@ -703,7 +703,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.test_db)
             {
-                // OtherFunctions.Message("TEST DATABASE IN USE", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "WARNING");//, this);
+                // OtherFunctions.Message("TEST DATABASE IN USE", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "WARNING");//, this);
                 this.BackColor = Color.DarkRed;
                 this.Text += " - ****TEST DATABASE****";
             }
@@ -752,7 +752,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         PowerShellWrapper PSWrapper = new PowerShellWrapper();
                         if (await PSWrapper.ExecutePowerShellScript(hostName, scriptByte))
                         {
-                            OtherFunctions.Message("Command successful.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Done", this);
+                            OtherFunctions.Message("Command successful.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Done", this);
                             return true;
                         }
                     }
@@ -886,11 +886,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                OtherFunctions.Message(ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(), (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Version", this);
+                OtherFunctions.Message(ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information, "Version", this);
             }
             else
             {
-                OtherFunctions.Message("Debug", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Version", this);
+                OtherFunctions.Message("Debug", MessageBoxButtons.OK, MessageBoxIcon.Information, "Version", this);
             }
         }
 

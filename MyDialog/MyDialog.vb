@@ -137,11 +137,12 @@ Public Class AdvancedDialog
     ''' Instantiates and binds a new modal Dialog on the specified Form.
     ''' </summary>
     ''' <param name="Prompt">Required. Message to be displayed to user.</param>
-    ''' <param name="Style">Optional. <see cref="MsgBoxStyle"/> of the dialog. (Default: vbOKOnly + vbInformation)</param>
+    ''' <param name="buttons">Optional. <see cref="MessageBoxButtons"/> for the dialog. (Default: MessageBoxButtons.OK)</param>
+    ''' <param name="icon">Optional. <see cref="MessageBoxIcon"/> for the dialog. (Default: MessageBoxIcon.Information)</param>
     ''' <param name="Title">Optional. Title text of dialog.</param>
     ''' <param name="ParentFrm">Optional. Form to which the modal dialog will be bound. (Default: <see cref="ActiveForm"/></param>
     ''' <returns><see cref="MsgBoxResult"/></returns>
-    Public Function DialogMessage(ByVal Prompt As String, Optional ByVal Style As Integer = vbOKOnly + vbInformation, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As DialogResult 'MsgBoxResult
+    Public Function DialogMessage(ByVal Prompt As String, Optional buttons As MessageBoxButtons = MessageBoxButtons.OK, Optional icon As MessageBoxIcon = MessageBoxIcon.Information, Optional ByVal Title As String = Nothing, Optional ByVal ParentFrm As Form = Nothing) As DialogResult 'MsgBoxResult
         IsMessageBox = True
         If IsNothing(Title) Then
             Me.Text = My.Application.Info.AssemblyName
@@ -150,14 +151,14 @@ Public Class AdvancedDialog
         End If
         AddRichTextBox("MessageBox", "MessageBox", Prompt)
         Me.Size = Me.MinimumSize
-        ParseStyle(CType(Style, MsgBoxStyle))
+        Dim style As Integer = DirectCast(buttons, Integer) + DirectCast(icon, Integer)
+        ParseStyle(CType(style, MsgBoxStyle))
         If ParentFrm IsNot Nothing Then
             Me.ShowDialog(ParentFrm)
         Else
             Me.ShowDialog(ActiveForm)
         End If
         Me.Dispose()
-        'Return CType(Me.DialogResult, MsgBoxResult)
         Return Me.DialogResult
     End Function
 

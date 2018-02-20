@@ -39,7 +39,7 @@ namespace AssetManager.Tools.Deployment
                     }
                     return true;
                 }
-                OtherFunctions.Message("The target device is null or does not have a hostname.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Missing Info", parentForm);
+                OtherFunctions.Message("The target device is null or does not have a hostname.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Missing Info", parentForm);
                 return false;
             }
             catch (Exception)

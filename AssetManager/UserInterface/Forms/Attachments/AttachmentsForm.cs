@@ -224,7 +224,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 this.WindowState = FormWindowState.Normal;
                 this.Activate();
-                var blah = OtherFunctions.Message("There are active uploads/downloads. Do you wish to cancel the current operation?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Exclamation, "Worker Busy", this);
+                var blah = OtherFunctions.Message("There are active uploads/downloads. Do you wish to cancel the current operation?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "Worker Busy", this);
                 if (blah == DialogResult.Yes)
                 {
                     CancelTransfers();
@@ -773,7 +773,7 @@ namespace AssetManager.UserInterface.Forms
                 SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
                 
                 string strFilename = AttachGrid.CurrentRowStringValue(attachmentColumns.FileName);
-                var blah = OtherFunctions.Message("Are you sure you want to delete '" + strFilename + "'?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Confirm Delete", this);
+                var blah = OtherFunctions.Message("Are you sure you want to delete '" + strFilename + "'?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Confirm Delete", this);
                 if (blah == DialogResult.Yes)
                 {
                     Waiting();
@@ -783,7 +783,7 @@ namespace AssetManager.UserInterface.Forms
                     }
                     else
                     {
-                        blah = OtherFunctions.Message("Deletion failed!", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Unexpected Results", this);
+                        blah = OtherFunctions.Message("Deletion failed!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Unexpected Results", this);
                     }
                 }
             }
@@ -823,14 +823,14 @@ namespace AssetManager.UserInterface.Forms
                     if (!OKFileSize(CurrentAttachment))
                     {
                         CurrentAttachment.Dispose();
-                        OtherFunctions.Message("The file is too large.   Please select a file less than " + fileSizeMBLimit.ToString() + "MB.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Size Limit Exceeded", this);
+                        OtherFunctions.Message("The file is too large.   Please select a file less than " + fileSizeMBLimit.ToString() + "MB.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Size Limit Exceeded", this);
                         continue;
                     }
                     SetStatusBar("Creating Directory...");
                     if (!await MakeDirectory(CurrentAttachment.FolderGUID))
                     {
                         CurrentAttachment.Dispose();
-                        OtherFunctions.Message("Error creating FTP directory.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "FTP Upload Error", this);
+                        OtherFunctions.Message("Error creating FTP directory.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "FTP Upload Error", this);
                         return;
                     }
                     var fileList = new List<string>(files);
@@ -1004,7 +1004,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 //something is very wrong
                 Logging.Logger("FILE VERIFICATION FAILURE: FolderUID:" + attachment.FolderGUID + "  FileUID: " + attachment.FileUID + " | Expected hash:" + attachment.MD5 + " Result hash:" + attachment.ComputedMD5);
-                OtherFunctions.Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Hash Value Mismatch", this);
+                OtherFunctions.Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Hash Value Mismatch", this);
                 attachment.Dispose();
                 OtherFunctions.PurgeTempDir();
                 return false;
@@ -1378,7 +1378,7 @@ namespace AssetManager.UserInterface.Forms
             }
             else
             {
-                OtherFunctions.Message("A folder with that name already exists.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Duplicate Name", this);
+                OtherFunctions.Message("A folder with that name already exists.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Duplicate Name", this);
             }
         }
 

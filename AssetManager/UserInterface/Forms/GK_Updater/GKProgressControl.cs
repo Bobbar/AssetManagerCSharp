@@ -317,7 +317,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
                     break;
 
                 case ProgressStatus.Queued:
-                    var blah = OtherFunctions.Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Warning", MyParentForm);
+                    var blah = OtherFunctions.Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Warning", MyParentForm);
                     if (blah == DialogResult.Yes)
                     {
                         StartUpdate();

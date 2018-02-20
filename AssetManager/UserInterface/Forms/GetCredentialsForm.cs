@@ -44,7 +44,7 @@ namespace AssetManager.UserInterface.Forms
             }
             else
             {
-                OtherFunctions.Message("Username or Password incomplete.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Info", this);
+                OtherFunctions.Message("Username or Password incomplete.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Missing Info", this);
             }
         }
 

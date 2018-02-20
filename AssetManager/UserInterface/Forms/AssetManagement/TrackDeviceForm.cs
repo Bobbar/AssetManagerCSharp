@@ -37,7 +37,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         {
                             if (c.Text.Trim() == "")
                             {
-                                OtherFunctions.Message("Please complete all fields.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Data", this);
+                                OtherFunctions.Message("Please complete all fields.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Missing Data", this);
                                 return false;
                             }
                         }
@@ -52,7 +52,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         if (c.Text.Trim() == "")
                         {
-                            OtherFunctions.Message("Please complete all fields.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Missing Data", this);
+                            OtherFunctions.Message("Please complete all fields.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Missing Data", this);
                             return false;
                         }
                     }
@@ -146,12 +146,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         if (rows == 2)
                         {
                             trans.Commit();
-                            OtherFunctions.Message("Device Checked Out!", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Success", this);
+                            OtherFunctions.Message("Device Checked Out!", MessageBoxButtons.OK, MessageBoxIcon.Information, "Success", this);
                         }
                         else
                         {
                             trans.Rollback();
-                            OtherFunctions.Message("Unsuccessful! The number of affected rows was not expected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Unexpected Result", this);
+                            OtherFunctions.Message("Unsuccessful! The number of affected rows was not expected.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Unexpected Result", this);
                         }
                         ParentForm.RefreshData();
                     }
@@ -200,12 +200,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         if (rows == 2)
                         {
                             trans.Commit();
-                            OtherFunctions.Message("Device Checked In!", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Success", this);
+                            OtherFunctions.Message("Device Checked In!", MessageBoxButtons.OK, MessageBoxIcon.Information, "Success", this);
                         }
                         else
                         {
                             trans.Rollback();
-                            OtherFunctions.Message("Unsuccessful! The number of affected rows was not what was expected.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Unexpected Result", this);
+                            OtherFunctions.Message("Unsuccessful! The number of affected rows was not what was expected.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Unexpected Result", this);
                         }
                         ParentForm.RefreshData();
                     }

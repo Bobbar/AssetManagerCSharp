@@ -72,18 +72,18 @@ namespace AssetManager.Helpers
             }
         }
 
-        public static DialogResult Message(string Prompt, int Buttons = (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, string Title = null, Form ParentFrm = null)
+        public static DialogResult Message(string Prompt, MessageBoxButtons button = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.Information, string Title = null, Form ParentFrm = null)
         {
             SetWaitCursor(false, ParentFrm);
             AdvancedDialog NewMessage = new AdvancedDialog(ParentFrm);
-            return NewMessage.DialogMessage(Prompt, Buttons, Title, ParentFrm);
+            return NewMessage.DialogMessage(Prompt, button, icon, Title, ParentFrm);
         }
 
         public static bool OKToEnd()
         {
             if (GlobalSwitches.BuildingCache)
             {
-                Message("Still building DB Cache. Please wait and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Critical Function Running");
+                Message("Still building DB Cache. Please wait and try again.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Critical Function Running");
                 return false;
             }
 

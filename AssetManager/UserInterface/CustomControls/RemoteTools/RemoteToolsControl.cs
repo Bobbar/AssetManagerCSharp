@@ -154,7 +154,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
 
-            if (OtherFunctions.Message("Deploy TeamViewer to this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
+            if (OtherFunctions.Message("Deploy TeamViewer to this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
                 return;
             }
@@ -186,7 +186,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
 
-            if (OtherFunctions.Message("Deploy Office 365 to this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
+            if (OtherFunctions.Message("Deploy Office 365 to this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
                 return;
             }
@@ -237,18 +237,18 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void RestartDevice()
         {
-            var blah = OtherFunctions.Message("Click 'Yes' to reboot this Device.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", hostForm);
+            var blah = OtherFunctions.Message("Click 'Yes' to reboot this Device.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm);
             if (blah == DialogResult.Yes)
             {
                 string IP = pingVis.CurrentResult.Address.ToString();
                 var RestartOutput = await SendRestart(IP, this.device.HostName);
                 if ((string)RestartOutput == "")
                 {
-                    OtherFunctions.Message("Success", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Restart Device", hostForm);
+                    OtherFunctions.Message("Success", MessageBoxButtons.OK, MessageBoxIcon.Information, "Restart Device", hostForm);
                 }
                 else
                 {
-                    OtherFunctions.Message("Failed" + "\r\n" + "\r\n" + "Output: " + RestartOutput, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, "Restart Device", hostForm);
+                    OtherFunctions.Message("Failed" + "\r\n" + "\r\n" + "Output: " + RestartOutput, MessageBoxButtons.OK, MessageBoxIcon.Information, "Restart Device", hostForm);
                 }
             }
         }
@@ -335,7 +335,7 @@ namespace AssetManager.UserInterface.CustomControls
             if (pingVis.CurrentResult != null)
             {
                 string IPAddress = pingVis.CurrentResult.Address.ToString();
-                var blah = OtherFunctions.Message(IPAddress + " - " + NetworkInfo.LocationOfIP(IPAddress) + "\r\n" + "\r\n" + "Press 'Yes' to copy to clipboard.", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Information, "IP Address", hostForm);
+                var blah = OtherFunctions.Message(IPAddress + " - " + NetworkInfo.LocationOfIP(IPAddress) + "\r\n" + "\r\n" + "Press 'Yes' to copy to clipboard.", MessageBoxButtons.YesNo, MessageBoxIcon.Information, "IP Address", hostForm);
                 if (blah == DialogResult.Yes)
                 {
                     Clipboard.SetText(IPAddress);
@@ -347,7 +347,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
 
-            if (OtherFunctions.Message("Update/Install Chrome on this device?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
+            if (OtherFunctions.Message("Update/Install Chrome on this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
                 return;
             }

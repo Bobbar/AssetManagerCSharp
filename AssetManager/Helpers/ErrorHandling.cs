@@ -57,8 +57,8 @@ namespace AssetManager.Helpers
                 {
                     InvalidCastException handEx = (InvalidCastException)ex;
                     Logging.Logger("CAST ERROR:  MethodName=" + method.Name + "  Type: " + ex.GetType().Name + "  #:" + handEx.HResult + "  Message:" + handEx.Message);
-                    //  PromptUser("An object was cast to an unmatched type.  See log for details.  Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Invalid Cast Error");
-                    PromptUser("An object was cast to an unmatched type.  See log for details.  Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Invalid Cast Error");
+                    //  PromptUser("An object was cast to an unmatched type.  See log for details.  Log: " + Paths.LogPath, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Invalid Cast Error");
+                    PromptUser("An object was cast to an unmatched type.  See log for details.  Log: " + Paths.LogPath, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Invalid Cast Error");
                     if (handEx.HResult == -2147467262)
                     {
                         errorResult = true;
@@ -139,7 +139,7 @@ namespace AssetManager.Helpers
         {
             Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message);
 
-            PromptUser(ex.Message, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Access Denied");
+            PromptUser(ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Access Denied");
 
             return true;
         }
@@ -147,13 +147,13 @@ namespace AssetManager.Helpers
         private static bool handleTimeoutException(TimeoutException ex, MethodBase Method)
         {
             Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message);
-            return false; 
+            return false;
         }
 
         private static bool handleNotImplementedException(NotImplementedException ex, MethodBase Method)
         {
             Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message);
-            PromptUser("ERROR:  Method not implemented.  See log for details: file://" + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Method Not Implemented");
+            PromptUser("ERROR:  Method not implemented.  See log for details: file://" + Paths.LogPath, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Method Not Implemented");
             return true;
         }
 
@@ -164,30 +164,30 @@ namespace AssetManager.Helpers
             {
                 case 1909:
                     //Locked account
-                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.NativeErrorCode + "  Message:" + ex.Message, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Network Error");
+                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.NativeErrorCode + "  Message:" + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Network Error");
                     SecurityTools.ClearAdminCreds();
                     return true;
 
                 case 1326:
                     //Bad credentials error. Clear AdminCreds
-                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.NativeErrorCode + "  Message:" + ex.Message, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Network Error");
+                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.NativeErrorCode + "  Message:" + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Network Error");
                     SecurityTools.ClearAdminCreds();
                     return true;
 
                 case 86:
                     //Bad credentials error. Clear AdminCreds
-                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.NativeErrorCode + "  Message:" + ex.Message, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Network Error");
+                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.NativeErrorCode + "  Message:" + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Network Error");
                     SecurityTools.ClearAdminCreds();
                     return true;
 
                 case 5:
                     //Access denied error. Clear AdminCreds
-                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.NativeErrorCode + "  Message:" + ex.Message, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Network Error");
+                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.NativeErrorCode + "  Message:" + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Network Error");
                     SecurityTools.ClearAdminCreds();
                     return true;
 
                 default:
-                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.NativeErrorCode + "  Message:" + ex.Message, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Network Error");
+                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.NativeErrorCode + "  Message:" + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Network Error");
                     return true;
             }
         }
@@ -232,25 +232,25 @@ namespace AssetManager.Helpers
             switch (errorNumber)
             {
                 case 1042:
-                    PromptUser("Unable to connect to server.  Check connection and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Connection Lost");
+                    PromptUser("Unable to connect to server.  Check connection and try again.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Connection Lost");
                     suppressAdditionalMessages = true;
                     return true;
 
                 case 0:
-                    PromptUser("Unable to connect to server.  Check connection and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Connection Lost");
+                    PromptUser("Unable to connect to server.  Check connection and try again.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Connection Lost");
                     suppressAdditionalMessages = true;
                     return true;
 
                 case 1064:
-                    PromptUser("Something went wrong with the SQL command. See log for details.  Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Error, "SQL Syntax Error");
+                    PromptUser("Something went wrong with the SQL command. See log for details.  Log: " + Paths.LogPath, MessageBoxButtons.OK, MessageBoxIcon.Error, "SQL Syntax Error");
                     return true;
 
                 case 1406:
-                    PromptUser(ex.Message + Environment.NewLine + Environment.NewLine + "Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "SQL Error");
+                    PromptUser(ex.Message + Environment.NewLine + Environment.NewLine + "Log: " + Paths.LogPath, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "SQL Error");
                     return true;
 
                 case 1292:
-                    PromptUser("Something went wrong with the SQL command. See log for details.  Log: " + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Error, "SQL Syntax Error");
+                    PromptUser("Something went wrong with the SQL command. See log for details.  Log: " + Paths.LogPath, MessageBoxButtons.OK, MessageBoxIcon.Error, "SQL Syntax Error");
                     return true;
 
                 default:
@@ -294,7 +294,7 @@ namespace AssetManager.Helpers
             switch (handResponse.StatusCode)
             {
                 case System.Net.FtpStatusCode.ActionNotTakenFileUnavailable:
-                    PromptUser("FTP File was not found, or access was denied.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Cannot Access FTP File");
+                    PromptUser("FTP File was not found, or access was denied.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Access FTP File");
                     return true;
 
                 default:
@@ -302,7 +302,7 @@ namespace AssetManager.Helpers
                     {
                         case -2146233079:
                             Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message);
-                            PromptUser("Could not connect to FTP server.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Connection Failure");
+                            PromptUser("Could not connect to FTP server.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Connection Failure");
                             return true;
                     }
                     UnHandledError(ex, ex.HResult, Method);
@@ -339,7 +339,7 @@ namespace AssetManager.Helpers
                 case SocketError.TimedOut:
                     //10060
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.SocketErrorCode + "  Message:" + ex.Message);
-                    PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" + Paths.LogPath + "'", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Network Socket Timeout");
+                    PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" + Paths.LogPath + "'", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Network Socket Timeout");
                     return true;
 
                 case SocketError.HostUnreachable:
@@ -350,18 +350,18 @@ namespace AssetManager.Helpers
                 case SocketError.ConnectionAborted:
                     //10053
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.SocketErrorCode + "  Message:" + ex.Message);
-                    PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" + Paths.LogPath + "'", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Connection Aborted");
+                    PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" + Paths.LogPath + "'", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Connection Aborted");
                     return true;
 
                 case SocketError.ConnectionReset:
                     //10054 'connection reset
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.SocketErrorCode + "  Message:" + ex.Message);
-                    PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" + Paths.LogPath + "'", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Connection Reset");
+                    PromptUser("Lost connection to the server or the server took too long to respond.  See Log.  '" + Paths.LogPath + "'", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Connection Reset");
                     return true;
 
                 case SocketError.NetworkUnreachable:
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.SocketErrorCode + "  Message:" + ex.Message);
-                    PromptUser("Could not connect to server.  See Log.  '" + Paths.LogPath + "'", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Network Unreachable");
+                    PromptUser("Could not connect to server.  See Log.  '" + Paths.LogPath + "'", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Network Unreachable");
                     return true;
 
                 case SocketError.HostNotFound:
@@ -380,17 +380,17 @@ namespace AssetManager.Helpers
             {
                 case 18456:
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message);
-                    PromptUser("Error connecting to MUNIS Database.  Your username may not have access.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "MUNIS Error");
+                    PromptUser("Error connecting to MUNIS Database.  Your username may not have access.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "MUNIS Error");
                     return false;
 
                 case 102:
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message);
-                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "ERROR");
+                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "ERROR");
                     return false;
 
                 case 121:
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message);
-                    PromptUser("Could not connect to MUNIS database.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Network Error");
+                    PromptUser("Could not connect to MUNIS database.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Network Error");
                     return false;
 
                 case 245:
@@ -399,12 +399,12 @@ namespace AssetManager.Helpers
 
                 case 248:
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message);
-                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "ERROR");
+                    PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "ERROR");
                     return false;
 
                 case 53:
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.Number + "  Message:" + ex.Message);
-                    PromptUser("Could not connect to MUNIS database.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Network Error");
+                    PromptUser("Could not connect to MUNIS database.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Network Error");
                     suppressAdditionalMessages = true;
                     return true;
 
@@ -426,7 +426,7 @@ namespace AssetManager.Helpers
             {
                 case -2146233088:
                     Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message);
-                    PromptUser("Unable to connect to server.  Check connection and try again.", (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "Connection Lost");
+                    PromptUser("Unable to connect to server.  Check connection and try again.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Connection Lost");
                     return true;
 
                 default:
@@ -440,7 +440,7 @@ namespace AssetManager.Helpers
             if (ServerInfo.ServerPinging)
             {
                 Logging.Logger("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message);
-                PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Exclamation, "ERROR");
+                PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "ERROR");
                 OtherFunctions.EndProgram();
                 return false;
             }
@@ -454,15 +454,15 @@ namespace AssetManager.Helpers
         private static void UnHandledError(Exception ex, int ErrorCode, MethodBase Method)
         {
             Logging.Logger("UNHANDLED ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ErrorCode + "  Message:" + ex.Message);
-            PromptUser("UNHANDLED ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ErrorCode + "  Message:" + ex.Message + Environment.NewLine + Environment.NewLine + "file://" + Paths.LogPath, (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Error, "ERROR");
+            PromptUser("UNHANDLED ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ErrorCode + "  Message:" + ex.Message + Environment.NewLine + Environment.NewLine + "file://" + Paths.LogPath, MessageBoxButtons.OK, MessageBoxIcon.Error, "ERROR");
             OtherFunctions.EndProgram();
         }
 
-        private static void PromptUser(string Prompt, int Buttons = (int)MessageBoxButtons.OK + (int)MessageBoxIcon.Information, string Title = null, Form ParentFrm = null)
+        private static void PromptUser(string Prompt, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.Information, string Title = null, Form ParentFrm = null)
         {
             if (!suppressAdditionalMessages)
             {
-                OtherFunctions.Message(Prompt, Buttons, Title, ParentFrm);
+                OtherFunctions.Message(Prompt, buttons, icon, Title, ParentFrm);
             }
         }
     }

@@ -117,7 +117,7 @@ namespace AssetManager.Tools.Deployment
             {
                 if (!cancelOperation)
                 {
-                    if (OtherFunctions.Message("Cancel the current operation?", (int)MessageBoxButtons.YesNo + (int)MessageBoxIcon.Question, "Cancel?", parentForm) == DialogResult.Yes)
+                    if (OtherFunctions.Message("Cancel the current operation?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Cancel?", parentForm) == DialogResult.Yes)
                     {
                         cancelOperation = true;
                         StopRemoteProcesses();
