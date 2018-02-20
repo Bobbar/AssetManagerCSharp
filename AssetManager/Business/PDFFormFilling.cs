@@ -63,7 +63,7 @@ namespace AssetManager.Business
             try
             {
                 OtherFunctions.Message("Please Double-Click a MUNIS line item on the following window.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Input Needed");
-                var SelectedPrice = await GlobalInstances.MunisFunc.NewMunisReqSearch(GlobalInstances.MunisFunc.GetReqNumberFromPO(CurrentDevice.PO), GlobalInstances.MunisFunc.GetFYFromPO(CurrentDevice.PO), ParentForm, true);
+                var SelectedPrice = await MunisFunctions.NewMunisReqSearch(MunisFunctions.GetReqNumberFromPO(CurrentDevice.PO), MunisFunctions.GetFYFromPO(CurrentDevice.PO), ParentForm, true);
                 decimal decPrice = Convert.ToDecimal(SelectedPrice);
                 var SelectedUnitPrice = decPrice.ToString("C");
                 CurrentDialog.SetControlValue(UnitPriceTxtName, SelectedUnitPrice);
@@ -265,7 +265,7 @@ namespace AssetManager.Business
             tmpFields.SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD");
             // .SetField("topmostSubform[0].Page1[0].Asterisked_items_____must_be_completed_by_the_department[0]", CurrentDevice.strAssetTag)
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined[0]", Device.Serial);
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_2[0]", GlobalInstances.MunisFunc.GetVendorNameFromPO(Device.PO));
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_2[0]", MunisFunctions.GetVendorNameFromPO(Device.PO));
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_3[0]", Device.Description);
             //.SetField("topmostSubform[0].Page1[0]._1[0]", "6")
             // .SetField("topmostSubform[0].Page1[0]._2[0]", "7")

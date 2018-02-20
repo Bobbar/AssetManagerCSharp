@@ -933,7 +933,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                GlobalInstances.MunisFunc.LoadMunisInfoByDevice(currentViewDevice, this);
+                MunisFunctions.LoadMunisInfoByDevice(currentViewDevice, this);
             }
             catch (Exception ex)
             {
@@ -943,7 +943,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void MunisSearchButton_Click(object sender, EventArgs e)
         {
-            MunisUser = GlobalInstances.MunisFunc.MunisUserSearch(this);
+            MunisUser = MunisFunctions.MunisUserSearch(this);
         }
 
         private void SibiViewButton_Click(object sender, EventArgs e)

@@ -12,12 +12,12 @@ using System.Windows.Forms;
 
 namespace AssetManager.Data.Functions
 {
-    public class MunisFunctions //Be warned. This whole class is a horrible bastard...
+    public static class MunisFunctions //Be warned. This whole class is a horrible bastard...
     {
         private const int intMaxResults = 100;
-        private MunisComms MunisComms = new MunisComms();
+        private static MunisComms MunisComms = new MunisComms();
 
-        public string GetReqNumberFromPO(string PO)
+        public static string GetReqNumberFromPO(string PO)
         {
             if (!ReferenceEquals(PO, null))
             {
@@ -29,7 +29,7 @@ namespace AssetManager.Data.Functions
             return null;
         }
 
-        private async Task<string> GetReqNumberFromPOAsync(string PO)
+        private static async Task<string> GetReqNumberFromPOAsync(string PO)
         {
             if (!string.IsNullOrEmpty(PO))
             {
@@ -38,7 +38,7 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        public async Task<string> GetPOFromReqNumberAsync(string reqNum, string FY)
+        public static async Task<string> GetPOFromReqNumberAsync(string reqNum, string FY)
         {
             if (!string.IsNullOrEmpty(reqNum))
             {
@@ -47,7 +47,7 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        public async Task<string> GetPOFromDevice(Device device)
+        public static async Task<string> GetPOFromDevice(Device device)
         {
             string POFromAsset = "";
             string POFromSerial = "";
@@ -83,7 +83,8 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        private string SelectedCellValue(DataGridViewRow gridRow, string column = null)
+        // Redundant?
+        private static string SelectedCellValue(DataGridViewRow gridRow, string column = null)
         {
             foreach (DataGridViewCell cell in gridRow.Cells)
             {
@@ -105,9 +106,9 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        public string GetSerialFromAsset(string assetTag)
+        public static async Task<string> GetSerialFromAsset(string assetTag)
         {
-            var value = MunisComms.ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_serial");
+            var value = await MunisComms.ReturnSqlValueAsync("famaster", "fama_tag", assetTag, "fama_serial");
             if (value != null)
             {
                 return value.ToString().Trim();
@@ -115,9 +116,9 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        public string GetAssetFromSerial(string serial)
+        public static async Task<string> GetAssetFromSerial(string serial)
         {
-            var value = MunisComms.ReturnSqlValue("famaster", "fama_serial", serial, "fama_tag");
+            var value = await MunisComms.ReturnSqlValueAsync("famaster", "fama_serial", serial, "fama_tag");
             if (value != null)
             {
                 return value.ToString().Trim();
@@ -125,12 +126,12 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        public string GetFYFromAsset(string assetTag)
+        public static string GetFYFromAsset(string assetTag)
         {
             return MunisComms.ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_fisc_yr").ToString().Trim();
         }
 
-        public DateTime GetPODate(string PO)
+        public static DateTime GetPODate(string PO)
         {
             try
             {
@@ -142,13 +143,13 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public string GetVendorNameFromPO(string PO)
+        public static string GetVendorNameFromPO(string PO)
         {
             var VendorNumber = MunisComms.ReturnSqlValue("rqdetail", "rqdt_req_no", GetReqNumberFromPO(PO), "rqdt_sug_vn", "rqdt_fsc_yr", GetFYFromPO(PO));
             return MunisComms.ReturnSqlValue("ap_vendor", "a_vendor_number", VendorNumber, "a_vendor_name").ToString();
         }
 
-        public async Task<string> GetVendorNumberFromReqNumber(string reqNum, string FY)
+        public static async Task<string> GetVendorNumberFromReqNumber(string reqNum, string FY)
         {
             var VendorNum = await MunisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_sug_vn", "rqdt_fsc_yr", FY);
             if (VendorNum != null)
@@ -158,13 +159,13 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        public string GetFYFromPO(string PO)
+        public static string GetFYFromPO(string PO)
         {
             string TwoDigitYear = PO.Substring(0, 2);
             return "20" + TwoDigitYear;
         }
 
-        public async Task<string> GetPOStatusFromPO(int PO)
+        public static async Task<string> GetPOStatusFromPO(int PO)
         {
             string StatusString = "";
             string StatusCode = await MunisComms.ReturnSqlValueAsync("poheader", "pohd_pur_no", PO, "pohd_sta_cd");
@@ -181,7 +182,7 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        public async Task<string> GetReqStatusFromReqNum(string reqNum, int FY)
+        public static async Task<string> GetReqStatusFromReqNum(string reqNum, int FY)
         {
             string StatusString = "";
             string StatusCode = await MunisComms.ReturnSqlValueAsync("rqheader", "rqhd_req_no", reqNum, "rqhd_sta_cd", "rqhd_fsc_yr", FY);
@@ -198,7 +199,7 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        private string POStatusTextFromCode(int code)
+        private static string POStatusTextFromCode(int code)
         {
             switch (code)
             {
@@ -235,7 +236,7 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        private string ReqStatusTextFromCode(int code)
+        private static string ReqStatusTextFromCode(int code)
         {
             switch (code)
             {
@@ -259,7 +260,7 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public void AssetSearch(ExtendedForm parentForm)
+        public static void AssetSearch(ExtendedForm parentForm)
         {
             try
             {
@@ -284,7 +285,7 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public void NameSearch(ExtendedForm parentForm)
+        public static void NameSearch(ExtendedForm parentForm)
         {
             try
             {
@@ -309,7 +310,7 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public void POSearch(ExtendedForm parentForm)
+        public static void POSearch(ExtendedForm parentForm)
         {
             try
             {
@@ -332,7 +333,7 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public async void ReqSearch(ExtendedForm parentForm)
+        public static async void ReqSearch(ExtendedForm parentForm)
         {
             try
             {
@@ -370,7 +371,7 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public void OrgObSearch(ExtendedForm parentForm)
+        public static void OrgObSearch(ExtendedForm parentForm)
         {
             try
             {
@@ -403,13 +404,13 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public DataTable ListOfEmpsBySup(string supEmpNum)
+        public static DataTable ListOfEmpsBySup(string supEmpNum)
         {
             string strQRY = "SELECT TOP 100 a_employee_number FROM pr_employee_master WHERE e_supervisor='" + supEmpNum + "'";
             return MunisComms.ReturnSqlTable(strQRY);
         }
 
-        public async void NewOrgObView(string org, string obj, string FY, ExtendedForm parentForm)
+        public static async void NewOrgObView(string org, string obj, string FY, ExtendedForm parentForm)
         {
             try
             {
@@ -460,7 +461,7 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        private async void NewMunisEmployeeSearch(string name, ExtendedForm parentForm)
+        private static async void NewMunisEmployeeSearch(string name, ExtendedForm parentForm)
         {
             try
             {
@@ -497,7 +498,7 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
             }
         }
 
-        public async void NewMunisPOSearch(string PO, ExtendedForm parentForm)
+        public static async void NewMunisPOSearch(string PO, ExtendedForm parentForm)
         {
             try
             {
@@ -535,7 +536,7 @@ FROM poheader";
             }
         }
 
-        public async Task<string> NewMunisReqSearch(string reqNumber, string FY, ExtendedForm parentForm, bool selectMode = false)
+        public static async Task<string> NewMunisReqSearch(string reqNumber, string FY, ExtendedForm parentForm, bool selectMode = false)
         {
             if (reqNumber == "" || FY == "")
             {
@@ -572,7 +573,7 @@ FROM poheader";
             return string.Empty;
         }
 
-        private bool HasResults(DataTable results, Form parentForm)
+        private static bool HasResults(DataTable results, Form parentForm)
         {
             if (results != null && results.Rows.Count > 0)
             {
@@ -585,7 +586,7 @@ FROM poheader";
             }
         }
 
-        private async Task<DataTable> GetReqHeaderFromReqNum(string reqNumber, string fiscalYr)
+        private static async Task<DataTable> GetReqHeaderFromReqNum(string reqNumber, string fiscalYr)
         {
             if (reqNumber == "" || fiscalYr == "")
             {
@@ -606,7 +607,7 @@ FROM poheader";
             return null;
         }
 
-        private async Task<DataTable> GetReqLineItemsFromReqNum(string reqNumber, string fiscalYr)
+        private static async Task<DataTable> GetReqLineItemsFromReqNum(string reqNumber, string fiscalYr)
         {
             if (reqNumber == "" || fiscalYr == "")
             {
@@ -638,7 +639,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
             }
         }
 
-        public async void LoadMunisInfoByDevice(Device device, ExtendedForm parentForm)
+        public static async void LoadMunisInfoByDevice(Device device, ExtendedForm parentForm)
         {
             try
             {
@@ -709,7 +710,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
             }
         }
 
-        private async Task<DataTable> LoadMunisInventoryGrid(Device device)
+        private static async Task<DataTable> LoadMunisInventoryGrid(Device device)
         {
             string strFields = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo";
             string Query = "SELECT TOP 1 " + strFields + " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" + device.AssetTag + "' AND fama_tag <> '' OR fama_serial='" + device.Serial + "' AND fama_serial <> ''";
@@ -722,7 +723,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
             return null;
         }
 
-        public MunisEmployee MunisUserSearch(ExtendedForm parentForm)
+        public static MunisEmployee MunisUserSearch(ExtendedForm parentForm)
         {
             using (MunisUserForm NewMunisSearch = new MunisUserForm(parentForm))
             {

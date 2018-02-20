@@ -363,13 +363,13 @@ namespace AssetManager.Data.Functions
             try
             {
                 MunisEmployee SupInfo = default(MunisEmployee);
-                SupInfo = GlobalInstances.MunisFunc.MunisUserSearch(parentForm);
+                SupInfo = MunisFunctions.MunisUserSearch(parentForm);
                 if (!string.IsNullOrEmpty(SupInfo.Number))
                 {
                     OtherFunctions.SetWaitCursor(true, parentForm);
                     using (DataTable DeviceList = new DataTable())
                     {
-                        using (DataTable EmpList = GlobalInstances.MunisFunc.ListOfEmpsBySup(SupInfo.Number))
+                        using (DataTable EmpList = MunisFunctions.ListOfEmpsBySup(SupInfo.Number))
                         {
                             foreach (DataRow r in EmpList.Rows)
                             {

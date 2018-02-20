@@ -61,7 +61,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 controlParser.FillDBFields(results, ImportColumnRemaps());
                 MunisUser = AssetManagerFunctions.SmartEmployeeSearch(results.Rows[0][SibiRequestItemsCols.User].ToString().ToUpper());
-                POPurchaseDate = GlobalInstances.MunisFunc.GetPODate(results.Rows[0][SibiRequestCols.PO].ToString());
+                POPurchaseDate = MunisFunctions.GetPODate(results.Rows[0][SibiRequestCols.PO].ToString());
             }
 
             CurrentUserTextBox.Text = MunisUser.Name;
@@ -305,7 +305,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void MunisSearchButton_Click(object sender, EventArgs e)
         {
-            MunisUser = GlobalInstances.MunisFunc.MunisUserSearch(this);
+            MunisUser = MunisFunctions.MunisUserSearch(this);
             if (!string.IsNullOrEmpty(MunisUser.Number))
             {
                 CurrentUserTextBox.Text = MunisUser.Name;

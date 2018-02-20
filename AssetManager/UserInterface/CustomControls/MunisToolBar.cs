@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using AssetManager.Data.Functions;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -87,11 +88,11 @@ namespace AssetManager.UserInterface.CustomControls
         private void InitToolItems(ExtendedForm parentForm)
         {
             List<ToolStripMenuItem> ToolItemList = new List<ToolStripMenuItem>();
-            ToolItemList.Add(NewToolItem("tsmUserOrgObLookup", "User Lookup", () => GlobalInstances.MunisFunc.NameSearch(parentForm)));
-            ToolItemList.Add(NewToolItem("tsmOrgObLookup", "Org/Obj Lookup", () => GlobalInstances.MunisFunc.OrgObSearch(parentForm)));
-            ToolItemList.Add(NewToolItem("tsmPOLookUp", "PO Lookup", () => GlobalInstances.MunisFunc.POSearch(parentForm)));
-            ToolItemList.Add(NewToolItem("tsmReqNumLookUp", "Requisition # Lookup", () => GlobalInstances.MunisFunc.ReqSearch(parentForm)));
-            ToolItemList.Add(NewToolItem("tsmDeviceLookUp", "Device Lookup", () => GlobalInstances.MunisFunc.AssetSearch(parentForm)));
+            ToolItemList.Add(NewToolItem("tsmUserOrgObLookup", "User Lookup", () => MunisFunctions.NameSearch(parentForm)));
+            ToolItemList.Add(NewToolItem("tsmOrgObLookup", "Org/Obj Lookup", () => MunisFunctions.OrgObSearch(parentForm)));
+            ToolItemList.Add(NewToolItem("tsmPOLookUp", "PO Lookup", () => MunisFunctions.POSearch(parentForm)));
+            ToolItemList.Add(NewToolItem("tsmReqNumLookUp", "Requisition # Lookup", () => MunisFunctions.ReqSearch(parentForm)));
+            ToolItemList.Add(NewToolItem("tsmDeviceLookUp", "Device Lookup", () => MunisFunctions.AssetSearch(parentForm)));
             foreach (ToolStripMenuItem item in ToolItemList)
             {
                 AddToolItem(item);

@@ -25,9 +25,6 @@ namespace AssetManager
 
         public static DeviceAttributes DeviceAttribute = new DeviceAttributes();
         public static SibiAttributes SibiAttribute = new SibiAttributes();
-        public static MunisFunctions MunisFunc = new MunisFunctions();
-        //public static AssetManagerFunctions AssetFunc = new AssetManagerFunctions();
-
         public static FtpFunctions FTPFunc = new FtpFunctions();
     }
 }
