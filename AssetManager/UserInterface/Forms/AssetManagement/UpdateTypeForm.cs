@@ -1,5 +1,6 @@
 using AssetManager.Data.Classes;
 using AssetManager.Data.Functions;
+using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
 using System;
 using System.ComponentModel;
@@ -19,10 +20,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         public UpdateDev(ExtendedForm parentForm, bool isNoteOnly = false) : base(parentForm)
         {
             InitializeComponent();
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.ChangeType, UpdateTypeCombo);
+            UpdateTypeCombo.FillComboBox(Attributes.DeviceAttribute.ChangeType);
             if (isNoteOnly)
             {
-                UpdateTypeCombo.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(GlobalInstances.DeviceAttribute.ChangeType, "NOTE");
+                UpdateTypeCombo.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(Attributes.DeviceAttribute.ChangeType, "NOTE");
                 UpdateTypeCombo.Enabled = false;
                 ValidateUpdateType();
             }
@@ -36,7 +37,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void SubmitButton_Click(object sender, EventArgs e)
         {
             NewUpdateInfo.Note = NotesTextBox.Rtf.Trim();
-            NewUpdateInfo.ChangeType = AttributeFunctions.GetDBValue(GlobalInstances.DeviceAttribute.ChangeType, UpdateTypeCombo.SelectedIndex);
+            NewUpdateInfo.ChangeType = UpdateTypeCombo.SelectedValue.ToString();
             NotesTextBox.Text = "";
             UpdateTypeCombo.Enabled = true;
             this.DialogResult = DialogResult.OK;

@@ -12,10 +12,10 @@ namespace AssetManager.UserInterface.Forms
     {
         #region "Fields"
 
-        private bool bolGridFilling = true;
-        private List<DataGridView> GridList = new List<DataGridView>();
+        private bool gridFilling = true;
+        private List<DataGridView> gridList = new List<DataGridView>();
 
-        private DataGridViewRow LastDoubleClickRow;
+        private DataGridViewRow lastDoubleClickRow;
 
         #endregion "Fields"
 
@@ -43,12 +43,12 @@ namespace AssetManager.UserInterface.Forms
 
         public int GridCount
         {
-            get { return GridList.Count; }
+            get { return gridList.Count; }
         }
 
-        public DataGridViewRow SelectedValue
+        public DataGridViewRow SelectedRow
         {
-            get { return LastDoubleClickRow; }
+            get { return lastDoubleClickRow; }
         }
 
         #endregion "Properties"
@@ -59,7 +59,7 @@ namespace AssetManager.UserInterface.Forms
         {
             var NewGrid = GetNewGrid(name, label + " (" + datatable.Rows.Count.ToString() + " rows)");
             FillGrid(NewGrid, datatable);
-            GridList.Add(NewGrid);
+            gridList.Add(NewGrid);
         }
 
         private void CopySelectedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -72,7 +72,7 @@ namespace AssetManager.UserInterface.Forms
             this.SuspendLayout();
             Panel1.SuspendLayout();
             GridPanel.SuspendLayout();
-            foreach (DataGridView grid in GridList)
+            foreach (DataGridView grid in gridList)
             {
                 GroupBox GridBox = new GroupBox();
                 GridBox.Text = (string)grid.Tag;
@@ -121,20 +121,19 @@ namespace AssetManager.UserInterface.Forms
             NewGrid.CellEnter += GridEnterCell;
             NewGrid.CellDoubleClick += GridDoubleClickCell;
             NewGrid.DoubleBufferedDataGrid(true);
-            //ExtendedMethods.DoubleBufferedDataGrid(NewGrid, true);
             return NewGrid;
         }
 
         private void GridDoubleClickCell(object sender, EventArgs e)
         {
             DataGridView SenderGrid = (DataGridView)sender;
-            LastDoubleClickRow = SenderGrid.CurrentRow;
+            lastDoubleClickRow = SenderGrid.CurrentRow;
             this.DialogResult = DialogResult.OK;
         }
 
         private void GridEnterCell(object sender, DataGridViewCellEventArgs e)
         {
-            if (!bolGridFilling)
+            if (!gridFilling)
             {
                 StyleFunctions.HighlightRow((DataGridView)sender, this.GridTheme, e.RowIndex);
             }
@@ -148,14 +147,14 @@ namespace AssetManager.UserInterface.Forms
 
         private void GridForm_Resize(object sender, EventArgs e)
         {
-            if (!bolGridFilling)
+            if (!gridFilling)
                 ResizeGridPanel();
         }
 
         private int GridHeight()
         {
             int MinHeight = 200;
-            int CalcHeight = Convert.ToInt32((this.ClientSize.Height - 30) / GridList.Count);
+            int CalcHeight = Convert.ToInt32((this.ClientSize.Height - 30) / gridList.Count);
             if (CalcHeight < MinHeight)
             {
                 return MinHeight;
@@ -174,16 +173,16 @@ namespace AssetManager.UserInterface.Forms
         private void ResizeGridPanel()
         {
             var NewHeight = GridHeight();
-            foreach (DataGridView grid in GridList)
+            foreach (DataGridView grid in gridList)
             {
-                var row = GridList.IndexOf(grid);
+                var row = gridList.IndexOf(grid);
                 GridPanel.RowStyles[row].Height = NewHeight;
             }
         }
 
         private void ResizeGrids()
         {
-            foreach (DataGridView grid in GridList)
+            foreach (DataGridView grid in gridList)
             {
                 grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
                 grid.FastAutoSizeColumns();
@@ -198,20 +197,20 @@ namespace AssetManager.UserInterface.Forms
 
         private void GridForm_Disposed(object sender, EventArgs e)
         {
-            foreach (DataGridView grid in GridList)
+            foreach (DataGridView grid in gridList)
             {
                 ((DataTable)grid.DataSource).Dispose();
                 grid.Dispose();
             }
-            if (LastDoubleClickRow != null)
-                LastDoubleClickRow.Dispose();
+            if (lastDoubleClickRow != null)
+                lastDoubleClickRow.Dispose();
         }
 
         private void GridForm_Load(object sender, EventArgs e)
         {
             AddGridsToForm();
             ResizeGrids();
-            bolGridFilling = false;
+            gridFilling = false;
         }
 
         #endregion "Methods"

@@ -83,29 +83,6 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        // Redundant?
-        private static string SelectedCellValue(DataGridViewRow gridRow, string column = null)
-        {
-            foreach (DataGridViewCell cell in gridRow.Cells)
-            {
-                if (column == "")
-                {
-                    if (cell.Selected)
-                    {
-                        return cell.Value.ToString();
-                    }
-                }
-                else
-                {
-                    if (cell.OwningColumn.Name == column)
-                    {
-                        return cell.Value.ToString();
-                    }
-                }
-            }
-            return string.Empty;
-        }
-
         public static async Task<string> GetSerialFromAsset(string assetTag)
         {
             var value = await MunisComms.ReturnSqlValueAsync("famaster", "fama_tag", assetTag, "fama_serial");
@@ -564,7 +541,7 @@ FROM poheader";
                         NewGridForm.ShowDialog(parentForm);
                         if (NewGridForm.DialogResult == DialogResult.OK)
                         {
-                            return SelectedCellValue(NewGridForm.SelectedValue, "rqdt_uni_pr");
+                            return NewGridForm.SelectedRow.Cells["rqdt_uni_pr"].Value.ToString().Trim();
                         }
                     }
                 }

@@ -1,4 +1,5 @@
 using AssetManager.Data;
+using AssetManager.Data.Classes;
 using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
@@ -31,20 +32,20 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             txtEntryTime.Tag = new DBControlInfo(HistoricalDevicesCols.ActionDateTime, ParseType.DisplayOnly, false);
             txtActionUser.Tag = new DBControlInfo(HistoricalDevicesCols.ActionUser, ParseType.DisplayOnly, false);
-            txtChangeType.Tag = new DBControlInfo(HistoricalDevicesCols.ChangeType, GlobalInstances.DeviceAttribute.ChangeType, ParseType.DisplayOnly, false);
+            txtChangeType.Tag = new DBControlInfo(HistoricalDevicesCols.ChangeType, Attributes.DeviceAttribute.ChangeType, ParseType.DisplayOnly, false);
             txtDescription.Tag = new DBControlInfo(HistoricalDevicesCols.Description, ParseType.DisplayOnly, false);
             txtGUID.Tag = new DBControlInfo(HistoricalDevicesCols.DeviceUID, ParseType.DisplayOnly, false);
             txtCurrentUser.Tag = new DBControlInfo(HistoricalDevicesCols.CurrentUser, ParseType.DisplayOnly, false);
-            txtLocation.Tag = new DBControlInfo(HistoricalDevicesCols.Location, GlobalInstances.DeviceAttribute.Locations, ParseType.DisplayOnly, false);
+            txtLocation.Tag = new DBControlInfo(HistoricalDevicesCols.Location, Attributes.DeviceAttribute.Locations, ParseType.DisplayOnly, false);
             txtPONumber.Tag = new DBControlInfo(HistoricalDevicesCols.PO, ParseType.DisplayOnly, false);
             txtAssetTag.Tag = new DBControlInfo(HistoricalDevicesCols.AssetTag, ParseType.DisplayOnly, false);
             txtPurchaseDate.Tag = new DBControlInfo(HistoricalDevicesCols.PurchaseDate, ParseType.DisplayOnly, false);
-            txtOSVersion.Tag = new DBControlInfo(HistoricalDevicesCols.OSVersion, GlobalInstances.DeviceAttribute.OSType, ParseType.DisplayOnly, false);
+            txtOSVersion.Tag = new DBControlInfo(HistoricalDevicesCols.OSVersion, Attributes.DeviceAttribute.OSType, ParseType.DisplayOnly, false);
             txtSerial.Tag = new DBControlInfo(HistoricalDevicesCols.Serial, ParseType.DisplayOnly, false);
             txtReplaceYear.Tag = new DBControlInfo(HistoricalDevicesCols.ReplacementYear, ParseType.DisplayOnly, false);
-            txtEQType.Tag = new DBControlInfo(HistoricalDevicesCols.EQType, GlobalInstances.DeviceAttribute.EquipType, ParseType.DisplayOnly, false);
+            txtEQType.Tag = new DBControlInfo(HistoricalDevicesCols.EQType, Attributes.DeviceAttribute.EquipType, ParseType.DisplayOnly, false);
             NotesTextBox.Tag = new DBControlInfo(HistoricalDevicesCols.Notes, ParseType.DisplayOnly, false);
-            txtStatus.Tag = new DBControlInfo(HistoricalDevicesCols.Status, GlobalInstances.DeviceAttribute.StatusType, ParseType.DisplayOnly, false);
+            txtStatus.Tag = new DBControlInfo(HistoricalDevicesCols.Status, Attributes.DeviceAttribute.StatusType, ParseType.DisplayOnly, false);
             txtEntryGUID.Tag = new DBControlInfo(HistoricalDevicesCols.HistoryEntryUID, ParseType.DisplayOnly, false);
             chkTrackable.Tag = new DBControlInfo(HistoricalDevicesCols.Trackable, ParseType.DisplayOnly, false);
             txtPhoneNumber.Tag = new DBControlInfo(HistoricalDevicesCols.PhoneNumber, ParseType.DisplayOnly, false);

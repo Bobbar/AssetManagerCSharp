@@ -90,7 +90,7 @@ namespace AssetManager.Business
                 {
                     newFile = Paths.DownloadPath + CurrentDevice.AssetTag + " - " + CurrentDevice.Description + strTimeStamp + ".pdf";
                 }
-                
+
                 if (Type == PdfFormType.InputForm)
                 {
                     using (PdfReader pdfReader = new PdfReader(Properties.Resources.Exh_K_01_Asset_Input_Formnew))
@@ -288,12 +288,15 @@ namespace AssetManager.Business
             using (AdvancedDialog newDialog = new AdvancedDialog(ParentForm))
             {
                 newDialog.Text = "Additional Input Required";
+
                 ComboBox cmbFrom = new ComboBox();
-                AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbFrom);
+                cmbFrom.FillComboBox(Attributes.DeviceAttribute.Locations);
                 newDialog.AddCustomControl("cmbFromLoc", "Transfer FROM:", (Control)cmbFrom);
+
                 ComboBox cmbTo = new ComboBox();
-                AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbTo);
+                cmbTo.FillComboBox(Attributes.DeviceAttribute.Locations);
                 newDialog.AddCustomControl("cmbToLoc", "Transfer TO:", (Control)cmbTo);
+
                 newDialog.AddLabel("Reason For Transfer-Check One:", true);
                 newDialog.AddCheckBox("chkBetterU", "Better Use of asset:");
                 newDialog.AddCheckBox("chkTradeIn", "Trade-in or exchange:");
@@ -306,10 +309,10 @@ namespace AssetManager.Business
                     return null;
                 }
 
-                string fromLocationCode = AttributeFunctions.GetDBValue(GlobalInstances.DeviceAttribute.Locations, (int)(newDialog.GetControlValue("cmbFromLoc")));
-                string fromLocDescription = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.Locations, fromLocationCode);
-                string toLocationCode = AttributeFunctions.GetDBValue(GlobalInstances.DeviceAttribute.Locations, (int)(newDialog.GetControlValue("cmbToLoc")));
-                string toLocDescription = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.Locations, toLocationCode);
+                string fromLocationCode = cmbFrom.SelectedValue.ToString();
+                string fromLocDescription = cmbFrom.Text;
+                string toLocationCode = cmbTo.SelectedValue.ToString();
+                string toLocDescription = cmbTo.Text;
 
                 tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.AssetTag);
                 tmpFields.SetField("topmostSubform[0].Page1[0].Serial_number[0]", Device.Serial);

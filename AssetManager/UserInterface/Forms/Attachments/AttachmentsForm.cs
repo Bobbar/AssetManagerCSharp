@@ -865,7 +865,7 @@ namespace AssetManager.UserInterface.Forms
                                 });
                                 if (cancelToken.IsCancellationRequested)
                                 {
-                                    GlobalInstances.FTPFunc.DeleteFtpAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID);
+                                    FtpFunctions.DeleteFtpAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID);
                                 }
                                 else
                                 {

@@ -10,17 +10,17 @@ using AssetManager.Helpers;
 
 namespace AssetManager.Data.Functions
 {
-    public class FtpFunctions
+    public static class FtpFunctions
     {
         #region Fields
 
-        private FtpComms FTPComms = new FtpComms();
+        private static FtpComms FTPComms = new FtpComms();
 
         #endregion Fields
 
         #region Methods
 
-        public bool DeleteFtpAttachment(string fileUID, string fKey)
+        public static bool DeleteFtpAttachment(string fileUID, string fKey)
         {
             FtpWebResponse resp = null;
             try
@@ -41,7 +41,7 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public bool DeleteFtpFolder(string folderUID)
+        public static bool DeleteFtpFolder(string folderUID)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public bool HasFtpFolder(string itemGUID)
+        public static bool HasFtpFolder(string itemGUID)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public void ScanAttachements()
+        public static void ScanAttachements()
         {
             try
             {
@@ -156,7 +156,7 @@ Missing Files: " + MissingSQLFiles.Count;
         /// Checks if supplied UID exists in Devices or Sibi tables.
         /// </summary>
         /// <returns></returns>
-        private bool CheckForPrimaryItem(string itemUID)
+        private static bool CheckForPrimaryItem(string itemUID)
         {
             bool exists = false;
             if (!string.IsNullOrEmpty(AssetManagerFunctions.GetSqlValue(DevicesCols.TableName, DevicesCols.DeviceUID, itemUID, DevicesCols.DeviceUID)))
@@ -170,7 +170,7 @@ Missing Files: " + MissingSQLFiles.Count;
             return exists;
         }
 
-        private int CleanSQLFiles(List<AttachScanInfo> missingSQLFiles)
+        private static int CleanSQLFiles(List<AttachScanInfo> missingSQLFiles)
         {
             if (missingSQLFiles.Count > 0)
             {
@@ -198,7 +198,7 @@ Missing Files: " + MissingSQLFiles.Count;
             return 0;
         }
 
-        private int CleanSQLEntries(List<AttachScanInfo> missingSQLDirs)
+        private static int CleanSQLEntries(List<AttachScanInfo> missingSQLDirs)
         {
             if (missingSQLDirs.Count > 0)
             {
@@ -229,7 +229,7 @@ Missing Files: " + MissingSQLFiles.Count;
             return 0;
         }
 
-        private int CleanFTPFiles(List<AttachScanInfo> missingFTPFiles)
+        private static int CleanFTPFiles(List<AttachScanInfo> missingFTPFiles)
         {
             int deletions = 0;
             foreach (var file in missingFTPFiles)
@@ -243,7 +243,7 @@ Missing Files: " + MissingSQLFiles.Count;
             return deletions;
         }
 
-        private int CleanFTPDirs(List<string> missingFTPDirs)
+        private static int CleanFTPDirs(List<string> missingFTPDirs)
         {
             int deletions = 0;
             foreach (var fDir in missingFTPDirs)
@@ -263,7 +263,7 @@ Missing Files: " + MissingSQLFiles.Count;
         /// <param name="sqlFiles"></param>
         /// <param name="ftpDirs"></param>
         /// <returns></returns>
-        private List<AttachScanInfo> ListMissingSQLDirs(List<AttachScanInfo> sqlFiles, List<string> ftpDirs)
+        private static List<AttachScanInfo> ListMissingSQLDirs(List<AttachScanInfo> sqlFiles, List<string> ftpDirs)
         {
             List<AttachScanInfo> MissingDirs = new List<AttachScanInfo>();
             foreach (var SQLfile in sqlFiles)
@@ -293,7 +293,7 @@ Missing Files: " + MissingSQLFiles.Count;
         /// </summary>
         /// <param name="ftpDirs"></param>
         /// <returns></returns>
-        private List<string> ListMissingFTPDirs(List<string> ftpDirs)
+        private static List<string> ListMissingFTPDirs(List<string> ftpDirs)
         {
             var MissingDirs = ftpDirs.FindAll(f => !CheckForPrimaryItem(f));
             MissingDirs.ForEach(f => Logging.Logger("Orphan FTP Dir Found: " + f));
@@ -306,7 +306,7 @@ Missing Files: " + MissingSQLFiles.Count;
         /// <param name="sqlFiles"></param>
         /// <param name="ftpFiles"></param>
         /// <returns></returns>
-        private List<AttachScanInfo> ListMissingSQLFiles(List<AttachScanInfo> sqlFiles, List<AttachScanInfo> ftpFiles)
+        private static List<AttachScanInfo> ListMissingSQLFiles(List<AttachScanInfo> sqlFiles, List<AttachScanInfo> ftpFiles)
         {
             var MissingFiles = sqlFiles.Except(ftpFiles).ToList();
             MissingFiles.ForEach(f => Logging.Logger("Orphan SQL File Found: " + f.FKey + "/" + f.FileUID));
@@ -319,14 +319,14 @@ Missing Files: " + MissingSQLFiles.Count;
         /// <param name="sqlFiles"></param>
         /// <param name="ftpFiles"></param>
         /// <returns></returns>
-        private List<AttachScanInfo> ListMissingFTPFiles(List<AttachScanInfo> sqlFiles, List<AttachScanInfo> ftpFiles)
+        private static List<AttachScanInfo> ListMissingFTPFiles(List<AttachScanInfo> sqlFiles, List<AttachScanInfo> ftpFiles)
         {
             var MissingFiles = ftpFiles.Except(sqlFiles).ToList();
             MissingFiles.ForEach(f => Logging.Logger("Orphan FTP File Found: " + f.FKey + "/" + f.FileUID));
             return MissingFiles;
         }
 
-        private List<AttachScanInfo> ListFTPFiles(List<string> ftpDirs)
+        private static List<AttachScanInfo> ListFTPFiles(List<string> ftpDirs)
         {
             List<AttachScanInfo> FTPFileList = new List<AttachScanInfo>();
             foreach (var fDir in ftpDirs)
@@ -339,7 +339,7 @@ Missing Files: " + MissingSQLFiles.Count;
             return FTPFileList;
         }
 
-        private List<AttachScanInfo> ListSQLFiles()
+        private static List<AttachScanInfo> ListSQLFiles()
         {
             DeviceAttachmentsCols DeviceTable = new DeviceAttachmentsCols();
             SibiAttachmentsCols SibiTable = new SibiAttachmentsCols();
@@ -360,7 +360,7 @@ Missing Files: " + MissingSQLFiles.Count;
             return SQLFileList;
         }
 
-        private List<string> ListDirectory(string uri)
+        private static List<string> ListDirectory(string uri)
         {
             try
             {

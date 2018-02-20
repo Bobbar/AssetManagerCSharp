@@ -439,7 +439,7 @@ namespace AssetManager.Data.Functions
                 ComboBox dbCmb = (ComboBox)dbControl;
                 if (dbCmb.SelectedIndex > -1)
                 {
-                    return AttributeFunctions.GetDBValue(DBInfo.AttribIndex, dbCmb.SelectedIndex);
+                    return dbCmb.SelectedValue.ToString();
                 }
                 else
                 {

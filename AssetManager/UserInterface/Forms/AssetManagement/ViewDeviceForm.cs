@@ -1,13 +1,13 @@
-﻿using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms.Sibi;
-using AssetManager.Data.Classes;
-using AssetManager.Data.Functions;
-using AssetManager.Data.Communications;
+﻿using AssetManager.Business;
 using AssetManager.Data;
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Data.Functions;
 using AssetManager.Helpers;
-using AssetManager.Tools;
 using AssetManager.Security;
-using AssetManager.Business;
+using AssetManager.Tools;
+using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.Sibi;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -32,6 +32,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 SetMunisEmpStatus();
             }
         }
+
         private bool gridFilling = false;
         private string currentHash;
         private Device currentViewDevice;
@@ -317,7 +318,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGUID)))
                 {
                     string dateStamp = results.Rows[0][HistoricalDevicesCols.ActionDateTime].ToString();
-                    string actionType = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.ChangeType, results.Rows[0][HistoricalDevicesCols.ChangeType].ToString());
+                    string actionType = AttributeFunctions.GetDisplayValueFromCode(Attributes.DeviceAttribute.ChangeType, results.Rows[0][HistoricalDevicesCols.ChangeType].ToString());
                     var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + dateStamp + " - " + actionType + " - " + entryGUID, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "Are you sure?", this);
                     if (blah == DialogResult.Yes)
                     {
@@ -487,7 +488,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             else
             {
                 TrackingStatusTextBox.BackColor = Colors.CheckIn;
-                TrackingLocationTextBox.Text = AttributeFunctions.GetDisplayValueFromCode(GlobalInstances.DeviceAttribute.Locations, currentViewDevice.Location);
+                TrackingLocationTextBox.Text = AttributeFunctions.GetDisplayValueFromCode(Attributes.DeviceAttribute.Locations, currentViewDevice.Location);
                 CheckTimeLabel.Text = "CheckIn Time:";
                 CheckTimeTextBox.Text = currentViewDevice.Tracking.CheckinTime.ToString();
                 CheckUserLabel.Text = "CheckIn User:";
@@ -565,14 +566,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionDateTime, "Time Stamp", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ChangeType, "Change Type", GlobalInstances.DeviceAttribute.ChangeType, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ChangeType, "Change Type", Attributes.DeviceAttribute.ChangeType, ColumnFormatTypes.AttributeDisplayMemberOnly));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionUser, "Action User", typeof(string)));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Notes, "Note Peek", typeof(string), ColumnFormatTypes.NotePreview));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.CurrentUser, "User", typeof(string)));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.AssetTag, "Asset ID", typeof(string)));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Serial, "Serial", typeof(string)));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Description, "Description", typeof(string)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Location, "Location", GlobalInstances.DeviceAttribute.Locations, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Location, "Location", Attributes.DeviceAttribute.Locations, ColumnFormatTypes.AttributeDisplayMemberOnly));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.PurchaseDate, "Purchase Date", typeof(DateTime)));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.HistoryEntryUID, "GUID", typeof(string)));
             return ColList;
@@ -586,10 +587,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             CurrentUserTextBox.Tag = new DBControlInfo(DevicesBaseCols.CurrentUser, true);
             DescriptionTextBox.Tag = new DBControlInfo(DevicesBaseCols.Description, true);
             PurchaseDatePicker.Tag = new DBControlInfo(DevicesBaseCols.PurchaseDate, true);
-            EquipTypeComboBox.Tag = new DBControlInfo(DevicesBaseCols.EQType, GlobalInstances.DeviceAttribute.EquipType, true);
-            LocationComboBox.Tag = new DBControlInfo(DevicesBaseCols.Location, GlobalInstances.DeviceAttribute.Locations, true);
-            OSVersionComboBox.Tag = new DBControlInfo(DevicesBaseCols.OSVersion, GlobalInstances.DeviceAttribute.OSType, true);
-            StatusComboBox.Tag = new DBControlInfo(DevicesBaseCols.Status, GlobalInstances.DeviceAttribute.StatusType, true);
+            EquipTypeComboBox.Tag = new DBControlInfo(DevicesBaseCols.EQType, Attributes.DeviceAttribute.EquipType, true);
+            LocationComboBox.Tag = new DBControlInfo(DevicesBaseCols.Location, Attributes.DeviceAttribute.Locations, true);
+            OSVersionComboBox.Tag = new DBControlInfo(DevicesBaseCols.OSVersion, Attributes.DeviceAttribute.OSType, true);
+            StatusComboBox.Tag = new DBControlInfo(DevicesBaseCols.Status, Attributes.DeviceAttribute.StatusType, true);
 
             //Non-required and Misc Fields
             PONumberTextBox.Tag = new DBControlInfo(DevicesBaseCols.PO, false);
@@ -673,7 +674,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             try
             {
                 SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi);
-                
+
                 if (string.IsNullOrEmpty(LinkDevice.PO))
                 {
                     OtherFunctions.Message("A valid PO Number is required.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Missing Info", this);
@@ -704,10 +705,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RefreshCombos()
         {
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.EquipType, EquipTypeComboBox);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, LocationComboBox);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, OSVersionComboBox);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, StatusComboBox);
+            EquipTypeComboBox.FillComboBox(Attributes.DeviceAttribute.EquipType);
+            LocationComboBox.FillComboBox(Attributes.DeviceAttribute.Locations);
+            OSVersionComboBox.FillComboBox(Attributes.DeviceAttribute.OSType);
+            StatusComboBox.FillComboBox(Attributes.DeviceAttribute.StatusType);
         }
 
         private async void SetADInfo()
@@ -818,7 +819,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void StartTrackDeviceForm()
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.Tracking);
-           
+
             Waiting();
             TrackDeviceForm NewTracking = new TrackDeviceForm(currentViewDevice, this);
             DoneWaiting();
@@ -882,7 +883,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void ViewAttachments()
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewAttachment);
-            
+
             if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
                 AttachmentsForm NewAttachments = new AttachmentsForm(this, new DeviceAttachmentsCols(), currentViewDevice, UpdateAttachCountHandler);
@@ -895,10 +896,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         #region Control Events
+
         private void PingHistLabel_Click(object sender, EventArgs e)
         {
             AssetManagerFunctions.ShowPingHistory(this, currentViewDevice);
         }
+
         private void AssetDisposalFormToolItem_Click(object sender, EventArgs e)
         {
             PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.DisposeForm);
@@ -1103,6 +1106,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             statusSlider.NewSlideMessage(e.Message, e.DisplayTime);
         }
+
         private void CurrentUserTextBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (editMode)
@@ -1110,6 +1114,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 MunisUser = new MunisEmployee();
             }
         }
+
         #endregion Control Events
 
         #endregion Methods

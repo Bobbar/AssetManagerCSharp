@@ -202,7 +202,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             MunisUser = new MunisEmployee();
             ClearFields(this);
             PurchaseDatePicker.Value = DateTime.Now;
-            StatusComboBox.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(GlobalInstances.DeviceAttribute.StatusType, "INSRV");
+            StatusComboBox.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(Attributes.DeviceAttribute.StatusType, "INSRV");
             TrackableCheckBox.Checked = false;
             NoClearCheckBox.Checked = false;
             controlParser.ClearErrors();
@@ -266,13 +266,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             SerialTextBox.Tag = new DBControlInfo(DevicesBaseCols.Serial, true);
             PurchaseDatePicker.Tag = new DBControlInfo(DevicesBaseCols.PurchaseDate, true);
             ReplaceYearTextBox.Tag = new DBControlInfo(DevicesBaseCols.ReplacementYear, false);
-            LocationComboBox.Tag = new DBControlInfo(DevicesBaseCols.Location, GlobalInstances.DeviceAttribute.Locations, true);
+            LocationComboBox.Tag = new DBControlInfo(DevicesBaseCols.Location, Attributes.DeviceAttribute.Locations, true);
             CurrentUserTextBox.Tag = new DBControlInfo(DevicesBaseCols.CurrentUser, true);
             // txtNotes.Tag = New DBControlInfo(historical_dev.Notes, False)
-            OSTypeComboBox.Tag = new DBControlInfo(DevicesBaseCols.OSVersion, GlobalInstances.DeviceAttribute.OSType, true);
+            OSTypeComboBox.Tag = new DBControlInfo(DevicesBaseCols.OSVersion, Attributes.DeviceAttribute.OSType, true);
             PhoneNumTextBox.Tag = new DBControlInfo(DevicesBaseCols.PhoneNumber, false);
-            EquipTypeComboBox.Tag = new DBControlInfo(DevicesBaseCols.EQType, GlobalInstances.DeviceAttribute.EquipType, true);
-            StatusComboBox.Tag = new DBControlInfo(DevicesBaseCols.Status, GlobalInstances.DeviceAttribute.StatusType, true);
+            EquipTypeComboBox.Tag = new DBControlInfo(DevicesBaseCols.EQType, Attributes.DeviceAttribute.EquipType, true);
+            StatusComboBox.Tag = new DBControlInfo(DevicesBaseCols.Status, Attributes.DeviceAttribute.StatusType, true);
             TrackableCheckBox.Tag = new DBControlInfo(DevicesBaseCols.Trackable, false);
             POTextBox.Tag = new DBControlInfo(DevicesBaseCols.PO, false);
             HostnameTextBox.Tag = new DBControlInfo(DevicesBaseCols.HostName, false);
@@ -281,10 +281,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RefreshCombos()
         {
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, LocationComboBox);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.EquipType, EquipTypeComboBox);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, OSTypeComboBox);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, StatusComboBox);
+            LocationComboBox.FillComboBox(Attributes.DeviceAttribute.Locations);
+            EquipTypeComboBox.FillComboBox(Attributes.DeviceAttribute.EquipType);
+            OSTypeComboBox.FillComboBox(Attributes.DeviceAttribute.OSType);
+            StatusComboBox.FillComboBox(Attributes.DeviceAttribute.StatusType);
         }
 
         private void SetReplacementYear(DateTime PurDate)
@@ -336,13 +336,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void SetHostname()
         {
-            if (SerialTextBox.Text != "" && AttributeFunctions.GetDBValue(GlobalInstances.DeviceAttribute.OSType, OSTypeComboBox.SelectedIndex).Contains("WIN"))
+            if (OSTypeComboBox.SelectedValue != null)
             {
-                HostnameTextBox.Text = DataConsistency.DeviceHostnameFormat(SerialTextBox.Text);
-            }
-            else
-            {
-                HostnameTextBox.Text = string.Empty;
+                bool windowsSelected = OSTypeComboBox.Text.ToString().ToUpper().Contains("WIN");
+                if (SerialTextBox.Text != "" && windowsSelected)
+                {
+                    HostnameTextBox.Text = DataConsistency.DeviceHostnameFormat(SerialTextBox.Text);
+                }
+                else
+                {
+                    HostnameTextBox.Text = string.Empty;
+                }
             }
         }
 

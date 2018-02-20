@@ -433,12 +433,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             txtSerialSearch.Tag = new DBControlInfo(DevicesCols.Serial);
             txtAssetTagSearch.Tag = new DBControlInfo(DevicesCols.AssetTag);
             txtDescription.Tag = new DBControlInfo(DevicesCols.Description);
-            cmbEquipType.Tag = new DBControlInfo(DevicesCols.EQType, GlobalInstances.DeviceAttribute.EquipType);
+            cmbEquipType.Tag = new DBControlInfo(DevicesCols.EQType, Attributes.DeviceAttribute.EquipType);
             txtReplaceYear.Tag = new DBControlInfo(DevicesCols.ReplacementYear);
-            cmbOSType.Tag = new DBControlInfo(DevicesCols.OSVersion, GlobalInstances.DeviceAttribute.OSType);
-            cmbLocation.Tag = new DBControlInfo(DevicesCols.Location, GlobalInstances.DeviceAttribute.Locations);
+            cmbOSType.Tag = new DBControlInfo(DevicesCols.OSVersion, Attributes.DeviceAttribute.OSType);
+            cmbLocation.Tag = new DBControlInfo(DevicesCols.Location, Attributes.DeviceAttribute.Locations);
             txtCurUser.Tag = new DBControlInfo(DevicesCols.CurrentUser);
-            cmbStatus.Tag = new DBControlInfo(DevicesCols.Status, GlobalInstances.DeviceAttribute.StatusType);
+            cmbStatus.Tag = new DBControlInfo(DevicesCols.Status, Attributes.DeviceAttribute.StatusType);
             chkTrackables.Tag = new DBControlInfo(DevicesCols.Trackable);
         }
 
@@ -490,10 +490,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RefreshCombos()
         {
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.EquipType, cmbEquipType);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.Locations, cmbLocation);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.StatusType, cmbStatus);
-            AttributeFunctions.FillComboBox(GlobalInstances.DeviceAttribute.OSType, cmbOSType);
+            cmbEquipType.FillComboBox(Attributes.DeviceAttribute.EquipType);
+            cmbLocation.FillComboBox(Attributes.DeviceAttribute.Locations);
+            cmbStatus.FillComboBox(Attributes.DeviceAttribute.StatusType);
+            cmbOSType.FillComboBox(Attributes.DeviceAttribute.OSType);
         }
 
         private List<GridColumnAttrib> ResultGridColumns()
@@ -511,10 +511,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ColList.Add(new GridColumnAttrib(DevicesCols.CurrentUser, "User", typeof(string)));
             ColList.Add(new GridColumnAttrib(DevicesCols.AssetTag, "Asset ID", typeof(string)));
             ColList.Add(new GridColumnAttrib(DevicesCols.Serial, "Serial", typeof(string)));
-            ColList.Add(new GridColumnAttrib(DevicesCols.EQType, "Device Type", GlobalInstances.DeviceAttribute.EquipType, AttribColumnType));
+            ColList.Add(new GridColumnAttrib(DevicesCols.EQType, "Device Type", Attributes.DeviceAttribute.EquipType, AttribColumnType));
             ColList.Add(new GridColumnAttrib(DevicesCols.Description, "Description", typeof(string)));
-            ColList.Add(new GridColumnAttrib(DevicesCols.OSVersion, "OS Version", GlobalInstances.DeviceAttribute.OSType, AttribColumnType));
-            ColList.Add(new GridColumnAttrib(DevicesCols.Location, "Location", GlobalInstances.DeviceAttribute.Locations, AttribColumnType));
+            ColList.Add(new GridColumnAttrib(DevicesCols.OSVersion, "OS Version", Attributes.DeviceAttribute.OSType, AttribColumnType));
+            ColList.Add(new GridColumnAttrib(DevicesCols.Location, "Location", Attributes.DeviceAttribute.Locations, AttribColumnType));
             ColList.Add(new GridColumnAttrib(DevicesCols.PO, "PO Number", typeof(string)));
             ColList.Add(new GridColumnAttrib(DevicesCols.PurchaseDate, "Purchase Date", typeof(System.DateTime)));
             ColList.Add(new GridColumnAttrib(DevicesCols.ReplacementYear, "Replace Year", typeof(string)));
@@ -568,7 +568,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void StartAttachScan()
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
-            GlobalInstances.FTPFunc.ScanAttachements();
+            FtpFunctions.ScanAttachements();
         }
 
         private async void StartBigQuery(DbCommand QryCommand)

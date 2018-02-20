@@ -272,10 +272,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
             ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestNumber, "Request #", typeof(int)));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.Status, "Status", GlobalInstances.SibiAttribute.StatusType, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.Status, "Status", Attributes.SibiAttribute.StatusType, ColumnFormatTypes.AttributeDisplayMemberOnly));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.Description, "Description", typeof(string)));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestUser, "Request User", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", GlobalInstances.SibiAttribute.RequestType, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", Attributes.SibiAttribute.RequestType, ColumnFormatTypes.AttributeDisplayMemberOnly));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.NeedBy, "Need By", typeof(System.DateTime)));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.PO, "PO Number", typeof(string)));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.RequisitionNumber, "Req. Number", typeof(string)));
@@ -403,7 +403,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             //gray color
             Color DarkColor = Color.FromArgb(222, 222, 222);
             // Get a list from the attrib array.
-            var attribList = GlobalInstances.SibiAttribute.StatusType.OfType<CodeAttribute>().ToList();
+            var attribList = Attributes.SibiAttribute.StatusType.OfType<CodeAttribute>().ToList();
             // Use List.Find to locate the matching attribute.
             var attribColor = attribList.Find((i) => { return i.Code == code; }).Color;
             // Return the a blended color.

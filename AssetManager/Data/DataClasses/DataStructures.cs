@@ -7,7 +7,7 @@ namespace AssetManager.Data.Classes
         public string Code { get; set; }
         public int ID { get; set; }
         public Color Color { get; set; }
-        
+
         public CodeAttribute(string displayValue, string code, int id)
         {
             this.DisplayValue = displayValue;
@@ -30,6 +30,33 @@ namespace AssetManager.Data.Classes
         }
     }
 }
+
+namespace AssetManager.Data.Classes
+{
+    public static class Attributes
+    {
+        public class SibiAttributes
+        {
+            public CodeAttribute[] StatusType;
+            public CodeAttribute[] ItemStatusType;
+            public CodeAttribute[] RequestType;
+        }
+
+        public class DeviceAttributes
+        {
+            public CodeAttribute[] Locations;
+            public CodeAttribute[] ChangeType;
+            public CodeAttribute[] EquipType;
+            public CodeAttribute[] OSType;
+            public CodeAttribute[] StatusType;
+        }
+
+        public static DeviceAttributes DeviceAttribute = new DeviceAttributes();
+        public static SibiAttributes SibiAttribute = new SibiAttributes();
+
+    }
+}
+
 namespace AssetManager.Data.Classes
 {
 

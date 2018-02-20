@@ -1,18 +1,13 @@
 using System;
-using System.Windows.Forms;
 using System.Data.Common;
 using System.Reflection;
-using System.Data;
-using System.Linq;
-using System.Drawing;
+using System.Windows.Forms;
 
 namespace AssetManager.Helpers
 {
-
-    static class MiscExtensions
+    internal static class MiscExtensions
 
     {
-
         public static void DoubleBufferedDataGrid(this DataGridView dgv, bool setting)
         {
             Type dgvType = dgv.GetType();
@@ -70,7 +65,6 @@ namespace AssetManager.Helpers
             command.Parameters.Add(parameter);
         }
 
-
         /// <summary>
         /// Sets the Rtf property if Rtf format is detected. Otherwise sets the Text property.
         /// </summary>
@@ -87,9 +81,5 @@ namespace AssetManager.Helpers
                 richTextBox.Text = text;
             }
         }
-
-
-
-
     }
 }

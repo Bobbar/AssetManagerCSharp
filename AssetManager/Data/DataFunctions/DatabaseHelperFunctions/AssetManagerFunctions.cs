@@ -265,9 +265,9 @@ namespace AssetManager.Data.Functions
             try
             {
                 // if has attachments, delete ftp directory, then delete the sql records.
-                if (GlobalInstances.FTPFunc.HasFtpFolder(GUID))
+                if (FtpFunctions.HasFtpFolder(GUID))
                 {
-                    if (!GlobalInstances.FTPFunc.DeleteFtpFolder(GUID)) return false;
+                    if (!FtpFunctions.DeleteFtpFolder(GUID)) return false;
                 }
                 //delete sql records
                 return DeleteMasterSqlEntry(GUID, EntryType.Device);
@@ -283,9 +283,9 @@ namespace AssetManager.Data.Functions
             try
             {
                 // if has attachments, delete ftp directory, then delete the sql records.
-                if (GlobalInstances.FTPFunc.HasFtpFolder(GUID))
+                if (FtpFunctions.HasFtpFolder(GUID))
                 {
-                    if (!GlobalInstances.FTPFunc.DeleteFtpFolder(GUID)) return false;
+                    if (!FtpFunctions.DeleteFtpFolder(GUID)) return false;
                 }
                 //delete sql records
                 return DeleteMasterSqlEntry(GUID, EntryType.Sibi);
@@ -302,7 +302,7 @@ namespace AssetManager.Data.Functions
             {
                 var AttachmentFolderID = GetSqlValue(attachment.AttachTable.TableName, attachment.AttachTable.FileUID, attachment.FileUID, attachment.AttachTable.FKey);
                 //Delete FTP Attachment
-                if (GlobalInstances.FTPFunc.DeleteFtpAttachment(attachment.FileUID, AttachmentFolderID))
+                if (FtpFunctions.DeleteFtpAttachment(attachment.FileUID, AttachmentFolderID))
                 {
                     //delete SQL entry
                     var SQLDeleteQry = "DELETE FROM " + attachment.AttachTable.TableName + " WHERE " + attachment.AttachTable.FileUID + "='" + attachment.FileUID + "'";

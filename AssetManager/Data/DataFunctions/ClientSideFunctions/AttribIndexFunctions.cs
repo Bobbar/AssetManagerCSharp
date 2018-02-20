@@ -1,94 +1,17 @@
+using AssetManager.Data.Classes;
+using AssetManager.Data.Communications;
+using AssetManager.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Windows.Forms;
-using System.Threading.Tasks;
 using System.Drawing;
-using AssetManager.Helpers;
-using AssetManager.Data.Communications;
-using AssetManager.Data.Classes;
+using System.Threading.Tasks;
+
 namespace AssetManager.Data.Functions
 {
-    static class AttributeFunctions
+    internal static class AttributeFunctions
     {
-
-        public static void FillComboBox(CodeAttribute[] IndexType, ComboBox combo)
-        {
-            combo.SuspendLayout();
-            combo.BeginUpdate();
-            combo.DataSource = null;
-            combo.Text = "";
-            AddAutoSizeDropWidthHandler(combo);
-            combo.DisplayMember = nameof(CodeAttribute.DisplayValue);
-            combo.ValueMember = nameof(CodeAttribute.Code);
-            combo.BindingContext = new BindingContext();
-            combo.DataSource = IndexType;
-            combo.SelectedIndex = -1;
-            combo.EndUpdate();
-            combo.ResumeLayout();
-        }
-
-        public static void AddAutoSizeDropWidthHandler(ComboBox combo)
-        {
-            combo.DropDown -= AdjustComboBoxWidth;
-            combo.DropDown += AdjustComboBoxWidth;
-        }
-
-        public static void AdjustComboBoxWidth(object sender, EventArgs e)
-        {
-            var senderComboBox = (ComboBox)sender;
-            int correctWidth = senderComboBox.DropDownWidth;
-            int newWidth = 0;
-            using (Graphics gfx = senderComboBox.CreateGraphics())
-            {
-                int vertScrollBarWidth = 0;
-                if (senderComboBox.Items.Count > senderComboBox.MaxDropDownItems)
-                {
-                    vertScrollBarWidth = SystemInformation.VerticalScrollBarWidth;
-                }
-                else
-                {
-                    vertScrollBarWidth = 0;
-                }
-                foreach (var s in senderComboBox.Items)
-                {
-                    newWidth = Convert.ToInt32(gfx.MeasureString(s.ToString(), senderComboBox.Font).Width) + vertScrollBarWidth;
-                    if (correctWidth < newWidth)
-                    {
-                        correctWidth = newWidth;
-                    }
-                }
-            }
-            senderComboBox.DropDownWidth = correctWidth;
-        }
-
-        public static void FillToolComboBox(CodeAttribute[] attribType, ref ToolStripComboBox cmb)
-        {
-            cmb.Items.Clear();
-            cmb.Text = "";
-            int i = 0;
-            foreach (CodeAttribute ComboItem in attribType)
-            {
-                cmb.Items.Insert(i, ComboItem.DisplayValue);
-                i += 1;
-            }
-        }
-
-        public static string GetDBValue(CodeAttribute[] codeIndex, int index)
-        {
-            try
-            {
-                if (index > -1)
-                {
-                    return codeIndex[index].Code;
-                }
-                return string.Empty;
-            }
-            catch
-            {
-                return string.Empty;
-            }
-        }
+        public static Dictionary<string, string> DepartmentCodes;
 
         public static string GetDisplayValueFromCode(CodeAttribute[] codeIndex, string code)
         {
@@ -96,15 +19,6 @@ namespace AssetManager.Data.Functions
             {
                 if (item.Code == code)
                     return item.DisplayValue;
-            }
-            return string.Empty;
-        }
-
-        public static string GetDisplayValueFromIndex(CodeAttribute[] codeIndex, int index)
-        {
-            if (index > -1)
-            {
-                return codeIndex[index].DisplayValue;
             }
             return string.Empty;
         }
@@ -123,14 +37,14 @@ namespace AssetManager.Data.Functions
         {
             var BuildIdxs = Task.Run(() =>
             {
-                GlobalInstances.DeviceAttribute.Locations = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.Location);
-                GlobalInstances.DeviceAttribute.ChangeType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.ChangeType);
-                GlobalInstances.DeviceAttribute.EquipType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.EquipType);
-                GlobalInstances.DeviceAttribute.OSType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.OSType);
-                GlobalInstances.DeviceAttribute.StatusType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.StatusType);
-                GlobalInstances.SibiAttribute.StatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiStatusType);
-                GlobalInstances.SibiAttribute.ItemStatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiItemStatusType);
-                GlobalInstances.SibiAttribute.RequestType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiRequestType);
+                Attributes.DeviceAttribute.Locations = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.Location);
+                Attributes.DeviceAttribute.ChangeType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.ChangeType);
+                Attributes.DeviceAttribute.EquipType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.EquipType);
+                Attributes.DeviceAttribute.OSType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.OSType);
+                Attributes.DeviceAttribute.StatusType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.StatusType);
+                Attributes.SibiAttribute.StatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiStatusType);
+                Attributes.SibiAttribute.ItemStatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiItemStatusType);
+                Attributes.SibiAttribute.RequestType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiRequestType);
                 PopulateDepartments();
             });
             BuildIdxs.Wait();
@@ -138,22 +52,22 @@ namespace AssetManager.Data.Functions
 
         private static void PopulateDepartments()
         {
-            GlobalInstances.DepartmentCodes = new Dictionary<string, string>();
+            DepartmentCodes = new Dictionary<string, string>();
             var selectDpmtQuery = "SELECT * FROM munis_departments";
             using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(selectDpmtQuery))
             {
                 foreach (DataRow row in results.Rows)
                 {
-                    GlobalInstances.DepartmentCodes.Add(row["asset_location_code"].ToString(), row["munis_department_code"].ToString());
+                    DepartmentCodes.Add(row["asset_location_code"].ToString(), row["munis_department_code"].ToString());
                 }
             }
         }
 
         public static string DepartmentOf(string location)
         {
-            if (GlobalInstances.DepartmentCodes.ContainsKey(location))
+            if (DepartmentCodes.ContainsKey(location))
             {
-                return GlobalInstances.DepartmentCodes[location];
+                return DepartmentCodes[location];
             }
             return string.Empty;
         }
@@ -201,6 +115,5 @@ namespace AssetManager.Data.Functions
                 return null;
             }
         }
-
     }
 }
