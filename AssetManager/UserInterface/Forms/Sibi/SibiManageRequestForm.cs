@@ -77,6 +77,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     if (IsNewRequest)
                     {
+                        IsModifying = false;
                         return true;
                     }
                     else
