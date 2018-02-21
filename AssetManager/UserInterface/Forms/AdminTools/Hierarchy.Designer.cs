@@ -31,8 +31,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.HierarchyTree = new AssetManager.UserInterface.CustomControls.CorrectedTreeView();
             this.workingSpinner = new System.Windows.Forms.ToolStripStatusLabel();
+            this.HierarchyTree = new AssetManager.UserInterface.CustomControls.CorrectedTreeView();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -69,22 +69,26 @@
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(0, 17);
             // 
-            // HierarchyTree
-            // 
-            this.HierarchyTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.HierarchyTree.Location = new System.Drawing.Point(6, 20);
-            this.HierarchyTree.Name = "HierarchyTree";
-            this.HierarchyTree.Size = new System.Drawing.Size(387, 432);
-            this.HierarchyTree.TabIndex = 0;
-            // 
             // workingSpinner
             // 
             this.workingSpinner.Image = global::AssetManager.Properties.Resources.LoadingAni;
             this.workingSpinner.Name = "workingSpinner";
             this.workingSpinner.Size = new System.Drawing.Size(16, 17);
             this.workingSpinner.Visible = false;
+            // 
+            // HierarchyTree
+            // 
+            this.HierarchyTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.HierarchyTree.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.HierarchyTree.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HierarchyTree.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.HierarchyTree.LineColor = System.Drawing.Color.DarkGray;
+            this.HierarchyTree.Location = new System.Drawing.Point(6, 20);
+            this.HierarchyTree.Name = "HierarchyTree";
+            this.HierarchyTree.Size = new System.Drawing.Size(387, 432);
+            this.HierarchyTree.TabIndex = 0;
             // 
             // Hierarchy
             // 
@@ -95,8 +99,8 @@
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(334, 296);
             this.Name = "Hierarchy";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hierarchy";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Hierarchy_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);

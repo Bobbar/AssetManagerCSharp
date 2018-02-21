@@ -1063,10 +1063,5 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         #endregion "Control Event Methods"
 
         #endregion "Methods"
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            new Hierarchy(this);
-        }
     }
 }

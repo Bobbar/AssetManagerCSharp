@@ -1032,6 +1032,37 @@
             <param name="parentForm">Form to add to ToolStrip.</param>
             <param name="targetMenuItem">Item to add the Form item to.</param>
         </member>
+        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.GetEmployeeList">
+            <summary>
+            Pull a complete list of employees from the database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.BuildTree(AssetManager.UserInterface.Forms.AdminTools.Hierarchy.EmployeeTree,System.Windows.Forms.TreeNode)">
+            <summary>
+            Recursively builds a node tree from the employee tree.
+            </summary>
+            <param name="tree"></param>
+            <param name="parentNode"></param>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.GetSubordinates(AssetManager.UserInterface.Forms.AdminTools.Hierarchy.Employee,AssetManager.UserInterface.Forms.AdminTools.Hierarchy.EmployeeTree)">
+            <summary>
+            Recursively searches data for specified employee/supervisor and builds a hierarchy tree.
+            </summary>
+            <param name="employee"></param>
+            <param name="tree"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.EmployeeTree">
+            <summary>
+            Employee tree object.
+            </summary>
+        </member>
+        <member name="T:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.Employee">
+            <summary>
+            Object for storing employee info.
+            </summary>
+        </member>
         <member name="F:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.components">
             <summary>
             Required designer variable.

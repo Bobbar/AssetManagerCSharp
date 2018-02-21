@@ -103,7 +103,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.InstallChromeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.cmdSibi = new System.Windows.Forms.ToolStripButton();
-            this.button1 = new System.Windows.Forms.Button();
             this.GroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ResultGrid)).BeginInit();
             this.ContextMenuStrip1.SuspendLayout();
@@ -892,23 +891,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.cmdSibi.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cmdSibi.Click += new System.EventHandler(this.cmdSibi_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(1256, 77);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(111, 34);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.ClientSize = new System.Drawing.Size(1381, 809);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.GroupBox2);
             this.Controls.Add(this.ToolStrip1);
             this.Controls.Add(this.StatusStrip1);
@@ -1010,6 +998,5 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal System.Windows.Forms.ToolStripMenuItem StartTransactionToolStripMenuItem;
         internal System.Windows.Forms.GroupBox TransactionBox;
         internal System.Windows.Forms.Button UpdateButton;
-        private System.Windows.Forms.Button button1;
     }
 }
