@@ -222,7 +222,6 @@ namespace AssetManager.Data.Functions
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    if (watcherTask != null) watcherTask.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
