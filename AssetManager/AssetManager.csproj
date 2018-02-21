@@ -179,6 +179,7 @@
     <Compile Include="Data\DataFunctions\ConnectionWatchdog.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AdvancedSearch.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AssetManagerFunctions.cs" />
+    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\EmpHierarchy.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\FTPFunctions.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\MunisFunctions.cs" />
     <Compile Include="Data\DataFunctions\DBCacheFunctions.cs" />
@@ -266,6 +267,12 @@
     </Compile>
     <Compile Include="UserInterface\Forms\AdminTools\CrypterForm.Designer.cs">
       <DependentUpon>CrypterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\AdminTools\Hierarchy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\Forms\AdminTools\Hierarchy.Designer.cs">
+      <DependentUpon>Hierarchy.cs</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\Forms\AdminTools\UserManagerForm.cs">
       <SubType>Form</SubType>
@@ -421,6 +428,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\AdminTools\CrypterForm.resx">
       <DependentUpon>CrypterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\AdminTools\Hierarchy.resx">
+      <DependentUpon>Hierarchy.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\AdminTools\UserManagerForm.resx">
       <DependentUpon>UserManagerForm.cs</DependentUpon>

@@ -1032,6 +1032,23 @@
             <param name="parentForm">Form to add to ToolStrip.</param>
             <param name="targetMenuItem">Item to add the Form item to.</param>
         </member>
+        <member name="F:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
         <member name="F:AssetManager.UserInterface.Forms.AssetManagement.MainForm.components">
             <summary>
             Required designer variable.

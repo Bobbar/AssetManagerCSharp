@@ -268,7 +268,7 @@ namespace AssetManager.Data.Functions
             {
                 using (AdvancedDialog NewDialog = new AdvancedDialog(parentForm))
                 {
-                    NewDialog.Text = "Org/Object Code Search";
+                    NewDialog.Text = "Employee Search";
                     NewDialog.AddTextBox("txtName", "First or Last Name:");
                     NewDialog.ShowDialog();
                     if (NewDialog.DialogResult == DialogResult.OK)
