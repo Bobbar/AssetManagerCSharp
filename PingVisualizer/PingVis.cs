@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -28,14 +29,14 @@ namespace PingVisualizer
         private Ping ping = new Ping();
         private List<PingInfo> pingReplies = new List<PingInfo>();
         private bool pingRunning = false;
-        private Timer pingTimer = new Timer();
+        private System.Threading.Timer pingTimer;
 
         private string hostname;
         private Control targetControl;
 
         private float targetScale;
         private float currentScale;
-        private Timer scaleTimer = new Timer();
+        private System.Threading.Timer scaleTimer;
 
         private Brush mouseOverTextBrush = new SolidBrush(Color.FromArgb(240, Color.White));
         private Brush mouseOverBarBrush = new SolidBrush(Color.FromArgb(128, Color.Navy));
@@ -63,13 +64,17 @@ namespace PingVisualizer
         private const int maxDrawRatePerMilliseconds = 10;
         private long lastDrawTime = 0;
 
+        private object drawThreadLockObject = new object();
+
+        private delegate void SetControlImageDelegate(Control targetControl, Bitmap image);
+
         public event EventHandler<PingEventArgs> NewPingResult;
 
         public void OnNewPingResult(PingInfo pingReply)
         {
-            NewPingResult(this, new PingEventArgs(pingReply));
+            RaiseEventOnUIThread(NewPingResult, new object[] { this, new PingEventArgs(pingReply) });
         }
-        
+
         public PingInfo CurrentResult
         {
             get
@@ -140,27 +145,22 @@ namespace PingVisualizer
         {
             if (!this.disposedValue)
             {
-                if (pingTimer != null)
+                if (pingTimer == null)
                 {
-                    pingTimer.Tick -= PingTimer_Tick;
-                    pingTimer.Dispose();
-                    pingTimer = null;
-                    pingTimer = new Timer();
+                    pingTimer = new System.Threading.Timer(new System.Threading.TimerCallback(PingTimer_Tick));
                 }
-                pingTimer.Interval = currentPingInterval;
-                pingTimer.Enabled = true;
-                pingTimer.Tick += PingTimer_Tick;
+
+                pingTimer.Change(currentPingInterval, 0);
             }
         }
 
         private void InitScaleTimer()
         {
-            scaleTimer.Tick += ScaleTimer_Tick;
-            scaleTimer.Interval = 50;
-            scaleTimer.Enabled = true;
+            scaleTimer = new System.Threading.Timer(new System.Threading.TimerCallback(ScaleTimer_Tick));
+            scaleTimer.Change(1, 50);
         }
 
-        private void ScaleTimer_Tick(object sender, EventArgs e)
+        private void ScaleTimer_Tick(object timer)
         {
             if (!this.disposedValue)
             {
@@ -168,10 +168,29 @@ namespace PingVisualizer
             }
         }
 
-        private void PingTimer_Tick(object sender, EventArgs e)
+        private void PingTimer_Tick(object timer)
         {
-            StartPing();
-            pingTimer.Interval = currentPingInterval;
+            if (!this.disposedValue)
+            {
+                StartPing();
+                pingTimer.Change(currentPingInterval, 0);
+            }
+        }
+
+        private void RaiseEventOnUIThread(Delegate theEvent, object[] args)
+        {
+            foreach (Delegate d in theEvent.GetInvocationList())
+            {
+                ISynchronizeInvoke syncer = d.Target as ISynchronizeInvoke;
+                if (syncer == null)
+                {
+                    d.DynamicInvoke(args);
+                }
+                else
+                {
+                    syncer.BeginInvoke(d, args);
+                }
+            }
         }
 
         private void SetScale()
@@ -186,7 +205,7 @@ namespace PingVisualizer
                 if (targetScale != newScale)
                 {
                     targetScale = newScale;
-                    scaleTimer.Enabled = true;
+                    scaleTimer.Change(1, 50);
                 }
                 if (mouseIsScrolling) currentScale = targetScale;
             }
@@ -222,8 +241,9 @@ namespace PingVisualizer
                     {
                         // Set to final scale and stop timer.
                         currentScale = targetScale;
-                        scaleTimer.Enabled = false;
+                        scaleTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
                     }
+
                     DrawBars();
                 }
                 else
@@ -272,10 +292,12 @@ namespace PingVisualizer
                 {
                     if (!mouseIsScrolling)
                     {
-                        RefreshPingBars();
+                        DrawBars(true, true);
                     }
-
-                    DrawBars(true);
+                    else
+                    {
+                        DrawBars(true, false);
+                    }
                 }
             }
         }
@@ -308,8 +330,7 @@ namespace PingVisualizer
         private void ControlMouseLeave(object sender, EventArgs e)
         {
             mouseIsScrolling = false;
-            RefreshPingBars();
-            DrawBars();
+            DrawBars(true, true);
         }
 
         private void ControlMouseWheel(object sender, MouseEventArgs e)
@@ -326,8 +347,8 @@ namespace PingVisualizer
                     {
                         newIdx = pingReplies.Count - maxBars;
                         mouseIsScrolling = false;
-                        RefreshPingBars();
-                        DrawBars();
+                        DrawBars(false, true);
+                        return;
                     }
                 }
                 else if (e.Delta > 0) // Scroll down.
@@ -341,8 +362,7 @@ namespace PingVisualizer
                 if (topIndex != newIdx)
                 {
                     topIndex = newIdx;
-                    RefreshPingBars();
-                    DrawBars();
+                    DrawBars(false, true);
                 }
             }
         }
@@ -379,45 +399,57 @@ namespace PingVisualizer
             return false;
         }
 
-        private void DrawBars(bool forceDraw = false)
+        private void DrawBars(bool forceDraw = false, bool refreshPingBars = false)
         {
-            if (pingReplies.Count < 1)
+            if (System.Threading.Monitor.TryEnter(drawThreadLockObject))
             {
-                return;
-            }
-            else
-            {
-                if (targetControl != null && targetControl.FindForm() != null)
+                try
                 {
-                    if (targetControl.FindForm().WindowState == FormWindowState.Minimized) return;
-                }
+                    if (pingReplies.Count < 1)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        if (targetControl != null && targetControl.FindForm() != null)
+                        {
+                            if (targetControl.FindForm().WindowState == FormWindowState.Minimized) return;
+                        }
 
-                if (!forceDraw && !CanDraw(Environment.TickCount))
+                        if (!forceDraw && !CanDraw(Environment.TickCount))
+                        {
+                            return;
+                        }
+                    }
+
+                    if (refreshPingBars) RefreshPingBars();
+
+                    SetScale();
+
+                    scaledGraphics.SmoothingMode = SmoothingMode.None;
+
+                    if (!mouseIsScrolling)
+                    {
+                        scaledGraphics.Clear(targetControl.BackColor);
+                    }
+                    else
+                    {
+                        scaledGraphics.Clear(Color.FromArgb(48, 53, 61));
+                    }
+
+                    DrawScaleLines(scaledGraphics);
+                    DrawPingBars(scaledGraphics, currentBarList);
+                    DrawPingText(scaledGraphics);
+                    DrawScrollBar(scaledGraphics);
+                    TrimPingList();
+                    ResizeImage();
+                    SetControlImage(targetControl, controlImage);
+                }
+                finally
                 {
-                    return;
+                    System.Threading.Monitor.Exit(drawThreadLockObject);
                 }
             }
-
-            SetScale();
-
-            scaledGraphics.SmoothingMode = SmoothingMode.None;
-
-            if (!mouseIsScrolling)
-            {
-                scaledGraphics.Clear(targetControl.BackColor);
-            }
-            else
-            {
-                scaledGraphics.Clear(Color.FromArgb(48, 53, 61));
-            }
-
-            DrawScaleLines(scaledGraphics);
-            DrawPingBars(scaledGraphics, currentBarList);
-            DrawPingText(scaledGraphics);
-            DrawScrollBar(scaledGraphics);
-            TrimPingList();
-            ResizeImage();
-            SetControlImage(targetControl, controlImage);
         }
 
         private void DrawScaleLines(Graphics gfx)
@@ -454,7 +486,7 @@ namespace PingVisualizer
 
             if (currentValue > 0)
             {
-                // Compute the intensity of the high ping color.
+                // Compute the intensity of the end color.
                 intensity = (int)(maxIntensity / (maxValue / (float)currentValue));
             }
 
@@ -660,25 +692,40 @@ namespace PingVisualizer
 
         private void SetControlImage(Control targetControl, Bitmap image)
         {
-            if (!(targetControl is Form))
+            try
             {
-                if (targetControl is Button)
+                if (targetControl.InvokeRequired)
                 {
-                    var but = (Button)targetControl;
-                    but.Image = image;
-                    but.Invalidate();
+                    var del = new SetControlImageDelegate(SetControlImage);
+                    targetControl.Invoke(del, new object[] { targetControl, image });
                 }
-                else if (targetControl is PictureBox)
+                else
                 {
-                    var pic = (PictureBox)targetControl;
-                    pic.Image = image;
-                    pic.Refresh();
+                    if (!(targetControl is Form))
+                    {
+                        if (targetControl is Button)
+                        {
+                            var but = (Button)targetControl;
+                            but.Image = image;
+                            but.Invalidate();
+                        }
+                        else if (targetControl is PictureBox)
+                        {
+                            var pic = (PictureBox)targetControl;
+                            pic.Image = image;
+                            pic.Refresh();
+                        }
+                    }
+                    else
+                    {
+                        targetControl.BackgroundImage = image;
+                        targetControl.Invalidate();
+                    }
                 }
             }
-            else
+            catch (ObjectDisposedException)
             {
-                targetControl.BackgroundImage = image;
-                targetControl.Invalidate();
+                // Remaining timer cycles tend to catch the control after it's been disposed. So ignore these errors.
             }
         }
 
@@ -818,7 +865,6 @@ namespace PingVisualizer
             {
                 PingReply = pingReply;
             }
-            
         }
 
         #region IDisposable Support
@@ -831,13 +877,11 @@ namespace PingVisualizer
             {
                 if (disposing)
                 {
-                    pingTimer.Enabled = false;
-                    pingTimer.Tick -= PingTimer_Tick;
+                    //   pingTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
                     pingTimer.Dispose();
                     pingTimer = null;
 
-                    scaleTimer.Enabled = false;
-                    scaleTimer.Tick -= ScaleTimer_Tick;
+                    // scaleTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
                     scaleTimer.Dispose();
                     scaleTimer = null;
 
