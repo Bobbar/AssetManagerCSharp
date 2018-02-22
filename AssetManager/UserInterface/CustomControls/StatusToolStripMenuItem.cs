@@ -1,14 +1,12 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.CustomControls
 {
     partial class StatusToolStripMenuItem : ToolStripMenuItem
     {
-        public bool HostOnline = false;
+        private bool hostOnline = false;
 
-        private const int onlineLightSize = 10;
         private ExtendedForm linkedForm;
 
         public ExtendedForm LinkedForm
@@ -21,7 +19,7 @@ namespace AssetManager.UserInterface.CustomControls
             set
             {
                 linkedForm = value;
-                HostOnline = linkedForm.OnlineStatus;
+                hostOnline = linkedForm.OnlineStatus;
                 linkedForm.OnlineStatusChanged -= HostOnlineStatusChanged;
                 linkedForm.OnlineStatusChanged += HostOnlineStatusChanged;
                 this.Invalidate();
@@ -36,19 +34,19 @@ namespace AssetManager.UserInterface.CustomControls
         {
             base.OnPaint(e);
 
-            if (HostOnline)
+            if (hostOnline)
             {
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                 e.Graphics.FillRectangle(Brushes.LimeGreen, this.Image.Width, 0, 3, this.Bounds.Height);
             }
         }
 
-        public void HostOnlineStatusChanged(object sender, EventArgs e)
+        private void HostOnlineStatusChanged(object sender, bool e)
         {
-            var statusArgs = (ExtendedForm.OnlineStatusChangedEventArgs)e;
-            if (statusArgs.OnlineStatus != HostOnline)
+            var onlineStatus = e;
+            if (onlineStatus != hostOnline)
             {
-                HostOnline = statusArgs.OnlineStatus;
+                hostOnline = onlineStatus;
                 this.Invalidate();
             }
         }

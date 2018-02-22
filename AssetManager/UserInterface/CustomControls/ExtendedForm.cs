@@ -40,7 +40,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        public event EventHandler OnlineStatusChanged;
+        public event EventHandler<bool> OnlineStatusChanged;
 
         private ExtendedForm myParentForm;
 
@@ -110,25 +110,25 @@ namespace AssetManager.UserInterface.CustomControls
             MemoryTweaks.SetWorkingSet();
         }
 
-        protected override CreateParams CreateParams
-        {
-            // Enables double-buffering.
-            get
-            {
-                bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-                bool terminalSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
-                CreateParams cp = base.CreateParams;
+        //protected override CreateParams CreateParams
+        //{
+        //    // Enables double-buffering.
+        //    get
+        //    {
+        //        bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+        //        bool terminalSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
+        //        CreateParams cp = base.CreateParams;
 
-                if (!designMode)
-                {
-                    if (!terminalSession)
-                    {
-                        cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
-                    }
-                }
-                return cp;
-            }
-        }
+        //        if (!designMode)
+        //        {
+        //            if (!terminalSession)
+        //            {
+        //                cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+        //            }
+        //        }
+        //        return cp;
+        //    }
+        //}
 
         public virtual bool OKToClose()
         {
@@ -151,26 +151,20 @@ namespace AssetManager.UserInterface.CustomControls
             this.Refresh();
         }
 
-        public virtual void OnOnlineStatusChanged(OnlineStatusChangedEventArgs e)
+        public virtual void OnOnlineStatusChanged(bool e)
         {
-            OnlineStatusChanged(this, e);
-            onlineStatus = e.OnlineStatus;
+            EventHandler<bool> handler = OnlineStatusChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+                onlineStatus = e;
+            }
         }
 
         private void SetTheme(ExtendedForm parentForm)
         {
             Icon = parentForm.Icon;
             GridTheme = parentForm.GridTheme;
-        }
-
-        public class OnlineStatusChangedEventArgs : EventArgs
-        {
-            public bool OnlineStatus { get; set; }
-
-            public OnlineStatusChangedEventArgs(bool isOnline)
-            {
-                OnlineStatus = isOnline;
-            }
         }
     }
 }

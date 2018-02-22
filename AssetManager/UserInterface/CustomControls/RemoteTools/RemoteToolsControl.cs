@@ -18,6 +18,7 @@ namespace AssetManager.UserInterface.CustomControls
     {
         #region Fields
 
+        private const int maxFailedPings = 100;
         private int failedPings = 0;
         private PingVis pingVis;
         private ExtendedForm hostForm;
@@ -32,7 +33,7 @@ namespace AssetManager.UserInterface.CustomControls
             set
             {
                 this.device = value;
-                CheckRDP();
+                InitPingVis();
             }
         }
 
@@ -41,6 +42,9 @@ namespace AssetManager.UserInterface.CustomControls
 
         [Browsable(true)]
         public event EventHandler<bool> VisibleChanging;
+
+        [Browsable(true)]
+        public event EventHandler<bool> HostOnlineStatus;
 
         #endregion Fields
 
@@ -65,6 +69,11 @@ namespace AssetManager.UserInterface.CustomControls
             VisibleChanging(this, newState);
         }
 
+        private void OnHostOnlineStatus(bool isOnline)
+        {
+            HostOnlineStatus(this, isOnline);
+        }
+
         #endregion Properties
 
         #region Methods
@@ -77,6 +86,54 @@ namespace AssetManager.UserInterface.CustomControls
                 components.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void PingVis_NewPingResult(object sender, PingVis.PingEventArgs e)
+        {
+            InitPingVis();
+            SetupNetTools(e.PingReply);
+        }
+
+        private void InitPingVis()
+        {
+            if (this.device == null) return;
+
+            if (this.device.OSVersion.Contains("WIN"))
+            {
+                if (ReferenceEquals(pingVis, null))
+                {
+                    pingVis = new PingVis(ShowIPButton, this.device.HostName + "." + NetworkInfo.CurrentDomain);
+                    pingVis.NewPingResult -= PingVis_NewPingResult;
+                    pingVis.NewPingResult += PingVis_NewPingResult;
+                }
+            }
+        }
+
+        private void SetupNetTools(PingVis.PingInfo PingResults)
+        {
+            if (PingResults.Status == IPStatus.Success)
+            {
+                failedPings = 0;
+                OnHostOnlineStatus(true);
+            }
+            else
+            {
+                failedPings++;
+                if (failedPings > maxFailedPings) failedPings = maxFailedPings;
+                OnHostOnlineStatus(false);
+            }
+
+            if (!this.Visible && PingResults.Status == IPStatus.Success)
+            {
+                OnVisibleChanging(true);
+                this.Visible = true;
+            }
+
+            if (failedPings >= maxFailedPings && this.Visible)
+            {
+                OnVisibleChanging(false);
+                this.Visible = false;
+            }
         }
 
         private void EventViewer()
@@ -119,29 +176,6 @@ namespace AssetManager.UserInterface.CustomControls
                             p.WaitForExit();
                         }
                     });
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-            }
-        }
-
-        private void CheckRDP()
-        {
-            if (this.device == null) return;
-            try
-            {
-                if (this.device.OSVersion.Contains("WIN"))
-                {
-                    if (ReferenceEquals(pingVis, null))
-                    {
-                        pingVis = new PingVis((Control)ShowIPButton, this.device.HostName + "." + NetworkInfo.CurrentDomain);
-                    }
-                    if (pingVis.CurrentResult != null)
-                    {
-                        SetupNetTools(pingVis.CurrentResult);
-                    }
                 }
             }
             catch (Exception ex)
@@ -294,42 +328,6 @@ namespace AssetManager.UserInterface.CustomControls
             return string.Empty;
         }
 
-        private void SetupNetTools(PingVis.PingInfo PingResults)
-        {
-            if (PingResults.Status != IPStatus.Success)
-            {
-                failedPings++;
-            }
-            else
-            {
-                failedPings = 0;
-            }
-
-            if (!this.Visible && PingResults.Status == IPStatus.Success)
-            {
-                ShowIPButton.Tag = PingResults.Address;
-                OnVisibleChanging(true);
-                this.Visible = true;
-            }
-            if (failedPings > 60 && this.Visible)
-            {
-                OnVisibleChanging(false);
-                this.Visible = false;
-            }
-
-            if (hostForm != null)
-            {
-                if (PingResults.Status == IPStatus.Success)
-                {
-                    hostForm.OnOnlineStatusChanged(new ExtendedForm.OnlineStatusChangedEventArgs(true));
-                }
-                else
-                {
-                    hostForm.OnOnlineStatusChanged(new ExtendedForm.OnlineStatusChangedEventArgs(false));
-                }
-            }
-        }
-
         private void ShowIP()
         {
             if (pingVis.CurrentResult != null)
@@ -410,11 +408,6 @@ namespace AssetManager.UserInterface.CustomControls
         private void GKUpdateButton_Click(object sender, EventArgs e)
         {
             QueueGKUpdate();
-        }
-
-        private void RemoteToolsTimer_Tick(object sender, EventArgs e)
-        {
-            CheckRDP();
         }
 
         private void RestartDeviceButton_Click(object sender, EventArgs e)

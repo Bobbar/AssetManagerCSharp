@@ -2,6 +2,7 @@ using System;
 using System.Data.Common;
 using System.Reflection;
 using System.Windows.Forms;
+using AssetManager.UserInterface.CustomControls;
 
 namespace AssetManager.Helpers
 {
@@ -15,32 +16,39 @@ namespace AssetManager.Helpers
             pi.SetValue(dgv, setting, null);
         }
 
-        public static void DoubleBufferedListBox(this ListBox dgv, bool setting)
+        public static void DoubleBufferedListBox(this ListBox listBox, bool setting)
         {
-            Type dgvType = dgv.GetType();
+            Type dgvType = listBox.GetType();
             PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, setting, null);
+            pi.SetValue(listBox, setting, null);
         }
 
-        public static void DoubleBufferedFlowLayout(this FlowLayoutPanel dgv, bool setting)
+        public static void DoubleBufferedFlowLayout(this FlowLayoutPanel flowPanel, bool setting)
         {
-            Type dgvType = dgv.GetType();
+            Type dgvType = flowPanel.GetType();
             PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, setting, null);
+            pi.SetValue(flowPanel, setting, null);
         }
 
-        public static void DoubleBufferedTableLayout(this TableLayoutPanel dgv, bool setting)
+        public static void DoubleBufferedTableLayout(this TableLayoutPanel tablePanel, bool setting)
         {
-            Type dgvType = dgv.GetType();
+            Type dgvType = tablePanel.GetType();
             PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, setting, null);
+            pi.SetValue(tablePanel, setting, null);
         }
 
-        public static void DoubleBufferedPanel(this Panel dgv, bool setting)
+        public static void DoubleBufferedTreeView(this CorrectedTreeView treeView, bool setting)
         {
-            Type dgvType = dgv.GetType();
+            Type dgvType = treeView.GetType();
             PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, setting, null);
+            pi.SetValue(treeView, setting, null);
+        }
+
+        public static void DoubleBufferedPanel(this Panel panel, bool setting)
+        {
+            Type dgvType = panel.GetType();
+            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            pi.SetValue(panel, setting, null);
         }
 
         /// <summary>

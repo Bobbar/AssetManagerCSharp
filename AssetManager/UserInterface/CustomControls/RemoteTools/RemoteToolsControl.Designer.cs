@@ -20,9 +20,6 @@
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.ShowIPButton = new System.Windows.Forms.Button();
             this.FlowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.RemoteToolsTimer = new System.Windows.Forms.Timer(this.components);
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.DeployOfficeButton = new System.Windows.Forms.Button();
             this.GKUpdateButton = new System.Windows.Forms.Button();
             this.BrowseFilesButton = new System.Windows.Forms.Button();
             this.RestartDeviceButton = new System.Windows.Forms.PictureBox();
@@ -30,6 +27,8 @@
             this.DeployTVButton = new System.Windows.Forms.Button();
             this.UpdateChromeButton = new System.Windows.Forms.Button();
             this.EventViewerButton = new System.Windows.Forms.Button();
+            this.DeployOfficeButton = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox.SuspendLayout();
             this.FlowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).BeginInit();
@@ -81,26 +80,6 @@
             this.FlowLayoutPanel1.Name = "FlowLayoutPanel1";
             this.FlowLayoutPanel1.Size = new System.Drawing.Size(320, 86);
             this.FlowLayoutPanel1.TabIndex = 58;
-            // 
-            // RemoteToolsTimer
-            // 
-            this.RemoteToolsTimer.Enabled = true;
-            this.RemoteToolsTimer.Interval = 1000;
-            this.RemoteToolsTimer.Tick += new System.EventHandler(this.RemoteToolsTimer_Tick);
-            // 
-            // DeployOfficeButton
-            // 
-            this.DeployOfficeButton.BackgroundImage = global::AssetManager.Properties.Resources.O365SquareLogo;
-            this.DeployOfficeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.DeployOfficeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.DeployOfficeButton.Location = new System.Drawing.Point(48, 48);
-            this.DeployOfficeButton.Margin = new System.Windows.Forms.Padding(1);
-            this.DeployOfficeButton.Name = "DeployOfficeButton";
-            this.DeployOfficeButton.Size = new System.Drawing.Size(45, 45);
-            this.DeployOfficeButton.TabIndex = 60;
-            this.toolTip.SetToolTip(this.DeployOfficeButton, "Deploy Office 365");
-            this.DeployOfficeButton.UseVisualStyleBackColor = true;
-            this.DeployOfficeButton.Click += new System.EventHandler(this.DeployOfficeButton_Click);
             // 
             // GKUpdateButton
             // 
@@ -199,6 +178,20 @@
             this.EventViewerButton.UseVisualStyleBackColor = true;
             this.EventViewerButton.Click += new System.EventHandler(this.EventViewerButton_Click);
             // 
+            // DeployOfficeButton
+            // 
+            this.DeployOfficeButton.BackgroundImage = global::AssetManager.Properties.Resources.O365SquareLogo;
+            this.DeployOfficeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.DeployOfficeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DeployOfficeButton.Location = new System.Drawing.Point(48, 48);
+            this.DeployOfficeButton.Margin = new System.Windows.Forms.Padding(1);
+            this.DeployOfficeButton.Name = "DeployOfficeButton";
+            this.DeployOfficeButton.Size = new System.Drawing.Size(45, 45);
+            this.DeployOfficeButton.TabIndex = 60;
+            this.toolTip.SetToolTip(this.DeployOfficeButton, "Deploy Office 365");
+            this.DeployOfficeButton.UseVisualStyleBackColor = true;
+            this.DeployOfficeButton.Click += new System.EventHandler(this.DeployOfficeButton_Click);
+            // 
             // RemoteToolsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -228,7 +221,6 @@
         internal System.Windows.Forms.Button DeployTVButton;
         internal System.Windows.Forms.Button UpdateChromeButton;
         internal System.Windows.Forms.Button ShowIPButton;
-        internal System.Windows.Forms.Timer RemoteToolsTimer;
         internal System.Windows.Forms.Button EventViewerButton;
         private System.Windows.Forms.ToolTip toolTip;
         internal System.Windows.Forms.Button DeployOfficeButton;

@@ -63,6 +63,13 @@ namespace PingVisualizer
         private const int maxDrawRatePerMilliseconds = 10;
         private long lastDrawTime = 0;
 
+        public event EventHandler<PingEventArgs> NewPingResult;
+
+        public void OnNewPingResult(PingInfo pingReply)
+        {
+            NewPingResult(this, new PingEventArgs(pingReply));
+        }
+        
         public PingInfo CurrentResult
         {
             get
@@ -241,7 +248,9 @@ namespace PingVisualizer
                     {
                         SetPingInterval(noPingInterval);
                     }
-                    pingReplies.Add(new PingInfo(reply));
+                    var pingInfo = new PingInfo(reply);
+                    pingReplies.Add(pingInfo);
+                    OnNewPingResult(pingInfo);
                 }
             }
             catch (Exception)
@@ -249,6 +258,7 @@ namespace PingVisualizer
                 if (!this.disposedValue)
                 {
                     pingReplies.Add(new PingInfo());
+                    OnNewPingResult(new PingInfo());
                     SetPingInterval(noPingInterval);
                 }
                 else
@@ -798,6 +808,17 @@ namespace PingVisualizer
                 MouseLoc = mouseLoc;
                 PingReply = pingInfo;
             }
+        }
+
+        public class PingEventArgs : EventArgs
+        {
+            public PingInfo PingReply { get; set; }
+
+            public PingEventArgs(PingInfo pingReply)
+            {
+                PingReply = pingReply;
+            }
+            
         }
 
         #region IDisposable Support

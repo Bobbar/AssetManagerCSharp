@@ -1090,6 +1090,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             Helpers.ChildFormControl.CloseChildren(this);
         }
 
+        private void remoteToolsControl_HostOnlineStatus(object sender, bool e)
+        {
+            OnOnlineStatusChanged(e);
+        }
+
         private void remoteToolsControl_VisibleChanging(object sender, bool e)
         {
             if (e)
