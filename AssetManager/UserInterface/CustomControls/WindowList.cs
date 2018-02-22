@@ -81,15 +81,6 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private Form GetFormFromTag(object tag)
-        {
-            if (tag is Form)
-            {
-                return (Form)tag;
-            }
-            return null;
-        }
-
         private string CountText(int count)
         {
             string MainText = "Select Window";
@@ -158,11 +149,10 @@ namespace AssetManager.UserInterface.CustomControls
         private StatusToolStripMenuItem NewMenuItem(ExtendedForm frm)
         {
             StatusToolStripMenuItem newitem = new StatusToolStripMenuItem();
+            newitem.Name = frm.Name;
             newitem.Font = DropDownControl.Font;
             newitem.Text = frm.Text;
             newitem.Image = frm.Icon.ToBitmap();
-            newitem.Tag = frm;
-            // TODO: Switch everything from .Tag to .LinkedForm
             newitem.LinkedForm = frm;
             newitem.ToolTipText = "Right-Click to close.";
             newitem.MouseDown += WindowClick;
@@ -200,8 +190,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void WindowClick(object sender, MouseEventArgs e)
         {
-            ToolStripItem item = (ToolStripItem)sender;
-            var frm = (ExtendedForm)item.Tag;
+            StatusToolStripMenuItem item = (StatusToolStripMenuItem)sender;
+            var frm = item.LinkedForm;
             if (e.Button == MouseButtons.Right)
             {
                 if ((!object.ReferenceEquals(frm, MyParentForm.ParentForm)))
