@@ -384,6 +384,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (pingVis != null)
                 {
+                    pingVis.NewPingResult -= PingVis_NewPingResult;
                     pingVis.Dispose();
                     pingVis = null;
                 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -58,7 +59,7 @@ namespace PingVisualizer
         private const int noPingInterval = 3000;
         private int currentPingInterval = goodPingInterval;
 
-        private const int maxViewScale = 10;
+        private const int maxViewScale = 15;
         private const float barGap = 0;
         private const int maxBars = 10;
         private const int minBarLength = 1;
@@ -206,25 +207,25 @@ namespace PingVisualizer
 
         private void SetScale()
         {
-            if (currentBarList.Count > 0)
+            if (CurrentDisplayResults().Count > 0)
             {
-                float maxLen = currentBarList.OrderByDescending(p => p.Length).FirstOrDefault().Length;
-                if (maxLen <= 0) maxLen = 1;
-                float newScale = ((upscaledImageWidth / 2f) / maxLen);
+                long maxPing = CurrentDisplayResults().OrderByDescending(p => p.RoundTripTime).FirstOrDefault().RoundTripTime;
+                if (maxPing <= 0) maxPing = 1;
+                float newScale = ((upscaledImageWidth * 0.55f) / maxPing);
                 if (newScale > maxViewScale) newScale = maxViewScale;
 
                 if (targetViewScale != newScale)
                 {
                     targetViewScale = newScale;
-                }
-                // If scrolling, just set the scale instantly. Otherwise, start the easing timer.
-                if (mouseIsScrolling)
-                {
-                    currentViewScale = targetViewScale;
-                }
-                else
-                {
-                    scaleEaseTimer.Change(1, scaleEaseTimerInterval);
+
+                    if (mouseIsScrolling)
+                    {
+                        currentViewScale = targetViewScale;
+                    }
+                    else
+                    {
+                        scaleEaseTimer.Change(1, scaleEaseTimerInterval);
+                    }
                 }
             }
         }
@@ -361,12 +362,13 @@ namespace PingVisualizer
                 {
                     newIdx = topIndex + 1;
                     //if the scroll index returns to the end (bottom) of the results, disable scrolling and return to normal display
-                    if (newIdx > pingReplies.Count - maxBars)
+                    if (newIdx >= pingReplies.Count - maxBars)
                     {
                         newIdx = pingReplies.Count - maxBars;
-                        mouseIsScrolling = false;
-                        Render(false, true);
-                        return;
+                        if (mouseIsScrolling)
+                        {
+                            mouseIsScrolling = false;
+                        }
                     }
                 }
                 else if (e.Delta > 0) // Scroll down.
@@ -649,8 +651,8 @@ namespace PingVisualizer
                 if (result.Status == IPStatus.Success)
                 {
                     barBrush = GetVariableBrush(Color.Green, Color.Red, maxBadPing, result.RoundTripTime, true);
-                    barLen = result.RoundTripTime;
-                    if (barLen < minBarLength) barLen = minBarLength; ;
+                    barLen = result.RoundTripTime + minBarLength;
+                    if (barLen < minBarLength) barLen = minBarLength;
                 }
                 else
                 {
@@ -739,6 +741,28 @@ namespace PingVisualizer
             catch (ObjectDisposedException)
             {
                 // Remaining timer cycles tend to catch the control after it's been disposed. So ignore these errors.
+            }
+        }
+
+        private void WaitUntilTimersCompleted()
+        {
+            var myTimers = new List<System.Threading.Timer>();
+            myTimers.Add(pingTimer);
+            myTimers.Add(scaleEaseTimer);
+
+            List<WaitHandle> waitHnd = new List<WaitHandle>();
+            foreach (var timer in myTimers)
+            {
+                WaitHandle h = new AutoResetEvent(false);
+                if (timer.Dispose(h))
+                {
+                    waitHnd.Add(h);
+                }
+            }
+
+            foreach (var w in waitHnd)
+            {
+                w.WaitOne(50);
             }
         }
 
@@ -890,11 +914,12 @@ namespace PingVisualizer
             {
                 if (disposing)
                 {
-                    pingTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                    // Wait for timers to complete current intervals.
+                    WaitUntilTimersCompleted();
+
                     pingTimer.Dispose();
                     pingTimer = null;
 
-                    scaleEaseTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
                     scaleEaseTimer.Dispose();
                     scaleEaseTimer = null;
 
