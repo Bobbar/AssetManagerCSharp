@@ -148,8 +148,9 @@ namespace AssetManager.UserInterface.CustomControls
                     p.StartInfo.UseShellExecute = false;
                     p.StartInfo.CreateNoWindow = true;
                     p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                    p.StartInfo.WorkingDirectory = Environment.SystemDirectory;
                     p.StartInfo.FileName = "cmd.exe";
-                    p.StartInfo.Arguments = "/c eventvwr.exe " + this.device.HostName;
+                    p.StartInfo.Arguments = "/c " + Environment.SystemDirectory  +  @"\eventvwr.exe " + this.device.HostName;
                     p.Start();
                 }
             }
