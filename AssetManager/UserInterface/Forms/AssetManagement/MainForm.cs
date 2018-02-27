@@ -404,18 +404,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (CurrentTransaction != null)
-            {
-                OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Close");
-            }
-
-            if (!OtherFunctions.OKToEnd() || !Helpers.ChildFormControl.OKToCloseChildren(this) || CurrentTransaction != null)
-            {
-                e.Cancel = true;
-            }
-        }
+       
 
         private void GetGridStyles()
         {
@@ -1044,6 +1033,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void ResultGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceUID));
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (CurrentTransaction != null)
+            {
+                OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Close");
+            }
+
+            if (!OtherFunctions.OKToEnd() || !Helpers.ChildFormControl.OKToCloseChildren(this) || CurrentTransaction != null)
+            {
+                e.Cancel = true;
+            }
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)

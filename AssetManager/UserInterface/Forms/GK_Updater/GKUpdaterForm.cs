@@ -210,8 +210,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         private void MaxUpdates_ValueChanged(object sender, EventArgs e)
         {
-            if (!bolStarting)
-                MaxSimUpdates = (int)MaxUpdates.Value;
+            if (!bolStarting) MaxSimUpdates = (int)MaxUpdates.Value;
         }
 
         private void ProcessUpdates()
@@ -373,14 +372,13 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         private void GKUpdaterForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!OKToClose())
+            if (!GlobalSwitches.ProgramEnding & !OKToClose())
             {
                 e.Cancel = true;
             }
             else
             {
                 DisposeUpdates();
-                this.Dispose();
             }
         }
     }
