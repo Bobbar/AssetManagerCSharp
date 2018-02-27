@@ -64,7 +64,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #region "Methods"
 
-        public MainForm()
+        public MainForm() : base()
         {
             InitializeComponent();
             this.Icon = Properties.Resources.asset_icon;
@@ -237,7 +237,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             var NewDevForm = Helpers.ChildFormControl.GetChildOfType(this, typeof(NewDeviceForm));
             if (NewDevForm == null)
             {
-                NewDeviceForm NewDev = new NewDeviceForm(this);
+                new NewDeviceForm(this);
             }
             else
             {

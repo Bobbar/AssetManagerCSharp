@@ -1,9 +1,8 @@
-using System.Windows.Forms;
-using AssetManager.Helpers;
 using AssetManager.Data.Classes;
+using AssetManager.Helpers;
 using AssetManager.Tools;
-using System;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -13,20 +12,6 @@ namespace AssetManager.UserInterface.CustomControls
     public class ExtendedForm : Form
     {
         private bool inheritTheme = true;
-
-        private bool onlineStatus = false;
-
-        public bool OnlineStatus
-        {
-            get
-            {
-                return onlineStatus;
-            }
-            set
-            {
-                this.onlineStatus = value;
-            }
-        }
 
         public bool InheritTheme
         {
@@ -39,8 +24,6 @@ namespace AssetManager.UserInterface.CustomControls
                 this.inheritTheme = value;
             }
         }
-
-        public event EventHandler<bool> OnlineStatusChanged;
 
         private ExtendedForm myParentForm;
 
@@ -149,16 +132,6 @@ namespace AssetManager.UserInterface.CustomControls
         public virtual void RefreshData()
         {
             this.Refresh();
-        }
-
-        public virtual void OnOnlineStatusChanged(bool e)
-        {
-            EventHandler<bool> handler = OnlineStatusChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-                onlineStatus = e;
-            }
         }
 
         private void SetTheme(ExtendedForm parentForm)

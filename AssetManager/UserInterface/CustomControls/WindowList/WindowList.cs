@@ -146,14 +146,20 @@ namespace AssetManager.UserInterface.CustomControls
             RefreshTimer.Tick += RefreshTimer_Tick;
         }
 
-        private StatusToolStripMenuItem NewMenuItem(ExtendedForm frm)
+        private OnlineStatusMenuItem NewMenuItem(ExtendedForm frm)
         {
-            StatusToolStripMenuItem newitem = new StatusToolStripMenuItem();
+            OnlineStatusMenuItem newitem = new OnlineStatusMenuItem();
             newitem.Name = frm.Name;
             newitem.Font = DropDownControl.Font;
             newitem.Text = frm.Text;
             newitem.Image = frm.Icon.ToBitmap();
-            newitem.LinkedForm = frm;
+            newitem.TargetForm = frm;
+
+            if (frm is IOnlineStatus)
+            {
+                newitem.OnlineStatusInterface = (IOnlineStatus)frm;
+            }
+
             newitem.ToolTipText = "Right-Click to close.";
             newitem.MouseDown += WindowClick;
             return newitem;
@@ -190,8 +196,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void WindowClick(object sender, MouseEventArgs e)
         {
-            StatusToolStripMenuItem item = (StatusToolStripMenuItem)sender;
-            var frm = item.LinkedForm;
+            OnlineStatusMenuItem item = (OnlineStatusMenuItem)sender;
+            var frm = item.TargetForm;
             if (e.Button == MouseButtons.Right)
             {
                 if ((!object.ReferenceEquals(frm, MyParentForm.ParentForm)))

@@ -17,7 +17,7 @@ using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
-    public partial class ViewDeviceForm : ExtendedForm, ILiveBox
+    public partial class ViewDeviceForm : ExtendedForm, ILiveBox, IOnlineStatus
     {
         #region Fields
 
@@ -43,6 +43,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private MunisToolBar munisToolBar;
         private WindowList windowList;
         private SliderLabel statusSlider;
+
+        public event EventHandler<bool> OnlineStatusChanged;
 
         #endregion Fields
 
@@ -1091,7 +1093,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void remoteToolsControl_HostOnlineStatus(object sender, bool e)
         {
-            OnOnlineStatusChanged(e);
+            OnlineStatusChanged?.Invoke(this, e);
         }
 
         private void remoteToolsControl_VisibleChanging(object sender, bool e)

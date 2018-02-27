@@ -1413,37 +1413,35 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void UpdateRequest()
         {
             using (var trans = DBFactory.GetDatabase().StartTransaction())
+            using (var conn = trans.Connection)
             {
-                using (var conn = trans.Connection)
+                try
                 {
-                    try
+                    if (!ConcurrencyCheck())
                     {
-                        if (!ConcurrencyCheck())
-                        {
-                            OtherFunctions.Message("It appears that someone else has modified this request. Please refresh and try again.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Concurrency Failure", this);
-                            return;
-                        }
-                        SibiRequest RequestData = GetRequestItems();
-                        if (ReferenceEquals(RequestData.RequestItems, null))
-                        {
-                            return;
-                        }
-                        string RequestUpdateQry = Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID);
-                        string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID);
-
-                        DBFactory.GetDatabase().UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans);
-                        DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans);
-
-                        trans.Commit();
-                        ParentForm.RefreshData();
-                        this.RefreshData();
-                        StatusSlider.NewSlideMessage("Update successful!");
+                        OtherFunctions.Message("It appears that someone else has modified this request. Please refresh and try again.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Concurrency Failure", this);
+                        return;
                     }
-                    catch (Exception ex)
+                    SibiRequest RequestData = GetRequestItems();
+                    if (ReferenceEquals(RequestData.RequestItems, null))
                     {
-                        trans.Rollback();
-                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                        return;
                     }
+                    string RequestUpdateQry = Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID);
+                    string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID);
+
+                    DBFactory.GetDatabase().UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans);
+                    DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans);
+
+                    trans.Commit();
+                    ParentForm.RefreshData();
+                    this.RefreshData();
+                    StatusSlider.NewSlideMessage("Update successful!");
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 }
             }
         }

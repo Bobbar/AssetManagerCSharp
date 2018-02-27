@@ -61,7 +61,7 @@ namespace AssetManager.Helpers
             {
                 if (!FormIsOpenByUID(typeof(ViewDeviceForm), device.GUID))
                 {
-                    ViewDeviceForm NewView = new ViewDeviceForm(parentForm, device);
+                    new ViewDeviceForm(parentForm, device);
                 }
             }
             else
@@ -105,7 +105,9 @@ namespace AssetManager.Helpers
             foreach (ExtendedForm frm in Application.OpenForms)
             {
                 if (frm.GetType() == formType)
+                {
                     return true;
+                }
             }
             return false;
         }
