@@ -179,18 +179,21 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
+                QueryParamCollection searchParams = BuildSearchList();
                 string strStartQry;
                 if (chkHistorical.Checked)
                 {
-                    strStartQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE ";
+                    strStartQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE";
+                    var searchCommand = DBFactory.GetDatabase().GetCommandFromParams(strStartQry, searchParams.Parameters);
+                    searchCommand.CommandText += " GROUP BY " + DevicesCols.DeviceUID;
+                    StartBigQuery(searchCommand);
                 }
                 else
                 {
-                    strStartQry = "SELECT * FROM " + DevicesCols.TableName + " WHERE ";
+                    strStartQry = "SELECT * FROM " + DevicesCols.TableName + " WHERE";
+                    var searchCommand = DBFactory.GetDatabase().GetCommandFromParams(strStartQry, searchParams.Parameters);
+                    StartBigQuery(searchCommand);
                 }
-
-                QueryParamCollection searchParams = BuildSearchList();
-                StartBigQuery(DBFactory.GetDatabase().GetCommandFromParams(strStartQry, searchParams.Parameters));
             }
             catch (Exception ex)
             {
@@ -417,8 +420,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 Helpers.ChildFormControl.GKUpdaterInstance().AddMultipleUpdates(SelectedDevices);
             }
         }
-
-
 
         private void GetGridStyles()
         {
