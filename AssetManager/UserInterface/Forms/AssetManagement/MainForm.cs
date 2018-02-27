@@ -728,18 +728,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     using (AdvancedDialog GetHostnameDialog = new AdvancedDialog(this))
                     {
+                        GetHostnameDialog.Text = "Remote Computer Hostname";
+                        GetHostnameDialog.AddTextBox("HostnameText", "Hostname:");
+                        GetHostnameDialog.ShowDialog();
+                        if (GetHostnameDialog.DialogResult == DialogResult.OK)
                         {
-                            GetHostnameDialog.Text = "Remote Computer Hostname";
-                            GetHostnameDialog.AddTextBox("HostnameText", "Hostname:");
-                            GetHostnameDialog.ShowDialog();
-                            if (GetHostnameDialog.DialogResult == DialogResult.OK)
-                            {
-                                hostName = GetHostnameDialog.GetControlValue("HostnameText").ToString().Trim();
-                            }
-                            else
-                            {
-                                return false;
-                            }
+                            hostName = GetHostnameDialog.GetControlValue("HostnameText").ToString().Trim();
+                        }
+                        else
+                        {
+                            return false;
                         }
                     }
                 }
@@ -778,18 +776,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     using (AdvancedDialog GetHostnameDialog = new AdvancedDialog(this))
                     {
+                        GetHostnameDialog.Text = "Remote Computer Hostname";
+                        GetHostnameDialog.AddTextBox("HostnameText", "Hostname:");
+                        GetHostnameDialog.ShowDialog();
+                        if (GetHostnameDialog.DialogResult == DialogResult.OK)
                         {
-                            GetHostnameDialog.Text = "Remote Computer Hostname";
-                            GetHostnameDialog.AddTextBox("HostnameText", "Hostname:");
-                            GetHostnameDialog.ShowDialog();
-                            if (GetHostnameDialog.DialogResult == DialogResult.OK)
-                            {
-                                hostName = GetHostnameDialog.GetControlValue("HostnameText").ToString().Trim();
-                            }
-                            else
-                            {
-                                return false;
-                            }
+                            hostName = GetHostnameDialog.GetControlValue("HostnameText").ToString().Trim();
+                        }
+                        else
+                        {
+                            return false;
                         }
                     }
                 }

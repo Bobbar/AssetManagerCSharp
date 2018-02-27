@@ -847,34 +847,32 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             string SelectQry = Queries.SelectDeviceByGUID(currentViewDevice.GUID);
             string InsertQry = Queries.SelectEmptyHistoricalTable;
             using (var trans = DBFactory.GetDatabase().StartTransaction())
+            using (var conn = trans.Connection)
             {
-                using (var conn = trans.Connection)
+                try
                 {
-                    try
-                    {
-                        affectedRows += DBFactory.GetDatabase().UpdateTable(SelectQry, GetUpdateTable(SelectQry), trans);
-                        affectedRows += DBFactory.GetDatabase().UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo), trans);
+                    affectedRows += DBFactory.GetDatabase().UpdateTable(SelectQry, GetUpdateTable(SelectQry), trans);
+                    affectedRows += DBFactory.GetDatabase().UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo), trans);
 
-                        if (affectedRows == 2)
-                        {
-                            trans.Commit();
-                            RefreshData();
-                            SetStatusBar("Update successful!");
-                        }
-                        else
-                        {
-                            trans.Rollback();
-                            RefreshData();
-                            OtherFunctions.Message("Unsuccessful! The number of affected rows was not what was expected.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Unexpected Result", this);
-                        }
+                    if (affectedRows == 2)
+                    {
+                        trans.Commit();
+                        RefreshData();
+                        SetStatusBar("Update successful!");
                     }
-                    catch (Exception ex)
+                    else
                     {
                         trans.Rollback();
-                        if (ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()))
-                        {
-                            RefreshData();
-                        }
+                        RefreshData();
+                        OtherFunctions.Message("Unsuccessful! The number of affected rows was not what was expected.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Unexpected Result", this);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    if (ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()))
+                    {
+                        RefreshData();
                     }
                 }
             }

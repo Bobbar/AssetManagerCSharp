@@ -195,18 +195,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private bool ConcurrencyCheck()
         {
             using (var RequestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID)))
+            using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
             {
-                using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
+                RequestTable.TableName = SibiRequestCols.TableName;
+                ItemTable.TableName = SibiRequestItemsCols.TableName;
+                string DBHash = GetHash(RequestTable, ItemTable);
+                if (DBHash != CurrentHash)
                 {
-                    RequestTable.TableName = SibiRequestCols.TableName;
-                    ItemTable.TableName = SibiRequestItemsCols.TableName;
-                    string DBHash = GetHash(RequestTable, ItemTable);
-                    if (DBHash != CurrentHash)
-                    {
-                        return false;
-                    }
-                    return true;
+                    return false;
                 }
+                return true;
             }
         }
 
@@ -253,28 +251,26 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             SibiRequest RequestData = GetRequestItems();
             using (var trans = DBFactory.GetDatabase().StartTransaction())
+            using (var conn = trans.Connection)
             {
-                using (var conn = trans.Connection)
+                try
                 {
-                    try
-                    {
-                        string InsertRequestQry = Queries.SelectEmptySibiRequestTable;
-                        string InsertRequestItemsQry = Queries.SelectEmptySibiItemsTable(GridColumnFunctions.ColumnsString(RequestItemsColumns()));
-                        DBFactory.GetDatabase().UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID), trans);
-                        DBFactory.GetDatabase().UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, trans);
-                        pnlCreate.Visible = false;
-                        trans.Commit();
-                        IsModifying = false;
-                        IsNewRequest = false;
-                        ParentForm.RefreshData();
-                        this.RefreshData();
-                        OtherFunctions.Message("New Request Added.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Complete", this);
-                    }
-                    catch (Exception ex)
-                    {
-                        trans.Rollback();
-                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
-                    }
+                    string InsertRequestQry = Queries.SelectEmptySibiRequestTable;
+                    string InsertRequestItemsQry = Queries.SelectEmptySibiItemsTable(GridColumnFunctions.ColumnsString(RequestItemsColumns()));
+                    DBFactory.GetDatabase().UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID), trans);
+                    DBFactory.GetDatabase().UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, trans);
+                    pnlCreate.Visible = false;
+                    trans.Commit();
+                    IsModifying = false;
+                    IsNewRequest = false;
+                    ParentForm.RefreshData();
+                    this.RefreshData();
+                    OtherFunctions.Message("New Request Added.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Complete", this);
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
                 }
             }
         }

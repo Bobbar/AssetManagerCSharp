@@ -251,7 +251,7 @@ namespace AssetManager.UserInterface.Forms
             try
             {
                 SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
-                
+
                 using (OpenFileDialog fd = new OpenFileDialog())
                 {
                     fd.ShowHelp = true;
@@ -521,7 +521,7 @@ namespace AssetManager.UserInterface.Forms
         private void MoveAttachToFolder(string attachUID, Attachment.Folder folder, bool isNew = false)
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
-            
+
             try
             {
                 Waiting();
@@ -723,7 +723,7 @@ namespace AssetManager.UserInterface.Forms
         private void BeginRenameAttachment()
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
-            
+
             //Enable read/write mode, set current cell to the filename cell and begin edit.
             AttachGrid.ReadOnly = false;
             AttachGrid.SelectionMode = DataGridViewSelectionMode.CellSelect;
@@ -771,7 +771,7 @@ namespace AssetManager.UserInterface.Forms
             try
             {
                 SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
-                
+
                 string strFilename = AttachGrid.CurrentRowStringValue(attachmentColumns.FileName);
                 var blah = OtherFunctions.Message("Are you sure you want to delete '" + strFilename + "'?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Confirm Delete", this);
                 if (blah == DialogResult.Yes)
@@ -837,47 +837,43 @@ namespace AssetManager.UserInterface.Forms
                     SetStatusBar("Uploading... " + (fileList.IndexOf(file) + 1).ToString() + " of " + files.Length.ToString());
                     progress = new ProgressCounter();
                     using (var trans = DBFactory.GetDatabase().StartTransaction())
+                    using (var conn = trans.Connection)
                     {
-                        using (var conn = trans.Connection)
+                        try
                         {
-                            try
+                            await Task.Run(() =>
                             {
-                                await Task.Run(() =>
+                                using (FileStream FileStream = (FileStream)(CurrentAttachment.DataStream))
+                                using (System.IO.Stream FTPStream = LocalFTPComm.ReturnFtpRequestStream(ftpUri + CurrentAttachment.FolderGUID + "/" + CurrentAttachment.FileUID, WebRequestMethods.Ftp.UploadFile))
                                 {
-                                    using (FileStream FileStream = (FileStream)(CurrentAttachment.DataStream))
+                                    byte[] buffer = new byte[1024];
+                                    int bytesIn = 1;
+                                    progress.BytesToTransfer = System.Convert.ToInt32(FileStream.Length);
+                                    while (!(bytesIn < 1 || cancelToken.IsCancellationRequested))
                                     {
-                                        using (System.IO.Stream FTPStream = LocalFTPComm.ReturnFtpRequestStream(ftpUri + CurrentAttachment.FolderGUID + "/" + CurrentAttachment.FileUID, WebRequestMethods.Ftp.UploadFile))
+                                        bytesIn = FileStream.Read(buffer, 0, 1024);
+                                        if (bytesIn > 0)
                                         {
-                                            byte[] buffer = new byte[1024];
-                                            int bytesIn = 1;
-                                            progress.BytesToTransfer = System.Convert.ToInt32(FileStream.Length);
-                                            while (!(bytesIn < 1 || cancelToken.IsCancellationRequested))
-                                            {
-                                                bytesIn = FileStream.Read(buffer, 0, 1024);
-                                                if (bytesIn > 0)
-                                                {
-                                                    FTPStream.Write(buffer, 0, bytesIn);
-                                                    progress.BytesMoved = bytesIn;
-                                                }
-                                            }
+                                            FTPStream.Write(buffer, 0, bytesIn);
+                                            progress.BytesMoved = bytesIn;
                                         }
                                     }
-                                });
-                                if (cancelToken.IsCancellationRequested)
-                                {
-                                    FtpFunctions.DeleteFtpAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID);
                                 }
-                                else
-                                {
-                                    InsertSQLAttachment(CurrentAttachment, trans);
-                                }
-                                CurrentAttachment.Dispose();
-                                trans.Commit();
-                            }
-                            catch (Exception)
+                            });
+                            if (cancelToken.IsCancellationRequested)
                             {
-                                trans.Rollback();
+                                FtpFunctions.DeleteFtpAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID);
                             }
+                            else
+                            {
+                                InsertSQLAttachment(CurrentAttachment, trans);
+                            }
+                            CurrentAttachment.Dispose();
+                            trans.Commit();
+                        }
+                        catch (Exception)
+                        {
+                            trans.Rollback();
                         }
                     }
                 }
@@ -1356,7 +1352,7 @@ namespace AssetManager.UserInterface.Forms
         private void NewFolderMenuItem_Click(object sender, EventArgs e)
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
-            
+
             string newFolderName;
             using (AdvancedDialog FolderDialog = new AdvancedDialog(this))
             {
