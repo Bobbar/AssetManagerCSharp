@@ -108,7 +108,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         public bool ActiveUpdates()
         {
-            return MyUpdates.Exists(upd => upd.ProgStatus == GKProgressControl.ProgressStatus.Running);
+            return MyUpdates.Exists(upd => upd.ProgStatus == GKProgressControl.ProgressStatus.Running | upd.ProgStatus == GKProgressControl.ProgressStatus.Paused);
         }
 
         private void CancelAll()

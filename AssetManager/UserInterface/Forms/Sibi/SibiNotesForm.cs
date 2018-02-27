@@ -66,7 +66,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 

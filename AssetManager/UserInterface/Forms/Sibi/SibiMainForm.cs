@@ -56,7 +56,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 this.Dispose();
             }
         }
@@ -99,7 +99,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
             finally
             {
@@ -229,7 +229,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 }
                 else
                 {
-                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 }
             }
         }
@@ -254,7 +254,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 

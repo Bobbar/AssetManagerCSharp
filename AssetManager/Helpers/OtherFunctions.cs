@@ -46,7 +46,10 @@ namespace AssetManager.Helpers
         {
             try
             {
-                Directory.Delete(Paths.DownloadPath, true);
+                if (Directory.Exists(Paths.DownloadPath))
+                {
+                    Directory.Delete(Paths.DownloadPath, true);
+                }
             }
             catch
             {
@@ -89,9 +92,10 @@ namespace AssetManager.Helpers
 
             var GKUpdInstance = Helpers.ChildFormControl.GKUpdaterInstance();
             if (GKUpdInstance.Visible && !GKUpdInstance.OKToClose())
+            {
                 return false;
+            }
             return true;
-
         }
 
         public delegate void SetWaitCursorVoidDelegate(bool waiting, Form parentForm = null);

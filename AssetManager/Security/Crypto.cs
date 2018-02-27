@@ -70,7 +70,7 @@ namespace AssetManager.Security
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 return null;
             }
         }

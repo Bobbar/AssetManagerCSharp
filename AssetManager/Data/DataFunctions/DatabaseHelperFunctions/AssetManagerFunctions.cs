@@ -69,7 +69,7 @@ namespace AssetManager.Data.Functions
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -255,7 +255,7 @@ namespace AssetManager.Data.Functions
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 return false;
             }
         }
@@ -274,7 +274,7 @@ namespace AssetManager.Data.Functions
             }
             catch (Exception ex)
             {
-                return ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                return ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -292,7 +292,7 @@ namespace AssetManager.Data.Functions
             }
             catch (Exception ex)
             {
-                return ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                return ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -312,7 +312,7 @@ namespace AssetManager.Data.Functions
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 return -1;
             }
         }
@@ -427,7 +427,7 @@ namespace AssetManager.Data.Functions
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 return null;
             }
         }
@@ -475,7 +475,7 @@ namespace AssetManager.Data.Functions
                 }
                 catch (Exception ex)
                 {
-                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 }
             }
         }

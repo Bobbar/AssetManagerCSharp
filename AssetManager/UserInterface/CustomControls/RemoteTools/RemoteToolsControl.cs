@@ -181,7 +181,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -213,7 +213,7 @@ namespace AssetManager.UserInterface.CustomControls
             catch (Exception ex)
             {
                 OnStatusPrompt("TeamViewer deployment failed...");
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -245,7 +245,7 @@ namespace AssetManager.UserInterface.CustomControls
             catch (Exception ex)
             {
                 OnStatusPrompt("Office 365 deployment failed...");
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -320,7 +320,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
             finally
             {
@@ -370,7 +370,7 @@ namespace AssetManager.UserInterface.CustomControls
             catch (Exception ex)
             {
                 OnStatusPrompt("Error while installing Chrome!");
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 

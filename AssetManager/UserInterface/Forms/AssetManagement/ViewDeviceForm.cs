@@ -119,7 +119,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -188,7 +188,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -219,7 +219,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -333,7 +333,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -699,7 +699,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -870,7 +870,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 catch (Exception ex)
                 {
                     trans.Rollback();
-                    if (ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod()))
+                    if (ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod()))
                     {
                         RefreshData();
                     }
@@ -938,7 +938,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 

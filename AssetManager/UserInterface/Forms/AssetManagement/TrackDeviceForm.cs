@@ -158,7 +158,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     catch (Exception ex)
                     {
                         trans.Rollback();
-                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                     }
                     finally
                     {
@@ -212,7 +212,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     catch (Exception ex)
                     {
                         trans.Rollback();
-                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                     }
                     finally
                     {

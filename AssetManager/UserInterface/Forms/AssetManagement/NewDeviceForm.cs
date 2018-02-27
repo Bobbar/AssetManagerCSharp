@@ -121,7 +121,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 OtherFunctions.Message("Unable to add new device.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
             }
         }
@@ -156,7 +156,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     catch (Exception ex)
                     {
                         trans.Rollback();
-                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                         return false;
                     }
                 }

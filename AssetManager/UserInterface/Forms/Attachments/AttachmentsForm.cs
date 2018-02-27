@@ -204,7 +204,7 @@ namespace AssetManager.UserInterface.Forms
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
             finally
             {
@@ -273,7 +273,7 @@ namespace AssetManager.UserInterface.Forms
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -559,7 +559,7 @@ namespace AssetManager.UserInterface.Forms
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
             finally
             {
@@ -599,7 +599,7 @@ namespace AssetManager.UserInterface.Forms
             catch (Exception ex)
             {
                 Logging.Logger("ERROR DOWNLOADING ATTACHMENT: " + this.FormUID + "/" + AttachUID);
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
             finally
             {
@@ -624,7 +624,7 @@ namespace AssetManager.UserInterface.Forms
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
             finally
             {
@@ -662,7 +662,7 @@ namespace AssetManager.UserInterface.Forms
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
             finally
             {
@@ -762,7 +762,7 @@ namespace AssetManager.UserInterface.Forms
                 //Expecting a MySQLException if the given filename is too long for the DB column.
                 //Cancel edit, then pass the exception to the error handler for logging and user prompt.
                 AttachGrid.CancelEdit();
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -789,7 +789,7 @@ namespace AssetManager.UserInterface.Forms
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
             finally
             {
@@ -880,7 +880,7 @@ namespace AssetManager.UserInterface.Forms
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
             finally
             {
@@ -933,7 +933,7 @@ namespace AssetManager.UserInterface.Forms
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -980,7 +980,7 @@ namespace AssetManager.UserInterface.Forms
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 return false;
             }
             finally

@@ -100,7 +100,7 @@ namespace AssetManager
 
         private static void MyApplication_UnhandledException(object sender, ThreadExceptionEventArgs e)
         {
-            ErrorHandling.ErrHandle(e.Exception, System.Reflection.MethodInfo.GetCurrentMethod());
+            ErrorHandling.ErrHandle(e.Exception, System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         private static void ProcessCommandArgs()
@@ -132,7 +132,7 @@ namespace AssetManager
             }
             catch (Exception ex)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 

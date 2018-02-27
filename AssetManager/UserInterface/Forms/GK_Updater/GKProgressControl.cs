@@ -129,7 +129,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             catch (Exception ex)
             {
                 SetStatus(ProgressStatus.Errors);
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodInfo.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
