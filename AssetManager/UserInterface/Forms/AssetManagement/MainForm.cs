@@ -6,6 +6,7 @@ using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.Tools;
 using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.CustomControls.LiveBox;
 using AssetManager.UserInterface.Forms.AdminTools;
 using MyDialogLib;
 using System;
@@ -21,7 +22,7 @@ using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
-    public partial class MainForm : ExtendedForm
+    public partial class MainForm : ExtendedForm, ILiveBox
     {
         #region "Fields"
 
@@ -35,6 +36,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private ConnectionWatchdog WatchDog;
 
         private DbTransaction CurrentTransaction = null;
+
+        public MunisEmployee MunisUser
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         #endregion "Fields"
 
@@ -188,10 +202,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewDeviceForm), deviceGUID))
+                if (!ChildFormControl.FormIsOpenByUID(typeof(ViewDeviceForm), deviceGUID))
                 {
                     Waiting();
-                    ViewDeviceForm NewView = new ViewDeviceForm(this, new Device(deviceGUID));
+                    new ViewDeviceForm(this, new Device(deviceGUID));
                 }
             }
             catch (Exception ex)
@@ -404,7 +418,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-       
+
 
         private void GetGridStyles()
         {
@@ -433,10 +447,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void InitLiveBox()
         {
-            MyLiveBox.AttachToControl(txtDescription, DevicesCols.Description, LiveBox.LiveBoxType.DynamicSearch);
-            MyLiveBox.AttachToControl(txtCurUser, DevicesCols.CurrentUser, LiveBox.LiveBoxType.DynamicSearch);
-            MyLiveBox.AttachToControl(txtSerial, DevicesCols.Serial, LiveBox.LiveBoxType.InstaLoad, DevicesCols.DeviceUID);
-            MyLiveBox.AttachToControl(txtAssetTag, DevicesCols.AssetTag, LiveBox.LiveBoxType.InstaLoad, DevicesCols.DeviceUID);
+            MyLiveBox.AttachToControl(txtDescription, DevicesCols.Description, LiveBox.LiveBoxSelectionType.DynamicSearch);
+            MyLiveBox.AttachToControl(txtCurUser, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.DynamicSearch);
+            MyLiveBox.AttachToControl(txtSerial, DevicesCols.Serial, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceUID);
+            MyLiveBox.AttachToControl(txtAssetTag, DevicesCols.AssetTag, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceUID);
         }
 
         private void InitDBCombo()

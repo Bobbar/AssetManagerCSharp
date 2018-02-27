@@ -1,7 +1,6 @@
 ﻿using AssetManager.Data;
 using AssetManager.Data.Classes;
 using AssetManager.Helpers;
-using AssetManager.UserInterface.Forms.AssetManagement;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,11 +8,10 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AssetManager.UserInterface.CustomControls
+namespace AssetManager.UserInterface.CustomControls.LiveBox
 {
     public class LiveBox : IDisposable
     {
-
         #region "Fields"
 
         private LiveBoxArgs CurrentLiveBoxArgs;
@@ -24,7 +22,8 @@ namespace AssetManager.UserInterface.CustomControls
         private bool queryRunning = false;
 
         private string previousSearchString;
-        #endregion
+
+        #endregion "Fields"
 
         #region "Constructors"
 
@@ -33,11 +32,11 @@ namespace AssetManager.UserInterface.CustomControls
             InitializeLiveListBox(parentForm);
         }
 
-        #endregion
+        #endregion "Constructors"
 
         #region "Methods"
 
-        public void AttachToControl(TextBox control, string displayMember, LiveBoxType type, string valueMember = null)
+        public void AttachToControl(TextBox control, string displayMember, LiveBoxSelectionType type, string valueMember = null)
         {
             LiveBoxArgs ControlArgs = new LiveBoxArgs(control, displayMember, type, valueMember);
             LiveBoxControls.Add(ControlArgs);
@@ -91,7 +90,6 @@ namespace AssetManager.UserInterface.CustomControls
                         StartLiveSearch(arg);
                     }
                 }
-
             }
         }
 
@@ -164,7 +162,6 @@ namespace AssetManager.UserInterface.CustomControls
                 }
             }
             return null;
-
         }
 
         private void InitializeLiveListBox(Form parentForm)
@@ -210,7 +207,6 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void LiveBox_MouseDown(object sender, MouseEventArgs e)
         {
-
             if (e.Button == MouseButtons.Left)
             {
                 LiveBoxSelect();
@@ -228,39 +224,40 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void LiveBoxSelect()
         {
-            string SelectedText = LiveListBox.Text;
-            string SelectedValue = LiveListBox.SelectedValue.ToString();
+            string selectedText = LiveListBox.Text;
+            string selectedValue = LiveListBox.SelectedValue.ToString();
             HideLiveBox();
 
+            var parentForm = CurrentLiveBoxArgs.Control.FindForm();
+            if (parentForm is ILiveBox)
+            {
+                var liveboxForm = (ILiveBox)parentForm;
 
-            if (CurrentLiveBoxArgs.Type == LiveBoxType.DynamicSearch)
-            {
-                CurrentLiveBoxArgs.Control.Text = SelectedText;
-                Helpers.ChildFormControl.MainFormInstance().DynamicSearch();
-            }
-            else if (CurrentLiveBoxArgs.Type == LiveBoxType.InstaLoad)
-            {
-                CurrentLiveBoxArgs.Control.Text = "";
-                Helpers.ChildFormControl.MainFormInstance().LoadDevice(SelectedValue);
-            }
-            else if (CurrentLiveBoxArgs.Type == LiveBoxType.SelectValue)
-            {
-                CurrentLiveBoxArgs.Control.Text = SelectedText;
-            }
-            else if (CurrentLiveBoxArgs.Type == LiveBoxType.UserSelect)
-            {
-                CurrentLiveBoxArgs.Control.Text = SelectedText;
-                if (CurrentLiveBoxArgs.Control.FindForm() is ViewDeviceForm)
+                switch (CurrentLiveBoxArgs.Type)
                 {
-                    ViewDeviceForm FrmSetData = (ViewDeviceForm)CurrentLiveBoxArgs.Control.FindForm();
-                    var munisUser = new MunisEmployee(SelectedText, SelectedValue);
-                    FrmSetData.MunisUser = munisUser;
+                    case LiveBoxSelectionType.DynamicSearch:
+                        CurrentLiveBoxArgs.Control.Text = selectedText;
+                        liveboxForm.DynamicSearch();
+                        break;
+
+                    case LiveBoxSelectionType.LoadDevice:
+                        CurrentLiveBoxArgs.Control.Text = "";
+                        liveboxForm.LoadDevice(selectedValue);
+                        break;
+
+                    case LiveBoxSelectionType.SelectValue:
+                        CurrentLiveBoxArgs.Control.Text = selectedText;
+                        break;
+
+                    case LiveBoxSelectionType.UserSelect:
+                        CurrentLiveBoxArgs.Control.Text = selectedText;
+                        liveboxForm.MunisUser = new MunisEmployee(selectedText, selectedValue);
+                        break;
                 }
-                else if (CurrentLiveBoxArgs.Control.FindForm() is NewDeviceForm)
-                {
-                    NewDeviceForm FrmSetData = (NewDeviceForm)CurrentLiveBoxArgs.Control.FindForm();
-                    FrmSetData.MunisUser = new MunisEmployee(SelectedText, SelectedValue);
-                }
+            }
+            else
+            {
+                throw new Exception(nameof(ILiveBox) + " is not implemented in parent Form.");
             }
         }
 
@@ -380,19 +377,18 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        #endregion
+        #endregion "Methods"
 
         #region "Structs"
 
         public class LiveBoxArgs
         {
-
             public TextBox Control { get; set; }
             public string DisplayMember { get; set; }
-            public Nullable<LiveBoxType> Type { get; set; }
+            public Nullable<LiveBoxSelectionType> Type { get; set; }
             public string ValueMember { get; set; }
 
-            public LiveBoxArgs(TextBox control, string displayMember, LiveBoxType type, string valueMember)
+            public LiveBoxArgs(TextBox control, string displayMember, LiveBoxSelectionType type, string valueMember)
             {
                 this.Control = control;
                 this.DisplayMember = displayMember;
@@ -407,19 +403,17 @@ namespace AssetManager.UserInterface.CustomControls
                 this.Type = null;
                 this.ValueMember = null;
             }
-
-
         }
 
-        public enum LiveBoxType
+        public enum LiveBoxSelectionType
         {
             DynamicSearch,
-            InstaLoad,
+            LoadDevice,
             SelectValue,
             UserSelect
         }
 
-        #endregion
+        #endregion "Structs"
 
         #region "IDisposable Support"
 
@@ -459,7 +453,6 @@ namespace AssetManager.UserInterface.CustomControls
             disposedValue = true;
         }
 
-        #endregion
-
+        #endregion "IDisposable Support"
     }
 }

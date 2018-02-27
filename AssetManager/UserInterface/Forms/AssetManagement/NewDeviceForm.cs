@@ -4,6 +4,7 @@ using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.CustomControls.LiveBox;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +13,7 @@ using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
-    public partial class NewDeviceForm : ExtendedForm
+    public partial class NewDeviceForm : ExtendedForm, ILiveBox
     {
         #region Fields
 
@@ -30,7 +31,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 LockUnlockUserField();
             }
         }
-
+               
         private int replacementYears = 4;
         private DBControlParser controlParser;
         private Device device = new Device();
@@ -353,8 +354,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void NewDeviceForm_Load(object sender, EventArgs e)
         {
             liveBox = new LiveBox(this);
-            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
-            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxType.SelectValue);
+            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.UserSelect, DevicesCols.MunisEmpNum);
+            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxSelectionType.SelectValue);
         }
 
         private void NewDeviceForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -372,6 +373,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void PurchaseDatePicker_ValueChanged(object sender, EventArgs e)
         {
             SetReplacementYear(PurchaseDatePicker.Value);
+        }
+
+        void ILiveBox.LoadDevice(string deviceGUID)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ILiveBox.DynamicSearch()
+        {
+            throw new NotImplementedException();
         }
     }
 }

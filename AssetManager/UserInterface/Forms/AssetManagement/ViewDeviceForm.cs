@@ -7,6 +7,7 @@ using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.Tools;
 using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.CustomControls.LiveBox;
 using AssetManager.UserInterface.Forms.Sibi;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
-    public partial class ViewDeviceForm : ExtendedForm
+    public partial class ViewDeviceForm : ExtendedForm, ILiveBox
     {
         #region Fields
 
@@ -66,8 +67,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DefaultFormTitle = this.Text;
 
             liveBox = new LiveBox(this);
-            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxType.UserSelect, DevicesCols.MunisEmpNum);
-            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxType.SelectValue);
+            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.UserSelect, DevicesCols.MunisEmpNum);
+            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxSelectionType.SelectValue);
 
             munisToolBar = new MunisToolBar(this);
             munisToolBar.InsertMunisDropDown(ToolStrip1, 6);
@@ -87,7 +88,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
             SetEditMode(false);
 
-            LoadDevice();
+            LoadCurrentDevice();
         }
 
         #endregion Constructors
@@ -100,7 +101,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             PingHistLabel.Visible = hasPingHist;
         }
 
-        public void LoadDevice()
+        public void LoadCurrentDevice()
         {
             try
             {
@@ -148,7 +149,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 ActiveDirectoryBox.Visible = false;
                 remoteToolsControl.Visible = false;
                 currentViewDevice = new Device(currentViewDevice.GUID);
-                LoadDevice();
+                LoadCurrentDevice();
             }
         }
 
@@ -292,7 +293,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     OtherFunctions.Message("Device deleted successfully.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Device Deleted", this);
                     currentViewDevice = null;
-                    Helpers.ChildFormControl.MainFormInstance().RefreshData();
+                    ParentForm.RefreshData();
                 }
                 else
                 {
@@ -1116,6 +1117,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 MunisUser = new MunisEmployee();
             }
+        }
+
+        void ILiveBox.LoadDevice(string deviceGUID)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ILiveBox.DynamicSearch()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion Control Events

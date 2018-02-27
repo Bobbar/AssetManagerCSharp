@@ -903,7 +903,7 @@
             Override and add code to refresh data from the database.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.LiveBox.ProcessSearch(System.String)">
+        <member name="M:AssetManager.UserInterface.CustomControls.LiveBox.LiveBox.ProcessSearch(System.String)">
             <summary>
             Runs the DB query Asynchronously.
             </summary>

@@ -226,7 +226,8 @@
     <Compile Include="UserInterface\CustomControls\ExtendedForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\CustomControls\LiveBox.cs" />
+    <Compile Include="UserInterface\CustomControls\LiveBox\ILiveBox.cs" />
+    <Compile Include="UserInterface\CustomControls\LiveBox\LiveBox.cs" />
     <Compile Include="UserInterface\CustomControls\MunisToolBar.cs" />
     <Compile Include="UserInterface\CustomControls\OneClickToolStrip.cs">
       <SubType>Component</SubType>
