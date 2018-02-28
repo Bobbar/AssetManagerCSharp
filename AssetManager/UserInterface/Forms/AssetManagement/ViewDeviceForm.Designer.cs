@@ -1089,6 +1089,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.remoteToolsControl.Size = new System.Drawing.Size(422, 103);
             this.remoteToolsControl.TabIndex = 42;
             this.remoteToolsControl.Visible = false;
+            this.remoteToolsControl.HostBackOnline += new System.EventHandler(this.remoteToolsControl_HostBackOnline);
             this.remoteToolsControl.NewStatusPrompt += new System.EventHandler<AssetManager.UserInterface.CustomControls.RemoteToolsControl.StatusPrompt>(this.remoteToolsControl_NewStatusPrompt);
             this.remoteToolsControl.VisibleChanging += new System.EventHandler<bool>(this.remoteToolsControl_VisibleChanging);
             this.remoteToolsControl.HostOnlineStatus += new System.EventHandler<bool>(this.remoteToolsControl_HostOnlineStatus);

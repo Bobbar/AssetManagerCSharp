@@ -213,6 +213,7 @@
     <Compile Include="Tools\FileIcon.cs" />
     <Compile Include="Data\NetworkInfo.cs" />
     <Compile Include="Tools\Deployment\DeployOffice.cs" />
+    <Compile Include="Tools\TaskBarNotify.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedImages.cs" />
     <Compile Include="Tools\PerformanceTweaks\MemoryTweaks.cs" />
     <Compile Include="Tools\PowerShellWrapper.cs" />

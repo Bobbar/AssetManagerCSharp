@@ -20,9 +20,26 @@ namespace AssetManager.UserInterface.CustomControls
 
         private const int maxFailedPings = 100;
         private int failedPings = 0;
+        private int maxFailedToNotify = 5;
         private PingVis pingVis;
         private ExtendedForm hostForm;
         private Device device;
+
+        /// <summary>
+        /// Gets or sets the number of failed pings required before a <see cref="HostBackOnline"/> event will be fired.
+        /// </summary>
+        public int MaxFailedUntilNotify
+        {
+            get
+            {
+                return maxFailedToNotify;
+            }
+
+            set
+            {
+                maxFailedToNotify = value;
+            }
+        }
 
         public Device Device
         {
@@ -36,6 +53,12 @@ namespace AssetManager.UserInterface.CustomControls
                 InitPingVis();
             }
         }
+
+        /// <summary>
+        /// Occurs when a successful ping is received after the number of failed pings has exceeded <see cref="MaxFailedUntilNotify"/> 
+        /// </summary>
+        [Browsable(true)]
+        public event EventHandler HostBackOnline;
 
         [Browsable(true)]
         public event EventHandler<StatusPrompt> NewStatusPrompt;
@@ -74,6 +97,11 @@ namespace AssetManager.UserInterface.CustomControls
             HostOnlineStatus(this, isOnline);
         }
 
+        private void OnHostBackOnline()
+        {
+            HostBackOnline(this, new EventArgs());
+        }
+        
         #endregion Properties
 
         #region Methods
@@ -113,6 +141,11 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (PingResults.Status == IPStatus.Success)
             {
+                if (failedPings >= maxFailedToNotify)
+                {
+                    OnHostBackOnline();
+                }
+
                 failedPings = 0;
                 OnHostOnlineStatus(true);
             }

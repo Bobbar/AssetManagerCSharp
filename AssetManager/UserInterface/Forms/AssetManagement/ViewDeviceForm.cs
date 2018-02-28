@@ -1093,7 +1093,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void remoteToolsControl_HostOnlineStatus(object sender, bool e)
         {
+            // If OnlineStatusChanged handle is not null, Invoke it.
             OnlineStatusChanged?.Invoke(this, e);
+        }
+
+        private void remoteToolsControl_HostBackOnline(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Normal;
+            this.Activate();
+            TaskBarNotify.FlashWindow(this.Handle, true, true, 3);
         }
 
         private void remoteToolsControl_VisibleChanging(object sender, bool e)
