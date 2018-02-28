@@ -285,14 +285,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             return ColList;
         }
 
-        private void SetGridHeaders()
-        {
-            foreach (DataGridViewColumn col in SibiResultGrid.Columns)
-            {
-                col.HeaderText = ((DataTable)SibiResultGrid.DataSource).Columns[col.HeaderText].Caption;
-            }
-        }
-
         private void SetDisplayYears()
         {
             bolRebuildingCombo = true;

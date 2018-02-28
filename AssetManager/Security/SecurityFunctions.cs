@@ -251,6 +251,7 @@ namespace AssetManager.Security
             }
         }
 
+        // METODO: Un-nest
         public sealed class AccessGroup
         {
             public const string AddDevice = "add";

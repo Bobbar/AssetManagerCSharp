@@ -253,7 +253,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             if (PackFileOK)
             {
                 Status = "Done.";
-                await Task.Run(() => { Thread.Sleep(1000); });
+                await Task.Delay(1000);
                 return true;
             }
             else

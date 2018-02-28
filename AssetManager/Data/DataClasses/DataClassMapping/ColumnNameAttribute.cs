@@ -2,7 +2,7 @@ using System;
 namespace AssetManager.Data.Classes
 {
     [AttributeUsage(AttributeTargets.Property)]
-	public class DataColumnNameAttribute : Attribute
+	public sealed class DataColumnNameAttribute : Attribute
 	{
 
 

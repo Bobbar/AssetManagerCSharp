@@ -381,7 +381,7 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
 
         #region "Structs"
 
-        public class LiveBoxArgs
+        private class LiveBoxArgs
         {
             public TextBox Control { get; set; }
             public string DisplayMember { get; set; }
@@ -405,6 +405,8 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
             }
         }
 
+
+        // METODO: Un-nest.
         public enum LiveBoxSelectionType
         {
             DynamicSearch,

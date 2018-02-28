@@ -255,6 +255,7 @@ namespace AssetManager.Data.Classes
             return false;
         }
 
+        // METODO: Un-nest.
         public class Folder
         {
             private string folderName;

@@ -593,7 +593,7 @@ namespace AssetManager.UserInterface.CustomControls
             #endregion Constructors
         }
 
-        public class LocationF
+        private class LocationF
         {
             private float _x;
             private float _y;

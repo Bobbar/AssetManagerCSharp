@@ -894,11 +894,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void PanelNoScrollOnFocus1_MouseWheel(object sender, MouseEventArgs e)
-        {
-            MyLiveBox.HideLiveBox();
-        }
-
         private void PanelNoScrollOnFocus1_Scroll(object sender, ScrollEventArgs e)
         {
             MyLiveBox.HideLiveBox();

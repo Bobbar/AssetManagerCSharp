@@ -32,15 +32,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
             ShowDialog(parentForm);
         }
 
-        public SibiNotesForm(ExtendedForm parentForm, string noteUID) : base(parentForm,noteUID)
+        public SibiNotesForm(ExtendedForm parentForm, string noteUID) : base(parentForm, noteUID)
         {
             InitializeComponent();
             ViewNote(noteUID);
-        }
-
-        private void ClearAll()
-        {
-            NotesTextBox.Clear();
         }
 
         private void ViewNote(string noteUID)

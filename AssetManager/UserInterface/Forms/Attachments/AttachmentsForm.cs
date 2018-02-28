@@ -1257,11 +1257,6 @@ namespace AssetManager.UserInterface.Forms
             DownloadAndSaveAttachment(SelectedAttachmentUID());
         }
 
-        private void AttachmentsForm_Disposed(object sender, EventArgs e)
-        {
-            OtherFunctions.PurgeTempDir();
-        }
-
         private void FolderListView_ItemActivate(object sender, EventArgs e)
         {
             foreach (ListViewItem item in FolderListView.Items)

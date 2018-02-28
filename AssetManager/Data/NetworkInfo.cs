@@ -71,6 +71,7 @@ namespace AssetManager.Data
             return DomainNames[database];
         }
 
+        // METODO: Un-nest.
         public enum Databases
         {
             test_db,

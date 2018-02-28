@@ -493,6 +493,7 @@ namespace AssetManager.Data.Functions
             Device
         }
 
+        // METODO: Un-nest.
         public enum FindDevType
         {
             AssetTag,

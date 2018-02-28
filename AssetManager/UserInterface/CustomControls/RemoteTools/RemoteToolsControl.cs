@@ -444,7 +444,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         #endregion Control Events
 
-        public class StatusPrompt
+        // METODO: Un-nest.
+        public struct StatusPrompt
         {
             public string Message { get; set; }
             public int DisplayTime { get; set; }

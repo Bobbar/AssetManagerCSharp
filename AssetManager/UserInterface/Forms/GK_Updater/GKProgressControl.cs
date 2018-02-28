@@ -97,6 +97,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         public event EventHandler CriticalStopError;
 
+        // METODO: Un-nest.
         public enum ProgressStatus
         {
             Starting,
