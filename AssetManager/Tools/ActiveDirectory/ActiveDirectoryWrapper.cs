@@ -13,7 +13,6 @@ namespace AssetManager.Tools
         private string _hostname;
         private SearchResult _searchResults;
 
-        // Public Property FoundInAD As Boolean = False
         public ActiveDirectoryWrapper(string hostname)
         {
             _hostname = hostname;
@@ -90,12 +89,11 @@ namespace AssetManager.Tools
                 {
                     if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.vintondd)
                     {
-                        if (!SecurityTools.VerifyAdminCreds("Credentials for Vinton AD"))
+                        if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.vintondd)
                         {
-                            return null;
+                            rootDSE.Username = SecurityTools.AdminCreds.UserName;
+                            rootDSE.Password = SecurityTools.AdminCreds.Password;
                         }
-                        rootDSE.Username = SecurityTools.AdminCreds.UserName;
-                        rootDSE.Password = SecurityTools.AdminCreds.Password;
                     }
 
                     var defaultNamingContext = rootDSE.Properties["defaultNamingContext"].Value.ToString();
@@ -114,15 +112,12 @@ namespace AssetManager.Tools
                             var directorySearchResult = directorySearch.FindOne();
                             if (directorySearchResult != null)
                             {
-                                return directorySearch.FindOne();
+                                return directorySearchResult;
                             }
                             return null;
                         }
-
                     }
-
                 }
-
             }
             catch
             {
@@ -135,7 +130,7 @@ namespace AssetManager.Tools
         //{
         //    var directorySearchResult = _searchResults;
         //    List<string> AttribList = new List<string>();
-       
+
         //    for (var i = 0; i <= directorySearchResult.Properties.Count - 1; i++)
         //    {
         //        AttribList.Add(directorySearchResult.Properties.PropertyNames[i].ToString() + " = " + directorySearchResult.Properties[directorySearchResult.Properties.PropertyNames(i).ToString()][0].ToString()); // & directorySearchResult.Properties.Values.)
@@ -198,6 +193,5 @@ namespace AssetManager.Tools
             }
             return Path;
         }
-
     }
 }

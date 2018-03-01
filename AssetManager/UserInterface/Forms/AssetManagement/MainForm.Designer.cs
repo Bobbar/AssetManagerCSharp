@@ -99,8 +99,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.tsmGKUpdater = new System.Windows.Forms.ToolStripMenuItem();
             this.AdvancedSearchMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StartTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.PSScriptMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.InstallChromeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.cmdSibi = new System.Windows.Forms.ToolStripButton();
             this.GroupBox1.SuspendLayout();
@@ -774,8 +772,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ScanAttachmentToolStripMenuItem,
             this.tsmGKUpdater,
             this.AdvancedSearchMenuItem,
-            this.StartTransactionToolStripMenuItem,
-            this.PSScriptMenuItem});
+            this.StartTransactionToolStripMenuItem});
             this.AdminDropDown.Image = global::AssetManager.Properties.Resources.AdminIcon;
             this.AdminDropDown.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.AdminDropDown.Name = "AdminDropDown";
@@ -806,73 +803,58 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.tsmUserManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsmUserManager.Name = "tsmUserManager";
-            this.tsmUserManager.Size = new System.Drawing.Size(256, 26);
+            this.tsmUserManager.Size = new System.Drawing.Size(242, 26);
             this.tsmUserManager.Text = "User Manager";
             this.tsmUserManager.Click += new System.EventHandler(this.tsmUserManager_Click);
             // 
             // ReEnterLACredentialsToolStripMenuItem
             // 
             this.ReEnterLACredentialsToolStripMenuItem.Name = "ReEnterLACredentialsToolStripMenuItem";
-            this.ReEnterLACredentialsToolStripMenuItem.Size = new System.Drawing.Size(256, 26);
+            this.ReEnterLACredentialsToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
             this.ReEnterLACredentialsToolStripMenuItem.Text = "Re-Enter Credentials";
             this.ReEnterLACredentialsToolStripMenuItem.Click += new System.EventHandler(this.ReEnterLACredentialsToolStripMenuItem_Click);
             // 
             // ViewLogToolStripMenuItem
             // 
             this.ViewLogToolStripMenuItem.Name = "ViewLogToolStripMenuItem";
-            this.ViewLogToolStripMenuItem.Size = new System.Drawing.Size(256, 26);
+            this.ViewLogToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
             this.ViewLogToolStripMenuItem.Text = "View Log";
             this.ViewLogToolStripMenuItem.Click += new System.EventHandler(this.ViewLogToolStripMenuItem_Click);
             // 
             // TextEnCrypterToolStripMenuItem
             // 
             this.TextEnCrypterToolStripMenuItem.Name = "TextEnCrypterToolStripMenuItem";
-            this.TextEnCrypterToolStripMenuItem.Size = new System.Drawing.Size(256, 26);
+            this.TextEnCrypterToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
             this.TextEnCrypterToolStripMenuItem.Text = "Text Encrypter";
             this.TextEnCrypterToolStripMenuItem.Click += new System.EventHandler(this.TextEnCrypterToolStripMenuItem_Click);
             // 
             // ScanAttachmentToolStripMenuItem
             // 
             this.ScanAttachmentToolStripMenuItem.Name = "ScanAttachmentToolStripMenuItem";
-            this.ScanAttachmentToolStripMenuItem.Size = new System.Drawing.Size(256, 26);
+            this.ScanAttachmentToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
             this.ScanAttachmentToolStripMenuItem.Text = "Scan Attachments";
             this.ScanAttachmentToolStripMenuItem.Click += new System.EventHandler(this.ScanAttachmentToolStripMenuItem_Click);
             // 
             // tsmGKUpdater
             // 
             this.tsmGKUpdater.Name = "tsmGKUpdater";
-            this.tsmGKUpdater.Size = new System.Drawing.Size(256, 26);
+            this.tsmGKUpdater.Size = new System.Drawing.Size(242, 26);
             this.tsmGKUpdater.Text = "GK Updater";
             this.tsmGKUpdater.Click += new System.EventHandler(this.tsmGKUpdater_Click);
             // 
             // AdvancedSearchMenuItem
             // 
             this.AdvancedSearchMenuItem.Name = "AdvancedSearchMenuItem";
-            this.AdvancedSearchMenuItem.Size = new System.Drawing.Size(256, 26);
+            this.AdvancedSearchMenuItem.Size = new System.Drawing.Size(242, 26);
             this.AdvancedSearchMenuItem.Text = "Advanced Search";
             this.AdvancedSearchMenuItem.Click += new System.EventHandler(this.AdvancedSearchMenuItem_Click);
             // 
             // StartTransactionToolStripMenuItem
             // 
             this.StartTransactionToolStripMenuItem.Name = "StartTransactionToolStripMenuItem";
-            this.StartTransactionToolStripMenuItem.Size = new System.Drawing.Size(256, 26);
+            this.StartTransactionToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
             this.StartTransactionToolStripMenuItem.Text = "Start Manual Edit Mode";
             this.StartTransactionToolStripMenuItem.Click += new System.EventHandler(this.StartTransactionToolStripMenuItem_Click);
-            // 
-            // PSScriptMenuItem
-            // 
-            this.PSScriptMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.InstallChromeMenuItem});
-            this.PSScriptMenuItem.Name = "PSScriptMenuItem";
-            this.PSScriptMenuItem.Size = new System.Drawing.Size(256, 26);
-            this.PSScriptMenuItem.Text = "Execute Remote PS Script";
-            // 
-            // InstallChromeMenuItem
-            // 
-            this.InstallChromeMenuItem.Name = "InstallChromeMenuItem";
-            this.InstallChromeMenuItem.Size = new System.Drawing.Size(237, 26);
-            this.InstallChromeMenuItem.Text = "Install/Update Chrome";
-            this.InstallChromeMenuItem.Click += new System.EventHandler(this.InstallChromeMenuItem_Click);
             // 
             // ToolStripSeparator5
             // 
@@ -988,8 +970,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal System.Windows.Forms.ToolStripMenuItem tsmGKUpdater;
         internal System.Windows.Forms.ToolStripMenuItem AdvancedSearchMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem tsmSendToGridForm;
-        internal System.Windows.Forms.ToolStripMenuItem PSScriptMenuItem;
-        internal System.Windows.Forms.ToolStripMenuItem InstallChromeMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem ReEnterLACredentialsToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem ViewLogToolStripMenuItem;
         internal System.Windows.Forms.ToolStripComboBox DatabaseToolCombo;

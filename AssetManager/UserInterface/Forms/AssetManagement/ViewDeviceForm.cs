@@ -720,6 +720,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 if (!string.IsNullOrEmpty(currentViewDevice.HostName))
                 {
+
+                    if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.vintondd)
+                    {
+                        if (SecurityTools.VerifyAdminCreds("Credentials for Vinton AD"));
+                        {
+                            ActiveDirectoryBox.Visible = false;
+                            return;
+                        }
+                    }
+
                     ActiveDirectoryWrapper ADWrap = new ActiveDirectoryWrapper(currentViewDevice.HostName);
                     if (await ADWrap.LoadResultsAsync())
                     {

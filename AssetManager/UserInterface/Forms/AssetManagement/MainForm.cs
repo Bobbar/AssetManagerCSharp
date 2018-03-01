@@ -724,101 +724,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             SetStatusBar("Processing...");
         }
 
-        private async Task<bool> StartPowerShellScript(byte[] scriptByte, string hostName = "")
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(hostName))
-                {
-                    using (AdvancedDialog GetHostnameDialog = new AdvancedDialog(this))
-                    {
-                        GetHostnameDialog.Text = "Remote Computer Hostname";
-                        GetHostnameDialog.AddTextBox("HostnameText", "Hostname:");
-                        GetHostnameDialog.ShowDialog();
-                        if (GetHostnameDialog.DialogResult == DialogResult.OK)
-                        {
-                            hostName = GetHostnameDialog.GetControlValue("HostnameText").ToString().Trim();
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(hostName))
-                {
-                    if (SecurityTools.VerifyAdminCreds())
-                    {
-                        Waiting();
-                        PowerShellWrapper PSWrapper = new PowerShellWrapper();
-                        if (await PSWrapper.ExecutePowerShellScript(hostName, scriptByte))
-                        {
-                            OtherFunctions.Message("Command successful.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Done", this);
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-                return false;
-            }
-            finally
-            {
-                DoneWaiting();
-            }
-        }
-
-        private async Task<bool> StartPowerShellCommand(Command PScommand, string hostName = "")
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(hostName))
-                {
-                    using (AdvancedDialog GetHostnameDialog = new AdvancedDialog(this))
-                    {
-                        GetHostnameDialog.Text = "Remote Computer Hostname";
-                        GetHostnameDialog.AddTextBox("HostnameText", "Hostname:");
-                        GetHostnameDialog.ShowDialog();
-                        if (GetHostnameDialog.DialogResult == DialogResult.OK)
-                        {
-                            hostName = GetHostnameDialog.GetControlValue("HostnameText").ToString().Trim();
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(hostName))
-                {
-                    if (SecurityTools.VerifyAdminCreds())
-                    {
-                        Waiting();
-                        PowerShellWrapper PSWrapper = new PowerShellWrapper();
-                        if (await PSWrapper.InvokePowerShellCommand(hostName, PScommand))
-                        {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-                return false;
-            }
-            finally
-            {
-                DoneWaiting();
-            }
-        }
-
         #region "Control Event Methods"
 
         private void AdvancedSearchMenuItem_Click(object sender, EventArgs e)
@@ -984,11 +889,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceUID));
-        }
-
-        private async void InstallChromeMenuItem_Click(object sender, EventArgs e)
-        {
-            await StartPowerShellScript(Properties.Resources.UpdateChrome);
         }
 
         private void ReEnterLACredentialsToolStripMenuItem_Click(object sender, EventArgs e)

@@ -790,7 +790,7 @@
         </member>
         <member name="M:AssetManager.Security.SecurityTools.CheckForAccess(System.String)">
             <summary>
-            Checks if current user has access to the specified module. Throws a <see cref="T:AssetManager.Security.InvalidAccessException"/> if they do not. 
+            Checks if current user has access to the specified module. Throws a <see cref="T:AssetManager.Security.InvalidAccessException"/> if they do not.
             </summary>
             <param name="recModule"></param>
         </member>
@@ -829,6 +829,11 @@
             </summary>
             <param name="distName"></param>
             <returns></returns>
+        </member>
+        <member name="T:AssetManager.Tools.TaskBarNotify">
+            <summary>
+            Provides flashing window and taskbar support.
+            </summary>
         </member>
         <member name="T:AssetManager.Tools.ImageCaching">
             <summary>
@@ -919,6 +924,16 @@
         <member name="T:AssetManager.UserInterface.CustomControls.OneClickToolStrip">
             <summary>
             Modified Toolstrip that responds to clicks as soon as the parent form is activated. As opposed to requiring two clicks (one to activate, another to focus).
+            </summary>
+        </member>
+        <member name="P:AssetManager.UserInterface.CustomControls.RemoteToolsControl.MaxFailedUntilNotify">
+            <summary>
+            Gets or sets the number of failed pings required before a <see cref="E:AssetManager.UserInterface.CustomControls.RemoteToolsControl.HostBackOnline"/> event will be fired.
+            </summary>
+        </member>
+        <member name="E:AssetManager.UserInterface.CustomControls.RemoteToolsControl.HostBackOnline">
+            <summary>
+            Occurs when a successful ping is received after the number of failed pings has exceeded <see cref="P:AssetManager.UserInterface.CustomControls.RemoteToolsControl.MaxFailedUntilNotify"/> 
             </summary>
         </member>
         <member name="F:AssetManager.UserInterface.CustomControls.RemoteToolsControl.components">

@@ -960,6 +960,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ActiveDirectoryBox.TabIndex = 0;
             this.ActiveDirectoryBox.TabStop = false;
             this.ActiveDirectoryBox.Text = "Active Directory Info:";
+            this.ActiveDirectoryBox.Visible = false;
             // 
             // Label22
             // 
@@ -1085,6 +1086,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.remoteToolsControl.Device = null;
             this.remoteToolsControl.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.remoteToolsControl.Location = new System.Drawing.Point(3, 7);
+            this.remoteToolsControl.MaxFailedUntilNotify = 5;
             this.remoteToolsControl.Name = "remoteToolsControl";
             this.remoteToolsControl.Size = new System.Drawing.Size(422, 103);
             this.remoteToolsControl.TabIndex = 42;
