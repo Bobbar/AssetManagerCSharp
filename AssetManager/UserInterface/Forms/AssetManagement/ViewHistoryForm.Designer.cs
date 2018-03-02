@@ -35,7 +35,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.txtPhoneNumber = new System.Windows.Forms.TextBox();
             this.chkTrackable = new System.Windows.Forms.CheckBox();
             this.Label17 = new System.Windows.Forms.Label();
-            this.txtEntryGUID = new System.Windows.Forms.TextBox();
+            this.txtEntryGuid = new System.Windows.Forms.TextBox();
             this.Label16 = new System.Windows.Forms.Label();
             this.txtStatus = new System.Windows.Forms.TextBox();
             this.Label14 = new System.Windows.Forms.Label();
@@ -43,7 +43,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label13 = new System.Windows.Forms.Label();
             this.txtEntryTime = new System.Windows.Forms.TextBox();
             this.Label12 = new System.Windows.Forms.Label();
-            this.txtGUID = new System.Windows.Forms.TextBox();
+            this.txtGuid = new System.Windows.Forms.TextBox();
             this.Label11 = new System.Windows.Forms.Label();
             this.txtEQType = new System.Windows.Forms.TextBox();
             this.Label10 = new System.Windows.Forms.Label();
@@ -85,7 +85,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.GroupBox1.Controls.Add(this.txtPhoneNumber);
             this.GroupBox1.Controls.Add(this.chkTrackable);
             this.GroupBox1.Controls.Add(this.Label17);
-            this.GroupBox1.Controls.Add(this.txtEntryGUID);
+            this.GroupBox1.Controls.Add(this.txtEntryGuid);
             this.GroupBox1.Controls.Add(this.Label16);
             this.GroupBox1.Controls.Add(this.txtStatus);
             this.GroupBox1.Controls.Add(this.Label14);
@@ -93,7 +93,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.GroupBox1.Controls.Add(this.Label13);
             this.GroupBox1.Controls.Add(this.txtEntryTime);
             this.GroupBox1.Controls.Add(this.Label12);
-            this.GroupBox1.Controls.Add(this.txtGUID);
+            this.GroupBox1.Controls.Add(this.txtGuid);
             this.GroupBox1.Controls.Add(this.Label11);
             this.GroupBox1.Controls.Add(this.txtEQType);
             this.GroupBox1.Controls.Add(this.Label10);
@@ -230,15 +230,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label17.TabIndex = 34;
             this.Label17.Text = "Entry UID";
             // 
-            // txtEntryGUID
+            // txtEntryGuid
             // 
-            this.txtEntryGUID.BackColor = System.Drawing.SystemColors.Window;
-            this.txtEntryGUID.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEntryGUID.Location = new System.Drawing.Point(563, 94);
-            this.txtEntryGUID.Name = "txtEntryGUID";
-            this.txtEntryGUID.ReadOnly = true;
-            this.txtEntryGUID.Size = new System.Drawing.Size(228, 23);
-            this.txtEntryGUID.TabIndex = 33;
+            this.txtEntryGuid.BackColor = System.Drawing.SystemColors.Window;
+            this.txtEntryGuid.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtEntryGuid.Location = new System.Drawing.Point(563, 94);
+            this.txtEntryGuid.Name = "txtEntryGuid";
+            this.txtEntryGuid.ReadOnly = true;
+            this.txtEntryGuid.Size = new System.Drawing.Size(228, 23);
+            this.txtEntryGuid.TabIndex = 33;
             // 
             // Label16
             // 
@@ -310,15 +310,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label12.TabIndex = 23;
             this.Label12.Text = "Device UID";
             // 
-            // txtGUID
+            // txtGuid
             // 
-            this.txtGUID.BackColor = System.Drawing.SystemColors.Window;
-            this.txtGUID.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtGUID.Location = new System.Drawing.Point(563, 47);
-            this.txtGUID.Name = "txtGUID";
-            this.txtGUID.ReadOnly = true;
-            this.txtGUID.Size = new System.Drawing.Size(228, 23);
-            this.txtGUID.TabIndex = 22;
+            this.txtGuid.BackColor = System.Drawing.SystemColors.Window;
+            this.txtGuid.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtGuid.Location = new System.Drawing.Point(563, 47);
+            this.txtGuid.Name = "txtGuid";
+            this.txtGuid.ReadOnly = true;
+            this.txtGuid.Size = new System.Drawing.Size(228, 23);
+            this.txtGuid.TabIndex = 22;
             // 
             // Label11
             // 
@@ -567,7 +567,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 		internal Label Label3;
 		internal TextBox txtAssetTag;
 		internal Label Label12;
-		internal TextBox txtGUID;
+		internal TextBox txtGuid;
 		internal Label Label11;
 		internal TextBox txtEQType;
 		internal Label Label10;
@@ -591,7 +591,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 		internal Label Label16;
 		internal TextBox txtStatus;
 		internal Label Label17;
-		internal TextBox txtEntryGUID;
+		internal TextBox txtEntryGuid;
 		internal CheckBox chkTrackable;
 		internal Label Label18;
 		internal TextBox txtPhoneNumber;

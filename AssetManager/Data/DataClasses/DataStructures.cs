@@ -79,14 +79,14 @@ namespace AssetManager.Data.Classes
         public string UserName;
         public string Fullname;
         public int AccessLevel;
-        public string GUID;
+        public string Guid;
 
         public LocalUser(string userName, string fullName, int accessLevel, string guid)
         {
             UserName = userName;
             Fullname = fullName;
             AccessLevel = accessLevel;
-            GUID = guid;
+            Guid = guid;
         }
     }
 
@@ -98,20 +98,20 @@ namespace AssetManager.Data.Classes
     {
         public string Number;
         public string Name;
-        public string GUID;
+        public string Guid;
 
         public MunisEmployee(string name, string number)
         {
             this.Name = name;
             this.Number = number;
-            this.GUID = string.Empty;
+            this.Guid = string.Empty;
         }
 
         public MunisEmployee()
         {
             this.Name = string.Empty;
             this.Number = string.Empty;
-            this.GUID = string.Empty;
+            this.Guid = string.Empty;
         }
 
         public override string ToString()

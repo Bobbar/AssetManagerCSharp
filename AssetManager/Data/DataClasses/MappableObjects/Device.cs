@@ -15,9 +15,9 @@ namespace AssetManager.Data.Classes
         {
         }
 
-        public Device(string GUID)
+        public Device(string Guid)
         {
-            this.MapClassProperties(GetDeviceDataFromGUID(GUID));
+            this.MapClassProperties(GetDeviceDataFromGuid(Guid));
         }
 
         #endregion Constructors
@@ -87,9 +87,9 @@ namespace AssetManager.Data.Classes
 
         #region Methods
 
-        private DataTable GetDeviceDataFromGUID(string GUID)
+        private DataTable GetDeviceDataFromGuid(string Guid)
         {
-            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGUID(GUID)))
+            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGuid(Guid)))
             {
                 results.TableName = DevicesCols.TableName;
                 return results;

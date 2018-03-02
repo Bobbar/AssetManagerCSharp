@@ -232,7 +232,7 @@ namespace AssetManager.Data.Functions
             return tmpResults;
         }
 
-        private static bool DeleteMasterSqlEntry(string sqlGUID, EntryType type)
+        private static bool DeleteMasterSqlEntry(string sqlGuid, EntryType type)
         {
             try
             {
@@ -240,11 +240,11 @@ namespace AssetManager.Data.Functions
                 switch (type)
                 {
                     case EntryType.Device:
-                        DeleteQuery = Queries.DeleteDeviceByGuid(sqlGUID);
+                        DeleteQuery = Queries.DeleteDeviceByGuid(sqlGuid);
                         break;
 
                     case EntryType.Sibi:
-                        DeleteQuery = Queries.DeleteSibiRequestByGUID(sqlGUID);
+                        DeleteQuery = Queries.DeleteSibiRequestByGuid(sqlGuid);
                         break;
                 }
                 if (DBFactory.GetDatabase().ExecuteNonQuery(DeleteQuery) > 0)
@@ -260,17 +260,17 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static bool DeleteDevice(string GUID)
+        public static bool DeleteDevice(string Guid)
         {
             try
             {
                 // if has attachments, delete ftp directory, then delete the sql records.
-                if (FtpFunctions.HasFtpFolder(GUID))
+                if (FtpFunctions.HasFtpFolder(Guid))
                 {
-                    if (!FtpFunctions.DeleteFtpFolder(GUID)) return false;
+                    if (!FtpFunctions.DeleteFtpFolder(Guid)) return false;
                 }
                 //delete sql records
-                return DeleteMasterSqlEntry(GUID, EntryType.Device);
+                return DeleteMasterSqlEntry(Guid, EntryType.Device);
             }
             catch (Exception ex)
             {
@@ -278,17 +278,17 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static bool DeleteSibiRequest(string GUID)
+        public static bool DeleteSibiRequest(string Guid)
         {
             try
             {
                 // if has attachments, delete ftp directory, then delete the sql records.
-                if (FtpFunctions.HasFtpFolder(GUID))
+                if (FtpFunctions.HasFtpFolder(Guid))
                 {
-                    if (!FtpFunctions.DeleteFtpFolder(GUID)) return false;
+                    if (!FtpFunctions.DeleteFtpFolder(Guid)) return false;
                 }
                 //delete sql records
-                return DeleteMasterSqlEntry(GUID, EntryType.Sibi);
+                return DeleteMasterSqlEntry(Guid, EntryType.Sibi);
             }
             catch (Exception ex)
             {

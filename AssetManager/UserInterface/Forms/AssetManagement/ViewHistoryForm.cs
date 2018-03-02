@@ -16,14 +16,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
     {
         private DBControlParser controlParser;
 
-        private string deviceGUID;
+        private string deviceGuid;
 
-        public ViewHistoryForm(ExtendedForm parentForm, string entryUID, string deviceGUID) : base(parentForm,entryUID)
+        public ViewHistoryForm(ExtendedForm parentForm, string entryUID, string deviceGuid) : base(parentForm,entryUID)
         {
             controlParser = new DBControlParser(this);
             InitializeComponent();
             InitDBControls();
-            this.deviceGUID = deviceGUID;
+            this.deviceGuid = deviceGuid;
             ViewEntry(entryUID);
         }
 
@@ -34,7 +34,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             txtActionUser.Tag = new DBControlInfo(HistoricalDevicesCols.ActionUser, ParseType.DisplayOnly, false);
             txtChangeType.Tag = new DBControlInfo(HistoricalDevicesCols.ChangeType, Attributes.DeviceAttribute.ChangeType, ParseType.DisplayOnly, false);
             txtDescription.Tag = new DBControlInfo(HistoricalDevicesCols.Description, ParseType.DisplayOnly, false);
-            txtGUID.Tag = new DBControlInfo(HistoricalDevicesCols.DeviceUID, ParseType.DisplayOnly, false);
+            txtGuid.Tag = new DBControlInfo(HistoricalDevicesCols.DeviceUID, ParseType.DisplayOnly, false);
             txtCurrentUser.Tag = new DBControlInfo(HistoricalDevicesCols.CurrentUser, ParseType.DisplayOnly, false);
             txtLocation.Tag = new DBControlInfo(HistoricalDevicesCols.Location, Attributes.DeviceAttribute.Locations, ParseType.DisplayOnly, false);
             txtPONumber.Tag = new DBControlInfo(HistoricalDevicesCols.PO, ParseType.DisplayOnly, false);
@@ -46,7 +46,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             txtEQType.Tag = new DBControlInfo(HistoricalDevicesCols.EQType, Attributes.DeviceAttribute.EquipType, ParseType.DisplayOnly, false);
             NotesTextBox.Tag = new DBControlInfo(HistoricalDevicesCols.Notes, ParseType.DisplayOnly, false);
             txtStatus.Tag = new DBControlInfo(HistoricalDevicesCols.Status, Attributes.DeviceAttribute.StatusType, ParseType.DisplayOnly, false);
-            txtEntryGUID.Tag = new DBControlInfo(HistoricalDevicesCols.HistoryEntryUID, ParseType.DisplayOnly, false);
+            txtEntryGuid.Tag = new DBControlInfo(HistoricalDevicesCols.HistoryEntryUID, ParseType.DisplayOnly, false);
             chkTrackable.Tag = new DBControlInfo(HistoricalDevicesCols.Trackable, ParseType.DisplayOnly, false);
             txtPhoneNumber.Tag = new DBControlInfo(HistoricalDevicesCols.PhoneNumber, ParseType.DisplayOnly, false);
             txtHostname.Tag = new DBControlInfo(HistoricalDevicesCols.HostName, ParseType.DisplayOnly, false);
@@ -92,7 +92,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             List<Control> ChangedControls = new List<Control>();
             System.DateTime CurrentTimeStamp = (System.DateTime)currentData.Rows[0][HistoricalDevicesCols.ActionDateTime];
             //Query for all rows with a timestamp older than the current historical entry.
-            using (DataTable olderData = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevHistoricalEntriesOlderThan(deviceGUID, CurrentTimeStamp)))
+            using (DataTable olderData = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevHistoricalEntriesOlderThan(deviceGuid, CurrentTimeStamp)))
             {
                 if (olderData.Rows.Count > 0)
                 {

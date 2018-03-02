@@ -55,7 +55,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public void ImportFromSibi(string itemUID)
         {
-            string itemQuery = Queries.SelectSibiRequestAndItemByItemGUID(itemUID);
+            string itemQuery = Queries.SelectSibiRequestAndItemByItemGuid(itemUID);
             DateTime POPurchaseDate = default(DateTime);
             using (var results = DBFactory.GetDatabase().DataTableFromQueryString(itemQuery))
             {
@@ -374,7 +374,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             SetReplacementYear(PurchaseDatePicker.Value);
         }
 
-        void ILiveBox.LoadDevice(string deviceGUID)
+        void ILiveBox.LoadDevice(string deviceGuid)
         {
             throw new NotImplementedException();
         }

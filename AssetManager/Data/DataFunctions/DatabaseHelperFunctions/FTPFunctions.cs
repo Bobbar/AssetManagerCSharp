@@ -73,11 +73,11 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static bool HasFtpFolder(string itemGUID)
+        public static bool HasFtpFolder(string itemGuid)
         {
             try
             {
-                using (FtpWebResponse resp = (FtpWebResponse)(FTPComms.ReturnFtpResponse("ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/" + itemGUID + "/", WebRequestMethods.Ftp.ListDirectory)))
+                using (FtpWebResponse resp = (FtpWebResponse)(FTPComms.ReturnFtpResponse("ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/" + itemGuid + "/", WebRequestMethods.Ftp.ListDirectory)))
                 {
                     if (resp.StatusCode == FtpStatusCode.OpeningData)
                     {

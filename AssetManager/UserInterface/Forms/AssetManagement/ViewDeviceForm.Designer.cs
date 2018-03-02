@@ -36,7 +36,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label15 = new System.Windows.Forms.Label();
             this.PhoneNumberTextBox = new System.Windows.Forms.MaskedTextBox();
             this.Label14 = new System.Windows.Forms.Label();
-            this.GUIDLabel = new System.Windows.Forms.Label();
+            this.GuidLabel = new System.Windows.Forms.Label();
             this.MunisSearchButton = new System.Windows.Forms.Button();
             this.MunisSibiPanel = new System.Windows.Forms.Panel();
             this.MunisInfoButton = new System.Windows.Forms.Button();
@@ -199,18 +199,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label14.TabIndex = 56;
             this.Label14.Text = "Phone #:";
             // 
-            // GUIDLabel
+            // GuidLabel
             // 
-            this.GUIDLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.GUIDLabel.Cursor = System.Windows.Forms.Cursors.Default;
-            this.GUIDLabel.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GUIDLabel.Location = new System.Drawing.Point(26, 149);
-            this.GUIDLabel.Name = "GUIDLabel";
-            this.GUIDLabel.Size = new System.Drawing.Size(272, 23);
-            this.GUIDLabel.TabIndex = 54;
-            this.GUIDLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.ToolTip1.SetToolTip(this.GUIDLabel, "Click to copy GUID.");
-            this.GUIDLabel.Click += new System.EventHandler(this.GUIDLabel_Click);
+            this.GuidLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.GuidLabel.Cursor = System.Windows.Forms.Cursors.Default;
+            this.GuidLabel.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GuidLabel.Location = new System.Drawing.Point(26, 149);
+            this.GuidLabel.Name = "GuidLabel";
+            this.GuidLabel.Size = new System.Drawing.Size(272, 23);
+            this.GuidLabel.TabIndex = 54;
+            this.GuidLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ToolTip1.SetToolTip(this.GuidLabel, "Click to copy Guid.");
+            this.GuidLabel.Click += new System.EventHandler(this.GuidLabel_Click);
             // 
             // MunisSearchButton
             // 
@@ -311,7 +311,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label10.Name = "Label10";
             this.Label10.Size = new System.Drawing.Size(90, 16);
             this.Label10.TabIndex = 41;
-            this.Label10.Text = "Device GUID:";
+            this.Label10.Text = "Device Guid:";
             // 
             // SerialTextBox
             // 
@@ -913,7 +913,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.MiscInfoTab.Controls.Add(this.ActiveDirectoryBox);
             this.MiscInfoTab.Controls.Add(this.iCloudTextBox);
             this.MiscInfoTab.Controls.Add(this.Label17);
-            this.MiscInfoTab.Controls.Add(this.GUIDLabel);
+            this.MiscInfoTab.Controls.Add(this.GuidLabel);
             this.MiscInfoTab.Controls.Add(this.PhoneNumberTextBox);
             this.MiscInfoTab.Controls.Add(this.Label10);
             this.MiscInfoTab.Controls.Add(this.Label14);
@@ -1401,7 +1401,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal Button SibiViewButton;
         internal Panel MunisSibiPanel;
         internal Button MunisSearchButton;
-        internal Label GUIDLabel;
+        internal Label GuidLabel;
         internal Label Label14;
         internal MaskedTextBox PhoneNumberTextBox;
         internal Panel FieldsPanel;

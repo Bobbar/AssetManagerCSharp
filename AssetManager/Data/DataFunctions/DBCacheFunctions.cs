@@ -10,7 +10,7 @@ namespace AssetManager.Data.Functions
 {
     public static class DBCacheFunctions
     {
-        private static string CacheVersionGUID;
+        private static string CacheVersionGuid;
 
         public static void RefreshLocalDBCache()
         {
@@ -48,10 +48,10 @@ namespace AssetManager.Data.Functions
                 {
                     if (connectedToDB)
                     {
-                        CacheVersionGUID = GetCacheVersion();
+                        CacheVersionGuid = GetCacheVersion();
                         var DBVersion = GetDBVersion();
 
-                        if (CacheVersionGUID != DBVersion)
+                        if (CacheVersionGuid != DBVersion)
                         {
                             return false;
                         }
@@ -67,7 +67,7 @@ namespace AssetManager.Data.Functions
                 }
                 else
                 {
-                    CacheVersionGUID = string.Empty;
+                    CacheVersionGuid = string.Empty;
                     return false;
                 }
             }

@@ -194,14 +194,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        public void LoadDevice(string deviceGUID)
+        public void LoadDevice(string deviceGuid)
         {
             try
             {
-                if (!ChildFormControl.FormIsOpenByUID(typeof(ViewDeviceForm), deviceGUID))
+                if (!ChildFormControl.FormIsOpenByUID(typeof(ViewDeviceForm), deviceGuid))
                 {
                     Waiting();
-                    new ViewDeviceForm(this, new Device(deviceGUID));
+                    new ViewDeviceForm(this, new Device(deviceGuid));
                 }
             }
             catch (Exception ex)
@@ -516,7 +516,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ColList.Add(new GridColumnAttrib(DevicesCols.PurchaseDate, "Purchase Date", typeof(System.DateTime)));
             ColList.Add(new GridColumnAttrib(DevicesCols.ReplacementYear, "Replace Year", typeof(string)));
             ColList.Add(new GridColumnAttrib(DevicesCols.LastModDate, "Modified", typeof(System.DateTime)));
-            ColList.Add(new GridColumnAttrib(DevicesCols.DeviceUID, "GUID", typeof(string)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.DeviceUID, "Guid", typeof(string)));
             return ColList;
         }
 
@@ -882,12 +882,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             StartUserManager();
         }
 
-        private void txtGUID_KeyDown(object sender, KeyEventArgs e)
+        private void txtGuid_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
             {
-                LoadDevice(txtGUID.Text.Trim());
-                txtGUID.Clear();
+                LoadDevice(txtGuid.Text.Trim());
+                txtGuid.Clear();
             }
         }
 

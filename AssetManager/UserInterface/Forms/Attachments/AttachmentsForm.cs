@@ -472,14 +472,14 @@ namespace AssetManager.UserInterface.Forms
             DBFactory.GetDatabase().InsertFromParameters(Attachment.AttachTable.TableName, insertParams.Parameters, transaction);
         }
 
-        private async Task<bool> MakeDirectory(string FolderGUID)
+        private async Task<bool> MakeDirectory(string FolderGuid)
         {
             return await Task.Run(() =>
             {
                 try
                 {
                     FtpComms LocalFTPComm = new FtpComms();
-                    using (var MkDirResp = (FtpWebResponse)(LocalFTPComm.ReturnFtpResponse(ftpUri + FolderGUID, WebRequestMethods.Ftp.MakeDirectory)))
+                    using (var MkDirResp = (FtpWebResponse)(LocalFTPComm.ReturnFtpResponse(ftpUri + FolderGuid, WebRequestMethods.Ftp.MakeDirectory)))
                     {
                         if (MkDirResp.StatusCode == FtpStatusCode.PathnameCreated)
                         {

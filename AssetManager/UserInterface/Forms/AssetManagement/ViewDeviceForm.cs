@@ -317,15 +317,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
             try
             {
-                string entryGUID = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryUID);
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGUID)))
+                string entryGuid = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryUID);
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGuid)))
                 {
                     string dateStamp = results.Rows[0][HistoricalDevicesCols.ActionDateTime].ToString();
                     string actionType = AttributeFunctions.GetDisplayValueFromCode(Attributes.DeviceAttribute.ChangeType, results.Rows[0][HistoricalDevicesCols.ChangeType].ToString());
-                    var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + dateStamp + " - " + actionType + " - " + entryGUID, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "Are you sure?", this);
+                    var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + dateStamp + " - " + actionType + " - " + entryGuid, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "Are you sure?", this);
                     if (blah == DialogResult.Yes)
                     {
-                        int affectedRows = DBFactory.GetDatabase().ExecuteNonQuery(Queries.DeleteHistoricalEntryByGUID(entryGUID));
+                        int affectedRows = DBFactory.GetDatabase().ExecuteNonQuery(Queries.DeleteHistoricalEntryByGuid(entryGuid));
                         if (affectedRows > 0)
                         {
                             SetStatusBar("Entry deleted successfully.");
@@ -509,7 +509,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private DataTable GetDevicesTable(string deviceUID)
         {
-            return DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGUID(deviceUID));
+            return DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGuid(deviceUID));
         }
 
         private string GetHash(DataTable deviceTable, DataTable historicalTable)
@@ -578,7 +578,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Description, "Description", typeof(string)));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Location, "Location", Attributes.DeviceAttribute.Locations, ColumnFormatTypes.AttributeDisplayMemberOnly));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.PurchaseDate, "Purchase Date", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.HistoryEntryUID, "GUID", typeof(string)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.HistoryEntryUID, "Guid", typeof(string)));
             return ColList;
         }
 
@@ -599,7 +599,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             PONumberTextBox.Tag = new DBControlInfo(DevicesBaseCols.PO, false);
             ReplaceYearTextBox.Tag = new DBControlInfo(DevicesBaseCols.ReplacementYear, false);
             PhoneNumberTextBox.Tag = new DBControlInfo(DevicesBaseCols.PhoneNumber, false);
-            GUIDLabel.Tag = new DBControlInfo(DevicesBaseCols.DeviceUID, ParseType.DisplayOnly, false);
+            GuidLabel.Tag = new DBControlInfo(DevicesBaseCols.DeviceUID, ParseType.DisplayOnly, false);
             TrackableCheckBox.Tag = new DBControlInfo(DevicesBaseCols.Trackable, false);
             HostnameTextBox.Tag = new DBControlInfo(DevicesBaseCols.HostName, false);
             iCloudTextBox.Tag = new DBControlInfo(DevicesBaseCols.iCloudAccount, false);
@@ -627,9 +627,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void LoadTracking(string deviceGUID)
+        private void LoadTracking(string deviceGuid)
         {
-            using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTrackingByDevGUID(deviceGUID)))
+            using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTrackingByDevGuid(deviceGuid)))
             {
                 if (Results.Rows.Count > 0)
                 {
@@ -665,10 +665,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void NewTrackingView(string GUID)
+        private void NewTrackingView(string Guid)
         {
             Waiting();
-            new ViewTrackingForm(this, GUID, currentViewDevice);
+            new ViewTrackingForm(this, Guid, currentViewDevice);
             DoneWaiting();
         }
 
@@ -849,7 +849,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ColList.Add(new GridColumnAttrib(TrackablesCols.CheckinTime, "Check In", typeof(DateTime)));
             ColList.Add(new GridColumnAttrib(TrackablesCols.DueBackDate, "Due Back", typeof(DateTime)));
             ColList.Add(new GridColumnAttrib(TrackablesCols.UseLocation, "Location", typeof(string)));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.UID, "GUID", typeof(string)));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.UID, "Guid", typeof(string)));
             return ColList;
         }
 
@@ -857,7 +857,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             SetEditMode(false);
             int affectedRows = 0;
-            string SelectQry = Queries.SelectDeviceByGUID(currentViewDevice.Guid);
+            string SelectQry = Queries.SelectDeviceByGuid(currentViewDevice.Guid);
             string InsertQry = Queries.SelectEmptyHistoricalTable;
             using (var trans = DBFactory.GetDatabase().StartTransaction())
             using (var conn = trans.Connection)
@@ -996,10 +996,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DeleteSelectedHistoricalEntry();
         }
 
-        private void GUIDLabel_Click(object sender, EventArgs e)
+        private void GuidLabel_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(GUIDLabel.Text);
-            OtherFunctions.Message("GUID Copied to clipboard.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Clipboard", this);
+            Clipboard.SetText(GuidLabel.Text);
+            OtherFunctions.Message("Guid Copied to clipboard.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Clipboard", this);
         }
 
         private void RefreshToolButton_Click(object sender, EventArgs e)
@@ -1137,7 +1137,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        void ILiveBox.LoadDevice(string deviceGUID)
+        void ILiveBox.LoadDevice(string deviceGuid)
         {
             throw new NotImplementedException();
         }

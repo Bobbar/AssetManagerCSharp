@@ -194,7 +194,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         DataTable rtables = new DataTable();
                         foreach (DataRow row in results.Rows)
                         {
-                            DataTable requestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(row[SibiRequestItemsCols.RequestUID].ToString()));
+                            DataTable requestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGuid(row[SibiRequestItemsCols.RequestUID].ToString()));
                             // Merge results into one table.
                             rtables.Merge(requestTable);
                         }

@@ -133,7 +133,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                 if (blah == DialogResult.Yes)
                 {
                     UserGrid.EndEdit();
-                    AddGUIDs();
+                    AddGuids();
                     DBFactory.GetDatabase().UpdateTable(Queries.SelectUsersTable, (DataTable)UserGrid.DataSource);
                     ListUsers();
                     SecurityTools.GetUserAccess();
@@ -148,7 +148,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             }
         }
 
-        private void AddGUIDs()
+        private void AddGuids()
         {
             foreach (DataGridViewRow row in UserGrid.Rows)
             {

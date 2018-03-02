@@ -164,7 +164,7 @@ namespace AssetManager.Security
                         LocalUserAccess.UserName = r[UsersCols.UserName].ToString();
                         LocalUserAccess.Fullname = r[UsersCols.FullName].ToString();
                         LocalUserAccess.AccessLevel = (int)r[UsersCols.AccessLevel];
-                        LocalUserAccess.GUID = r[UsersCols.UID].ToString();
+                        LocalUserAccess.Guid = r[UsersCols.UID].ToString();
                     }
                     else
                     {

@@ -10,10 +10,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 {
     public partial class ViewTrackingForm : ExtendedForm
     {
-        public ViewTrackingForm(ExtendedForm parentForm, string entryGUID, Device device) : base(parentForm,entryGUID)
+        public ViewTrackingForm(ExtendedForm parentForm, string entryGuid, Device device) : base(parentForm,entryGuid)
         {
             InitializeComponent();
-            ViewTrackingEntry(entryGUID, device);
+            ViewTrackingEntry(entryGuid, device);
             Show();
         }
 
@@ -22,7 +22,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             try
             {
                 OtherFunctions.SetWaitCursor(true, this);
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTrackingEntryByGUID(entryUID)))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTrackingEntryByGuid(entryUID)))
                 {
                     foreach (DataRow r in results.Rows)
                     {
@@ -37,7 +37,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                             txtCheckType.BackColor = Colors.CheckOut;
                         }
                         txtDescription.Text = device.Description;
-                        txtGUID.Text = DataConsistency.NoNull(r[TrackablesCols.DeviceUID]);
+                        txtGuid.Text = DataConsistency.NoNull(r[TrackablesCols.DeviceUID]);
                         txtCheckOutUser.Text = DataConsistency.NoNull(r[TrackablesCols.CheckoutUser]);
                         txtCheckInUser.Text = DataConsistency.NoNull(r[TrackablesCols.CheckinUser]);
                         txtLocation.Text = DataConsistency.NoNull(r[TrackablesCols.UseLocation]);
@@ -47,7 +47,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         txtSerial.Text = device.Serial;
                         txtCheckInTime.Text = DataConsistency.NoNull(r[TrackablesCols.CheckinTime]);
                         txtNotes.Text = DataConsistency.NoNull(r[TrackablesCols.Notes]);
-                        txtEntryGUID.Text = DataConsistency.NoNull(r[TrackablesCols.UID]);
+                        txtEntryGuid.Text = DataConsistency.NoNull(r[TrackablesCols.UID]);
                         this.Text = this.Text + " - " + DataConsistency.NoNull(r[TrackablesCols.DateStamp]);
                     }
                 }

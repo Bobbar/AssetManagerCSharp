@@ -9,7 +9,7 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
 {
     public interface ILiveBox
     {
-        void LoadDevice(string deviceGUID);
+        void LoadDevice(string deviceGuid);
 
         void DynamicSearch();
 

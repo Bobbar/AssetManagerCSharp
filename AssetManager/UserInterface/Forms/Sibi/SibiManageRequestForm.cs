@@ -154,7 +154,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             OtherFunctions.SetWaitCursor(true, this);
             try
             {
-                using (DataTable RequestResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(RequestUID)))
+                using (DataTable RequestResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGuid(RequestUID)))
                 using (DataTable RequestItemsResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), RequestUID)))
                 {
                     RequestResults.TableName = SibiRequestCols.TableName;
@@ -194,7 +194,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private bool ConcurrencyCheck()
         {
-            using (var RequestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(CurrentRequest.Guid)))
+            using (var RequestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGuid(CurrentRequest.Guid)))
             using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.Guid)))
             {
                 RequestTable.TableName = SibiRequestCols.TableName;
@@ -1427,7 +1427,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     {
                         return;
                     }
-                    string RequestUpdateQry = Queries.SelectSibiRequestsByGUID(CurrentRequest.Guid);
+                    string RequestUpdateQry = Queries.SelectSibiRequestsByGuid(CurrentRequest.Guid);
                     string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.Guid);
 
                     DBFactory.GetDatabase().UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans);

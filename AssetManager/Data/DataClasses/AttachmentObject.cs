@@ -56,7 +56,7 @@ namespace AssetManager.Data.Classes
             _dataStream = _fileInfo.OpenRead();
         }
 
-        public Attachment(string newFile, string folderGUID, AttachmentsBaseCols attachTable)
+        public Attachment(string newFile, string folderGuid, AttachmentsBaseCols attachTable)
         {
             _fileInfo = new FileInfo(newFile);
             _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
@@ -66,7 +66,7 @@ namespace AssetManager.Data.Classes
             _fileSize = Convert.ToInt32(_fileInfo.Length);
             _extention = _fileInfo.Extension;
             _folder = new Folder();
-            _folderGuid = folderGUID;
+            _folderGuid = folderGuid;
             _attachTable = attachTable;
             _dataStream = _fileInfo.OpenRead();
         }
@@ -87,7 +87,7 @@ namespace AssetManager.Data.Classes
             _folderGuid = TableRow[attachTable.FKey].ToString();
         }
 
-        public Attachment(string newFile, string folderGUID, Folder selectedFolder, AttachmentsBaseCols attachTable)
+        public Attachment(string newFile, string folderGuid, Folder selectedFolder, AttachmentsBaseCols attachTable)
         {
             _fileInfo = new FileInfo(newFile);
             _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
@@ -97,7 +97,7 @@ namespace AssetManager.Data.Classes
             _fileSize = Convert.ToInt32(_fileInfo.Length);
             _extention = _fileInfo.Extension;
             _folder = selectedFolder;
-            _folderGuid = folderGUID;
+            _folderGuid = folderGuid;
             _attachTable = attachTable;
             _dataStream = _fileInfo.OpenRead();
         }

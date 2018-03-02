@@ -89,7 +89,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolStrip1 = new AssetManager.UserInterface.CustomControls.OneClickToolStrip();
             this.AddDeviceTool = new System.Windows.Forms.ToolStripButton();
             this.AdminDropDown = new System.Windows.Forms.ToolStripDropDownButton();
-            this.txtGUID = new System.Windows.Forms.ToolStripTextBox();
+            this.txtGuid = new System.Windows.Forms.ToolStripTextBox();
             this.DatabaseToolCombo = new System.Windows.Forms.ToolStripComboBox();
             this.tsmUserManager = new System.Windows.Forms.ToolStripMenuItem();
             this.ReEnterLACredentialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -763,7 +763,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // AdminDropDown
             // 
             this.AdminDropDown.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.txtGUID,
+            this.txtGuid,
             this.DatabaseToolCombo,
             this.tsmUserManager,
             this.ReEnterLACredentialsToolStripMenuItem,
@@ -780,16 +780,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.AdminDropDown.Size = new System.Drawing.Size(143, 34);
             this.AdminDropDown.Text = "Admin Tools";
             // 
-            // txtGUID
+            // txtGuid
             // 
-            this.txtGUID.AutoSize = false;
-            this.txtGUID.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.txtGUID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtGUID.Name = "txtGUID";
-            this.txtGUID.Size = new System.Drawing.Size(150, 23);
-            this.txtGUID.ToolTipText = "GUID Lookup. (Press Enter)";
-            this.txtGUID.Visible = false;
-            this.txtGUID.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtGUID_KeyDown);
+            this.txtGuid.AutoSize = false;
+            this.txtGuid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.txtGuid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtGuid.Name = "txtGuid";
+            this.txtGuid.Size = new System.Drawing.Size(150, 23);
+            this.txtGuid.ToolTipText = "Guid Lookup. (Press Enter)";
+            this.txtGuid.Visible = false;
+            this.txtGuid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtGuid_KeyDown);
             // 
             // DatabaseToolCombo
             // 
@@ -950,7 +950,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal System.Windows.Forms.ToolStripDropDownButton AdminDropDown;
         internal System.Windows.Forms.GroupBox GroupBox2;
         internal System.Windows.Forms.CheckBox chkTrackables;
-        internal System.Windows.Forms.ToolStripTextBox txtGUID;
+        internal System.Windows.Forms.ToolStripTextBox txtGuid;
         internal System.Windows.Forms.ComboBox cmbOSType;
         internal System.Windows.Forms.Label Label5;
         internal System.Windows.Forms.Label Label6;
