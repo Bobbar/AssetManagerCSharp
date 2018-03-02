@@ -59,7 +59,7 @@ namespace AssetManager.Helpers
         {
             if (device != null)
             {
-                if (!FormIsOpenByUID(typeof(ViewDeviceForm), device.GUID))
+                if (!FormIsOpenByUID(typeof(ViewDeviceForm), device.Guid))
                 {
                     new ViewDeviceForm(parentForm, device);
                 }

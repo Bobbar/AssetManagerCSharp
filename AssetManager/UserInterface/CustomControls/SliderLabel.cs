@@ -633,11 +633,6 @@ namespace AssetManager.UserInterface.CustomControls
                 _x = x;
                 _y = y;
             }
-
-            public PointF ToPointF()
-            {
-                return new PointF(_x, _y);
-            }
         }
 
         #endregion Structs

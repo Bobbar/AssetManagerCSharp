@@ -63,7 +63,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             checkData.UseLocation = txtUseLocation.Text.Trim().ToUpper();
             checkData.UseReason = txtUseReason.Text.Trim().ToUpper();
             checkData.CheckinNotes = txtCheckInNotes.Text.Trim().ToUpper();
-            checkData.GUID = currentTrackingDevice.GUID;
+            checkData.Guid = currentTrackingDevice.Guid;
             checkData.CheckoutUser = NetworkInfo.LocalDomainUser;
             checkData.CheckinTime = dtCheckIn.Value;
             checkData.CheckinUser = NetworkInfo.LocalDomainUser;
@@ -131,7 +131,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                         OtherFunctions.SetWaitCursor(true, this);
                         int rows = 0;
-                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, currentTrackingDevice.GUID, trans);
+                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, currentTrackingDevice.Guid, trans);
 
                         ParamCollection checkParams = new ParamCollection();
                         checkParams.Add(TrackablesCols.CheckType, CheckType.Checkout);
@@ -140,7 +140,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         checkParams.Add(TrackablesCols.CheckoutUser, checkData.CheckoutUser);
                         checkParams.Add(TrackablesCols.UseLocation, checkData.UseLocation);
                         checkParams.Add(TrackablesCols.Notes, checkData.UseReason);
-                        checkParams.Add(TrackablesCols.DeviceUID, checkData.GUID);
+                        checkParams.Add(TrackablesCols.DeviceUID, checkData.Guid);
                         rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
 
                         if (rows == 2)
@@ -182,7 +182,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                         OtherFunctions.SetWaitCursor(true, this);
                         int rows = 0;
-                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, currentTrackingDevice.GUID, trans);
+                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, currentTrackingDevice.Guid, trans);
 
                         ParamCollection checkParams = new ParamCollection();
 
@@ -194,7 +194,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         checkParams.Add(TrackablesCols.CheckinUser, checkData.CheckinUser);
                         checkParams.Add(TrackablesCols.UseLocation, checkData.UseLocation);
                         checkParams.Add(TrackablesCols.Notes, checkData.CheckinNotes);
-                        checkParams.Add(TrackablesCols.DeviceUID, checkData.GUID);
+                        checkParams.Add(TrackablesCols.DeviceUID, checkData.Guid);
                         rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
 
                         if (rows == 2)
@@ -245,6 +245,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void txtCheckInNotes_LostFocus(object sender, EventArgs e)
         {
             txtCheckInNotes.Text = txtCheckInNotes.Text.Trim().ToUpper();
+        }
+
+        private void TrackDeviceForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            checkData.Dispose();
         }
     }
 }

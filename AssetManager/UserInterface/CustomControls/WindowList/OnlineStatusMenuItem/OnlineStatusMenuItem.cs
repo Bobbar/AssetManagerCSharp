@@ -11,24 +11,13 @@ namespace AssetManager.UserInterface.CustomControls
 
         private IOnlineStatus onlineStatusInterface = null;
 
-        public IOnlineStatus OnlineStatusInterface
+        public void SetOnlineStatusInterface(IOnlineStatus statusObject)
         {
-            get
-            {
-                return onlineStatusInterface;
-            }
-
-            set
-            {
-                if (value != null)
-                {
-                    onlineStatusInterface = value;
-                    onlineStatusInterface.OnlineStatusChanged -= OnlineStatusChanged;
-                    onlineStatusInterface.OnlineStatusChanged += OnlineStatusChanged;
-                }
-            }
+            onlineStatusInterface = statusObject;
+            onlineStatusInterface.OnlineStatusChanged -= OnlineStatusChanged;
+            onlineStatusInterface.OnlineStatusChanged += OnlineStatusChanged;
         }
-
+        
         public OnlineStatusMenuItem() : base()
         {
         }

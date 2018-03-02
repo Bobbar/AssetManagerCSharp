@@ -13,6 +13,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             {
                 if (disposing && components != null)
                 {
+                    MyUpdater.Dispose();
                     components.Dispose();
                 }
             }

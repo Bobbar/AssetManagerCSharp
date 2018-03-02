@@ -52,37 +52,30 @@ namespace AssetManager.Data.Functions
             {
                 string qry = "SELECT " + BuildSelectString(table) + " FROM " + table.TableName + " WHERE ";
                 qry += BuildFieldString(table);
-                //using (MySQLDatabase MySQLDB = new MySQLDatabase())
-                //{
-                    using (var cmd = DBFactory.GetMySqlDatabase().GetCommand(qry))
-                    {
-                        cmd.AddParameterWithValue("@" + "SEARCHVAL", _searchString);
-                        var results = DBFactory.GetMySqlDatabase().DataTableFromCommand(cmd);
-                        results.TableName = table.TableName;
-                        resultsList.Add(results);
-                        results.Dispose();
-                    }
-                //}
+                using (var cmd = DBFactory.GetMySqlDatabase().GetCommand(qry))
+                {
+                    cmd.AddParameterWithValue("@" + "SEARCHVAL", _searchString);
+                    var results = DBFactory.GetMySqlDatabase().DataTableFromCommand(cmd);
+                    results.TableName = table.TableName;
+                    resultsList.Add(results);
+                    results.Dispose();
+                }
             }
             return resultsList;
         }
 
         public DataTable GetSingleTableResults(string searchString, string tableName)
         {
-            List<DataTable> resultsList = new List<DataTable>();
             var searchTableInfo = new TableInfo(tableName, GetColumns(tableName));
             string qry = "SELECT " + BuildSelectString(searchTableInfo) + " FROM " + searchTableInfo.TableName + " WHERE ";
             qry += BuildFieldString(searchTableInfo);
-            //using (MySQLDatabase MySQLDB = new MySQLDatabase())
-            //{
-                using (var cmd = DBFactory.GetMySqlDatabase().GetCommand(qry))
-                {
-                    cmd.AddParameterWithValue("@" + "SEARCHVAL", searchString);
-                    var results = DBFactory.GetMySqlDatabase().DataTableFromCommand(cmd);
-                    results.TableName = searchTableInfo.TableName;
-                    return results;
-                }
-            //}
+            using (var cmd = DBFactory.GetMySqlDatabase().GetCommand(qry))
+            {
+                cmd.AddParameterWithValue("@" + "SEARCHVAL", searchString);
+                var results = DBFactory.GetMySqlDatabase().DataTableFromCommand(cmd);
+                results.TableName = searchTableInfo.TableName;
+                return results;
+            }
         }
 
         private string BuildFieldString(TableInfo table)

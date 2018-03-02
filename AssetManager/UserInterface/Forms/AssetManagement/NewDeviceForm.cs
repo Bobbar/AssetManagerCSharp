@@ -34,7 +34,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                
         private int replacementYears = 4;
         private DBControlParser controlParser;
-        private Device device = new Device();
         private LiveBox liveBox;
         private string newUID;
 

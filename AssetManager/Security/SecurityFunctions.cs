@@ -19,7 +19,10 @@ namespace AssetManager.Security
 {
     public static class SecurityTools
     {
-        public static NetworkCredential AdminCreds = null;
+        private static NetworkCredential adminCreds = null;
+
+        public static NetworkCredential AdminCreds { get { return adminCreds; } }
+
         private static Dictionary<string, Data.Classes.AccessGroup> AccessGroups = new Dictionary<string, Data.Classes.AccessGroup>();
         private static LocalUser LocalUserAccess;
 
@@ -34,7 +37,7 @@ namespace AssetManager.Security
                     NewGetCreds.ShowDialog();
                     if (NewGetCreds.DialogResult == DialogResult.OK)
                     {
-                        AdminCreds = NewGetCreds.Credentials;
+                        adminCreds = NewGetCreds.Credentials;
                     }
                     else
                     {
@@ -78,7 +81,7 @@ namespace AssetManager.Security
                 // Return true when we cannot contact the server so the user doesn't get prompted repeatedly.
                 return true;
             }
-         
+
         }
 
         public static bool IsAdministrator()
@@ -87,15 +90,12 @@ namespace AssetManager.Security
             var principal = new WindowsPrincipal(identity);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
-        
+
         public static void ClearAdminCreds()
         {
-            AdminCreds = null;
+            adminCreds = null;
         }
-
-
-
-
+        
         public static string DecodePassword(string cypherString)
         {
             using (Simple3Des wrapper = new Simple3Des(CryptKey))

@@ -10,7 +10,7 @@ namespace AssetManager.Data.Functions
 {
     public static class DBCacheFunctions
     {
-        public static string CacheVersionGUID;
+        private static string CacheVersionGUID;
 
         public static void RefreshLocalDBCache()
         {

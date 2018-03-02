@@ -18,7 +18,7 @@ namespace AssetManager.Data.Functions
 
         public static async Task<bool> HasPingHistory(Device device)
         {
-            string query = "SELECT device_guid FROM device_ping_history WHERE device_guid = '" + device.GUID + "'";
+            string query = "SELECT device_guid FROM device_ping_history WHERE device_guid = '" + device.Guid + "'";
 
             return await Task.Run(() =>
               {
@@ -33,7 +33,7 @@ namespace AssetManager.Data.Functions
 
         public static void ShowPingHistory(ExtendedForm parentForm, Device device)
         {
-            string query = "SELECT timestamp, hostname, ip FROM device_ping_history WHERE device_guid = '" + device.GUID + "' ORDER BY timestamp DESC";
+            string query = "SELECT timestamp, hostname, ip FROM device_ping_history WHERE device_guid = '" + device.Guid + "' ORDER BY timestamp DESC";
 
             using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
             {
@@ -240,7 +240,7 @@ namespace AssetManager.Data.Functions
                 switch (type)
                 {
                     case EntryType.Device:
-                        DeleteQuery = Queries.DeleteDeviceByGUID(sqlGUID);
+                        DeleteQuery = Queries.DeleteDeviceByGuid(sqlGUID);
                         break;
 
                     case EntryType.Sibi:
@@ -300,12 +300,12 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                var AttachmentFolderID = GetSqlValue(attachment.AttachTable.TableName, attachment.AttachTable.FileUID, attachment.FileUID, attachment.AttachTable.FKey);
+                var AttachmentFolderID = GetSqlValue(attachment.AttachTable.TableName, attachment.AttachTable.FileUID, attachment.FileGuid, attachment.AttachTable.FKey);
                 //Delete FTP Attachment
-                if (FtpFunctions.DeleteFtpAttachment(attachment.FileUID, AttachmentFolderID))
+                if (FtpFunctions.DeleteFtpAttachment(attachment.FileGuid, AttachmentFolderID))
                 {
                     //delete SQL entry
-                    var SQLDeleteQry = "DELETE FROM " + attachment.AttachTable.TableName + " WHERE " + attachment.AttachTable.FileUID + "='" + attachment.FileUID + "'";
+                    var SQLDeleteQry = "DELETE FROM " + attachment.AttachTable.TableName + " WHERE " + attachment.AttachTable.FileUID + "='" + attachment.FileGuid + "'";
                     return DBFactory.GetDatabase().ExecuteNonQuery(SQLDeleteQry);
                 }
                 return -1;

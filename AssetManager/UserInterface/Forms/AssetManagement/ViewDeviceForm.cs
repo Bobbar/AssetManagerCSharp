@@ -111,7 +111,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 LoadHistoryAndFields();
                 if (currentViewDevice.IsTrackable)
                 {
-                    LoadTracking(currentViewDevice.GUID);
+                    LoadTracking(currentViewDevice.Guid);
                 }
                 SetPingHistoryLink();
                 SetTracking(currentViewDevice.IsTrackable, currentViewDevice.Tracking.IsCheckedOut);
@@ -150,14 +150,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 ActiveDirectoryBox.Visible = false;
                 remoteToolsControl.Visible = false;
-                currentViewDevice = new Device(currentViewDevice.GUID);
+                currentViewDevice = new Device(currentViewDevice.Guid);
                 LoadCurrentDevice();
             }
         }
 
         public void UpdateAttachCountHandler(object sender, EventArgs e)
         {
-            AssetManagerFunctions.SetAttachmentCount(AttachmentsToolButton, currentViewDevice.GUID, new DeviceAttachmentsCols());
+            AssetManagerFunctions.SetAttachmentCount(AttachmentsToolButton, currentViewDevice.Guid, new DeviceAttachmentsCols());
         }
 
         private void AcceptChanges()
@@ -267,9 +267,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private bool ConcurrencyCheck()
         {
-            using (var DeviceResults = GetDevicesTable(currentViewDevice.GUID))
+            using (var DeviceResults = GetDevicesTable(currentViewDevice.Guid))
             {
-                using (var HistoricalResults = GetHistoricalTable(currentViewDevice.GUID))
+                using (var HistoricalResults = GetHistoricalTable(currentViewDevice.Guid))
                 {
                     DeviceResults.TableName = DevicesCols.TableName;
                     HistoricalResults.TableName = HistoricalDevicesCols.TableName;
@@ -291,7 +291,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "WARNING", this);
             if (blah == DialogResult.Yes)
             {
-                if (AssetManagerFunctions.DeleteDevice(currentViewDevice.GUID))
+                if (AssetManagerFunctions.DeleteDevice(currentViewDevice.Guid))
                 {
                     OtherFunctions.Message("Device deleted successfully.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Device Deleted", this);
                     currentViewDevice = null;
@@ -299,7 +299,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 else
                 {
-                    Logging.Logger("*****DELETION ERROR******: " + currentViewDevice.GUID);
+                    Logging.Logger("*****DELETION ERROR******: " + currentViewDevice.Guid);
                     OtherFunctions.Message("Failed to delete device succesfully!  Please let Bobby Lovell know about this.", MessageBoxButtons.OK, MessageBoxIcon.Error, "Delete Failed", this);
                     currentViewDevice = null;
                 }
@@ -340,9 +340,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void SetEditMode(bool editMode)
+        private void SetEditMode(bool inEditMode)
         {
-            if (editMode)
+            if (inEditMode)
             {
                 this.editMode = true;
                 EnableControlsRecursive(this);
@@ -532,7 +532,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DBRow[HistoricalDevicesCols.ChangeType] = UpdateInfo.ChangeType;
             DBRow[HistoricalDevicesCols.Notes] = UpdateInfo.Note;
             DBRow[HistoricalDevicesCols.ActionUser] = NetworkInfo.LocalDomainUser;
-            DBRow[HistoricalDevicesCols.DeviceUID] = currentViewDevice.GUID;
+            DBRow[HistoricalDevicesCols.DeviceUID] = currentViewDevice.Guid;
             return tmpTable;
         }
 
@@ -607,7 +607,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void LoadHistoryAndFields()
         {
-            using (var HistoricalResults = GetHistoricalTable(currentViewDevice.GUID))
+            using (var HistoricalResults = GetHistoricalTable(currentViewDevice.Guid))
             {
                 currentHash = GetHash(currentViewDevice.PopulatingTable, HistoricalResults);
                 controlParser.FillDBFields(currentViewDevice.PopulatingTable);
@@ -660,7 +660,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewHistoryForm), entryUID))
             {
                 Waiting();
-                ViewHistoryForm NewEntry = new ViewHistoryForm(this, entryUID, currentViewDevice.GUID);
+                new ViewHistoryForm(this, entryUID, currentViewDevice.Guid);
                 DoneWaiting();
             }
         }
@@ -668,7 +668,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void NewTrackingView(string GUID)
         {
             Waiting();
-            ViewTrackingForm NewTracking = new ViewTrackingForm(this, GUID, currentViewDevice);
+            new ViewTrackingForm(this, GUID, currentViewDevice);
             DoneWaiting();
         }
 
@@ -695,7 +695,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiManageRequestForm), SibiUID))
                         {
-                            SibiManageRequestForm NewRequest = new SibiManageRequestForm(this, SibiUID);
+                            new SibiManageRequestForm(this, SibiUID);
                         }
                     }
                 }
@@ -721,7 +721,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 if (!string.IsNullOrEmpty(currentViewDevice.HostName))
                 {
 
-                    if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.vintondd)
+                    if (ServerInfo.CurrentDataBase == Database.vintondd)
                     {
                         if (SecurityTools.VerifyAdminCreds("Credentials for Vinton AD"));
                         {
@@ -834,7 +834,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.Tracking);
 
             Waiting();
-            TrackDeviceForm NewTracking = new TrackDeviceForm(currentViewDevice, this);
+            new TrackDeviceForm(currentViewDevice, this);
             DoneWaiting();
         }
 
@@ -857,7 +857,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             SetEditMode(false);
             int affectedRows = 0;
-            string SelectQry = Queries.SelectDeviceByGUID(currentViewDevice.GUID);
+            string SelectQry = Queries.SelectDeviceByGUID(currentViewDevice.Guid);
             string InsertQry = Queries.SelectEmptyHistoricalTable;
             using (var trans = DBFactory.GetDatabase().StartTransaction())
             using (var conn = trans.Connection)
@@ -897,7 +897,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
             if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
-                AttachmentsForm NewAttachments = new AttachmentsForm(this, new DeviceAttachmentsCols(), currentViewDevice, UpdateAttachCountHandler);
+                new AttachmentsForm(this, new DeviceAttachmentsCols(), currentViewDevice, UpdateAttachCountHandler);
             }
         }
 
@@ -915,7 +915,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void AssetDisposalFormToolItem_Click(object sender, EventArgs e)
         {
-            PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.DisposeForm);
+            new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.DisposeForm);
         }
 
         private void AttachmentsToolButton_Click(object sender, EventArgs e)
@@ -1055,7 +1055,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (!string.IsNullOrEmpty(currentViewDevice.PO))
             {
-                PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.InputForm);
+                new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.InputForm);
             }
             else
             {
@@ -1065,7 +1065,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void AssetTransferFormToolItem_Click(object sender, EventArgs e)
         {
-            PdfFormFilling PDFForm = new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.TransferForm);
+            new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.TransferForm);
         }
 
         private void PhoneNumberTextBox_Leave(object sender, EventArgs e)

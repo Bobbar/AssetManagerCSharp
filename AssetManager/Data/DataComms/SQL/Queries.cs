@@ -7,23 +7,23 @@ namespace AssetManager.Data.Communications
         #region DeviceQueries
 
         /// <summary>
-        /// SELECT * FROM <see cref="HistoricalDevicesCols.TableName"/> WHERE <see cref="HistoricalDevicesCols.HistoryEntryUID"/> = <paramref name="entryGUID"/>
+        /// SELECT * FROM <see cref="HistoricalDevicesCols.TableName"/> WHERE <see cref="HistoricalDevicesCols.HistoryEntryUID"/> = <paramref name="entryGuid"/>
         /// </summary>
-        /// <param name="entryGUID"></param>
+        /// <param name="entryGuid"></param>
         /// <returns></returns>
-        public static string SelectHistoricalDeviceEntry(string entryGUID)
+        public static string SelectHistoricalDeviceEntry(string entryGuid)
         {
-            return "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + entryGUID + "'";
+            return "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + entryGuid + "'";
         }
 
         /// <summary>
-        /// SELECT * FROM <see cref="DevicesCols.TableName"/> WHERE <see cref="DevicesCols.TableName"/> = <paramref name="deviceGUID"/>
+        /// SELECT * FROM <see cref="DevicesCols.TableName"/> WHERE <see cref="DevicesCols.TableName"/> = <paramref name="deviceGuid"/>
         /// </summary>
-        /// <param name="deviceGUID"></param>
+        /// <param name="deviceGuid"></param>
         /// <returns></returns>
-        public static string SelectDeviceByGUID(string deviceGUID)
+        public static string SelectDeviceByGuid(string deviceGuid)
         {
-            return "SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + " = '" + deviceGUID + "'";
+            return "SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + " = '" + deviceGuid + "'";
         }
 
         /// <summary>
@@ -47,44 +47,44 @@ namespace AssetManager.Data.Communications
         public static string SelectEmptyHistoricalTable { get; } = "SELECT * FROM " + HistoricalDevicesCols.TableName + " LIMIT 0";
 
         /// <summary>
-        /// SELECT * FROM <see cref="TrackablesCols.TableName"/> WHERE <see cref="TrackablesCols.DeviceUID"/> = <paramref name="deviceGUID"/> ORDER BY <see cref="TrackablesCols.DateStamp"/> DESC
+        /// SELECT * FROM <see cref="TrackablesCols.TableName"/> WHERE <see cref="TrackablesCols.DeviceUID"/> = <paramref name="deviceGuid"/> ORDER BY <see cref="TrackablesCols.DateStamp"/> DESC
         /// </summary>
-        /// <param name="deviceGUID"></param>
+        /// <param name="deviceGuid"></param>
         /// <returns></returns>
-        public static string SelectTrackingByDevGUID(string deviceGUID)
+        public static string SelectTrackingByDevGuid(string deviceGuid)
         {
-            return "SELECT * FROM " + TrackablesCols.TableName + " WHERE " + TrackablesCols.DeviceUID + " = '" + deviceGUID + "' ORDER BY " + TrackablesCols.DateStamp + " DESC";
+            return "SELECT * FROM " + TrackablesCols.TableName + " WHERE " + TrackablesCols.DeviceUID + " = '" + deviceGuid + "' ORDER BY " + TrackablesCols.DateStamp + " DESC";
         }
 
         /// <summary>
-        /// SELECT * FROM <see cref="TrackablesCols.TableName"/> WHERE <see cref="TrackablesCols.UID"/> = <paramref name="entryGUID"/>
+        /// SELECT * FROM <see cref="TrackablesCols.TableName"/> WHERE <see cref="TrackablesCols.UID"/> = <paramref name="entryGuid"/>
         /// </summary>
-        /// <param name="entryGUID"></param>
+        /// <param name="entryGuid"></param>
         /// <returns></returns>
-        public static string SelectTrackingEntryByGUID(string entryGUID)
+        public static string SelectTrackingEntryByGuid(string entryGuid)
         {
-            return "SELECT * FROM " + TrackablesCols.TableName + " WHERE  " + TrackablesCols.UID + " = '" + entryGUID + "'";
+            return "SELECT * FROM " + TrackablesCols.TableName + " WHERE  " + TrackablesCols.UID + " = '" + entryGuid + "'";
         }
 
         /// <summary>
-        /// SELECT * FROM <see cref="HistoricalDevicesCols.TableName"/> WHERE <see cref="DevicesBaseCols.DeviceUID"/> = <paramref name="deviceGUID"/> ORDER BY <see cref=" HistoricalDevicesCols.ActionDateTime"/> DESC
+        /// SELECT * FROM <see cref="HistoricalDevicesCols.TableName"/> WHERE <see cref="DevicesBaseCols.DeviceUID"/> = <paramref name="deviceGuid"/> ORDER BY <see cref=" HistoricalDevicesCols.ActionDateTime"/> DESC
         /// </summary>
-        /// <param name="deviceGUID"></param>
+        /// <param name="deviceGuid"></param>
         /// <returns></returns>
-        public static string SelectDeviceHistoricalTable(string deviceGUID)
+        public static string SelectDeviceHistoricalTable(string deviceGuid)
         {
-            return "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.DeviceUID + " = '" + deviceGUID + "' ORDER BY " + HistoricalDevicesCols.ActionDateTime + " DESC";
+            return "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.DeviceUID + " = '" + deviceGuid + "' ORDER BY " + HistoricalDevicesCols.ActionDateTime + " DESC";
         }
 
         /// <summary>
-        /// SELECT * FROM <see cref="HistoricalDevicesCols.TableName"/> WHERE <see cref="DevicesBaseCols.DeviceUID"/> = <paramref name="deviceGUID"/> AND <see cref="HistoricalDevicesCols.ActionDateTime"/> "LESS THAN" <paramref name="startDate"/> ORDER BY <see cref="HistoricalDevicesCols.ActionDateTime"/> DESC
+        /// SELECT * FROM <see cref="HistoricalDevicesCols.TableName"/> WHERE <see cref="DevicesBaseCols.DeviceUID"/> = <paramref name="deviceGuid"/> AND <see cref="HistoricalDevicesCols.ActionDateTime"/> "LESS THAN" <paramref name="startDate"/> ORDER BY <see cref="HistoricalDevicesCols.ActionDateTime"/> DESC
         /// </summary>
-        /// <param name="deviceGUID"></param>
+        /// <param name="deviceGuid"></param>
         /// <param name="startDate"></param>
         /// <returns></returns>
-        public static string SelectDevHistoricalEntriesOlderThan(string deviceGUID, DateTime startDate)
+        public static string SelectDevHistoricalEntriesOlderThan(string deviceGuid, DateTime startDate)
         {
-            return "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.DeviceUID + " = '" + deviceGUID + "' AND " + HistoricalDevicesCols.ActionDateTime + " < '" + startDate.ToString(DataConsistency.strDBDateTimeFormat) + "' ORDER BY " + HistoricalDevicesCols.ActionDateTime + " DESC";
+            return "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.DeviceUID + " = '" + deviceGuid + "' AND " + HistoricalDevicesCols.ActionDateTime + " < '" + startDate.ToString(DataConsistency.strDBDateTimeFormat) + "' ORDER BY " + HistoricalDevicesCols.ActionDateTime + " DESC";
         }
 
         /// <summary>
@@ -93,23 +93,23 @@ namespace AssetManager.Data.Communications
         public static string SelectDevicesPartial { get; } = "SELECT * FROM " + DevicesCols.TableName + " WHERE ";
 
         /// <summary>
-        /// "DELETE FROM <see cref="DevicesCols.TableName"/> WHERE <see cref="DevicesCols.DeviceUID"/> = <paramref name="deviceGUID"/>
+        /// "DELETE FROM <see cref="DevicesCols.TableName"/> WHERE <see cref="DevicesCols.DeviceUID"/> = <paramref name="deviceGuid"/>
         /// </summary>
-        /// <param name="deviceGUID"></param>
+        /// <param name="deviceGuid"></param>
         /// <returns></returns>
-        public static string DeleteDeviceByGUID(string deviceGUID)
+        public static string DeleteDeviceByGuid(string deviceGuid)
         {
-            return "DELETE FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + "='" + deviceGUID + "'";
+            return "DELETE FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.DeviceUID + "='" + deviceGuid + "'";
         }
 
         /// <summary>
-        /// "DELETE FROM <see cref="HistoricalDevicesCols.TableName"/> WHERE <see cref="HistoricalDevicesCols.HistoryEntryUID"/> = <paramref name="entryGUID"/>
+        /// "DELETE FROM <see cref="HistoricalDevicesCols.TableName"/> WHERE <see cref="HistoricalDevicesCols.HistoryEntryUID"/> = <paramref name="entryGuid"/>
         /// </summary>
-        /// <param name="entryGUID"></param>
+        /// <param name="entryGuid"></param>
         /// <returns></returns>
-        public static string DeleteHistoricalEntryByGUID(string entryGUID)
+        public static string DeleteHistoricalEntryByGuid(string entryGuid)
         {
-            return "DELETE FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + entryGUID + "'";
+            return "DELETE FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.HistoryEntryUID + "='" + entryGuid + "'";
         }
 
         #endregion DeviceQueries
@@ -117,13 +117,13 @@ namespace AssetManager.Data.Communications
         #region SibiQueries
 
         /// <summary>
-        /// SELECT * FROM <see cref="SibiRequestItemsCols.TableName"/> INNER JOIN <see cref="SibiRequestCols.TableName"/> ON <see cref="SibiRequestItemsCols.RequestUID"/> = <see cref="SibiRequestCols.UID"/> WHERE <see cref="SibiRequestItemsCols.ItemUID"/> = <paramref name="itemGUID"/>
+        /// SELECT * FROM <see cref="SibiRequestItemsCols.TableName"/> INNER JOIN <see cref="SibiRequestCols.TableName"/> ON <see cref="SibiRequestItemsCols.RequestUID"/> = <see cref="SibiRequestCols.UID"/> WHERE <see cref="SibiRequestItemsCols.ItemUID"/> = <paramref name="itemGuid"/>
         /// </summary>
-        /// <param name="itemGUID"></param>
+        /// <param name="itemGuid"></param>
         /// <returns></returns>
-        public static string SelectSibiRequestAndItemByItemGUID(string itemGUID)
+        public static string SelectSibiRequestAndItemByItemGuid(string itemGuid)
         {
-            return "SELECT * FROM " + SibiRequestItemsCols.TableName + " INNER JOIN " + SibiRequestCols.TableName + " ON " + SibiRequestItemsCols.RequestUID + " = " + SibiRequestCols.UID + " WHERE " + SibiRequestItemsCols.ItemUID + "='" + itemGUID + "'";
+            return "SELECT * FROM " + SibiRequestItemsCols.TableName + " INNER JOIN " + SibiRequestCols.TableName + " ON " + SibiRequestItemsCols.RequestUID + " = " + SibiRequestCols.UID + " WHERE " + SibiRequestItemsCols.ItemUID + "='" + itemGuid + "'";
         }
 
         /// <summary>
@@ -147,13 +147,13 @@ namespace AssetManager.Data.Communications
         }
 
         /// <summary>
-        /// SELECT * FROM <see cref="SibiRequestCols.TableName"/> WHERE <see cref="SibiRequestCols.UID"/> = <see cref="requestGUID"/>
+        /// SELECT * FROM <see cref="SibiRequestCols.TableName"/> WHERE <see cref="SibiRequestCols.UID"/> = <see cref="requestGuid"/>
         /// </summary>
-        /// <param name="requestGUID"></param>
+        /// <param name="requestGuid"></param>
         /// <returns></returns>
-        public static string SelectSibiRequestsByGUID(string requestGUID)
+        public static string SelectSibiRequestsByGuid(string requestGuid)
         {
-            return "SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.UID + "='" + requestGUID + "'";
+            return "SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.UID + "='" + requestGuid + "'";
         }
 
         /// <summary>
@@ -172,54 +172,54 @@ namespace AssetManager.Data.Communications
         public static string SelectEmptySibiRequestTable { get; } = "SELECT * FROM " + SibiRequestCols.TableName + " LIMIT 0";
 
         /// <summary>
-        /// SELECT <paramref name="columnsString"/> FROM <see cref="SibiRequestItemsCols.TableName"/> WHERE <see cref="SibiRequestItemsCols.RequestUID"/> = <paramref name="requestGUID"/> ORDER BY <see cref="SibiRequestItemsCols.Timestamp"/>
+        /// SELECT <paramref name="columnsString"/> FROM <see cref="SibiRequestItemsCols.TableName"/> WHERE <see cref="SibiRequestItemsCols.RequestUID"/> = <paramref name="requestGuid"/> ORDER BY <see cref="SibiRequestItemsCols.Timestamp"/>
         /// </summary>
         /// <param name="columnsString"></param>
-        /// <param name="requestGUID"></param>
+        /// <param name="requestGuid"></param>
         /// <returns></returns>
-        public static string SelectSibiRequestItems(string columnsString, string requestGUID)
+        public static string SelectSibiRequestItems(string columnsString, string requestGuid)
         {
-            return "SELECT " + columnsString + " FROM " + SibiRequestItemsCols.TableName + " WHERE " + SibiRequestItemsCols.RequestUID + "='" + requestGUID + "' ORDER BY " + SibiRequestItemsCols.Timestamp;
+            return "SELECT " + columnsString + " FROM " + SibiRequestItemsCols.TableName + " WHERE " + SibiRequestItemsCols.RequestUID + "='" + requestGuid + "' ORDER BY " + SibiRequestItemsCols.Timestamp;
         }
 
         /// <summary>
-        /// SELECT * FROM <see cref="SibiNotesCols.TableName"/> WHERE <see cref="SibiNotesCols.RequestUID"/> = <paramref name="requestGUID"/> ORDER BY <see cref="SibiNotesCols.DateStamp"/> DESC
+        /// SELECT * FROM <see cref="SibiNotesCols.TableName"/> WHERE <see cref="SibiNotesCols.RequestUID"/> = <paramref name="requestGuid"/> ORDER BY <see cref="SibiNotesCols.DateStamp"/> DESC
         /// </summary>
-        /// <param name="requestGUID"></param>
+        /// <param name="requestGuid"></param>
         /// <returns></returns>
-        public static string SelectSibiNotes(string requestGUID)
+        public static string SelectSibiNotes(string requestGuid)
         {
-            return "SELECT * FROM " + SibiNotesCols.TableName + " WHERE " + SibiNotesCols.RequestUID + "='" + requestGUID + "' ORDER BY " + SibiNotesCols.DateStamp + " DESC";
+            return "SELECT * FROM " + SibiNotesCols.TableName + " WHERE " + SibiNotesCols.RequestUID + "='" + requestGuid + "' ORDER BY " + SibiNotesCols.DateStamp + " DESC";
         }
 
         /// <summary>
-        /// SELECT * FROM <see cref="SibiNotesCols.TableName"/> WHERE <see cref="SibiNotesCols.NoteUID"/> = <paramref name="noteGUID"/>
+        /// SELECT * FROM <see cref="SibiNotesCols.TableName"/> WHERE <see cref="SibiNotesCols.NoteUID"/> = <paramref name="noteGuid"/>
         /// </summary>
-        /// <param name="noteGUID"></param>
+        /// <param name="noteGuid"></param>
         /// <returns></returns>
-        public static string SelectNoteByGuid(string noteGUID)
+        public static string SelectNoteByGuid(string noteGuid)
         {
-            return "SELECT * FROM " + SibiNotesCols.TableName + " WHERE " + SibiNotesCols.NoteUID + "='" + noteGUID + "'";
+            return "SELECT * FROM " + SibiNotesCols.TableName + " WHERE " + SibiNotesCols.NoteUID + "='" + noteGuid + "'";
         }
 
         /// <summary>
-        /// DELETE FROM <see cref="SibiNotesCols.TableName"/> WHERE <see cref="SibiNotesCols.NoteUID"/> = <paramref name="noteGUID"/>
+        /// DELETE FROM <see cref="SibiNotesCols.TableName"/> WHERE <see cref="SibiNotesCols.NoteUID"/> = <paramref name="noteGuid"/>
         /// </summary>
-        /// <param name="noteGUID"></param>
+        /// <param name="noteGuid"></param>
         /// <returns></returns>
-        public static string DeleteSibiNote(string noteGUID)
+        public static string DeleteSibiNote(string noteGuid)
         {
-            return "DELETE FROM " + SibiNotesCols.TableName + " WHERE " + SibiNotesCols.NoteUID + "='" + noteGUID + "'";
+            return "DELETE FROM " + SibiNotesCols.TableName + " WHERE " + SibiNotesCols.NoteUID + "='" + noteGuid + "'";
         }
 
         /// <summary>
-        /// DELETE FROM <see cref="SibiRequestCols.TableName"/> WHERE <see cref="SibiRequestCols.UID"/> = <paramref name="requestGUID"/>
+        /// DELETE FROM <see cref="SibiRequestCols.TableName"/> WHERE <see cref="SibiRequestCols.UID"/> = <paramref name="requestGuid"/>
         /// </summary>
-        /// <param name="requestGUID"></param>
+        /// <param name="requestGuid"></param>
         /// <returns></returns>
-        public static string DeleteSibiRequestByGUID(string requestGUID)
+        public static string DeleteSibiRequestByGuid(string requestGuid)
         {
-            return "DELETE FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.UID + "='" + requestGUID + "'";
+            return "DELETE FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.UID + "='" + requestGuid + "'";
         }
 
         #endregion SibiQueries

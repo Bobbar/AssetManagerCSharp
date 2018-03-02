@@ -98,12 +98,12 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         private void StartUpdateByDevice(Device device)
         {
-            MyUpdates.Find(upd => upd.Device.GUID == device.GUID).StartUpdate();
+            MyUpdates.Find(upd => upd.Device.Guid == device.Guid).StartUpdate();
         }
 
         private bool Exists(Device device)
         {
-            return MyUpdates.Exists(upd => upd.Device.GUID == device.GUID);
+            return MyUpdates.Exists(upd => upd.Device.Guid == device.Guid);
         }
 
         public bool ActiveUpdates()

@@ -87,9 +87,9 @@ namespace AssetManager.Tools
             {
                 using (var rootDSE = new DirectoryEntry("LDAP://" + NetworkInfo.CurrentDomain + "/RootDSE"))
                 {
-                    if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.vintondd)
+                    if (ServerInfo.CurrentDataBase == Database.vintondd)
                     {
-                        if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.vintondd)
+                        if (ServerInfo.CurrentDataBase == Database.vintondd)
                         {
                             rootDSE.Username = SecurityTools.AdminCreds.UserName;
                             rootDSE.Password = SecurityTools.AdminCreds.Password;
@@ -101,7 +101,7 @@ namespace AssetManager.Tools
 
                     using (var searchRoot = new DirectoryEntry(domainRootADsPath))
                     {
-                        if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.vintondd)
+                        if (ServerInfo.CurrentDataBase == Database.vintondd)
                         {
                             searchRoot.Username = SecurityTools.AdminCreds.UserName;
                             searchRoot.Password = SecurityTools.AdminCreds.Password;

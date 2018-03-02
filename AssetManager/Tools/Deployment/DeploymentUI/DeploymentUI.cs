@@ -34,7 +34,7 @@ namespace AssetManager.Tools.Deployment
             {
                 if (powerShellWrapper == null)
                 {
-                    throw new Exception("Please call " + nameof(DeploymentUI.UsePowerShell) + " first.");
+                    throw new NotSupportedException("Please call " + nameof(DeploymentUI.UsePowerShell) + " first.");
                 }
                 return powerShellWrapper;
             }
@@ -46,7 +46,7 @@ namespace AssetManager.Tools.Deployment
             {
                 if (psExecWrapper == null)
                 {
-                    throw new Exception("Please call " + nameof(DeploymentUI.UsePsExec) + " first.");
+                    throw new NotSupportedException("Please call " + nameof(DeploymentUI.UsePsExec) + " first.");
                 }
                 return psExecWrapper;
             }
@@ -81,7 +81,6 @@ namespace AssetManager.Tools.Deployment
 
         private void InitLogWindow(ExtendedForm parentForm)
         {
-            this.parentForm = parentForm;
             logView = new ExtendedForm(parentForm);
             logView.FormClosing += new FormClosingEventHandler(LogClosed);
             logView.Text = "Deployment Log (Close to cancel)";
@@ -286,28 +285,19 @@ namespace AssetManager.Tools.Deployment
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
+                    logView.Dispose();
+                    RTBLog.Dispose();
+                    watchDogCancelTokenSource.Dispose();
+                    watchDogTask.Dispose();
                 }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
 
                 disposedValue = true;
             }
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
         }
 
         #endregion IDisposable Support

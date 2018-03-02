@@ -129,7 +129,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 IsNewRequest = true;
                 SetTitle(true);
                 CurrentRequest = new SibiRequest();
-                this.FormUID = CurrentRequest.GUID;
+                this.FormUID = CurrentRequest.Guid;
                 IsModifying = true;
                 //Set the datasource to a new empty DB table.
                 var EmptyTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectEmptySibiItemsTable(GridColumnFunctions.ColumnsString(RequestItemsColumns())));
@@ -164,7 +164,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     CollectRequestInfo(RequestResults, RequestItemsResults);
                     controlParser.FillDBFields(RequestResults);
                     SendToGrid(RequestItemsResults);
-                    LoadNotes(CurrentRequest.GUID);
+                    LoadNotes(CurrentRequest.Guid);
                     SetTitle(false);
                     UpdateAttachCountHandler(this, new EventArgs());
                     this.Show();
@@ -194,8 +194,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private bool ConcurrencyCheck()
         {
-            using (var RequestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID)))
-            using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID)))
+            using (var RequestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGUID(CurrentRequest.Guid)))
+            using (var ItemTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.Guid)))
             {
                 RequestTable.TableName = SibiRequestCols.TableName;
                 ItemTable.TableName = SibiRequestItemsCols.TableName;
@@ -210,7 +210,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         public void UpdateAttachCountHandler(object sender, EventArgs e)
         {
-            AssetManagerFunctions.SetAttachmentCount(cmdAttachments, CurrentRequest.GUID, new SibiAttachmentsCols());
+            AssetManagerFunctions.SetAttachmentCount(cmdAttachments, CurrentRequest.Guid, new SibiAttachmentsCols());
         }
 
         public void ClearAttachCount()
@@ -257,7 +257,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     string InsertRequestQry = Queries.SelectEmptySibiRequestTable;
                     string InsertRequestItemsQry = Queries.SelectEmptySibiItemsTable(GridColumnFunctions.ColumnsString(RequestItemsColumns()));
-                    DBFactory.GetDatabase().UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.GUID), trans);
+                    DBFactory.GetDatabase().UpdateTable(InsertRequestQry, GetInsertTable(InsertRequestQry, CurrentRequest.Guid), trans);
                     DBFactory.GetDatabase().UpdateTable(InsertRequestItemsQry, RequestData.RequestItems, trans);
                     pnlCreate.Visible = false;
                     trans.Commit();
@@ -281,13 +281,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
 
-                if (!string.IsNullOrEmpty(CurrentRequest.GUID) && !IsNewRequest)
+                if (!string.IsNullOrEmpty(CurrentRequest.Guid) && !IsNewRequest)
                 {
                     SibiNotesForm NewNote = new SibiNotesForm(this, CurrentRequest);
                     if (NewNote.DialogResult == DialogResult.OK)
                     {
-                        AddNewNote(NewNote.Request.GUID, NewNote.Note);
-                        LoadNotes(CurrentRequest.GUID);
+                        AddNewNote(NewNote.Request.Guid, NewNote.Note);
+                        LoadNotes(CurrentRequest.Guid);
                     }
                 }
                 else
@@ -315,7 +315,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     if (blah == DialogResult.Yes)
                     {
                         InsertPONumber(GetPO);
-                        OpenRequest(CurrentRequest.GUID);
+                        OpenRequest(CurrentRequest.Guid);
                     }
                     else
                     {
@@ -401,9 +401,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
             if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
-                if (!string.IsNullOrEmpty(CurrentRequest.GUID) && !IsNewRequest)
+                if (!string.IsNullOrEmpty(CurrentRequest.Guid) && !IsNewRequest)
                 {
-                    AttachmentsForm NewAttach = new AttachmentsForm(this, new SibiAttachmentsCols(), CurrentRequest, UpdateAttachCountHandler);
+                    new AttachmentsForm(this, new SibiAttachmentsCols(), CurrentRequest, UpdateAttachCountHandler);
                 }
             }
         }
@@ -432,7 +432,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 if (blah == DialogResult.Yes)
                 {
                     OtherFunctions.SetWaitCursor(true, this);
-                    if (AssetManagerFunctions.DeleteSibiRequest(CurrentRequest.GUID))
+                    if (AssetManagerFunctions.DeleteSibiRequest(CurrentRequest.Guid))
                     {
                         OtherFunctions.Message("Sibi Request deleted successfully.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Device Deleted", this);
                         CurrentRequest = null;
@@ -441,7 +441,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     }
                     else
                     {
-                        Logging.Logger("*****DELETION ERROR******: " + CurrentRequest.GUID);
+                        Logging.Logger("*****DELETION ERROR******: " + CurrentRequest.Guid);
                         OtherFunctions.Message("Failed to delete request successfully!  Please let Bobby Lovell know about this.", MessageBoxButtons.OK, MessageBoxIcon.Error, "Delete Failed", this);
                         CurrentRequest = null;
                         this.Dispose();
@@ -480,7 +480,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     if (!string.IsNullOrEmpty(NoteUID))
                     {
                         OtherFunctions.Message(DeleteNote(NoteUID) + " Rows affected.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Delete Item", this);
-                        OpenRequest(CurrentRequest.GUID);
+                        OpenRequest(CurrentRequest.Guid);
                     }
                 }
             }
@@ -505,7 +505,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
 
-            if (!string.IsNullOrEmpty(CurrentRequest.GUID) && !IsModifying)
+            if (!string.IsNullOrEmpty(CurrentRequest.Guid) && !IsModifying)
             {
                 SetModifyMode();
             }
@@ -522,7 +522,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
             SibiRequest request = new SibiRequest();
             request.RequestItems = (DataTable)RequestItemsGrid.DataSource;
-            request.GUID = CurrentRequest.GUID;
+            request.Guid = CurrentRequest.Guid;
 
             MarkupRequestItems(request.RequestItems);
 
@@ -547,7 +547,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         {
                             if (row[col] == null || string.IsNullOrEmpty(row[col].ToString()))
                             {
-                                row[SibiRequestItemsCols.RequestUID] = CurrentRequest.GUID;
+                                row[SibiRequestItemsCols.RequestUID] = CurrentRequest.Guid;
                             }
                         }
 
@@ -635,7 +635,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 var NoteUID = NotesGrid.CurrentRowStringValue(SibiNotesCols.NoteUID);
                 if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiNotesForm), NoteUID))
                 {
-                    SibiNotesForm ViewNote = new SibiNotesForm(this, NoteUID);
+                    new SibiNotesForm(this, NoteUID);
                 }
             }
             catch (Exception ex)
@@ -848,7 +848,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                AssetManagerFunctions.UpdateSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, PO, SibiRequestCols.UID, CurrentRequest.GUID);
+                AssetManagerFunctions.UpdateSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, PO, SibiRequestCols.UID, CurrentRequest.Guid);
             }
             catch (Exception ex)
             {
@@ -925,7 +925,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         public override void RefreshData()
         {
-            OpenRequest(CurrentRequest.GUID);
+            OpenRequest(CurrentRequest.Guid);
         }
 
         private List<GridColumnAttrib> NotesGridColumns()
@@ -1041,7 +1041,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                             }
                             else if (col.ColumnName == SibiRequestItemsCols.RequestUID)
                             {
-                                ItemArr.Add(CurrentRequest.GUID);
+                                ItemArr.Add(CurrentRequest.Guid);
                             }
                             else
                             {
@@ -1256,7 +1256,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             if (!IsNewRequest)
             {
-                OpenRequest(CurrentRequest.GUID);
+                OpenRequest(CurrentRequest.Guid);
             }
         }
 
@@ -1360,7 +1360,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void txtReqNumber_Click(object sender, EventArgs e)
+        private async void txtReqNumber_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1368,7 +1368,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 string ReqNum = txtReqNumber.Text.Trim();
                 if (!IsModifying && !string.IsNullOrEmpty(ReqNum))
                 {
-                    MunisFunctions.NewMunisReqSearch(ReqNum, CurrentRequest.NeedByDate.Year.ToString(), this);
+                   var unused = await MunisFunctions.NewMunisReqSearch(ReqNum, CurrentRequest.NeedByDate.Year.ToString(), this);
                 }
             }
             catch (Exception ex)
@@ -1427,8 +1427,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     {
                         return;
                     }
-                    string RequestUpdateQry = Queries.SelectSibiRequestsByGUID(CurrentRequest.GUID);
-                    string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.GUID);
+                    string RequestUpdateQry = Queries.SelectSibiRequestsByGUID(CurrentRequest.Guid);
+                    string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), CurrentRequest.Guid);
 
                     DBFactory.GetDatabase().UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans);
                     DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans);
@@ -1559,6 +1559,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void SibiManageRequestForm_FormClosed(object sender, FormClosedEventArgs e)
         {
+            CurrentRequest.Dispose();
             MyMunisToolBar.Dispose();
             MyWindowList.Dispose();
             Helpers.ChildFormControl.CloseChildren(this);

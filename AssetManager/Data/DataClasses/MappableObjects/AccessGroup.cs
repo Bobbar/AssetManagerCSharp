@@ -27,7 +27,7 @@ namespace AssetManager.Data.Classes
         [DataColumnName(SecurityCols.Description)]
         public string Description { get; set; }
 
-        public override string GUID { get; set; }
+        public override string Guid { get; set; }
         [DataColumnName(SecurityCols.AccessLevel)]
         public int Level { get; set; }
 

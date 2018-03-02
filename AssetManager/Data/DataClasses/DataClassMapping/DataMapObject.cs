@@ -19,7 +19,7 @@ namespace AssetManager.Data.Classes
 
         #region Properties
 
-        public abstract string GUID { get; set; }
+        public abstract string Guid { get; set; }
 
         /// <summary>
         /// DataTable that was used to populate this object.

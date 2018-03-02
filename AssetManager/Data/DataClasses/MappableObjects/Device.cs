@@ -42,7 +42,7 @@ namespace AssetManager.Data.Classes
         public string FiscalYear { get; set; }
 
         [DataColumnName(DevicesCols.DeviceUID)]
-        public override string GUID { get; set; }
+        public override string Guid { get; set; }
 
         [DataColumnName(DevicesCols.HostName)]
         public string HostName { get; set; }

@@ -157,7 +157,7 @@ namespace AssetManager.UserInterface.CustomControls
 
             if (frm is IOnlineStatus)
             {
-                newitem.OnlineStatusInterface = (IOnlineStatus)frm;
+                newitem.SetOnlineStatusInterface((IOnlineStatus)frm);
             }
 
             newitem.ToolTipText = "Right-Click to close.";

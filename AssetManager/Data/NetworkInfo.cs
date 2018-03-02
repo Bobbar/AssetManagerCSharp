@@ -17,14 +17,14 @@ namespace AssetManager.Data
             get { return _currentDomain; }
         }
 
-        private static Dictionary<Databases, string> DomainNames = new Dictionary<Databases, string>
+        private static Dictionary<Database, string> DomainNames = new Dictionary<Database, string>
         {
-            {Databases.test_db, "core.co.fairfield.oh.us"},
-            {Databases.asset_manager, "core.co.fairfield.oh.us"},
-            {Databases.vintondd, "vinton.local"}
+            {Database.test_db, "core.co.fairfield.oh.us"},
+            {Database.asset_manager, "core.co.fairfield.oh.us"},
+            {Database.vintondd, "vinton.local"}
         };
 
-        public static Dictionary<string, string> SubnetLocations = new Dictionary<string, string>
+        private static Dictionary<string, string> SubnetLocations = new Dictionary<string, string>
         {
             {"10.10.80.0", "Admin"},
             {"10.10.81.0", "OC"},
@@ -60,24 +60,15 @@ namespace AssetManager.Data
             }
         }
 
-        public static string SetCurrentDomain(Databases database)
+        public static string SetCurrentDomain(Database database)
         {
             _currentDomain = DomainNames[database];
             SecurityTools.ClearAdminCreds();
-            if (database == Databases.vintondd)
+            if (database == Database.vintondd)
             {
                 SecurityTools.VerifyAdminCreds("Credentials for Vinton AD");
             }
             return DomainNames[database];
         }
-
-        // METODO: Un-nest.
-        public enum Databases
-        {
-            test_db,
-            asset_manager,
-            vintondd
-        }
-
     }
 }

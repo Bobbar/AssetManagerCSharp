@@ -95,7 +95,7 @@ namespace AssetManager.UserInterface.Forms
             if (!ReferenceEquals(attachDataObject, null))
             {
 
-                attachFolderUID = attachDataObject.GUID;
+                attachFolderUID = attachDataObject.Guid;
 
                 if (attachDataObject is SibiRequest)
                 {
@@ -314,7 +314,7 @@ namespace AssetManager.UserInterface.Forms
                 SetStatusBar("Connecting...");
                 FtpComms LocalFTPComm = new FtpComms();
                 dAttachment = GetSQLAttachment(AttachUID);
-                string FtpRequestString = ftpUri + dAttachment.FolderGUID + "/" + AttachUID;
+                string FtpRequestString = ftpUri + dAttachment.FolderGuid + "/" + AttachUID;
                 //get file size
                 progress = new ProgressCounter();
                 progress.BytesToTransfer = Convert.ToInt32(LocalFTPComm.ReturnFtpResponse(FtpRequestString, WebRequestMethods.Ftp.GetFileSize).ContentLength);
@@ -461,11 +461,11 @@ namespace AssetManager.UserInterface.Forms
         private void InsertSQLAttachment(Attachment Attachment, DbTransaction transaction)
         {
             ParamCollection insertParams = new ParamCollection();
-            insertParams.Add(Attachment.AttachTable.FKey, Attachment.FolderGUID);
+            insertParams.Add(Attachment.AttachTable.FKey, Attachment.FolderGuid);
             insertParams.Add(Attachment.AttachTable.FileName, Attachment.FileName);
             insertParams.Add(Attachment.AttachTable.FileType, Attachment.Extension);
             insertParams.Add(Attachment.AttachTable.FileSize, Attachment.Filesize);
-            insertParams.Add(Attachment.AttachTable.FileUID, Attachment.FileUID);
+            insertParams.Add(Attachment.AttachTable.FileUID, Attachment.FileGuid);
             insertParams.Add(Attachment.AttachTable.FileHash, Attachment.MD5);
             insertParams.Add(Attachment.AttachTable.FolderName, Attachment.FolderInfo.FolderName);
             insertParams.Add(Attachment.AttachTable.FolderNameUID, Attachment.FolderInfo.FolderNameUID);
@@ -827,7 +827,7 @@ namespace AssetManager.UserInterface.Forms
                         continue;
                     }
                     SetStatusBar("Creating Directory...");
-                    if (!await MakeDirectory(CurrentAttachment.FolderGUID))
+                    if (!await MakeDirectory(CurrentAttachment.FolderGuid))
                     {
                         CurrentAttachment.Dispose();
                         OtherFunctions.Message("Error creating FTP directory.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "FTP Upload Error", this);
@@ -844,7 +844,7 @@ namespace AssetManager.UserInterface.Forms
                             await Task.Run(() =>
                             {
                                 using (FileStream FileStream = (FileStream)(CurrentAttachment.DataStream))
-                                using (System.IO.Stream FTPStream = LocalFTPComm.ReturnFtpRequestStream(ftpUri + CurrentAttachment.FolderGUID + "/" + CurrentAttachment.FileUID, WebRequestMethods.Ftp.UploadFile))
+                                using (System.IO.Stream FTPStream = LocalFTPComm.ReturnFtpRequestStream(ftpUri + CurrentAttachment.FolderGuid + "/" + CurrentAttachment.FileGuid, WebRequestMethods.Ftp.UploadFile))
                                 {
                                     byte[] buffer = new byte[1024];
                                     int bytesIn = 1;
@@ -862,7 +862,7 @@ namespace AssetManager.UserInterface.Forms
                             });
                             if (cancelToken.IsCancellationRequested)
                             {
-                                FtpFunctions.DeleteFtpAttachment(CurrentAttachment.FileUID, CurrentAttachment.FolderGUID);
+                                FtpFunctions.DeleteFtpAttachment(CurrentAttachment.FileGuid, CurrentAttachment.FolderGuid);
                             }
                             else
                             {
@@ -999,7 +999,7 @@ namespace AssetManager.UserInterface.Forms
             else
             {
                 //something is very wrong
-                Logging.Logger("FILE VERIFICATION FAILURE: FolderUID:" + attachment.FolderGUID + "  FileUID: " + attachment.FileUID + " | Expected hash:" + attachment.MD5 + " Result hash:" + attachment.ComputedMD5);
+                Logging.Logger("FILE VERIFICATION FAILURE: FolderUID:" + attachment.FolderGuid + "  FileUID: " + attachment.FileGuid + " | Expected hash:" + attachment.MD5 + " Result hash:" + attachment.ComputedMD5);
                 OtherFunctions.Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Hash Value Mismatch", this);
                 attachment.Dispose();
                 OtherFunctions.PurgeTempDir();

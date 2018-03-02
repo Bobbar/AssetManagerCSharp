@@ -417,8 +417,6 @@ namespace AssetManager.Data.Functions
 
         public object GetDBControlValue(Control dbControl)
         {
-            var DBInfo = (DBControlInfo)dbControl.Tag;
-
             if (dbControl is TextBox)
             {
                 TextBox dbTxt = (TextBox)dbControl;

@@ -218,7 +218,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private async void DeployTeamViewer(Device device)
+        private async void DeployTeamViewer(Device targetDevice)
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
 
@@ -233,7 +233,7 @@ namespace AssetManager.UserInterface.CustomControls
                     DeployTeamViewer newTVDeploy = new DeployTeamViewer(hostForm);
 
                     OnStatusPrompt("Deploying TeamViewer...", 0);
-                    if (await newTVDeploy.DeployToDevice(this.device))
+                    if (await newTVDeploy.DeployToDevice(targetDevice))
                     {
                         OnStatusPrompt("TeamViewer deployment complete!");
                     }
@@ -250,7 +250,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private async void DeployOffice(Device device)
+        private async void DeployOffice(Device targetDevice)
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
 
@@ -265,7 +265,7 @@ namespace AssetManager.UserInterface.CustomControls
                     DeployOffice newOfficeDeploy = new DeployOffice(hostForm);
 
                     OnStatusPrompt("Deploying Office 365...", 0);
-                    if (await newOfficeDeploy.DeployToDevice(this.device))
+                    if (await newOfficeDeploy.DeployToDevice(targetDevice))
                     {
                         OnStatusPrompt("Office 365 deployment complete!");
                     }
@@ -375,7 +375,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private async void UpdateChrome(Device device)
+        private async void UpdateChrome(Device targetDevice)
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
 
@@ -390,7 +390,7 @@ namespace AssetManager.UserInterface.CustomControls
                     OnStatusPrompt("Installing Chrome...", 0);
                     DeployChrome newChromeDeploy = new DeployChrome(hostForm);
 
-                    if (await newChromeDeploy.DeployToDevice(this.device))
+                    if (await newChromeDeploy.DeployToDevice(targetDevice))
                     {
                         OnStatusPrompt("Chrome install complete!");
                     }

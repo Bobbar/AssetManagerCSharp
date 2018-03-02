@@ -32,7 +32,7 @@ namespace AssetManager.Data.Classes
         public System.DateTime DueBackTime { get; set; }
 
         [DataColumnName(TrackablesCols.DeviceUID)]
-        public override string GUID { get; set; }
+        public override string Guid { get; set; }
 
         [DataColumnName(DevicesCols.CheckedOut)]
         public bool IsCheckedOut { get; set; }

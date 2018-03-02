@@ -13,6 +13,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 if (disposing && components != null)
                 {
+                    SecurePwd.Dispose();
                     components.Dispose();
                 }
             }

@@ -116,11 +116,11 @@ namespace AssetManager
                         switch (ArgToEnum)
                         {
                             case CommandArgs.TESTDB:
-                                ServerInfo.CurrentDataBase = NetworkInfo.Databases.test_db;
+                                ServerInfo.CurrentDataBase = Database.test_db;
                                 break;
 
                             case CommandArgs.VINTONDD:
-                                ServerInfo.CurrentDataBase = NetworkInfo.Databases.vintondd;
+                                ServerInfo.CurrentDataBase = Database.vintondd;
                                 break;
                         }
                     }

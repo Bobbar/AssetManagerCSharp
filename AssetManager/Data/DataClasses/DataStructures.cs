@@ -3,25 +3,30 @@ namespace AssetManager.Data.Classes
 {
     public struct CodeAttribute
     {
-        public string DisplayValue { get; set; }
-        public string Code { get; set; }
-        public int ID { get; set; }
-        public Color Color { get; set; }
+        private string displayValue;
+        private string code;
+        private int id;
+        private Color color;
+
+        public string DisplayValue { get { return displayValue; } }
+        public string Code { get { return code; } }
+        public int ID { get { return id; } }
+        public Color Color { get { return color; } }
 
         public CodeAttribute(string displayValue, string code, int id)
         {
-            this.DisplayValue = displayValue;
-            this.Code = code;
-            this.ID = id;
-            this.Color = Color.Empty;
+            this.displayValue = displayValue;
+            this.code = code;
+            this.id = id;
+            this.color = Color.Empty;
         }
 
         public CodeAttribute(string displayValue, string code, int id, Color color)
         {
-            this.DisplayValue = displayValue;
-            this.Code = code;
-            this.ID = id;
-            this.Color = color;
+            this.displayValue = displayValue;
+            this.code = code;
+            this.id = id;
+            this.color = color;
         }
 
         public override string ToString()

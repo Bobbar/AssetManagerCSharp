@@ -13,10 +13,10 @@ namespace AssetManager.Data.Classes
         private int _fileSize;
         private string _extention;
         private Folder _folder;
-        private string _folderGUID;
+        private string _folderGuid;
         private string _MD5;
         private string _computedMD5;
-        private string _fileUID;
+        private string _fileGuid;
         private AttachmentsBaseCols _attachTable;
 
         private Stream _dataStream;
@@ -28,10 +28,10 @@ namespace AssetManager.Data.Classes
             _fileSize = 0;
             _extention = null;
             _folder = new Folder();
-            _folderGUID = null;
+            _folderGuid = null;
             _MD5 = null;
             _computedMD5 = null;
-            _fileUID = null;
+            _fileGuid = null;
             _attachTable = null;
             _dataStream = null;
         }
@@ -45,13 +45,13 @@ namespace AssetManager.Data.Classes
         {
             _fileInfo = new FileInfo(newFile);
             _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
-            _fileUID = Guid.NewGuid().ToString();
+            _fileGuid = Guid.NewGuid().ToString();
             _MD5 = null;
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(_fileInfo.Length);
             _extention = _fileInfo.Extension;
             _folder = new Folder();
-            _folderGUID = string.Empty;
+            _folderGuid = string.Empty;
             _attachTable = attachTable;
             _dataStream = _fileInfo.OpenRead();
         }
@@ -60,13 +60,13 @@ namespace AssetManager.Data.Classes
         {
             _fileInfo = new FileInfo(newFile);
             _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
-            _fileUID = Guid.NewGuid().ToString();
+            _fileGuid = Guid.NewGuid().ToString();
             _MD5 = null;
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(_fileInfo.Length);
             _extention = _fileInfo.Extension;
             _folder = new Folder();
-            _folderGUID = folderGUID;
+            _folderGuid = folderGUID;
             _attachTable = attachTable;
             _dataStream = _fileInfo.OpenRead();
         }
@@ -78,26 +78,26 @@ namespace AssetManager.Data.Classes
             _dataStream = null;
             _attachTable = attachTable;
             _fileName = TableRow[attachTable.FileName].ToString();
-            _fileUID = TableRow[attachTable.FileUID].ToString();
+            _fileGuid = TableRow[attachTable.FileUID].ToString();
             _MD5 = TableRow[attachTable.FileHash].ToString();
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(TableRow[attachTable.FileSize]);
             _extention = TableRow[attachTable.FileType].ToString();
             _folder = new Folder(TableRow[attachTable.FolderName].ToString(), TableRow[attachTable.FolderNameUID].ToString());
-            _folderGUID = TableRow[attachTable.FKey].ToString();
+            _folderGuid = TableRow[attachTable.FKey].ToString();
         }
 
         public Attachment(string newFile, string folderGUID, Folder selectedFolder, AttachmentsBaseCols attachTable)
         {
             _fileInfo = new FileInfo(newFile);
             _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
-            _fileUID = Guid.NewGuid().ToString();
+            _fileGuid = Guid.NewGuid().ToString();
             _MD5 = null;
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(_fileInfo.Length);
             _extention = _fileInfo.Extension;
             _folder = selectedFolder;
-            _folderGUID = folderGUID;
+            _folderGuid = folderGUID;
             _attachTable = attachTable;
             _dataStream = _fileInfo.OpenRead();
         }
@@ -109,13 +109,13 @@ namespace AssetManager.Data.Classes
             _dataStream = null;
             _attachTable = attachTable;
             _fileName = TableRow[attachTable.FileName].ToString();
-            _fileUID = TableRow[attachTable.FileUID].ToString();
+            _fileGuid = TableRow[attachTable.FileUID].ToString();
             _MD5 = TableRow[attachTable.FileHash].ToString();
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(TableRow[attachTable.FileSize]);
             _extention = TableRow[attachTable.FileType].ToString();
             _folder = selectedFolder;
-            _folderGUID = TableRow[attachTable.FKey].ToString();
+            _folderGuid = TableRow[attachTable.FKey].ToString();
         }
 
         public FileInfo FileInfo
@@ -183,9 +183,9 @@ namespace AssetManager.Data.Classes
             }
         }
 
-        public string FileUID
+        public string FileGuid
         {
-            get { return _fileUID; }
+            get { return _fileGuid; }
         }
 
         public string MD5
@@ -217,9 +217,9 @@ namespace AssetManager.Data.Classes
             get { return _folder; }
         }
 
-        public string FolderGUID
+        public string FolderGuid
         {
-            get { return _folderGUID; }
+            get { return _folderGuid; }
         }
 
         public Stream DataStream

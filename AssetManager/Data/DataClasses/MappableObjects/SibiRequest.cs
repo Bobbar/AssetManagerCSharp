@@ -14,7 +14,7 @@ namespace AssetManager.Data.Classes
 
         public SibiRequest()
         {
-            this.GUID = System.Guid.NewGuid().ToString();
+            this.Guid = System.Guid.NewGuid().ToString();
         }
 
         public SibiRequest(DataTable data) : base(data)
@@ -32,7 +32,7 @@ namespace AssetManager.Data.Classes
         public string Description { get; set; }
 
         [DataColumnName(SibiRequestCols.UID)]
-        public override string GUID { get; set; }
+        public override string Guid { get; set; }
 
         [DataColumnName(SibiRequestCols.NeedBy)]
         public System.DateTime NeedByDate { get; set; }

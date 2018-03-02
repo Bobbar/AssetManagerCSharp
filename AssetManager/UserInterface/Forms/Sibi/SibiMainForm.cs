@@ -329,7 +329,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 OtherFunctions.SetWaitCursor(true, this);
-                SibiManageRequestForm NewRequest = new SibiManageRequestForm(this);
+                new SibiManageRequestForm(this);
             }
             finally
             {
@@ -339,8 +339,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void ResultGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (SibiResultGrid.CurrentRow.Index > -1)
-                OpenRequest(SibiResultGrid.CurrentRowStringValue(SibiRequestCols.UID));
+            if (SibiResultGrid.CurrentRow.Index > -1) OpenRequest(SibiResultGrid.CurrentRowStringValue(SibiRequestCols.UID));
         }
 
         private void OpenRequest(string strUID)
@@ -350,7 +349,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 OtherFunctions.SetWaitCursor(true, this);
                 if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiManageRequestForm), strUID))
                 {
-                    SibiManageRequestForm NewRequest = new SibiManageRequestForm(this, strUID);
+                    new SibiManageRequestForm(this, strUID);
                 }
             }
             finally

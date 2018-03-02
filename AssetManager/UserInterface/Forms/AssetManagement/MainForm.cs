@@ -41,12 +41,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             get
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             set
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
         }
 
@@ -449,7 +449,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void InitDBCombo()
         {
-            foreach (var item in Enum.GetValues(typeof(NetworkInfo.Databases)))
+            foreach (var item in Enum.GetValues(typeof(Database)))
             {
                 DatabaseToolCombo.Items.Add(item.ToString());
             }
@@ -459,7 +459,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void NewTextCrypterForm()
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
-            CrypterForm NewEncryp = new CrypterForm(this);
+            new CrypterForm(this);
         }
 
         private void OpenSibiMainForm()
@@ -472,7 +472,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 var SibiForm = Helpers.ChildFormControl.GetChildOfType(this, typeof(Sibi.SibiMainForm));
                 if (SibiForm == null)
                 {
-                    Sibi.SibiMainForm NewSibi = new Sibi.SibiMainForm(this);
+                    new Sibi.SibiMainForm(this);
                 }
                 else
                 {
@@ -601,7 +601,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void StartUserManager()
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
-            UserManagerForm NewUserMan = new UserManagerForm(this);
+            new UserManagerForm(this);
         }
 
         private void SetStatusBar(string text, int timeOut = 0)
@@ -644,7 +644,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void ChangeDatabase(NetworkInfo.Databases database)
+        private void ChangeDatabase(Database database)
         {
             try
             {
@@ -694,15 +694,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             switch (ServerInfo.CurrentDataBase)
             {
-                case NetworkInfo.Databases.asset_manager:
+                case Database.asset_manager:
                     this.Text = "Asset Manager - Main";
                     break;
 
-                case NetworkInfo.Databases.test_db:
+                case Database.test_db:
                     this.Text = "Asset Manager - Main - ****TEST DATABASE****";
                     break;
 
-                case NetworkInfo.Databases.vintondd:
+                case Database.vintondd:
                     this.Text = "Asset Manager - Main - Vinton DD";
                     break;
             }
@@ -710,7 +710,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ShowTestDBWarning()
         {
-            if (ServerInfo.CurrentDataBase == NetworkInfo.Databases.test_db)
+            if (ServerInfo.CurrentDataBase == Database.test_db)
             {
                 // OtherFunctions.Message("TEST DATABASE IN USE", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "WARNING");//, this);
                 this.BackColor = Color.DarkRed;
@@ -911,7 +911,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DatabaseToolCombo_DropDownClosed(object sender, EventArgs e)
         {
-            ChangeDatabase((NetworkInfo.Databases)DatabaseToolCombo.SelectedIndex);
+            ChangeDatabase((Database)DatabaseToolCombo.SelectedIndex);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
