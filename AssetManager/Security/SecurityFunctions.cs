@@ -65,11 +65,20 @@ namespace AssetManager.Security
         private static bool CredentialIsValid(NetworkCredential creds)
         {
             bool valid = false;
-            using (PrincipalContext context = new PrincipalContext(ContextType.Domain, NetworkInfo.CurrentDomain))
+            try
             {
-                valid = context.ValidateCredentials(creds.UserName, creds.Password);
+                using (PrincipalContext context = new PrincipalContext(ContextType.Domain, NetworkInfo.CurrentDomain))
+                {
+                    valid = context.ValidateCredentials(creds.UserName, creds.Password);
+                }
+                return valid;
             }
-            return valid;
+            catch (PrincipalServerDownException)
+            {
+                // Return true when we cannot contact the server so the user doesn't get prompted repeatedly.
+                return true;
+            }
+         
         }
 
         public static bool IsAdministrator()

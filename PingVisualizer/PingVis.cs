@@ -207,11 +207,16 @@ namespace PingVisualizer
 
         private void SetScale()
         {
+            // Fraction width multiplier.
+            // Determines the Y location of the highest peak. 
+            // 0.5 = middle of the image, 1 = all the way to the right.
+            float scaleWidthFraction = 0.55f;
+
             if (CurrentDisplayResults().Count > 0)
             {
                 long maxPing = CurrentDisplayResults().OrderByDescending(p => p.RoundTripTime).FirstOrDefault().RoundTripTime;
                 if (maxPing <= 0) maxPing = 1;
-                float newScale = ((upscaledImageWidth * 0.55f) / maxPing);
+                float newScale = ((upscaledImageWidth * scaleWidthFraction) / maxPing);
                 if (newScale > maxViewScale) newScale = maxViewScale;
 
                 if (targetViewScale != newScale)
@@ -243,8 +248,8 @@ namespace PingVisualizer
                     float diff = currentViewScale - targetViewScale;
                     float diffAbs = Math.Abs(diff);
 
-                    // If the absolute difference above a certain amount begin/continue easing.
-                    if (diffAbs > 0.02)
+                    // If the absolute difference is above a certain amount begin/continue easing.
+                    if (diffAbs > 0.02f)
                     {
                         // Simple easing calulation.
                         if (currentViewScale > targetViewScale)
@@ -288,7 +293,7 @@ namespace PingVisualizer
                         SetPingInterval(noPingInterval);
                     }
                     var pingInfo = new PingInfo(reply);
-                    pingReplies.Add(pingInfo);
+                    AddPingReply(pingInfo);
                     OnNewPingResult(pingInfo);
                 }
             }
@@ -296,7 +301,7 @@ namespace PingVisualizer
             {
                 if (!this.disposedValue)
                 {
-                    pingReplies.Add(new PingInfo());
+                    AddPingReply(new PingInfo());
                     OnNewPingResult(new PingInfo());
                     SetPingInterval(noPingInterval);
                 }
@@ -317,6 +322,26 @@ namespace PingVisualizer
                     {
                         Render(true, false);
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds ping reply to the reply collection if it's a success or there were previous successes.
+        /// </summary>
+        /// <param name="reply"></param>
+        private void AddPingReply(PingInfo reply)
+        {
+            // No sense in accumulating when we start with the device offline.
+            if (pingReplies != null)
+            {
+                if (pingReplies.Count == 0 && reply.Status == IPStatus.Success)
+                {
+                    pingReplies.Add(reply);
+                }
+                else if (pingReplies.Count > 0)
+                {
+                    pingReplies.Add(reply);
                 }
             }
         }
@@ -399,6 +424,7 @@ namespace PingVisualizer
         private MouseOverInfo GetMouseOverPingBar()
         {
             var mScalePoint = new PointF(mouseLocation.X * imageUpscaleMulti, mouseLocation.Y * imageUpscaleMulti);
+
             foreach (PingBar bar in currentBarList)
             {
                 if (bar.Rectangle.Contains(mScalePoint))
@@ -457,7 +483,6 @@ namespace PingVisualizer
                     }
 
                     // Draw all the elements from back to front.
-
                     DrawScaleLines(upscaledGraphics);
                     DrawPingBars(upscaledGraphics, currentBarList);
                     DrawPingText(upscaledGraphics);

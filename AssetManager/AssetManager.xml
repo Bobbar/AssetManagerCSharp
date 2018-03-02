@@ -790,7 +790,7 @@
         </member>
         <member name="M:AssetManager.Security.SecurityTools.CheckForAccess(System.String)">
             <summary>
-            Checks if current user has access to the specified module. Throws a <see cref="T:AssetManager.Security.InvalidAccessException"/> if they do not.
+            Checks if current user has access to the specified module. Throws a <see cref="T:AssetManager.Security.InvalidAccessException"/> if they do not. 
             </summary>
             <param name="recModule"></param>
         </member>
