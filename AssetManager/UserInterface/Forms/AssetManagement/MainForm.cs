@@ -76,14 +76,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DateTimeLabel.Text = DateTime.Now.ToString();
             ToolStrip1.BackColor = Colors.AssetToolBarColor;
             ResultGrid.DoubleBufferedDataGrid(true);
-            if (SecurityTools.CanAccess(SecurityTools.AccessGroup.IsAdmin))
-            {
-                AdminDropDown.Visible = true;
-            }
-            else
-            {
-                AdminDropDown.Visible = false;
-            }
+            CheckForAdmin();
             GetGridStyles();
 
             WatchDog = new ConnectionWatchdog(GlobalSwitches.CachedMode);
@@ -346,21 +339,21 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     ConnectStatus("Connected", Color.Green, Colors.DefaultFormBackColor, "Connection OK");
                     GlobalSwitches.CachedMode = false;
                     ServerInfo.ServerPinging = true;
-
+                    CheckForAdmin();
                     break;
 
                 case WatchDogConnectionStatus.Offline:
                     ConnectStatus("Offline", Color.Red, Colors.StatusBarProblem, "No connection. Cache unavailable.");
                     GlobalSwitches.CachedMode = false;
                     ServerInfo.ServerPinging = false;
-
+                    AdminDropDown.Visible = false;
                     break;
 
                 case WatchDogConnectionStatus.CachedMode:
                     ConnectStatus("Cached Mode", Color.Black, Colors.StatusBarProblem, "Server Offline. Using Local DB Cache.");
                     GlobalSwitches.CachedMode = true;
                     ServerInfo.ServerPinging = false;
-
+                    AdminDropDown.Visible = false;
                     break;
             }
         }
@@ -636,6 +629,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 DateTimeLabel.Text = serverTime;
                 StatusStrip1.Update();
+            }
+        }
+
+        private void CheckForAdmin()
+        {
+            if (SecurityTools.CanAccess(SecurityTools.AccessGroup.IsAdmin))
+            {
+                AdminDropDown.Visible = true;
+            }
+            else
+            {
+                AdminDropDown.Visible = false;
             }
         }
 

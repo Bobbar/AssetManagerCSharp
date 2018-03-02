@@ -1109,9 +1109,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void remoteToolsControl_HostBackOnline(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Normal;
-            this.Activate();
-            TaskBarNotify.FlashWindow(this.Handle, true, true, 3);
+            TaskBarNotify.FlashWindow(this.Handle, true, true, 0);
         }
 
         private void remoteToolsControl_VisibleChanging(object sender, bool e)
