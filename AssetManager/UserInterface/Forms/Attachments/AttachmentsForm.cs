@@ -179,14 +179,6 @@ namespace AssetManager.UserInterface.Forms
         public void CancelTransfers()
         {
             taskCancelTokenSource.Cancel();
-            // Block until transfer is complete to make sure any canceled FTP transfers are deleted.
-            Task.Run(() =>
-                {
-                    do
-                    {
-                        Task.Delay(100).Wait();
-                    } while (transferTaskRunning);
-                });
         }
 
         private void ListAttachments()
