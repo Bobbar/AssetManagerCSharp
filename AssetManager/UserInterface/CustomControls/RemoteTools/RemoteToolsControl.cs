@@ -101,7 +101,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             HostBackOnline(this, new EventArgs());
         }
-        
+
         #endregion Properties
 
         #region Methods
@@ -230,16 +230,17 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-                    DeployTeamViewer newTVDeploy = new DeployTeamViewer(hostForm);
-
-                    OnStatusPrompt("Deploying TeamViewer...", 0);
-                    if (await newTVDeploy.DeployToDevice(targetDevice))
+                    using (DeployTeamViewer newTVDeploy = new DeployTeamViewer(hostForm))
                     {
-                        OnStatusPrompt("TeamViewer deployment complete!");
-                    }
-                    else
-                    {
-                        OnStatusPrompt("TeamViewer deployment failed...");
+                        OnStatusPrompt("Deploying TeamViewer...", 0);
+                        if (await newTVDeploy.DeployToDevice(targetDevice))
+                        {
+                            OnStatusPrompt("TeamViewer deployment complete!");
+                        }
+                        else
+                        {
+                            OnStatusPrompt("TeamViewer deployment failed...");
+                        }
                     }
                 }
             }
@@ -262,16 +263,17 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-                    DeployOffice newOfficeDeploy = new DeployOffice(hostForm);
-
-                    OnStatusPrompt("Deploying Office 365...", 0);
-                    if (await newOfficeDeploy.DeployToDevice(targetDevice))
+                    using (DeployOffice newOfficeDeploy = new DeployOffice(hostForm))
                     {
-                        OnStatusPrompt("Office 365 deployment complete!");
-                    }
-                    else
-                    {
-                        OnStatusPrompt("Office 365 deployment failed...");
+                        OnStatusPrompt("Deploying Office 365...", 0);
+                        if (await newOfficeDeploy.DeployToDevice(targetDevice))
+                        {
+                            OnStatusPrompt("Office 365 deployment complete!");
+                        }
+                        else
+                        {
+                            OnStatusPrompt("Office 365 deployment failed...");
+                        }
                     }
                 }
             }
@@ -388,15 +390,16 @@ namespace AssetManager.UserInterface.CustomControls
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
                     OnStatusPrompt("Installing Chrome...", 0);
-                    DeployChrome newChromeDeploy = new DeployChrome(hostForm);
-
-                    if (await newChromeDeploy.DeployToDevice(targetDevice))
+                    using (DeployChrome newChromeDeploy = new DeployChrome(hostForm))
                     {
-                        OnStatusPrompt("Chrome install complete!");
-                    }
-                    else
-                    {
-                        OnStatusPrompt("Error while installing Chrome!");
+                        if (await newChromeDeploy.DeployToDevice(targetDevice))
+                        {
+                            OnStatusPrompt("Chrome install complete!");
+                        }
+                        else
+                        {
+                            OnStatusPrompt("Error while installing Chrome!");
+                        }
                     }
                 }
             }

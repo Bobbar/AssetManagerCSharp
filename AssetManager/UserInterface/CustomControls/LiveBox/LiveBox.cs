@@ -318,11 +318,11 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
 
                     if (CurrentLiveBoxArgs.ValueMember == null)
                     {
-                        strQry = "SELECT " + DevicesCols.DeviceUID + "," + CurrentLiveBoxArgs.DisplayMember + " FROM " + DevicesCols.TableName + " WHERE " + CurrentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + CurrentLiveBoxArgs.DisplayMember + " ORDER BY " + CurrentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
+                        strQry = "SELECT " + DevicesCols.DeviceGuid + "," + CurrentLiveBoxArgs.DisplayMember + " FROM " + DevicesCols.TableName + " WHERE " + CurrentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + CurrentLiveBoxArgs.DisplayMember + " ORDER BY " + CurrentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
                     }
                     else
                     {
-                        strQry = "SELECT " + DevicesCols.DeviceUID + "," + CurrentLiveBoxArgs.DisplayMember + "," + CurrentLiveBoxArgs.ValueMember + " FROM " + DevicesCols.TableName + " WHERE " + CurrentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + CurrentLiveBoxArgs.DisplayMember + " ORDER BY " + CurrentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
+                        strQry = "SELECT " + DevicesCols.DeviceGuid + "," + CurrentLiveBoxArgs.DisplayMember + "," + CurrentLiveBoxArgs.ValueMember + " FROM " + DevicesCols.TableName + " WHERE " + CurrentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + CurrentLiveBoxArgs.DisplayMember + " ORDER BY " + CurrentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
                     }
 
                     using (var cmd = DBFactory.GetDatabase().GetCommand(strQry))

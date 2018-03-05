@@ -196,7 +196,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
-        public override bool OKToClose()
+        public override bool OkToClose()
         {
             if (ActiveUpdates())
             {
@@ -372,7 +372,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         private void GKUpdaterForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!GlobalSwitches.ProgramEnding & !OKToClose())
+            if (!GlobalSwitches.ProgramEnding & !OkToClose())
             {
                 e.Cancel = true;
             }

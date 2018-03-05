@@ -75,31 +75,31 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             return true;
         }
 
-        public void CompressDirectory(string sInDir, string sOutFile)
+        public void CompressDirectory(string inDir, string outDir)
         {
-            string[] sFiles = Directory.GetFiles(sInDir, "*.*", SearchOption.AllDirectories);
-            int iDirLen = sInDir[sInDir.Length - 1] == Path.DirectorySeparatorChar ? sInDir.Length : sInDir.Length + 1;
+            string[] files = Directory.GetFiles(inDir, "*.*", SearchOption.AllDirectories);
+            int iDirLen = inDir[inDir.Length - 1] == Path.DirectorySeparatorChar ? inDir.Length : inDir.Length + 1;
             Progress.ResetProgress();
-            Progress.BytesToTransfer = sFiles.Length - 1;
-            FileStream outFile = new FileStream(sOutFile, FileMode.Create, FileAccess.Write, FileShare.None, 256000);
+            Progress.BytesToTransfer = files.Length - 1;
+            FileStream outFile = new FileStream(outDir, FileMode.Create, FileAccess.Write, FileShare.None, 256000);
             using (GZipStream str = new GZipStream(outFile, CompressionLevel.Optimal))
             {
-                foreach (string sFilePath in sFiles)
+                foreach (string filePath in files)
                 {
                     Progress.BytesMoved = 1;
-                    string sRelativePath = sFilePath.Substring(iDirLen);
-                    CompressFile(sInDir, sRelativePath, str);
+                    string sRelativePath = filePath.Substring(iDirLen);
+                    CompressFile(inDir, sRelativePath, str);
                 }
             }
         }
 
-        public void DecompressToDirectory(string sCompressedFile, string sDir)
+        public void DecompressToDirectory(string compressedFile, string dir)
         {
-            Progress.BytesToTransfer = GetGzOriginalFileSize(sCompressedFile);
-            FileStream inFile = new FileStream(sCompressedFile, FileMode.Open, FileAccess.Read, FileShare.None, 256000);
+            Progress.BytesToTransfer = GetGZOriginalFileSize(compressedFile);
+            FileStream inFile = new FileStream(compressedFile, FileMode.Open, FileAccess.Read, FileShare.None, 256000);
             using (GZipStream zipStream = new GZipStream(inFile, CompressionMode.Decompress, true))
             {
-                while (DecompressFile(sDir, zipStream))
+                while (DecompressFile(dir, zipStream))
                 {
                 }
             }
@@ -111,9 +111,9 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         /// <param name="fi">GZip file to handle</param>
         /// <returns>Size of the compressed file, when its decompressed.</returns>
         /// <remarks>More information at <a href="http://tools.ietf.org/html/rfc1952">http://tools.ietf.org/html/rfc1952</a> section 2.3</remarks>
-        public static int GetGzOriginalFileSize(string fi)
+        public static int GetGZOriginalFileSize(string fi)
         {
-            return GetGzOriginalFileSize(new FileInfo(fi));
+            return GetGZOriginalFileSize(new FileInfo(fi));
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         /// <param name="fi">GZip file to handle</param>
         /// <returns>Size of the compressed file, when its decompressed.</returns>
         /// <remarks>More information at <a href="http://tools.ietf.org/html/rfc1952">http://tools.ietf.org/html/rfc1952</a> section 2.3</remarks>
-        public static int GetGzOriginalFileSize(FileInfo fi)
+        public static int GetGZOriginalFileSize(FileInfo fi)
         {
             try
             {

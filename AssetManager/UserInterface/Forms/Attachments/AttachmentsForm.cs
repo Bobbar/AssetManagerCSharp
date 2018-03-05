@@ -27,7 +27,7 @@ namespace AssetManager.UserInterface.Forms
     {
         #region Fields
 
-        private string attachFolderUID;
+        private string attachFolderGuid;
         private const short fileSizeMBLimit = 150;
         private AttachmentsBaseCols attachmentColumns;
         private bool allowDrag = true;
@@ -61,7 +61,7 @@ namespace AssetManager.UserInterface.Forms
                     else
                     {
                         currentFolder.FolderName = FolderListView.SelectedItems[0].Text;
-                        currentFolder.FolderNameUID = (string)FolderListView.SelectedItems[0].Tag;
+                        currentFolder.FolderNameGuid = (string)FolderListView.SelectedItems[0].Tag;
                     }
                     return currentFolder;
                 }
@@ -81,7 +81,7 @@ namespace AssetManager.UserInterface.Forms
 
         #region Constructors
 
-        public AttachmentsForm(ExtendedForm ParentForm, AttachmentsBaseCols AttachTable, MappableObject attachDataObject, EventHandler attachCountChangeHandler = null) : base(ParentForm, attachDataObject)
+        public AttachmentsForm(ExtendedForm parentForm, AttachmentsBaseCols attachTable, MappableObject attachDataObject, EventHandler attachCountChangeHandler = null) : base(parentForm, attachDataObject)
         {
             ftpUri = "ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/";
 
@@ -91,11 +91,11 @@ namespace AssetManager.UserInterface.Forms
             AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
             AttachGrid.DoubleBufferedDataGrid(true);
             SetStatusBar("Idle...");
-            attachmentColumns = AttachTable;
+            attachmentColumns = attachTable;
             if (!ReferenceEquals(attachDataObject, null))
             {
 
-                attachFolderUID = attachDataObject.Guid;
+                attachFolderGuid = attachDataObject.Guid;
 
                 if (attachDataObject is SibiRequest)
                 {
@@ -137,7 +137,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void SetActiveFolder(Attachment.Folder folder)
         {
-            if (folder.FolderNameUID == "")
+            if (folder.FolderNameGuid == "")
             {
                 FolderListView.Items[0].Selected = true;
             }
@@ -145,7 +145,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 foreach (ListViewItem item in FolderListView.Items)
                 {
-                    if ((string)item.Tag == folder.FolderNameUID)
+                    if ((string)item.Tag == folder.FolderNameGuid)
                     {
                         item.Selected = true;
                     }
@@ -218,7 +218,7 @@ namespace AssetManager.UserInterface.Forms
             StatusStrip1.Update();
         }
 
-        public override bool OKToClose()
+        public override bool OkToClose()
         {
             if (ActiveTransfer())
             {
@@ -240,7 +240,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void AttachmentsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!OKToClose())
+            if (!OkToClose())
             {
                 e.Cancel = true;
             }
@@ -299,7 +299,7 @@ namespace AssetManager.UserInterface.Forms
             SetStatusBar("Idle...");
         }
 
-        private async Task<Attachment> DownloadAttachment(string AttachUID)
+        private async Task<Attachment> DownloadAttachment(string AttachGuid)
         {
             if (transferTaskRunning)
             {
@@ -313,8 +313,8 @@ namespace AssetManager.UserInterface.Forms
                 CancellationToken cancelToken = taskCancelTokenSource.Token;
                 SetStatusBar("Connecting...");
                 FtpComms LocalFTPComm = new FtpComms();
-                dAttachment = GetSQLAttachment(AttachUID);
-                string FtpRequestString = ftpUri + dAttachment.FolderGuid + "/" + AttachUID;
+                dAttachment = GetSQLAttachment(AttachGuid);
+                string FtpRequestString = ftpUri + dAttachment.FolderGuid + "/" + AttachGuid;
                 //get file size
                 progress = new ProgressCounter();
                 progress.BytesToTransfer = Convert.ToInt32(LocalFTPComm.ReturnFtpResponse(FtpRequestString, WebRequestMethods.Ftp.GetFileSize).ContentLength);
@@ -374,7 +374,7 @@ namespace AssetManager.UserInterface.Forms
         private void PopulateFolderList()
         {
             var addedFolders = new List<string>();
-            string folderQuery = "SELECT " + attachmentColumns.FolderName + ", " + attachmentColumns.FolderNameUID + " FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FKey + "='" + attachFolderUID + "' ORDER BY " + attachmentColumns.FolderName;
+            string folderQuery = "SELECT " + attachmentColumns.FolderName + ", " + attachmentColumns.FolderNameGuid + " FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FKey + "='" + attachFolderGuid + "' ORDER BY " + attachmentColumns.FolderName;
 
             using (var folders = DBFactory.GetDatabase().DataTableFromQueryString(folderQuery))
             {
@@ -386,7 +386,7 @@ namespace AssetManager.UserInterface.Forms
                 foreach (DataRow row in folders.Rows)
                 {
                     string folderName = row[attachmentColumns.FolderName].ToString().Trim();
-                    string folderNameUID = row[attachmentColumns.FolderNameUID].ToString().Trim();
+                    string folderNameGuid = row[attachmentColumns.FolderNameGuid].ToString().Trim();
 
                     if (!string.IsNullOrEmpty(folderName))
                     {
@@ -397,7 +397,7 @@ namespace AssetManager.UserInterface.Forms
                             var newFolderItem = new ListViewItem(folderName);
                             newFolderItem.StateImageIndex = 0;
                             newFolderItem.Selected = false;
-                            newFolderItem.Tag = folderNameUID;
+                            newFolderItem.Tag = folderNameGuid;
                             FolderListView.Items.Add(newFolderItem);
                         }
                     }
@@ -429,31 +429,31 @@ namespace AssetManager.UserInterface.Forms
 
             if (FolderListView.SelectedIndices.Count > 0 && FolderListView.SelectedIndices[0] == 0)
             {
-                strQry = "Select * FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FKey + "='" + attachFolderUID + "' ORDER BY " + attachmentColumns.Timestamp + " DESC";
+                strQry = "Select * FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FKey + "='" + attachFolderGuid + "' ORDER BY " + attachmentColumns.Timestamp + " DESC";
             }
             else
             {
-                strQry = "Select * FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FolderNameUID + "='" + CurrentSelectedFolder.FolderNameUID + "' AND " + attachmentColumns.FKey + " ='" + attachFolderUID + "' ORDER BY " + attachmentColumns.Timestamp + " DESC";
+                strQry = "Select * FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FolderNameGuid + "='" + CurrentSelectedFolder.FolderNameGuid + "' AND " + attachmentColumns.FKey + " ='" + attachFolderGuid + "' ORDER BY " + attachmentColumns.Timestamp + " DESC";
             }
 
             return strQry;
         }
 
-        private Attachment GetSQLAttachment(string AttachUID)
+        private Attachment GetSQLAttachment(string AttachGuid)
         {
-            string strQry = "SELECT * FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FileUID + "='" + AttachUID + "' LIMIT 1";
+            string strQry = "SELECT * FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FileGuid + "='" + AttachGuid + "' LIMIT 1";
             return new Attachment(DBFactory.GetDatabase().DataTableFromQueryString(strQry), attachmentColumns);
         }
 
         private List<GridColumnAttrib> AttachGridColumns(AttachmentsBaseCols attachtable)
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(attachtable.FileType, "", typeof(Image), ColumnFormatTypes.Image));
+            ColList.Add(new GridColumnAttrib(attachtable.FileType, "", typeof(Image), ColumnFormatType.Image));
             ColList.Add(new GridColumnAttrib(attachtable.FileName, "Filename", typeof(string)));
-            ColList.Add(new GridColumnAttrib(attachtable.FileSize, "Size", typeof(string), ColumnFormatTypes.FileSize));
+            ColList.Add(new GridColumnAttrib(attachtable.FileSize, "Size", typeof(string), ColumnFormatType.FileSize));
             ColList.Add(new GridColumnAttrib(attachtable.Timestamp, "Date", typeof(DateTime)));
             ColList.Add(new GridColumnAttrib(attachtable.FolderName, "Folder", typeof(string)));
-            ColList.Add(new GridColumnAttrib(attachtable.FileUID, "AttachUID", typeof(string)));
+            ColList.Add(new GridColumnAttrib(attachtable.FileGuid, "AttachGuid", typeof(string)));
             ColList.Add(new GridColumnAttrib(attachtable.FileHash, "MD5", typeof(string)));
             return ColList;
         }
@@ -465,10 +465,10 @@ namespace AssetManager.UserInterface.Forms
             insertParams.Add(Attachment.AttachTable.FileName, Attachment.FileName);
             insertParams.Add(Attachment.AttachTable.FileType, Attachment.Extension);
             insertParams.Add(Attachment.AttachTable.FileSize, Attachment.Filesize);
-            insertParams.Add(Attachment.AttachTable.FileUID, Attachment.FileGuid);
+            insertParams.Add(Attachment.AttachTable.FileGuid, Attachment.FileGuid);
             insertParams.Add(Attachment.AttachTable.FileHash, Attachment.MD5);
             insertParams.Add(Attachment.AttachTable.FolderName, Attachment.FolderInfo.FolderName);
-            insertParams.Add(Attachment.AttachTable.FolderNameUID, Attachment.FolderInfo.FolderNameUID);
+            insertParams.Add(Attachment.AttachTable.FolderNameGuid, Attachment.FolderInfo.FolderNameGuid);
             DBFactory.GetDatabase().InsertFromParameters(Attachment.AttachTable.TableName, insertParams.Parameters, transaction);
         }
 
@@ -518,7 +518,7 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void MoveAttachToFolder(string attachUID, Attachment.Folder folder, bool isNew = false)
+        private void MoveAttachToFolder(string attachGuid, Attachment.Folder folder, bool isNew = false)
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
 
@@ -530,8 +530,8 @@ namespace AssetManager.UserInterface.Forms
                 int rows = 0;
                 using (var trans = DBFactory.GetDatabase().StartTransaction())
                 {
-                    rows += DBFactory.GetDatabase().UpdateValue(attachmentColumns.TableName, attachmentColumns.FolderNameUID, folder.FolderNameUID, attachmentColumns.FileUID, attachUID, trans);
-                    rows += DBFactory.GetDatabase().UpdateValue(attachmentColumns.TableName, attachmentColumns.FolderName, folder.FolderName, attachmentColumns.FileUID, attachUID, trans);
+                    rows += DBFactory.GetDatabase().UpdateValue(attachmentColumns.TableName, attachmentColumns.FolderNameGuid, folder.FolderNameGuid, attachmentColumns.FileGuid, attachGuid, trans);
+                    rows += DBFactory.GetDatabase().UpdateValue(attachmentColumns.TableName, attachmentColumns.FolderName, folder.FolderName, attachmentColumns.FileGuid, attachGuid, trans);
 
                     if (rows == 2)
                     {
@@ -577,15 +577,15 @@ namespace AssetManager.UserInterface.Forms
             return true;
         }
 
-        private async void DownloadAndOpenAttachment(string AttachUID)
+        private async void DownloadAndOpenAttachment(string AttachGuid)
         {
             try
             {
-                if (AttachUID == "")
+                if (AttachGuid == "")
                 {
                     return;
                 }
-                using (var saveAttachment = await DownloadAttachment(AttachUID))
+                using (var saveAttachment = await DownloadAttachment(AttachGuid))
                 {
                     if (ReferenceEquals(saveAttachment, null))
                     {
@@ -598,7 +598,7 @@ namespace AssetManager.UserInterface.Forms
             }
             catch (Exception ex)
             {
-                Logging.Logger("ERROR DOWNLOADING ATTACHMENT: " + this.FormUID + "/" + AttachUID);
+                Logging.Logger("ERROR DOWNLOADING ATTACHMENT: " + this.FormGuid + "/" + AttachGuid);
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
             finally
@@ -641,10 +641,10 @@ namespace AssetManager.UserInterface.Forms
                 {
                     if (!DropIsFromOutside(dropObject))
                     {
-                        //Cast out the datarow, get the attach UID, and move the attachment to the new folder.
+                        //Cast out the datarow, get the attach Guid, and move the attachment to the new folder.
                         var DragRow = (DataGridViewRow)(dropObject.GetData(typeof(DataGridViewRow)));
                         CurrentSelectedFolder = previousFolder;
-                        MoveAttachToFolder(DragRow.Cells[attachmentColumns.FileUID].Value.ToString(), folder);
+                        MoveAttachToFolder(DragRow.Cells[attachmentColumns.FileGuid].Value.ToString(), folder);
                     }
                     else
                     {
@@ -698,7 +698,7 @@ namespace AssetManager.UserInterface.Forms
             if (dropObject.GetDataPresent("FormID"))
             {
                 string FormID = (string)(dropObject.GetData("FormID"));
-                if (FormID != this.FormUID)
+                if (FormID != this.FormGuid)
                 {
                     return true;
                 }
@@ -715,9 +715,9 @@ namespace AssetManager.UserInterface.Forms
             AttachCountChanged(this, e);
         }
 
-        private void UpdateDbAttachementName(string AttachUID, string NewFileName)
+        private void UpdateDbAttachementName(string AttachGuid, string NewFileName)
         {
-            AssetManagerFunctions.UpdateSqlValue(attachmentColumns.TableName, attachmentColumns.FileName, NewFileName, attachmentColumns.FileUID, AttachUID);
+            AssetManagerFunctions.UpdateSqlValue(attachmentColumns.TableName, attachmentColumns.FileName, NewFileName, attachmentColumns.FileGuid, AttachGuid);
         }
 
         private void BeginRenameAttachment()
@@ -747,9 +747,9 @@ namespace AssetManager.UserInterface.Forms
                 //Make sure filename has changed.
                 if (newFilename != oldFilename && !string.IsNullOrEmpty(newFilename))
                 {
-                    //Get the UID of the attachment for the update method.
-                    string renamedUID = AttachGrid[attachmentColumns.FileUID, row].Value.ToString();
-                    UpdateDbAttachementName(renamedUID, newFilename);
+                    //Get the Guid of the attachment for the update method.
+                    string renamedGuid = AttachGrid[attachmentColumns.FileGuid, row].Value.ToString();
+                    UpdateDbAttachementName(renamedGuid, newFilename);
                 }
                 else
                 {
@@ -766,7 +766,7 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void DeleteAttachment(string AttachUID)
+        private void DeleteAttachment(string AttachGuid)
         {
             try
             {
@@ -777,7 +777,7 @@ namespace AssetManager.UserInterface.Forms
                 if (blah == DialogResult.Yes)
                 {
                     Waiting();
-                    if (AssetManagerFunctions.DeleteSqlAttachment(GetSQLAttachment(AttachUID)) > 0)
+                    if (AssetManagerFunctions.DeleteSqlAttachment(GetSQLAttachment(AttachGuid)) > 0)
                     {
                         ListAttachments();
                     }
@@ -819,7 +819,7 @@ namespace AssetManager.UserInterface.Forms
                 WorkerFeedback(true);
                 foreach (string file in files)
                 {
-                    CurrentAttachment = new Attachment(file, attachFolderUID, folder, attachmentColumns);
+                    CurrentAttachment = new Attachment(file, attachFolderGuid, folder, attachmentColumns);
                     if (!OKFileSize(CurrentAttachment))
                     {
                         CurrentAttachment.Dispose();
@@ -902,19 +902,19 @@ namespace AssetManager.UserInterface.Forms
         {
             dragDropDataObj = new DataObject();
             dragDropDataObj.SetData(typeof(DataGridViewRow), AttachGrid.CurrentRow);
-            dragDropDataObj.SetData("FormID", this.FormUID);
+            dragDropDataObj.SetData("FormID", this.FormGuid);
             AttachGrid.DoDragDrop(dragDropDataObj, DragDropEffects.All);
         }
 
-        private async void DownloadAndSaveAttachment(string attachUID)
+        private async void DownloadAndSaveAttachment(string attachGuid)
         {
             try
             {
-                if (attachUID == "")
+                if (attachGuid == "")
                 {
                     return;
                 }
-                using (var saveAttachment = await DownloadAttachment(attachUID))
+                using (var saveAttachment = await DownloadAttachment(attachGuid))
                 {
                     if (ReferenceEquals(saveAttachment, null))
                     {
@@ -937,12 +937,12 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private async void AddAttachmentFileToDragDropObject(string attachUID)
+        private async void AddAttachmentFileToDragDropObject(string attachGuid)
         {
             if (!dragDropDataObj.GetDataPresent(DataFormats.FileDrop) && !transferTaskRunning)
             {
                 Waiting();
-                using (var saveAttachment = await DownloadAttachment(attachUID))
+                using (var saveAttachment = await DownloadAttachment(attachGuid))
                 {
                     if (ReferenceEquals(saveAttachment, null))
                     {
@@ -999,7 +999,7 @@ namespace AssetManager.UserInterface.Forms
             else
             {
                 //something is very wrong
-                Logging.Logger("FILE VERIFICATION FAILURE: FolderUID:" + attachment.FolderGuid + "  FileUID: " + attachment.FileGuid + " | Expected hash:" + attachment.MD5 + " Result hash:" + attachment.ComputedMD5);
+                Logging.Logger("FILE VERIFICATION FAILURE: FolderGuid:" + attachment.FolderGuid + "  FileGuid: " + attachment.FileGuid + " | Expected hash:" + attachment.MD5 + " Result hash:" + attachment.ComputedMD5);
                 OtherFunctions.Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Hash Value Mismatch", this);
                 attachment.Dispose();
                 OtherFunctions.PurgeTempDir();
@@ -1040,12 +1040,12 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private string SelectedAttachmentUID()
+        private string SelectedAttachmentGuid()
         {
-            string AttachUID = AttachGrid.CurrentRowStringValue(attachmentColumns.FileUID);
-            if (!string.IsNullOrEmpty(AttachUID))
+            string AttachGuid = AttachGrid.CurrentRowStringValue(attachmentColumns.FileGuid);
+            if (!string.IsNullOrEmpty(AttachGuid))
             {
-                return AttachUID;
+                return AttachGuid;
             }
             else
             {
@@ -1097,7 +1097,7 @@ namespace AssetManager.UserInterface.Forms
         {
             if (!AttachGrid.IsCurrentCellInEditMode)
             {
-                DownloadAndOpenAttachment(SelectedAttachmentUID());
+                DownloadAndOpenAttachment(SelectedAttachmentGuid());
             }
         }
 
@@ -1194,12 +1194,12 @@ namespace AssetManager.UserInterface.Forms
 
         private void cmdDelete_Click(object sender, EventArgs e)
         {
-            DeleteAttachment(SelectedAttachmentUID());
+            DeleteAttachment(SelectedAttachmentGuid());
         }
 
         private void cmdOpen_Click(object sender, EventArgs e)
         {
-            DownloadAndOpenAttachment(SelectedAttachmentUID());
+            DownloadAndOpenAttachment(SelectedAttachmentGuid());
         }
 
         private void cmdUpload_Click(object sender, EventArgs e)
@@ -1214,12 +1214,12 @@ namespace AssetManager.UserInterface.Forms
 
         private void DeleteAttachmentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DeleteAttachment(SelectedAttachmentUID());
+            DeleteAttachment(SelectedAttachmentGuid());
         }
 
         private void OpenTool_Click(object sender, EventArgs e)
         {
-            DownloadAndOpenAttachment(SelectedAttachmentUID());
+            DownloadAndOpenAttachment(SelectedAttachmentGuid());
         }
 
         private void ProgTimer_Tick(object sender, EventArgs e)
@@ -1254,7 +1254,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void SaveToMenuItem_Click(object sender, EventArgs e)
         {
-            DownloadAndSaveAttachment(SelectedAttachmentUID());
+            DownloadAndSaveAttachment(SelectedAttachmentGuid());
         }
 
         private void FolderListView_ItemActivate(object sender, EventArgs e)
@@ -1365,7 +1365,7 @@ namespace AssetManager.UserInterface.Forms
 
             if (!FolderNameExists(newFolderName))
             {
-                MoveAttachToFolder(SelectedAttachmentUID(), new Attachment.Folder(newFolderName), true);
+                MoveAttachToFolder(SelectedAttachmentGuid(), new Attachment.Folder(newFolderName), true);
             }
             else
             {
@@ -1389,7 +1389,7 @@ namespace AssetManager.UserInterface.Forms
                         ((Control.MousePosition.Y) < f.DesktopBounds.Top) ||
                         ((Control.MousePosition.Y) > f.DesktopBounds.Bottom))
                 {
-                    AddAttachmentFileToDragDropObject(SelectedAttachmentUID());
+                    AddAttachmentFileToDragDropObject(SelectedAttachmentGuid());
                 }
                 else
                 {

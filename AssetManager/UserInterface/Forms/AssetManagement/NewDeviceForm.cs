@@ -35,7 +35,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private int replacementYears = 4;
         private DBControlParser controlParser;
         private LiveBox liveBox;
-        private string newUID;
+        private string newGuid;
 
         #endregion Fields
 
@@ -53,9 +53,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Activate();
         }
 
-        public void ImportFromSibi(string itemUID)
+        public void ImportFromSibi(string itemGuid)
         {
-            string itemQuery = Queries.SelectSibiRequestAndItemByItemGuid(itemUID);
+            string itemQuery = Queries.SelectSibiRequestAndItemByItemGuid(itemGuid);
             DateTime POPurchaseDate = default(DateTime);
             using (var results = DBFactory.GetDatabase().DataTableFromQueryString(itemQuery))
             {
@@ -134,7 +134,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     try
                     {
-                        newUID = Guid.NewGuid().ToString();
+                        newGuid = Guid.NewGuid().ToString();
                         int rows = 0;
                         string DeviceInsertQry = "SELECT * FROM " + DevicesCols.TableName + " LIMIT 0";
                         string HistoryInsertQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " LIMIT 0";
@@ -242,7 +242,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             DBRow[DevicesCols.LastModUser] = NetworkInfo.LocalDomainUser;
             DBRow[DevicesCols.LastModDate] = DateTime.Now;
-            DBRow[DevicesCols.DeviceUID] = newUID;
+            DBRow[DevicesCols.DeviceGuid] = newGuid;
             DBRow[DevicesCols.CheckedOut] = false;
             return tmpTable;
         }
@@ -255,7 +255,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DBRow[HistoricalDevicesCols.ChangeType] = "NEWD";
             DBRow[HistoricalDevicesCols.Notes] = NotesTextBox.Text.ToString().Trim();
             DBRow[HistoricalDevicesCols.ActionUser] = NetworkInfo.LocalDomainUser;
-            DBRow[HistoricalDevicesCols.DeviceUID] = newUID;
+            DBRow[HistoricalDevicesCols.DeviceGuid] = newGuid;
             return tmpTable;
         }
 
@@ -360,6 +360,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void NewDeviceForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             liveBox.Dispose();
+            controlParser.Dispose();
         }
 
         #endregion Methods

@@ -59,7 +59,7 @@ namespace AssetManager.Helpers
         {
             if (device != null)
             {
-                if (!FormIsOpenByUID(typeof(ViewDeviceForm), device.Guid))
+                if (!FormIsOpenByGuid(typeof(ViewDeviceForm), device.Guid))
                 {
                     new ViewDeviceForm(parentForm, device);
                 }
@@ -127,11 +127,11 @@ namespace AssetManager.Helpers
             return null;
         }
 
-        public static bool FormIsOpenByUID(Type formType, string UID)
+        public static bool FormIsOpenByGuid(Type formType, string guid)
         {
             foreach (ExtendedForm frm in Application.OpenForms)
             {
-                if (frm.GetType() == formType && frm.FormUID == UID)
+                if (frm.GetType() == formType && frm.FormGuid == guid)
                 {
                     ActivateForm(frm);
                     return true;
@@ -140,13 +140,13 @@ namespace AssetManager.Helpers
             return false;
         }
 
-        public static bool OKToCloseChildren(ExtendedForm parentForm)
+        public static bool OkToCloseChildren(ExtendedForm parentForm)
         {
             bool CanClose = true;
             var frms = GetChildren(parentForm).ToArray();
             for (int i = 0; i <= frms.Length - 1; i++)
             {
-                if (!frms[i].OKToClose())
+                if (!frms[i].OkToClose())
                     CanClose = false;
             }
             return CanClose;

@@ -78,12 +78,12 @@ namespace AssetManager.Data.Classes
             _dataStream = null;
             _attachTable = attachTable;
             _fileName = TableRow[attachTable.FileName].ToString();
-            _fileGuid = TableRow[attachTable.FileUID].ToString();
+            _fileGuid = TableRow[attachTable.FileGuid].ToString();
             _MD5 = TableRow[attachTable.FileHash].ToString();
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(TableRow[attachTable.FileSize]);
             _extention = TableRow[attachTable.FileType].ToString();
-            _folder = new Folder(TableRow[attachTable.FolderName].ToString(), TableRow[attachTable.FolderNameUID].ToString());
+            _folder = new Folder(TableRow[attachTable.FolderName].ToString(), TableRow[attachTable.FolderNameGuid].ToString());
             _folderGuid = TableRow[attachTable.FKey].ToString();
         }
 
@@ -109,7 +109,7 @@ namespace AssetManager.Data.Classes
             _dataStream = null;
             _attachTable = attachTable;
             _fileName = TableRow[attachTable.FileName].ToString();
-            _fileGuid = TableRow[attachTable.FileUID].ToString();
+            _fileGuid = TableRow[attachTable.FileGuid].ToString();
             _MD5 = TableRow[attachTable.FileHash].ToString();
             _computedMD5 = null;
             _fileSize = Convert.ToInt32(TableRow[attachTable.FileSize]);
@@ -259,7 +259,7 @@ namespace AssetManager.Data.Classes
         public class Folder
         {
             private string folderName;
-            private string folderUID;
+            private string folderGuid;
 
             public string FolderName
             {
@@ -273,35 +273,35 @@ namespace AssetManager.Data.Classes
                 }
             }
 
-            public string FolderNameUID
+            public string FolderNameGuid
             {
                 get
                 {
-                    return folderUID;
+                    return folderGuid;
                 }
 
                 set
                 {
-                    folderUID = value;
+                    folderGuid = value;
                 }
             }
 
             public Folder()
             {
                 this.folderName = string.Empty;
-                this.folderUID = string.Empty;
+                this.folderGuid = string.Empty;
             }
 
             public Folder(string folderName)
             {
                 this.folderName = folderName;
-                this.folderUID = Guid.NewGuid().ToString();
+                this.folderGuid = Guid.NewGuid().ToString();
             }
 
-            public Folder(string folderName, string folderNameUID)
+            public Folder(string folderName, string folderNameGuid)
             {
                 this.folderName = folderName;
-                this.folderUID = folderNameUID;
+                this.folderGuid = folderNameGuid;
             }
 
         }

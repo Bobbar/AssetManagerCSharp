@@ -31,7 +31,7 @@ namespace AssetManager.Data.Classes
         [DataColumnName(SibiRequestCols.Description)]
         public string Description { get; set; }
 
-        [DataColumnName(SibiRequestCols.UID)]
+        [DataColumnName(SibiRequestCols.Guid)]
         public override string Guid { get; set; }
 
         [DataColumnName(SibiRequestCols.NeedBy)]

@@ -10,12 +10,12 @@ namespace AssetManager.Tools
 {
     public class ActiveDirectoryWrapper
     {
-        private string _hostname;
+        private string _hostName;
         private SearchResult _searchResults;
 
-        public ActiveDirectoryWrapper(string hostname)
+        public ActiveDirectoryWrapper(string hostName)
         {
-            _hostname = hostname;
+            _hostName = hostName;
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace AssetManager.Tools
                             searchRoot.Username = SecurityTools.AdminCreds.UserName;
                             searchRoot.Password = SecurityTools.AdminCreds.Password;
                         }
-                        var filter = "(&(objectCategory=computer)(name=" + _hostname + "))";
+                        var filter = "(&(objectCategory=computer)(name=" + _hostName + "))";
                         using (var directorySearch = new DirectorySearcher(searchRoot, filter))
                         {
                             var directorySearchResult = directorySearch.FindOne();

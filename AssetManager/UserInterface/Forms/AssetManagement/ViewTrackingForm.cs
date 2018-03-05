@@ -17,12 +17,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             Show();
         }
 
-        private void ViewTrackingEntry(string entryUID, Device device)
+        private void ViewTrackingEntry(string entryGuid, Device device)
         {
             try
             {
                 OtherFunctions.SetWaitCursor(true, this);
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTrackingEntryByGuid(entryUID)))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTrackingEntryByGuid(entryGuid)))
                 {
                     foreach (DataRow r in results.Rows)
                     {
@@ -37,7 +37,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                             txtCheckType.BackColor = Colors.CheckOut;
                         }
                         txtDescription.Text = device.Description;
-                        txtGuid.Text = DataConsistency.NoNull(r[TrackablesCols.DeviceUID]);
+                        txtGuid.Text = DataConsistency.NoNull(r[TrackablesCols.DeviceGuid]);
                         txtCheckOutUser.Text = DataConsistency.NoNull(r[TrackablesCols.CheckoutUser]);
                         txtCheckInUser.Text = DataConsistency.NoNull(r[TrackablesCols.CheckinUser]);
                         txtLocation.Text = DataConsistency.NoNull(r[TrackablesCols.UseLocation]);
@@ -47,7 +47,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         txtSerial.Text = device.Serial;
                         txtCheckInTime.Text = DataConsistency.NoNull(r[TrackablesCols.CheckinTime]);
                         txtNotes.Text = DataConsistency.NoNull(r[TrackablesCols.Notes]);
-                        txtEntryGuid.Text = DataConsistency.NoNull(r[TrackablesCols.UID]);
+                        txtEntryGuid.Text = DataConsistency.NoNull(r[TrackablesCols.Guid]);
                         this.Text = this.Text + " - " + DataConsistency.NoNull(r[TrackablesCols.DateStamp]);
                     }
                 }

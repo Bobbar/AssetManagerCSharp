@@ -51,30 +51,30 @@ namespace AssetManager.Helpers
                     {
                         switch (col.ColumnFormatType)
                         {
-                            case ColumnFormatTypes.DefaultFormat:
-                            case ColumnFormatTypes.AttributeCombo:
+                            case ColumnFormatType.DefaultFormat:
+                            case ColumnFormatType.AttributeCombo:
                                 NewRow[col.ColumnName] = row[col.ColumnName];
 
                                 break;
 
-                            case ColumnFormatTypes.AttributeDisplayMemberOnly:
+                            case ColumnFormatType.AttributeDisplayMemberOnly:
                                 NewRow[col.ColumnName] = AttributeFunctions.GetDisplayValueFromCode(col.AttributeIndex, row[col.ColumnName].ToString());
 
                                 break;
 
-                            case ColumnFormatTypes.NotePreview:
+                            case ColumnFormatType.NotePreview:
                                 var NoteText = OtherFunctions.RTFToPlainText(row[col.ColumnName].ToString());
                                 NewRow[col.ColumnName] = OtherFunctions.NotePreview(NoteText);
 
                                 break;
 
-                            case ColumnFormatTypes.FileSize:
+                            case ColumnFormatType.FileSize:
                                 string HumanFileSize = Math.Round((Convert.ToInt32(row[col.ColumnName]) / 1024d), 1) + " KB";
                                 NewRow[col.ColumnName] = HumanFileSize;
 
                                 break;
 
-                            case ColumnFormatTypes.Image:
+                            case ColumnFormatType.Image:
                                 NewRow[col.ColumnName] = FileIcon.GetFileIcon(row[col.ColumnName].ToString());
 
                                 break;
@@ -97,10 +97,10 @@ namespace AssetManager.Helpers
             {
                 switch (col.ColumnFormatType)
                 {
-                    case ColumnFormatTypes.AttributeDisplayMemberOnly:
-                    case ColumnFormatTypes.NotePreview:
-                    case ColumnFormatTypes.FileSize:
-                    case ColumnFormatTypes.Image:
+                    case ColumnFormatType.AttributeDisplayMemberOnly:
+                    case ColumnFormatType.NotePreview:
+                    case ColumnFormatType.FileSize:
+                    case ColumnFormatType.Image:
                         RebuildRequired = true;
                         break;
                 }
@@ -112,16 +112,16 @@ namespace AssetManager.Helpers
         {
             switch (column.ColumnFormatType)
             {
-                case ColumnFormatTypes.DefaultFormat:
-                case ColumnFormatTypes.AttributeDisplayMemberOnly:
-                case ColumnFormatTypes.NotePreview:
-                case ColumnFormatTypes.FileSize:
+                case ColumnFormatType.DefaultFormat:
+                case ColumnFormatType.AttributeDisplayMemberOnly:
+                case ColumnFormatType.NotePreview:
+                case ColumnFormatType.FileSize:
                     return GenericColumn(column);
 
-                case ColumnFormatTypes.AttributeCombo:
+                case ColumnFormatType.AttributeCombo:
                     return DataGridComboColumn(column.AttributeIndex, column.ColumnCaption, column.ColumnName);
 
-                case ColumnFormatTypes.Image:
+                case ColumnFormatType.Image:
                     return DataGridImageColumn(column);
             }
             return null;

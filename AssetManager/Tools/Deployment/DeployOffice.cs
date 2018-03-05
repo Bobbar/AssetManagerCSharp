@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace AssetManager.Tools.Deployment
 {
-    public class DeployOffice
+    public class DeployOffice : IDisposable
     {
         private const string deploymentFilesDirectory = "\\\\svr-file1\\dd_files\\Information Technology\\Software\\Office\\RemoteDeploy";// "\\\\core.co.fairfield.oh.us\\dfs1\\fcdd\\files\\Information Technology\\Software\\Office\\RemoteDeploy";
         private const string deployTempDirectory = "\\Temp\\OfficeDeploy";
@@ -122,7 +122,7 @@ namespace AssetManager.Tools.Deployment
 
                     deploy.LogMessage("Starting Office 356 deployment...");
 
-                    var installExitCode = await deploy.PsExecWrap.ExecuteRemoteCommand(targetDevice, GetO365InstallString(configFile));
+                    var installExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetO365InstallString(configFile));
                     if (installExitCode == 0)
                     {
                         deploy.LogMessage("Deployment complete!");
@@ -196,6 +196,11 @@ namespace AssetManager.Tools.Deployment
             cmd.Parameters.Add("Force");
             cmd.Parameters.Add("Path", fullDeployTempDir);
             return cmd;
+        }
+
+        public void Dispose()
+        {
+            ((IDisposable)deploy).Dispose();
         }
     }
 }

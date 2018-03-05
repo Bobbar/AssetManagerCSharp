@@ -226,9 +226,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label17.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label17.Location = new System.Drawing.Point(560, 75);
             this.Label17.Name = "Label17";
-            this.Label17.Size = new System.Drawing.Size(70, 15);
+            this.Label17.Size = new System.Drawing.Size(77, 15);
             this.Label17.TabIndex = 34;
-            this.Label17.Text = "Entry UID";
+            this.Label17.Text = "Entry Guid";
             // 
             // txtEntryGuid
             // 
@@ -306,9 +306,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label12.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label12.Location = new System.Drawing.Point(560, 28);
             this.Label12.Name = "Label12";
-            this.Label12.Size = new System.Drawing.Size(77, 15);
+            this.Label12.Size = new System.Drawing.Size(84, 15);
             this.Label12.TabIndex = 23;
-            this.Label12.Text = "Device UID";
+            this.Label12.Text = "Device Guid";
             // 
             // txtGuid
             // 
@@ -553,6 +553,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View Entry";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ViewHistoryForm_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ViewHistoryForm_FormClosed);
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
             this.GroupBox2.ResumeLayout(false);

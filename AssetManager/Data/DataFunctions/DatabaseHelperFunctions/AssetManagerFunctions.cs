@@ -59,11 +59,11 @@ namespace AssetManager.Data.Functions
             {
                 if (!IsEmployeeInDB(empInfo.Number))
                 {
-                    string UID = Guid.NewGuid().ToString();
+                    string newGuid = Guid.NewGuid().ToString();
                     ParamCollection insertParams = new ParamCollection();
                     insertParams.Add(EmployeesCols.Name, empInfo.Name);
                     insertParams.Add(EmployeesCols.Number, empInfo.Number);
-                    insertParams.Add(EmployeesCols.UID, UID);
+                    insertParams.Add(EmployeesCols.Guid, newGuid);
                     DBFactory.GetDatabase().InsertFromParameters(EmployeesCols.TableName, insertParams.Parameters);
                 }
             }
@@ -76,39 +76,39 @@ namespace AssetManager.Data.Functions
         /// <summary>
         /// Searches the database for the best possible match to the specified search name using a Levenshtein distance algorithm.
         /// </summary>
-        /// <param name="empSearchName"></param>
-        /// <param name="MinSearchDistance"></param>
+        /// <param name="searchName"></param>
+        /// <param name="minSearchDistance"></param>
         /// <returns></returns>
-        public static MunisEmployee SmartEmployeeSearch(string empSearchName, int MinSearchDistance = 10)
+        public static MunisEmployee SmartEmployeeSearch(string searchName, int minSearchDistance = 10)
         {
-            if (empSearchName.Trim() != "")
+            if (searchName.Trim() != "")
             {
                 // Split the name string by spaces to try and separate first/last names.
-                string[] SplitName = empSearchName.Split(char.Parse(" "));
+                string[] splitName = searchName.Split(char.Parse(" "));
 
                 // Init new list of search result objects.
-                List<SmartEmpSearchInfo> Results = new List<SmartEmpSearchInfo>();
+                List<SmartEmpSearchInfo> results = new List<SmartEmpSearchInfo>();
 
                 // Get results for complete name from employees table
-                Results.AddRange(GetEmpSearchResults(EmployeesCols.TableName, empSearchName, EmployeesCols.Name, EmployeesCols.Number));
+                results.AddRange(GetEmpSearchResults(EmployeesCols.TableName, searchName, EmployeesCols.Name, EmployeesCols.Number));
 
                 // Get results for complete name from devices table
-                Results.AddRange(GetEmpSearchResults(DevicesCols.TableName, empSearchName, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum));
+                results.AddRange(GetEmpSearchResults(DevicesCols.TableName, searchName, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum));
 
-                foreach (string s in SplitName)
+                foreach (string s in splitName)
                 {
                     //Get results for partial name from employees table
-                    Results.AddRange(GetEmpSearchResults(EmployeesCols.TableName, s, EmployeesCols.Name, EmployeesCols.Number));
+                    results.AddRange(GetEmpSearchResults(EmployeesCols.TableName, s, EmployeesCols.Name, EmployeesCols.Number));
 
                     //Get results for partial name from devices table
-                    Results.AddRange(GetEmpSearchResults(DevicesCols.TableName, s, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum));
+                    results.AddRange(GetEmpSearchResults(DevicesCols.TableName, s, DevicesCols.CurrentUser, DevicesCols.MunisEmpNum));
                 }
 
-                if (Results.Count > 0)
+                if (results.Count > 0)
                 {
-                    Results = NarrowResults(Results);
-                    var BestMatch = FindBestSmartSearchMatch(Results);
-                    if (BestMatch.MatchDistance < MinSearchDistance)
+                    results = NarrowResults(results);
+                    var BestMatch = FindBestSmartSearchMatch(results);
+                    if (BestMatch.MatchDistance < minSearchDistance)
                     {
                         return BestMatch.SearchResult;
                     }
@@ -260,17 +260,17 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static bool DeleteDevice(string Guid)
+        public static bool DeleteDevice(string guid)
         {
             try
             {
                 // if has attachments, delete ftp directory, then delete the sql records.
-                if (FtpFunctions.HasFtpFolder(Guid))
+                if (FtpFunctions.HasFtpFolder(guid))
                 {
-                    if (!FtpFunctions.DeleteFtpFolder(Guid)) return false;
+                    if (!FtpFunctions.DeleteFtpFolder(guid)) return false;
                 }
                 //delete sql records
-                return DeleteMasterSqlEntry(Guid, EntryType.Device);
+                return DeleteMasterSqlEntry(guid, EntryType.Device);
             }
             catch (Exception ex)
             {
@@ -278,17 +278,17 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static bool DeleteSibiRequest(string Guid)
+        public static bool DeleteSibiRequest(string guid)
         {
             try
             {
                 // if has attachments, delete ftp directory, then delete the sql records.
-                if (FtpFunctions.HasFtpFolder(Guid))
+                if (FtpFunctions.HasFtpFolder(guid))
                 {
-                    if (!FtpFunctions.DeleteFtpFolder(Guid)) return false;
+                    if (!FtpFunctions.DeleteFtpFolder(guid)) return false;
                 }
                 //delete sql records
-                return DeleteMasterSqlEntry(Guid, EntryType.Sibi);
+                return DeleteMasterSqlEntry(guid, EntryType.Sibi);
             }
             catch (Exception ex)
             {
@@ -300,12 +300,12 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                var AttachmentFolderID = GetSqlValue(attachment.AttachTable.TableName, attachment.AttachTable.FileUID, attachment.FileGuid, attachment.AttachTable.FKey);
+                var AttachmentFolderID = GetSqlValue(attachment.AttachTable.TableName, attachment.AttachTable.FileGuid, attachment.FileGuid, attachment.AttachTable.FKey);
                 //Delete FTP Attachment
                 if (FtpFunctions.DeleteFtpAttachment(attachment.FileGuid, AttachmentFolderID))
                 {
                     //delete SQL entry
-                    var SQLDeleteQry = "DELETE FROM " + attachment.AttachTable.TableName + " WHERE " + attachment.AttachTable.FileUID + "='" + attachment.FileGuid + "'";
+                    var SQLDeleteQry = "DELETE FROM " + attachment.AttachTable.TableName + " WHERE " + attachment.AttachTable.FileGuid + "='" + attachment.FileGuid + "'";
                     return DBFactory.GetDatabase().ExecuteNonQuery(SQLDeleteQry);
                 }
                 return -1;
@@ -393,10 +393,10 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static bool IsEmployeeInDB(string empNum)
+        public static bool IsEmployeeInDB(string empNumber)
         {
-            string EmpName = GetSqlValue(EmployeesCols.TableName, EmployeesCols.Number, empNum, EmployeesCols.Name);
-            if (!string.IsNullOrEmpty(EmpName))
+            string empName = GetSqlValue(EmployeesCols.TableName, EmployeesCols.Number, empNumber, EmployeesCols.Name);
+            if (!string.IsNullOrEmpty(empName))
             {
                 return true;
             }
@@ -406,21 +406,21 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static Device FindDeviceFromAssetOrSerial(string searchVal, FindDevType type)
+        public static Device FindDeviceFromAssetOrSerial(string searchValue, FindDevType type)
         {
             try
             {
                 if (type == FindDevType.AssetTag)
                 {
                     QueryParamCollection searchParam = new QueryParamCollection();
-                    searchParam.Add(DevicesCols.AssetTag, searchVal, true);
+                    searchParam.Add(DevicesCols.AssetTag, searchValue, true);
                     return new Device(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, searchParam.Parameters));
                 }
                 else if (type == FindDevType.Serial)
                 {
 
                     QueryParamCollection searchParam = new QueryParamCollection();
-                    searchParam.Add(DevicesCols.Serial, searchVal, true);
+                    searchParam.Add(DevicesCols.Serial, searchValue, true);
                     return new Device(DBFactory.GetDatabase().DataTableFromParameters(Queries.SelectDevicesPartial, searchParam.Parameters));
                 }
                 return null;
@@ -463,13 +463,13 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static void SetAttachmentCount(ToolStripButton targetTool, string attachFolderUID, AttachmentsBaseCols attachTable)
+        public static void SetAttachmentCount(ToolStripButton targetTool, string attachFolderGuid, AttachmentsBaseCols attachTable)
         {
             if (!GlobalSwitches.CachedMode)
             {
                 try
                 {
-                    int attachCount = Convert.ToInt32(GetSqlValue(attachTable.TableName, attachTable.FKey, attachFolderUID, "COUNT(*)"));
+                    int attachCount = Convert.ToInt32(GetSqlValue(attachTable.TableName, attachTable.FKey, attachFolderGuid, "COUNT(*)"));
                     targetTool.Text = "(" + attachCount.ToString() + ")";
                     targetTool.ToolTipText = "Attachments " + targetTool.Text;
                 }

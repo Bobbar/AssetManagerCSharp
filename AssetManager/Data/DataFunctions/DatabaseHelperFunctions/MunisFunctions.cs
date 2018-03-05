@@ -29,20 +29,20 @@ namespace AssetManager.Data.Functions
             return null;
         }
 
-        private static async Task<string> GetReqNumberFromPOAsync(string PO)
+        private static async Task<string> GetReqNumberFromPOAsync(string po)
         {
-            if (!string.IsNullOrEmpty(PO))
+            if (!string.IsNullOrEmpty(po))
             {
-                return await MunisComms.ReturnSqlValueAsync("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber");
+                return await MunisComms.ReturnSqlValueAsync("Requisitions", "PurchaseOrderNumber", po, "RequisitionNumber");
             }
             return string.Empty;
         }
 
-        public static async Task<string> GetPOFromReqNumberAsync(string reqNum, string FY)
+        public static async Task<string> GetPOFromReqNumberAsync(string reqNum, string fy)
         {
             if (!string.IsNullOrEmpty(reqNum))
             {
-                return await MunisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_pur_no", "rqdt_fsc_yr", FY);
+                return await MunisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_pur_no", "rqdt_fsc_yr", fy);
             }
             return string.Empty;
         }
@@ -108,11 +108,11 @@ namespace AssetManager.Data.Functions
             return MunisComms.ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_fisc_yr").ToString().Trim();
         }
 
-        public static DateTime GetPODate(string PO)
+        public static DateTime GetPODate(string po)
         {
             try
             {
-                return DateTime.Parse(MunisComms.ReturnSqlValue("RequisitionItems", "PurchaseOrderNumber", PO, "PurchaseOrderDate").ToString().Trim());
+                return DateTime.Parse(MunisComms.ReturnSqlValue("RequisitionItems", "PurchaseOrderNumber", po, "PurchaseOrderDate").ToString().Trim());
             }
             catch (Exception)
             {
@@ -120,58 +120,58 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static string GetVendorNameFromPO(string PO)
+        public static string GetVendorNameFromPO(string po)
         {
-            var VendorNumber = MunisComms.ReturnSqlValue("rqdetail", "rqdt_req_no", GetReqNumberFromPO(PO), "rqdt_sug_vn", "rqdt_fsc_yr", GetFYFromPO(PO));
-            return MunisComms.ReturnSqlValue("ap_vendor", "a_vendor_number", VendorNumber, "a_vendor_name").ToString();
+            var vendorNumber = MunisComms.ReturnSqlValue("rqdetail", "rqdt_req_no", GetReqNumberFromPO(po), "rqdt_sug_vn", "rqdt_fsc_yr", GetFYFromPO(po));
+            return MunisComms.ReturnSqlValue("ap_vendor", "a_vendor_number", vendorNumber, "a_vendor_name").ToString();
         }
 
-        public static async Task<string> GetVendorNumberFromReqNumber(string reqNum, string FY)
+        public static async Task<string> GetVendorNumberFromReqNumber(string reqNum, string fy)
         {
-            var VendorNum = await MunisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_sug_vn", "rqdt_fsc_yr", FY);
-            if (VendorNum != null)
+            var vendorNumber = await MunisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_sug_vn", "rqdt_fsc_yr", fy);
+            if (vendorNumber != null)
             {
-                return VendorNum.ToString();
+                return vendorNumber.ToString();
             }
             return string.Empty;
         }
 
-        public static string GetFYFromPO(string PO)
+        public static string GetFYFromPO(string po)
         {
-            string TwoDigitYear = PO.Substring(0, 2);
-            return "20" + TwoDigitYear;
+            string twoDigitYear = po.Substring(0, 2);
+            return "20" + twoDigitYear;
         }
 
-        public static async Task<string> GetPOStatusFromPO(int PO)
+        public static async Task<string> GetPOStatusFromPO(int po)
         {
-            string StatusString = "";
-            string StatusCode = await MunisComms.ReturnSqlValueAsync("poheader", "pohd_pur_no", PO, "pohd_sta_cd");
-            if (!string.IsNullOrEmpty(StatusCode))
+            string statusString = "";
+            string statusCode = await MunisComms.ReturnSqlValueAsync("poheader", "pohd_pur_no", po, "pohd_sta_cd");
+            if (!string.IsNullOrEmpty(statusCode))
             {
-                int ParseCode = -1;
-                if (!int.TryParse(StatusCode, out ParseCode))
+                int parseCode = -1;
+                if (!int.TryParse(statusCode, out parseCode))
                 {
                     return string.Empty;
                 }
-                StatusString = StatusCode.ToString() + " - " + POStatusTextFromCode(ParseCode);
-                return StatusString;
+                statusString = statusCode.ToString() + " - " + POStatusTextFromCode(parseCode);
+                return statusString;
             }
             return string.Empty;
         }
 
-        public static async Task<string> GetReqStatusFromReqNum(string reqNum, int FY)
+        public static async Task<string> GetReqStatusFromReqNum(string reqNum, int fy)
         {
-            string StatusString = "";
-            string StatusCode = await MunisComms.ReturnSqlValueAsync("rqheader", "rqhd_req_no", reqNum, "rqhd_sta_cd", "rqhd_fsc_yr", FY);
-            if (!string.IsNullOrEmpty(StatusCode))
+            string statusString = "";
+            string statusCode = await MunisComms.ReturnSqlValueAsync("rqheader", "rqhd_req_no", reqNum, "rqhd_sta_cd", "rqhd_fsc_yr", fy);
+            if (!string.IsNullOrEmpty(statusCode))
             {
-                int ParseCode = -1;
-                if (!int.TryParse(StatusCode, out ParseCode))
+                int parseCode = -1;
+                if (!int.TryParse(statusCode, out parseCode))
                 {
                     return string.Empty;
                 }
-                StatusString = StatusCode.ToString() + " - " + ReqStatusTextFromCode(ParseCode);
-                return StatusString;
+                statusString = statusCode.ToString() + " - " + ReqStatusTextFromCode(parseCode);
+                return statusString;
             }
             return string.Empty;
         }
@@ -241,18 +241,18 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                Device Device = new Device();
-                using (AdvancedDialog NewDialog = new AdvancedDialog(parentForm))
+                Device device = new Device();
+                using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
                 {
-                    NewDialog.Text = "Asset Search";
-                    NewDialog.AddTextBox("txtAsset", "Asset:");
-                    NewDialog.AddTextBox("txtSerial", "Serial:");
-                    NewDialog.ShowDialog();
-                    if (NewDialog.DialogResult == DialogResult.OK)
+                    newDialog.Text = "Asset Search";
+                    newDialog.AddTextBox("txtAsset", "Asset:");
+                    newDialog.AddTextBox("txtSerial", "Serial:");
+                    newDialog.ShowDialog();
+                    if (newDialog.DialogResult == DialogResult.OK)
                     {
-                        Device.AssetTag = NewDialog.GetControlValue("txtAsset").ToString().Trim();
-                        Device.Serial = NewDialog.GetControlValue("txtSerial").ToString().Trim();
-                        LoadMunisInfoByDevice(Device, parentForm);
+                        device.AssetTag = newDialog.GetControlValue("txtAsset").ToString().Trim();
+                        device.Serial = newDialog.GetControlValue("txtSerial").ToString().Trim();
+                        LoadMunisInfoByDevice(device, parentForm);
                     }
                 }
             }
@@ -266,14 +266,14 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                using (AdvancedDialog NewDialog = new AdvancedDialog(parentForm))
+                using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
                 {
-                    NewDialog.Text = "Employee Search";
-                    NewDialog.AddTextBox("txtName", "First or Last Name:");
-                    NewDialog.ShowDialog();
-                    if (NewDialog.DialogResult == DialogResult.OK)
+                    newDialog.Text = "Employee Search";
+                    newDialog.AddTextBox("txtName", "First or Last Name:");
+                    newDialog.ShowDialog();
+                    if (newDialog.DialogResult == DialogResult.OK)
                     {
-                        var strName = NewDialog.GetControlValue("txtName").ToString();
+                        var strName = newDialog.GetControlValue("txtName").ToString();
                         if (strName.Trim() != "")
                         {
                             NewMunisEmployeeSearch(strName.Trim(), parentForm);
@@ -291,16 +291,16 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                string PO = "";
-                using (AdvancedDialog NewDialog = new AdvancedDialog(parentForm))
+                string po = "";
+                using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
                 {
-                    NewDialog.Text = "PO Search";
-                    NewDialog.AddTextBox("txtPO", "PO #:");
-                    NewDialog.ShowDialog();
-                    if (NewDialog.DialogResult == DialogResult.OK)
+                    newDialog.Text = "PO Search";
+                    newDialog.AddTextBox("txtPO", "PO #:");
+                    newDialog.ShowDialog();
+                    if (newDialog.DialogResult == DialogResult.OK)
                     {
-                        PO = NewDialog.GetControlValue("txtPO").ToString();
-                        NewMunisPOSearch(PO, parentForm);
+                        po = newDialog.GetControlValue("txtPO").ToString();
+                        NewMunisPOSearch(po, parentForm);
                     }
                 }
             }
@@ -314,22 +314,22 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                string ReqNumber = "";
-                string FY = "";
-                using (AdvancedDialog NewDialog = new AdvancedDialog(parentForm))
+                string reqNumber = "";
+                string fy = "";
+                using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
                 {
-                    NewDialog.Text = "Req Search";
-                    NewDialog.AddTextBox("txtReqNum", "Requisition #:");
-                    NewDialog.AddTextBox("txtFY", "FY:");
-                    NewDialog.ShowDialog();
-                    if (NewDialog.DialogResult == DialogResult.OK)
+                    newDialog.Text = "Req Search";
+                    newDialog.AddTextBox("txtReqNum", "Requisition #:");
+                    newDialog.AddTextBox("txtFY", "FY:");
+                    newDialog.ShowDialog();
+                    if (newDialog.DialogResult == DialogResult.OK)
                     {
-                        ReqNumber = NewDialog.GetControlValue("txtReqNum").ToString();
-                        FY = NewDialog.GetControlValue("txtFY").ToString();
-                        if (DataConsistency.IsValidYear(FY))
+                        reqNumber = newDialog.GetControlValue("txtReqNum").ToString();
+                        fy = newDialog.GetControlValue("txtFY").ToString();
+                        if (DataConsistency.IsValidYear(fy))
                         {
                             OtherFunctions.SetWaitCursor(true, parentForm);
-                            var blah = await NewMunisReqSearch(ReqNumber, FY, parentForm);
+                            var blah = await NewMunisReqSearch(reqNumber, fy, parentForm);
                         }
                         else
                         {
@@ -348,29 +348,29 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static void OrgObSearch(ExtendedForm parentForm)
+        public static void OrgObjSearch(ExtendedForm parentForm)
         {
             try
             {
-                using (AdvancedDialog NewDialog = new AdvancedDialog(parentForm))
+                using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
                 {
-                    string strOrg = "";
-                    string strObj = "";
-                    string strFY = "";
-                    NewDialog.Text = "Org/Object Code Search";
-                    NewDialog.AddTextBox("txtOrg", "Org Code:");
-                    NewDialog.AddTextBox("txtObj", "Object Code:");
-                    NewDialog.AddTextBox("txtFY", "Fiscal Year:");
-                    NewDialog.SetControlValue("txtFY", DateTime.Now.Year);
-                    NewDialog.ShowDialog();
-                    if (NewDialog.DialogResult == DialogResult.OK)
+                    string org = "";
+                    string obj = "";
+                    string fy = "";
+                    newDialog.Text = "Org/Object Code Search";
+                    newDialog.AddTextBox("txtOrg", "Org Code:");
+                    newDialog.AddTextBox("txtObj", "Object Code:");
+                    newDialog.AddTextBox("txtFY", "Fiscal Year:");
+                    newDialog.SetControlValue("txtFY", DateTime.Now.Year);
+                    newDialog.ShowDialog();
+                    if (newDialog.DialogResult == DialogResult.OK)
                     {
-                        strOrg = NewDialog.GetControlValue("txtOrg").ToString();
-                        strObj = NewDialog.GetControlValue("txtObj").ToString();
-                        strFY = NewDialog.GetControlValue("txtFY").ToString();
-                        if (strOrg.Trim() != "" && DataConsistency.IsValidYear(strFY))
+                        org = newDialog.GetControlValue("txtOrg").ToString();
+                        obj = newDialog.GetControlValue("txtObj").ToString();
+                        fy = newDialog.GetControlValue("txtFY").ToString();
+                        if (org.Trim() != "" && DataConsistency.IsValidYear(fy))
                         {
-                            NewOrgObView(strOrg, strObj, strFY, parentForm);
+                            NewOrgObjView(org, obj, fy, parentForm);
                         }
                     }
                 }
@@ -383,18 +383,18 @@ namespace AssetManager.Data.Functions
 
         public static DataTable ListOfEmpsBySup(string supEmpNum)
         {
-            string strQRY = "SELECT TOP 100 a_employee_number FROM pr_employee_master WHERE e_supervisor='" + supEmpNum + "'";
-            return MunisComms.ReturnSqlTable(strQRY);
+            string query = "SELECT TOP 100 a_employee_number FROM pr_employee_master WHERE e_supervisor='" + supEmpNum + "'";
+            return MunisComms.ReturnSqlTable(query);
         }
 
-        public static async void NewOrgObView(string org, string obj, string FY, ExtendedForm parentForm)
+        public static async void NewOrgObjView(string org, string obj, string fy, ExtendedForm parentForm)
         {
             try
             {
                 OtherFunctions.SetWaitCursor(true, parentForm);
-                GridForm NewGridForm = new GridForm(parentForm, "Org/Obj Info");
-                string GLColumns = " glma_org, glma_obj, glma_desc, glma_seg5, glma_bud_yr, glma_orig_bud_cy, glma_rev_bud_cy, glma_encumb_cy, glma_memo_bal_cy, glma_rev_bud_cy-glma_encumb_cy-glma_memo_bal_cy AS 'Funds Available' ";
-                string GLMasterQry = "Select TOP " + intMaxResults + " " + GLColumns + "FROM glmaster";
+                GridForm newGridForm = new GridForm(parentForm, "Org/Obj Info");
+                string glColumns = " glma_org, glma_obj, glma_desc, glma_seg5, glma_bud_yr, glma_orig_bud_cy, glma_rev_bud_cy, glma_encumb_cy, glma_memo_bal_cy, glma_rev_bud_cy-glma_encumb_cy-glma_memo_bal_cy AS 'Funds Available' ";
+                string glMasterQry = "Select TOP " + intMaxResults + " " + glColumns + "FROM glmaster";
 
                 QueryParamCollection glParams = new QueryParamCollection();
                 glParams.Add("glma_org", org, true);
@@ -403,30 +403,30 @@ namespace AssetManager.Data.Functions
                 {
                     glParams.Add("glma_obj", obj, true);
 
-                    string RollUpCode = await MunisComms.ReturnSqlValueAsync("gl_budget_rollup", "a_org", org, "a_rollup_code");
-                    string RollUpByCodeQry = "SELECT TOP " + intMaxResults + " * FROM gl_budget_rollup WHERE a_rollup_code = '" + RollUpCode + "'";
-                    string BudgetQry = "SELECT TOP " + intMaxResults + " a_projection_no,a_org,a_object,db_line,db_bud_desc_line1,db_bud_reason_desc,db_bud_req_qty5,db_bud_unit_cost,db_bud_req_amt5,a_account_id FROM gl_budget_detail_2"; // WHERE a_projection_no='" & FY & "' AND a_org='" & Org & "' AND a_object='" & Obj & "'"
+                    string rollUpCode = await MunisComms.ReturnSqlValueAsync("gl_budget_rollup", "a_org", org, "a_rollup_code");
+                    string rollUpByCodeQry = "SELECT TOP " + intMaxResults + " * FROM gl_budget_rollup WHERE a_rollup_code = '" + rollUpCode + "'";
+                    string budgetQry = "SELECT TOP " + intMaxResults + " a_projection_no,a_org,a_object,db_line,db_bud_desc_line1,db_bud_reason_desc,db_bud_req_qty5,db_bud_unit_cost,db_bud_req_amt5,a_account_id FROM gl_budget_detail_2"; // WHERE a_projection_no='" & FY & "' AND a_org='" & Org & "' AND a_object='" & Obj & "'"
 
                     QueryParamCollection budgetParams = new QueryParamCollection();
-                    budgetParams.Add("a_projection_no", FY, true);
+                    budgetParams.Add("a_projection_no", fy, true);
                     budgetParams.Add("a_org", org, true);
                     budgetParams.Add("a_object", obj, true);
 
-                    NewGridForm.AddGrid("OrgGrid", "GL Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(GLMasterQry, glParams.Parameters)));
-                    NewGridForm.AddGrid("RollupGrid", "Rollup Info:", await MunisComms.ReturnSqlTableAsync(RollUpByCodeQry));
-                    NewGridForm.AddGrid("BudgetGrid", "Budget Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(BudgetQry, budgetParams.Parameters)));
+                    newGridForm.AddGrid("OrgGrid", "GL Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(glMasterQry, glParams.Parameters)));
+                    newGridForm.AddGrid("RollupGrid", "Rollup Info:", await MunisComms.ReturnSqlTableAsync(rollUpByCodeQry));
+                    newGridForm.AddGrid("BudgetGrid", "Budget Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(budgetQry, budgetParams.Parameters)));
                 }
                 else // Show Rollup info for all Objects in Org
                 {
-                    string RollUpAllQry = "SELECT TOP " + intMaxResults + " * FROM gl_budget_rollup";
+                    string rollUpAllQry = "SELECT TOP " + intMaxResults + " * FROM gl_budget_rollup";
 
                     QueryParamCollection rollUpParams = new QueryParamCollection();
                     rollUpParams.Add("a_org", org, true);
 
-                    NewGridForm.AddGrid("OrgGrid", "GL Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(GLMasterQry, glParams.Parameters))); //MunisComms.Return_MSSQLTableAsync(Qry))
-                    NewGridForm.AddGrid("RollupGrid", "Rollup Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(RollUpAllQry, rollUpParams.Parameters))); //MunisComms.Return_MSSQLTableAsync("SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
+                    newGridForm.AddGrid("OrgGrid", "GL Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(glMasterQry, glParams.Parameters))); //MunisComms.Return_MSSQLTableAsync(Qry))
+                    newGridForm.AddGrid("RollupGrid", "Rollup Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(rollUpAllQry, rollUpParams.Parameters))); //MunisComms.Return_MSSQLTableAsync("SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
                 }
-                NewGridForm.Show();
+                newGridForm.Show();
             }
             catch (Exception ex)
             {
@@ -443,8 +443,8 @@ namespace AssetManager.Data.Functions
             try
             {
                 OtherFunctions.SetWaitCursor(true, parentForm);
-                string strColumns = "e.a_employee_number,e.a_name_last,e.a_name_first,e.a_org_primary,e.a_object_primary,e.a_location_primary,e.a_location_p_desc,e.a_location_p_short,e.e_work_location,m.a_employee_number as sup_employee_number,m.a_name_first as sup_name_first,m.a_name_last as sup_name_last";
-                string strQRY = "SELECT TOP " + intMaxResults + " " + strColumns + @"
+                string columns = "e.a_employee_number,e.a_name_last,e.a_name_first,e.a_org_primary,e.a_object_primary,e.a_location_primary,e.a_location_p_desc,e.a_location_p_short,e.e_work_location,m.a_employee_number as sup_employee_number,m.a_name_first as sup_name_first,m.a_name_last as sup_name_last";
+                string query = "SELECT TOP " + intMaxResults + " " + columns + @"
 FROM pr_employee_master e
 INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
 
@@ -452,15 +452,15 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
                 searchParams.Add("e.a_name_last", name.ToUpper(), "OR");
                 searchParams.Add("e.a_name_first", name.ToUpper(), "OR");
 
-                GridForm NewGridForm = new GridForm(parentForm, "MUNIS Employee Info");
-                using (var cmd = MunisComms.GetSqlCommandFromParams(strQRY, searchParams.Parameters))
+                GridForm newGridForm = new GridForm(parentForm, "MUNIS Employee Info");
+                using (var cmd = MunisComms.GetSqlCommandFromParams(query, searchParams.Parameters))
                 {
                     using (var results = await MunisComms.ReturnSqlTableFromCmdAsync(cmd))
                     {
                         if (HasResults(results, parentForm))
                         {
-                            NewGridForm.AddGrid("EmpGrid", "MUNIS Info:", results);
-                            NewGridForm.Show();
+                            newGridForm.AddGrid("EmpGrid", "MUNIS Info:", results);
+                            newGridForm.Show();
                         }
                     }
                 }
@@ -475,30 +475,30 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
             }
         }
 
-        public static async void NewMunisPOSearch(string PO, ExtendedForm parentForm)
+        public static async void NewMunisPOSearch(string po, ExtendedForm parentForm)
         {
             try
             {
                 OtherFunctions.SetWaitCursor(true, parentForm);
-                if (PO == "")
+                if (po == "")
                 {
                     return;
                 }
-                string strQRY = "SELECT TOP " + intMaxResults + @" pohd_pur_no, pohd_fsc_yr, pohd_req_no, pohd_gen_cm, pohd_buy_id, pohd_pre_dt, pohd_exp_dt, pohd_sta_cd, pohd_vnd_cd, pohd_dep_cd, pohd_shp_cd, pohd_tot_amt, pohd_serial
+                string query = "SELECT TOP " + intMaxResults + @" pohd_pur_no, pohd_fsc_yr, pohd_req_no, pohd_gen_cm, pohd_buy_id, pohd_pre_dt, pohd_exp_dt, pohd_sta_cd, pohd_vnd_cd, pohd_dep_cd, pohd_shp_cd, pohd_tot_amt, pohd_serial
 FROM poheader";
 
                 QueryParamCollection searchParams = new QueryParamCollection();
-                searchParams.Add("pohd_pur_no", PO, true);
+                searchParams.Add("pohd_pur_no", po, true);
 
-                GridForm NewGridForm = new GridForm(parentForm, "MUNIS PO Info");
-                using (var cmd = MunisComms.GetSqlCommandFromParams(strQRY, searchParams.Parameters))
+                GridForm newGridForm = new GridForm(parentForm, "MUNIS PO Info");
+                using (var cmd = MunisComms.GetSqlCommandFromParams(query, searchParams.Parameters))
                 {
                     using (var results = await MunisComms.ReturnSqlTableFromCmdAsync(cmd))
                     {
                         if (HasResults(results, parentForm))
                         {
-                            NewGridForm.AddGrid("POGrid", "PO Info:", results);
-                            NewGridForm.Show();
+                            newGridForm.AddGrid("POGrid", "PO Info:", results);
+                            newGridForm.Show();
                         }
                     }
                 }
@@ -513,35 +513,35 @@ FROM poheader";
             }
         }
 
-        public static async Task<string> NewMunisReqSearch(string reqNumber, string FY, ExtendedForm parentForm, bool selectMode = false)
+        public static async Task<string> NewMunisReqSearch(string reqNumber, string fy, ExtendedForm parentForm, bool selectMode = false)
         {
-            if (reqNumber == "" || FY == "")
+            if (reqNumber == "" || fy == "")
             {
                 return string.Empty;
             }
-            GridForm NewGridForm = new GridForm(parentForm, "MUNIS Requisition Info");
-            using (var ReqLineItemsTable = await GetReqLineItemsFromReqNum(reqNumber, FY))
+            GridForm newGridForm = new GridForm(parentForm, "MUNIS Requisition Info");
+            using (var ReqLineItemsTable = await GetReqLineItemsFromReqNum(reqNumber, fy))
             {
                 if (HasResults(ReqLineItemsTable, parentForm))
                 {
                     if (!selectMode)
                     {
-                        using (var ReqHeaderTable = await GetReqHeaderFromReqNum(reqNumber, FY))
+                        using (var ReqHeaderTable = await GetReqHeaderFromReqNum(reqNumber, fy))
                         {
-                            NewGridForm.AddGrid("ReqHeaderGrid", "Requisition Header:", ReqHeaderTable);
+                            newGridForm.AddGrid("ReqHeaderGrid", "Requisition Header:", ReqHeaderTable);
                         }
 
-                        NewGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", ReqLineItemsTable);
-                        NewGridForm.Show();
+                        newGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", ReqLineItemsTable);
+                        newGridForm.Show();
                         return string.Empty;
                     }
                     else
                     {
-                        NewGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", ReqLineItemsTable);
-                        NewGridForm.ShowDialog(parentForm);
-                        if (NewGridForm.DialogResult == DialogResult.OK)
+                        newGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", ReqLineItemsTable);
+                        newGridForm.ShowDialog(parentForm);
+                        if (newGridForm.DialogResult == DialogResult.OK)
                         {
-                            return NewGridForm.SelectedRow.Cells["rqdt_uni_pr"].Value.ToString().Trim();
+                            return newGridForm.SelectedRow.Cells["rqdt_uni_pr"].Value.ToString().Trim();
                         }
                     }
                 }
@@ -569,13 +569,13 @@ FROM poheader";
             {
                 return null;
             }
-            string Query = "SELECT TOP " + intMaxResults + " * FROM rqheader";
+            string query = "SELECT TOP " + intMaxResults + " * FROM rqheader";
 
             QueryParamCollection searchParams = new QueryParamCollection();
             searchParams.Add("rqhd_req_no", reqNumber, true);
             searchParams.Add("rqhd_fsc_yr", fiscalYr, true);
 
-            DataTable results = await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(Query, searchParams.Parameters));
+            DataTable results = await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(query, searchParams.Parameters));
 
             if (results.Rows.Count > 0)
             {
@@ -590,14 +590,14 @@ FROM poheader";
             {
                 return null;
             }
-            var VendorNum = await GetVendorNumberFromReqNumber(reqNumber, fiscalYr);
-            if ((string)VendorNum == "")
+            var vendorNum = await GetVendorNumberFromReqNumber(reqNumber, fiscalYr);
+            if ((string)vendorNum == "")
             {
                 return null;
             }
-            string VendorName = await MunisComms.ReturnSqlValueAsync("ap_vendor", "a_vendor_number", VendorNum, "a_vendor_name");
-            string strQRY = "SELECT TOP " + intMaxResults + @" dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc,
-'" + VendorName + "' AS a_vendor_name, '" + VendorNum + @"' AS a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr, dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln, dbo.rqdetail.rqdt_vdr_part_no
+            string nendorName = await MunisComms.ReturnSqlValueAsync("ap_vendor", "a_vendor_number", vendorNum, "a_vendor_name");
+            string query = "SELECT TOP " + intMaxResults + @" dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc,
+'" + nendorName + "' AS a_vendor_name, '" + vendorNum + @"' AS a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr, dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln, dbo.rqdetail.rqdt_vdr_part_no
 FROM dbo.rq_gl_info INNER JOIN
 dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr";
 
@@ -605,10 +605,10 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
             searchParams.Add("dbo.rq_gl_info.a_requisition_no", reqNumber, true);
             searchParams.Add("dbo.rq_gl_info.rg_fiscal_year", fiscalYr, true);
 
-            var ReqTable = await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(strQRY, searchParams.Parameters));
-            if (ReqTable.Rows.Count > 0)
+            var reqTable = await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(query, searchParams.Parameters));
+            if (reqTable.Rows.Count > 0)
             {
-                return ReqTable;
+                return reqTable;
             }
             else
             {
@@ -621,9 +621,9 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
             try
             {
                 OtherFunctions.SetWaitCursor(true, parentForm);
-                DataTable ReqLinesTable = new DataTable();
-                DataTable ReqHeaderTable = new DataTable();
-                DataTable InventoryTable = new DataTable();
+                DataTable reqLinesTable = new DataTable();
+                DataTable reqHeaderTable = new DataTable();
+                DataTable inventoryTable = new DataTable();
 
                 if (device.PO == "" || device.PO == null)
                 {
@@ -632,47 +632,47 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
 
                 if (device.PO != string.Empty)
                 {
-                    InventoryTable = await LoadMunisInventoryGrid(device);
-                    ReqLinesTable = await GetReqLineItemsFromReqNum(await GetReqNumberFromPOAsync(device.PO), GetFYFromPO(device.PO));
-                    ReqHeaderTable = await GetReqHeaderFromReqNum(await GetReqNumberFromPOAsync(device.PO), GetFYFromPO(device.PO));
+                    inventoryTable = await LoadMunisInventoryGrid(device);
+                    reqLinesTable = await GetReqLineItemsFromReqNum(await GetReqNumberFromPOAsync(device.PO), GetFYFromPO(device.PO));
+                    reqHeaderTable = await GetReqHeaderFromReqNum(await GetReqNumberFromPOAsync(device.PO), GetFYFromPO(device.PO));
                 }
                 else
                 {
-                    InventoryTable = await LoadMunisInventoryGrid(device);
-                    ReqLinesTable = null;
-                    ReqHeaderTable = null;
+                    inventoryTable = await LoadMunisInventoryGrid(device);
+                    reqLinesTable = null;
+                    reqHeaderTable = null;
                 }
-                if (InventoryTable != null || ReqLinesTable != null)
+                if (inventoryTable != null || reqLinesTable != null)
                 {
-                    GridForm NewGridForm = new GridForm(parentForm, "MUNIS Info");
-                    if (ReferenceEquals(InventoryTable, null))
+                    GridForm newGridForm = new GridForm(parentForm, "MUNIS Info");
+                    if (ReferenceEquals(inventoryTable, null))
                     {
                         OtherFunctions.Message("Munis Fixed Asset info. not found.", MessageBoxButtons.OK, MessageBoxIcon.Information, "No FA Record");
                     }
                     else
                     {
-                        NewGridForm.AddGrid("InvGrid", "FA Info:", InventoryTable);
+                        newGridForm.AddGrid("InvGrid", "FA Info:", inventoryTable);
                     }
-                    if (ReferenceEquals(ReqLinesTable, null))
+                    if (ReferenceEquals(reqLinesTable, null))
                     {
                         OtherFunctions.Message("Could not resolve PO from Asset Tag or Serial. Please add a valid PO if possible.", MessageBoxButtons.OK, MessageBoxIcon.Information, "No Req. Record");
                     }
                     else
                     {
-                        NewGridForm.AddGrid("ReqHeadGrid", "Requisition Header:", ReqHeaderTable);
-                        NewGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", ReqLinesTable);
+                        newGridForm.AddGrid("ReqHeadGrid", "Requisition Header:", reqHeaderTable);
+                        newGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", reqLinesTable);
                     }
 
-                    if (NewGridForm.GridCount > 0)
+                    if (newGridForm.GridCount > 0)
                     {
-                        NewGridForm.Show();
+                        newGridForm.Show();
                     }
                     else
                     {
-                        NewGridForm.Dispose();
+                        newGridForm.Dispose();
                     }
                 }
-                else if (ReferenceEquals(InventoryTable, null) && ReferenceEquals(ReqLinesTable, null))
+                else if (ReferenceEquals(inventoryTable, null) && ReferenceEquals(reqLinesTable, null))
                 {
                     OtherFunctions.Message("Could not resolve any purchase or Fixed Asset info.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Nothing Found");
                 }
@@ -689,9 +689,9 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
 
         private static async Task<DataTable> LoadMunisInventoryGrid(Device device)
         {
-            string strFields = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo";
-            string Query = "SELECT TOP 1 " + strFields + " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" + device.AssetTag + "' AND fama_tag <> '' OR fama_serial='" + device.Serial + "' AND fama_serial <> ''";
-            DataTable results = await MunisComms.ReturnSqlTableAsync(Query);
+            string columns = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo";
+            string query = "SELECT TOP 1 " + columns + " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" + device.AssetTag + "' AND fama_tag <> '' OR fama_serial='" + device.Serial + "' AND fama_serial <> ''";
+            DataTable results = await MunisComms.ReturnSqlTableAsync(query);
 
             if (results.Rows.Count > 0)
             {
@@ -702,11 +702,11 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
 
         public static MunisEmployee MunisUserSearch(ExtendedForm parentForm)
         {
-            using (MunisUserForm NewMunisSearch = new MunisUserForm(parentForm))
+            using (MunisUserForm newMunisSearch = new MunisUserForm(parentForm))
             {
-                if (NewMunisSearch.DialogResult == DialogResult.OK)
+                if (newMunisSearch.DialogResult == DialogResult.OK)
                 {
-                    return NewMunisSearch.EmployeeInfo;
+                    return newMunisSearch.EmployeeInfo;
                 }
                 else
                 {

@@ -178,7 +178,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     strStartQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE";
                     var searchCommand = DBFactory.GetDatabase().GetCommandFromParams(strStartQry, searchParams.Parameters);
-                    searchCommand.CommandText += " GROUP BY " + DevicesCols.DeviceUID;
+                    searchCommand.CommandText += " GROUP BY " + DevicesCols.DeviceGuid;
                     StartBigQuery(searchCommand);
                 }
                 else
@@ -198,7 +198,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                if (!ChildFormControl.FormIsOpenByUID(typeof(ViewDeviceForm), deviceGuid))
+                if (!ChildFormControl.FormIsOpenByGuid(typeof(ViewDeviceForm), deviceGuid))
                 {
                     Waiting();
                     new ViewDeviceForm(this, new Device(deviceGuid));
@@ -245,41 +245,43 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             QueryParamCollection searchParams = new QueryParamCollection();
 
-            DBControlParser DataParser = new DBControlParser(this);
-            foreach (Control ctl in DataParser.GetDBControls(this))
+            using (DBControlParser controlParser = new DBControlParser(this))
             {
-                object CtlValue = DataParser.GetDBControlValue(ctl);
-                if (!object.ReferenceEquals(CtlValue, DBNull.Value) && !string.IsNullOrEmpty(CtlValue.ToString()))
+                foreach (Control ctl in controlParser.GetDBControls(this))
                 {
-                    var DBInfo = (DBControlInfo)ctl.Tag;
-                    bool IsExact = false;
-                    switch (DBInfo.DataColumn)
+                    object CtlValue = controlParser.GetDBControlValue(ctl);
+                    if (!object.ReferenceEquals(CtlValue, DBNull.Value) && !string.IsNullOrEmpty(CtlValue.ToString()))
                     {
-                        //case DevicesCols.OSVersion:
-                        //    IsExact = true;
-                        //    break;
+                        var DBInfo = (DBControlInfo)ctl.Tag;
+                        bool IsExact = false;
+                        switch (DBInfo.DataColumn)
+                        {
+                            //case DevicesCols.OSVersion:
+                            //    IsExact = true;
+                            //    break;
 
-                        case DevicesCols.EQType:
-                            IsExact = true;
-                            break;
+                            case DevicesCols.EQType:
+                                IsExact = true;
+                                break;
 
-                        case DevicesCols.Location:
-                            IsExact = true;
-                            break;
+                            case DevicesCols.Location:
+                                IsExact = true;
+                                break;
 
-                        case DevicesCols.Status:
-                            IsExact = true;
-                            break;
+                            case DevicesCols.Status:
+                                IsExact = true;
+                                break;
 
-                        default:
-                            IsExact = false;
-                            break;
+                            default:
+                                IsExact = false;
+                                break;
+                        }
+
+                        searchParams.Add(DBInfo.DataColumn, CtlValue, IsExact);
                     }
-
-                    searchParams.Add(DBInfo.DataColumn, CtlValue, IsExact);
                 }
+                return searchParams;
             }
-            return searchParams;
         }
 
         private void Clear_All()
@@ -406,8 +408,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
                 foreach (var row in Rows)
                 {
-                    string DevUID = ResultGrid[DevicesCols.DeviceUID, row].Value.ToString();
-                    SelectedDevices.Add(new Device(DevUID));
+                    string DevGuid = ResultGrid[DevicesCols.DeviceGuid, row].Value.ToString();
+                    SelectedDevices.Add(new Device(DevGuid));
                 }
 
                 Helpers.ChildFormControl.GKUpdaterInstance().AddMultipleUpdates(SelectedDevices);
@@ -443,8 +445,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             MyLiveBox.AttachToControl(txtDescription, DevicesCols.Description, LiveBox.LiveBoxSelectionType.DynamicSearch);
             MyLiveBox.AttachToControl(txtCurUser, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.DynamicSearch);
-            MyLiveBox.AttachToControl(txtSerial, DevicesCols.Serial, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceUID);
-            MyLiveBox.AttachToControl(txtAssetTag, DevicesCols.AssetTag, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceUID);
+            MyLiveBox.AttachToControl(txtSerial, DevicesCols.Serial, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceGuid);
+            MyLiveBox.AttachToControl(txtAssetTag, DevicesCols.AssetTag, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceGuid);
         }
 
         private void InitDBCombo()
@@ -495,14 +497,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private List<GridColumnAttrib> ResultGridColumns()
         {
-            ColumnFormatTypes AttribColumnType;
+            ColumnFormatType AttribColumnType;
             if (CurrentTransaction != null)
             {
-                AttribColumnType = ColumnFormatTypes.AttributeCombo;
+                AttribColumnType = ColumnFormatType.AttributeCombo;
             }
             else
             {
-                AttribColumnType = ColumnFormatTypes.AttributeDisplayMemberOnly;
+                AttribColumnType = ColumnFormatType.AttributeDisplayMemberOnly;
             }
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
             ColList.Add(new GridColumnAttrib(DevicesCols.CurrentUser, "User", typeof(string)));
@@ -516,7 +518,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ColList.Add(new GridColumnAttrib(DevicesCols.PurchaseDate, "Purchase Date", typeof(System.DateTime)));
             ColList.Add(new GridColumnAttrib(DevicesCols.ReplacementYear, "Replace Year", typeof(string)));
             ColList.Add(new GridColumnAttrib(DevicesCols.LastModDate, "Modified", typeof(System.DateTime)));
-            ColList.Add(new GridColumnAttrib(DevicesCols.DeviceUID, "Guid", typeof(string)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.DeviceGuid, "Guid", typeof(string)));
             return ColList;
         }
 
@@ -657,7 +659,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                             var blah = OtherFunctions.Message("Are you sure? This will close all open forms.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Change Database", this);
                             if (blah == DialogResult.Yes)
                             {
-                                if (Helpers.ChildFormControl.OKToCloseChildren(this))
+                                if (Helpers.ChildFormControl.OkToCloseChildren(this))
                                 {
                                     Helpers.ChildFormControl.CloseChildren(this);
                                     ServerInfo.CurrentDataBase = database;
@@ -838,7 +840,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (e.KeyCode == Keys.Enter)
             {
-                LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceUID));
+                LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid));
                 e.SuppressKeyPress = true;
             }
         }
@@ -893,7 +895,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceUID));
+            LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid));
         }
 
         private void ReEnterLACredentialsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -947,7 +949,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ResultGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceUID));
+            LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid));
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -957,7 +959,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Close");
             }
 
-            if (!OtherFunctions.OKToEnd() || !Helpers.ChildFormControl.OKToCloseChildren(this) || CurrentTransaction != null)
+            if (!OtherFunctions.OKToEnd() || !Helpers.ChildFormControl.OkToCloseChildren(this) || CurrentTransaction != null)
             {
                 e.Cancel = true;
             }

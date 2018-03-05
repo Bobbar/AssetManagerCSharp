@@ -15,9 +15,9 @@ namespace AssetManager.Data.Classes
         {
         }
 
-        public Device(string Guid)
+        public Device(string guid)
         {
-            this.MapClassProperties(GetDeviceDataFromGuid(Guid));
+            this.MapClassProperties(GetDeviceDataFromGuid(guid));
         }
 
         #endregion Constructors
@@ -41,7 +41,7 @@ namespace AssetManager.Data.Classes
 
         public string FiscalYear { get; set; }
 
-        [DataColumnName(DevicesCols.DeviceUID)]
+        [DataColumnName(DevicesCols.DeviceGuid)]
         public override string Guid { get; set; }
 
         [DataColumnName(DevicesCols.HostName)]
@@ -73,7 +73,7 @@ namespace AssetManager.Data.Classes
         [DataColumnName(DevicesCols.Serial)]
         public string Serial { get; set; }
 
-        [DataColumnName(DevicesCols.SibiLinkUID)]
+        [DataColumnName(DevicesCols.SibiLinkGuid)]
         public string SibiLink { get; set; }
 
         [DataColumnName(DevicesCols.Status)]
@@ -87,9 +87,9 @@ namespace AssetManager.Data.Classes
 
         #region Methods
 
-        private DataTable GetDeviceDataFromGuid(string Guid)
+        private DataTable GetDeviceDataFromGuid(string guid)
         {
-            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGuid(Guid)))
+            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGuid(guid)))
             {
                 results.TableName = DevicesCols.TableName;
                 return results;

@@ -39,7 +39,7 @@ namespace AssetManager.UserInterface.CustomControls
         /// Unique identifying string used to locate specific instances of this form.
         /// </summary>
         /// <returns></returns>
-        public string FormUID { get; set; }
+        public string FormGuid { get; set; }
 
         /// <summary>
         /// Overloads the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="GridTheme"/> from the parent form.
@@ -75,14 +75,14 @@ namespace AssetManager.UserInterface.CustomControls
         public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject)
         {
             ParentForm = parentForm;
-            FormUID = currentObject.Guid;
+            FormGuid = currentObject.Guid;
             MemoryTweaks.SetWorkingSet();
         }
 
-        public ExtendedForm(ExtendedForm parentForm, string formUID)
+        public ExtendedForm(ExtendedForm parentForm, string formGuid)
         {
             ParentForm = parentForm;
-            FormUID = formUID;
+            FormGuid = formGuid;
             MemoryTweaks.SetWorkingSet();
         }
 
@@ -113,7 +113,7 @@ namespace AssetManager.UserInterface.CustomControls
         //    }
         //}
 
-        public virtual bool OKToClose()
+        public virtual bool OkToClose()
         {
             if (this.Owner != null)
             {

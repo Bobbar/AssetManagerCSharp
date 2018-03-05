@@ -7,7 +7,7 @@ namespace AssetManager.Helpers
 {
     public static class ComboBoxExtensions
     {
-        public static void FillComboBox(this ComboBox combo, CodeAttribute[] IndexType)
+        public static void FillComboBox(this ComboBox combo, CodeAttribute[] index)
         {
             combo.SuspendLayout();
             combo.BeginUpdate();
@@ -17,7 +17,7 @@ namespace AssetManager.Helpers
             combo.DisplayMember = nameof(CodeAttribute.DisplayValue);
             combo.ValueMember = nameof(CodeAttribute.Code);
             combo.BindingContext = new BindingContext();
-            combo.DataSource = IndexType;
+            combo.DataSource = index;
             combo.SelectedIndex = -1;
             combo.EndUpdate();
             combo.ResumeLayout();

@@ -13,7 +13,7 @@ namespace AssetManager.Helpers
         public bool ColumnReadOnly { get; set; }
         public bool ColumnVisible { get; set; }
         public CodeAttribute[] AttributeIndex { get; set; }
-        public ColumnFormatTypes ColumnFormatType { get; set; }
+        public ColumnFormatType ColumnFormatType { get; set; }
 
         public GridColumnAttrib(string colName, string caption, Type type)
         {
@@ -23,10 +23,10 @@ namespace AssetManager.Helpers
             ColumnReadOnly = false;
             ColumnVisible = true;
             AttributeIndex = null;
-            ColumnFormatType = ColumnFormatTypes.DefaultFormat;
+            ColumnFormatType = ColumnFormatType.DefaultFormat;
         }
 
-        public GridColumnAttrib(string colName, string caption, Type type, ColumnFormatTypes displayMode)
+        public GridColumnAttrib(string colName, string caption, Type type, ColumnFormatType displayMode)
         {
             ColumnName = colName;
             ColumnCaption = caption;
@@ -45,10 +45,10 @@ namespace AssetManager.Helpers
             ColumnReadOnly = false;
             ColumnVisible = true;
             this.AttributeIndex = attribIndex;
-            ColumnFormatType = ColumnFormatTypes.AttributeCombo;
+            ColumnFormatType = ColumnFormatType.AttributeCombo;
         }
 
-        public GridColumnAttrib(string colName, string caption, CodeAttribute[] attribIndex, ColumnFormatTypes displayMode)
+        public GridColumnAttrib(string colName, string caption, CodeAttribute[] attribIndex, ColumnFormatType displayMode)
         {
             ColumnName = colName;
             ColumnCaption = caption;
@@ -67,14 +67,14 @@ namespace AssetManager.Helpers
             ColumnReadOnly = isReadOnly;
             ColumnVisible = visible;
             AttributeIndex = null;
-            ColumnFormatType = ColumnFormatTypes.DefaultFormat;
+            ColumnFormatType = ColumnFormatType.DefaultFormat;
         }
     }
 }
 
 namespace AssetManager.Helpers
 {
-    public enum ColumnFormatTypes
+    public enum ColumnFormatType
     {
         DefaultFormat,
         AttributeCombo,

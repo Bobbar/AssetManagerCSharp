@@ -31,7 +31,7 @@ namespace AssetManager.Data.Classes
         [DataColumnName(TrackablesCols.DueBackDate)]
         public System.DateTime DueBackTime { get; set; }
 
-        [DataColumnName(TrackablesCols.DeviceUID)]
+        [DataColumnName(TrackablesCols.DeviceGuid)]
         public override string Guid { get; set; }
 
         [DataColumnName(DevicesCols.CheckedOut)]

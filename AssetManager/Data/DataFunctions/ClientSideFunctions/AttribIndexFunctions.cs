@@ -104,7 +104,7 @@ namespace AssetManager.Data.Functions
                             attribColor = ColorTranslator.FromHtml(r[ComboCodesBaseCols.Color].ToString());
                         }
 
-                        tmpArray.Add(new CodeAttribute(DisplayValue, r[ComboCodesBaseCols.CodeValue].ToString(), Convert.ToInt32(r[ComboCodesBaseCols.ID]), attribColor));
+                        tmpArray.Add(new CodeAttribute(DisplayValue, r[ComboCodesBaseCols.CodeValue].ToString(), Convert.ToInt32(r[ComboCodesBaseCols.Id]), attribColor));
                     }
                     return tmpArray.ToArray();
                 }

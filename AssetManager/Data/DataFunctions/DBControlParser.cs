@@ -148,7 +148,7 @@ namespace AssetManager.Data.Functions
 
 namespace AssetManager.Data.Functions
 {
-    public class DBControlParser
+    public class DBControlParser : IDisposable
     {
         #region "Fields"
 
@@ -508,6 +508,11 @@ namespace AssetManager.Data.Functions
                     DBRow[DBInfo.DataColumn] = GetDBControlValue(ctl);
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            ((IDisposable)errorProvider).Dispose();
         }
 
         #endregion "Methods"

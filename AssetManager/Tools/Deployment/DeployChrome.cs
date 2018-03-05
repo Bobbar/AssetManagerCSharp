@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace AssetManager.Tools.Deployment
 {
-    public class DeployChrome
+    public class DeployChrome : IDisposable
     {
         private ExtendedForm parentForm;
         private DeploymentUI deploy;
@@ -50,6 +50,11 @@ namespace AssetManager.Tools.Deployment
             {
                 deploy.DoneOrError();
             }
+        }
+
+        public void Dispose()
+        {
+            ((IDisposable)deploy).Dispose();
         }
     }
 }

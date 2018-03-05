@@ -20,7 +20,7 @@ namespace AssetManager.Tools.Deployment
         private ExtendedForm logView;
         private ExtendedForm parentForm;
         private PowerShellWrapper powerShellWrapper;
-        private PsExecWrapper psExecWrapper;
+        private PSExecWrapper pSExecWrapper;
         private RichTextBox RTBLog;
         private int timeoutSeconds = 120;
         private Task watchDogTask;
@@ -40,15 +40,15 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
-        public PsExecWrapper PsExecWrap
+        public PSExecWrapper PSExecWrap
         {
             get
             {
-                if (psExecWrapper == null)
+                if (pSExecWrapper == null)
                 {
                     throw new NotSupportedException("Please call " + nameof(DeploymentUI.UsePsExec) + " first.");
                 }
-                return psExecWrapper;
+                return pSExecWrapper;
             }
         }
 
@@ -71,12 +71,12 @@ namespace AssetManager.Tools.Deployment
 
         public void UsePsExec()
         {
-            psExecWrapper = new PsExecWrapper();
-            psExecWrapper.ErrorReceived -= PsExecErrorReceived;
-            psExecWrapper.ErrorReceived += PsExecErrorReceived;
+            pSExecWrapper = new PSExecWrapper();
+            pSExecWrapper.ErrorReceived -= PsExecErrorReceived;
+            pSExecWrapper.ErrorReceived += PsExecErrorReceived;
 
-            psExecWrapper.OutputReceived -= PsExecOutputReceived;
-            psExecWrapper.OutputReceived += PsExecOutputReceived;
+            pSExecWrapper.OutputReceived -= PsExecOutputReceived;
+            pSExecWrapper.OutputReceived += PsExecOutputReceived;
         }
 
         private void InitLogWindow(ExtendedForm parentForm)
@@ -177,9 +177,9 @@ namespace AssetManager.Tools.Deployment
                 powerShellWrapper.StopPiplineCommand();
             }
 
-            if (psExecWrapper != null)
+            if (pSExecWrapper != null)
             {
-                psExecWrapper.StopProcess();
+                pSExecWrapper.StopProcess();
             }
         }
 

@@ -10,7 +10,7 @@ namespace AssetManager.Data.Classes
 
         public string DisplayValue { get { return displayValue; } }
         public string Code { get { return code; } }
-        public int ID { get { return id; } }
+        public int Id { get { return id; } }
         public Color Color { get { return color; } }
 
         public CodeAttribute(string displayValue, string code, int id)
@@ -132,20 +132,20 @@ namespace AssetManager.Data.Classes
         public int MatchLength { get; set; }
 
 
-        public SmartEmpSearchInfo(MunisEmployee munisInfo, string searchString, int matchDistance)
+        public SmartEmpSearchInfo(MunisEmployee munisInfo, string searchValue, int matchDistance)
         {
             this.SearchResult = munisInfo;
-            this.SearchString = searchString;
-            MatchLength = searchString.Length;
+            this.SearchString = searchValue;
+            MatchLength = searchValue.Length;
             this.MatchDistance = matchDistance;
 
         }
 
-        public SmartEmpSearchInfo(MunisEmployee munisInfo, string searchString)
+        public SmartEmpSearchInfo(MunisEmployee munisInfo, string searchValue)
         {
             this.SearchResult = munisInfo;
-            this.SearchString = searchString;
-            MatchLength = searchString.Length;
+            this.SearchString = searchValue;
+            MatchLength = searchValue.Length;
             this.MatchDistance = 0;
 
         }

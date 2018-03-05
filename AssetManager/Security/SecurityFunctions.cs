@@ -96,11 +96,11 @@ namespace AssetManager.Security
             adminCreds = null;
         }
         
-        public static string DecodePassword(string cypherString)
+        public static string DecodePassword(string cypherValue)
         {
             using (Simple3Des wrapper = new Simple3Des(CryptKey))
             {
-                return wrapper.DecryptData(cypherString);
+                return wrapper.DecryptData(cypherValue);
             }
         }
 
@@ -164,7 +164,7 @@ namespace AssetManager.Security
                         LocalUserAccess.UserName = r[UsersCols.UserName].ToString();
                         LocalUserAccess.Fullname = r[UsersCols.FullName].ToString();
                         LocalUserAccess.AccessLevel = (int)r[UsersCols.AccessLevel];
-                        LocalUserAccess.Guid = r[UsersCols.UID].ToString();
+                        LocalUserAccess.Guid = r[UsersCols.Guid].ToString();
                     }
                     else
                     {
@@ -196,26 +196,26 @@ namespace AssetManager.Security
             }
         }
 
-        public static bool CanAccess(string recModule, int AccessLevel = -1)
+        public static bool CanAccess(string module, int accessLevel = -1)
         {
             //bitwise access levels
             int mask = 1;
             int calc_level;
-            int UsrLevel;
-            if (AccessLevel == -1)
+            int usrLevel;
+            if (accessLevel == -1)
             {
-                UsrLevel = LocalUserAccess.AccessLevel;
+                usrLevel = LocalUserAccess.AccessLevel;
             }
             else
             {
-                UsrLevel = AccessLevel;
+                usrLevel = accessLevel;
             }
             foreach (Data.Classes.AccessGroup group in AccessGroups.Values)
             {
-                calc_level = UsrLevel & mask;
+                calc_level = usrLevel & mask;
                 if (calc_level != 0)
                 {
-                    if (group.AccessModule == recModule)
+                    if (group.AccessModule == module)
                     {
                         if (GlobalSwitches.CachedMode)
                         {

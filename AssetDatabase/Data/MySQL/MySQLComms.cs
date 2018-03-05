@@ -6,40 +6,9 @@ using System.Data.Common;
 
 namespace AssetDatabase.Data
 {
-    public class MySQLDatabase : IDisposable, IDataBase
+    public class MySQLDatabase : IDataBase
     {
-        #region IDisposable Support
-
-        private bool disposedValue; // To detect redundant calls
-
-        // This code added by Visual Basic to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-            Dispose(true);
-            // TODO: uncomment the following line if Finalize() is overridden above.
-            //    GC.SuppressFinalize(Me)
-        }
-
-        // IDisposable
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                    MySQLConnectString = null;
-                }
-                // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
-                // TODO: set large fields to null.
-            }
-            disposedValue = true;
-        }
-
-        #endregion IDisposable Support
-
-        #region Fields
+         #region Fields
 
         private string serverIp = string.Empty;
         private string dbPassword = string.Empty;

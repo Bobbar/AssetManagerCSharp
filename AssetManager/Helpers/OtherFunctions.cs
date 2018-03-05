@@ -91,7 +91,7 @@ namespace AssetManager.Helpers
             }
 
             var GKUpdInstance = Helpers.ChildFormControl.GKUpdaterInstance();
-            if (GKUpdInstance.Visible && !GKUpdInstance.OKToClose())
+            if (GKUpdInstance.Visible && !GKUpdInstance.OkToClose())
             {
                 return false;
             }

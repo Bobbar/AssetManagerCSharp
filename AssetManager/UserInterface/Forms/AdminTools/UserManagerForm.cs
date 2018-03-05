@@ -46,7 +46,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         private void SendToGrid()
         {
             UserGrid.DataSource = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectUsersTable);
-            UserGrid.Columns[UsersCols.UID].ReadOnly = true;
+            UserGrid.Columns[UsersCols.Guid].ReadOnly = true;
         }
 
         private void DisplayAccess(int intAccessLevel)
@@ -152,10 +152,10 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         {
             foreach (DataGridViewRow row in UserGrid.Rows)
             {
-                if (string.IsNullOrEmpty(row.Cells[UsersCols.UID].EditedFormattedValue.ToString()))
+                if (string.IsNullOrEmpty(row.Cells[UsersCols.Guid].EditedFormattedValue.ToString()))
                 {
-                    string UserUID = Guid.NewGuid().ToString();
-                    row.Cells[UsersCols.UID].Value = UserUID;
+                    string UserGuid = Guid.NewGuid().ToString();
+                    row.Cells[UsersCols.Guid].Value = UserGuid;
                 }
             }
         }

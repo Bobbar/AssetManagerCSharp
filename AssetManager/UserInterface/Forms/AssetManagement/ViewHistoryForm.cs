@@ -18,13 +18,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private string deviceGuid;
 
-        public ViewHistoryForm(ExtendedForm parentForm, string entryUID, string deviceGuid) : base(parentForm,entryUID)
+        public ViewHistoryForm(ExtendedForm parentForm, string entryGuid, string deviceGuid) : base(parentForm,entryGuid)
         {
             controlParser = new DBControlParser(this);
             InitializeComponent();
             InitDBControls();
             this.deviceGuid = deviceGuid;
-            ViewEntry(entryUID);
+            ViewEntry(entryGuid);
         }
 
         //TODO: Iterate through properties and dynamically generate controls at runtime.
@@ -34,7 +34,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             txtActionUser.Tag = new DBControlInfo(HistoricalDevicesCols.ActionUser, ParseType.DisplayOnly, false);
             txtChangeType.Tag = new DBControlInfo(HistoricalDevicesCols.ChangeType, Attributes.DeviceAttribute.ChangeType, ParseType.DisplayOnly, false);
             txtDescription.Tag = new DBControlInfo(HistoricalDevicesCols.Description, ParseType.DisplayOnly, false);
-            txtGuid.Tag = new DBControlInfo(HistoricalDevicesCols.DeviceUID, ParseType.DisplayOnly, false);
+            txtGuid.Tag = new DBControlInfo(HistoricalDevicesCols.DeviceGuid, ParseType.DisplayOnly, false);
             txtCurrentUser.Tag = new DBControlInfo(HistoricalDevicesCols.CurrentUser, ParseType.DisplayOnly, false);
             txtLocation.Tag = new DBControlInfo(HistoricalDevicesCols.Location, Attributes.DeviceAttribute.Locations, ParseType.DisplayOnly, false);
             txtPONumber.Tag = new DBControlInfo(HistoricalDevicesCols.PO, ParseType.DisplayOnly, false);
@@ -46,7 +46,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             txtEQType.Tag = new DBControlInfo(HistoricalDevicesCols.EQType, Attributes.DeviceAttribute.EquipType, ParseType.DisplayOnly, false);
             NotesTextBox.Tag = new DBControlInfo(HistoricalDevicesCols.Notes, ParseType.DisplayOnly, false);
             txtStatus.Tag = new DBControlInfo(HistoricalDevicesCols.Status, Attributes.DeviceAttribute.StatusType, ParseType.DisplayOnly, false);
-            txtEntryGuid.Tag = new DBControlInfo(HistoricalDevicesCols.HistoryEntryUID, ParseType.DisplayOnly, false);
+            txtEntryGuid.Tag = new DBControlInfo(HistoricalDevicesCols.HistoryEntryGuid, ParseType.DisplayOnly, false);
             chkTrackable.Tag = new DBControlInfo(HistoricalDevicesCols.Trackable, ParseType.DisplayOnly, false);
             txtPhoneNumber.Tag = new DBControlInfo(HistoricalDevicesCols.PhoneNumber, ParseType.DisplayOnly, false);
             txtHostname.Tag = new DBControlInfo(HistoricalDevicesCols.HostName, ParseType.DisplayOnly, false);
@@ -59,12 +59,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Text = this.Text + " - " + DataConsistency.NoNull(data.Rows[0][HistoricalDevicesCols.ActionDateTime]);
         }
 
-        private void ViewEntry(string entryUID)
+        private void ViewEntry(string entryGuid)
         {
             OtherFunctions.SetWaitCursor(true, this);
             try
             {
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryUID)))
+                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGuid)))
                 {
                     HighlightChangedFields(results);
                     FillControls(results);
@@ -134,6 +134,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void ViewHistoryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Dispose();
+        }
+
+        private void ViewHistoryForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            controlParser.Dispose();
         }
     }
 }

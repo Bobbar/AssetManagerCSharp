@@ -131,7 +131,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                         OtherFunctions.SetWaitCursor(true, this);
                         int rows = 0;
-                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceUID, currentTrackingDevice.Guid, trans);
+                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceGuid, currentTrackingDevice.Guid, trans);
 
                         ParamCollection checkParams = new ParamCollection();
                         checkParams.Add(TrackablesCols.CheckType, CheckType.Checkout);
@@ -140,7 +140,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         checkParams.Add(TrackablesCols.CheckoutUser, checkData.CheckoutUser);
                         checkParams.Add(TrackablesCols.UseLocation, checkData.UseLocation);
                         checkParams.Add(TrackablesCols.Notes, checkData.UseReason);
-                        checkParams.Add(TrackablesCols.DeviceUID, checkData.Guid);
+                        checkParams.Add(TrackablesCols.DeviceGuid, checkData.Guid);
                         rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
 
                         if (rows == 2)
@@ -182,7 +182,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                         OtherFunctions.SetWaitCursor(true, this);
                         int rows = 0;
-                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceUID, currentTrackingDevice.Guid, trans);
+                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceGuid, currentTrackingDevice.Guid, trans);
 
                         ParamCollection checkParams = new ParamCollection();
 
@@ -194,7 +194,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         checkParams.Add(TrackablesCols.CheckinUser, checkData.CheckinUser);
                         checkParams.Add(TrackablesCols.UseLocation, checkData.UseLocation);
                         checkParams.Add(TrackablesCols.Notes, checkData.CheckinNotes);
-                        checkParams.Add(TrackablesCols.DeviceUID, checkData.Guid);
+                        checkParams.Add(TrackablesCols.DeviceGuid, checkData.Guid);
                         rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
 
                         if (rows == 2)

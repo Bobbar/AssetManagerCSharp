@@ -32,13 +32,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             ShowDialog(parentForm);
         }
 
-        public SibiNotesForm(ExtendedForm parentForm, string noteUID) : base(parentForm, noteUID)
+        public SibiNotesForm(ExtendedForm parentForm, string noteGuid) : base(parentForm, noteGuid)
         {
             InitializeComponent();
-            ViewNote(noteUID);
+            ViewNote(noteGuid);
         }
 
-        private void ViewNote(string noteUID)
+        private void ViewNote(string noteGuid)
         {
             string noteText;
             string noteTimeStamp;
@@ -47,7 +47,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 OkButton.Visible = false;
                 NotesTextBox.Clear();
-                using (var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectNoteByGuid(noteUID)))
+                using (var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectNoteByGuid(noteGuid)))
                 {
                     noteText = results.Rows[0][SibiNotesCols.Note].ToString();
                     noteTimeStamp = results.Rows[0][SibiNotesCols.DateStamp].ToString();

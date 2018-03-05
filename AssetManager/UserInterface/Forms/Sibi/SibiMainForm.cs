@@ -187,14 +187,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     //Clear slider label of any previous errors.
                     searchSlider.Clear();
 
-                    // Iterate through results and use Request Items Request UID column to query for the full request data.
+                    // Iterate through results and use Request Items Request Guid column to query for the full request data.
                     // Task.Run lambda to keep UI alive.
                     DataTable resultsTable = await Task.Run(() =>
                     {
                         DataTable rtables = new DataTable();
                         foreach (DataRow row in results.Rows)
                         {
-                            DataTable requestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGuid(row[SibiRequestItemsCols.RequestUID].ToString()));
+                            DataTable requestTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGuid(row[SibiRequestItemsCols.RequestGuid].ToString()));
                             // Merge results into one table.
                             rtables.Merge(requestTable);
                         }
@@ -272,16 +272,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
             ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestNumber, "Request #", typeof(int)));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.Status, "Status", Attributes.SibiAttribute.StatusType, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.Status, "Status", Attributes.SibiAttribute.StatusType, ColumnFormatType.AttributeDisplayMemberOnly));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.Description, "Description", typeof(string)));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestUser, "Request User", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", Attributes.SibiAttribute.RequestType, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", Attributes.SibiAttribute.RequestType, ColumnFormatType.AttributeDisplayMemberOnly));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.NeedBy, "Need By", typeof(System.DateTime)));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.PO, "PO Number", typeof(string)));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.RequisitionNumber, "Req. Number", typeof(string)));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.RTNumber, "RT Number", typeof(string)));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.DateStamp, "Create Date", typeof(System.DateTime)));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.UID, "UID", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.Guid, "Guid", typeof(string)));
             return ColList;
         }
 
@@ -339,17 +339,17 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void ResultGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (SibiResultGrid.CurrentRow.Index > -1) OpenRequest(SibiResultGrid.CurrentRowStringValue(SibiRequestCols.UID));
+            if (SibiResultGrid.CurrentRow.Index > -1) OpenRequest(SibiResultGrid.CurrentRowStringValue(SibiRequestCols.Guid));
         }
 
-        private void OpenRequest(string strUID)
+        private void OpenRequest(string strGuid)
         {
             try
             {
                 OtherFunctions.SetWaitCursor(true, this);
-                if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiManageRequestForm), strUID))
+                if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(SibiManageRequestForm), strGuid))
                 {
-                    new SibiManageRequestForm(this, strUID);
+                    new SibiManageRequestForm(this, strGuid);
                 }
             }
             finally
@@ -433,17 +433,17 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        public override bool OKToClose()
+        public override bool OkToClose()
         {
             bool CanClose = true;
-            if (!Helpers.ChildFormControl.OKToCloseChildren(this))
+            if (!Helpers.ChildFormControl.OkToCloseChildren(this))
                 CanClose = false;
             return CanClose;
         }
 
         private void SibiMainForm_Closing(object sender, CancelEventArgs e)
         {
-            if (!OKToClose())
+            if (!OkToClose())
             {
                 e.Cancel = true;
             }

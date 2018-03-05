@@ -126,10 +126,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        public override bool OKToClose()
+        public override bool OkToClose()
         {
             bool CanClose = true;
-            if (!Helpers.ChildFormControl.OKToCloseChildren(this))
+            if (!Helpers.ChildFormControl.OkToCloseChildren(this))
             {
                 CanClose = false;
             }
@@ -317,7 +317,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
             try
             {
-                string entryGuid = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryUID);
+                string entryGuid = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryGuid);
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGuid)))
                 {
                     string dateStamp = results.Rows[0][HistoricalDevicesCols.ActionDateTime].ToString();
@@ -507,9 +507,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return " - " + Device.CurrentUser + " - " + Device.AssetTag + " - " + Device.Description;
         }
 
-        private DataTable GetDevicesTable(string deviceUID)
+        private DataTable GetDevicesTable(string deviceGuid)
         {
-            return DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGuid(deviceUID));
+            return DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGuid(deviceGuid));
         }
 
         private string GetHash(DataTable deviceTable, DataTable historicalTable)
@@ -517,9 +517,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return SecurityTools.GetSHAOfTable(deviceTable) + SecurityTools.GetSHAOfTable(historicalTable);
         }
 
-        private DataTable GetHistoricalTable(string deviceUID)
+        private DataTable GetHistoricalTable(string deviceGuid)
         {
-            var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceHistoricalTable(deviceUID));
+            var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceHistoricalTable(deviceGuid));
             results.TableName = HistoricalDevicesCols.TableName;
             return results;
         }
@@ -532,7 +532,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DBRow[HistoricalDevicesCols.ChangeType] = UpdateInfo.ChangeType;
             DBRow[HistoricalDevicesCols.Notes] = UpdateInfo.Note;
             DBRow[HistoricalDevicesCols.ActionUser] = NetworkInfo.LocalDomainUser;
-            DBRow[HistoricalDevicesCols.DeviceUID] = currentViewDevice.Guid;
+            DBRow[HistoricalDevicesCols.DeviceGuid] = currentViewDevice.Guid;
             return tmpTable;
         }
 
@@ -559,7 +559,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     DBRow[DevicesCols.MunisEmpNum] = currentViewDevice.CurrentUserEmpNum;
                 }
             }
-            DBRow[DevicesCols.SibiLinkUID] = DataConsistency.CleanDBValue(currentViewDevice.SibiLink);
+            DBRow[DevicesCols.SibiLinkGuid] = DataConsistency.CleanDBValue(currentViewDevice.SibiLink);
             DBRow[DevicesCols.LastModUser] = NetworkInfo.LocalDomainUser;
             DBRow[DevicesCols.LastModDate] = DateTime.Now;
             return tmpTable;
@@ -569,16 +569,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionDateTime, "Time Stamp", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ChangeType, "Change Type", Attributes.DeviceAttribute.ChangeType, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ChangeType, "Change Type", Attributes.DeviceAttribute.ChangeType, ColumnFormatType.AttributeDisplayMemberOnly));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionUser, "Action User", typeof(string)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Notes, "Note Peek", typeof(string), ColumnFormatTypes.NotePreview));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Notes, "Note Peek", typeof(string), ColumnFormatType.NotePreview));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.CurrentUser, "User", typeof(string)));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.AssetTag, "Asset ID", typeof(string)));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Serial, "Serial", typeof(string)));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Description, "Description", typeof(string)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Location, "Location", Attributes.DeviceAttribute.Locations, ColumnFormatTypes.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Location, "Location", Attributes.DeviceAttribute.Locations, ColumnFormatType.AttributeDisplayMemberOnly));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.PurchaseDate, "Purchase Date", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.HistoryEntryUID, "Guid", typeof(string)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.HistoryEntryGuid, "Guid", typeof(string)));
             return ColList;
         }
 
@@ -599,7 +599,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             PONumberTextBox.Tag = new DBControlInfo(DevicesBaseCols.PO, false);
             ReplaceYearTextBox.Tag = new DBControlInfo(DevicesBaseCols.ReplacementYear, false);
             PhoneNumberTextBox.Tag = new DBControlInfo(DevicesBaseCols.PhoneNumber, false);
-            GuidLabel.Tag = new DBControlInfo(DevicesBaseCols.DeviceUID, ParseType.DisplayOnly, false);
+            GuidLabel.Tag = new DBControlInfo(DevicesBaseCols.DeviceGuid, ParseType.DisplayOnly, false);
             TrackableCheckBox.Tag = new DBControlInfo(DevicesBaseCols.Trackable, false);
             HostnameTextBox.Tag = new DBControlInfo(DevicesBaseCols.HostName, false);
             iCloudTextBox.Tag = new DBControlInfo(DevicesBaseCols.iCloudAccount, false);
@@ -656,11 +656,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void NewEntryView()
         {
-            string entryUID = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryUID);
-            if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewHistoryForm), entryUID))
+            string entryGuid = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryGuid);
+            if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(ViewHistoryForm), entryGuid))
             {
                 Waiting();
-                new ViewHistoryForm(this, entryUID, currentViewDevice.Guid);
+                new ViewHistoryForm(this, entryGuid, currentViewDevice.Guid);
                 DoneWaiting();
             }
         }
@@ -685,17 +685,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 else
                 {
-                    string SibiUID = AssetManagerFunctions.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, LinkDevice.PO, SibiRequestCols.UID);
+                    string SibiGuid = AssetManagerFunctions.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, LinkDevice.PO, SibiRequestCols.Guid);
 
-                    if (string.IsNullOrEmpty(SibiUID))
+                    if (string.IsNullOrEmpty(SibiGuid))
                     {
                         OtherFunctions.Message("No Sibi request found with matching PO number.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Not Found", this);
                     }
                     else
                     {
-                        if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(SibiManageRequestForm), SibiUID))
+                        if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(SibiManageRequestForm), SibiGuid))
                         {
-                            new SibiManageRequestForm(this, SibiUID);
+                            new SibiManageRequestForm(this, SibiGuid);
                         }
                     }
                 }
@@ -723,7 +723,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
                     if (ServerInfo.CurrentDataBase == Database.vintondd)
                     {
-                        if (SecurityTools.VerifyAdminCreds("Credentials for Vinton AD"));
+                        if (SecurityTools.VerifyAdminCreds("Credentials for Vinton AD"))
                         {
                             ActiveDirectoryBox.Visible = false;
                             return;
@@ -849,7 +849,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ColList.Add(new GridColumnAttrib(TrackablesCols.CheckinTime, "Check In", typeof(DateTime)));
             ColList.Add(new GridColumnAttrib(TrackablesCols.DueBackDate, "Due Back", typeof(DateTime)));
             ColList.Add(new GridColumnAttrib(TrackablesCols.UseLocation, "Location", typeof(string)));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.UID, "Guid", typeof(string)));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.Guid, "Guid", typeof(string)));
             return ColList;
         }
 
@@ -1014,10 +1014,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void TrackingGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            var EntryUID = TrackingGrid.CurrentRowStringValue(TrackablesCols.UID);
-            if (!Helpers.ChildFormControl.FormIsOpenByUID(typeof(ViewTrackingForm), EntryUID))
+            var EntryGuid = TrackingGrid.CurrentRowStringValue(TrackablesCols.Guid);
+            if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(ViewTrackingForm), EntryGuid))
             {
-                NewTrackingView(EntryUID);
+                NewTrackingView(EntryGuid);
             }
         }
 
@@ -1086,7 +1086,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ViewDeviceForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!OKToClose())
+            if (!OkToClose())
             {
                 e.Cancel = true;
             }
@@ -1098,6 +1098,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             liveBox.Dispose();
             munisToolBar.Dispose();
             currentViewDevice.Dispose();
+            controlParser.Dispose();
             Helpers.ChildFormControl.CloseChildren(this);
         }
 

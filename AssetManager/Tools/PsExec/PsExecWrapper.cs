@@ -7,7 +7,7 @@ using System.IO;
 
 namespace AssetManager.Tools
 {
-    public class PsExecWrapper
+    public class PSExecWrapper
     {
         private Process currentProcess;
 
@@ -23,7 +23,7 @@ namespace AssetManager.Tools
 
         public event EventHandler OutputReceived;
 
-        public PsExecWrapper()
+        public PSExecWrapper()
         {
             StageExecutable();
         }
@@ -44,7 +44,7 @@ namespace AssetManager.Tools
             }
         }
 
-        private async void StageExecutable()
+        private void StageExecutable()
         {
             if (!Directory.Exists(Paths.PsExecTempDir))
             {
