@@ -169,7 +169,7 @@ namespace PingVisualizer
         {
             scaleEaseTimerInterval = 1000 / maxDrawRateFPS;
             scaleEaseTimer = new System.Threading.Timer(new System.Threading.TimerCallback(ScaleTimer_Tick));
-            scaleEaseTimer.Change(1, scaleEaseTimerInterval);
+            scaleEaseTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         }
 
         private void ScaleTimer_Tick(object timer)

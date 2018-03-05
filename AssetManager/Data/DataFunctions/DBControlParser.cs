@@ -512,7 +512,7 @@ namespace AssetManager.Data.Functions
 
         public void Dispose()
         {
-            ((IDisposable)errorProvider).Dispose();
+            ((IDisposable)errorProvider)?.Dispose();
         }
 
         #endregion "Methods"

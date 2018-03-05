@@ -150,7 +150,7 @@ namespace AssetManager.Helpers
                         string columnName = targetGrid.Columns[c].Name;
 
                         // Leverage Linq enumerator to rapidly collect all the rows into the array, making sure to exclude null values.
-                        rowStringCollection = gridTable.AsEnumerable().Where(r => r.Field<object>(columnName) != null).Select(r => r.Field<object>(columnName).ToString()).ToArray();
+                        rowStringCollection = gridTable.AsEnumerable().Where(r => (r.RowState != DataRowState.Deleted && r.Field<object>(columnName) != null)).Select(r => r.Field<object>(columnName).ToString()).ToArray();
                     }
 
                     // Make sure the Linq query returned results.

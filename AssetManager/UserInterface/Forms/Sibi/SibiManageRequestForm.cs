@@ -274,7 +274,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void AddNote()
+        private void NewNote()
         {
             try
             {
@@ -282,11 +282,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
                 if (!string.IsNullOrEmpty(CurrentRequest.Guid) && !IsNewRequest)
                 {
-                    SibiNotesForm NewNote = new SibiNotesForm(this, CurrentRequest);
-                    if (NewNote.DialogResult == DialogResult.OK)
+                    using (var NewNote = new SibiNotesForm(this, CurrentRequest))
                     {
-                        AddNewNote(NewNote.Request.Guid, NewNote.Note);
-                        LoadNotes(CurrentRequest.Guid);
+                        if (NewNote.DialogResult == DialogResult.OK)
+                        {
+                            AddNewNote(NewNote.Request.Guid, NewNote.Note);
+                            LoadNotes(CurrentRequest.Guid);
+                        }
                     }
                 }
                 else
@@ -391,7 +393,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void cmdAddNote_Click(object sender, EventArgs e)
         {
-            AddNote();
+            NewNote();
         }
 
         private void ViewAttachments()
@@ -497,7 +499,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void cmdNewNote_Click(object sender, EventArgs e)
         {
-            AddNote();
+            NewNote();
         }
 
         private void ModifyRequest()
@@ -539,7 +541,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 foreach (DataColumn col in itemsData.Columns)
                 {
                     // If the row has been modified.
-                    if (row.RowState != DataRowState.Unchanged)
+                    if (row.RowState != DataRowState.Unchanged && row.RowState != DataRowState.Deleted)
                     {
                         // Add the request Guid to the row if needed.
                         if (col.ColumnName == SibiRequestItemsCols.RequestGuid)
