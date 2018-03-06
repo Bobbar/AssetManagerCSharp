@@ -320,7 +320,10 @@ namespace AssetManager.Data.Classes
                 {
                     // TODO: dispose managed state (managed objects).
                     if (_dataStream != null)
+                    {
                         _dataStream.Dispose();
+                        _dataStream = null;
+                    }
                     _fileInfo = null;
                 }
 

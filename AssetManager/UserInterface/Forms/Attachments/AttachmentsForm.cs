@@ -332,19 +332,21 @@ namespace AssetManager.UserInterface.Forms
                     using (Stream respStream = LocalFTPComm.ReturnFtpResponse(FtpRequestString, WebRequestMethods.Ftp.DownloadFile).GetResponseStream())
                     {
                         MemoryStream memStream = new MemoryStream();
-                        byte[] buffer = new byte[1024];
+                        int bufferSize = 256000;
+                        byte[] buffer = new byte[bufferSize];
                         int bytesIn = 0;
                         //ftp download
                         bytesIn = 1;
                         while (!(bytesIn < 1 || cancelToken.IsCancellationRequested))
                         {
-                            bytesIn = respStream.Read(buffer, 0, 1024);
+                            bytesIn = respStream.Read(buffer, 0, bufferSize);
                             if (bytesIn > 0)
                             {
                                 memStream.Write(buffer, 0, bytesIn); //download data to memory before saving to disk
                                 progress.BytesMoved = bytesIn;
                             }
                         }
+                        buffer = null;
                         return memStream;
                     }
                 });
@@ -419,11 +421,13 @@ namespace AssetManager.UserInterface.Forms
                     using (MemoryStream streamFileName = (MemoryStream)(AttachObject.GetData("FileGroupDescriptor")))
                     {
                         streamFileName.Position = 0;
-                        StreamReader sr = new StreamReader(streamFileName);
-                        string fullString = sr.ReadToEnd();
-                        fullString = fullString.Replace("\0", "");
-                        fullString = fullString.Replace("\u0001", "");
-                        return fullString;
+                        using (StreamReader sr = new StreamReader(streamFileName))
+                        {
+                            string fullString = sr.ReadToEnd();
+                            fullString = fullString.Replace("\0", "");
+                            fullString = fullString.Replace("\u0001", "");
+                            return fullString;
+                        }
                     }
             }
             return null;
@@ -850,20 +854,22 @@ namespace AssetManager.UserInterface.Forms
                             await Task.Run(() =>
                             {
                                 using (FileStream FileStream = (FileStream)(CurrentAttachment.DataStream))
-                                using (System.IO.Stream FTPStream = LocalFTPComm.ReturnFtpRequestStream(ftpUri + CurrentAttachment.FolderGuid + "/" + CurrentAttachment.FileGuid, WebRequestMethods.Ftp.UploadFile))
+                                using (Stream FTPStream = LocalFTPComm.ReturnFtpRequestStream(ftpUri + CurrentAttachment.FolderGuid + "/" + CurrentAttachment.FileGuid, WebRequestMethods.Ftp.UploadFile))
                                 {
-                                    byte[] buffer = new byte[1024];
+                                    int bufferSize = 256000;
+                                    byte[] buffer = new byte[bufferSize];
                                     int bytesIn = 1;
                                     progress.BytesToTransfer = System.Convert.ToInt32(FileStream.Length);
                                     while (!(bytesIn < 1 || cancelToken.IsCancellationRequested))
                                     {
-                                        bytesIn = FileStream.Read(buffer, 0, 1024);
+                                        bytesIn = FileStream.Read(buffer, 0, bufferSize);
                                         if (bytesIn > 0)
                                         {
                                             FTPStream.Write(buffer, 0, bytesIn);
                                             progress.BytesMoved = bytesIn;
                                         }
                                     }
+                                    buffer = null;
                                 }
                             });
                             if (cancelToken.IsCancellationRequested)
