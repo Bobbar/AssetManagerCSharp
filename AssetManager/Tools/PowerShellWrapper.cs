@@ -35,15 +35,15 @@ namespace AssetManager.Tools
         /// Execute the specified PowerShell script on the specified host.
         /// </summary>
         /// <param name="hostName">Hostname of the remote computer.</param>
-        /// <param name="scriptBytes">PowerShell script as a byte array.</param>
+        /// <param name="scriptValue">PowerShell script as a byte array.</param>
         /// <param name="credentials">Credentials used when creating the remote runspace.</param>
         /// <returns>Returns any error messages.</returns>
-        public string ExecuteRemotePSScript(string hostName, byte[] scriptBytes, NetworkCredential credentials)
+        public string ExecuteRemotePSScript(string hostName, byte[] scriptValue, NetworkCredential credentials)
         {
             try
             {
                 var psCreds = new PSCredential(credentials.UserName, credentials.SecurePassword);
-                string scriptText = LoadScript(scriptBytes);
+                string scriptText = LoadScript(scriptValue);
                 string shellUri = "http://schemas.microsoft.com/powershell/Microsoft.PowerShell";
                 WSManConnectionInfo connInfo = new WSManConnectionInfo(false, hostName, 5985, "/wsman", shellUri, psCreds);
 
@@ -288,7 +288,8 @@ namespace AssetManager.Tools
             {
                 // Create an instance of StreamReader to read from our file.
                 // The using statement also closes the StreamReader.
-                using (StreamReader sr = new StreamReader(new MemoryStream(scriptBytes), Encoding.ASCII))
+                using (var memoryStream = new MemoryStream(scriptBytes))
+                using (StreamReader sr = new StreamReader(memoryStream, Encoding.ASCII))
                 {
                     // use a string builder to get all our lines from the file
                     StringBuilder fileContents = new StringBuilder();

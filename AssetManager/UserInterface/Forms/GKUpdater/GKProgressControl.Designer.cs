@@ -1,5 +1,5 @@
 using System.Windows.Forms;
-namespace AssetManager.UserInterface.Forms.GK_Updater
+namespace AssetManager.UserInterface.Forms.GKUpdater
 {
 
     partial class GKProgressControl : System.Windows.Forms.UserControl

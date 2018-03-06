@@ -1,6 +1,6 @@
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AssetManagement;
-using AssetManager.UserInterface.Forms.GK_Updater;
+using AssetManager.UserInterface.Forms.GKUpdater;
 using AssetManager.UserInterface.Forms.Sibi;
 using AssetManager.UserInterface.Forms;
 using AssetManager.Data.Classes;

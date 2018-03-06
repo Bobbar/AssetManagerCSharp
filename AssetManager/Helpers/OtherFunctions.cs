@@ -39,7 +39,7 @@ namespace AssetManager.Helpers
             GlobalSwitches.ProgramEnding = true;
             Logging.Logger("Ending Program...");
             PurgeTempDir();
-           // Application.Exit();
+            // Application.Exit();
         }
 
         public static void PurgeTempDir()
@@ -78,8 +78,10 @@ namespace AssetManager.Helpers
         public static DialogResult Message(string Prompt, MessageBoxButtons button = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.Information, string Title = null, Form ParentFrm = null)
         {
             SetWaitCursor(false, ParentFrm);
-            AdvancedDialog NewMessage = new AdvancedDialog(ParentFrm);
-            return NewMessage.DialogMessage(Prompt, button, icon, Title, ParentFrm);
+            using (var newMessage = new AdvancedDialog(ParentFrm))
+            {
+                return newMessage.DialogMessage(Prompt, button, icon, Title, ParentFrm);
+            }
         }
 
         public static bool OKToEnd()

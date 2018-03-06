@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace AssetManager.Tools.Deployment
 {
-    public class DeployTeamViewer: IDisposable
+    public class DeployTeamViewer : IDisposable
     {
         private const string deploymentFilesDirectory = "\\\\core.co.fairfield.oh.us\\dfs1\\fcdd\\files\\Information Technology\\Software\\Tools\\TeamViewer\\Deploy";
         private const string deployTempDirectory = "\\Temp\\TVDeploy";
@@ -202,9 +202,28 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
+        #region IDisposable Support
+
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    deploy?.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
         public void Dispose()
         {
-            ((IDisposable)deploy).Dispose();
+            Dispose(true);
         }
+
+        #endregion IDisposable Support
     }
 }

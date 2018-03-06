@@ -310,48 +310,48 @@ namespace AssetManager.UserInterface.CustomControls
             var blah = OtherFunctions.Message("Click 'Yes' to reboot this Device.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm);
             if (blah == DialogResult.Yes)
             {
-                string IP = pingVis.CurrentResult.Address.ToString();
-                var RestartOutput = await SendRestart(IP, this.device.HostName);
-                if ((string)RestartOutput == "")
+                if (SecurityTools.VerifyAdminCreds())
                 {
-                    OtherFunctions.Message("Success", MessageBoxButtons.OK, MessageBoxIcon.Information, "Restart Device", hostForm);
-                }
-                else
-                {
-                    OtherFunctions.Message("Failed" + "\r\n" + "\r\n" + "Output: " + RestartOutput, MessageBoxButtons.OK, MessageBoxIcon.Information, "Restart Device", hostForm);
+                    string ip = pingVis.CurrentResult.Address.ToString();
+                    var restartOutput = await SendRestart(ip);
+                    if ((string)restartOutput == "")
+                    {
+                        OtherFunctions.Message("Success", MessageBoxButtons.OK, MessageBoxIcon.Information, "Restart Device", hostForm);
+                    }
+                    else
+                    {
+                        OtherFunctions.Message("Failed" + "\r\n" + "\r\n" + "Output: " + restartOutput, MessageBoxButtons.OK, MessageBoxIcon.Information, "Restart Device", hostForm);
+                    }
                 }
             }
         }
 
-        private async Task<string> SendRestart(string IP, string DeviceName)
+        private async Task<string> SendRestart(string ip)
         {
-            var OrigButtonImage = RestartDeviceButton.Image;
+            var origButtonImage = RestartDeviceButton.Image;
             try
             {
-                if (SecurityTools.VerifyAdminCreds())
+                RestartDeviceButton.Image = Properties.Resources.LoadingAni;
+                string FullPath = "\\\\" + ip;
+                string output = await Task.Run(() =>
                 {
-                    RestartDeviceButton.Image = Properties.Resources.LoadingAni;
-                    string FullPath = "\\\\" + IP;
-                    string output = await Task.Run(() =>
+                    using (NetworkConnection NetCon = new NetworkConnection(FullPath, SecurityTools.AdminCreds))
+                    using (Process p = new Process())
                     {
-                        using (NetworkConnection NetCon = new NetworkConnection(FullPath, SecurityTools.AdminCreds))
-                        using (Process p = new Process())
-                        {
-                            string results;
-                            p.StartInfo.UseShellExecute = false;
-                            p.StartInfo.RedirectStandardOutput = true;
-                            p.StartInfo.RedirectStandardError = true;
-                            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                            p.StartInfo.FileName = "shutdown.exe";
-                            p.StartInfo.Arguments = "/m " + FullPath + " /f /r /t 0";
-                            p.Start();
-                            results = p.StandardError.ReadToEnd();
-                            p.WaitForExit();
-                            return results.Trim();
-                        }
-                    });
-                    return output;
-                }
+                        string results;
+                        p.StartInfo.UseShellExecute = false;
+                        p.StartInfo.RedirectStandardOutput = true;
+                        p.StartInfo.RedirectStandardError = true;
+                        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        p.StartInfo.FileName = "shutdown.exe";
+                        p.StartInfo.Arguments = "/m " + FullPath + " /f /r /t 0";
+                        p.Start();
+                        results = p.StandardError.ReadToEnd();
+                        p.WaitForExit();
+                        return results.Trim();
+                    }
+                });
+                return output;
             }
             catch (Exception ex)
             {
@@ -359,7 +359,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
             finally
             {
-                RestartDeviceButton.Image = OrigButtonImage;
+                RestartDeviceButton.Image = origButtonImage;
             }
             return string.Empty;
         }

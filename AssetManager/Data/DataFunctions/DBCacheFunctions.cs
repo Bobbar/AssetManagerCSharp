@@ -103,8 +103,8 @@ namespace AssetManager.Data.Functions
 
                 Logging.Logger("Rebuilding local DB cache...");
 
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
+                //GC.Collect();
+                //GC.WaitForPendingFinalizers();
 
                 if (!File.Exists(Paths.SQLiteDir))
                 {

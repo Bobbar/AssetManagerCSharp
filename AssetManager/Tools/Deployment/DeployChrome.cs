@@ -52,9 +52,28 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
+        #region IDisposable Support
+
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    deploy?.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
         public void Dispose()
         {
-            ((IDisposable)deploy).Dispose();
+            Dispose(true);
+
+            #endregion IDisposable Support
         }
     }
 }

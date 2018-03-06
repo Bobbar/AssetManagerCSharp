@@ -4,7 +4,6 @@ using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.CustomControls.LiveBox;
 using System;
 using System.Collections.Generic;
 using System.Data;

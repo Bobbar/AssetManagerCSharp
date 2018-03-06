@@ -6,7 +6,6 @@ using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.Tools;
 using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.CustomControls.LiveBox;
 using AssetManager.UserInterface.Forms.AdminTools;
 using MyDialogLib;
 using System;
@@ -561,7 +560,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AdvancedSearch);
 
-            AdvancedSearchForm NewAdvancedSearch = new AdvancedSearchForm(this);
+            new AdvancedSearchForm(this);
         }
 
         private void StartAttachScan()
@@ -773,10 +772,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     var newGridForm = new GridForm(this, "Devices By Supervisor");
                     newGridForm.AddGrid("DevBySup", "Devices", results);
                     newGridForm.Show();
-                }
-                else
-                {
-                    //do nutzing
                 }
             }
             catch (Exception ex)

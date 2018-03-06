@@ -4,7 +4,7 @@ using System.IO.Compression;
 using System.Text;
 using AssetManager.Tools;
 
-namespace AssetManager.UserInterface.Forms.GK_Updater
+namespace AssetManager.UserInterface.Forms.GKUpdater
 {
     public class GZipCompress
     {
@@ -81,7 +81,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             int iDirLen = inDir[inDir.Length - 1] == Path.DirectorySeparatorChar ? inDir.Length : inDir.Length + 1;
             Progress.ResetProgress();
             Progress.BytesToTransfer = files.Length - 1;
-            FileStream outFile = new FileStream(outDir, FileMode.Create, FileAccess.Write, FileShare.None, 256000);
+            using (FileStream outFile = new FileStream(outDir, FileMode.Create, FileAccess.Write, FileShare.None, 256000))
             using (GZipStream str = new GZipStream(outFile, CompressionLevel.Optimal))
             {
                 foreach (string filePath in files)
@@ -96,7 +96,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         public void DecompressToDirectory(string compressedFile, string dir)
         {
             Progress.BytesToTransfer = GetGZOriginalFileSize(compressedFile);
-            FileStream inFile = new FileStream(compressedFile, FileMode.Open, FileAccess.Read, FileShare.None, 256000);
+            using (FileStream inFile = new FileStream(compressedFile, FileMode.Open, FileAccess.Read, FileShare.None, 256000))
             using (GZipStream zipStream = new GZipStream(inFile, CompressionMode.Decompress, true))
             {
                 while (DecompressFile(dir, zipStream))

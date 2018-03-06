@@ -148,7 +148,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private OnlineStatusMenuItem NewMenuItem(ExtendedForm frm)
         {
-            OnlineStatusMenuItem newitem = new OnlineStatusMenuItem();
+            var newitem = new OnlineStatusMenuItem();
             newitem.Name = frm.Name;
             newitem.Font = DropDownControl.Font;
             newitem.Text = frm.Text;

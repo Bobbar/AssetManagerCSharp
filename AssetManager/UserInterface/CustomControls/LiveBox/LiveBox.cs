@@ -8,15 +8,15 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AssetManager.UserInterface.CustomControls.LiveBox
+namespace AssetManager.UserInterface.CustomControls
 {
     public class LiveBox : IDisposable
     {
         #region "Fields"
-
-        private LiveBoxArgs CurrentLiveBoxArgs;
-        private ListBox LiveListBox;
-        private List<LiveBoxArgs> LiveBoxControls = new List<LiveBoxArgs>();
+        private Font liveBoxFont = new Font("Consolas", 11.25f, FontStyle.Bold);
+        private LiveBoxArgs currentLiveBoxArgs;
+        private ListBox liveListBox;
+        private List<LiveBoxArgs> liveBoxControls = new List<LiveBoxArgs>();
         private int rowLimit = 30;
 
         private bool queryRunning = false;
@@ -38,27 +38,27 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
 
         public void AttachToControl(TextBox control, string displayMember, LiveBoxSelectionType type, string valueMember = null)
         {
-            LiveBoxArgs ControlArgs = new LiveBoxArgs(control, displayMember, type, valueMember);
-            LiveBoxControls.Add(ControlArgs);
-            ControlArgs.Control.KeyUp += Control_KeyUp;
-            ControlArgs.Control.KeyDown += Control_KeyDown;
-            ControlArgs.Control.LostFocus += Control_LostFocus;
-            ControlArgs.Control.ReadOnlyChanged += Control_LostFocus;
+            LiveBoxArgs controlArgs = new LiveBoxArgs(control, displayMember, type, valueMember);
+            liveBoxControls.Add(controlArgs);
+            controlArgs.Control.KeyUp += Control_KeyUp;
+            controlArgs.Control.KeyDown += Control_KeyDown;
+            controlArgs.Control.LostFocus += Control_LostFocus;
+            controlArgs.Control.ReadOnlyChanged += Control_LostFocus;
         }
 
         public void GiveLiveBoxFocus()
         {
-            LiveListBox.Focus();
-            if (LiveListBox.SelectedIndex == -1)
+            liveListBox.Focus();
+            if (liveListBox.SelectedIndex == -1)
             {
-                LiveListBox.SelectedIndex = 0;
+                liveListBox.SelectedIndex = 0;
             }
         }
 
         public void HideLiveBox()
         {
-            LiveListBox.Visible = false;
-            LiveListBox.DataSource = null;
+            liveListBox.Visible = false;
+            liveListBox.DataSource = null;
         }
 
         private void Control_KeyDown(object sender, KeyEventArgs e)
@@ -95,24 +95,24 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
 
         private void Control_LostFocus(object sender, EventArgs e)
         {
-            if (CurrentLiveBoxArgs.Control != null)
+            if (currentLiveBoxArgs.Control != null)
             {
-                if (!CurrentLiveBoxArgs.Control.Focused & !LiveListBox.Focused)
+                if (!currentLiveBoxArgs.Control.Focused & !liveListBox.Focused)
                 {
-                    if (LiveListBox.Visible)
+                    if (liveListBox.Visible)
                         HideLiveBox();
                 }
-                if (!CurrentLiveBoxArgs.Control.Enabled)
+                if (!currentLiveBoxArgs.Control.Enabled)
                 {
-                    if (LiveListBox.Visible)
+                    if (liveListBox.Visible)
                         HideLiveBox();
                 }
-                if (CurrentLiveBoxArgs.Control is TextBox)
+                if (currentLiveBoxArgs.Control is TextBox)
                 {
-                    TextBox txt = CurrentLiveBoxArgs.Control;
+                    TextBox txt = currentLiveBoxArgs.Control;
                     if (txt.ReadOnly)
                     {
-                        if (LiveListBox.Visible)
+                        if (liveListBox.Visible)
                             HideLiveBox();
                     }
                 }
@@ -125,25 +125,25 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
             {
                 if (results.Rows.Count > 0)
                 {
-                    LiveListBox.SuspendLayout();
-                    LiveListBox.BeginUpdate();
-                    LiveListBox.DataSource = results;
-                    LiveListBox.DisplayMember = CurrentLiveBoxArgs.DisplayMember;
-                    LiveListBox.ValueMember = CurrentLiveBoxArgs.ValueMember;
-                    LiveListBox.ClearSelected();
+                    liveListBox.SuspendLayout();
+                    liveListBox.BeginUpdate();
+                    liveListBox.DataSource = results;
+                    liveListBox.DisplayMember = currentLiveBoxArgs.DisplayMember;
+                    liveListBox.ValueMember = currentLiveBoxArgs.ValueMember;
+                    liveListBox.ClearSelected();
                     PosistionLiveBox();
-                    LiveListBox.Visible = true;
-                    LiveListBox.EndUpdate();
-                    LiveListBox.ResumeLayout();
-                    if (previousSearchString != CurrentLiveBoxArgs.Control.Text.Trim())
+                    liveListBox.Visible = true;
+                    liveListBox.EndUpdate();
+                    liveListBox.ResumeLayout();
+                    if (previousSearchString != currentLiveBoxArgs.Control.Text.Trim())
                     {
-                        StartLiveSearch(CurrentLiveBoxArgs);
+                        StartLiveSearch(currentLiveBoxArgs);
                         //if search string has changed since last completion, run again.
                     }
                 }
                 else
                 {
-                    LiveListBox.Visible = false;
+                    liveListBox.Visible = false;
                 }
             }
             catch
@@ -154,7 +154,7 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
 
         private LiveBoxArgs GetSenderArgs(object sender)
         {
-            foreach (LiveBoxArgs arg in LiveBoxControls)
+            foreach (LiveBoxArgs arg in liveBoxControls)
             {
                 if (object.ReferenceEquals(arg.Control, (TextBox)sender))
                 {
@@ -166,17 +166,17 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
 
         private void InitializeLiveListBox(Form parentForm)
         {
-            LiveListBox = new ListBox();
-            LiveListBox.Parent = parentForm;
-            LiveListBox.BringToFront();
-            LiveListBox.MouseDown += LiveBox_MouseDown;
-            LiveListBox.MouseMove += LiveBox_MouseMove;
-            LiveListBox.KeyDown += LiveBox_KeyDown;
-            LiveListBox.LostFocus += LiveBox_LostFocus;
-            LiveListBox.PreviewKeyDown += LiveBox_PreviewKeyDown;
-            LiveListBox.DoubleBufferedListBox(true);
-            LiveListBox.Visible = false;
-            CurrentLiveBoxArgs = new LiveBoxArgs();
+            liveListBox = new ListBox();
+            liveListBox.Parent = parentForm;
+            liveListBox.BringToFront();
+            liveListBox.MouseDown += LiveBox_MouseDown;
+            liveListBox.MouseMove += LiveBox_MouseMove;
+            liveListBox.KeyDown += LiveBox_KeyDown;
+            liveListBox.LostFocus += LiveBox_LostFocus;
+            liveListBox.PreviewKeyDown += LiveBox_PreviewKeyDown;
+            liveListBox.DoubleBufferedListBox(true);
+            liveListBox.Visible = false;
+            currentLiveBoxArgs = new LiveBoxArgs();
             SetStyle();
         }
 
@@ -219,38 +219,38 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
 
         private void LiveBox_MouseMove(object sender, MouseEventArgs e)
         {
-            LiveListBox.SelectedIndex = LiveListBox.IndexFromPoint(e.Location);
+            liveListBox.SelectedIndex = liveListBox.IndexFromPoint(e.Location);
         }
 
         private void LiveBoxSelect()
         {
-            string selectedText = LiveListBox.Text;
-            string selectedValue = LiveListBox.SelectedValue.ToString();
+            string selectedText = liveListBox.Text;
+            string selectedValue = liveListBox.SelectedValue.ToString();
             HideLiveBox();
 
-            var parentForm = CurrentLiveBoxArgs.Control.FindForm();
+            var parentForm = currentLiveBoxArgs.Control.FindForm();
             if (parentForm is ILiveBox)
             {
                 var liveboxForm = (ILiveBox)parentForm;
 
-                switch (CurrentLiveBoxArgs.Type)
+                switch (currentLiveBoxArgs.Type)
                 {
                     case LiveBoxSelectionType.DynamicSearch:
-                        CurrentLiveBoxArgs.Control.Text = selectedText;
+                        currentLiveBoxArgs.Control.Text = selectedText;
                         liveboxForm.DynamicSearch();
                         break;
 
                     case LiveBoxSelectionType.LoadDevice:
-                        CurrentLiveBoxArgs.Control.Text = "";
+                        currentLiveBoxArgs.Control.Text = "";
                         liveboxForm.LoadDevice(selectedValue);
                         break;
 
                     case LiveBoxSelectionType.SelectValue:
-                        CurrentLiveBoxArgs.Control.Text = selectedText;
+                        currentLiveBoxArgs.Control.Text = selectedText;
                         break;
 
                     case LiveBoxSelectionType.UserSelect:
-                        CurrentLiveBoxArgs.Control.Text = selectedText;
+                        currentLiveBoxArgs.Control.Text = selectedText;
                         liveboxForm.MunisUser = new MunisEmployee(selectedText, selectedValue);
                         break;
                 }
@@ -263,41 +263,41 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
 
         private void PosistionLiveBox()
         {
-            Point ScreenPos = LiveListBox.Parent.PointToClient(CurrentLiveBoxArgs.Control.Parent.PointToScreen(CurrentLiveBoxArgs.Control.Location));
-            ScreenPos.Y += CurrentLiveBoxArgs.Control.Height - 1;
-            LiveListBox.Location = ScreenPos;
-            LiveListBox.Width = PreferredWidth();
-            Rectangle FormBounds = LiveListBox.Parent.ClientRectangle;
-            if (LiveListBox.PreferredHeight + LiveListBox.Top > FormBounds.Bottom)
+            Point ScreenPos = liveListBox.Parent.PointToClient(currentLiveBoxArgs.Control.Parent.PointToScreen(currentLiveBoxArgs.Control.Location));
+            ScreenPos.Y += currentLiveBoxArgs.Control.Height - 1;
+            liveListBox.Location = ScreenPos;
+            liveListBox.Width = PreferredWidth();
+            Rectangle FormBounds = liveListBox.Parent.ClientRectangle;
+            if (liveListBox.PreferredHeight + liveListBox.Top > FormBounds.Bottom)
             {
-                LiveListBox.Height = FormBounds.Bottom - LiveListBox.Top - LiveListBox.Padding.Bottom;
+                liveListBox.Height = FormBounds.Bottom - liveListBox.Top - liveListBox.Padding.Bottom;
             }
             else
             {
-                LiveListBox.Height = LiveListBox.PreferredHeight;
+                liveListBox.Height = liveListBox.PreferredHeight;
             }
         }
 
         private int PreferredWidth()
         {
-            using (Graphics gfx = LiveListBox.CreateGraphics())
+            using (Graphics gfx = liveListBox.CreateGraphics())
             {
                 int MaxLen = 0;
-                foreach (DataRowView row in LiveListBox.Items)
+                foreach (DataRowView row in liveListBox.Items)
                 {
-                    int ItemLen = (int)gfx.MeasureString(row[CurrentLiveBoxArgs.DisplayMember].ToString(), LiveListBox.Font).Width;
+                    int ItemLen = (int)gfx.MeasureString(row[currentLiveBoxArgs.DisplayMember].ToString(), liveListBox.Font).Width;
                     if (ItemLen > MaxLen)
                     {
                         MaxLen = ItemLen;
                     }
                 }
-                if (MaxLen > CurrentLiveBoxArgs.Control.Width)
+                if (MaxLen > currentLiveBoxArgs.Control.Width)
                 {
                     return MaxLen;
                 }
                 else
                 {
-                    return CurrentLiveBoxArgs.Control.Width;
+                    return currentLiveBoxArgs.Control.Width;
                 }
             }
         }
@@ -316,13 +316,13 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
                 {
                     string strQry;
 
-                    if (CurrentLiveBoxArgs.ValueMember == null)
+                    if (currentLiveBoxArgs.ValueMember == null)
                     {
-                        strQry = "SELECT " + DevicesCols.DeviceGuid + "," + CurrentLiveBoxArgs.DisplayMember + " FROM " + DevicesCols.TableName + " WHERE " + CurrentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + CurrentLiveBoxArgs.DisplayMember + " ORDER BY " + CurrentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
+                        strQry = "SELECT " + DevicesCols.DeviceGuid + "," + currentLiveBoxArgs.DisplayMember + " FROM " + DevicesCols.TableName + " WHERE " + currentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + currentLiveBoxArgs.DisplayMember + " ORDER BY " + currentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
                     }
                     else
                     {
-                        strQry = "SELECT " + DevicesCols.DeviceGuid + "," + CurrentLiveBoxArgs.DisplayMember + "," + CurrentLiveBoxArgs.ValueMember + " FROM " + DevicesCols.TableName + " WHERE " + CurrentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + CurrentLiveBoxArgs.DisplayMember + " ORDER BY " + CurrentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
+                        strQry = "SELECT " + DevicesCols.DeviceGuid + "," + currentLiveBoxArgs.DisplayMember + "," + currentLiveBoxArgs.ValueMember + " FROM " + DevicesCols.TableName + " WHERE " + currentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + currentLiveBoxArgs.DisplayMember + " ORDER BY " + currentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
                     }
 
                     using (var cmd = DBFactory.GetDatabase().GetCommand(strQry))
@@ -344,18 +344,17 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
 
         private void SetStyle()
         {
-            Font LiveBoxFont = new Font("Consolas", 11.25f, FontStyle.Bold);
-            LiveListBox.BackColor = Color.FromArgb(255, 208, 99);
-            LiveListBox.BorderStyle = BorderStyle.FixedSingle;
-            LiveListBox.Font = LiveBoxFont;
-            LiveListBox.ForeColor = Color.Black;
-            LiveListBox.Padding = new Padding(0, 0, 0, 10);
+            liveListBox.BackColor = Color.FromArgb(255, 208, 99);
+            liveListBox.BorderStyle = BorderStyle.FixedSingle;
+            liveListBox.Font = liveBoxFont;
+            liveListBox.ForeColor = Color.Black;
+            liveListBox.Padding = new Padding(0, 0, 0, 10);
         }
 
         private void StartLiveSearch(LiveBoxArgs args)
         {
-            CurrentLiveBoxArgs = args;
-            string strSearchString = CurrentLiveBoxArgs.Control.Text.Trim();
+            currentLiveBoxArgs = args;
+            string strSearchString = currentLiveBoxArgs.Control.Text.Trim();
             if (!string.IsNullOrEmpty(strSearchString))
             {
                 ProcessSearch(strSearchString);
@@ -368,7 +367,7 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
 
         private void RemovedHandlers()
         {
-            foreach (var control in LiveBoxControls)
+            foreach (var control in liveBoxControls)
             {
                 control.Control.KeyUp -= Control_KeyUp;
                 control.Control.KeyDown -= Control_KeyDown;
@@ -446,8 +445,9 @@ namespace AssetManager.UserInterface.CustomControls.LiveBox
                 {
                     // TODO: dispose managed state (managed objects).
                     RemovedHandlers();
-                    LiveListBox.Dispose();
-                    LiveBoxControls.Clear();
+                    liveListBox.Dispose();
+                    liveBoxControls.Clear();
+                    liveBoxFont.Dispose();
                 }
                 // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
                 // TODO: set large fields to null.

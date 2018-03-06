@@ -15,43 +15,43 @@ namespace AssetManager.Business
 {
     public class PdfFormFilling
     {
-        private ExtendedForm ParentForm;
-        private Device CurrentDevice = new Device();
-        private AdvancedDialog CurrentDialog;
-        private string UnitPriceTxtName = "txtUnitPrice";
+        private ExtendedForm parentForm;
+        private Device currentDevice;
+        private AdvancedDialog currentDialog;
+        private string unitPriceTxtName = "txtUnitPrice";
 
-        public PdfFormFilling(ExtendedForm parentForm, Device deviceInfo, PdfFormType pdfType)
+        public PdfFormFilling(ExtendedForm parentForm, Device device, PdfFormType pdfType)
         {
-            this.ParentForm = parentForm;
-            CurrentDevice = deviceInfo;
+            this.parentForm = parentForm;
+            currentDevice = device;
             FillForm(pdfType);
         }
 
-        public void ListFieldNames()
-        {
-            PdfReader pdfReader = new PdfReader(Properties.Resources.Exh_K_02_Asset_Disposal_Form);
-            StringBuilder sb = new StringBuilder();
-            // var de = new KeyValuePair<string, AcroFields.Item>();
+        //public void ListFieldNames()
+        //{
+        //    PdfReader pdfReader = new PdfReader(Properties.Resources.Exh_K_02_Asset_Disposal_Form);
+        //    StringBuilder sb = new StringBuilder();
+        //    // var de = new KeyValuePair<string, AcroFields.Item>();
 
-            foreach (KeyValuePair<string, AcroFields.Item> de in pdfReader.AcroFields.Fields)
-            {
-                sb.Append(de.Key.ToString() + Environment.NewLine);
-            }
-            Debug.Print(sb.ToString());
-        }
+        //    foreach (KeyValuePair<string, AcroFields.Item> de in pdfReader.AcroFields.Fields)
+        //    {
+        //        sb.Append(de.Key.ToString() + Environment.NewLine);
+        //    }
+        //    Debug.Print(sb.ToString());
+        //}
 
         private string GetUnitPrice()
         {
-            using (AdvancedDialog NewDialog = new AdvancedDialog(ParentForm))
+            using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
             {
-                CurrentDialog = NewDialog;
-                NewDialog.Text = "Input Unit Price";
-                NewDialog.AddTextBox(UnitPriceTxtName, "Enter Unit Price:");
-                NewDialog.AddButton("cmdReqSelect", "Select From Req.", PriceFromMunis);
-                NewDialog.ShowDialog();
-                if (NewDialog.DialogResult == DialogResult.OK)
+                currentDialog = newDialog;
+                newDialog.Text = "Input Unit Price";
+                newDialog.AddTextBox(unitPriceTxtName, "Enter Unit Price:");
+                newDialog.AddButton("cmdReqSelect", "Select From Req.", PriceFromMunis);
+                newDialog.ShowDialog();
+                if (newDialog.DialogResult == DialogResult.OK)
                 {
-                    return NewDialog.GetControlValue(UnitPriceTxtName).ToString();
+                    return newDialog.GetControlValue(unitPriceTxtName).ToString();
                 }
             }
 
@@ -63,10 +63,10 @@ namespace AssetManager.Business
             try
             {
                 OtherFunctions.Message("Please Double-Click a MUNIS line item on the following window.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Input Needed");
-                var SelectedPrice = await MunisFunctions.NewMunisReqSearch(MunisFunctions.GetReqNumberFromPO(CurrentDevice.PO), MunisFunctions.GetFYFromPO(CurrentDevice.PO), ParentForm, true);
+                var SelectedPrice = await MunisFunctions.NewMunisReqSearch(MunisFunctions.GetReqNumberFromPO(currentDevice.PO), MunisFunctions.GetFYFromPO(currentDevice.PO), parentForm, true);
                 decimal decPrice = Convert.ToDecimal(SelectedPrice);
                 var SelectedUnitPrice = decPrice.ToString("C");
-                CurrentDialog.SetControlValue(UnitPriceTxtName, SelectedUnitPrice);
+                currentDialog.SetControlValue(unitPriceTxtName, SelectedUnitPrice);
             }
             catch (Exception ex)
             {
@@ -74,7 +74,7 @@ namespace AssetManager.Business
             }
         }
 
-        private void FillForm(PdfFormType Type)
+        private void FillForm(PdfFormType type)
         {
             try
             {
@@ -82,48 +82,52 @@ namespace AssetManager.Business
                 string strTimeStamp = DateTime.Now.ToString("_hhmmss");
                 string newFile;
 
-                if (CurrentDevice.AssetTag == "NA")
+                if (currentDevice.AssetTag == "NA")
                 {
-                    newFile = Paths.DownloadPath + CurrentDevice.Serial + " - " + CurrentDevice.Description + strTimeStamp + ".pdf";
+                    newFile = Paths.DownloadPath + currentDevice.Serial + " - " + currentDevice.Description + strTimeStamp + ".pdf";
                 }
                 else
                 {
-                    newFile = Paths.DownloadPath + CurrentDevice.AssetTag + " - " + CurrentDevice.Description + strTimeStamp + ".pdf";
+                    newFile = Paths.DownloadPath + currentDevice.AssetTag + " - " + currentDevice.Description + strTimeStamp + ".pdf";
                 }
 
-                if (Type == PdfFormType.InputForm)
+                if (type == PdfFormType.InputForm)
                 {
                     using (PdfReader pdfReader = new PdfReader(Properties.Resources.Exh_K_01_Asset_Input_Formnew))
                     {
-                        using (var pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create)))
+                        using (var newFileStream = new FileStream(newFile, FileMode.Create))
+                        using (var pdfStamper = new PdfStamper(pdfReader, newFileStream))
                         {
-                            AcroFields pdfFormFields = InputFormFields(CurrentDevice, pdfStamper);
+                            AcroFields pdfFormFields = InputFormFields(currentDevice, pdfStamper);
                             if (pdfFormFields == null) return;
                             pdfStamper.FormFlattening = FlattenPrompt();
                         }
                     }
 
                 }
-                else if (Type == PdfFormType.TransferForm)
+                else if (type == PdfFormType.TransferForm)
                 {
                     using (PdfReader pdfReader = new PdfReader(Properties.Resources.Exh_K_03_Asset_Transfer_Form))
                     {
-                        using (var pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create)))
+
+                        using (var newFileStream = new FileStream(newFile, FileMode.Create))
+                        using (var pdfStamper = new PdfStamper(pdfReader, newFileStream))
                         {
-                            AcroFields pdfFormFields = TransferFormFields(CurrentDevice, pdfStamper);
+                            AcroFields pdfFormFields = TransferFormFields(currentDevice, pdfStamper);
                             if (pdfFormFields == null) return;
                             pdfStamper.FormFlattening = FlattenPrompt();
                         }
                     }
 
                 }
-                else if (Type == PdfFormType.DisposeForm)
+                else if (type == PdfFormType.DisposeForm)
                 {
                     using (PdfReader pdfReader = new PdfReader(Properties.Resources.Exh_K_02_Asset_Disposal_Form))
                     {
-                        using (var pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create)))
+                        using (var newFileStream = new FileStream(newFile, FileMode.Create))
+                        using (var pdfStamper = new PdfStamper(pdfReader, newFileStream))
                         {
-                            AcroFields pdfFormFields = DisposalFormFields(CurrentDevice, pdfStamper);
+                            AcroFields pdfFormFields = DisposalFormFields(currentDevice, pdfStamper);
                             if (pdfFormFields == null) return;
                             pdfStamper.FormFlattening = FlattenPrompt();
                         }
@@ -152,10 +156,10 @@ namespace AssetManager.Business
             }
         }
 
-        private AcroFields DisposalFormFields(Device Device, PdfStamper pdfStamper)
+        private AcroFields DisposalFormFields(Device device, PdfStamper pdfStamper)
         {
             AcroFields tmpFields = pdfStamper.AcroFields;
-            using (AdvancedDialog newDialog = new AdvancedDialog(ParentForm, true))
+            using (AdvancedDialog newDialog = new AdvancedDialog(parentForm, true))
             {
                 newDialog.Text = "Additional Input Required";
 
@@ -204,10 +208,10 @@ namespace AssetManager.Business
                 {
                     return null;
                 }
-                tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.AssetTag);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Mfg_serial_number_1[0]", Device.Serial);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Mfg_serial_number_2[0]", Device.Description);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Mfg_serial_number_3[0]", AttributeFunctions.DepartmentOf(Device.Location));
+                tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", device.AssetTag);
+                tmpFields.SetField("topmostSubform[0].Page1[0].Mfg_serial_number_1[0]", device.Serial);
+                tmpFields.SetField("topmostSubform[0].Page1[0].Mfg_serial_number_2[0]", device.Description);
+                tmpFields.SetField("topmostSubform[0].Page1[0].Mfg_serial_number_3[0]", AttributeFunctions.DepartmentOf(device.Location));
                 tmpFields.SetField("topmostSubform[0].Page1[0].County_s_possession[0]", DateTime.Now.ToString("MM/dd/yyyy"));
 
                 #region Section 2
@@ -244,7 +248,7 @@ namespace AssetManager.Business
                 tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number_2[0]", newDialog.GetControlValue("txtAssetTag").ToString());
                 tmpFields.SetField("topmostSubform[0].Page1[0].Serial_number[0]", newDialog.GetControlValue("txtSerial").ToString());
                 tmpFields.SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", newDialog.GetControlValue("txtDescription").ToString());
-                tmpFields.SetField("topmostSubform[0].Page1[0].Department_1[0]", AttributeFunctions.DepartmentOf(Device.Location));
+                tmpFields.SetField("topmostSubform[0].Page1[0].Department_1[0]", AttributeFunctions.DepartmentOf(device.Location));
                 tmpFields.SetField("topmostSubform[0].Page1[0].Date[0]", DateTime.Now.ToString("MM/dd/yyyy"));
 
                 #endregion
@@ -254,38 +258,38 @@ namespace AssetManager.Business
             return tmpFields;
         }
 
-        private AcroFields InputFormFields(Device Device, PdfStamper pdfStamper)
+        private AcroFields InputFormFields(Device device, PdfStamper pdfStamper)
         {
             AcroFields tmpFields = pdfStamper.AcroFields;
-            string strUnitPrice = GetUnitPrice();
-            if (string.IsNullOrEmpty(strUnitPrice) || ReferenceEquals(strUnitPrice, null))
+            string unitPrice = GetUnitPrice();
+            if (string.IsNullOrEmpty(unitPrice) || ReferenceEquals(unitPrice, null))
             {
                 return null;
             }
             tmpFields.SetField("topmostSubform[0].Page1[0].Department[0]", "FCBDD");
             // .SetField("topmostSubform[0].Page1[0].Asterisked_items_____must_be_completed_by_the_department[0]", CurrentDevice.strAssetTag)
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined[0]", Device.Serial);
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_2[0]", MunisFunctions.GetVendorNameFromPO(Device.PO));
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_3[0]", Device.Description);
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined[0]", device.Serial);
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_2[0]", MunisFunctions.GetVendorNameFromPO(device.PO));
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_3[0]", device.Description);
             //.SetField("topmostSubform[0].Page1[0]._1[0]", "6")
             // .SetField("topmostSubform[0].Page1[0]._2[0]", "7")
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_4[0]", Device.PO);
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_5[0]", AssetManagerFunctions.GetMunisCodeFromAssetCode(Device.Location));
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_6[0]", AttributeFunctions.DepartmentOf(Device.Location));
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_7[0]", AssetManagerFunctions.GetMunisCodeFromAssetCode(Device.EquipmentType));
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_4[0]", device.PO);
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_5[0]", AssetManagerFunctions.GetMunisCodeFromAssetCode(device.Location));
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_6[0]", AttributeFunctions.DepartmentOf(device.Location));
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_7[0]", AssetManagerFunctions.GetMunisCodeFromAssetCode(device.EquipmentType));
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_8[0]", "GP");
             //.SetField("topmostSubform[0].Page1[0].undefined_9[0]", "13")
             tmpFields.SetField("topmostSubform[0].Page1[0].undefined_10[0]", "1");
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_11[0]", strUnitPrice);
-            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_12[0]", Device.PurchaseDate.ToString("MM/dd/yyyy"));
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_11[0]", unitPrice);
+            tmpFields.SetField("topmostSubform[0].Page1[0].undefined_12[0]", device.PurchaseDate.ToString("MM/dd/yyyy"));
             tmpFields.SetField("topmostSubform[0].Page1[0].Date[0]", DateTime.Now.ToString("MM/dd/yyyy"));
             return tmpFields;
         }
 
-        private AcroFields TransferFormFields(Device Device, PdfStamper pdfStamper)
+        private AcroFields TransferFormFields(Device device, PdfStamper pdfStamper)
         {
             AcroFields tmpFields = pdfStamper.AcroFields;
-            using (AdvancedDialog newDialog = new AdvancedDialog(ParentForm))
+            using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
             {
                 newDialog.Text = "Additional Input Required";
 
@@ -314,9 +318,9 @@ namespace AssetManager.Business
                 string toLocationCode = cmbTo.SelectedValue.ToString();
                 string toLocDescription = cmbTo.Text;
 
-                tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", Device.AssetTag);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Serial_number[0]", Device.Serial);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", Device.Description);
+                tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", device.AssetTag);
+                tmpFields.SetField("topmostSubform[0].Page1[0].Serial_number[0]", device.Serial);
+                tmpFields.SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", device.Description);
                 tmpFields.SetField("topmostSubform[0].Page1[0].Department[0]", AttributeFunctions.DepartmentOf(fromLocationCode));
                 tmpFields.SetField("topmostSubform[0].Page1[0].Location[0]", fromLocDescription);
                 tmpFields.SetField("topmostSubform[0].Page1[0].Department_2[0]", AttributeFunctions.DepartmentOf(toLocationCode));
@@ -359,9 +363,9 @@ namespace AssetManager.Business
             return tmpFields;
         }
 
-        private string CheckValueToString(bool Checked)
+        private string CheckValueToString(bool checkedValue)
         {
-            if (@Checked)
+            if (checkedValue)
             {
                 return "X";
             }

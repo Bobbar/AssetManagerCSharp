@@ -93,7 +93,7 @@ namespace AssetManager.Data.Communications
         public static string SelectDevicesPartial { get; } = "SELECT * FROM " + DevicesCols.TableName + " WHERE ";
 
         /// <summary>
-        /// "DELETE FROM <see cref="DevicesCols.TableName"/> WHERE <see cref="DevicesCols.DeviceGuid"/> = <paramref name="deviceGuid"/>
+        /// "DELETE FROM <see cref="DevicesCols.TableName"/> WHERE <see cref="DevicesBaseCols.DeviceGuid"/> = <paramref name="deviceGuid"/>
         /// </summary>
         /// <param name="deviceGuid"></param>
         /// <returns></returns>
@@ -147,7 +147,7 @@ namespace AssetManager.Data.Communications
         }
 
         /// <summary>
-        /// SELECT * FROM <see cref="SibiRequestCols.TableName"/> WHERE <see cref="SibiRequestCols.Guid"/> = <see cref="requestGuid"/>
+        /// SELECT * FROM <see cref="SibiRequestCols.TableName"/> WHERE <see cref="SibiRequestCols.Guid"/> = <paramref name="requestGuid"/>
         /// </summary>
         /// <param name="requestGuid"></param>
         /// <returns></returns>

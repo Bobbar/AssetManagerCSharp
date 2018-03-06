@@ -13,9 +13,9 @@ namespace AssetManager.Data.Functions
     {
         public static Dictionary<string, string> DepartmentCodes;
 
-        public static string GetDisplayValueFromCode(CodeAttribute[] codeIndex, string code)
+        public static string GetDisplayValueFromCode(DBCode[] codeIndex, string code)
         {
-            foreach (CodeAttribute item in codeIndex)
+            foreach (DBCode item in codeIndex)
             {
                 if (item.Code == code)
                     return item.DisplayValue;
@@ -23,7 +23,7 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        public static int GetComboIndexFromCode(CodeAttribute[] codeIndex, string code)
+        public static int GetComboIndexFromCode(DBCode[] codeIndex, string code)
         {
             for (int i = 0; i <= codeIndex.Length - 1; i++)
             {
@@ -72,13 +72,13 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        private static CodeAttribute[] BuildIndex(string codeType, string typeName)
+        private static DBCode[] BuildIndex(string codeType, string typeName)
         {
             try
             {
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectAttributeCodes(codeType, typeName)))
                 {
-                    List<CodeAttribute> tmpArray = new List<CodeAttribute>();
+                    List<DBCode> tmpArray = new List<DBCode>();
                     foreach (DataRow r in results.Rows)
                     {
                         string DisplayValue = "";
@@ -104,7 +104,7 @@ namespace AssetManager.Data.Functions
                             attribColor = ColorTranslator.FromHtml(r[ComboCodesBaseCols.Color].ToString());
                         }
 
-                        tmpArray.Add(new CodeAttribute(DisplayValue, r[ComboCodesBaseCols.CodeValue].ToString(), Convert.ToInt32(r[ComboCodesBaseCols.Id]), attribColor));
+                        tmpArray.Add(new DBCode(DisplayValue, r[ComboCodesBaseCols.CodeValue].ToString(), Convert.ToInt32(r[ComboCodesBaseCols.Id]), attribColor));
                     }
                     return tmpArray.ToArray();
                 }

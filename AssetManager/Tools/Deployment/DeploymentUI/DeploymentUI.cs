@@ -59,7 +59,7 @@ namespace AssetManager.Tools.Deployment
             watchDogCancelTokenSource = new CancellationTokenSource();
             watchDogTask = new Task(() => WatchDog(watchDogCancelTokenSource.Token), watchDogCancelTokenSource.Token);
 
-            InitLogWindow(parentForm);
+            InitLogWindow();
         }
 
         public void UsePowerShell()
@@ -79,7 +79,7 @@ namespace AssetManager.Tools.Deployment
             pSExecWrapper.OutputReceived += PsExecOutputReceived;
         }
 
-        private void InitLogWindow(ExtendedForm parentForm)
+        private void InitLogWindow()
         {
             logView = new ExtendedForm(parentForm);
             logView.FormClosing += new FormClosingEventHandler(LogClosed);

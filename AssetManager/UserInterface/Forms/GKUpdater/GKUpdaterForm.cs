@@ -8,7 +8,7 @@ using AssetManager.Helpers;
 using AssetManager.Security;
 
 
-namespace AssetManager.UserInterface.Forms.GK_Updater
+namespace AssetManager.UserInterface.Forms.GKUpdater
 {
     public partial class GKUpdaterForm : ExtendedForm
     {

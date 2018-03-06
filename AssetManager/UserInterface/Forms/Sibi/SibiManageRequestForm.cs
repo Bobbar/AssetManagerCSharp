@@ -44,7 +44,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             MyWindowList = new WindowList(this);
 
             InitializeComponent();
-            InitForm(parentForm, requestGuid);
+            InitForm();
 
             OpenRequest(requestGuid);
         }
@@ -55,7 +55,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             MyWindowList = new WindowList(this);
 
             InitializeComponent();
-            InitForm(parentForm);
+            InitForm();
             Text += " - *New Request*";
             NewRequest();
         }
@@ -825,7 +825,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             txtCreateDate.Tag = new DBControlInfo(SibiRequestCols.DateStamp, ParseType.DisplayOnly, false);
         }
 
-        private void InitForm(ExtendedForm parentForm, string Guid = "")
+        private void InitForm()
         {
             StatusSlider = new SliderLabel();
             StatusStrip1.Items.Insert(0, StatusSlider.ToToolStripControl(StatusStrip1));
@@ -1546,8 +1546,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice);
 
-            NewDeviceForm NewDev = new NewDeviceForm(this);
-            NewDev.ImportFromSibi(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemGuid));
+            var newDev = new NewDeviceForm(this);
+            newDev.ImportFromSibi(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemGuid));
         }
 
         private void SibiManageRequestForm_FormClosing(object sender, FormClosingEventArgs e)

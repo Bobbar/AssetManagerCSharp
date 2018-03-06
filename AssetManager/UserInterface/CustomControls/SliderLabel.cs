@@ -454,10 +454,11 @@ namespace AssetManager.UserInterface.CustomControls
 
             //Trigger redraw.
             lastPositionRect.Inflate(10, 5);
-            Region updateRegion = new Region(lastPositionRect);
-            this.Invalidate(updateRegion);
-            this.Update();
-
+            using (var updateRegion = new Region(lastPositionRect))
+            {
+                this.Invalidate(updateRegion);
+                this.Update();
+            }
             if (currentMessage.AnimationComplete) ProcessNextState();
 
             // Check the queue for new messages.

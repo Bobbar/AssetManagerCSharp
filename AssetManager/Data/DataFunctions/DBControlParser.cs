@@ -1,9 +1,9 @@
+using AssetManager.Data.Classes;
+using AssetManager.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
-using AssetManager.Data.Classes;
-using AssetManager.Helpers;
 
 namespace AssetManager.Data.Functions
 {
@@ -33,7 +33,7 @@ namespace AssetManager.Data.Functions
     {
         #region "Fields"
 
-        private CodeAttribute[] db_attrib_index;
+        private DBCode[] db_attrib_index;
         private string db_column;
         private ParseType db_parse_type;
 
@@ -67,7 +67,7 @@ namespace AssetManager.Data.Functions
             db_attrib_index = null;
         }
 
-        public DBControlInfo(string dataColumn, CodeAttribute[] attribIndex, bool required = false)
+        public DBControlInfo(string dataColumn, DBCode[] attribIndex, bool required = false)
         {
             db_column = dataColumn;
             db_required = required;
@@ -75,7 +75,7 @@ namespace AssetManager.Data.Functions
             db_attrib_index = attribIndex;
         }
 
-        public DBControlInfo(string dataColumn, CodeAttribute[] attribIndex, ParseType parseType, bool required = false)
+        public DBControlInfo(string dataColumn, DBCode[] attribIndex, ParseType parseType, bool required = false)
         {
             db_column = dataColumn;
             db_required = required;
@@ -88,10 +88,10 @@ namespace AssetManager.Data.Functions
         #region "Properties"
 
         /// <summary>
-        /// Gets or sets the <see cref="CodeAttribute"/> index for <see cref="ComboBox"/> controls.
+        /// Gets or sets the <see cref="DBCode"/> index for <see cref="ComboBox"/> controls.
         /// </summary>
         /// <returns></returns>
-        public CodeAttribute[] AttribIndex
+        public DBCode[] AttribIndex
         {
             get { return db_attrib_index; }
             set { db_attrib_index = value; }
@@ -159,6 +159,7 @@ namespace AssetManager.Data.Functions
         {
             get { return errorProvider; }
         }
+
         #endregion "Fields"
 
         #region "Constructors"
@@ -510,10 +511,29 @@ namespace AssetManager.Data.Functions
             }
         }
 
+        #region IDisposable Support
+
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    errorProvider?.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
         public void Dispose()
         {
-            ((IDisposable)errorProvider)?.Dispose();
+            Dispose(true);
         }
+
+        #endregion IDisposable Support
 
         #endregion "Methods"
     }

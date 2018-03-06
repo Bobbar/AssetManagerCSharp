@@ -394,7 +394,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             //gray color
             Color DarkColor = Color.FromArgb(222, 222, 222);
             // Get a list from the attrib array.
-            var attribList = Attributes.SibiAttribute.StatusType.OfType<CodeAttribute>().ToList();
+            var attribList = Attributes.SibiAttribute.StatusType.OfType<DBCode>().ToList();
             // Use List.Find to locate the matching attribute.
             var attribColor = attribList.Find((i) => { return i.Code == code; }).Color;
             // Return the a blended color.

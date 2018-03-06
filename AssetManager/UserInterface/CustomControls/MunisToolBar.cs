@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using AssetManager.Data.Functions;
 using AssetManager.UserInterface.Forms.AdminTools;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -10,7 +11,8 @@ namespace AssetManager.UserInterface.CustomControls
     {
         #region "Fields"
 
-        private ToolStripDropDownButton MunisDropDown = new ToolStripDropDownButton();
+        private ToolStripSeparator blankSeparator = new ToolStripSeparator();
+        private ToolStripDropDownButton munisDropDown = new ToolStripDropDownButton();
 
         #endregion "Fields"
 
@@ -35,12 +37,12 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (locationIndex >= 0)
             {
-                targetStrip.Items.Insert(locationIndex, MunisDropDown);
+                targetStrip.Items.Insert(locationIndex, munisDropDown);
                 AddSeperators(ref targetStrip, locationIndex);
             }
             else
             {
-                targetStrip.Items.Add(MunisDropDown);
+                targetStrip.Items.Add(munisDropDown);
                 AddSeperators(ref targetStrip, targetStrip.Items.Count - 1);
             }
         }
@@ -51,39 +53,39 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (!object.ReferenceEquals(targetToolStrip.Items[locationIndex + 1].GetType(), typeof(ToolStripSeparator)))
                 {
-                    targetToolStrip.Items.Insert(locationIndex + 1, new ToolStripSeparator());
+                    targetToolStrip.Items.Insert(locationIndex + 1, blankSeparator);
                 }
                 if (!object.ReferenceEquals(targetToolStrip.Items[locationIndex - 1].GetType(), typeof(ToolStripSeparator)))
                 {
-                    targetToolStrip.Items.Insert(locationIndex, new ToolStripSeparator());
+                    targetToolStrip.Items.Insert(locationIndex, blankSeparator);
                 }
             }
             else
             {
                 if (!object.ReferenceEquals(targetToolStrip.Items[locationIndex].GetType(), typeof(ToolStripSeparator)))
                 {
-                    targetToolStrip.Items.Add(new ToolStripSeparator());
+                    targetToolStrip.Items.Add(blankSeparator);
                 }
                 if (!object.ReferenceEquals(targetToolStrip.Items[locationIndex - 1].GetType(), typeof(ToolStripSeparator)))
                 {
-                    targetToolStrip.Items.Insert(locationIndex, new ToolStripSeparator());
+                    targetToolStrip.Items.Insert(locationIndex, blankSeparator);
                 }
             }
         }
 
         private void AddToolItem(ToolStripMenuItem toolItem)
         {
-            MunisDropDown.DropDownItems.Add(toolItem);
+            munisDropDown.DropDownItems.Add(toolItem);
             toolItem.Click += ToolItemClicked;
         }
 
         private void InitDropDown()
         {
-            MunisDropDown.Image = Properties.Resources.SearchIcon;
-            MunisDropDown.Name = "MunisTools";
-            MunisDropDown.Size = new System.Drawing.Size(87, 29);
-            MunisDropDown.Text = "MUNIS Tools";
-            MunisDropDown.AutoSize = true;
+            munisDropDown.Image = Properties.Resources.SearchIcon;
+            munisDropDown.Name = "MunisTools";
+            munisDropDown.Size = new System.Drawing.Size(87, 29);
+            munisDropDown.Text = "MUNIS Tools";
+            munisDropDown.AutoSize = true;
         }
 
         private void InitToolItems(ExtendedForm parentForm)
@@ -103,11 +105,11 @@ namespace AssetManager.UserInterface.CustomControls
 
         private ToolStripMenuItem NewToolItem(string name, string text, Action clickMethod)
         {
-            ToolStripMenuItem TSM = new ToolStripMenuItem();
-            TSM.Name = name;
-            TSM.Text = text;
-            TSM.Tag = clickMethod;
-            return TSM;
+            ToolStripMenuItem newItem = new ToolStripMenuItem();
+            newItem.Name = name;
+            newItem.Text = text;
+            newItem.Tag = clickMethod;
+            return newItem;
         }
 
         private void ToolItemClicked(object sender, EventArgs e)
@@ -141,7 +143,8 @@ namespace AssetManager.UserInterface.CustomControls
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    MunisDropDown.Dispose();
+                    blankSeparator.Dispose();
+                    munisDropDown.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.

@@ -74,12 +74,12 @@ namespace AssetManager.UserInterface.Forms
             GridPanel.SuspendLayout();
             foreach (DataGridView grid in gridList)
             {
-                GroupBox GridBox = new GroupBox();
-                GridBox.Text = (string)grid.Tag;
-                GridBox.Dock = DockStyle.Fill;
-                GridBox.Controls.Add(grid);
+                GroupBox gridBox = new GroupBox();
+                gridBox.Text = (string)grid.Tag;
+                gridBox.Dock = DockStyle.Fill;
+                gridBox.Controls.Add(grid);
                 GridPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, GridHeight()));
-                GridPanel.Controls.Add(GridBox);
+                GridPanel.Controls.Add(gridBox);
             }
             this.ResumeLayout();
             Panel1.ResumeLayout();
@@ -88,8 +88,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void FillGrid(DataGridView grid, DataTable datatable)
         {
-            if (datatable != null)
-                grid.DataSource = datatable;
+            if (datatable != null) grid.DataSource = datatable;
         }
 
         private DataGridView GetActiveGrid()
@@ -103,25 +102,25 @@ namespace AssetManager.UserInterface.Forms
 
         private DataGridView GetNewGrid(string name, string label)
         {
-            DataGridView NewGrid = new DataGridView();
-            NewGrid.Name = name;
-            NewGrid.Tag = label;
-            NewGrid.Dock = DockStyle.Fill;
-            NewGrid.RowHeadersVisible = false;
-            NewGrid.EditMode = DataGridViewEditMode.EditProgrammatically;
-            NewGrid.AllowUserToResizeRows = false;
-            NewGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            NewGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            NewGrid.AllowUserToAddRows = false;
-            NewGrid.AllowUserToDeleteRows = false;
-            NewGrid.Padding = new Padding(0, 0, 0, 10);
-            NewGrid.ContextMenuStrip = PopUpMenu;
-            StyleFunctions.SetGridStyle(NewGrid, ParentForm.GridTheme);
-            NewGrid.CellLeave += GridLeaveCell;
-            NewGrid.CellEnter += GridEnterCell;
-            NewGrid.CellDoubleClick += GridDoubleClickCell;
-            NewGrid.DoubleBufferedDataGrid(true);
-            return NewGrid;
+            DataGridView newGrid = new DataGridView();
+            newGrid.Name = name;
+            newGrid.Tag = label;
+            newGrid.Dock = DockStyle.Fill;
+            newGrid.RowHeadersVisible = false;
+            newGrid.EditMode = DataGridViewEditMode.EditProgrammatically;
+            newGrid.AllowUserToResizeRows = false;
+            newGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            newGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            newGrid.AllowUserToAddRows = false;
+            newGrid.AllowUserToDeleteRows = false;
+            newGrid.Padding = new Padding(0, 0, 0, 10);
+            newGrid.ContextMenuStrip = PopUpMenu;
+            StyleFunctions.SetGridStyle(newGrid, ParentForm.GridTheme);
+            newGrid.CellLeave += GridLeaveCell;
+            newGrid.CellEnter += GridEnterCell;
+            newGrid.CellDoubleClick += GridDoubleClickCell;
+            newGrid.DoubleBufferedDataGrid(true);
+            return newGrid;
         }
 
         private void GridDoubleClickCell(object sender, EventArgs e)

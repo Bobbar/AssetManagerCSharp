@@ -9,23 +9,23 @@ using AssetManager.Helpers;
 using AssetManager.Security;
 
 
-namespace AssetManager.UserInterface.Forms.GK_Updater
+namespace AssetManager.UserInterface.Forms.GKUpdater
 {
     public partial class GKProgressControl : IDisposable
     {
         public GKUpdaterLibClass MyUpdater;
         public ProgressStatus ProgStatus;
-        private bool bolShow = false;
-        private GKUpdaterLib.GKUpdaterLibClass.Status_Stats CurrentStatus;
-        private Device CurDevice = new Device();
-        private string LogBuff = "";
+        private bool logVisible = false;
+        private GKUpdaterLibClass.Status_Stats currentStatus;
+        private Device currentDevice;
+        private string logBuffer = "";
         private Form MyParentForm;
-
-        private Color PrevColor;
+        private Color prevColor;
+        private Bitmap statusLight;
 
         public Device Device
         {
-            get { return CurDevice; }
+            get { return currentDevice; }
         }
 
         public GKProgressControl()
@@ -44,11 +44,11 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             ImageCaching.CacheControlImages(this);
             this.Size = this.MinimumSize;
             MyParentForm = parentForm;
-            CurDevice = device;
-            MyUpdater = new GKUpdaterLibClass(CurDevice.HostName, gkPath);
+            currentDevice = device;
+            MyUpdater = new GKUpdaterLibClass(currentDevice.HostName, gkPath);
             MyUpdater.CreateMissingDirectories = createMissingDirs;
             this.DoubleBuffered = true;
-            lblInfo.Text = CurDevice.Serial + " - " + CurDevice.CurrentUser;
+            lblInfo.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
             lblTransRate.Text = "0.00MB/s";
             SetStatus(ProgressStatus.Queued);
             if (seq > 0)
@@ -73,11 +73,11 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             ImageCaching.CacheControlImages(this);
             this.Size = this.MinimumSize;
             MyParentForm = parentForm;
-            CurDevice = device;
-            MyUpdater = new GKUpdaterLibClass(CurDevice.HostName, sourcePath, destPath);
+            currentDevice = device;
+            MyUpdater = new GKUpdaterLibClass(currentDevice.HostName, sourcePath, destPath);
             MyUpdater.CreateMissingDirectories = createMissingDirs;
             this.DoubleBuffered = true;
-            lblInfo.Text = CurDevice.Serial + " - " + CurDevice.CurrentUser;
+            lblInfo.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
             lblTransRate.Text = "0.00MB/s";
             SetStatus(ProgressStatus.Queued);
             if (seq > 0)
@@ -112,8 +112,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         public void CancelUpdate()
         {
-            if (!MyUpdater.IsDisposed)
-                MyUpdater.CancelUpdate();
+            if (!MyUpdater.IsDisposed) MyUpdater.CancelUpdate();
         }
 
         public void StartUpdate()
@@ -122,7 +121,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             {
                 if (ProgStatus != ProgressStatus.Running)
                 {
-                    LogBuff = "";
+                    logBuffer = "";
                     SetStatus(ProgressStatus.Starting);
                     MyUpdater.StartUpdate(SecurityTools.AdminCreds);
                 }
@@ -142,30 +141,32 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             }
         }
 
-        private void DrawLight(Color Color)
+        private void DrawLight(Color color)
         {
-            if (Color != PrevColor)
+            if (color != prevColor)
             {
-                PrevColor = Color;
-                Bitmap bm = new Bitmap(pbStatus.Width, pbStatus.Height);
-                using (SolidBrush MyBrush = new SolidBrush(Color))
+                prevColor = color;
+
+                if (statusLight == null)
                 {
-                    using (Pen StrokePen = new Pen(Color.Black, 1.5f))
-                    {
-                        using (Graphics gr = Graphics.FromImage(bm))
-                        {
-                            gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                            float XLoc = 0;
-                            float YLoc = 0;
-                            float Size = 0;
-                            Size = 20;
-                            XLoc = Convert.ToSingle(pbStatus.Width / 2 - Size / 2);
-                            YLoc = Convert.ToSingle(pbStatus.Height / 2 - Size / 2);
-                            gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size);
-                            gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size);
-                            pbStatus.Image = bm;
-                        }
-                    }
+                    statusLight = new Bitmap(pbStatus.Width, pbStatus.Height);
+                }
+
+                using (SolidBrush MyBrush = new SolidBrush(color))
+                using (Pen StrokePen = new Pen(Color.Black, 1.5f))
+                using (Graphics gr = Graphics.FromImage(statusLight))
+                {
+                    gr.Clear(pbStatus.BackColor);
+                    gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    float XLoc = 0;
+                    float YLoc = 0;
+                    float Size = 0;
+                    Size = 20;
+                    XLoc = Convert.ToSingle(pbStatus.Width / 2 - Size / 2);
+                    YLoc = Convert.ToSingle(pbStatus.Height / 2 - Size / 2);
+                    gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size);
+                    gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size);
+                    pbStatus.Image = statusLight;
                 }
             }
         }
@@ -177,6 +178,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
             MyUpdater.UpdateComplete -= GKUpdate_Complete;
             MyUpdater.UpdateCanceled -= GKUpdate_Cancelled;
             MyUpdater.Dispose();
+            statusLight?.Dispose();
         }
 
         /// <summary>
@@ -190,17 +192,17 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         private void Log(string Message)
         {
-            LogBuff += Message + Environment.NewLine;
+            logBuffer += Message + Environment.NewLine;
         }
 
         private void GKStatusUpdateEvent(object sender, EventArgs e)
         {
             var UpdateEvent = (GKUpdaterLibClass.GKUpdateEvents)e;
             SetStatus(ProgressStatus.Running);
-            CurrentStatus = UpdateEvent.CurrentStatus;
-            pbarProgress.Maximum = CurrentStatus.TotFiles;
-            pbarProgress.Value = CurrentStatus.CurFileIdx;
-            lblStatus.Text = CurrentStatus.CurFileName;
+            currentStatus = UpdateEvent.CurrentStatus;
+            pbarProgress.Maximum = currentStatus.TotFiles;
+            pbarProgress.Value = currentStatus.CurFileIdx;
+            lblStatus.Text = currentStatus.CurFileName;
         }
 
         private void GKUpdate_Cancelled(object sender, EventArgs e)
@@ -252,7 +254,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         private void HideLog()
         {
             this.Size = this.MinimumSize;
-            bolShow = false;
+            logVisible = false;
             lblShowHide.Text = "s";
             //"+"
         }
@@ -261,19 +263,19 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         {
             UpdateLogBox();
             this.Size = this.MaximumSize;
-            bolShow = true;
+            logVisible = true;
             lblShowHide.Text = "r";
             //"-"
         }
 
         private void lblInfo_Click(object sender, EventArgs e)
         {
-            Helpers.ChildFormControl.LookupDevice(Helpers.ChildFormControl.MainFormInstance(), CurDevice);
+            Helpers.ChildFormControl.LookupDevice(Helpers.ChildFormControl.MainFormInstance(), currentDevice);
         }
 
         private void lblShowHide_Click(object sender, EventArgs e)
         {
-            if (!bolShow)
+            if (!logVisible)
             {
                 ShowLog();
             }
@@ -423,7 +425,7 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
         /// </summary>
         private void UI_Timer_Tick(object sender, EventArgs e)
         {
-            if (bolShow & !string.IsNullOrEmpty(LogBuff))
+            if (logVisible & !string.IsNullOrEmpty(logBuffer))
             {
                 UpdateLogBox();
             }
@@ -441,9 +443,9 @@ namespace AssetManager.UserInterface.Forms.GK_Updater
 
         private void UpdateLogBox()
         {
-            rtbLog.AppendText(LogBuff);
+            rtbLog.AppendText(logBuffer);
             rtbLog.Refresh();
-            LogBuff = "";
+            logBuffer = "";
         }
     }
 }

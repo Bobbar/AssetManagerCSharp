@@ -3,7 +3,7 @@ using AssetManager.UserInterface.CustomControls;
 using System;
 using System.Windows.Forms;
 
-namespace AssetManager.UserInterface.Forms.GK_Updater
+namespace AssetManager.UserInterface.Forms.GKUpdater
 {
     public partial class PackFileForm : ExtendedForm
     {

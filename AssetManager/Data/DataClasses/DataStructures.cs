@@ -1,7 +1,7 @@
 using System.Drawing;
 namespace AssetManager.Data.Classes
 {
-    public struct CodeAttribute
+    public struct DBCode
     {
         private string displayValue;
         private string code;
@@ -13,7 +13,7 @@ namespace AssetManager.Data.Classes
         public int Id { get { return id; } }
         public Color Color { get { return color; } }
 
-        public CodeAttribute(string displayValue, string code, int id)
+        public DBCode(string displayValue, string code, int id)
         {
             this.displayValue = displayValue;
             this.code = code;
@@ -21,7 +21,7 @@ namespace AssetManager.Data.Classes
             this.color = Color.Empty;
         }
 
-        public CodeAttribute(string displayValue, string code, int id, Color color)
+        public DBCode(string displayValue, string code, int id, Color color)
         {
             this.displayValue = displayValue;
             this.code = code;
@@ -42,18 +42,18 @@ namespace AssetManager.Data.Classes
     {
         public class SibiAttributes
         {
-            public CodeAttribute[] StatusType;
-            public CodeAttribute[] ItemStatusType;
-            public CodeAttribute[] RequestType;
+            public DBCode[] StatusType;
+            public DBCode[] ItemStatusType;
+            public DBCode[] RequestType;
         }
 
         public class DeviceAttributes
         {
-            public CodeAttribute[] Locations;
-            public CodeAttribute[] ChangeType;
-            public CodeAttribute[] EquipType;
-            public CodeAttribute[] OSType;
-            public CodeAttribute[] StatusType;
+            public DBCode[] Locations;
+            public DBCode[] ChangeType;
+            public DBCode[] EquipType;
+            public DBCode[] OSType;
+            public DBCode[] StatusType;
         }
 
         public static DeviceAttributes DeviceAttribute = new DeviceAttributes();

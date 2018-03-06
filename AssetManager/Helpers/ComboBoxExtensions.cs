@@ -7,15 +7,15 @@ namespace AssetManager.Helpers
 {
     public static class ComboBoxExtensions
     {
-        public static void FillComboBox(this ComboBox combo, CodeAttribute[] index)
+        public static void FillComboBox(this ComboBox combo, DBCode[] index)
         {
             combo.SuspendLayout();
             combo.BeginUpdate();
             combo.DataSource = null;
             combo.Text = "";
             AddAutoSizeDropWidthHandler(combo);
-            combo.DisplayMember = nameof(CodeAttribute.DisplayValue);
-            combo.ValueMember = nameof(CodeAttribute.Code);
+            combo.DisplayMember = nameof(DBCode.DisplayValue);
+            combo.ValueMember = nameof(DBCode.Code);
             combo.BindingContext = new BindingContext();
             combo.DataSource = index;
             combo.SelectedIndex = -1;

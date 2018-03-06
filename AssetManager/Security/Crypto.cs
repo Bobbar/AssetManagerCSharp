@@ -35,16 +35,15 @@ namespace AssetManager.Security
             // Create the stream.
             // Create the encoder to write to the stream.
             using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+            using (CryptoStream encStream = new CryptoStream(ms, TripleDes.CreateEncryptor(), System.Security.Cryptography.CryptoStreamMode.Write))
             {
-                using (CryptoStream encStream = new CryptoStream(ms, TripleDes.CreateEncryptor(), System.Security.Cryptography.CryptoStreamMode.Write))
-                {
-                    // Use the crypto stream to write the byte array to the stream.
-                    encStream.Write(plaintextBytes, 0, plaintextBytes.Length);
-                    encStream.FlushFinalBlock();
-                    // Convert the encrypted stream to a printable string.
-                    return Convert.ToBase64String(ms.ToArray());
-                }
+                // Use the crypto stream to write the byte array to the stream.
+                encStream.Write(plaintextBytes, 0, plaintextBytes.Length);
+                encStream.FlushFinalBlock();
+                // Convert the encrypted stream to a printable string.
+                return Convert.ToBase64String(ms.ToArray());
             }
+
         }
 
         public string DecryptData(string encryptedtext)
@@ -56,17 +55,16 @@ namespace AssetManager.Security
                 // ' Create the stream.
                 // Create the decoder to write to the stream.
                 using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+                using (CryptoStream decStream = new CryptoStream(ms, TripleDes.CreateDecryptor(), System.Security.Cryptography.CryptoStreamMode.Write))
                 {
-                    using (CryptoStream decStream = new CryptoStream(ms, TripleDes.CreateDecryptor(), System.Security.Cryptography.CryptoStreamMode.Write))
-                    {
-                        // Use the crypto stream to write the byte array to the stream.
-                        decStream.Write(encryptedBytes, 0, encryptedBytes.Length);
-                        decStream.FlushFinalBlock();
-                        // Convert the plaintext stream to a string.
-                        encryptedBytes = null;
-                        return System.Text.Encoding.Unicode.GetString(ms.ToArray());
-                    }
+                    // Use the crypto stream to write the byte array to the stream.
+                    decStream.Write(encryptedBytes, 0, encryptedBytes.Length);
+                    decStream.FlushFinalBlock();
+                    // Convert the plaintext stream to a string.
+                    encryptedBytes = null;
+                    return System.Text.Encoding.Unicode.GetString(ms.ToArray());
                 }
+
             }
             catch (Exception ex)
             {

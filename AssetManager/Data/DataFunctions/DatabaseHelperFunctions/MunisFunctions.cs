@@ -17,13 +17,13 @@ namespace AssetManager.Data.Functions
         private const int intMaxResults = 100;
         private static MunisComms MunisComms = new MunisComms();
 
-        public static string GetReqNumberFromPO(string PO)
+        public static string GetReqNumberFromPO(string po)
         {
-            if (!ReferenceEquals(PO, null))
+            if (!ReferenceEquals(po, null))
             {
-                if (!string.IsNullOrEmpty(PO))
+                if (!string.IsNullOrEmpty(po))
                 {
-                    return MunisComms.ReturnSqlValue("Requisitions", "PurchaseOrderNumber", PO, "RequisitionNumber").ToString();
+                    return MunisComms.ReturnSqlValue("Requisitions", "PurchaseOrderNumber", po, "RequisitionNumber").ToString();
                 }
             }
             return null;

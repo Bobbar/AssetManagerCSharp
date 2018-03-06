@@ -16,9 +16,9 @@ namespace AssetManager.Data.Functions
 
         #region "Constructors"
 
-        public AdvancedSearch(string searchString, List<TableInfo> searchTables)
+        public AdvancedSearch(string searchValue, List<TableInfo> searchTables)
         {
-            _searchString = searchString;
+            _searchString = searchValue;
             _searchTables = searchTables;
         }
 
@@ -64,14 +64,14 @@ namespace AssetManager.Data.Functions
             return resultsList;
         }
 
-        public DataTable GetSingleTableResults(string searchString, string tableName)
+        public DataTable GetSingleTableResults(string searchValue, string tableName)
         {
             var searchTableInfo = new TableInfo(tableName, GetColumns(tableName));
             string qry = "SELECT " + BuildSelectString(searchTableInfo) + " FROM " + searchTableInfo.TableName + " WHERE ";
             qry += BuildFieldString(searchTableInfo);
             using (var cmd = DBFactory.GetMySqlDatabase().GetCommand(qry))
             {
-                cmd.AddParameterWithValue("@" + "SEARCHVAL", searchString);
+                cmd.AddParameterWithValue("@" + "SEARCHVAL", searchValue);
                 var results = DBFactory.GetMySqlDatabase().DataTableFromCommand(cmd);
                 results.TableName = searchTableInfo.TableName;
                 return results;
