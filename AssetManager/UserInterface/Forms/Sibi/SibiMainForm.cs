@@ -271,17 +271,17 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private List<GridColumnAttrib> SibiTableColumns()
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestNumber, "Request #", typeof(int)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestNumber, "Request #"));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.Status, "Status", Attributes.SibiAttribute.StatusType, ColumnFormatType.AttributeDisplayMemberOnly));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.Description, "Description", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestUser, "Request User", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.Description, "Description"));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestUser, "Request User"));
             ColList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", Attributes.SibiAttribute.RequestType, ColumnFormatType.AttributeDisplayMemberOnly));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.NeedBy, "Need By", typeof(System.DateTime)));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.PO, "PO Number", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequisitionNumber, "Req. Number", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.RTNumber, "RT Number", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.DateStamp, "Create Date", typeof(System.DateTime)));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.Guid, "Guid", typeof(string)));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.NeedBy, "Need By"));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.PO, "PO Number"));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequisitionNumber, "Req. Number"));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.RTNumber, "RT Number"));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.DateStamp, "Create Date"));
+            ColList.Add(new GridColumnAttrib(SibiRequestCols.Guid, "Guid"));
             return ColList;
         }
 

@@ -454,13 +454,13 @@ namespace AssetManager.UserInterface.Forms
         private List<GridColumnAttrib> AttachGridColumns(AttachmentsBaseCols attachtable)
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(attachtable.FileType, "", typeof(Image), ColumnFormatType.Image));
-            ColList.Add(new GridColumnAttrib(attachtable.FileName, "Filename", typeof(string)));
-            ColList.Add(new GridColumnAttrib(attachtable.FileSize, "Size", typeof(string), ColumnFormatType.FileSize));
-            ColList.Add(new GridColumnAttrib(attachtable.Timestamp, "Date", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(attachtable.FolderName, "Folder", typeof(string)));
-            ColList.Add(new GridColumnAttrib(attachtable.FileGuid, "AttachGuid", typeof(string)));
-            ColList.Add(new GridColumnAttrib(attachtable.FileHash, "MD5", typeof(string)));
+            ColList.Add(new GridColumnAttrib(attachtable.FileType, "", ColumnFormatType.Image));
+            ColList.Add(new GridColumnAttrib(attachtable.FileName, "Filename"));
+            ColList.Add(new GridColumnAttrib(attachtable.FileSize, "Size", ColumnFormatType.FileSize));
+            ColList.Add(new GridColumnAttrib(attachtable.Timestamp, "Date"));
+            ColList.Add(new GridColumnAttrib(attachtable.FolderName, "Folder"));
+            ColList.Add(new GridColumnAttrib(attachtable.FileGuid, "AttachGuid"));
+            ColList.Add(new GridColumnAttrib(attachtable.FileHash, "MD5"));
             return ColList;
         }
 

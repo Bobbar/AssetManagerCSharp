@@ -507,18 +507,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 AttribColumnType = ColumnFormatType.AttributeDisplayMemberOnly;
             }
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(DevicesCols.CurrentUser, "User", typeof(string)));
-            ColList.Add(new GridColumnAttrib(DevicesCols.AssetTag, "Asset ID", typeof(string)));
-            ColList.Add(new GridColumnAttrib(DevicesCols.Serial, "Serial", typeof(string)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.CurrentUser, "User"));
+            ColList.Add(new GridColumnAttrib(DevicesCols.AssetTag, "Asset ID"));
+            ColList.Add(new GridColumnAttrib(DevicesCols.Serial, "Serial"));
             ColList.Add(new GridColumnAttrib(DevicesCols.EQType, "Device Type", Attributes.DeviceAttribute.EquipType, AttribColumnType));
-            ColList.Add(new GridColumnAttrib(DevicesCols.Description, "Description", typeof(string)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.Description, "Description"));
             ColList.Add(new GridColumnAttrib(DevicesCols.OSVersion, "OS Version", Attributes.DeviceAttribute.OSType, AttribColumnType));
             ColList.Add(new GridColumnAttrib(DevicesCols.Location, "Location", Attributes.DeviceAttribute.Locations, AttribColumnType));
-            ColList.Add(new GridColumnAttrib(DevicesCols.PO, "PO Number", typeof(string)));
-            ColList.Add(new GridColumnAttrib(DevicesCols.PurchaseDate, "Purchase Date", typeof(System.DateTime)));
-            ColList.Add(new GridColumnAttrib(DevicesCols.ReplacementYear, "Replace Year", typeof(string)));
-            ColList.Add(new GridColumnAttrib(DevicesCols.LastModDate, "Modified", typeof(System.DateTime)));
-            ColList.Add(new GridColumnAttrib(DevicesCols.DeviceGuid, "Guid", typeof(string)));
+            ColList.Add(new GridColumnAttrib(DevicesCols.PO, "PO Number"));
+            ColList.Add(new GridColumnAttrib(DevicesCols.PurchaseDate, "Purchase Date"));
+            ColList.Add(new GridColumnAttrib(DevicesCols.ReplacementYear, "Replace Year"));
+            ColList.Add(new GridColumnAttrib(DevicesCols.LastModDate, "Modified"));
+            ColList.Add(new GridColumnAttrib(DevicesCols.DeviceGuid, "Guid"));
             return ColList;
         }
 

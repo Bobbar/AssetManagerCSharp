@@ -19,7 +19,7 @@ namespace AssetManager.Helpers
                 grid.DataSource = BuildDataSource(data, columns, forceRawData);
             }
         }
-        
+
         private static void SetupGrid(DataGridView grid, List<GridColumnAttrib> columns)
         {
             grid.DataSource = null;
@@ -37,15 +37,25 @@ namespace AssetManager.Helpers
             var needsRebuilt = ColumnsRequireRebuild(columns);
             if (needsRebuilt & !forceRawData)
             {
-                DataTable NewTable = new DataTable();
+                DataTable newTable = new DataTable();
+
+                // Add columns to the new table.
                 foreach (GridColumnAttrib col in columns)
                 {
-                    NewTable.Columns.Add(col.ColumnName, col.ColumnType);
+                    if (col.ColumnType != null)
+                    {
+                        newTable.Columns.Add(col.ColumnName, col.ColumnType);
+                    }
+                    else
+                    {
+                        newTable.Columns.Add(col.ColumnName, data.Columns[col.ColumnName].DataType);
+                    }
                 }
+
                 foreach (DataRow row in data.Rows)
                 {
-                    DataRow NewRow = null;
-                    NewRow = NewTable.NewRow();
+                    DataRow newRow = null;
+                    newRow = newTable.NewRow();
 
                     foreach (GridColumnAttrib col in columns)
                     {
@@ -53,36 +63,36 @@ namespace AssetManager.Helpers
                         {
                             case ColumnFormatType.DefaultFormat:
                             case ColumnFormatType.AttributeCombo:
-                                NewRow[col.ColumnName] = row[col.ColumnName];
+                                newRow[col.ColumnName] = row[col.ColumnName];
 
                                 break;
 
                             case ColumnFormatType.AttributeDisplayMemberOnly:
-                                NewRow[col.ColumnName] = AttributeFunctions.GetDisplayValueFromCode(col.AttributeIndex, row[col.ColumnName].ToString());
+                                newRow[col.ColumnName] = AttributeFunctions.GetDisplayValueFromCode(col.AttributeIndex, row[col.ColumnName].ToString());
 
                                 break;
 
                             case ColumnFormatType.NotePreview:
-                                var NoteText = OtherFunctions.RTFToPlainText(row[col.ColumnName].ToString());
-                                NewRow[col.ColumnName] = OtherFunctions.NotePreview(NoteText);
+                                var noteText = OtherFunctions.RTFToPlainText(row[col.ColumnName].ToString());
+                                newRow[col.ColumnName] = OtherFunctions.NotePreview(noteText);
 
                                 break;
 
                             case ColumnFormatType.FileSize:
-                                string HumanFileSize = Math.Round((Convert.ToInt32(row[col.ColumnName]) / 1024d), 1) + " KB";
-                                NewRow[col.ColumnName] = HumanFileSize;
+                                string humanFileSize = Math.Round((Convert.ToInt32(row[col.ColumnName]) / 1024d), 1) + " KB";
+                                newRow[col.ColumnName] = humanFileSize;
 
                                 break;
 
                             case ColumnFormatType.Image:
-                                NewRow[col.ColumnName] = FileIcon.GetFileIcon(row[col.ColumnName].ToString());
+                                newRow[col.ColumnName] = FileIcon.GetFileIcon(row[col.ColumnName].ToString());
 
                                 break;
                         }
                     }
-                    NewTable.Rows.Add(NewRow);
+                    newTable.Rows.Add(newRow);
                 }
-                return NewTable;
+                return newTable;
             }
             else
             {

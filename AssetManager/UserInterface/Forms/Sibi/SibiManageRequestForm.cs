@@ -932,31 +932,31 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private List<GridColumnAttrib> NotesGridColumns()
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(SibiNotesCols.Note, "Note", typeof(string), ColumnFormatType.NotePreview));
-            ColList.Add(new GridColumnAttrib(SibiNotesCols.DateStamp, "Date Stamp", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(SibiNotesCols.NoteGuid, "Guid", typeof(string), true, false));
+            ColList.Add(new GridColumnAttrib(SibiNotesCols.Note, "Note", ColumnFormatType.NotePreview));
+            ColList.Add(new GridColumnAttrib(SibiNotesCols.DateStamp, "Date Stamp"));
+            ColList.Add(new GridColumnAttrib(SibiNotesCols.NoteGuid, "Guid", true, false));
             return ColList;
         }
 
         private List<GridColumnAttrib> RequestItemsColumns()
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.User, "User", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Description, "Description", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Qty, "Qty", typeof(int)));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Location, "Location", Attributes.DeviceAttribute.Locations));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Status, "Status", Attributes.SibiAttribute.ItemStatusType));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceAsset, "Replace Asset", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceSerial, "Replace Serial", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewAsset, "New Asset", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewSerial, "New Serial", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.OrgCode, "Org Code", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ObjectCode, "Object Code", typeof(string)));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Timestamp, "Created", typeof(DateTime), true, true));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ModifiedDate, "Modified", typeof(DateTime), true, true));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ModifiedBy, "Modified By", typeof(string), true, true));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ItemGuid, "Item Guid", typeof(string), true, true));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.RequestGuid, "Request Guid", typeof(string), true, false));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.User, "User"));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Description, "Description"));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Qty, "Qty"));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Location, "Location", Attributes.DeviceAttribute.Locations, ColumnFormatType.AttributeCombo));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Status, "Status", Attributes.SibiAttribute.ItemStatusType, ColumnFormatType.AttributeCombo));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceAsset, "Replace Asset"));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceSerial, "Replace Serial"));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewAsset, "New Asset"));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewSerial, "New Serial"));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.OrgCode, "Org Code"));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ObjectCode, "Object Code"));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Timestamp, "Created", true, true));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ModifiedDate, "Modified", true, true));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ModifiedBy, "Modified By", true, true));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ItemGuid, "Item Guid", true, true));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.RequestGuid, "Request Guid", true, false));
 
             return ColList;
         }

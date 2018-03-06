@@ -568,17 +568,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private List<GridColumnAttrib> HistoricalGridColumns()
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionDateTime, "Time Stamp", typeof(DateTime)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionDateTime, "Time Stamp"));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ChangeType, "Change Type", Attributes.DeviceAttribute.ChangeType, ColumnFormatType.AttributeDisplayMemberOnly));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionUser, "Action User", typeof(string)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Notes, "Note Peek", typeof(string), ColumnFormatType.NotePreview));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.CurrentUser, "User", typeof(string)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.AssetTag, "Asset ID", typeof(string)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Serial, "Serial", typeof(string)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Description, "Description", typeof(string)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionUser, "Action User"));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Notes, "Note Peek", ColumnFormatType.NotePreview));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.CurrentUser, "User"));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.AssetTag, "Asset ID"));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Serial, "Serial"));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Description, "Description"));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Location, "Location", Attributes.DeviceAttribute.Locations, ColumnFormatType.AttributeDisplayMemberOnly));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.PurchaseDate, "Purchase Date", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.HistoryEntryGuid, "Guid", typeof(string)));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.PurchaseDate, "Purchase Date"));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.HistoryEntryGuid, "Guid"));
             return ColList;
         }
 
@@ -841,15 +841,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private List<GridColumnAttrib> TrackingGridColumns()
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(TrackablesCols.DateStamp, "Date", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckType, "Check Type", typeof(string)));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckoutUser, "Check Out User", typeof(string)));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckinUser, "Check In User", typeof(string)));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckoutTime, "Check Out", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckinTime, "Check In", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.DueBackDate, "Due Back", typeof(DateTime)));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.UseLocation, "Location", typeof(string)));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.Guid, "Guid", typeof(string)));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.DateStamp, "Date"));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckType, "Check Type"));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckoutUser, "Check Out User"));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckinUser, "Check In User"));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckoutTime, "Check Out"));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckinTime, "Check In"));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.DueBackDate, "Due Back"));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.UseLocation, "Location"));
+            ColList.Add(new GridColumnAttrib(TrackablesCols.Guid, "Guid"));
             return ColList;
         }
 

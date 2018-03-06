@@ -15,37 +15,33 @@ namespace AssetManager.Helpers
         public CodeAttribute[] AttributeIndex { get; set; }
         public ColumnFormatType ColumnFormatType { get; set; }
 
-        public GridColumnAttrib(string colName, string caption, Type type)
+        public GridColumnAttrib(string colName, string caption)
         {
             ColumnName = colName;
             ColumnCaption = caption;
-            ColumnType = type;
+            ColumnType = null;
             ColumnReadOnly = false;
             ColumnVisible = true;
             AttributeIndex = null;
             ColumnFormatType = ColumnFormatType.DefaultFormat;
         }
 
-        public GridColumnAttrib(string colName, string caption, Type type, ColumnFormatType displayMode)
+        public GridColumnAttrib(string colName, string caption, ColumnFormatType displayMode)
         {
             ColumnName = colName;
             ColumnCaption = caption;
-            ColumnType = type;
+            if (displayMode == ColumnFormatType.Image)
+            {
+                ColumnType = typeof(Image);
+            }
+            else
+            {
+                ColumnType = typeof(string);
+            }
             ColumnReadOnly = false;
             ColumnVisible = true;
             AttributeIndex = null;
             ColumnFormatType = displayMode;
-        }
-
-        public GridColumnAttrib(string colName, string caption, CodeAttribute[] attribIndex)
-        {
-            ColumnName = colName;
-            ColumnCaption = caption;
-            ColumnType = typeof(string);
-            ColumnReadOnly = false;
-            ColumnVisible = true;
-            this.AttributeIndex = attribIndex;
-            ColumnFormatType = ColumnFormatType.AttributeCombo;
         }
 
         public GridColumnAttrib(string colName, string caption, CodeAttribute[] attribIndex, ColumnFormatType displayMode)
@@ -59,11 +55,11 @@ namespace AssetManager.Helpers
             ColumnFormatType = displayMode;
         }
 
-        public GridColumnAttrib(string colName, string caption, Type type, bool isReadOnly, bool visible)
+        public GridColumnAttrib(string colName, string caption, bool isReadOnly, bool visible)
         {
             ColumnName = colName;
             ColumnCaption = caption;
-            ColumnType = type;
+            ColumnType = null;
             ColumnReadOnly = isReadOnly;
             ColumnVisible = visible;
             AttributeIndex = null;
