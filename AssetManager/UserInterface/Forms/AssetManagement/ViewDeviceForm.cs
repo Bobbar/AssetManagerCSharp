@@ -21,6 +21,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         #region Fields
 
         private MunisEmployee munisUser = new MunisEmployee();
+        private string defaultFormTitle;
 
         public MunisEmployee MunisUser
         {
@@ -65,7 +66,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             controlParser = new DBControlParser(this);
             controlParser.EnableFieldValidation();
 
-            DefaultFormTitle = this.Text;
+            defaultFormTitle = this.Text;
 
             liveBox = new LiveBox(this);
             liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.UserSelect, DevicesCols.MunisEmpNum);
@@ -114,7 +115,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 SetPingHistoryLink();
                 SetTracking(currentViewDevice.IsTrackable, currentViewDevice.Tracking.IsCheckedOut);
-                this.Text = this.DefaultFormTitle + FormTitle(currentViewDevice);
+                this.Text = this.defaultFormTitle + FormTitle(currentViewDevice);
                 this.Show();
                 DataGridHistory.ClearSelection();
                 gridFilling = false;
@@ -358,7 +359,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 DisableControlsRecursive(this);
                 MunisSibiPanel.Visible = true;
                 MunisSearchButton.Visible = false;
-                this.Text = DefaultFormTitle;
+                this.Text = defaultFormTitle;
                 AcceptCancelToolStrip.Visible = false;
                 TrackingToolStrip.Visible = false;
             }

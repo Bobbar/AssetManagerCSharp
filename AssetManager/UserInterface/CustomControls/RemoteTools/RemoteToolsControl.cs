@@ -230,17 +230,15 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-                    using (DeployTeamViewer newTVDeploy = new DeployTeamViewer(hostForm))
+                    var newTVDeploy = new DeployTeamViewer(hostForm);
+                    OnStatusPrompt("Deploying TeamViewer...", 0);
+                    if (await newTVDeploy.DeployToDevice(targetDevice))
                     {
-                        OnStatusPrompt("Deploying TeamViewer...", 0);
-                        if (await newTVDeploy.DeployToDevice(targetDevice))
-                        {
-                            OnStatusPrompt("TeamViewer deployment complete!");
-                        }
-                        else
-                        {
-                            OnStatusPrompt("TeamViewer deployment failed...");
-                        }
+                        OnStatusPrompt("TeamViewer deployment complete!");
+                    }
+                    else
+                    {
+                        OnStatusPrompt("TeamViewer deployment failed...");
                     }
                 }
             }
@@ -263,17 +261,15 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-                    using (DeployOffice newOfficeDeploy = new DeployOffice(hostForm))
+                    var newOfficeDeploy = new DeployOffice(hostForm);
+                    OnStatusPrompt("Deploying Office 365...", 0);
+                    if (await newOfficeDeploy.DeployToDevice(targetDevice))
                     {
-                        OnStatusPrompt("Deploying Office 365...", 0);
-                        if (await newOfficeDeploy.DeployToDevice(targetDevice))
-                        {
-                            OnStatusPrompt("Office 365 deployment complete!");
-                        }
-                        else
-                        {
-                            OnStatusPrompt("Office 365 deployment failed...");
-                        }
+                        OnStatusPrompt("Office 365 deployment complete!");
+                    }
+                    else
+                    {
+                        OnStatusPrompt("Office 365 deployment failed...");
                     }
                 }
             }
@@ -390,16 +386,14 @@ namespace AssetManager.UserInterface.CustomControls
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
                     OnStatusPrompt("Installing Chrome...", 0);
-                    using (DeployChrome newChromeDeploy = new DeployChrome(hostForm))
+                    var newChromeDeploy = new DeployChrome(hostForm);
+                    if (await newChromeDeploy.DeployToDevice(targetDevice))
                     {
-                        if (await newChromeDeploy.DeployToDevice(targetDevice))
-                        {
-                            OnStatusPrompt("Chrome install complete!");
-                        }
-                        else
-                        {
-                            OnStatusPrompt("Error while installing Chrome!");
-                        }
+                        OnStatusPrompt("Chrome install complete!");
+                    }
+                    else
+                    {
+                        OnStatusPrompt("Error while installing Chrome!");
                     }
                 }
             }

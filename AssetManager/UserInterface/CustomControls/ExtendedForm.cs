@@ -25,9 +25,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private ExtendedForm myParentForm;
-
-        public string DefaultFormTitle { get; set; }
+        private ExtendedForm parentForm;
 
         /// <summary>
         /// Gets or sets the Grid Theme for the DataGridView controls within the form.
@@ -49,15 +47,15 @@ namespace AssetManager.UserInterface.CustomControls
         {
             get
             {
-                return myParentForm;
+                return parentForm;
             }
 
             set
             {
-                this.myParentForm = value;
+                this.parentForm = value;
                 if (inheritTheme)
                 {
-                    SetTheme(this.myParentForm);
+                    SetTheme(this.parentForm);
                 }
             }
         }
@@ -89,7 +87,7 @@ namespace AssetManager.UserInterface.CustomControls
         public ExtendedForm(ExtendedForm parentForm, bool inheritTheme = true)
         {
             this.inheritTheme = inheritTheme;
-            this.ParentForm = parentForm;
+            ParentForm = parentForm;
             MemoryTweaks.SetWorkingSet();
         }
 
