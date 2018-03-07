@@ -830,6 +830,24 @@
             <param name="distName"></param>
             <returns></returns>
         </member>
+        <member name="T:AssetManager.Tools.Deployment.NewDeviceDeployment.TaskInfo">
+            <summary>
+            Container for holding deployment methods and a descriptive name.
+            </summary>
+        </member>
+        <member name="M:AssetManager.Tools.Deployment.NewDeviceDeployment.DeploymentTasks(AssetManager.Data.Classes.Device)">
+            <summary>
+            List of available deployment methods.
+            </summary>
+            <param name="targetDevice"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Tools.Deployment.NewDeviceDeployment.ChooseDeployments(AssetManager.Data.Classes.Device)">
+            <summary>
+            Prompt user for items to be deployed to the device.
+            </summary>
+            <param name="targetDevice"></param>
+        </member>
         <member name="T:AssetManager.Tools.TaskBarNotify">
             <summary>
             Provides flashing window and taskbar support.

@@ -148,7 +148,10 @@ namespace AssetManager.Tools.Deployment
 
         public void StartTimer()
         {
-            startTime = DateTime.Now.Ticks;
+            if (startTime == 0)
+            {
+                startTime = DateTime.Now.Ticks;
+            }
         }
 
         private void PrintElapsedTime()

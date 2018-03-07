@@ -312,6 +312,11 @@ Public Class AdvancedDialog
                     but.Name = ctl.Name
                     AddHandler but.Click, AddressOf ButtonClick
                     pnlControls.Controls.Add(but)
+                Case Else
+                    Dim smPanel As FlowLayoutPanel = ControlPanel()
+                    smPanel.Controls.Add(NewControlLabel(ctl.Tag))
+                    smPanel.Controls.Add(ctl)
+                    pnlControls.Controls.Add(smPanel)
             End Select
         Next
         pnlControls.ResumeLayout()
