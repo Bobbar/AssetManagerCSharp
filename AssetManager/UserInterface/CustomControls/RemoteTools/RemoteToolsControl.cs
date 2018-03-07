@@ -280,6 +280,38 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
+        private async void NewDeviceDeployment(Device targetDevice)
+        {
+            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
+
+            if (OtherFunctions.Message("Execute new deployment on this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
+            {
+                return;
+            }
+            try
+            {
+                if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
+                {
+                    var newDeviceDeploy = new NewDeviceDeployment(hostForm);
+                    OnStatusPrompt("Deploying New Device Software...", 0);
+                    if (await newDeviceDeploy.DeployToDevice(targetDevice))
+                    {
+                        OnStatusPrompt("New Device Deployment Complete!");
+                    }
+                    else
+                    {
+                        OnStatusPrompt("New Device Deployment Failed...");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OnStatusPrompt("Office 365 deployment failed...");
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+            }
+        }
+               
+
         private void LaunchRDP()
         {
             ProcessStartInfo StartInfo = new ProcessStartInfo();
@@ -472,6 +504,11 @@ namespace AssetManager.UserInterface.CustomControls
             DeployOffice(this.device);
         }
 
+        private void NewDeployButton_Click(object sender, EventArgs e)
+        {
+            NewDeviceDeployment(this.device);
+        }
+
         #endregion Control Events
 
         // METODO: Un-nest.
@@ -486,5 +523,7 @@ namespace AssetManager.UserInterface.CustomControls
                 DisplayTime = displayTime;
             }
         }
+
+       
     }
 }

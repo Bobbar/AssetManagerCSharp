@@ -29,6 +29,7 @@
             this.EventViewerButton = new System.Windows.Forms.Button();
             this.DeployOfficeButton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.NewDeployButton = new System.Windows.Forms.Button();
             this.groupBox.SuspendLayout();
             this.FlowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).BeginInit();
@@ -75,6 +76,7 @@
             this.FlowLayoutPanel1.Controls.Add(this.UpdateChromeButton);
             this.FlowLayoutPanel1.Controls.Add(this.EventViewerButton);
             this.FlowLayoutPanel1.Controls.Add(this.DeployOfficeButton);
+            this.FlowLayoutPanel1.Controls.Add(this.NewDeployButton);
             this.FlowLayoutPanel1.Location = new System.Drawing.Point(5, 14);
             this.FlowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.FlowLayoutPanel1.Name = "FlowLayoutPanel1";
@@ -192,6 +194,19 @@
             this.DeployOfficeButton.UseVisualStyleBackColor = true;
             this.DeployOfficeButton.Click += new System.EventHandler(this.DeployOfficeButton_Click);
             // 
+            // NewDeployButton
+            // 
+            this.NewDeployButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.NewDeployButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.NewDeployButton.Location = new System.Drawing.Point(95, 48);
+            this.NewDeployButton.Margin = new System.Windows.Forms.Padding(1);
+            this.NewDeployButton.Name = "NewDeployButton";
+            this.NewDeployButton.Size = new System.Drawing.Size(45, 45);
+            this.NewDeployButton.TabIndex = 61;
+            this.toolTip.SetToolTip(this.NewDeployButton, "Deploy Office 365");
+            this.NewDeployButton.UseVisualStyleBackColor = true;
+            this.NewDeployButton.Click += new System.EventHandler(this.NewDeployButton_Click);
+            // 
             // RemoteToolsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -224,5 +239,6 @@
         internal System.Windows.Forms.Button EventViewerButton;
         private System.Windows.Forms.ToolTip toolTip;
         internal System.Windows.Forms.Button DeployOfficeButton;
+        internal System.Windows.Forms.Button NewDeployButton;
     }
 }

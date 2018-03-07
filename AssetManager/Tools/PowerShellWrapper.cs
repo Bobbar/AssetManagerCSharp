@@ -158,6 +158,7 @@ namespace AssetManager.Tools
                     Collection<PSObject> results = session.Invoke();
                     StringBuilder stringBuilder = new StringBuilder();
 
+
                     foreach (var obj in results)
                     {
                         stringBuilder.AppendLine(obj.ToString());
@@ -167,8 +168,16 @@ namespace AssetManager.Tools
 
                 if (!string.IsNullOrEmpty(psResults))
                 {
-                    OtherFunctions.Message(psResults, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error Running Script");
-                    return false;
+
+                    if (psResults.Contains("success"))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        OtherFunctions.Message(psResults, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error Running Script");
+                        return false;
+                    }
                 }
                 else
                 {

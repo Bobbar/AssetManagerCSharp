@@ -10,13 +10,13 @@ namespace AssetManager.UserInterface.Forms
 {
     public partial class GetCredentialsForm : ExtendedForm
     {
-        private NetworkCredential MyCreds;
+        private NetworkCredential newCreds;
 
         private SecureString SecurePwd = new SecureString();
 
         public NetworkCredential Credentials
         {
-            get { return MyCreds; }
+            get { return newCreds; }
         }
 
         public GetCredentialsForm() : base()
@@ -38,7 +38,7 @@ namespace AssetManager.UserInterface.Forms
             if (!string.IsNullOrEmpty(Username) & SecurePwd.Length > 0)
             {
                 SecurePwd.MakeReadOnly();
-                MyCreds = new NetworkCredential(Username, SecurePwd, NetworkInfo.CurrentDomain);
+                newCreds = new NetworkCredential(Username, SecurePwd, NetworkInfo.CurrentDomain);
                 SecurePwd.Dispose();
                 DialogResult = DialogResult.OK;
             }
