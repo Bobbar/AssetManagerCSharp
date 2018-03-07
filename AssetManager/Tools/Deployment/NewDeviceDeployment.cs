@@ -76,6 +76,7 @@ namespace AssetManager.Tools.Deployment
         {
             using (var newDialog = new AdvancedDialog(parentForm))
             {
+                newDialog.Text = "Select Installs";
                 var depList = DeploymentTasks(targetDevice);
 
                 var selectListBox = new CheckedListBox();
@@ -372,7 +373,7 @@ namespace AssetManager.Tools.Deployment
 
         private string GetVPNInstallString()
         {
-            string installString = @"""\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\vpn-client-2.2.2-release.exe"" / S / STANDARD";
+            string installString = @"cmd /c ""\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\vpn-client-2.2.2-release.exe"" /S /STANDARD";
             return installString;
         }
         #endregion DeploymentSupportMethods

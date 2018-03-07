@@ -82,7 +82,7 @@ namespace AssetManager.Tools
                       p.StartInfo.WorkingDirectory = Paths.PsExecTempDir;
                       p.StartInfo.FileName = Paths.PsExecTempPath;
 
-                      p.StartInfo.Arguments = "\\\\" + targetDevice.HostName + " -accepteula -nobanner -h -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
+                      p.StartInfo.Arguments = "\\\\" + targetDevice.HostName + " -accepteula -nobanner -h -n 30 -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
 
                       p.OutputDataReceived += P_OutputDataReceived;
                       p.ErrorDataReceived += P_ErrorDataReceived;

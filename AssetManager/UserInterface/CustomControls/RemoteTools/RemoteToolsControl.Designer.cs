@@ -20,6 +20,7 @@
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.ShowIPButton = new System.Windows.Forms.Button();
             this.FlowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.GKUpdateButton = new System.Windows.Forms.Button();
             this.BrowseFilesButton = new System.Windows.Forms.Button();
             this.RestartDeviceButton = new System.Windows.Forms.PictureBox();
@@ -28,7 +29,6 @@
             this.UpdateChromeButton = new System.Windows.Forms.Button();
             this.EventViewerButton = new System.Windows.Forms.Button();
             this.DeployOfficeButton = new System.Windows.Forms.Button();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.NewDeployButton = new System.Windows.Forms.Button();
             this.groupBox.SuspendLayout();
             this.FlowLayoutPanel1.SuspendLayout();
@@ -68,13 +68,13 @@
             // 
             this.FlowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.FlowLayoutPanel1.AutoScroll = true;
-            this.FlowLayoutPanel1.Controls.Add(this.GKUpdateButton);
-            this.FlowLayoutPanel1.Controls.Add(this.BrowseFilesButton);
             this.FlowLayoutPanel1.Controls.Add(this.RestartDeviceButton);
+            this.FlowLayoutPanel1.Controls.Add(this.BrowseFilesButton);
             this.FlowLayoutPanel1.Controls.Add(this.StartRDPButton);
+            this.FlowLayoutPanel1.Controls.Add(this.EventViewerButton);
+            this.FlowLayoutPanel1.Controls.Add(this.GKUpdateButton);
             this.FlowLayoutPanel1.Controls.Add(this.DeployTVButton);
             this.FlowLayoutPanel1.Controls.Add(this.UpdateChromeButton);
-            this.FlowLayoutPanel1.Controls.Add(this.EventViewerButton);
             this.FlowLayoutPanel1.Controls.Add(this.DeployOfficeButton);
             this.FlowLayoutPanel1.Controls.Add(this.NewDeployButton);
             this.FlowLayoutPanel1.Location = new System.Drawing.Point(5, 14);
@@ -87,7 +87,7 @@
             // 
             this.GKUpdateButton.BackgroundImage = global::AssetManager.Properties.Resources.GK__UpdateIcon;
             this.GKUpdateButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.GKUpdateButton.Location = new System.Drawing.Point(1, 1);
+            this.GKUpdateButton.Location = new System.Drawing.Point(189, 1);
             this.GKUpdateButton.Margin = new System.Windows.Forms.Padding(1);
             this.GKUpdateButton.Name = "GKUpdateButton";
             this.GKUpdateButton.Size = new System.Drawing.Size(45, 45);
@@ -114,7 +114,7 @@
             this.RestartDeviceButton.BackColor = System.Drawing.SystemColors.ControlLight;
             this.RestartDeviceButton.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RestartDeviceButton.Image = global::AssetManager.Properties.Resources.RestartIcon;
-            this.RestartDeviceButton.Location = new System.Drawing.Point(95, 1);
+            this.RestartDeviceButton.Location = new System.Drawing.Point(1, 1);
             this.RestartDeviceButton.Margin = new System.Windows.Forms.Padding(1);
             this.RestartDeviceButton.Name = "RestartDeviceButton";
             this.RestartDeviceButton.Size = new System.Drawing.Size(45, 45);
@@ -129,7 +129,7 @@
             this.StartRDPButton.BackgroundImage = global::AssetManager.Properties.Resources.RDPIcon;
             this.StartRDPButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.StartRDPButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.StartRDPButton.Location = new System.Drawing.Point(142, 1);
+            this.StartRDPButton.Location = new System.Drawing.Point(95, 1);
             this.StartRDPButton.Margin = new System.Windows.Forms.Padding(1);
             this.StartRDPButton.Name = "StartRDPButton";
             this.StartRDPButton.Size = new System.Drawing.Size(45, 45);
@@ -143,7 +143,7 @@
             this.DeployTVButton.BackgroundImage = global::AssetManager.Properties.Resources.TeamViewerIcon;
             this.DeployTVButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.DeployTVButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.DeployTVButton.Location = new System.Drawing.Point(189, 1);
+            this.DeployTVButton.Location = new System.Drawing.Point(236, 1);
             this.DeployTVButton.Margin = new System.Windows.Forms.Padding(1);
             this.DeployTVButton.Name = "DeployTVButton";
             this.DeployTVButton.Size = new System.Drawing.Size(45, 45);
@@ -157,7 +157,7 @@
             this.UpdateChromeButton.BackgroundImage = global::AssetManager.Properties.Resources.ChromeIcon;
             this.UpdateChromeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.UpdateChromeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.UpdateChromeButton.Location = new System.Drawing.Point(236, 1);
+            this.UpdateChromeButton.Location = new System.Drawing.Point(1, 48);
             this.UpdateChromeButton.Margin = new System.Windows.Forms.Padding(1);
             this.UpdateChromeButton.Name = "UpdateChromeButton";
             this.UpdateChromeButton.Size = new System.Drawing.Size(45, 45);
@@ -171,7 +171,7 @@
             this.EventViewerButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("EventViewerButton.BackgroundImage")));
             this.EventViewerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.EventViewerButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.EventViewerButton.Location = new System.Drawing.Point(1, 48);
+            this.EventViewerButton.Location = new System.Drawing.Point(142, 1);
             this.EventViewerButton.Margin = new System.Windows.Forms.Padding(1);
             this.EventViewerButton.Name = "EventViewerButton";
             this.EventViewerButton.Size = new System.Drawing.Size(45, 45);
@@ -196,6 +196,7 @@
             // 
             // NewDeployButton
             // 
+            this.NewDeployButton.BackgroundImage = global::AssetManager.Properties.Resources.DeployIcon;
             this.NewDeployButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.NewDeployButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.NewDeployButton.Location = new System.Drawing.Point(95, 48);
@@ -203,7 +204,7 @@
             this.NewDeployButton.Name = "NewDeployButton";
             this.NewDeployButton.Size = new System.Drawing.Size(45, 45);
             this.NewDeployButton.TabIndex = 61;
-            this.toolTip.SetToolTip(this.NewDeployButton, "Deploy Office 365");
+            this.toolTip.SetToolTip(this.NewDeployButton, "New Device Deployment");
             this.NewDeployButton.UseVisualStyleBackColor = true;
             this.NewDeployButton.Click += new System.EventHandler(this.NewDeployButton_Click);
             // 

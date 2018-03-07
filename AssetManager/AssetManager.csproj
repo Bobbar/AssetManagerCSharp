@@ -623,6 +623,7 @@
     <None Include="Resources\fieldErrorIcon.Icon.ico" />
     <None Include="Resources\EventIcon.png" />
     <None Include="Resources\O365SquareLogo.png" />
+    <None Include="Resources\DeployIcon.png" />
     <Content Include="Tools\PsExec\PsExec.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -223,6 +223,16 @@ namespace AssetManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DeployIcon {
+            get {
+                object obj = ResourceManager.GetObject("DeployIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DetailsIcon {
             get {
                 object obj = ResourceManager.GetObject("DetailsIcon", resourceCulture);

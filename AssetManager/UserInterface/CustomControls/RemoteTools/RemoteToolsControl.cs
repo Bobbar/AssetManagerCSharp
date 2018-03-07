@@ -284,7 +284,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
 
-            if (OtherFunctions.Message("Execute new deployment on this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
+            if (OtherFunctions.Message("Start new device software deployment?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
                 return;
             }

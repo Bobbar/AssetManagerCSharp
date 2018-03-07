@@ -32,6 +32,14 @@ namespace AssetManager.Tools.Deployment
             deploy.UsePsExec();
         }
 
+        public DeployOffice(ExtendedForm parentForm, DeploymentUI deployUI)
+        {
+            this.parentForm = parentForm;
+            deploy = deployUI;
+            deploy.UsePowerShell();
+            deploy.UsePsExec();
+        }
+
         private List<string> GetConfigFiles()
         {
             var files = Directory.GetFiles(deploymentFilesDirectory, "*.xml", SearchOption.TopDirectoryOnly);
