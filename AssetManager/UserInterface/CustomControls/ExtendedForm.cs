@@ -91,25 +91,25 @@ namespace AssetManager.UserInterface.CustomControls
             MemoryTweaks.SetWorkingSet();
         }
 
-        //protected override CreateParams CreateParams
-        //{
-        //    // Enables double-buffering.
-        //    get
-        //    {
-        //        bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-        //        bool terminalSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
-        //        CreateParams cp = base.CreateParams;
+        protected override CreateParams CreateParams
+        {
+            // Enables double-buffering.
+            get
+            {
+                bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+                bool terminalSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
+                CreateParams cp = base.CreateParams;
 
-        //        if (!designMode)
-        //        {
-        //            if (!terminalSession)
-        //            {
-        //                cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
-        //            }
-        //        }
-        //        return cp;
-        //    }
-        //}
+                if (!designMode)
+                {
+                    if (!terminalSession)
+                    {
+                        cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+                    }
+                }
+                return cp;
+            }
+        }
 
         public virtual bool OkToClose()
         {
