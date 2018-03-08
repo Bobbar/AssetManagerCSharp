@@ -15,6 +15,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         public CopyFilesForm(ExtendedForm parentForm, Device targetDevice, string sourceDirectory, string targetDirectory) : base(parentForm)
         {
             InitializeComponent();
+            this.Owner = parentForm;
             ImageCaching.CacheControlImages(this);
             pushFilesControl = new GKProgressControl(this, targetDevice, true, sourceDirectory, targetDirectory);
             this.Controls.Add(pushFilesControl);

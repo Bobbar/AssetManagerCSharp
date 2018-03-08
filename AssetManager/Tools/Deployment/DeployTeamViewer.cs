@@ -27,6 +27,13 @@ namespace AssetManager.Tools.Deployment
             deploy.UsePowerShell();
         }
 
+        public DeployTeamViewer(ExtendedForm parentForm, DeploymentUI deployUI)
+        {
+            this.parentForm = parentForm;
+            deploy = deployUI;
+            deploy.UsePowerShell();
+        }
+
         public async Task<bool> DeployToDevice(Device targetDevice)
         {
             try
@@ -170,7 +177,7 @@ namespace AssetManager.Tools.Deployment
         {
             var cmd = new Command("Start-Process", false, true);
             cmd.Parameters.Add("FilePath", "msiexec.exe");
-            cmd.Parameters.Add("ArgumentList", "/i C:\\Temp\\TVDeploy\\TeamViewer_Host-idcjnfzfgb.msi /qn");
+            cmd.Parameters.Add("ArgumentList", @"/i C:\Temp\TVDeploy\TeamViewer_Host-idcjnfzfgb.msi /qn /l*v ""C:\Temp\log.log""");
             cmd.Parameters.Add("Wait");
             cmd.Parameters.Add("NoNewWindow");
             return cmd;

@@ -15,11 +15,6 @@ namespace AssetManager.Tools.Deployment
 {
     public class NewDeviceDeployment : IDisposable
     {
-        private const string deploymentFilesDirectory = "\\\\svr-file1\\dd_files\\Information Technology\\Software\\Office\\RemoteDeploy";// "\\\\core.co.fairfield.oh.us\\dfs1\\fcdd\\files\\Information Technology\\Software\\Office\\RemoteDeploy";
-        private const string deployTempDirectory = "\\Temp\\OfficeDeploy";
-        private const string fullDeployTempDir = "C:" + deployTempDirectory;
-        private const string removeOfficeScriptPath = fullDeployTempDir + "\\Remove-PreviousOfficeInstalls";
-
         private Queue<Func<Task<bool>>> deployments = new Queue<Func<Task<bool>>>();
 
         private ExtendedForm parentForm;
@@ -63,6 +58,7 @@ namespace AssetManager.Tools.Deployment
             depList.Add(new TaskInfo(() => InstallGatekeeper(targetDevice), "Gatekeeper"));
             depList.Add(new TaskInfo(() => InstallIntellivue(targetDevice), "Intellivue"));
             depList.Add(new TaskInfo(() => InstallChrome(targetDevice), "Chrome"));
+            depList.Add(new TaskInfo(() => InstallTeamViewer(targetDevice), "Team Viewer"));
             depList.Add(new TaskInfo(() => InstallCarbonBlack(targetDevice), "Carbon Black"));
             depList.Add(new TaskInfo(() => InstallVPNClient(targetDevice), "Shrewsoft VPN"));
             return depList;
@@ -77,19 +73,31 @@ namespace AssetManager.Tools.Deployment
             using (var newDialog = new AdvancedDialog(parentForm))
             {
                 newDialog.Text = "Select Installs";
-                var depList = DeploymentTasks(targetDevice);
+                newDialog.Height = 800;
 
                 var selectListBox = new CheckedListBox();
                 selectListBox.CheckOnClick = true;
                 selectListBox.Size = new System.Drawing.Size(300, 200);
                 selectListBox.DisplayMember = nameof(TaskInfo.TaskName);
 
+                var depList = DeploymentTasks(targetDevice);
                 foreach (var d in depList)
                 {
                     selectListBox.Items.Add(d, true);
                 }
-
+                // Add deployment selection list.
                 newDialog.AddCustomControl("TaskList", "Select items to install:", selectListBox);
+
+                // Add a 'Select None' button with lamba action.
+                newDialog.AddButton("selectNoneButton", "Select None", () =>
+                {
+                    for (int i = 0; i < selectListBox.Items.Count; i++)
+                    {
+                        selectListBox.SetItemChecked(i, false);
+                    }
+
+                });
+
                 newDialog.ShowDialog();
                 if (newDialog.DialogResult == DialogResult.OK)
                 {
@@ -292,6 +300,11 @@ namespace AssetManager.Tools.Deployment
             return await newOfficeDeploy.DeployToDevice(targetDevice);
         }
 
+        private async Task<bool> InstallTeamViewer(Device targetDevice)
+        {
+            var newTeamViewDeploy = new DeployTeamViewer(parentForm, deploy);
+            return await newTeamViewDeploy.DeployToDevice(targetDevice);
+        }
 
         private async Task<bool> InstallVPNClient(Device targetDevice)
         {
@@ -303,9 +316,10 @@ namespace AssetManager.Tools.Deployment
             }
             else
             {
-                deploy.LogMessage("VPN Client Install failed! Exit code: " + installVPNExitCode.ToString());
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
+                deploy.LogMessage("Exit Code: " + installVPNExitCode);
+                deploy.LogMessage("### Errors are expected due to the installation causing the device to momentarily disconnect.");
+                //OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return true;
             }
             return true;
         }
@@ -331,19 +345,19 @@ namespace AssetManager.Tools.Deployment
 
         private string GetMVPSInstallString()
         {
-            string installString = "PowerShell.exe \"& \"\"\\\\svr-file1\\dd_files\\Information Technology\\Software\\MVPS\\powershell_install.ps1\"\"\"";
+            string installString = @"PowerShell.exe ""& """"\\\\svr-file1\\dd_files\\Information Technology\\Software\\MVPS\\powershell_V2_install.ps1""""""";
             return installString;
         }
 
         private string GetGKClientInstallString()
         {
-            string installString = @"msiexec.exe /i \\svr-ddas1.core.co.fairfield.oh.us\PSiServ\Gatekeeper\Install\Full\ClientFull.msi REINSTALL=ALL REINSTALLMODE=omus /qn";
+            string installString = @"msiexec.exe /i \\svr-ddas1.core.co.fairfield.oh.us\PSiServ\Gatekeeper\Install\Full\ClientFull.msi /qn /norestart";
             return installString;
         }
 
         private string GetGKUpdateString()
         {
-            string updateString = @"msiexec.exe /i \\svr-ddas1.core.co.fairfield.oh.us\PSiServ\Gatekeeper\Install\Upgrade\Setup.msi REINSTALL=ALL REINSTALLMODE=omus /qn";
+            string updateString = @"msiexec.exe /i \\svr-ddas1.core.co.fairfield.oh.us\PSiServ\Gatekeeper\Install\Upgrade\Setup.msi /qn /norestart";
             return updateString;
         }
 

@@ -84,12 +84,16 @@ namespace AssetManager.Tools.Deployment
             logView = new ExtendedForm(parentForm);
             logView.FormClosing += new FormClosingEventHandler(LogClosed);
             logView.Text = "Deployment Log (Close to cancel)";
-            logView.Width = 500;
+            logView.Width = 600;
+            logView.Height = 700;
             logView.Owner = parentForm;
             logView.StartPosition = FormStartPosition.CenterScreen;
             RTBLog = new RichTextBox();
             RTBLog.Dock = DockStyle.Fill;
             RTBLog.Font = StyleFunctions.DefaultGridFont;
+            RTBLog.WordWrap = false;
+            RTBLog.ReadOnly = true;
+            RTBLog.ScrollBars = RichTextBoxScrollBars.Both;
             logView.Controls.Add(RTBLog);
             logView.Show();
 
