@@ -180,7 +180,6 @@
     <Compile Include="Data\DataFunctions\ConnectionWatchdog.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AdvancedSearch.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AssetManagerFunctions.cs" />
-    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\EmpHierarchy.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\FTPFunctions.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\MunisFunctions.cs" />
     <Compile Include="Data\DataFunctions\DBCacheFunctions.cs" />

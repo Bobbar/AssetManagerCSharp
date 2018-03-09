@@ -1,5 +1,6 @@
 ﻿using AssetManager.Data;
 using AssetManager.Helpers;
+using AssetManager.Data.Functions;
 using AssetManager.UserInterface.CustomControls;
 using System;
 using System.ComponentModel;
@@ -265,6 +266,11 @@ namespace AssetManager.Tools.Deployment
                 LogMessage("The deployment has been canceled!");
                 throw (new DeploymentCanceledException());
             }
+        }
+        // Wrapper to shorten calls.
+        public string GetString(string stringName)
+        {
+            return AssetManagerFunctions.GetDeployString(stringName);
         }
 
         private class DeploymentCanceledException : Exception

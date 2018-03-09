@@ -16,6 +16,19 @@ namespace AssetManager.Data.Functions
     {
         #region "Methods"
 
+
+        public static string GetDeployString(string stringName)
+        {
+            string query = "SELECT value FROM deployment_strings WHERE name = '" + stringName + "'";
+            var results = DBFactory.GetDatabase().ExecuteScalarFromQueryString(query);
+
+            if (results != null)
+            {
+                return results.ToString();
+            }
+            return string.Empty;
+        }
+
         public static async Task<bool> HasPingHistory(Device device)
         {
             string query = "SELECT device_guid FROM device_ping_history WHERE device_guid = '" + device.Guid + "'";

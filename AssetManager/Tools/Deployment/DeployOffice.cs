@@ -16,10 +16,10 @@ namespace AssetManager.Tools.Deployment
 {
     public class DeployOffice : IDisposable
     {
-        private const string deploymentFilesDirectory = "\\\\svr-file1\\dd_files\\Information Technology\\Software\\Office\\RemoteDeploy";// "\\\\core.co.fairfield.oh.us\\dfs1\\fcdd\\files\\Information Technology\\Software\\Office\\RemoteDeploy";
-        private const string deployTempDirectory = "\\Temp\\OfficeDeploy";
-        private const string fullDeployTempDir = "C:" + deployTempDirectory;
-        private const string removeOfficeScriptPath = fullDeployTempDir + "\\Remove-PreviousOfficeInstalls";
+        private string deployFilesDirectory;
+        private string deployTempDirectory;
+        private string fullDeployTempDir;
+        private string removeOfficeScriptPath;
         private ExtendedForm parentForm;
 
         private DeploymentUI deploy;
@@ -30,6 +30,7 @@ namespace AssetManager.Tools.Deployment
             deploy = new DeploymentUI(parentForm);
             deploy.UsePowerShell();
             deploy.UsePsExec();
+            GetDirectories();
         }
 
         public DeployOffice(ExtendedForm parentForm, DeploymentUI deployUI)
@@ -38,11 +39,20 @@ namespace AssetManager.Tools.Deployment
             deploy = deployUI;
             deploy.UsePowerShell();
             deploy.UsePsExec();
+            GetDirectories();
         }
 
+        private void GetDirectories()
+        {
+            deployFilesDirectory = deploy.GetString("office_deploy_dir");
+            deployTempDirectory = deploy.GetString("office_temp_dir");
+            fullDeployTempDir = "C:" + deployTempDirectory;
+            removeOfficeScriptPath = fullDeployTempDir + deploy.GetString("office_remove_script_dir");
+        }
+        
         private List<string> GetConfigFiles()
         {
-            var files = Directory.GetFiles(deploymentFilesDirectory, "*.xml", SearchOption.TopDirectoryOnly);
+            var files = Directory.GetFiles(deployFilesDirectory, "*.xml", SearchOption.TopDirectoryOnly);
             var configFiles = new List<string>();
 
             if (files.Length > 0)
@@ -92,10 +102,10 @@ namespace AssetManager.Tools.Deployment
                     deploy.StartTimer();
 
                     deploy.LogMessage("Starting new Office 365 deployment to " + targetDevice.HostName);
-                    deploy.LogMessage("Config = '" + deploymentFilesDirectory + "\\" + configFile + "'");
+                    deploy.LogMessage("Config = '" + deployFilesDirectory + "\\" + configFile + "'");
                     deploy.LogMessage("-------------------");
 
-                    using (CopyFilesForm PushForm = new CopyFilesForm(parentForm, targetDevice, deploymentFilesDirectory, deployTempDirectory))
+                    using (CopyFilesForm PushForm = new CopyFilesForm(parentForm, targetDevice, deployFilesDirectory, deployTempDirectory))
                     {
                         deploy.LogMessage("Pushing files to target computer...");
                         if (await PushForm.StartCopy())
@@ -183,7 +193,7 @@ namespace AssetManager.Tools.Deployment
             session.Commands.AddCommand(setLocationCommand);
 
             // Execute the remove office script.
-            var removeCommand = new Command(removeOfficeScriptPath + "\\Remove-PreviousOfficeInstalls.ps1", true, true);
+            var removeCommand = new Command(removeOfficeScriptPath + deploy.GetString("office_remove_script_name"), true, true);
             removeCommand.Parameters.Add("Wait");
             removeCommand.Parameters.Add("NoNewWindow");
             session.Commands.AddCommand(removeCommand);

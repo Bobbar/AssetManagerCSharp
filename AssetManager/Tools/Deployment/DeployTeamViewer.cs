@@ -13,8 +13,9 @@ namespace AssetManager.Tools.Deployment
 {
     public class DeployTeamViewer : IDisposable
     {
-        private const string deploymentFilesDirectory = "\\\\core.co.fairfield.oh.us\\dfs1\\fcdd\\files\\Information Technology\\Software\\Tools\\TeamViewer\\Deploy";
-        private const string deployTempDirectory = "\\Temp\\TVDeploy";
+        private string filesDirectory;
+        private string tempDirectory;
+        private string fullTempDirectory;
 
         private ExtendedForm parentForm;
 
@@ -25,6 +26,8 @@ namespace AssetManager.Tools.Deployment
             this.parentForm = parentForm;
             deploy = new DeploymentUI(parentForm);
             deploy.UsePowerShell();
+            deploy.UsePsExec();
+            GetDirectories();
         }
 
         public DeployTeamViewer(ExtendedForm parentForm, DeploymentUI deployUI)
@@ -32,6 +35,14 @@ namespace AssetManager.Tools.Deployment
             this.parentForm = parentForm;
             deploy = deployUI;
             deploy.UsePowerShell();
+            GetDirectories();
+        }
+
+        private void GetDirectories()
+        {
+            filesDirectory = deploy.GetString("teamviewer_deploy_dir");
+            tempDirectory = deploy.GetString("teamviewer_temp_dir");
+            fullTempDirectory = "C:" + tempDirectory;
         }
 
         public async Task<bool> DeployToDevice(Device targetDevice)
@@ -45,7 +56,7 @@ namespace AssetManager.Tools.Deployment
                     deploy.LogMessage("Starting new TeamViewer deployment to " + targetDevice.HostName);
                     deploy.LogMessage("-------------------");
 
-                    using (CopyFilesForm PushForm = new CopyFilesForm(parentForm, targetDevice, deploymentFilesDirectory, deployTempDirectory))
+                    using (CopyFilesForm PushForm = new CopyFilesForm(parentForm, targetDevice, filesDirectory, tempDirectory))
                     {
                         deploy.LogMessage("Pushing files to target computer...");
                         if (await PushForm.StartCopy())
@@ -75,32 +86,32 @@ namespace AssetManager.Tools.Deployment
 
                     if (TVExists)
                     {
-                        deploy.LogMessage("Reinstalling TeamViewer...");
-
-                        if (await deploy.PowerShellWrap.InvokePowerShellCommand(targetDevice.HostName, GetTVReinstallCommand()))
+                        deploy.LogMessage("Uninstalling TeamViewer...");
+                        var tvReinstallExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetTVUninstallString());
+                        if (tvReinstallExitCode == 0)
                         {
-                            deploy.LogMessage("Deployment complete!");
+                            deploy.LogMessage("Uninstall complete!");
                         }
                         else
                         {
-                            deploy.LogMessage("Deployment failed!");
+                            deploy.LogMessage("Uninstall failed!");
                             OtherFunctions.Message("Error occurred while executing deployment command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             return false;
                         }
+
+                    }
+
+                    deploy.LogMessage("Starting TeamViewer install...");
+                    var tvExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetTVInstallString());
+                    if (tvExitCode == 0)
+                    {
+                        deploy.LogMessage("Install complete!");
                     }
                     else
                     {
-                        deploy.LogMessage("Starting TeamViewer deployment...");
-                        if (await deploy.PowerShellWrap.InvokePowerShellCommand(targetDevice.HostName, GetTVInstallCommand()))
-                        {
-                            deploy.LogMessage("Deployment complete!");
-                        }
-                        else
-                        {
-                            deploy.LogMessage("Deployment failed!");
-                            OtherFunctions.Message("Error occurred while executing deployment command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            return false;
-                        }
+                        deploy.LogMessage("Install failed!");
+                        OtherFunctions.Message("Error occurred while executing deployment command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return false;
                     }
 
                     deploy.LogMessage("Waiting 10 seconds.");
@@ -111,7 +122,8 @@ namespace AssetManager.Tools.Deployment
                     }
 
                     deploy.LogMessage("Starting TeamViewer assignment...");
-                    if (await deploy.PowerShellWrap.InvokePowerShellCommand(targetDevice.HostName, GetTVAssignCommand()))
+                    var assignExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetTVAssignString());
+                    if (assignExitCode == 0)
                     {
                         deploy.LogMessage("Assignment complete!");
                     }
@@ -152,35 +164,20 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
-        private Command GetTVAssignCommand()
+        private string GetTVInstallString()
         {
-            string ApiToken = AssetManagerFunctions.GetTVApiToken();
-            var cmd = new Command("Start-Process", false, true);
-            cmd.Parameters.Add("FilePath", "C:\\Temp\\TVDeploy\\Assignment\\TeamViewer_Assignment.exe");
-            cmd.Parameters.Add("ArgumentList", "-apitoken " + ApiToken + " -datafile ${ProgramFiles}\\TeamViewer\\AssignmentData.json");
-            cmd.Parameters.Add("Wait");
-            cmd.Parameters.Add("NoNewWindow");
-            return cmd;
+            return "msiexec.exe /i " + fullTempDirectory + deploy.GetString("teamviewer_install");
         }
 
-        private Command GetTVReinstallCommand()
+        private string GetTVUninstallString()
         {
-            var cmd = new Command("Start-Process", false, true);
-            cmd.Parameters.Add("FilePath", "msiexec.exe");
-            cmd.Parameters.Add("ArgumentList", "/i C:\\Temp\\TVDeploy\\TeamViewer_Host-idcjnfzfgb.msi REINSTALL=ALL REINSTALLMODE=omus /qn");
-            cmd.Parameters.Add("Wait");
-            cmd.Parameters.Add("NoNewWindow");
-            return cmd;
+            return "msiexec.exe /x " + fullTempDirectory + deploy.GetString("teamviewer_install");
         }
 
-        private Command GetTVInstallCommand()
+        private string GetTVAssignString()
         {
-            var cmd = new Command("Start-Process", false, true);
-            cmd.Parameters.Add("FilePath", "msiexec.exe");
-            cmd.Parameters.Add("ArgumentList", @"/i C:\Temp\TVDeploy\TeamViewer_Host-idcjnfzfgb.msi /qn /l*v ""C:\Temp\log.log""");
-            cmd.Parameters.Add("Wait");
-            cmd.Parameters.Add("NoNewWindow");
-            return cmd;
+            string apiToken = AssetManagerFunctions.GetTVApiToken();
+            return fullTempDirectory + deploy.GetString("teamviewer_assign_exe") + " -apitoken " + apiToken + " -datafile " + deploy.GetString("teamviewer_assign_json");
         }
 
         private Command GetDeleteDirectoryCommand()
@@ -188,7 +185,7 @@ namespace AssetManager.Tools.Deployment
             var cmd = new Command("Remove-Item", false, true);
             cmd.Parameters.Add("Recurse");
             cmd.Parameters.Add("Force");
-            cmd.Parameters.Add("Path", "C:\\Temp\\TVDeploy\\");
+            cmd.Parameters.Add("Path", fullTempDirectory);
             return cmd;
         }
 

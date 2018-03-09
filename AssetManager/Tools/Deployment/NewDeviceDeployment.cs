@@ -54,11 +54,11 @@ namespace AssetManager.Tools.Deployment
             var depList = new List<TaskInfo>();
             depList.Add(new TaskInfo(() => EnableAdmin(targetDevice), "Enable Local Admin"));
             depList.Add(new TaskInfo(() => InstallMVPS(targetDevice), "MVPS Hosts File"));
-            depList.Add(new TaskInfo(() => InstallOffice(targetDevice), "Office 365"));
-            depList.Add(new TaskInfo(() => InstallGatekeeper(targetDevice), "Gatekeeper"));
             depList.Add(new TaskInfo(() => InstallIntellivue(targetDevice), "Intellivue"));
+            depList.Add(new TaskInfo(() => InstallGatekeeper(targetDevice), "Gatekeeper"));
             depList.Add(new TaskInfo(() => InstallChrome(targetDevice), "Chrome"));
             depList.Add(new TaskInfo(() => InstallTeamViewer(targetDevice), "Team Viewer"));
+            depList.Add(new TaskInfo(() => InstallOffice(targetDevice), "Office 365"));
             depList.Add(new TaskInfo(() => InstallCarbonBlack(targetDevice), "Carbon Black"));
             depList.Add(new TaskInfo(() => InstallVPNClient(targetDevice), "Shrewsoft VPN"));
             return depList;
@@ -95,7 +95,6 @@ namespace AssetManager.Tools.Deployment
                     {
                         selectListBox.SetItemChecked(i, false);
                     }
-
                 });
 
                 newDialog.ShowDialog();
@@ -133,6 +132,7 @@ namespace AssetManager.Tools.Deployment
                         {
                             return false;
                         }
+                        if (deployments.Any()) Task.Delay(4000).Wait();
                     }
 
                     deploy.LogMessage("Done.");
@@ -318,24 +318,20 @@ namespace AssetManager.Tools.Deployment
             {
                 deploy.LogMessage("Exit Code: " + installVPNExitCode);
                 deploy.LogMessage("### Errors are expected due to the installation causing the device to momentarily disconnect.");
-                //OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return true;
             }
             return true;
         }
 
-
         #endregion DeploymentMethods
-
 
         #region DeploymentSupportMethods
 
         private async Task<PowerShell> GetSetLocalAdminSession(Device targetDevice)
         {
             var session = await deploy.PowerShellWrap.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
-
-            var setAdminPassCommand = new Command("net user Administrator \"057|750\"", true);
-            var setAdminActiveCommand = new Command(@"net user Administrator /active:yes", true);
+            var setAdminPassCommand = new Command(deploy.GetString("set_admin_pass"), true);
+            var setAdminActiveCommand = new Command(deploy.GetString("set_admin_active"), true);
 
             session.Commands.AddCommand(setAdminPassCommand);
             session.Commands.AddCommand(setAdminActiveCommand);
@@ -345,20 +341,17 @@ namespace AssetManager.Tools.Deployment
 
         private string GetMVPSInstallString()
         {
-            string installString = @"PowerShell.exe ""& """"\\\\svr-file1\\dd_files\\Information Technology\\Software\\MVPS\\powershell_V2_install.ps1""""""";
-            return installString;
+            return deploy.GetString("mvps_install");
         }
 
         private string GetGKClientInstallString()
         {
-            string installString = @"msiexec.exe /i \\svr-ddas1.core.co.fairfield.oh.us\PSiServ\Gatekeeper\Install\Full\ClientFull.msi /qn /norestart";
-            return installString;
+            return deploy.GetString("gk_client");
         }
 
         private string GetGKUpdateString()
         {
-            string updateString = @"msiexec.exe /i \\svr-ddas1.core.co.fairfield.oh.us\PSiServ\Gatekeeper\Install\Upgrade\Setup.msi /qn /norestart";
-            return updateString;
+            return deploy.GetString("gk_update");
         }
 
         private async Task<PowerShell> GetGKRegFixSession(Device targetDevice)
@@ -366,7 +359,7 @@ namespace AssetManager.Tools.Deployment
             var session = await deploy.PowerShellWrap.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
 
             var registryFixCommand = new Command("Remove-ItemProperty");
-            registryFixCommand.Parameters.Add("Path", @"HKLM:\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\Gatekeeper");
+            registryFixCommand.Parameters.Add("Path", deploy.GetString("gk_regfix"));
             registryFixCommand.Parameters.Add("Name", "CommLinks");
             session.Commands.AddCommand(registryFixCommand);
 
@@ -375,21 +368,19 @@ namespace AssetManager.Tools.Deployment
 
         private string GetIVueInstallString()
         {
-            string installString = @"cmd /c \\ddad-svr-fs02\Intellivue\GXInstaller\IVueInstaller.exe";
-            return installString;
+            return deploy.GetString("ivue_install");
         }
 
         private string GetCarbonBlackInstallString()
         {
-            string installString = @"msiexec.exe /i ""\\core.co.fairfield.oh.us\dfs1\pub\misc\CbDefense\installer_vista_win7_win8-64-2.1.0.9.msi"" ALLUSERS=1 /qn /norestart /log C:\Temp\output.log COMPANY_CODE=3JZ1Q5E4 GROUP_NAME=default BYPASS=0";
-            return installString;
+            return deploy.GetString("carbonblack_install");
         }
 
         private string GetVPNInstallString()
         {
-            string installString = @"cmd /c ""\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\vpn-client-2.2.2-release.exe"" /S /STANDARD";
-            return installString;
+            return deploy.GetString("vpn_install");
         }
+
         #endregion DeploymentSupportMethods
 
         #region IDisposable Support
