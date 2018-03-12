@@ -18,7 +18,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private string deviceGuid;
 
-        public ViewHistoryForm(ExtendedForm parentForm, string entryGuid, string deviceGuid) : base(parentForm,entryGuid)
+        public ViewHistoryForm(ExtendedForm parentForm, string entryGuid, string deviceGuid) : base(parentForm, entryGuid)
         {
             controlParser = new DBControlParser(this);
             InitializeComponent();
@@ -89,36 +89,36 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         /// <returns></returns>
         private List<Control> GetChangedFields(DataTable currentData)
         {
-            List<Control> ChangedControls = new List<Control>();
-            System.DateTime CurrentTimeStamp = (System.DateTime)currentData.Rows[0][HistoricalDevicesCols.ActionDateTime];
+            List<Control> changedControls = new List<Control>();
+            System.DateTime currentTimeStamp = (System.DateTime)currentData.Rows[0][HistoricalDevicesCols.ActionDateTime];
             //Query for all rows with a timestamp older than the current historical entry.
-            using (DataTable olderData = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevHistoricalEntriesOlderThan(deviceGuid, CurrentTimeStamp)))
+            using (DataTable olderData = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevHistoricalEntriesOlderThan(deviceGuid, currentTimeStamp)))
             {
                 if (olderData.Rows.Count > 0)
                 {
                     //Declare the current and previous DataRows.
-                    DataRow PreviousRow = olderData.Rows[0];
-                    DataRow CurrentRow = currentData.Rows[0];
-                    List<string> ChangedColumns = new List<string>();
+                    DataRow previousRow = olderData.Rows[0];
+                    DataRow currentRow = currentData.Rows[0];
+                    List<string> changedColumns = new List<string>();
                     //Iterate through the CurrentRow item array and compare them to the PreviousRow items.
-                    for (int i = 0; i <= CurrentRow.ItemArray.Length - 1; i++)
+                    for (int i = 0; i <= currentRow.ItemArray.Length - 1; i++)
                     {
-                        if (PreviousRow[i].ToString() != CurrentRow[i].ToString())
+                        if (previousRow[i].ToString() != currentRow[i].ToString())
                         {
                             //Add column names to a list if the item values don't match.
-                            ChangedColumns.Add(PreviousRow.Table.Columns[i].ColumnName);
+                            changedColumns.Add(previousRow.Table.Columns[i].ColumnName);
                         }
                     }
                     //Get a list of all the controls with DBControlInfo tags.
                     var ControlList = controlParser.GetDBControls(this);
                     //Get a list of all the controls whose data columns match the ChangedColumns.
-                    foreach (string col in ChangedColumns)
+                    foreach (string col in changedColumns)
                     {
-                        ChangedControls.Add(ControlList.Find(c => ((DBControlInfo)c.Tag).DataColumn == col));
+                        changedControls.Add(ControlList.Find(c => ((DBControlInfo)c.Tag).DataColumn == col));
                     }
                 }
             }
-            return ChangedControls;
+            return changedControls;
         }
 
         private void HighlightChangedFields(DataTable currentData)
@@ -131,14 +131,24 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             NotesTextBox.BackColor = Color.White;
         }
 
-        private void ViewHistoryForm_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void Dispose(bool disposing)
         {
-            Dispose();
-        }
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
 
-        private void ViewHistoryForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            controlParser.Dispose();
+                    controlParser.Dispose();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
     }
 }

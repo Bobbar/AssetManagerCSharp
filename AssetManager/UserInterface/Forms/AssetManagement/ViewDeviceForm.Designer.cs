@@ -6,22 +6,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
     partial class ViewDeviceForm
     {
-        //Form overrides dispose to clean up the component list.
-
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing && components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
         //Required by the Windows Form Designer
         private System.ComponentModel.IContainer components = null;
         //NOTE: The following procedure is required by the Windows Form Designer
@@ -309,7 +293,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label10.Location = new System.Drawing.Point(22, 130);
             this.Label10.Name = "Label10";
-            this.Label10.Size = new System.Drawing.Size(90, 16);
+            this.Label10.Size = new System.Drawing.Size(85, 16);
             this.Label10.TabIndex = 41;
             this.Label10.Text = "Device Guid:";
             // 
@@ -1307,8 +1291,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Name = "ViewDeviceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ViewDeviceForm_FormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ViewDeviceForm_FormClosed);
             this.Resize += new System.EventHandler(this.ViewDeviceForm_Resize);
             this.MunisSibiPanel.ResumeLayout(false);
             this.RightClickMenu.ResumeLayout(false);

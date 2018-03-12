@@ -1123,12 +1123,6 @@
             Required designer variable.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.AssetManagement.MainForm.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
         <member name="M:AssetManager.UserInterface.Forms.AssetManagement.ViewHistoryForm.GetChangedFields(System.Data.DataTable)">
             <summary>
             Returns a list of controls whose value differs from the previous historical state.

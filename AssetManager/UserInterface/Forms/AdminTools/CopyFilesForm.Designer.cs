@@ -3,27 +3,9 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 
     partial class CopyFilesForm
     {
-
-        //Form overrides dispose to clean up the component list.
-
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing && components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
-
         //Required by the Windows Form Designer
 
-        private System.ComponentModel.IContainer components  = null;
+        private System.ComponentModel.IContainer components = null;
         //NOTE: The following procedure is required by the Windows Form Designer
         //It can be modified using the Windows Form Designer.  
         //Do not modify it using the code editor.
@@ -42,7 +24,6 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             this.Name = "CopyFilesForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Push Files";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CopyFilesForm_FormClosed);
             this.ResumeLayout(false);
 
         }

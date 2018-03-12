@@ -244,14 +244,6 @@ namespace AssetManager.UserInterface.Forms
             return true;
         }
 
-        private void AttachmentsForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!OkToClose())
-            {
-                e.Cancel = true;
-            }
-        }
-
         private void UploadFileDialog()
         {
             try
@@ -1414,6 +1406,27 @@ namespace AssetManager.UserInterface.Forms
         }
 
         #endregion Control Event Methods
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    taskCancelTokenSource?.Dispose();
+                    AttachCountChanged = null;
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
 
         #endregion Methods
     }

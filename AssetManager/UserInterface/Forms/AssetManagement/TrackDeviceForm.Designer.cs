@@ -4,28 +4,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
     partial class TrackDeviceForm
     {
-        //Form overrides dispose to clean up the component list.
-        
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing && components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
         //Required by the Windows Form Designer
-        private System.ComponentModel.IContainer components  = null;
+        private System.ComponentModel.IContainer components = null;
         //NOTE: The following procedure is required by the Windows Form Designer
         //It can be modified using the Windows Form Designer.  
         //Do not modify it using the code editor.
-        
+
         private void InitializeComponent()
         {
             this.CheckInBox = new System.Windows.Forms.GroupBox();
@@ -371,7 +355,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Name = "TrackDeviceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tracking";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TrackDeviceForm_FormClosed);
             this.CheckInBox.ResumeLayout(false);
             this.CheckInBox.PerformLayout();
             this.CheckOutBox.ResumeLayout(false);

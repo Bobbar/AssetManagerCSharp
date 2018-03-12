@@ -247,9 +247,24 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             txtCheckInNotes.Text = txtCheckInNotes.Text.Trim().ToUpper();
         }
 
-        private void TrackDeviceForm_FormClosed(object sender, FormClosedEventArgs e)
+        protected override void Dispose(bool disposing)
         {
-            checkData.Dispose();
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    checkData.Dispose();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
     }
 }

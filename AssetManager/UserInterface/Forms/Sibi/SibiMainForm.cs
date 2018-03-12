@@ -19,18 +19,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
 {
     public partial class SibiMainForm : ExtendedForm
     {
-        private bool bolGridFilling = false;
-        private WindowList MyWindowList;
-        private DbCommand LastCmd;
-        private bool bolRebuildingCombo = false;
+        private bool gridFilling = false;
+        private WindowList windowList;
+        private DbCommand lastCmd;
+        private bool rebuildingCombo = false;
 
         private List<StatusColumnColor> StatusColors;
 
         public SibiMainForm(ExtendedForm parentForm) : base(parentForm, false)
         {
-            MyWindowList = new WindowList(this);
-            Disposed += SibiMainForm_Disposed;
-            Closing += SibiMainForm_Closing;
+            windowList = new WindowList(this);
             // This call is required by the designer.
             InitializeComponent();
 
@@ -47,7 +45,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 StyleFunctions.SetGridStyle(SibiResultGrid, this.GridTheme);
                 ToolStrip1.BackColor = Colors.SibiToolBarColor;
                 ImageCaching.CacheControlImages(this);
-                MyWindowList.InsertWindowList(ToolStrip1);
+                windowList.InsertWindowList(ToolStrip1);
                 SetDisplayYears();
                 this.Show();
                 this.Activate();
@@ -63,7 +61,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         public override void RefreshData()
         {
-            ExecuteCmd(ref LastCmd);
+            ExecuteCmd(ref lastCmd);
         }
 
         private void ClearAll(System.Windows.Forms.Control.ControlCollection TopControl)
@@ -216,7 +214,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                LastCmd = cmd;
+                lastCmd = cmd;
                 SendToGrid(DBFactory.GetDatabase().DataTableFromCommand(cmd));
             }
             catch (Exception ex)
@@ -240,7 +238,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 using (results)
                 {
-                    bolGridFilling = true;
+                    gridFilling = true;
                     SibiResultGrid.SuspendLayout();
                     SibiResultGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
                     SibiResultGrid.ColumnHeadersHeight = 38;
@@ -249,7 +247,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     SibiResultGrid.FastAutoSizeColumns();
                     SibiResultGrid.ClearSelection();
                     SibiResultGrid.ResumeLayout();
-                    bolGridFilling = false;
+                    gridFilling = false;
                 }
             }
             catch (Exception ex)
@@ -287,7 +285,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void SetDisplayYears()
         {
-            bolRebuildingCombo = true;
+            rebuildingCombo = true;
             using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiDisplayYears))
             {
                 List<string> Years = new List<string>();
@@ -302,7 +300,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 }
                 cmbDisplayYear.DataSource = Years;
                 cmbDisplayYear.SelectedIndex = 0;
-                bolRebuildingCombo = false;
+                rebuildingCombo = false;
             }
         }
 
@@ -405,7 +403,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                if (!bolGridFilling)
+                if (!gridFilling)
                 {
                     StyleFunctions.HighlightRow(SibiResultGrid, GridTheme, Row);
                 }
@@ -427,25 +425,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void cmbDisplayYear_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbDisplayYear.Text != null & !bolRebuildingCombo)
+            if (cmbDisplayYear.Text != null & !rebuildingCombo)
             {
                 ShowAll(cmbDisplayYear.Text);
-            }
-        }
-
-        public override bool OkToClose()
-        {
-            bool CanClose = true;
-            if (!Helpers.ChildFormControl.OkToCloseChildren(this))
-                CanClose = false;
-            return CanClose;
-        }
-
-        private void SibiMainForm_Closing(object sender, CancelEventArgs e)
-        {
-            if (!OkToClose())
-            {
-                e.Cancel = true;
             }
         }
 
@@ -469,14 +451,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             DynamicSearch();
         }
 
-        private void SibiMainForm_Disposed(object sender, EventArgs e)
-        {
-            if (LastCmd != null)
-                LastCmd.Dispose();
-            MyWindowList.Dispose();
-            Helpers.ChildFormControl.CloseChildren(this);
-        }
-
         private void ItemSearchButton_Click(object sender, EventArgs e)
         {
             ItemSearch(ItemSearchTextBox.Text);
@@ -487,6 +461,27 @@ namespace AssetManager.UserInterface.Forms.Sibi
             if (e.KeyCode == Keys.Enter)
             {
                 ItemSearch(ItemSearchTextBox.Text);
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    lastCmd?.Dispose();
+                    windowList?.Dispose();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
             }
         }
     }

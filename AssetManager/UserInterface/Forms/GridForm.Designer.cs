@@ -3,31 +3,13 @@ namespace AssetManager.UserInterface.Forms
 
     public partial class GridForm
     {
-
-        //Form overrides dispose to clean up the component list.
-        
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing && components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
-
         //Required by the Windows Form Designer
 
-        private System.ComponentModel.IContainer components  = null;
+        private System.ComponentModel.IContainer components = null;
         //NOTE: The following procedure is required by the Windows Form Designer
         //It can be modified using the Windows Form Designer.  
         //Do not modify it using the code editor.
-        
+
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -43,7 +25,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // GridPanel
             // 
-            this.GridPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.GridPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GridPanel.AutoSize = true;
             this.GridPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -68,8 +50,8 @@ namespace AssetManager.UserInterface.Forms
             // 
             // Panel1
             // 
-            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel1.AutoScroll = true;
             this.Panel1.AutoScrollMargin = new System.Drawing.Size(0, 20);

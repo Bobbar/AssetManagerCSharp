@@ -37,19 +37,6 @@ namespace AssetManager.Helpers
             return false;
         }
 
-        public static void CloseChildren(ExtendedForm parentForm)
-        {
-            var Children = GetChildren(parentForm);
-            if (Children.Count > 0)
-            {
-                foreach (ExtendedForm child in Children)
-                {
-                    child.Close();
-                }
-            }
-            Children.Clear();
-        }
-
         public static List<ExtendedForm> GetChildren(ExtendedForm parentForm)
         {
             return Application.OpenForms.OfType<ExtendedForm>().ToList().FindAll(f => object.ReferenceEquals(f.ParentForm, parentForm) & !f.IsDisposed);
@@ -84,15 +71,6 @@ namespace AssetManager.Helpers
             {
                 child.WindowState = FormWindowState.Normal;
             }
-        }
-
-        public static bool SibiIsOpen()
-        {
-            if (Application.OpenForms.OfType<SibiMainForm>().Any())
-            {
-                return true;
-            }
-            return false;
         }
 
         public static ExtendedForm GetChildOfType(ExtendedForm parentForm, Type childType)
@@ -138,18 +116,6 @@ namespace AssetManager.Helpers
                 }
             }
             return false;
-        }
-
-        public static bool OkToCloseChildren(ExtendedForm parentForm)
-        {
-            bool CanClose = true;
-            var frms = GetChildren(parentForm).ToArray();
-            for (int i = 0; i <= frms.Length - 1; i++)
-            {
-                if (!frms[i].OkToClose())
-                    CanClose = false;
-            }
-            return CanClose;
         }
 
         /// <summary>

@@ -12,13 +12,12 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 {
     public partial class AdvancedSearchForm : ExtendedForm
     {
-        private AdvancedSearch AdvSearch = new AdvancedSearch();
+        private AdvancedSearch advancedSearch = new AdvancedSearch();
 
 
         public AdvancedSearchForm(ExtendedForm parentForm) : base(parentForm)
         {
             InitializeComponent();
-           // this.ParentForm = parentForm;
             PopulateTableTree();
             this.Show();
         }
@@ -35,7 +34,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                     childAllNode.Tag = true;
                     childAllNode.Checked = true;
                     parentNode.Nodes.Add(childAllNode);
-                    foreach (var col in AdvSearch.GetColumns(table))
+                    foreach (var col in advancedSearch.GetColumns(table))
                     {
                         TreeNode childNode = new TreeNode(col);
                         childNode.Tag = false;
@@ -72,12 +71,12 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             try
             {
                 OtherFunctions.SetWaitCursor(true, ParentForm);
-                AdvSearch = new AdvancedSearch(SearchStringTextBox.Text.Trim(), GetSelectedTables()); // GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
+                advancedSearch = new AdvancedSearch(SearchStringTextBox.Text.Trim(), GetSelectedTables()); // GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
                 GridForm DisplayGrid = new GridForm(ParentForm, "Advanced Search Results");
 
                 List<DataTable> Tables = await Task.Run(() =>
                 {
-                    return AdvSearch.GetResults();
+                    return advancedSearch.GetResults();
                 });
 
                 foreach (var table in Tables)

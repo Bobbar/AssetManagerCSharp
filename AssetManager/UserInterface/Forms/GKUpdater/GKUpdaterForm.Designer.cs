@@ -4,31 +4,13 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
     partial class GKUpdaterForm
     {
-
-        //Form overrides dispose to clean up the component list.
-        
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing && components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
-
         //Required by the Windows Form Designer
 
-        private System.ComponentModel.IContainer components  = null;
+        private System.ComponentModel.IContainer components = null;
         //NOTE: The following procedure is required by the Windows Form Designer
         //It can be modified using the Windows Form Designer.  
         //Do not modify it using the code editor.
-        
+
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -288,7 +270,6 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gatekeeper Updater";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GKUpdaterForm_FormClosing);
             this.Shown += new System.EventHandler(this.GKUpdaterForm_Shown);
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox3.ResumeLayout(false);

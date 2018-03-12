@@ -748,16 +748,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         public override bool OkToClose()
         {
-            bool CanClose = true;
-            if (!Helpers.ChildFormControl.OkToCloseChildren(this))
-            {
-                CanClose = false;
-            }
+            bool canClose = true;
             if (IsModifying && !CancelModify())
             {
-                CanClose = false;
+                canClose = false;
             }
-            return CanClose;
+            return canClose;
         }
 
         private DataTable GetInsertTable(string selectQuery, string Guid)
@@ -1550,23 +1546,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             newDev.ImportFromSibi(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemGuid));
         }
 
-        private void SibiManageRequestForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!OkToClose())
-            {
-                e.Cancel = true;
-            }
-        }
-
-        private void SibiManageRequestForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            CurrentRequest.Dispose();
-            MyMunisToolBar.Dispose();
-            MyWindowList.Dispose();
-            controlParser.Dispose();
-            Helpers.ChildFormControl.CloseChildren(this);
-        }
-
         private void SibiManageRequestForm_Resize(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
@@ -1587,6 +1566,31 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             PrevWindowState = this.WindowState;
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    CurrentRequest.Dispose();
+                    MyMunisToolBar.Dispose();
+                    MyWindowList.Dispose();
+                    controlParser.Dispose();
+
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
+
 
         #endregion Methods
     }

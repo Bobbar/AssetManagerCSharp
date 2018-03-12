@@ -24,7 +24,6 @@ namespace AssetManager.UserInterface.Forms
         public GridForm(ExtendedForm parentForm, string title = "") : base(parentForm)
         {
             Load += GridForm_Load;
-            Disposed += GridForm_Disposed;
             Resize += GridForm_Resize;
             Closing += GridForm_Closing;
             // This call is required by the designer.
@@ -140,14 +139,12 @@ namespace AssetManager.UserInterface.Forms
 
         private void GridForm_Closing(object sender, CancelEventArgs e)
         {
-            if (!Modal)
-                this.Dispose();
+            if (!Modal) this.Dispose();
         }
 
         private void GridForm_Resize(object sender, EventArgs e)
         {
-            if (!gridFilling)
-                ResizeGridPanel();
+            if (!gridFilling) ResizeGridPanel();
         }
 
         private int GridHeight()
@@ -194,23 +191,39 @@ namespace AssetManager.UserInterface.Forms
             GetActiveGrid().CopyToGridForm(ParentForm);
         }
 
-        private void GridForm_Disposed(object sender, EventArgs e)
-        {
-            foreach (DataGridView grid in gridList)
-            {
-                ((DataTable)grid.DataSource).Dispose();
-                grid.Dispose();
-            }
-            if (lastDoubleClickRow != null)
-                lastDoubleClickRow.Dispose();
-        }
-
         private void GridForm_Load(object sender, EventArgs e)
         {
             AddGridsToForm();
             ResizeGrids();
             gridFilling = false;
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    foreach (DataGridView grid in gridList)
+                    {
+                        ((DataTable)grid.DataSource).Dispose();
+                        grid.Dispose();
+                    }
+
+                    lastDoubleClickRow?.Dispose();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
+
 
         #endregion "Methods"
     }

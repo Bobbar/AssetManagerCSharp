@@ -30,7 +30,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 LockUnlockUserField();
             }
         }
-               
+
         private int replacementYears = 4;
         private DBControlParser controlParser;
         private LiveBox liveBox;
@@ -356,12 +356,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxSelectionType.SelectValue);
         }
 
-        private void NewDeviceForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            liveBox.Dispose();
-            controlParser.Dispose();
-        }
-
         #endregion Methods
 
         private void OSTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -382,6 +376,27 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         void ILiveBox.DynamicSearch()
         {
             throw new NotImplementedException();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    liveBox.Dispose();
+                    controlParser.Dispose();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
     }
 }

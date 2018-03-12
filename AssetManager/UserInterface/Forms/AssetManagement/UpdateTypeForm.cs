@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
-    public partial class UpdateDev : ExtendedForm
+    public partial class UpdateTypeForm : ExtendedForm
     {
         public DeviceUpdateInfo UpdateInfo
         {
@@ -17,7 +17,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private DeviceUpdateInfo NewUpdateInfo;
 
-        public UpdateDev(ExtendedForm parentForm, bool isNoteOnly = false) : base(parentForm)
+        public UpdateTypeForm(ExtendedForm parentForm, bool isNoteOnly = false) : base(parentForm)
         {
             InitializeComponent();
             UpdateTypeCombo.FillComboBox(Attributes.DeviceAttribute.ChangeType);
@@ -31,7 +31,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 UpdateTypeCombo.SelectedIndex = -1;
             }
-            ShowDialog(parentForm);
         }
 
         private void SubmitButton_Click(object sender, EventArgs e)
@@ -46,6 +45,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void CancelButton_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
 
         private bool ValidateUpdateType()

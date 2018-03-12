@@ -129,10 +129,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         public override bool OkToClose()
         {
             bool CanClose = true;
-            if (!Helpers.ChildFormControl.OkToCloseChildren(this))
-            {
-                CanClose = false;
-            }
             if (editMode && !CancelModify())
             {
                 CanClose = false;
@@ -169,9 +165,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     OtherFunctions.Message("Some required fields are missing or invalid.  Please check and fill all highlighted fields.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Missing Data", this);
                     return;
                 }
-                using (UpdateDev UpdateDia = new UpdateDev(this))
+                using (UpdateTypeForm updateTypePrompt = new UpdateTypeForm(this))
                 {
-                    if (UpdateDia.DialogResult == DialogResult.OK)
+
+                    if (updateTypePrompt.ShowDialog(this) == DialogResult.OK)
                     {
                         if (!ConcurrencyCheck())
                         {
@@ -180,7 +177,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                         else
                         {
-                            UpdateDevice(UpdateDia.UpdateInfo);
+                            UpdateDevice(updateTypePrompt.UpdateInfo);
                         }
                     }
                     else
@@ -201,9 +198,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice);
 
-                using (UpdateDev UpdateDia = new UpdateDev(this, true))
+                using (UpdateTypeForm updateTypePrompt = new UpdateTypeForm(this, true))
                 {
-                    if (UpdateDia.DialogResult == DialogResult.OK)
+                    if (updateTypePrompt.ShowDialog(this) == DialogResult.OK)
                     {
                         if (!ConcurrencyCheck())
                         {
@@ -211,7 +208,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                         else
                         {
-                            UpdateDevice(UpdateDia.UpdateInfo);
+                            UpdateDevice(updateTypePrompt.UpdateInfo);
                         }
                     }
                     else
@@ -1084,24 +1081,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void ViewDeviceForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!OkToClose())
-            {
-                e.Cancel = true;
-            }
-        }
-
-        private void ViewDeviceForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            windowList.Dispose();
-            liveBox.Dispose();
-            munisToolBar.Dispose();
-            currentViewDevice.Dispose();
-            controlParser.Dispose();
-            Helpers.ChildFormControl.CloseChildren(this);
-        }
-
         private void remoteToolsControl_HostOnlineStatus(object sender, bool e)
         {
             // If OnlineStatusChanged handle is not null, Invoke it.
@@ -1149,6 +1128,31 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         #endregion Control Events
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    windowList.Dispose();
+                    liveBox.Dispose();
+                    munisToolBar.Dispose();
+                    currentViewDevice.Dispose();
+                    controlParser.Dispose();
+
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
 
         #endregion Methods
     }

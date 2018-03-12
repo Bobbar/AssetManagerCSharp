@@ -2,7 +2,7 @@ using System.Windows.Forms;
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
 
-    partial class UpdateDev
+    partial class UpdateTypeForm
     {
         //Form overrides dispose to clean up the component list.
         
@@ -43,8 +43,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.GroupBox1.Controls.Add(this.CancelUpdateButton);
@@ -74,8 +74,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // NotesTextBox
             // 
-            this.NotesTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.NotesTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.NotesTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NotesTextBox.Location = new System.Drawing.Point(9, 85);
@@ -127,11 +127,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.UpdateTypeCombo.SelectionChangeCommitted += new System.EventHandler(this.UpdateTypeCombo_SelectionChangeCommitted);
             this.UpdateTypeCombo.Validating += new System.ComponentModel.CancelEventHandler(this.UpdateTypeCombo_ChangeType_Validating);
             // 
-            // ErrorProvider1
+            // ErrorProvider
             // 
             this.ErrorProvider.ContainerControl = this;
             // 
-            // UpdateDev
+            // UpdateTypeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -141,7 +141,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.DoubleBuffered = true;
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(426, 287);
-            this.Name = "UpdateDev";
+            this.Name = "UpdateTypeForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Update Device";

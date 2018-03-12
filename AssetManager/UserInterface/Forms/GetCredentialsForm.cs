@@ -12,7 +12,7 @@ namespace AssetManager.UserInterface.Forms
     {
         private NetworkCredential newCreds;
 
-        private SecureString SecurePwd = new SecureString();
+        private SecureString securePwd = new SecureString();
 
         public NetworkCredential Credentials
         {
@@ -35,11 +35,11 @@ namespace AssetManager.UserInterface.Forms
         {
             string Username = null;
             Username = txtUsername.Text.Trim();
-            if (!string.IsNullOrEmpty(Username) & SecurePwd.Length > 0)
+            if (!string.IsNullOrEmpty(Username) & securePwd.Length > 0)
             {
-                SecurePwd.MakeReadOnly();
-                newCreds = new NetworkCredential(Username, SecurePwd, NetworkInfo.CurrentDomain);
-                SecurePwd.Dispose();
+                securePwd.MakeReadOnly();
+                newCreds = new NetworkCredential(Username, securePwd, NetworkInfo.CurrentDomain);
+                securePwd.Dispose();
                 DialogResult = DialogResult.OK;
             }
             else
@@ -61,9 +61,9 @@ namespace AssetManager.UserInterface.Forms
             }
             if (e.KeyCode == Keys.Back)
             {
-                if (SecurePwd.Length > 0)
+                if (securePwd.Length > 0)
                 {
-                    SecurePwd.RemoveAt(SecurePwd.Length - 1);
+                    securePwd.RemoveAt(securePwd.Length - 1);
                 }
             }
         }
@@ -72,7 +72,7 @@ namespace AssetManager.UserInterface.Forms
         {
             if (e.KeyChar != Convert.ToChar(Keys.Back) & e.KeyChar != Convert.ToChar(Keys.Enter))
             {
-                SecurePwd.AppendChar(e.KeyChar);
+                securePwd.AppendChar(e.KeyChar);
             }
         }
 
@@ -83,7 +83,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void SetText()
         {
-            txtPassword.Text = BlankText(SecurePwd.Length);
+            txtPassword.Text = BlankText(securePwd.Length);
             txtPassword.SelectionStart = txtPassword.Text.Length + 1;
         }
 
@@ -94,6 +94,28 @@ namespace AssetManager.UserInterface.Forms
                 return new string(char.Parse("*"), length);
             }
             return string.Empty;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    newCreds?.SecurePassword?.Dispose();
+                    securePwd?.Dispose();
+
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
     }
 }

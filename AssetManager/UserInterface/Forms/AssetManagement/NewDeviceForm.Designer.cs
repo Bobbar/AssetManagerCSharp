@@ -4,28 +4,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
     partial class NewDeviceForm
     {
-        //Form overrides dispose to clean up the component list.
-        
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing && components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
         //Required by the Windows Form Designer
-        private System.ComponentModel.IContainer components  = null;
+        private System.ComponentModel.IContainer components = null;
         //NOTE: The following procedure is required by the Windows Form Designer
         //It can be modified using the Windows Form Designer.  
         //Do not modify it using the code editor.
-        
+
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -557,7 +541,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Name = "NewDeviceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add New Device";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.NewDeviceForm_FormClosed);
             this.Load += new System.EventHandler(this.NewDeviceForm_Load);
             this.GroupBox2.ResumeLayout(false);
             this.GroupBox2.PerformLayout();

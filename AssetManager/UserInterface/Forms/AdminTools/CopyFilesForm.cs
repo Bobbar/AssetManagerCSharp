@@ -64,13 +64,25 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             SecurityTools.ClearAdminCreds();
         }
 
-        private void CopyFilesForm_FormClosed(object sender, System.Windows.Forms.FormClosedEventArgs e)
+        protected override void Dispose(bool disposing)
         {
-            if (pushFilesControl != null)
+            try
             {
-                pushFilesControl.Dispose();
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    pushFilesControl?.Dispose();
+                    cancel = true;
+                }
             }
-            cancel = true;
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
     }
 }

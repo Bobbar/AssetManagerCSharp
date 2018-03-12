@@ -658,9 +658,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                             var blah = OtherFunctions.Message("Are you sure? This will close all open forms.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Change Database", this);
                             if (blah == DialogResult.Yes)
                             {
-                                if (Helpers.ChildFormControl.OkToCloseChildren(this))
+                                if (this.OkToCloseChildren())
                                 {
-                                    Helpers.ChildFormControl.CloseChildren(this);
+                                    this.CloseChildren();
                                     ServerInfo.CurrentDataBase = database;
                                     AttributeFunctions.PopulateAttributeIndexes();
                                     RefreshCombos();
@@ -954,23 +954,38 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Close");
             }
 
-            if (!OtherFunctions.OKToEnd() || !Helpers.ChildFormControl.OkToCloseChildren(this) || CurrentTransaction != null)
+            if (!OtherFunctions.OKToEnd() || CurrentTransaction != null)
             {
                 e.Cancel = true;
             }
         }
 
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            LastCommand.Dispose();
-            MyLiveBox.Dispose();
-            MyMunisToolBar.Dispose();
-            MyWindowList.Dispose();
-            WatchDog.Dispose();
-            OtherFunctions.EndProgram();
-        }
-
         #endregion "Control Event Methods"
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    LastCommand.Dispose();
+                    MyLiveBox.Dispose();
+                    MyMunisToolBar.Dispose();
+                    MyWindowList.Dispose();
+                    WatchDog.Dispose();
+                    OtherFunctions.EndProgram();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
 
         #endregion "Methods"
     }

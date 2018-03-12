@@ -81,5 +81,25 @@ namespace AssetManager.UserInterface.Forms.Sibi
             Process.Start(e.LinkText);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    sibiRequest?.Dispose();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
+
     }
 }

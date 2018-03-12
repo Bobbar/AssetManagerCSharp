@@ -3,27 +3,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 {
 
     partial class ViewHistoryForm
-	{
-		//Form overrides dispose to clean up the component list.
-		
-		protected override void Dispose(bool disposing)
-		{
-			try {
-				if (disposing && components != null) {
-					components.Dispose();
-				}
-			} finally {
-				base.Dispose(disposing);
-			}
-		}
-		//Required by the Windows Form Designer
-		private System.ComponentModel.IContainer components  = null;
-		//NOTE: The following procedure is required by the Windows Form Designer
-		//It can be modified using the Windows Form Designer.  
-		//Do not modify it using the code editor.
-		
-		private void InitializeComponent()
-		{
+    {
+        //Required by the Windows Form Designer
+        private System.ComponentModel.IContainer components = null;
+        //NOTE: The following procedure is required by the Windows Form Designer
+        //It can be modified using the Windows Form Designer.  
+        //Do not modify it using the code editor.
+
+        private void InitializeComponent()
+        {
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.GroupBox2 = new System.Windows.Forms.GroupBox();
             this.NotesTextBox = new System.Windows.Forms.RichTextBox();
@@ -552,55 +540,53 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View Entry";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ViewHistoryForm_FormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ViewHistoryForm_FormClosed);
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
             this.GroupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
-		}
-		internal GroupBox GroupBox1;
-		internal Label Label2;
-		internal TextBox txtCurrentUser;
-		internal Label Label1;
-		internal TextBox txtChangeType;
-		internal Label Label3;
-		internal TextBox txtAssetTag;
-		internal Label Label12;
-		internal TextBox txtGuid;
-		internal Label Label11;
-		internal TextBox txtEQType;
-		internal Label Label10;
-		internal TextBox txtOSVersion;
-		internal Label Label9;
-		internal TextBox txtPONumber;
-		internal Label Label8;
-		internal TextBox txtReplaceYear;
-		internal Label Label7;
-		internal TextBox txtPurchaseDate;
-		internal Label Label6;
-		internal TextBox txtLocation;
-		internal Label Label5;
-		internal TextBox txtDescription;
-		internal Label Label4;
-		internal TextBox txtSerial;
-		internal Label Label13;
-		internal TextBox txtEntryTime;
-		internal Label Label14;
-		internal TextBox txtActionUser;
-		internal Label Label16;
-		internal TextBox txtStatus;
-		internal Label Label17;
-		internal TextBox txtEntryGuid;
-		internal CheckBox chkTrackable;
-		internal Label Label18;
-		internal TextBox txtPhoneNumber;
-		internal Label Label19;
-		internal TextBox txtHostname;
-		internal Label Label20;
-		internal TextBox iCloudTextBox;
-		internal GroupBox GroupBox2;
-		internal RichTextBox NotesTextBox;
-	}
+        }
+        internal GroupBox GroupBox1;
+        internal Label Label2;
+        internal TextBox txtCurrentUser;
+        internal Label Label1;
+        internal TextBox txtChangeType;
+        internal Label Label3;
+        internal TextBox txtAssetTag;
+        internal Label Label12;
+        internal TextBox txtGuid;
+        internal Label Label11;
+        internal TextBox txtEQType;
+        internal Label Label10;
+        internal TextBox txtOSVersion;
+        internal Label Label9;
+        internal TextBox txtPONumber;
+        internal Label Label8;
+        internal TextBox txtReplaceYear;
+        internal Label Label7;
+        internal TextBox txtPurchaseDate;
+        internal Label Label6;
+        internal TextBox txtLocation;
+        internal Label Label5;
+        internal TextBox txtDescription;
+        internal Label Label4;
+        internal TextBox txtSerial;
+        internal Label Label13;
+        internal TextBox txtEntryTime;
+        internal Label Label14;
+        internal TextBox txtActionUser;
+        internal Label Label16;
+        internal TextBox txtStatus;
+        internal Label Label17;
+        internal TextBox txtEntryGuid;
+        internal CheckBox chkTrackable;
+        internal Label Label18;
+        internal TextBox txtPhoneNumber;
+        internal Label Label19;
+        internal TextBox txtHostname;
+        internal Label Label20;
+        internal TextBox iCloudTextBox;
+        internal GroupBox GroupBox2;
+        internal RichTextBox NotesTextBox;
+    }
 }

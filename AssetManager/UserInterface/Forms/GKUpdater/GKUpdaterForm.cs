@@ -370,15 +370,24 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             }
         }
 
-        private void GKUpdaterForm_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void Dispose(bool disposing)
         {
-            if (!GlobalSwitches.ProgramEnding & !OkToClose())
+            try
             {
-                e.Cancel = true;
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    DisposeUpdates();
+
+                }
             }
-            else
+            finally
             {
-                DisposeUpdates();
+                base.Dispose(disposing);
             }
         }
     }

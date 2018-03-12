@@ -6,22 +6,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
     partial class SibiManageRequestForm
     {
-        //Form overrides dispose to clean up the component list.
-
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing && components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
         //Required by the Windows Form Designer
         private System.ComponentModel.IContainer components = null;
         //NOTE: The following procedure is required by the Windows Form Designer
@@ -255,7 +239,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // Panel4
             // 
-            this.Panel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.Panel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel4.Controls.Add(this.GroupBox1);
             this.Panel4.Controls.Add(this.GroupBox3);
@@ -396,7 +380,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // GroupBox2
             // 
-            this.GroupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.GroupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox2.Controls.Add(this.lblReqStatus);
             this.GroupBox2.Controls.Add(this.lblPOStatus);
@@ -561,7 +545,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // GroupBox3
             // 
-            this.GroupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.GroupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox3.Controls.Add(this.Panel2);
             this.GroupBox3.Location = new System.Drawing.Point(611, 4);
@@ -573,7 +557,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // Panel2
             // 
-            this.Panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.Panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel2.Controls.Add(this.NotesGrid);
             this.Panel2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -587,8 +571,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.NotesGrid.AllowUserToAddRows = false;
             this.NotesGrid.AllowUserToDeleteRows = false;
             this.NotesGrid.AllowUserToResizeRows = false;
-            this.NotesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.NotesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.NotesGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.NotesGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -628,8 +612,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // Panel1
             // 
-            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel1.Controls.Add(this.GroupBox4);
             this.Panel1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -640,8 +624,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // GroupBox4
             // 
-            this.GroupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.GroupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox4.Controls.Add(this.RequestItemsGrid);
             this.GroupBox4.Controls.Add(this.chkAllowDrag);
@@ -656,8 +640,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.RequestItemsGrid.AllowDrop = true;
             this.RequestItemsGrid.AllowUserToResizeRows = false;
-            this.RequestItemsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.RequestItemsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.RequestItemsGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.RequestItemsGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -834,8 +818,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Manage Request";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SibiManageRequestForm_FormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SibiManageRequestForm_FormClosed);
             this.ResizeBegin += new System.EventHandler(this.SibiManageRequestForm_ResizeBegin);
             this.Resize += new System.EventHandler(this.SibiManageRequestForm_Resize);
             this.PopupMenuItems.ResumeLayout(false);
