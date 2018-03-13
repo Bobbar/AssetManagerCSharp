@@ -1,12 +1,9 @@
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AssetManagement;
 using AssetManager.UserInterface.Forms.GKUpdater;
-using AssetManager.UserInterface.Forms.Sibi;
 using AssetManager.UserInterface.Forms;
 using AssetManager.Data.Classes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 
@@ -26,20 +23,13 @@ namespace AssetManager.Helpers
 
         public static bool AttachmentsIsOpen(ExtendedForm parentForm)
         {
-            foreach (ExtendedForm frm in GetChildren(parentForm))
+            var attachForm = FindChildOfType(parentForm, typeof(AttachmentsForm));
+            if (attachForm != null)
             {
-                if (frm is AttachmentsForm & object.ReferenceEquals(frm.ParentForm, parentForm))
-                {
-                    ActivateForm(frm);
-                    return true;
-                }
+                ActivateForm(attachForm);
+                return true;
             }
             return false;
-        }
-
-        public static List<ExtendedForm> GetChildren(ExtendedForm parentForm)
-        {
-            return Application.OpenForms.OfType<ExtendedForm>().ToList().FindAll(f => object.ReferenceEquals(f.ParentForm, parentForm) & !f.IsDisposed);
         }
 
         public static void LookupDevice(ExtendedForm parentForm, Device device)
@@ -59,7 +49,7 @@ namespace AssetManager.Helpers
 
         public static void MinimizeChildren(ExtendedForm parentForm)
         {
-            foreach (ExtendedForm child in GetChildren(parentForm))
+            foreach (var child in parentForm.ChildForms)
             {
                 child.WindowState = FormWindowState.Minimized;
             }
@@ -67,15 +57,20 @@ namespace AssetManager.Helpers
 
         public static void RestoreChildren(ExtendedForm parentForm)
         {
-            foreach (ExtendedForm child in GetChildren(parentForm))
+            foreach (var child in parentForm.ChildForms)
             {
                 child.WindowState = FormWindowState.Normal;
             }
         }
 
-        public static ExtendedForm GetChildOfType(ExtendedForm parentForm, Type childType)
+        public static ExtendedForm FindChildOfType(ExtendedForm parentForm, Type childType)
         {
-            return GetChildren(parentForm).Find(f => f.GetType() == childType);
+            var findForm = parentForm.ChildForms.Find(f => f.GetType() == childType);
+            if (findForm != null)
+            {
+                return findForm;
+            }
+            return null;
         }
 
         public static bool FormTypeIsOpen(Type formType)
@@ -100,7 +95,9 @@ namespace AssetManager.Helpers
             foreach (ExtendedForm frm in Application.OpenForms)
             {
                 if (frm.GetType() == formType)
+                {
                     return frm;
+                }
             }
             return null;
         }
@@ -129,7 +126,7 @@ namespace AssetManager.Helpers
             if (!FormTypeIsOpen(typeof(GKUpdaterForm)))
             {
                 //If no current instance, create a new one and return it.
-                currentGKUpdInstance = new GKUpdaterForm();
+                currentGKUpdInstance = new GKUpdaterForm(MainFormInstance());
                 return currentGKUpdInstance;
             }
             else

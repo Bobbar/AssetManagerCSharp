@@ -21,7 +21,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private bool PackFileReady = false;
 
-        public GKUpdaterForm() : base()
+        public GKUpdaterForm(ExtendedForm parentForm) : base(parentForm)
         {
             // This call is required by the designer.
             InitializeComponent();

@@ -229,7 +229,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice);
 
-            var NewDevForm = Helpers.ChildFormControl.GetChildOfType(this, typeof(NewDeviceForm));
+            var NewDevForm = Helpers.ChildFormControl.FindChildOfType(this, typeof(NewDeviceForm));
             if (NewDevForm == null)
             {
                 new NewDeviceForm(this);
@@ -470,7 +470,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi);
 
                 Waiting();
-                var SibiForm = Helpers.ChildFormControl.GetChildOfType(this, typeof(Sibi.SibiMainForm));
+                var SibiForm = Helpers.ChildFormControl.FindChildOfType(this, typeof(Sibi.SibiMainForm));
                 if (SibiForm == null)
                 {
                     new Sibi.SibiMainForm(this);
@@ -947,17 +947,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid));
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        public override bool OkToClose()
         {
             if (CurrentTransaction != null)
             {
                 OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Close");
+                return false;
             }
 
-            if (!OtherFunctions.OKToEnd() || CurrentTransaction != null)
+            if (!OtherFunctions.OKToEnd())
             {
-                e.Cancel = true;
+                return false;
             }
+            return true;
         }
 
         #endregion "Control Event Methods"

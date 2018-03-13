@@ -91,12 +91,6 @@ namespace AssetManager.Helpers
                 Message("Still building DB Cache. Please wait and try again.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Critical Function Running");
                 return false;
             }
-
-            var GKUpdInstance = Helpers.ChildFormControl.GKUpdaterInstance();
-            if (GKUpdInstance.Visible && !GKUpdInstance.OkToClose())
-            {
-                return false;
-            }
             return true;
         }
 

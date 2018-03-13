@@ -46,7 +46,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             InitDBControls();
             controlParser = new DBControlParser(this);
             controlParser.EnableFieldValidation();
-            this.Owner = parentForm;
             ClearAll();
             this.Show();
             this.Activate();
@@ -376,6 +375,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         void ILiveBox.DynamicSearch()
         {
             throw new NotImplementedException();
+        }
+
+        public override bool OkToClose()
+        {
+            var prompt = OtherFunctions.Message("Close this window?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, "Are you sure?", this);
+            if (prompt == DialogResult.OK)
+            {
+                return true;
+            }
+            return false;
         }
 
         protected override void Dispose(bool disposing)

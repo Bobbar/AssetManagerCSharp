@@ -251,7 +251,7 @@ namespace AssetManager.UserInterface.CustomControls
                 parentForm.AddChild(this);
             }
         }
-        
+
         /// <summary>
         /// Recursively counts the number of child forms within the parent/child tree.
         /// </summary>
@@ -271,10 +271,10 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void OnWindowCountChanged(EventArgs e)
         {
-            this.ChildCountChanged(this, e);
+            ChildCountChanged?.Invoke(this, e);
             parentForm?.OnWindowCountChanged(e);
         }
-        
+
         private void SetTheme(ExtendedForm parentForm)
         {
             Icon = parentForm.Icon;

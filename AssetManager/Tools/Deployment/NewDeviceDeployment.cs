@@ -132,7 +132,7 @@ namespace AssetManager.Tools.Deployment
                         {
                             return false;
                         }
-                        if (deployments.Any()) Task.Delay(4000).Wait();
+                        if (deployments.Any()) await Task.Delay(4000);
                     }
 
                     deploy.LogMessage("Done.");
