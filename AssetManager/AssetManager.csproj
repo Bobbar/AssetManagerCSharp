@@ -228,6 +228,7 @@
     <Compile Include="UserInterface\CustomControls\ExtendedForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\CustomControls\WindowList\IWindowList.cs" />
     <Compile Include="UserInterface\CustomControls\WindowList\OnlineStatusMenuItem\IOnlineStatus.cs" />
     <Compile Include="UserInterface\CustomControls\LiveBox\ILiveBox.cs" />
     <Compile Include="UserInterface\CustomControls\LiveBox\LiveBox.cs" />

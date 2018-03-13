@@ -905,18 +905,18 @@
         </member>
         <member name="T:AssetManager.UserInterface.CustomControls.ExtendedForm">
             <summary>
-            Custom form with project specific properties and methods.
+            Custom form with project specific properties, methods and child form handling.
             </summary>
-        </member>
-        <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.GridTheme">
-            <summary>
-            Gets or sets the Grid Theme for the DataGridView controls within the form.
-            </summary>
-            <returns></returns>
         </member>
         <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.FormGuid">
             <summary>
             Unique identifying string used to locate specific instances of this form.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.GridTheme">
+            <summary>
+            Gets or sets the Grid Theme for the DataGridView controls within the form.
             </summary>
             <returns></returns>
         </member>
@@ -930,6 +930,29 @@
             <summary>
             Override and add code to refresh data from the database.
             </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.GetChildFormCount(AssetManager.UserInterface.CustomControls.IWindowList)">
+            <summary>
+            Recursively counts the number of child forms within the parent/child tree.
+            </summary>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="E:AssetManager.UserInterface.CustomControls.IWindowList.ChildCountChanged">
+            <summary>
+            Occurs when the number of child forms has changed.
+            </summary>
+        </member>
+        <member name="P:AssetManager.UserInterface.CustomControls.IWindowList.ChildForms">
+            <summary>
+            List of child forms bound to the current form. This list ultimately comprises a tree of parent and child forms.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.IWindowList.ChildFormCount">
+            <summary>
+            The total number of child forms within the tree.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.LiveBox.ProcessSearch(System.String)">
             <summary>
@@ -1063,7 +1086,7 @@
             Parameters for messages to be queued.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.WindowList.BuildWindowList(AssetManager.UserInterface.CustomControls.ExtendedForm,System.Windows.Forms.ToolStripItemCollection)">
+        <member name="M:AssetManager.UserInterface.CustomControls.WindowList.BuildWindowList(AssetManager.UserInterface.CustomControls.IWindowList,System.Windows.Forms.ToolStripItemCollection)">
             <summary>
             Recursively build ToolStripItemCollections of Forms and their Children and add them to the ToolStrip. Making sure to add SibiMain to the top of the list.
             </summary>

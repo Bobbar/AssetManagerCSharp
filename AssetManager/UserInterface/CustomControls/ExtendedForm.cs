@@ -1,22 +1,105 @@
 using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 using AssetManager.Tools;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.Collections;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace AssetManager.UserInterface.CustomControls
 {
     /// <summary>
-    /// Custom form with project specific properties and methods.
+    /// Custom form with project specific properties, methods and child form handling.
     /// </summary>
-    public class ExtendedForm : Form
+    public class ExtendedForm : Form, IWindowList
     {
+        #region Fields
+
         private List<ExtendedForm> childForms = new List<ExtendedForm>();
 
         private bool inheritTheme = true;
+
+        private ExtendedForm parentForm;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public ExtendedForm()
+        {
+            this.Load += ExtendedForm_Load;
+            this.Disposed += ExtendedForm_Disposed;
+            this.FormClosing += ExtendedForm_FormClosing;
+        }
+
+        public ExtendedForm(ExtendedForm parentForm)
+        {
+            ParentForm = parentForm;
+            MemoryTweaks.SetWorkingSet();
+            this.Load += ExtendedForm_Load;
+            this.Disposed += ExtendedForm_Disposed;
+            this.FormClosing += ExtendedForm_FormClosing;
+        }
+
+        public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject)
+        {
+            ParentForm = parentForm;
+            FormGuid = currentObject.Guid;
+            MemoryTweaks.SetWorkingSet();
+            this.Load += ExtendedForm_Load;
+            this.Disposed += ExtendedForm_Disposed;
+            this.FormClosing += ExtendedForm_FormClosing;
+        }
+
+        public ExtendedForm(ExtendedForm parentForm, string formGuid)
+        {
+            ParentForm = parentForm;
+            FormGuid = formGuid;
+            MemoryTweaks.SetWorkingSet();
+            this.Load += ExtendedForm_Load;
+            this.Disposed += ExtendedForm_Disposed;
+            this.FormClosing += ExtendedForm_FormClosing;
+        }
+
+        public ExtendedForm(ExtendedForm parentForm, bool inheritTheme = true)
+        {
+            this.inheritTheme = inheritTheme;
+            ParentForm = parentForm;
+            MemoryTweaks.SetWorkingSet();
+            this.Load += ExtendedForm_Load;
+            this.Disposed += ExtendedForm_Disposed;
+            this.FormClosing += ExtendedForm_FormClosing;
+        }
+
+        #endregion Constructors
+
+        #region Events
+
+        public event EventHandler<EventArgs> ChildCountChanged;
+
+        #endregion Events
+
+        #region Properties
+
+        public List<ExtendedForm> ChildForms
+        {
+            get
+            {
+                return childForms;
+            }
+        }
+
+        /// <summary>
+        /// Unique identifying string used to locate specific instances of this form.
+        /// </summary>
+        /// <returns></returns>
+        public string FormGuid { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Grid Theme for the DataGridView controls within the form.
+        /// </summary>
+        /// <returns></returns>
+        public GridTheme GridTheme { get; set; }
 
         public bool InheritTheme
         {
@@ -29,21 +112,6 @@ namespace AssetManager.UserInterface.CustomControls
                 this.inheritTheme = value;
             }
         }
-
-        private ExtendedForm parentForm;
-
-        /// <summary>
-        /// Gets or sets the Grid Theme for the DataGridView controls within the form.
-        /// </summary>
-        /// <returns></returns>
-        public GridTheme GridTheme { get; set; }
-
-        /// <summary>
-        /// Unique identifying string used to locate specific instances of this form.
-        /// </summary>
-        /// <returns></returns>
-        public string FormGuid { get; set; }
-
         /// <summary>
         /// Overloads the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="GridTheme"/> from the parent form.
         /// </summary>
@@ -65,85 +133,41 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        public ExtendedForm()
-        {
-            this.Disposed += ExtendedForm_Disposed;
-            this.FormClosing += ExtendedForm_FormClosing;
-        }
+        #endregion Properties
 
-        public ExtendedForm(ExtendedForm parentForm)
-        {
-            ParentForm = parentForm;
-            MemoryTweaks.SetWorkingSet();
-            parentForm.AddChild(this);
-            this.Disposed += ExtendedForm_Disposed;
-            this.FormClosing += ExtendedForm_FormClosing;
-        }
-
-        public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject)
-        {
-            ParentForm = parentForm;
-            FormGuid = currentObject.Guid;
-            MemoryTweaks.SetWorkingSet();
-            parentForm.AddChild(this);
-            this.Disposed += ExtendedForm_Disposed;
-            this.FormClosing += ExtendedForm_FormClosing;
-        }
-
-        public ExtendedForm(ExtendedForm parentForm, string formGuid)
-        {
-            ParentForm = parentForm;
-            FormGuid = formGuid;
-            MemoryTweaks.SetWorkingSet();
-            parentForm.AddChild(this);
-            this.Disposed += ExtendedForm_Disposed;
-            this.FormClosing += ExtendedForm_FormClosing;
-        }
-
-        public ExtendedForm(ExtendedForm parentForm, bool inheritTheme = true)
-        {
-            this.inheritTheme = inheritTheme;
-            ParentForm = parentForm;
-            MemoryTweaks.SetWorkingSet();
-            parentForm.AddChild(this);
-            this.Disposed += ExtendedForm_Disposed;
-            this.FormClosing += ExtendedForm_FormClosing;
-        }
+        #region Methods
 
         public void AddChild(ExtendedForm child)
         {
             childForms.Add(child);
-            parentForm?.AddChild(child);
-
-            Console.WriteLine(this.Text + ": add : " + childForms.Count);
+            child.Disposed += Child_Disposed;
+            OnWindowCountChanged(new EventArgs());
         }
 
-        public void RemoveChild(ExtendedForm child)
+        public int ChildFormCount()
         {
-            childForms.Remove(child);
-            parentForm?.RemoveChild(child);
-
-            Console.WriteLine(this.Text + ": remove : " + childForms.Count);
+            return GetChildFormCount(this);
         }
 
-
-        private void ExtendedForm_Disposed(object sender, System.EventArgs e)
+        public void CloseChildren()
         {
-            if (!IsDisposed)
+            while (childForms.Count > 0)
             {
-                this.Disposed -= ExtendedForm_Disposed;
-                this.FormClosing -= ExtendedForm_FormClosing;
-                CloseChildren();
-                parentForm?.RemoveChild(this);
+                childForms[0].Dispose();
             }
         }
 
-        private void ExtendedForm_FormClosing(object sender, FormClosingEventArgs e)
+        public virtual bool OkToClose()
         {
-            if (!OkToClose() || !OkToCloseChildren())
+            if (!this.Modal && this.Owner != null)
             {
-                e.Cancel = true;
+                this.Owner.Activate();
+                this.Owner.WindowState = FormWindowState.Normal;
+                this.Focus();
+                return false;
             }
+
+            return true;
         }
 
         public bool OkToCloseChildren()
@@ -162,45 +186,23 @@ namespace AssetManager.UserInterface.CustomControls
             return closeAllowed;
         }
 
-        public void CloseChildren()
+        protected override CreateParams CreateParams
         {
-            while (childForms.Count > 0)
+            // Enables double-buffering.
+            get
             {
-                childForms[0].Dispose();
+                bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+                bool terminalSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
+                CreateParams cp = base.CreateParams;
+                if (!designMode)
+                {
+                    if (!terminalSession)
+                    {
+                        cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+                    }
+                }
+                return cp;
             }
-        }
-
-        //protected override CreateParams CreateParams
-        //{
-        //    // Enables double-buffering.
-        //    get
-        //    {
-        //        bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-        //        bool terminalSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
-        //        CreateParams cp = base.CreateParams;
-
-        //        if (!designMode)
-        //        {
-        //            if (!terminalSession)
-        //            {
-        //                cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
-        //            }
-        //        }
-        //        return cp;
-        //    }
-        //}
-
-        public virtual bool OkToClose()
-        {
-            if (!this.Modal && this.Owner != null)
-            {
-                this.Owner.Activate();
-                this.Owner.WindowState = FormWindowState.Normal;
-                this.Focus();
-                return false;
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -211,10 +213,74 @@ namespace AssetManager.UserInterface.CustomControls
             this.Refresh();
         }
 
+        public void RemoveChild(ExtendedForm child)
+        {
+            childForms.Remove(child);
+            child.Disposed -= Child_Disposed;
+            OnWindowCountChanged(new EventArgs());
+        }
+
+        private void Child_Disposed(object sender, EventArgs e)
+        {
+            RemoveChild((ExtendedForm)sender);
+        }
+
+        private void ExtendedForm_Disposed(object sender, System.EventArgs e)
+        {
+            if (!IsDisposed)
+            {
+                this.Load -= ExtendedForm_Load;
+                this.Disposed -= ExtendedForm_Disposed;
+                this.FormClosing -= ExtendedForm_FormClosing;
+                CloseChildren();
+            }
+        }
+
+        private void ExtendedForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!OkToClose() || !OkToCloseChildren())
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void ExtendedForm_Load(object sender, EventArgs e)
+        {
+            if (parentForm != null)
+            {
+                parentForm.AddChild(this);
+            }
+        }
+        
+        /// <summary>
+        /// Recursively counts the number of child forms within the parent/child tree.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        private int GetChildFormCount(IWindowList parent)
+        {
+            int childCount = 0;
+
+            foreach (var child in parent.ChildForms)
+            {
+                childCount += GetChildFormCount(child) + 1;
+            }
+
+            return childCount;
+        }
+
+        private void OnWindowCountChanged(EventArgs e)
+        {
+            this.ChildCountChanged(this, e);
+            parentForm?.OnWindowCountChanged(e);
+        }
+        
         private void SetTheme(ExtendedForm parentForm)
         {
             Icon = parentForm.Icon;
             GridTheme = parentForm.GridTheme;
         }
+
+        #endregion Methods
     }
 }

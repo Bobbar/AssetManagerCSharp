@@ -8,18 +8,19 @@ namespace AssetManager.UserInterface.CustomControls
     {
         #region "Fields"
 
-        private Timer RefreshTimer;
-        private ToolStripDropDownButton DropDownControl = new ToolStripDropDownButton();
-        private int intFormCount;
-        private ExtendedForm MyParentForm;
-
+        private ToolStripDropDownButton dropDownControl = new ToolStripDropDownButton();
+        private bool dropDownOpen = false;
+        private ExtendedForm parentForm;
+        private IWindowList windowListForm;
         #endregion "Fields"
 
         #region "Constructors"
 
         public WindowList(ExtendedForm parentForm)
         {
-            MyParentForm = parentForm;
+            windowListForm = parentForm;
+            windowListForm.ChildCountChanged += WindowListForm_WindowCountChanged;
+            this.parentForm = parentForm;
         }
 
         #endregion "Constructors"
@@ -29,19 +30,18 @@ namespace AssetManager.UserInterface.CustomControls
         public void InsertWindowList(OneClickToolStrip targetToolStrip)
         {
             InitializeDropDownButton(targetToolStrip);
-            InitializeTimer();
             RefreshWindowList();
         }
 
         private void AddParentMenu()
         {
-            if (MyParentForm.ParentForm != null)
+            if (parentForm.ParentForm != null)
             {
-                ToolStripMenuItem ParentDropDown = NewMenuItem(MyParentForm.ParentForm);
+                ToolStripMenuItem ParentDropDown = NewMenuItem(parentForm.ParentForm);
                 ParentDropDown.Text = "[Parent] " + ParentDropDown.Text;
                 ParentDropDown.ToolTipText = "Parent Form";
-                DropDownControl.DropDownItems.Insert(0, ParentDropDown);
-                DropDownControl.DropDownItems.Add(new ToolStripSeparator());
+                dropDownControl.DropDownItems.Insert(0, ParentDropDown);
+                dropDownControl.DropDownItems.Add(new ToolStripSeparator());
             }
         }
 
@@ -50,22 +50,22 @@ namespace AssetManager.UserInterface.CustomControls
         /// </summary>
         /// <param name="parentForm">Form to add to ToolStrip.</param>
         /// <param name="targetMenuItem">Item to add the Form item to.</param>
-        private void BuildWindowList(ExtendedForm parentForm, ToolStripItemCollection targetMenuItem)
+        private void BuildWindowList(IWindowList parentForm, ToolStripItemCollection targetMenuItem)
         {
-            foreach (ExtendedForm frm in Helpers.ChildFormControl.GetChildren(parentForm))
+            foreach (var frm in parentForm.ChildForms)
             {
-                if (HasChildren(frm))
+                if (frm.ChildForms.Count > 0)
                 {
-                    var NewDropDown = NewMenuItem(frm);
+                    var newDropDown = NewMenuItem(frm);
                     if (frm is SibiMainForm)
                     {
-                        targetMenuItem.Insert(0, NewDropDown);
+                        targetMenuItem.Insert(0, newDropDown);
                     }
                     else
                     {
-                        targetMenuItem.Add(NewDropDown);
+                        targetMenuItem.Add(newDropDown);
                     }
-                    BuildWindowList(frm, NewDropDown.DropDownItems);
+                    BuildWindowList(frm, newDropDown.DropDownItems);
                 }
                 else
                 {
@@ -94,113 +94,53 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private int FormCount(ExtendedForm parentForm)
+        private void DisposeDropDownItem(ToolStripItem item)
         {
-            int i = 0;
-            foreach (ExtendedForm frm in Helpers.ChildFormControl.GetChildren(parentForm))
+            if (dropDownControl.DropDownItems.Count < 1)
             {
-                if (!frm.Modal & !object.ReferenceEquals(frm, parentForm))
-                {
-                    i += FormCount(frm) + 1;
-                }
-            }
-            return i;
-        }
-
-        private bool HasChildren(ExtendedForm parentForm)
-        {
-            var Children = Helpers.ChildFormControl.GetChildren(parentForm);
-            if (Children.Count == 0)
-            {
-                return false;
+                dropDownControl.DropDownItems.Clear();
             }
             else
             {
-                foreach (ExtendedForm frm in Children)
-                {
-                    if (!frm.IsDisposed)
-                    {
-                        return true;
-                    }
-                }
+                item.Visible = false;
+                dropDownControl.DropDownItems.Remove(item);
             }
-            return false;
+
+            item.MouseDown -= ItemClicked;
+            item.Dispose();
+
+            SetVisibility();
+        }
+
+        private void DropDownControl_DropDownClosed(object sender, EventArgs e)
+        {
+            dropDownOpen = false;
+        }
+
+        private void DropDownControl_DropDownOpened(object sender, EventArgs e)
+        {
+            dropDownOpen = true;
         }
 
         private void InitializeDropDownButton(OneClickToolStrip targetToolStrip)
         {
-            DropDownControl.Visible = false;
-            DropDownControl.Font = targetToolStrip.Font;
-            DropDownControl.Text = "Select Window";
-            DropDownControl.Name = "WindowList";
-            DropDownControl.Image = Properties.Resources.CascadeIcon;
+            dropDownControl.Visible = false;
+            dropDownControl.Font = targetToolStrip.Font;
+            dropDownControl.Text = "Select Window";
+            dropDownControl.Name = "WindowList";
+            dropDownControl.Image = Properties.Resources.CascadeIcon;
+            dropDownControl.DropDownClosed += DropDownControl_DropDownClosed;
+            dropDownControl.DropDownOpened += DropDownControl_DropDownOpened;
             AddParentMenu();
-            targetToolStrip.Items.Insert(targetToolStrip.Items.Count, DropDownControl);
+            targetToolStrip.Items.Insert(targetToolStrip.Items.Count, dropDownControl);
         }
-
-        private void InitializeTimer()
+        private void ItemClicked(object sender, MouseEventArgs e)
         {
-            RefreshTimer = new Timer();
-            RefreshTimer.Interval = 500;
-            RefreshTimer.Enabled = true;
-            RefreshTimer.Tick += RefreshTimer_Tick;
-        }
-
-        private OnlineStatusMenuItem NewMenuItem(ExtendedForm frm)
-        {
-            var newitem = new OnlineStatusMenuItem();
-            newitem.Name = frm.Name;
-            newitem.Font = DropDownControl.Font;
-            newitem.Text = frm.Text;
-            newitem.Image = frm.Icon.ToBitmap();
-            newitem.TargetForm = frm;
-
-            if (frm is IOnlineStatus)
-            {
-                newitem.SetOnlineStatusInterface((IOnlineStatus)frm);
-            }
-
-            newitem.ToolTipText = "Right-Click to close.";
-            newitem.MouseDown += WindowClick;
-            return newitem;
-        }
-
-        private void RefreshTimer_Tick(object sender, EventArgs e)
-        {
-            RefreshWindowList();
-        }
-
-        private void RefreshWindowList()
-        {
-            var NumOfForms = FormCount(MyParentForm);
-            if (MyParentForm.ParentForm == null & NumOfForms < 1)
-            {
-                DropDownControl.Visible = false;
-            }
-            else
-            {
-                DropDownControl.Visible = true;
-            }
-            if (NumOfForms != intFormCount)
-            {
-                if (!DropDownControl.DropDown.Focused)
-                {
-                    DropDownControl.DropDownItems.Clear();
-                    AddParentMenu();
-                    BuildWindowList(MyParentForm, DropDownControl.DropDownItems);
-                    intFormCount = NumOfForms;
-                    DropDownControl.Text = CountText(intFormCount);
-                }
-            }
-        }
-
-        private void WindowClick(object sender, MouseEventArgs e)
-        {
-            OnlineStatusMenuItem item = (OnlineStatusMenuItem)sender;
+            var item = (OnlineStatusMenuItem)sender;
             var frm = item.TargetForm;
             if (e.Button == MouseButtons.Right)
             {
-                if ((!object.ReferenceEquals(frm, MyParentForm.ParentForm)))
+                if ((frm != parentForm.ParentForm))
                 {
                     frm.Close();
                     if (frm.Disposing | frm.IsDisposed)
@@ -213,7 +153,8 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (!frm.IsDisposed)
                 {
-                    Helpers.ChildFormControl.ActivateForm(frm);
+                    frm.WindowState = FormWindowState.Normal;
+                    frm.Activate();
                 }
                 else
                 {
@@ -222,64 +163,79 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private void DisposeDropDownItem(ToolStripItem item)
+        private OnlineStatusMenuItem NewMenuItem(ExtendedForm frm)
         {
-            if (DropDownControl.DropDownItems.Count < 1)
+            var newitem = new OnlineStatusMenuItem();
+            newitem.Name = frm.Name;
+            newitem.Font = dropDownControl.Font;
+            newitem.Text = frm.Text;
+            newitem.Image = frm.Icon.ToBitmap();
+            newitem.TargetForm = frm;
+
+            if (frm is IOnlineStatus)
             {
-                DropDownControl.Visible = false;
-                DropDownControl.DropDownItems.Clear();
-                item.Dispose();
+                newitem.SetOnlineStatusInterface((IOnlineStatus)frm);
+            }
+            newitem.ToolTipText = "Right-Click to close.";
+            newitem.MouseDown += ItemClicked;
+            return newitem;
+        }
+
+        private void RefreshWindowList()
+        {
+            dropDownControl.Text = CountText(windowListForm.ChildFormCount());
+
+            if (!dropDownOpen)
+            {
+                dropDownControl.DropDownItems.Clear();
+                AddParentMenu();
+                BuildWindowList(parentForm, dropDownControl.DropDownItems);
+            }
+
+            SetVisibility();
+        }
+
+        private void SetVisibility()
+        {
+            if (dropDownControl.DropDownItems.Count > 0)
+            {
+                dropDownControl.Visible = true;
             }
             else
             {
-                item.Visible = false;
-                item.Dispose();
-                DropDownControl.DropDownItems.Remove(item);
-                intFormCount = FormCount(MyParentForm);
-                DropDownControl.Text = CountText(intFormCount);
+                dropDownControl.Visible = false;
             }
         }
 
+        private void WindowListForm_WindowCountChanged(object sender, EventArgs e)
+        {
+            RefreshWindowList();
+        }
         #endregion "Methods"
 
         #region "IDisposable Support"
 
-        // To detect redundant calls
         private bool disposedValue;
 
-        // This code added by Visual Basic to correctly implement the disposable pattern.
         public void Dispose()
         {
-            // Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
             Dispose(true);
-            // TODO: uncomment the following line if Finalize() is overridden above.
-            // GC.SuppressFinalize(Me)
         }
 
-        // IDisposable
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
-                    RefreshTimer.Dispose();
-                    DropDownControl.Dispose();
+                    dropDownControl.Dispose();
+                    windowListForm.ChildCountChanged -= WindowListForm_WindowCountChanged;
+                    dropDownControl.DropDownClosed -= DropDownControl_DropDownClosed;
+                    dropDownControl.DropDownOpened -= DropDownControl_DropDownOpened;
                 }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
-                // TODO: set large fields to null.
             }
             disposedValue = true;
         }
-
-        // TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
-        //Protected Overrides Sub Finalize()
-        //    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-        //    Dispose(False)
-        //    MyBase.Finalize()
-        //End Sub
 
         #endregion "IDisposable Support"
     }
