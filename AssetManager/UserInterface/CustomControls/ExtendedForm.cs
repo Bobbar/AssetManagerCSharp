@@ -166,7 +166,6 @@ namespace AssetManager.UserInterface.CustomControls
                 this.Focus();
                 return false;
             }
-
             return true;
         }
 
@@ -177,7 +176,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 foreach (var child in childForms)
                 {
-                    if (!child.OkToClose())
+                    if (!child.OkToClose() || !child.OkToCloseChildren())
                     {
                         closeAllowed = false;
                     }
@@ -246,10 +245,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void ExtendedForm_Load(object sender, EventArgs e)
         {
-            if (parentForm != null)
-            {
-                parentForm.AddChild(this);
-            }
+            parentForm?.AddChild(this);
         }
 
         /// <summary>
