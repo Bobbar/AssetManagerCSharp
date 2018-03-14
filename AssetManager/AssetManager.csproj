@@ -204,6 +204,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Security\SecurityGroups.cs" />
     <Compile Include="Security\Crypto.cs" />
     <Compile Include="Security\InvalidAccessException.cs" />
     <Compile Include="Security\SecurityFunctions.cs" />

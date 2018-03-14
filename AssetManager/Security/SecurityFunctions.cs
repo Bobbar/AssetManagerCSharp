@@ -11,9 +11,9 @@ using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
 using System.Windows.Forms;
-using System.Security.Principal;
 
 namespace AssetManager.Security
 {
@@ -23,16 +23,17 @@ namespace AssetManager.Security
 
         public static NetworkCredential AdminCreds { get { return adminCreds; } }
 
-        private static Dictionary<string, Data.Classes.AccessGroup> AccessGroups = new Dictionary<string, Data.Classes.AccessGroup>();
-        private static LocalUser LocalUserAccess;
+        private static Dictionary<string, AccessGroup> accessGroups = new Dictionary<string, AccessGroup>();
+        private static LocalUser localUser;
 
-        private const string CryptKey = "r7L$aNjE6eiVj&zhap_@|Gz_";
-        public static bool VerifyAdminCreds(string credentialDescription = "")
+        private const string cryptKey = "r7L$aNjE6eiVj&zhap_@|Gz_";
+
+        public static bool VerifyAdminCreds(string credentialDescription = "", string lastUsername = "")
         {
-            bool ValidCreds = false;
+            bool validCreds = false;
             if (AdminCreds == null)
             {
-                using (GetCredentialsForm NewGetCreds = new GetCredentialsForm(credentialDescription))
+                using (GetCredentialsForm NewGetCreds = new GetCredentialsForm(credentialDescription, lastUsername))
                 {
                     NewGetCreds.ShowDialog();
                     if (NewGetCreds.DialogResult == DialogResult.OK)
@@ -46,13 +47,14 @@ namespace AssetManager.Security
                     }
                 }
             }
-            ValidCreds = CredentialIsValid(AdminCreds);
-            if (!ValidCreds)
+            validCreds = CredentialIsValid(AdminCreds);
+            if (!validCreds)
             {
+                string currentUsername = AdminCreds.UserName;
                 ClearAdminCreds();
                 if (OtherFunctions.Message("Could not authenticate with provided credentials.  Do you wish to re-enter?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "Auth Error") == DialogResult.OK)
                 {
-                    return VerifyAdminCreds(credentialDescription);
+                    return VerifyAdminCreds(credentialDescription, currentUsername);
                 }
                 else
                 {
@@ -61,7 +63,7 @@ namespace AssetManager.Security
             }
             else
             {
-                return ValidCreds;
+                return validCreds;
             }
         }
 
@@ -81,7 +83,6 @@ namespace AssetManager.Security
                 // Return true when we cannot contact the server so the user doesn't get prompted repeatedly.
                 return true;
             }
-
         }
 
         public static bool IsAdministrator()
@@ -95,10 +96,10 @@ namespace AssetManager.Security
         {
             adminCreds = null;
         }
-        
+
         public static string DecodePassword(string cypherValue)
         {
-            using (Simple3Des wrapper = new Simple3Des(CryptKey))
+            using (Simple3Des wrapper = new Simple3Des(cryptKey))
             {
                 return wrapper.DecryptData(cypherValue);
             }
@@ -149,7 +150,7 @@ namespace AssetManager.Security
 
         public static int GetSecGroupValue(string accessGroupName)
         {
-            return AccessGroups[accessGroupName].Level;
+            return accessGroups[accessGroupName].Level;
         }
 
         public static void GetUserAccess()
@@ -161,19 +162,21 @@ namespace AssetManager.Security
                     if (results.Rows.Count > 0)
                     {
                         DataRow r = results.Rows[0];
-                        LocalUserAccess.UserName = r[UsersCols.UserName].ToString();
-                        LocalUserAccess.Fullname = r[UsersCols.FullName].ToString();
-                        LocalUserAccess.AccessLevel = (int)r[UsersCols.AccessLevel];
-                        LocalUserAccess.Guid = r[UsersCols.Guid].ToString();
+                        localUser = new LocalUser(
+                            r[UsersCols.UserName].ToString(),
+                            r[UsersCols.FullName].ToString(),
+                            (int)r[UsersCols.AccessLevel],
+                            r[UsersCols.Guid].ToString());
                     }
                     else
                     {
-                        LocalUserAccess.AccessLevel = 0;
+                        localUser = new LocalUser();
                     }
                 }
             }
             catch (Exception ex)
             {
+                localUser = new LocalUser();
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
@@ -186,7 +189,7 @@ namespace AssetManager.Security
                 {
                     foreach (DataRow row in results.Rows)
                     {
-                        AccessGroups.Add(row[SecurityCols.SecModule].ToString(), new Data.Classes.AccessGroup(row));
+                        accessGroups.Add(row[SecurityCols.SecModule].ToString(), new AccessGroup(row));
                     }
                 }
             }
@@ -204,13 +207,13 @@ namespace AssetManager.Security
             int usrLevel;
             if (accessLevel == -1)
             {
-                usrLevel = LocalUserAccess.AccessLevel;
+                usrLevel = localUser.AccessLevel;
             }
             else
             {
                 usrLevel = accessLevel;
             }
-            foreach (Data.Classes.AccessGroup group in AccessGroups.Values)
+            foreach (AccessGroup group in accessGroups.Values)
             {
                 calc_level = usrLevel & mask;
                 if (calc_level != 0)
@@ -240,12 +243,12 @@ namespace AssetManager.Security
         }
 
         /// <summary>
-        /// Checks if current user has access to the specified module. Throws a <see cref="InvalidAccessException"/> if they do not. 
+        /// Checks if current user has access to the specified group. Throws a <see cref="InvalidAccessException"/> if they do not.
         /// </summary>
-        /// <param name="recModule"></param>
-        public static void CheckForAccess(string recModule)
+        /// <param name="securityGroup"></param>
+        public static void CheckForAccess(string securityGroup)
         {
-            if (!CanAccess(recModule))
+            if (!CanAccess(securityGroup))
             {
                 if (GlobalSwitches.CachedMode)
                 {
@@ -254,30 +257,10 @@ namespace AssetManager.Security
                 }
                 else
                 {
-                    string errMessage = "You do not have the required access rights for this function. Must have access to '" + recModule + "'.";
+                    string errMessage = "You do not have the required access rights for this function. Must have access to '" + securityGroup + "'.";
                     throw new InvalidAccessException(errMessage);
                 }
             }
         }
-
-        // METODO: Un-nest
-        public sealed class AccessGroup
-        {
-            public const string AddDevice = "add";
-            public const string CanRun = "can_run";
-            public const string DeleteDevice = "delete";
-            public const string ManageAttachment = "manage_attach";
-            public const string ModifyDevice = "modify";
-            public const string Tracking = "track";
-            public const string ViewAttachment = "view_attach";
-            public const string ViewSibi = "sibi_view";
-            public const string AddSibi = "sibi_add";
-            public const string ModifySibi = "sibi_modify";
-            public const string DeleteSibi = "sibi_delete";
-            public const string IsAdmin = "admin";
-            public const string AdvancedSearch = "advanced_search";
-            public const string CanStartTransaction = "start_transaction";
-        }
-
     }
 }

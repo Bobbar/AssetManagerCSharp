@@ -220,7 +220,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void DeployTeamViewer(Device targetDevice)
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
+            SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
 
             if (OtherFunctions.Message("Deploy TeamViewer to this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
@@ -251,7 +251,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void DeployOffice(Device targetDevice)
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
+            SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
 
             if (OtherFunctions.Message("Deploy Office 365 to this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
@@ -282,7 +282,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void NewDeviceDeployment(Device targetDevice)
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
+            SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
 
             if (OtherFunctions.Message("Start new device software deployment?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
@@ -407,7 +407,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void UpdateChrome(Device targetDevice)
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
+            SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
 
             if (OtherFunctions.Message("Update/Install Chrome on this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {

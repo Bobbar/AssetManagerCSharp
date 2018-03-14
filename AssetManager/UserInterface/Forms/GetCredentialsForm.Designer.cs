@@ -14,11 +14,11 @@ namespace AssetManager.UserInterface.Forms
         {
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.CredDescriptionLabel = new System.Windows.Forms.Label();
-            this.cmdAccept = new System.Windows.Forms.Button();
+            this.AcceptCredsButton = new System.Windows.Forms.Button();
             this.Label2 = new System.Windows.Forms.Label();
             this.Label1 = new System.Windows.Forms.Label();
-            this.txtPassword = new System.Windows.Forms.TextBox();
-            this.txtUsername = new System.Windows.Forms.TextBox();
+            this.PasswordTextBox = new System.Windows.Forms.TextBox();
+            this.UsernameTextBox = new System.Windows.Forms.TextBox();
             this.GroupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -28,11 +28,11 @@ namespace AssetManager.UserInterface.Forms
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.Controls.Add(this.CredDescriptionLabel);
-            this.GroupBox1.Controls.Add(this.cmdAccept);
+            this.GroupBox1.Controls.Add(this.AcceptCredsButton);
             this.GroupBox1.Controls.Add(this.Label2);
             this.GroupBox1.Controls.Add(this.Label1);
-            this.GroupBox1.Controls.Add(this.txtPassword);
-            this.GroupBox1.Controls.Add(this.txtUsername);
+            this.GroupBox1.Controls.Add(this.PasswordTextBox);
+            this.GroupBox1.Controls.Add(this.UsernameTextBox);
             this.GroupBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox1.Location = new System.Drawing.Point(7, 9);
             this.GroupBox1.Name = "GroupBox1";
@@ -53,13 +53,13 @@ namespace AssetManager.UserInterface.Forms
             // 
             // cmdAccept
             // 
-            this.cmdAccept.Location = new System.Drawing.Point(36, 161);
-            this.cmdAccept.Name = "cmdAccept";
-            this.cmdAccept.Size = new System.Drawing.Size(199, 36);
-            this.cmdAccept.TabIndex = 4;
-            this.cmdAccept.Text = "Accept";
-            this.cmdAccept.UseVisualStyleBackColor = true;
-            this.cmdAccept.Click += new System.EventHandler(this.cmdAccept_Click);
+            this.AcceptCredsButton.Location = new System.Drawing.Point(36, 161);
+            this.AcceptCredsButton.Name = "cmdAccept";
+            this.AcceptCredsButton.Size = new System.Drawing.Size(199, 36);
+            this.AcceptCredsButton.TabIndex = 4;
+            this.AcceptCredsButton.Text = "Accept";
+            this.AcceptCredsButton.UseVisualStyleBackColor = true;
+            this.AcceptCredsButton.Click += new System.EventHandler(this.AcceptCredsButton_Click);
             // 
             // Label2
             // 
@@ -83,21 +83,21 @@ namespace AssetManager.UserInterface.Forms
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(35, 117);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(200, 23);
-            this.txtPassword.TabIndex = 1;
-            this.txtPassword.UseSystemPasswordChar = true;
-            this.txtPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPassword_KeyDown);
-            this.txtPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPassword_KeyPress);
-            this.txtPassword.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtPassword_KeyUp);
+            this.PasswordTextBox.Location = new System.Drawing.Point(35, 117);
+            this.PasswordTextBox.Name = "txtPassword";
+            this.PasswordTextBox.Size = new System.Drawing.Size(200, 23);
+            this.PasswordTextBox.TabIndex = 1;
+            this.PasswordTextBox.UseSystemPasswordChar = true;
+            this.PasswordTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PasswordTextBox_KeyDown);
+            this.PasswordTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PasswordTextBox_KeyPress);
+            this.PasswordTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PasswordTextBox_KeyUp);
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(35, 62);
-            this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(200, 23);
-            this.txtUsername.TabIndex = 0;
+            this.UsernameTextBox.Location = new System.Drawing.Point(35, 62);
+            this.UsernameTextBox.Name = "txtUsername";
+            this.UsernameTextBox.Size = new System.Drawing.Size(200, 23);
+            this.UsernameTextBox.TabIndex = 0;
             // 
             // GetCredentialsForm
             // 
@@ -118,11 +118,11 @@ namespace AssetManager.UserInterface.Forms
         }
 
         internal GroupBox GroupBox1;
-        internal Button cmdAccept;
+        internal Button AcceptCredsButton;
         internal Label Label2;
         internal Label Label1;
-        internal TextBox txtPassword;
-        internal TextBox txtUsername;
+        internal TextBox PasswordTextBox;
+        internal TextBox UsernameTextBox;
         internal Label CredDescriptionLabel;
     }
 }

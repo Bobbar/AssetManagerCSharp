@@ -118,7 +118,7 @@ namespace AssetManager.UserInterface.Forms
                 SibiGroup.Visible = false;
             }
 
-            if (SecurityTools.CanAccess(SecurityTools.AccessGroup.ManageAttachment))
+            if (SecurityTools.CanAccess(SecurityGroups.ManageAttachment))
             {
                 cmdUpload.Enabled = true;
                 cmdDelete.Enabled = true;
@@ -248,7 +248,7 @@ namespace AssetManager.UserInterface.Forms
         {
             try
             {
-                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
+                SecurityTools.CheckForAccess(SecurityGroups.ManageAttachment);
 
                 using (OpenFileDialog fd = new OpenFileDialog())
                 {
@@ -522,7 +522,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void MoveAttachToFolder(string attachGuid, Attachment.Folder folder, bool isNew = false)
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
+            SecurityTools.CheckForAccess(SecurityGroups.ManageAttachment);
 
             try
             {
@@ -724,7 +724,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void BeginRenameAttachment()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
+            SecurityTools.CheckForAccess(SecurityGroups.ManageAttachment);
 
             //Enable read/write mode, set current cell to the filename cell and begin edit.
             AttachGrid.ReadOnly = false;
@@ -772,7 +772,7 @@ namespace AssetManager.UserInterface.Forms
         {
             try
             {
-                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
+                SecurityTools.CheckForAccess(SecurityGroups.ManageAttachment);
 
                 string strFilename = AttachGrid.CurrentRowStringValue(attachmentColumns.FileName);
                 var blah = OtherFunctions.Message("Are you sure you want to delete '" + strFilename + "'?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Confirm Delete", this);
@@ -1350,7 +1350,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void NewFolderMenuItem_Click(object sender, EventArgs e)
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
+            SecurityTools.CheckForAccess(SecurityGroups.ManageAttachment);
 
             string newFolderName;
             using (AdvancedDialog FolderDialog = new AdvancedDialog(this))

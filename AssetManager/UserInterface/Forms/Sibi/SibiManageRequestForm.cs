@@ -112,7 +112,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddSibi);
+                SecurityTools.CheckForAccess(SecurityGroups.AddSibi);
 
                 OtherFunctions.SetWaitCursor(true, this);
 
@@ -242,7 +242,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void AddNewRequest()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddSibi);
+            SecurityTools.CheckForAccess(SecurityGroups.AddSibi);
 
             if (!ValidateFields())
             {
@@ -278,7 +278,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
+                SecurityTools.CheckForAccess(SecurityGroups.ModifySibi);
 
                 if (!string.IsNullOrEmpty(CurrentRequest.Guid) && !IsNewRequest)
                 {
@@ -398,7 +398,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void ViewAttachments()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewAttachment);
+            SecurityTools.CheckForAccess(SecurityGroups.ViewAttachment);
 
             if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {
@@ -423,7 +423,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.DeleteSibi);
+                SecurityTools.CheckForAccess(SecurityGroups.DeleteSibi);
 
                 if (ReferenceEquals(CurrentRequest.RequestItems, null))
                 {
@@ -470,7 +470,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void DeleteCurrentNote()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
+            SecurityTools.CheckForAccess(SecurityGroups.ModifySibi);
 
             if (NotesGrid.CurrentRow != null && NotesGrid.CurrentRow.Index > -1)
             {
@@ -504,7 +504,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void ModifyRequest()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
+            SecurityTools.CheckForAccess(SecurityGroups.ModifySibi);
 
             if (!string.IsNullOrEmpty(CurrentRequest.Guid) && !IsModifying)
             {
@@ -1266,7 +1266,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
+                SecurityTools.CheckForAccess(SecurityGroups.ModifySibi);
 
                 var blah = OtherFunctions.Message("Delete selected row?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Delete Item Row", this);
                 if (blah == DialogResult.Yes)
@@ -1328,7 +1328,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void PopulateCurrentFAItem()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifySibi);
+            SecurityTools.CheckForAccess(SecurityGroups.ModifySibi);
 
             try
             {
@@ -1540,7 +1540,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void NewDeviceMenuItem_Click(object sender, EventArgs e)
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice);
+            SecurityTools.CheckForAccess(SecurityGroups.AddDevice);
 
             var newDev = new NewDeviceForm(this);
             newDev.ImportFromSibi(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemGuid));

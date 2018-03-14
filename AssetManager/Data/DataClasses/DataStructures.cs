@@ -74,12 +74,20 @@ namespace AssetManager.Data.Classes
 namespace AssetManager.Data.Classes
 {
 
-    public struct LocalUser
+    public class LocalUser
     {
-        public string UserName;
-        public string Fullname;
-        public int AccessLevel;
-        public string Guid;
+        public string UserName { get; }
+        public string Fullname { get; }
+        public int AccessLevel { get; }
+        public string Guid { get; }
+
+        public LocalUser()
+        {
+            UserName = string.Empty;
+            Fullname = string.Empty;
+            AccessLevel = 0;
+            Guid = string.Empty;
+        }
 
         public LocalUser(string userName, string fullName, int accessLevel, string guid)
         {

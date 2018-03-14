@@ -97,7 +97,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void StartTransaction()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.CanStartTransaction);
+            SecurityTools.CheckForAccess(SecurityGroups.CanStartTransaction);
 
             if (OtherFunctions.Message("This will allow unchecked changes to the database. Incorrect inputs WILL BREAK THINGS! \r\n" + Environment.NewLine + "Changes must be 'applied' and 'committed' before they will be permanently stored in the database.", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "WARNING", this) == DialogResult.OK)
             {
@@ -227,7 +227,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void AddNewDevice()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AddDevice);
+            SecurityTools.CheckForAccess(SecurityGroups.AddDevice);
 
             var NewDevForm = Helpers.ChildFormControl.FindChildOfType(this, typeof(NewDeviceForm));
             if (NewDevForm == null)
@@ -459,7 +459,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void NewTextCrypterForm()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
+            SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
             new CrypterForm(this);
         }
 
@@ -467,7 +467,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi);
+                SecurityTools.CheckForAccess(SecurityGroups.ViewSibi);
 
                 Waiting();
                 var SibiForm = Helpers.ChildFormControl.FindChildOfType(this, typeof(Sibi.SibiMainForm));
@@ -558,14 +558,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void StartAdvancedSearch()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.AdvancedSearch);
+            SecurityTools.CheckForAccess(SecurityGroups.AdvancedSearch);
 
             new AdvancedSearchForm(this);
         }
 
         private void StartAttachScan()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ManageAttachment);
+            SecurityTools.CheckForAccess(SecurityGroups.ManageAttachment);
             FtpFunctions.ScanAttachements();
         }
 
@@ -601,7 +601,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void StartUserManager()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.IsAdmin);
+            SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
             new UserManagerForm(this);
         }
 
@@ -635,7 +635,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void CheckForAdmin()
         {
-            if (SecurityTools.CanAccess(SecurityTools.AccessGroup.IsAdmin))
+            if (SecurityTools.CanAccess(SecurityGroups.IsAdmin))
             {
                 AdminDropDown.Visible = true;
             }

@@ -196,7 +196,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice);
+                SecurityTools.CheckForAccess(SecurityGroups.ModifyDevice);
 
                 using (UpdateTypeForm updateTypePrompt = new UpdateTypeForm(this, true))
                 {
@@ -283,7 +283,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DeleteDevice()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.DeleteDevice);
+            SecurityTools.CheckForAccess(SecurityGroups.DeleteDevice);
 
             var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all historical data, tracking and attachments.", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "WARNING", this);
             if (blah == DialogResult.Yes)
@@ -310,7 +310,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DeleteSelectedHistoricalEntry()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice);
+            SecurityTools.CheckForAccess(SecurityGroups.ModifyDevice);
 
             try
             {
@@ -646,7 +646,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ModifyDevice()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ModifyDevice);
+            SecurityTools.CheckForAccess(SecurityGroups.ModifyDevice);
 
             SetEditMode(true);
         }
@@ -673,7 +673,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewSibi);
+                SecurityTools.CheckForAccess(SecurityGroups.ViewSibi);
 
                 if (string.IsNullOrEmpty(LinkDevice.PO))
                 {
@@ -828,7 +828,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void StartTrackDeviceForm()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.Tracking);
+            SecurityTools.CheckForAccess(SecurityGroups.Tracking);
 
             Waiting();
             new TrackDeviceForm(currentViewDevice, this);
@@ -890,7 +890,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ViewAttachments()
         {
-            SecurityTools.CheckForAccess(SecurityTools.AccessGroup.ViewAttachment);
+            SecurityTools.CheckForAccess(SecurityGroups.ViewAttachment);
 
             if (!Helpers.ChildFormControl.AttachmentsIsOpen(this))
             {

@@ -72,7 +72,7 @@ namespace AssetManager
             Status("Checking Access Level...");
             SecurityTools.PopulateAccessGroups();
             SecurityTools.GetUserAccess();
-            if (!SecurityTools.CanAccess(SecurityTools.AccessGroup.CanRun))
+            if (!SecurityTools.CanAccess(SecurityGroups.CanRun))
             {
                 OtherFunctions.Message("You do not have permission to run this software.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Access Denied");
                 // e.Cancel = true;

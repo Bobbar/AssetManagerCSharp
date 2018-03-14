@@ -24,21 +24,23 @@ namespace AssetManager.UserInterface.Forms
             InitializeComponent();
         }
 
-        public GetCredentialsForm(string credentialDescription) : base()
+        public GetCredentialsForm(string credentialDescription, string lastUsername) : base()
         {
             InitializeComponent();
             this.Icon = Properties.Resources.asset_icon;
             CredDescriptionLabel.Text = credentialDescription;
+            UsernameTextBox.Text = lastUsername;
+            this.ActiveControl = PasswordTextBox;
         }
 
         private void Accept()
         {
-            string Username = null;
-            Username = txtUsername.Text.Trim();
-            if (!string.IsNullOrEmpty(Username) & securePwd.Length > 0)
+            string username = null;
+            username = UsernameTextBox.Text.Trim();
+            if (!string.IsNullOrEmpty(username) & securePwd.Length > 0)
             {
                 securePwd.MakeReadOnly();
-                newCreds = new NetworkCredential(Username, securePwd, NetworkInfo.CurrentDomain);
+                newCreds = new NetworkCredential(username, securePwd, NetworkInfo.CurrentDomain);
                 securePwd.Dispose();
                 DialogResult = DialogResult.OK;
             }
@@ -48,12 +50,12 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void cmdAccept_Click(object sender, EventArgs e)
+        private void AcceptCredsButton_Click(object sender, EventArgs e)
         {
             Accept();
         }
 
-        private void txtPassword_KeyDown(object sender, KeyEventArgs e)
+        private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -68,7 +70,7 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
+        private void PasswordTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar != Convert.ToChar(Keys.Back) & e.KeyChar != Convert.ToChar(Keys.Enter))
             {
@@ -76,15 +78,15 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void txtPassword_KeyUp(object sender, KeyEventArgs e)
+        private void PasswordTextBox_KeyUp(object sender, KeyEventArgs e)
         {
             SetText();
         }
 
         private void SetText()
         {
-            txtPassword.Text = BlankText(securePwd.Length);
-            txtPassword.SelectionStart = txtPassword.Text.Length + 1;
+            PasswordTextBox.Text = BlankText(securePwd.Length);
+            PasswordTextBox.SelectionStart = PasswordTextBox.Text.Length + 1;
         }
 
         private string BlankText(int length)
