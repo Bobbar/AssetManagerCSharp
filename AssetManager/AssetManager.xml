@@ -738,6 +738,11 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:AssetManager.Properties.Resources.PowerShellIcon2">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:AssetManager.Properties.Resources.RDPIcon">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -835,19 +840,19 @@
             <param name="distName"></param>
             <returns></returns>
         </member>
-        <member name="T:AssetManager.Tools.Deployment.NewDeviceDeployment.TaskInfo">
+        <member name="T:AssetManager.Tools.Deployment.SoftwareDeployment.TaskInfo">
             <summary>
             Container for holding deployment methods and a descriptive name.
             </summary>
         </member>
-        <member name="M:AssetManager.Tools.Deployment.NewDeviceDeployment.DeploymentTasks(AssetManager.Data.Classes.Device)">
+        <member name="M:AssetManager.Tools.Deployment.SoftwareDeployment.DeploymentTasks(AssetManager.Data.Classes.Device)">
             <summary>
             List of available deployment methods.
             </summary>
             <param name="targetDevice"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Tools.Deployment.NewDeviceDeployment.ChooseDeployments(AssetManager.Data.Classes.Device)">
+        <member name="M:AssetManager.Tools.Deployment.SoftwareDeployment.ChooseDeployments(AssetManager.Data.Classes.Device)">
             <summary>
             Prompt user for items to be deployed to the device.
             </summary>

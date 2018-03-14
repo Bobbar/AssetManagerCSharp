@@ -55,7 +55,7 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         /// <summary>
-        /// Occurs when a successful ping is received after the number of failed pings has exceeded <see cref="MaxFailedUntilNotify"/> 
+        /// Occurs when a successful ping is received after the number of failed pings has exceeded <see cref="MaxFailedUntilNotify"/>
         /// </summary>
         [Browsable(true)]
         public event EventHandler HostBackOnline;
@@ -310,7 +310,6 @@ namespace AssetManager.UserInterface.CustomControls
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
-               
 
         private void LaunchRDP()
         {
@@ -390,6 +389,31 @@ namespace AssetManager.UserInterface.CustomControls
                 RestartDeviceButton.Image = origButtonImage;
             }
             return string.Empty;
+        }
+
+        private async Task StartPowerShellSession(Device targetDevice)
+        {
+            if (SecurityTools.VerifyAdminCreds())
+            {
+                using (var p = new Process())
+                {
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.CreateNoWindow = false;
+                    p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+                    p.StartInfo.FileName = "PowerShell.exe";
+
+                    string domainUsername = SecurityTools.AdminCreds.Domain + @"\" + SecurityTools.AdminCreds.UserName;
+                    string cmdArgs = @"-NoExit -Command ""& { ";
+                    cmdArgs += @"$User = '" + domainUsername + "'; ";
+                    cmdArgs += @"$PWord = ConvertTo-SecureString -String '" + SecurityTools.AdminCreds.Password + "' -AsPlainText -Force; ";
+                    cmdArgs += @"$Creds = New-Object -TypeName 'System.Management.Automation.PSCredential' -ArgumentList $User,$PWord; ";
+                    cmdArgs += @"Enter-PSSession -ComputerName " + targetDevice.HostName + " –Credential $Creds; }";
+
+                    p.StartInfo.Arguments = cmdArgs;
+
+                    p.Start();
+                }
+            }
         }
 
         private void ShowIP()
@@ -509,6 +533,11 @@ namespace AssetManager.UserInterface.CustomControls
             NewDeviceDeployment(this.device);
         }
 
+        private void PowerShellButton_Click(object sender, EventArgs e)
+        {
+            StartPowerShellSession(this.device);
+        }
+
         #endregion Control Events
 
         // METODO: Un-nest.
@@ -523,7 +552,5 @@ namespace AssetManager.UserInterface.CustomControls
                 DisplayTime = displayTime;
             }
         }
-
-       
     }
 }

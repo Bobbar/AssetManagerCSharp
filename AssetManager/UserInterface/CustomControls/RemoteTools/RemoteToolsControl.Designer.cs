@@ -29,6 +29,7 @@
             this.UpdateChromeButton = new System.Windows.Forms.Button();
             this.DeployOfficeButton = new System.Windows.Forms.Button();
             this.NewDeployButton = new System.Windows.Forms.Button();
+            this.PowerShellButton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox.SuspendLayout();
             this.FlowLayoutPanel1.SuspendLayout();
@@ -72,6 +73,7 @@
             this.FlowLayoutPanel1.Controls.Add(this.BrowseFilesButton);
             this.FlowLayoutPanel1.Controls.Add(this.StartRDPButton);
             this.FlowLayoutPanel1.Controls.Add(this.EventViewerButton);
+            this.FlowLayoutPanel1.Controls.Add(this.PowerShellButton);
             this.FlowLayoutPanel1.Controls.Add(this.GKUpdateButton);
             this.FlowLayoutPanel1.Controls.Add(this.DeployTVButton);
             this.FlowLayoutPanel1.Controls.Add(this.UpdateChromeButton);
@@ -143,7 +145,7 @@
             // 
             this.GKUpdateButton.BackgroundImage = global::AssetManager.Properties.Resources.GK__UpdateIcon;
             this.GKUpdateButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.GKUpdateButton.Location = new System.Drawing.Point(189, 1);
+            this.GKUpdateButton.Location = new System.Drawing.Point(236, 1);
             this.GKUpdateButton.Margin = new System.Windows.Forms.Padding(1);
             this.GKUpdateButton.Name = "GKUpdateButton";
             this.GKUpdateButton.Size = new System.Drawing.Size(45, 45);
@@ -157,7 +159,7 @@
             this.DeployTVButton.BackgroundImage = global::AssetManager.Properties.Resources.TeamViewerIcon;
             this.DeployTVButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.DeployTVButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.DeployTVButton.Location = new System.Drawing.Point(236, 1);
+            this.DeployTVButton.Location = new System.Drawing.Point(1, 48);
             this.DeployTVButton.Margin = new System.Windows.Forms.Padding(1);
             this.DeployTVButton.Name = "DeployTVButton";
             this.DeployTVButton.Size = new System.Drawing.Size(45, 45);
@@ -171,7 +173,7 @@
             this.UpdateChromeButton.BackgroundImage = global::AssetManager.Properties.Resources.ChromeIcon;
             this.UpdateChromeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.UpdateChromeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.UpdateChromeButton.Location = new System.Drawing.Point(1, 48);
+            this.UpdateChromeButton.Location = new System.Drawing.Point(48, 48);
             this.UpdateChromeButton.Margin = new System.Windows.Forms.Padding(1);
             this.UpdateChromeButton.Name = "UpdateChromeButton";
             this.UpdateChromeButton.Size = new System.Drawing.Size(45, 45);
@@ -185,7 +187,7 @@
             this.DeployOfficeButton.BackgroundImage = global::AssetManager.Properties.Resources.O365SquareLogo;
             this.DeployOfficeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.DeployOfficeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.DeployOfficeButton.Location = new System.Drawing.Point(48, 48);
+            this.DeployOfficeButton.Location = new System.Drawing.Point(95, 48);
             this.DeployOfficeButton.Margin = new System.Windows.Forms.Padding(1);
             this.DeployOfficeButton.Name = "DeployOfficeButton";
             this.DeployOfficeButton.Size = new System.Drawing.Size(45, 45);
@@ -199,7 +201,7 @@
             this.NewDeployButton.BackgroundImage = global::AssetManager.Properties.Resources.DeployIcon;
             this.NewDeployButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.NewDeployButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.NewDeployButton.Location = new System.Drawing.Point(95, 48);
+            this.NewDeployButton.Location = new System.Drawing.Point(142, 48);
             this.NewDeployButton.Margin = new System.Windows.Forms.Padding(1);
             this.NewDeployButton.Name = "NewDeployButton";
             this.NewDeployButton.Size = new System.Drawing.Size(45, 45);
@@ -207,6 +209,20 @@
             this.toolTip.SetToolTip(this.NewDeployButton, "Software Deployments");
             this.NewDeployButton.UseVisualStyleBackColor = true;
             this.NewDeployButton.Click += new System.EventHandler(this.NewDeployButton_Click);
+            // 
+            // PowerShellButton
+            // 
+            this.PowerShellButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PowerShellButton.BackgroundImage")));
+            this.PowerShellButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PowerShellButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.PowerShellButton.Location = new System.Drawing.Point(189, 1);
+            this.PowerShellButton.Margin = new System.Windows.Forms.Padding(1);
+            this.PowerShellButton.Name = "PowerShellButton";
+            this.PowerShellButton.Size = new System.Drawing.Size(45, 45);
+            this.PowerShellButton.TabIndex = 62;
+            this.toolTip.SetToolTip(this.PowerShellButton, "Start Remote PowerShell");
+            this.PowerShellButton.UseVisualStyleBackColor = true;
+            this.PowerShellButton.Click += new System.EventHandler(this.PowerShellButton_Click);
             // 
             // RemoteToolsControl
             // 
@@ -241,5 +257,6 @@
         private System.Windows.Forms.ToolTip toolTip;
         internal System.Windows.Forms.Button DeployOfficeButton;
         internal System.Windows.Forms.Button NewDeployButton;
+        internal System.Windows.Forms.Button PowerShellButton;
     }
 }
