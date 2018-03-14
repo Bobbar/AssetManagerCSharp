@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace AssetManager.Tools.Deployment
 {
-    public class NewDeviceDeployment : IDisposable
+    public class SoftwareDeployment : IDisposable
     {
         private Queue<Func<Task<bool>>> deployments = new Queue<Func<Task<bool>>>();
 
@@ -21,7 +21,7 @@ namespace AssetManager.Tools.Deployment
 
         private DeploymentUI deploy;
 
-        public NewDeviceDeployment(ExtendedForm parentForm)
+        public SoftwareDeployment(ExtendedForm parentForm)
         {
             this.parentForm = parentForm;
             deploy = new DeploymentUI(parentForm);
@@ -54,6 +54,7 @@ namespace AssetManager.Tools.Deployment
             var depList = new List<TaskInfo>();
             depList.Add(new TaskInfo(() => EnableAdmin(targetDevice), "Enable Local Admin"));
             depList.Add(new TaskInfo(() => InstallMVPS(targetDevice), "MVPS Hosts File"));
+            depList.Add(new TaskInfo(() => InstallMapWinGIS(targetDevice), "MapWinGIS"));
             depList.Add(new TaskInfo(() => InstallIntellivue(targetDevice), "Intellivue"));
             depList.Add(new TaskInfo(() => InstallGatekeeper(targetDevice), "Gatekeeper"));
             depList.Add(new TaskInfo(() => InstallChrome(targetDevice), "Chrome"));
@@ -61,6 +62,7 @@ namespace AssetManager.Tools.Deployment
             depList.Add(new TaskInfo(() => InstallOffice(targetDevice), "Office 365"));
             depList.Add(new TaskInfo(() => InstallCarbonBlack(targetDevice), "Carbon Black"));
             depList.Add(new TaskInfo(() => InstallVPNClient(targetDevice), "Shrewsoft VPN"));
+
             return depList;
         }
 
@@ -116,7 +118,7 @@ namespace AssetManager.Tools.Deployment
                 {
                     deploy.StartTimer();
 
-                    deploy.LogMessage("Starting new device deployment to " + targetDevice.HostName);
+                    deploy.LogMessage("Starting software deployment to " + targetDevice.HostName);
                     deploy.LogMessage("-------------------");
 
                     ChooseDeployments(targetDevice);
@@ -137,7 +139,7 @@ namespace AssetManager.Tools.Deployment
 
                     deploy.LogMessage("Done.");
                     deploy.LogMessage("-------------------");
-                    deploy.LogMessage("New Device deployment is complete!");
+                    deploy.LogMessage("Software deployment is complete!");
                     return true;
                 }
                 else
@@ -165,7 +167,9 @@ namespace AssetManager.Tools.Deployment
         {
             deploy.LogMessage("Enabling Local Admin Account...");
             deploy.LogMessage("Starting remote session...");
+
             var enableAdminSession = await GetSetLocalAdminSession(targetDevice);
+
             deploy.LogMessage("Invoking script...");
             if (await deploy.PowerShellWrap.InvokePowerShellSession(enableAdminSession))
             {
@@ -182,116 +186,85 @@ namespace AssetManager.Tools.Deployment
 
         private async Task<bool> InstallMVPS(Device targetDevice)
         {
-            deploy.LogMessage("Installing MVPS...");
-            var installMVPSExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetMVPSInstallString());
-            if (installMVPSExitCode == 0)
+            try
             {
-                deploy.LogMessage("MVPS Installed!");
+                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("mvps_install"), "MVPS Hosts File Install");
+                return true;
             }
-            else
+            catch (Exception)
             {
-                deploy.LogMessage("MVPS Install failed! Exit code: " + installMVPSExitCode.ToString());
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
-            return true;
         }
 
         private async Task<bool> InstallGatekeeper(Device targetDevice)
         {
-            deploy.LogMessage("Installing Gatekeeper Client...");
-            var installGKClientExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetGKClientInstallString());
-            if (installGKClientExitCode == 0)
+            try
             {
-                deploy.LogMessage("Gatekeeper Client Installed!");
+                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("gk_client"), "Gatekeeper Client Install");
+                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("gk_update"), "Gatekeeper Update Install");
+
+                deploy.LogMessage("Applying Gatekeeper Registry Fix...");
+                deploy.LogMessage("Starting remote session...");
+
+                var applyGKRegFixSession = await GetGKRegFixSession(targetDevice);
+
+                deploy.LogMessage("Invoking script...");
+                if (await deploy.PowerShellWrap.InvokePowerShellSession(applyGKRegFixSession))
+                {
+                    deploy.LogMessage("GK Registry fix applied!");
+                }
+                else
+                {
+                    deploy.LogMessage("Failed to apply GK Registry fix!");
+                    OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return false;
+                }
+                return true;
             }
-            else
+            catch (Exception)
             {
-                deploy.LogMessage("Gatekeeper Client Install failed! Exit code: " + installGKClientExitCode.ToString());
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
-
-            deploy.LogMessage("Installing Gatekeeper Update...");
-            var installGKUpdateExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetGKUpdateString());
-            if (installGKUpdateExitCode == 0)
-            {
-                deploy.LogMessage("Gatekeeper Update Installed!");
-            }
-            else
-            {
-                deploy.LogMessage("Gatekeeper Update Install failed! Exit code: " + installGKUpdateExitCode.ToString());
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            deploy.LogMessage("Applying Gatekeepr Registry Fix...");
-            deploy.LogMessage("Starting remote session...");
-            var applyGKRegFixSession = await GetGKRegFixSession(targetDevice);
-
-            deploy.LogMessage("Invoking script...");
-            if (await deploy.PowerShellWrap.InvokePowerShellSession(applyGKRegFixSession))
-            {
-                deploy.LogMessage("GK Registry fix applied!");
-            }
-            else
-            {
-                deploy.LogMessage("Failed to apply GK Registry fix!");
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-            return true;
         }
 
         private async Task<bool> InstallIntellivue(Device targetDevice)
         {
-            deploy.LogMessage("Installing Intellivue...");
-            var installIVueExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetIVueInstallString());
-            if (installIVueExitCode == 0)
+            try
             {
-                deploy.LogMessage("Intellivue Installed!");
+                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("ivue_install"), "Intellivue Install");
+                return true;
             }
-            else
+            catch (Exception)
             {
-                deploy.LogMessage("Intellivue Install failed! Exit code: " + installIVueExitCode.ToString());
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
-
-            return true;
         }
 
         private async Task<bool> InstallChrome(Device targetDevice)
         {
-            deploy.LogMessage("Installing Chrome...");
-            if (await deploy.PowerShellWrap.ExecutePowerShellScript(targetDevice.HostName, Properties.Resources.UpdateChrome))
+            try
             {
-                deploy.LogMessage("Chrome install complete.");
+                await deploy.SimplePowerShellCommand(targetDevice, Properties.Resources.UpdateChrome, "Chrome Install");
+                return true;
             }
-            else
+            catch (Exception)
             {
-                deploy.LogMessage("Chrome install failed!");
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
-            return true;
         }
 
         private async Task<bool> InstallCarbonBlack(Device targetDevice)
         {
-            deploy.LogMessage("Installing Carbon Black...");
-            var installCBExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetCarbonBlackInstallString());
-            if (installCBExitCode == 0)
+            try
             {
-                deploy.LogMessage("Carbon Black Installed!");
+                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("carbonblack_install"), "Carbon Black Install");
+                return true;
             }
-            else
+            catch (Exception)
             {
-                deploy.LogMessage("Carbon Black Install failed! Exit code: " + installCBExitCode.ToString());
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
-            return true;
         }
 
         private async Task<bool> InstallOffice(Device targetDevice)
@@ -308,19 +281,31 @@ namespace AssetManager.Tools.Deployment
 
         private async Task<bool> InstallVPNClient(Device targetDevice)
         {
-            deploy.LogMessage("Installing VPN Client... (Remember to open client and set FCBDD Profile to 'Public')");
-            var installVPNExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetVPNInstallString());
-            if (installVPNExitCode == 0)
+            try
             {
-                deploy.LogMessage("VPN Client Installed!");
+                deploy.LogMessage("Installing VPN Client... (Remember to open client and set FCBDD Profile to 'Public')");
+                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("vpn_install"), "VPN Client Install");
+                return true;
             }
-            else
+            catch (Exception)
             {
-                deploy.LogMessage("Exit Code: " + installVPNExitCode);
                 deploy.LogMessage("### Errors are expected due to the installation causing the device to momentarily disconnect.");
                 return true;
             }
-            return true;
+        }
+
+        private async Task<bool> InstallMapWinGIS(Device targetDevice)
+        {
+            try
+            {
+                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("vcredist_install"), "Visual C++ Redist Install");
+                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("mapwingis_install"), "MapWinGIS Install");
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         #endregion DeploymentMethods
@@ -339,21 +324,6 @@ namespace AssetManager.Tools.Deployment
             return session;
         }
 
-        private string GetMVPSInstallString()
-        {
-            return deploy.GetString("mvps_install");
-        }
-
-        private string GetGKClientInstallString()
-        {
-            return deploy.GetString("gk_client");
-        }
-
-        private string GetGKUpdateString()
-        {
-            return deploy.GetString("gk_update");
-        }
-
         private async Task<PowerShell> GetGKRegFixSession(Device targetDevice)
         {
             var session = await deploy.PowerShellWrap.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
@@ -364,21 +334,6 @@ namespace AssetManager.Tools.Deployment
             session.Commands.AddCommand(registryFixCommand);
 
             return session;
-        }
-
-        private string GetIVueInstallString()
-        {
-            return deploy.GetString("ivue_install");
-        }
-
-        private string GetCarbonBlackInstallString()
-        {
-            return deploy.GetString("carbonblack_install");
-        }
-
-        private string GetVPNInstallString()
-        {
-            return deploy.GetString("vpn_install");
         }
 
         #endregion DeploymentSupportMethods

@@ -29,8 +29,11 @@ namespace AssetManager.UserInterface.Forms
             InitializeComponent();
             this.Icon = Properties.Resources.asset_icon;
             CredDescriptionLabel.Text = credentialDescription;
-            UsernameTextBox.Text = lastUsername;
-            this.ActiveControl = PasswordTextBox;
+            if (!string.IsNullOrEmpty(lastUsername))
+            {
+                UsernameTextBox.Text = lastUsername;
+                this.ActiveControl = PasswordTextBox;
+            }
         }
 
         private void Accept()

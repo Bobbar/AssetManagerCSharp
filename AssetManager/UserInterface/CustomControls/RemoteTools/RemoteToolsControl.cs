@@ -292,7 +292,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-                    var newDeviceDeploy = new NewDeviceDeployment(hostForm);
+                    var newDeviceDeploy = new SoftwareDeployment(hostForm);
                     OnStatusPrompt("Deploying New Device Software...", 0);
                     if (await newDeviceDeploy.DeployToDevice(targetDevice))
                     {

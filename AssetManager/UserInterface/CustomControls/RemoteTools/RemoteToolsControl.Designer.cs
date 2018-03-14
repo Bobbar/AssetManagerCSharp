@@ -20,16 +20,16 @@
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.ShowIPButton = new System.Windows.Forms.Button();
             this.FlowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.GKUpdateButton = new System.Windows.Forms.Button();
-            this.BrowseFilesButton = new System.Windows.Forms.Button();
             this.RestartDeviceButton = new System.Windows.Forms.PictureBox();
+            this.BrowseFilesButton = new System.Windows.Forms.Button();
             this.StartRDPButton = new System.Windows.Forms.Button();
+            this.EventViewerButton = new System.Windows.Forms.Button();
+            this.GKUpdateButton = new System.Windows.Forms.Button();
             this.DeployTVButton = new System.Windows.Forms.Button();
             this.UpdateChromeButton = new System.Windows.Forms.Button();
-            this.EventViewerButton = new System.Windows.Forms.Button();
             this.DeployOfficeButton = new System.Windows.Forms.Button();
             this.NewDeployButton = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox.SuspendLayout();
             this.FlowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).BeginInit();
@@ -83,32 +83,6 @@
             this.FlowLayoutPanel1.Size = new System.Drawing.Size(320, 86);
             this.FlowLayoutPanel1.TabIndex = 58;
             // 
-            // GKUpdateButton
-            // 
-            this.GKUpdateButton.BackgroundImage = global::AssetManager.Properties.Resources.GK__UpdateIcon;
-            this.GKUpdateButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.GKUpdateButton.Location = new System.Drawing.Point(189, 1);
-            this.GKUpdateButton.Margin = new System.Windows.Forms.Padding(1);
-            this.GKUpdateButton.Name = "GKUpdateButton";
-            this.GKUpdateButton.Size = new System.Drawing.Size(45, 45);
-            this.GKUpdateButton.TabIndex = 55;
-            this.toolTip.SetToolTip(this.GKUpdateButton, "Enqueue GK Update");
-            this.GKUpdateButton.UseVisualStyleBackColor = true;
-            this.GKUpdateButton.Click += new System.EventHandler(this.GKUpdateButton_Click);
-            // 
-            // BrowseFilesButton
-            // 
-            this.BrowseFilesButton.BackgroundImage = global::AssetManager.Properties.Resources.FolderIcon;
-            this.BrowseFilesButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BrowseFilesButton.Location = new System.Drawing.Point(48, 1);
-            this.BrowseFilesButton.Margin = new System.Windows.Forms.Padding(1);
-            this.BrowseFilesButton.Name = "BrowseFilesButton";
-            this.BrowseFilesButton.Size = new System.Drawing.Size(45, 45);
-            this.BrowseFilesButton.TabIndex = 52;
-            this.toolTip.SetToolTip(this.BrowseFilesButton, "Browse Files");
-            this.BrowseFilesButton.UseVisualStyleBackColor = true;
-            this.BrowseFilesButton.Click += new System.EventHandler(this.BrowseFilesButton_Click);
-            // 
             // RestartDeviceButton
             // 
             this.RestartDeviceButton.BackColor = System.Drawing.SystemColors.ControlLight;
@@ -124,6 +98,19 @@
             this.toolTip.SetToolTip(this.RestartDeviceButton, "Restart Computer");
             this.RestartDeviceButton.Click += new System.EventHandler(this.RestartDeviceButton_Click);
             // 
+            // BrowseFilesButton
+            // 
+            this.BrowseFilesButton.BackgroundImage = global::AssetManager.Properties.Resources.FolderIcon;
+            this.BrowseFilesButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BrowseFilesButton.Location = new System.Drawing.Point(48, 1);
+            this.BrowseFilesButton.Margin = new System.Windows.Forms.Padding(1);
+            this.BrowseFilesButton.Name = "BrowseFilesButton";
+            this.BrowseFilesButton.Size = new System.Drawing.Size(45, 45);
+            this.BrowseFilesButton.TabIndex = 52;
+            this.toolTip.SetToolTip(this.BrowseFilesButton, "Browse Files");
+            this.BrowseFilesButton.UseVisualStyleBackColor = true;
+            this.BrowseFilesButton.Click += new System.EventHandler(this.BrowseFilesButton_Click);
+            // 
             // StartRDPButton
             // 
             this.StartRDPButton.BackgroundImage = global::AssetManager.Properties.Resources.RDPIcon;
@@ -137,6 +124,33 @@
             this.toolTip.SetToolTip(this.StartRDPButton, "Start Remote Desktop");
             this.StartRDPButton.UseVisualStyleBackColor = true;
             this.StartRDPButton.Click += new System.EventHandler(this.StartRDPButton_Click);
+            // 
+            // EventViewerButton
+            // 
+            this.EventViewerButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("EventViewerButton.BackgroundImage")));
+            this.EventViewerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.EventViewerButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.EventViewerButton.Location = new System.Drawing.Point(142, 1);
+            this.EventViewerButton.Margin = new System.Windows.Forms.Padding(1);
+            this.EventViewerButton.Name = "EventViewerButton";
+            this.EventViewerButton.Size = new System.Drawing.Size(45, 45);
+            this.EventViewerButton.TabIndex = 59;
+            this.toolTip.SetToolTip(this.EventViewerButton, "View Event Logs");
+            this.EventViewerButton.UseVisualStyleBackColor = true;
+            this.EventViewerButton.Click += new System.EventHandler(this.EventViewerButton_Click);
+            // 
+            // GKUpdateButton
+            // 
+            this.GKUpdateButton.BackgroundImage = global::AssetManager.Properties.Resources.GK__UpdateIcon;
+            this.GKUpdateButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.GKUpdateButton.Location = new System.Drawing.Point(189, 1);
+            this.GKUpdateButton.Margin = new System.Windows.Forms.Padding(1);
+            this.GKUpdateButton.Name = "GKUpdateButton";
+            this.GKUpdateButton.Size = new System.Drawing.Size(45, 45);
+            this.GKUpdateButton.TabIndex = 55;
+            this.toolTip.SetToolTip(this.GKUpdateButton, "Enqueue GK Update");
+            this.GKUpdateButton.UseVisualStyleBackColor = true;
+            this.GKUpdateButton.Click += new System.EventHandler(this.GKUpdateButton_Click);
             // 
             // DeployTVButton
             // 
@@ -166,20 +180,6 @@
             this.UpdateChromeButton.UseVisualStyleBackColor = true;
             this.UpdateChromeButton.Click += new System.EventHandler(this.UpdateChromeButton_Click);
             // 
-            // EventViewerButton
-            // 
-            this.EventViewerButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("EventViewerButton.BackgroundImage")));
-            this.EventViewerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.EventViewerButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.EventViewerButton.Location = new System.Drawing.Point(142, 1);
-            this.EventViewerButton.Margin = new System.Windows.Forms.Padding(1);
-            this.EventViewerButton.Name = "EventViewerButton";
-            this.EventViewerButton.Size = new System.Drawing.Size(45, 45);
-            this.EventViewerButton.TabIndex = 59;
-            this.toolTip.SetToolTip(this.EventViewerButton, "View Event Logs");
-            this.EventViewerButton.UseVisualStyleBackColor = true;
-            this.EventViewerButton.Click += new System.EventHandler(this.EventViewerButton_Click);
-            // 
             // DeployOfficeButton
             // 
             this.DeployOfficeButton.BackgroundImage = global::AssetManager.Properties.Resources.O365SquareLogo;
@@ -204,7 +204,7 @@
             this.NewDeployButton.Name = "NewDeployButton";
             this.NewDeployButton.Size = new System.Drawing.Size(45, 45);
             this.NewDeployButton.TabIndex = 61;
-            this.toolTip.SetToolTip(this.NewDeployButton, "New Device Deployment");
+            this.toolTip.SetToolTip(this.NewDeployButton, "Software Deployments");
             this.NewDeployButton.UseVisualStyleBackColor = true;
             this.NewDeployButton.Click += new System.EventHandler(this.NewDeployButton_Click);
             // 

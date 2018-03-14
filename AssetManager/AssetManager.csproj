@@ -211,7 +211,7 @@
     <Compile Include="StartProgram.cs" />
     <Compile Include="Tools\ActiveDirectory\ActiveDirectoryWrapper.cs" />
     <Compile Include="Tools\Deployment\DeployChrome.cs" />
-    <Compile Include="Tools\Deployment\NewDeviceDeployment.cs" />
+    <Compile Include="Tools\Deployment\SoftwareDeployment.cs" />
     <Compile Include="Tools\FileIcon.cs" />
     <Compile Include="Data\NetworkInfo.cs" />
     <Compile Include="Tools\Deployment\DeployOffice.cs" />

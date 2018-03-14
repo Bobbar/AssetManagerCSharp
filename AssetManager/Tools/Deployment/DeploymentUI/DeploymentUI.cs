@@ -1,6 +1,7 @@
 ﻿using AssetManager.Data;
-using AssetManager.Helpers;
+using AssetManager.Data.Classes;
 using AssetManager.Data.Functions;
+using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
 using System;
 using System.ComponentModel;
@@ -99,6 +100,38 @@ namespace AssetManager.Tools.Deployment
             logView.Show();
 
             watchDogTask.Start();
+        }
+
+        public async Task SimplePSExecCommand(Device targetDevice, string command, string title)
+        {
+            LogMessage("Starting " + title);
+            var exitCode = await PSExecWrap.ExecuteRemoteCommand(targetDevice, command);
+            if (exitCode == 0)
+            {
+                LogMessage(title + " complete!");
+            }
+            else
+            {
+                LogMessage(title + " failed! Exit code: " + exitCode.ToString());
+                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                throw new Exception("Error occurred while executing command");
+            }
+        }
+
+        public async Task SimplePowerShellCommand(Device targetDevice, byte[] scriptBytes, string title)
+        {
+            LogMessage("Starting " + title);
+            var success = await PowerShellWrap.ExecutePowerShellScript(targetDevice.HostName, scriptBytes);
+            if (success)
+            {
+                LogMessage(title + " complete!");
+            }
+            else
+            {
+                LogMessage(title + " failed!");
+                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                throw new Exception("Error occurred while executing command");
+            }
         }
 
         public void LogMessage(string message)
@@ -267,6 +300,7 @@ namespace AssetManager.Tools.Deployment
                 throw (new DeploymentCanceledException());
             }
         }
+
         // Wrapper to shorten calls.
         public string GetString(string stringName)
         {
