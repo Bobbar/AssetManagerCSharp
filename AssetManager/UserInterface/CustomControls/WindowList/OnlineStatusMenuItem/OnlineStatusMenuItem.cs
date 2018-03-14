@@ -5,7 +5,7 @@ namespace AssetManager.UserInterface.CustomControls
 {
     partial class OnlineStatusMenuItem : ToolStripMenuItem
     {
-        public ExtendedForm TargetForm;
+        public ExtendedForm TargetForm { get; set; }
 
         private bool onlineStatus = false;
 
@@ -17,7 +17,7 @@ namespace AssetManager.UserInterface.CustomControls
             onlineStatusInterface.OnlineStatusChanged -= OnlineStatusChanged;
             onlineStatusInterface.OnlineStatusChanged += OnlineStatusChanged;
         }
-        
+
         public OnlineStatusMenuItem() : base()
         {
         }
@@ -28,7 +28,6 @@ namespace AssetManager.UserInterface.CustomControls
 
             if (onlineStatus)
             {
-                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                 e.Graphics.FillRectangle(Brushes.LimeGreen, this.Image.Width, 0, 3, this.Bounds.Height);
             }
         }
