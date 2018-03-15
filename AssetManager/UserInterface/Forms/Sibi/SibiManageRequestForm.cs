@@ -834,7 +834,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             RequestItemsGrid.DoubleBufferedDataGrid(true);
             NotesGrid.DoubleBufferedDataGrid(true);
             MyMunisToolBar.InsertMunisDropDown(ToolStrip);
-            ImageCaching.CacheControlImages(this);
             MyWindowList.InsertWindowList(ToolStrip);
             StyleFunctions.SetGridStyle(RequestItemsGrid, GridTheme);
             StyleFunctions.SetGridStyle(NotesGrid, GridTheme);

@@ -87,7 +87,6 @@ namespace AssetManager.UserInterface.Forms
 
             InitializeComponent();
             AttachCountChanged += attachCountChangeHandler;
-            ImageCaching.CacheControlImages(this);
             AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
             AttachGrid.DoubleBufferedDataGrid(true);
             SetStatusBar("Idle...");

@@ -41,5 +41,12 @@ namespace AssetManager.UserInterface.CustomControls
                 this.Invalidate();
             }
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            TargetForm = null;
+            onlineStatusInterface = null;
+            base.Dispose(disposing);
+        }
     }
 }

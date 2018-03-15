@@ -81,8 +81,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             statusSlider = new SliderLabel();
             StatusStrip1.Items.Add(statusSlider.ToToolStripControl(StatusStrip1));
 
-            ImageCaching.CacheControlImages(this);
-
             RefreshCombos();
 
             DataGridHistory.DoubleBufferedDataGrid(true);

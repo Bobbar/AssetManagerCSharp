@@ -86,7 +86,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
             MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 2);
             MyWindowList.InsertWindowList(ToolStrip1);
-            ImageCaching.CacheControlImages(this);
             InitLiveBox();
 
             InitDBControls();
@@ -975,7 +974,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         components.Dispose();
                     }
 
-                    LastCommand.Dispose();
+                    LastCommand?.Dispose();
                     MyLiveBox.Dispose();
                     MyMunisToolBar.Dispose();
                     MyWindowList.Dispose();

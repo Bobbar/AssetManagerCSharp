@@ -961,9 +961,11 @@ namespace PingVisualizer
 
                     downsampleImage.Dispose();
                     downsampleGraphics.Dispose();
-
-                    DisposeBarList(currentBarList);
-                    currentBarList = null;
+                    if (currentBarList == null)
+                    {
+                        DisposeBarList(currentBarList);
+                        currentBarList = null;
+                    }
 
                     // TODO: dispose managed state (managed objects).
                 }

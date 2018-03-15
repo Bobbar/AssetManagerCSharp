@@ -18,6 +18,7 @@ namespace AssetManager.UserInterface.CustomControls
         private List<ExtendedForm> childForms = new List<ExtendedForm>();
 
         private bool inheritTheme = true;
+        private bool cacheImages = true;
 
         private ExtendedForm parentForm;
 
@@ -35,7 +36,6 @@ namespace AssetManager.UserInterface.CustomControls
         public ExtendedForm(ExtendedForm parentForm)
         {
             ParentForm = parentForm;
-            MemoryTweaks.SetWorkingSet();
             this.Load += ExtendedForm_Load;
             this.Disposed += ExtendedForm_Disposed;
             this.FormClosing += ExtendedForm_FormClosing;
@@ -45,7 +45,6 @@ namespace AssetManager.UserInterface.CustomControls
         {
             ParentForm = parentForm;
             FormGuid = currentObject.Guid;
-            MemoryTweaks.SetWorkingSet();
             this.Load += ExtendedForm_Load;
             this.Disposed += ExtendedForm_Disposed;
             this.FormClosing += ExtendedForm_FormClosing;
@@ -55,7 +54,6 @@ namespace AssetManager.UserInterface.CustomControls
         {
             ParentForm = parentForm;
             FormGuid = formGuid;
-            MemoryTweaks.SetWorkingSet();
             this.Load += ExtendedForm_Load;
             this.Disposed += ExtendedForm_Disposed;
             this.FormClosing += ExtendedForm_FormClosing;
@@ -65,7 +63,6 @@ namespace AssetManager.UserInterface.CustomControls
         {
             this.inheritTheme = inheritTheme;
             ParentForm = parentForm;
-            MemoryTweaks.SetWorkingSet();
             this.Load += ExtendedForm_Load;
             this.Disposed += ExtendedForm_Disposed;
             this.FormClosing += ExtendedForm_FormClosing;
@@ -112,6 +109,24 @@ namespace AssetManager.UserInterface.CustomControls
                 this.inheritTheme = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the value indicating whether the controls will have their images cached with a global reference. See <see cref="ImageCaching"/>.
+        /// </summary>
+        public bool CacheControlImages
+        {
+            get
+            {
+                return cacheImages;
+            }
+
+            set
+            {
+                this.cacheImages = value;
+            }
+        }
+
+
         /// <summary>
         /// Overloads the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="GridTheme"/> from the parent form.
         /// </summary>
@@ -246,6 +261,8 @@ namespace AssetManager.UserInterface.CustomControls
         private void ExtendedForm_Load(object sender, EventArgs e)
         {
             parentForm?.AddChild(this);
+            if (cacheImages) ImageCaching.CacheControlImages(this);
+            MemoryTweaks.SetWorkingSet();
         }
 
         /// <summary>

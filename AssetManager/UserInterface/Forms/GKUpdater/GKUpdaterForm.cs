@@ -25,6 +25,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
         {
             // This call is required by the designer.
             InitializeComponent();
+            this.CacheControlImages = false;
             this.Icon = Properties.Resources.asset_icon;
             bolStarting = false;
             MaxUpdates.Value = MaxSimUpdates;

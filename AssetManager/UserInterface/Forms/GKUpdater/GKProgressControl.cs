@@ -41,8 +41,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
         {
             Disposed += GK_Progress_Fragment_Disposed;
             InitializeComponent();
-            ImageCaching.CacheControlImages(this);
-            this.Size = this.MinimumSize;
+             this.Size = this.MinimumSize;
             MyParentForm = parentForm;
             currentDevice = device;
             MyUpdater = new GKUpdaterLibClass(currentDevice.HostName, gkPath);
@@ -70,7 +69,6 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
         {
             Disposed += GK_Progress_Fragment_Disposed;
             InitializeComponent();
-            ImageCaching.CacheControlImages(this);
             this.Size = this.MinimumSize;
             MyParentForm = parentForm;
             currentDevice = device;

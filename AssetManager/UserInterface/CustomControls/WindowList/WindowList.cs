@@ -112,6 +112,16 @@ namespace AssetManager.UserInterface.CustomControls
             SetVisibility();
         }
 
+        private void DisposeAllDropDownItems()
+        {
+            for (int i = 0; i < dropDownControl.DropDownItems.Count; i++)
+            {
+                dropDownControl.DropDownItems[i].MouseDown -= ItemClicked;
+                dropDownControl.DropDownItems[i].Dispose();
+            }
+            dropDownControl.DropDownItems.Clear();
+        }
+
         private void DropDownControl_DropDownClosed(object sender, EventArgs e)
         {
             dropDownOpen = false;
@@ -187,7 +197,7 @@ namespace AssetManager.UserInterface.CustomControls
 
             if (!dropDownOpen)
             {
-                dropDownControl.DropDownItems.Clear();
+                DisposeAllDropDownItems();
                 AddParentMenu();
                 BuildWindowList(parentForm, dropDownControl.DropDownItems);
             }
@@ -228,6 +238,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (disposing)
                 {
+                    DisposeAllDropDownItems();
                     dropDownControl.Dispose();
                     windowListForm.ChildCountChanged -= WindowListForm_WindowCountChanged;
                     dropDownControl.DropDownClosed -= DropDownControl_DropDownClosed;

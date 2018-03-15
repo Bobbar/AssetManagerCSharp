@@ -44,7 +44,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 this.GridTheme = new GridTheme(Colors.HighlightBlue, Colors.SibiSelectColor, Colors.SibiSelectAltColor, SibiResultGrid.DefaultCellStyle.BackColor);
                 StyleFunctions.SetGridStyle(SibiResultGrid, this.GridTheme);
                 ToolStrip1.BackColor = Colors.SibiToolBarColor;
-                ImageCaching.CacheControlImages(this);
                 windowList.InsertWindowList(ToolStrip1);
                 SetDisplayYears();
                 this.Show();

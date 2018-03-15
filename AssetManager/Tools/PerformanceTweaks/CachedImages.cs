@@ -37,8 +37,7 @@ namespace AssetManager.Tools
                     SetControlImage(ctl);
                 }
                 //If the control has children, recurse.
-                if (ctl.HasChildren)
-                    CacheControlImages(ctl);
+                if (ctl.HasChildren) CacheControlImages(ctl);
             }
         }
 

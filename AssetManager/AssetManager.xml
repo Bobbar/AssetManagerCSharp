@@ -925,6 +925,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.CacheControlImages">
+            <summary>
+            Gets or sets the value indicating whether the controls will have their images cached with a global reference. See <see cref="T:AssetManager.Tools.ImageCaching"/>.
+            </summary>
+        </member>
         <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.ParentForm">
             <summary>
             Overloads the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="P:AssetManager.UserInterface.CustomControls.ExtendedForm.GridTheme"/> from the parent form.
@@ -984,7 +989,7 @@
         </member>
         <member name="E:AssetManager.UserInterface.CustomControls.RemoteToolsControl.HostBackOnline">
             <summary>
-            Occurs when a successful ping is received after the number of failed pings has exceeded <see cref="P:AssetManager.UserInterface.CustomControls.RemoteToolsControl.MaxFailedUntilNotify"/> 
+            Occurs when a successful ping is received after the number of failed pings has exceeded <see cref="P:AssetManager.UserInterface.CustomControls.RemoteToolsControl.MaxFailedUntilNotify"/>
             </summary>
         </member>
         <member name="F:AssetManager.UserInterface.CustomControls.RemoteToolsControl.components">

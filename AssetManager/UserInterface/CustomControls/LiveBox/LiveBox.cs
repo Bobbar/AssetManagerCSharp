@@ -18,10 +18,9 @@ namespace AssetManager.UserInterface.CustomControls
         private ListBox liveListBox;
         private List<LiveBoxArgs> liveBoxControls = new List<LiveBoxArgs>();
         private int rowLimit = 30;
-
         private bool queryRunning = false;
-
         private string previousSearchString;
+        private int previousIndex = -1;
 
         #endregion "Fields"
 
@@ -219,7 +218,13 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void LiveBox_MouseMove(object sender, MouseEventArgs e)
         {
-            liveListBox.SelectedIndex = liveListBox.IndexFromPoint(e.Location);
+            int currentIndex = liveListBox.IndexFromPoint(e.Location);
+
+            if (previousIndex != currentIndex)
+            {
+                previousIndex = currentIndex;
+                liveListBox.SetSelected(currentIndex, true);
+            }
         }
 
         private void LiveBoxSelect()
