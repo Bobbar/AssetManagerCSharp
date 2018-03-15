@@ -66,7 +66,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             // 
             this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblStatus.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatus.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.lblStatus.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.lblStatus.Location = new System.Drawing.Point(2, 61);
             this.lblStatus.Name = "lblStatus";
@@ -79,10 +79,10 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             // 
             this.lblInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblInfo.BackColor = System.Drawing.Color.FromArgb(64,64,64);
             this.lblInfo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblInfo.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblInfo.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInfo.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.lblInfo.ForeColor = System.Drawing.Color.White;
             this.lblInfo.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.lblInfo.Location = new System.Drawing.Point(75, 4);
@@ -99,10 +99,10 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             this.rtbLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.rtbLog.BackColor = System.Drawing.Color.FromArgb(64,64,64);
             this.rtbLog.DetectUrls = false;
-            this.rtbLog.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
+            this.rtbLog.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            this.rtbLog.ForeColor = System.Drawing.Color.FromArgb(234,234,234);
             this.rtbLog.Location = new System.Drawing.Point(4, 87);
             this.rtbLog.Name = "rtbLog";
             this.rtbLog.ReadOnly = true;
@@ -115,7 +115,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             this.lblShowHide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblShowHide.AutoSize = true;
             this.lblShowHide.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblShowHide.Font = new System.Drawing.Font("Wingdings 3", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.lblShowHide.Font = new System.Drawing.Font("Wingdings 3", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 2);
             this.lblShowHide.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.lblShowHide.Location = new System.Drawing.Point(373, 72);
             this.lblShowHide.Name = "lblShowHide";
@@ -194,7 +194,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             // lblTransRate
             // 
             this.lblTransRate.AutoSize = true;
-            this.lblTransRate.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTransRate.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.lblTransRate.Location = new System.Drawing.Point(327, 48);
             this.lblTransRate.Name = "lblTransRate";
             this.lblTransRate.Size = new System.Drawing.Size(43, 13);
@@ -225,7 +225,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.Panel1);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.MaximumSize = new System.Drawing.Size(400, 300);
             this.MinimumSize = new System.Drawing.Size(400, 87);
             this.Name = "GKProgressControl";

@@ -82,7 +82,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // SerialTextBox
             // 
-            this.SerialTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SerialTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.SerialTextBox.Location = new System.Drawing.Point(17, 46);
             this.SerialTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.SerialTextBox.Name = "SerialTextBox";
@@ -93,7 +93,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label1.Location = new System.Drawing.Point(14, 26);
             this.Label1.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label1.Name = "Label1";
@@ -103,7 +103,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // CurrentUserTextBox
             // 
-            this.CurrentUserTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CurrentUserTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.CurrentUserTextBox.Location = new System.Drawing.Point(17, 144);
             this.CurrentUserTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.CurrentUserTextBox.Name = "CurrentUserTextBox";
@@ -125,7 +125,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label3.Location = new System.Drawing.Point(14, 124);
             this.Label3.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label3.Name = "Label3";
@@ -136,7 +136,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label2
             // 
             this.Label2.AutoSize = true;
-            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label2.Location = new System.Drawing.Point(14, 75);
             this.Label2.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label2.Name = "Label2";
@@ -146,7 +146,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // Label12
             // 
-            this.Label12.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label12.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label12.ForeColor = System.Drawing.Color.Gray;
             this.Label12.Location = new System.Drawing.Point(92, 79);
             this.Label12.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
@@ -158,7 +158,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // AssetTagTextBox
             // 
-            this.AssetTagTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AssetTagTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.AssetTagTextBox.Location = new System.Drawing.Point(17, 95);
             this.AssetTagTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.AssetTagTextBox.Name = "AssetTagTextBox";
@@ -168,7 +168,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // NoClearCheckBox
             // 
             this.NoClearCheckBox.AutoSize = true;
-            this.NoClearCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NoClearCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.NoClearCheckBox.Location = new System.Drawing.Point(732, 392);
             this.NoClearCheckBox.Name = "NoClearCheckBox";
             this.NoClearCheckBox.Size = new System.Drawing.Size(91, 20);
@@ -179,7 +179,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // TrackableCheckBox
             // 
             this.TrackableCheckBox.AutoSize = true;
-            this.TrackableCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TrackableCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.TrackableCheckBox.Location = new System.Drawing.Point(31, 196);
             this.TrackableCheckBox.Name = "TrackableCheckBox";
             this.TrackableCheckBox.Size = new System.Drawing.Size(135, 20);
@@ -189,7 +189,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // ClearButton
             // 
-            this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.ClearButton.Location = new System.Drawing.Point(693, 427);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(170, 23);
@@ -201,7 +201,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label11
             // 
             this.Label11.AutoSize = true;
-            this.Label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label11.Location = new System.Drawing.Point(14, 226);
             this.Label11.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label11.Name = "Label11";
@@ -211,7 +211,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // StatusComboBox
             // 
-            this.StatusComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.StatusComboBox.FormattingEnabled = true;
             this.StatusComboBox.Location = new System.Drawing.Point(17, 246);
             this.StatusComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
@@ -222,7 +222,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label10
             // 
             this.Label10.AutoSize = true;
-            this.Label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label10.Location = new System.Drawing.Point(14, 126);
             this.Label10.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label10.Name = "Label10";
@@ -232,7 +232,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // OSTypeComboBox
             // 
-            this.OSTypeComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OSTypeComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.OSTypeComboBox.FormattingEnabled = true;
             this.OSTypeComboBox.Location = new System.Drawing.Point(17, 146);
             this.OSTypeComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
@@ -244,7 +244,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label9
             // 
             this.Label9.AutoSize = true;
-            this.Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label9.Location = new System.Drawing.Point(11, 135);
             this.Label9.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label9.Name = "Label9";
@@ -254,7 +254,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // POTextBox
             // 
-            this.POTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.POTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.POTextBox.Location = new System.Drawing.Point(14, 154);
             this.POTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.POTextBox.Name = "POTextBox";
@@ -264,7 +264,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label8
             // 
             this.Label8.AutoSize = true;
-            this.Label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label8.Location = new System.Drawing.Point(14, 76);
             this.Label8.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label8.Name = "Label8";
@@ -274,7 +274,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // EquipTypeComboBox
             // 
-            this.EquipTypeComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EquipTypeComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.EquipTypeComboBox.FormattingEnabled = true;
             this.EquipTypeComboBox.Location = new System.Drawing.Point(17, 96);
             this.EquipTypeComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
@@ -284,7 +284,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // NotesTextBox
             // 
-            this.NotesTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NotesTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.NotesTextBox.Location = new System.Drawing.Point(6, 21);
             this.NotesTextBox.MaxLength = 200;
             this.NotesTextBox.Multiline = true;
@@ -294,7 +294,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // AddButton
             // 
-            this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.AddButton.Location = new System.Drawing.Point(693, 342);
             this.AddButton.Name = "AddButton";
             this.AddButton.Size = new System.Drawing.Size(170, 44);
@@ -306,7 +306,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label6
             // 
             this.Label6.AutoSize = true;
-            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label6.Location = new System.Drawing.Point(10, 81);
             this.Label6.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label6.Name = "Label6";
@@ -316,7 +316,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // ReplaceYearTextBox
             // 
-            this.ReplaceYearTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReplaceYearTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.ReplaceYearTextBox.Location = new System.Drawing.Point(14, 100);
             this.ReplaceYearTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.ReplaceYearTextBox.Name = "ReplaceYearTextBox";
@@ -326,7 +326,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // lbPurchaseDate
             // 
             this.lbPurchaseDate.AutoSize = true;
-            this.lbPurchaseDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPurchaseDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.lbPurchaseDate.Location = new System.Drawing.Point(10, 27);
             this.lbPurchaseDate.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.lbPurchaseDate.Name = "lbPurchaseDate";
@@ -337,7 +337,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // PurchaseDatePicker
             // 
             this.PurchaseDatePicker.CustomFormat = "yyyy-MM-dd";
-            this.PurchaseDatePicker.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PurchaseDatePicker.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.PurchaseDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.PurchaseDatePicker.Location = new System.Drawing.Point(13, 46);
             this.PurchaseDatePicker.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
@@ -350,7 +350,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label5.Location = new System.Drawing.Point(14, 176);
             this.Label5.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label5.Name = "Label5";
@@ -361,7 +361,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // LocationComboBox
             // 
             this.LocationComboBox.DropDownWidth = 171;
-            this.LocationComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LocationComboBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.LocationComboBox.FormattingEnabled = true;
             this.LocationComboBox.Location = new System.Drawing.Point(17, 196);
             this.LocationComboBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
@@ -372,7 +372,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label4
             // 
             this.Label4.AutoSize = true;
-            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label4.Location = new System.Drawing.Point(14, 28);
             this.Label4.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label4.Name = "Label4";
@@ -382,7 +382,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // DescriptionTextBox
             // 
-            this.DescriptionTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DescriptionTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.DescriptionTextBox.Location = new System.Drawing.Point(17, 47);
             this.DescriptionTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.DescriptionTextBox.Name = "DescriptionTextBox";
@@ -441,7 +441,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // iCloudTextBox
             // 
-            this.iCloudTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iCloudTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.iCloudTextBox.Location = new System.Drawing.Point(14, 154);
             this.iCloudTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.iCloudTextBox.Name = "iCloudTextBox";
@@ -451,7 +451,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label14
             // 
             this.Label14.AutoSize = true;
-            this.Label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label14.Location = new System.Drawing.Point(11, 134);
             this.Label14.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label14.Name = "Label14";
@@ -461,7 +461,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // HostnameTextBox
             // 
-            this.HostnameTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HostnameTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.HostnameTextBox.Location = new System.Drawing.Point(14, 100);
             this.HostnameTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.HostnameTextBox.Name = "HostnameTextBox";
@@ -471,7 +471,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label7
             // 
             this.Label7.AutoSize = true;
-            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label7.Location = new System.Drawing.Point(11, 80);
             this.Label7.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label7.Name = "Label7";
@@ -481,7 +481,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // PhoneNumTextBox
             // 
-            this.PhoneNumTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PhoneNumTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.PhoneNumTextBox.Location = new System.Drawing.Point(14, 46);
             this.PhoneNumTextBox.Mask = "(999) 000-0000";
             this.PhoneNumTextBox.Name = "PhoneNumTextBox";
@@ -493,7 +493,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label13
             // 
             this.Label13.AutoSize = true;
-            this.Label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label13.Location = new System.Drawing.Point(11, 25);
             this.Label13.Margin = new System.Windows.Forms.Padding(2, 2, 40, 2);
             this.Label13.Name = "Label13";
@@ -504,7 +504,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // GroupBox6
             // 
             this.GroupBox6.Controls.Add(this.NotesTextBox);
-            this.GroupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GroupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.GroupBox6.Location = new System.Drawing.Point(84, 19);
             this.GroupBox6.Name = "GroupBox6";
             this.GroupBox6.Size = new System.Drawing.Size(378, 119);
@@ -525,7 +525,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.ClientSize = new System.Drawing.Size(997, 472);
             this.Controls.Add(this.NoClearCheckBox);
             this.Controls.Add(this.ClearButton);

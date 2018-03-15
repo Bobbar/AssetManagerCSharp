@@ -63,7 +63,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.GroupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.GroupBox1.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.GroupBox1.Controls.Add(this.GroupBox2);
             this.GroupBox1.Controls.Add(this.Label20);
             this.GroupBox1.Controls.Add(this.iCloudTextBox);
@@ -117,7 +117,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox2.Controls.Add(this.NotesTextBox);
-            this.GroupBox2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GroupBox2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.GroupBox2.Location = new System.Drawing.Point(6, 230);
             this.GroupBox2.Name = "GroupBox2";
             this.GroupBox2.Size = new System.Drawing.Size(795, 171);
@@ -128,7 +128,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // NotesTextBox
             // 
             this.NotesTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.NotesTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NotesTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.NotesTextBox.Location = new System.Drawing.Point(3, 19);
             this.NotesTextBox.Name = "NotesTextBox";
             this.NotesTextBox.ReadOnly = true;
@@ -139,7 +139,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label20
             // 
             this.Label20.AutoSize = true;
-            this.Label20.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label20.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label20.Location = new System.Drawing.Point(560, 162);
             this.Label20.Name = "Label20";
             this.Label20.Size = new System.Drawing.Size(84, 15);
@@ -149,7 +149,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // iCloudTextBox
             // 
             this.iCloudTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.iCloudTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iCloudTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.iCloudTextBox.Location = new System.Drawing.Point(563, 181);
             this.iCloudTextBox.Name = "iCloudTextBox";
             this.iCloudTextBox.ReadOnly = true;
@@ -159,7 +159,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label19
             // 
             this.Label19.AutoSize = true;
-            this.Label19.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label19.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label19.Location = new System.Drawing.Point(14, 162);
             this.Label19.Name = "Label19";
             this.Label19.Size = new System.Drawing.Size(70, 15);
@@ -169,7 +169,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtHostname
             // 
             this.txtHostname.BackColor = System.Drawing.SystemColors.Window;
-            this.txtHostname.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtHostname.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtHostname.Location = new System.Drawing.Point(17, 181);
             this.txtHostname.Name = "txtHostname";
             this.txtHostname.ReadOnly = true;
@@ -179,7 +179,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label18
             // 
             this.Label18.AutoSize = true;
-            this.Label18.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label18.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label18.Location = new System.Drawing.Point(14, 119);
             this.Label18.Name = "Label18";
             this.Label18.Size = new System.Drawing.Size(49, 15);
@@ -189,7 +189,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtPhoneNumber
             // 
             this.txtPhoneNumber.BackColor = System.Drawing.SystemColors.Window;
-            this.txtPhoneNumber.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPhoneNumber.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtPhoneNumber.Location = new System.Drawing.Point(17, 138);
             this.txtPhoneNumber.Name = "txtPhoneNumber";
             this.txtPhoneNumber.ReadOnly = true;
@@ -200,7 +200,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.chkTrackable.AutoSize = true;
             this.chkTrackable.Enabled = false;
-            this.chkTrackable.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkTrackable.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.chkTrackable.Location = new System.Drawing.Point(563, 210);
             this.chkTrackable.Name = "chkTrackable";
             this.chkTrackable.Size = new System.Drawing.Size(89, 19);
@@ -211,7 +211,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label17
             // 
             this.Label17.AutoSize = true;
-            this.Label17.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label17.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label17.Location = new System.Drawing.Point(560, 75);
             this.Label17.Name = "Label17";
             this.Label17.Size = new System.Drawing.Size(77, 15);
@@ -221,7 +221,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtEntryGuid
             // 
             this.txtEntryGuid.BackColor = System.Drawing.SystemColors.Window;
-            this.txtEntryGuid.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtEntryGuid.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtEntryGuid.Location = new System.Drawing.Point(563, 94);
             this.txtEntryGuid.Name = "txtEntryGuid";
             this.txtEntryGuid.ReadOnly = true;
@@ -231,7 +231,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label16
             // 
             this.Label16.AutoSize = true;
-            this.Label16.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label16.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label16.Location = new System.Drawing.Point(560, 119);
             this.Label16.Name = "Label16";
             this.Label16.Size = new System.Drawing.Size(49, 15);
@@ -241,7 +241,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtStatus
             // 
             this.txtStatus.BackColor = System.Drawing.SystemColors.Window;
-            this.txtStatus.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtStatus.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtStatus.Location = new System.Drawing.Point(563, 138);
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.ReadOnly = true;
@@ -251,7 +251,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label14
             // 
             this.Label14.AutoSize = true;
-            this.Label14.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label14.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label14.Location = new System.Drawing.Point(14, 75);
             this.Label14.Name = "Label14";
             this.Label14.Size = new System.Drawing.Size(84, 15);
@@ -261,7 +261,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtActionUser
             // 
             this.txtActionUser.BackColor = System.Drawing.SystemColors.Window;
-            this.txtActionUser.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtActionUser.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtActionUser.Location = new System.Drawing.Point(17, 94);
             this.txtActionUser.Name = "txtActionUser";
             this.txtActionUser.ReadOnly = true;
@@ -271,7 +271,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label13
             // 
             this.Label13.AutoSize = true;
-            this.Label13.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label13.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label13.Location = new System.Drawing.Point(14, 28);
             this.Label13.Name = "Label13";
             this.Label13.Size = new System.Drawing.Size(77, 15);
@@ -281,7 +281,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtEntryTime
             // 
             this.txtEntryTime.BackColor = System.Drawing.SystemColors.Window;
-            this.txtEntryTime.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtEntryTime.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtEntryTime.Location = new System.Drawing.Point(17, 47);
             this.txtEntryTime.Name = "txtEntryTime";
             this.txtEntryTime.ReadOnly = true;
@@ -291,7 +291,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label12
             // 
             this.Label12.AutoSize = true;
-            this.Label12.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label12.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label12.Location = new System.Drawing.Point(560, 28);
             this.Label12.Name = "Label12";
             this.Label12.Size = new System.Drawing.Size(84, 15);
@@ -301,7 +301,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtGuid
             // 
             this.txtGuid.BackColor = System.Drawing.SystemColors.Window;
-            this.txtGuid.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtGuid.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtGuid.Location = new System.Drawing.Point(563, 47);
             this.txtGuid.Name = "txtGuid";
             this.txtGuid.ReadOnly = true;
@@ -311,7 +311,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label11
             // 
             this.Label11.AutoSize = true;
-            this.Label11.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label11.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label11.Location = new System.Drawing.Point(438, 162);
             this.Label11.Name = "Label11";
             this.Label11.Size = new System.Drawing.Size(56, 15);
@@ -321,7 +321,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtEQType
             // 
             this.txtEQType.BackColor = System.Drawing.SystemColors.Window;
-            this.txtEQType.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtEQType.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtEQType.Location = new System.Drawing.Point(441, 181);
             this.txtEQType.Name = "txtEQType";
             this.txtEQType.ReadOnly = true;
@@ -331,7 +331,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label10
             // 
             this.Label10.AutoSize = true;
-            this.Label10.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label10.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label10.Location = new System.Drawing.Point(438, 119);
             this.Label10.Name = "Label10";
             this.Label10.Size = new System.Drawing.Size(77, 15);
@@ -341,7 +341,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtOSVersion
             // 
             this.txtOSVersion.BackColor = System.Drawing.SystemColors.Window;
-            this.txtOSVersion.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtOSVersion.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtOSVersion.Location = new System.Drawing.Point(441, 138);
             this.txtOSVersion.Name = "txtOSVersion";
             this.txtOSVersion.ReadOnly = true;
@@ -351,7 +351,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label9
             // 
             this.Label9.AutoSize = true;
-            this.Label9.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label9.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label9.Location = new System.Drawing.Point(438, 75);
             this.Label9.Name = "Label9";
             this.Label9.Size = new System.Drawing.Size(70, 15);
@@ -361,7 +361,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtPONumber
             // 
             this.txtPONumber.BackColor = System.Drawing.SystemColors.Window;
-            this.txtPONumber.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPONumber.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtPONumber.Location = new System.Drawing.Point(441, 94);
             this.txtPONumber.Name = "txtPONumber";
             this.txtPONumber.ReadOnly = true;
@@ -371,7 +371,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label8
             // 
             this.Label8.AutoSize = true;
-            this.Label8.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label8.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label8.Location = new System.Drawing.Point(317, 162);
             this.Label8.Name = "Label8";
             this.Label8.Size = new System.Drawing.Size(119, 15);
@@ -381,7 +381,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtReplaceYear
             // 
             this.txtReplaceYear.BackColor = System.Drawing.SystemColors.Window;
-            this.txtReplaceYear.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtReplaceYear.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtReplaceYear.Location = new System.Drawing.Point(320, 181);
             this.txtReplaceYear.Name = "txtReplaceYear";
             this.txtReplaceYear.ReadOnly = true;
@@ -391,7 +391,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label7
             // 
             this.Label7.AutoSize = true;
-            this.Label7.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label7.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label7.Location = new System.Drawing.Point(317, 119);
             this.Label7.Name = "Label7";
             this.Label7.Size = new System.Drawing.Size(98, 15);
@@ -401,7 +401,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtPurchaseDate
             // 
             this.txtPurchaseDate.BackColor = System.Drawing.SystemColors.Window;
-            this.txtPurchaseDate.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPurchaseDate.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtPurchaseDate.Location = new System.Drawing.Point(320, 138);
             this.txtPurchaseDate.Name = "txtPurchaseDate";
             this.txtPurchaseDate.ReadOnly = true;
@@ -411,7 +411,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label6
             // 
             this.Label6.AutoSize = true;
-            this.Label6.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label6.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label6.Location = new System.Drawing.Point(317, 75);
             this.Label6.Name = "Label6";
             this.Label6.Size = new System.Drawing.Size(63, 15);
@@ -421,7 +421,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtLocation
             // 
             this.txtLocation.BackColor = System.Drawing.SystemColors.Window;
-            this.txtLocation.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLocation.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtLocation.Location = new System.Drawing.Point(320, 94);
             this.txtLocation.Name = "txtLocation";
             this.txtLocation.ReadOnly = true;
@@ -431,7 +431,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label5.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label5.Location = new System.Drawing.Point(317, 28);
             this.Label5.Name = "Label5";
             this.Label5.Size = new System.Drawing.Size(84, 15);
@@ -441,7 +441,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtDescription
             // 
             this.txtDescription.BackColor = System.Drawing.SystemColors.Window;
-            this.txtDescription.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDescription.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtDescription.Location = new System.Drawing.Point(320, 47);
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.ReadOnly = true;
@@ -451,7 +451,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label4
             // 
             this.Label4.AutoSize = true;
-            this.Label4.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label4.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label4.Location = new System.Drawing.Point(191, 162);
             this.Label4.Name = "Label4";
             this.Label4.Size = new System.Drawing.Size(49, 15);
@@ -461,7 +461,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtSerial
             // 
             this.txtSerial.BackColor = System.Drawing.SystemColors.Window;
-            this.txtSerial.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSerial.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtSerial.Location = new System.Drawing.Point(194, 181);
             this.txtSerial.Name = "txtSerial";
             this.txtSerial.ReadOnly = true;
@@ -471,7 +471,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label3.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label3.Location = new System.Drawing.Point(191, 119);
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(70, 15);
@@ -481,7 +481,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtAssetTag
             // 
             this.txtAssetTag.BackColor = System.Drawing.SystemColors.Window;
-            this.txtAssetTag.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAssetTag.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtAssetTag.Location = new System.Drawing.Point(194, 138);
             this.txtAssetTag.Name = "txtAssetTag";
             this.txtAssetTag.ReadOnly = true;
@@ -491,7 +491,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label2
             // 
             this.Label2.AutoSize = true;
-            this.Label2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label2.Location = new System.Drawing.Point(189, 75);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(35, 15);
@@ -501,7 +501,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtCurrentUser
             // 
             this.txtCurrentUser.BackColor = System.Drawing.SystemColors.Window;
-            this.txtCurrentUser.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCurrentUser.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtCurrentUser.Location = new System.Drawing.Point(192, 94);
             this.txtCurrentUser.Name = "txtCurrentUser";
             this.txtCurrentUser.ReadOnly = true;
@@ -511,7 +511,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label1.Location = new System.Drawing.Point(189, 28);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(84, 15);
@@ -521,7 +521,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // txtChangeType
             // 
             this.txtChangeType.BackColor = System.Drawing.SystemColors.Window;
-            this.txtChangeType.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtChangeType.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtChangeType.Location = new System.Drawing.Point(192, 47);
             this.txtChangeType.Name = "txtChangeType";
             this.txtChangeType.ReadOnly = true;
@@ -531,10 +531,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // ViewHistoryForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.ClientSize = new System.Drawing.Size(832, 431);
             this.Controls.Add(this.GroupBox1);
-            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.MinimumSize = new System.Drawing.Size(848, 385);
             this.Name = "ViewHistoryForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;

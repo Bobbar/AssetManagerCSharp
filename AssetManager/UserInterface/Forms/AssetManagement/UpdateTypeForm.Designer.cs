@@ -46,14 +46,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.GroupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.GroupBox1.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.GroupBox1.Controls.Add(this.CancelUpdateButton);
             this.GroupBox1.Controls.Add(this.NotesTextBox);
             this.GroupBox1.Controls.Add(this.SubmitButton);
             this.GroupBox1.Controls.Add(this.Label2);
             this.GroupBox1.Controls.Add(this.Label1);
             this.GroupBox1.Controls.Add(this.UpdateTypeCombo);
-            this.GroupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GroupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.GroupBox1.Location = new System.Drawing.Point(12, 12);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(456, 297);
@@ -77,7 +77,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.NotesTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.NotesTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NotesTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.NotesTextBox.Location = new System.Drawing.Point(9, 85);
             this.NotesTextBox.Name = "NotesTextBox";
             this.NotesTextBox.Size = new System.Drawing.Size(438, 163);
@@ -118,7 +118,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // UpdateTypeCombo
             // 
             this.UpdateTypeCombo.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.UpdateTypeCombo.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UpdateTypeCombo.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.UpdateTypeCombo.FormattingEnabled = true;
             this.UpdateTypeCombo.Location = new System.Drawing.Point(165, 34);
             this.UpdateTypeCombo.Name = "UpdateTypeCombo";
@@ -135,7 +135,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.ClientSize = new System.Drawing.Size(480, 322);
             this.Controls.Add(this.GroupBox1);
             this.DoubleBuffered = true;

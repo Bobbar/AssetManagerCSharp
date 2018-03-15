@@ -177,7 +177,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // txtRTNumber
             // 
             this.txtRTNumber.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.txtRTNumber.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtRTNumber.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtRTNumber.Location = new System.Drawing.Point(17, 144);
             this.txtRTNumber.Name = "txtRTNumber";
             this.txtRTNumber.Size = new System.Drawing.Size(137, 22);
@@ -188,9 +188,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // txtCreateDate
             // 
             this.txtCreateDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCreateDate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.txtCreateDate.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.txtCreateDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCreateDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCreateDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtCreateDate.ForeColor = System.Drawing.Color.Black;
             this.txtCreateDate.Location = new System.Drawing.Point(263, 71);
             this.txtCreateDate.Name = "txtCreateDate";
@@ -265,7 +265,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox1.Controls.Add(this.txtUser);
             this.GroupBox1.Controls.Add(this.Label1);
             this.GroupBox1.Controls.Add(this.txtDescription);
-            this.GroupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GroupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.GroupBox1.Location = new System.Drawing.Point(5, 4);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(600, 264);
@@ -298,7 +298,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // cmdAccept
             // 
             this.cmdAccept.BackColor = System.Drawing.Color.PaleGreen;
-            this.cmdAccept.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdAccept.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.cmdAccept.Location = new System.Drawing.Point(9, 3);
             this.cmdAccept.Name = "cmdAccept";
             this.cmdAccept.Size = new System.Drawing.Size(119, 41);
@@ -309,8 +309,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // cmdDiscard
             // 
-            this.cmdDiscard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.cmdDiscard.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdDiscard.BackColor = System.Drawing.Color.FromArgb(255,128,128);
+            this.cmdDiscard.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.cmdDiscard.Location = new System.Drawing.Point(9, 50);
             this.cmdDiscard.Name = "cmdDiscard";
             this.cmdDiscard.Size = new System.Drawing.Size(119, 24);
@@ -330,7 +330,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // cmdAddNew
             // 
-            this.cmdAddNew.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdAddNew.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.cmdAddNew.Location = new System.Drawing.Point(9, 8);
             this.cmdAddNew.Name = "cmdAddNew";
             this.cmdAddNew.Size = new System.Drawing.Size(119, 41);
@@ -400,7 +400,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // lblReqStatus
             // 
             this.lblReqStatus.AutoSize = true;
-            this.lblReqStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblReqStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.lblReqStatus.ForeColor = System.Drawing.Color.DimGray;
             this.lblReqStatus.Location = new System.Drawing.Point(16, 112);
             this.lblReqStatus.Name = "lblReqStatus";
@@ -411,7 +411,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // lblPOStatus
             // 
             this.lblPOStatus.AutoSize = true;
-            this.lblPOStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPOStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.lblPOStatus.ForeColor = System.Drawing.Color.DimGray;
             this.lblPOStatus.Location = new System.Drawing.Point(16, 59);
             this.lblPOStatus.Name = "lblPOStatus";
@@ -440,7 +440,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // txtReqNumber
             // 
             this.txtReqNumber.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.txtReqNumber.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtReqNumber.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtReqNumber.Location = new System.Drawing.Point(17, 90);
             this.txtReqNumber.Name = "txtReqNumber";
             this.txtReqNumber.Size = new System.Drawing.Size(137, 22);
@@ -459,7 +459,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // txtPO
             // 
             this.txtPO.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.txtPO.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPO.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtPO.ForeColor = System.Drawing.SystemColors.WindowText;
             this.txtPO.Location = new System.Drawing.Point(17, 37);
             this.txtPO.Name = "txtPO";
@@ -560,7 +560,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel2.Controls.Add(this.NotesGrid);
-            this.Panel2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Panel2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Panel2.Location = new System.Drawing.Point(6, 13);
             this.Panel2.Name = "Panel2";
             this.Panel2.Size = new System.Drawing.Size(436, 244);
@@ -574,17 +574,17 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.NotesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.NotesGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.NotesGrid.BackgroundColor = System.Drawing.Color.FromArgb(64,64,64);
             this.NotesGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.NotesGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.NotesGrid.ColumnHeadersHeight = 25;
             this.NotesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.NotesGrid.ContextMenuStrip = this.PopupMenuNotes;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(64,64,64);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(39)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(255,152,39);
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.NotesGrid.DefaultCellStyle = dataGridViewCellStyle1;
@@ -593,8 +593,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.NotesGrid.Name = "NotesGrid";
             this.NotesGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(64,64,64);
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -616,7 +616,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel1.Controls.Add(this.GroupBox4);
-            this.Panel1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Panel1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Panel1.Location = new System.Drawing.Point(8, 314);
             this.Panel1.Name = "Panel1";
             this.Panel1.Size = new System.Drawing.Size(1061, 384);
@@ -643,16 +643,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.RequestItemsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.RequestItemsGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.RequestItemsGrid.BackgroundColor = System.Drawing.Color.FromArgb(64,64,64);
             this.RequestItemsGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.RequestItemsGrid.ColumnHeadersHeight = 38;
             this.RequestItemsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.RequestItemsGrid.ContextMenuStrip = this.PopupMenuItems;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(64,64,64);
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(185,205,255);
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.RequestItemsGrid.DefaultCellStyle = dataGridViewCellStyle3;
@@ -661,8 +661,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.RequestItemsGrid.Name = "RequestItemsGrid";
             this.RequestItemsGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(64,64,64);
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
             dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -703,8 +703,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // ToolStrip
             // 
-            this.ToolStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
-            this.ToolStrip.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ToolStrip.BackColor = System.Drawing.Color.FromArgb(185,205,255);
+            this.ToolStrip.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.ToolStrip.ImageScalingSize = new System.Drawing.Size(25, 25);
             this.ToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmdCreate,
@@ -794,8 +794,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // StatusStrip1
             // 
             this.StatusStrip1.AutoSize = false;
-            this.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
-            this.StatusStrip1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(232,232,232);
+            this.StatusStrip1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.StatusStrip1.Location = new System.Drawing.Point(0, 701);
             this.StatusStrip1.Name = "StatusStrip1";
             this.StatusStrip1.Size = new System.Drawing.Size(1079, 22);
@@ -806,7 +806,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.ClientSize = new System.Drawing.Size(1079, 723);
             this.Controls.Add(this.ToolStrip);
             this.Controls.Add(this.Panel1);

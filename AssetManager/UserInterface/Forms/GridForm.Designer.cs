@@ -32,7 +32,7 @@ namespace AssetManager.UserInterface.Forms
             this.GridPanel.ColumnCount = 1;
             this.GridPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.GridPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.GridPanel.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GridPanel.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.GridPanel.Location = new System.Drawing.Point(3, 3);
             this.GridPanel.Name = "GridPanel";
             this.GridPanel.RowCount = 1;
@@ -93,7 +93,7 @@ namespace AssetManager.UserInterface.Forms
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this.StatusStrip1);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.MinimumSize = new System.Drawing.Size(439, 282);
             this.Name = "GridForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;

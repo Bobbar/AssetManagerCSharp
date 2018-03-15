@@ -41,7 +41,7 @@
             this.groupBox.Controls.Add(this.ShowIPButton);
             this.groupBox.Controls.Add(this.FlowLayoutPanel1);
             this.groupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.groupBox.Location = new System.Drawing.Point(0, 0);
             this.groupBox.Name = "groupBox";
             this.groupBox.Size = new System.Drawing.Size(421, 108);
@@ -55,7 +55,7 @@
             this.ShowIPButton.BackColor = System.Drawing.Color.Black;
             this.ShowIPButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ShowIPButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.ShowIPButton.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShowIPButton.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.ShowIPButton.ForeColor = System.Drawing.Color.White;
             this.ShowIPButton.Location = new System.Drawing.Point(329, 10);
             this.ShowIPButton.Name = "ShowIPButton";
@@ -230,7 +230,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.Name = "RemoteToolsControl";
             this.Size = new System.Drawing.Size(421, 108);
             this.Load += new System.EventHandler(this.RemoteToolsControl_Load);

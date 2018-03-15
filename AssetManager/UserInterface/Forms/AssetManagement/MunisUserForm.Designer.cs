@@ -55,7 +55,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MunisResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            this.MunisResults.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.MunisResults.BackgroundColor = System.Drawing.Color.FromArgb(64,64,64);
             this.MunisResults.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.MunisResults.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.MunisResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
@@ -83,7 +83,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.GroupBox1.Controls.Add(this.lblSelectedEmp);
             this.GroupBox1.Controls.Add(this.cmdAccept);
             this.GroupBox1.Controls.Add(this.MunisResults);
-            this.GroupBox1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GroupBox1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.GroupBox1.Location = new System.Drawing.Point(12, 103);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(686, 360);
@@ -121,7 +121,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.pnlSearch.Controls.Add(this.Label1);
             this.pnlSearch.Controls.Add(this.cmdSearch);
             this.pnlSearch.Controls.Add(this.txtSearchName);
-            this.pnlSearch.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pnlSearch.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.pnlSearch.Location = new System.Drawing.Point(12, 12);
             this.pnlSearch.Name = "pnlSearch";
             this.pnlSearch.Size = new System.Drawing.Size(686, 85);

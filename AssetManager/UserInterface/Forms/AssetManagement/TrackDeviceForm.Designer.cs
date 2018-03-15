@@ -46,7 +46,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // CheckInBox
             // 
-            this.CheckInBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.CheckInBox.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.CheckInBox.Controls.Add(this.cmdCheckIn);
             this.CheckInBox.Controls.Add(this.Label11);
             this.CheckInBox.Controls.Add(this.txtCheckInNotes);
@@ -61,7 +61,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // cmdCheckIn
             // 
-            this.cmdCheckIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdCheckIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.cmdCheckIn.Location = new System.Drawing.Point(601, 58);
             this.cmdCheckIn.Name = "cmdCheckIn";
             this.cmdCheckIn.Size = new System.Drawing.Size(160, 51);
@@ -73,7 +73,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label11
             // 
             this.Label11.AutoSize = true;
-            this.Label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label11.Location = new System.Drawing.Point(354, 27);
             this.Label11.Name = "Label11";
             this.Label11.Size = new System.Drawing.Size(98, 16);
@@ -82,7 +82,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // txtCheckInNotes
             // 
-            this.txtCheckInNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCheckInNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtCheckInNotes.Location = new System.Drawing.Point(270, 46);
             this.txtCheckInNotes.MaxLength = 200;
             this.txtCheckInNotes.Multiline = true;
@@ -94,7 +94,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label10
             // 
             this.Label10.AutoSize = true;
-            this.Label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label10.Location = new System.Drawing.Point(28, 36);
             this.Label10.Name = "Label10";
             this.Label10.Size = new System.Drawing.Size(91, 16);
@@ -103,9 +103,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // dtCheckIn
             // 
-            this.dtCheckIn.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtCheckIn.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.dtCheckIn.CustomFormat = "MM-dd-yyyy hh:mm tt";
-            this.dtCheckIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtCheckIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.dtCheckIn.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtCheckIn.Location = new System.Drawing.Point(31, 58);
             this.dtCheckIn.Name = "dtCheckIn";
@@ -114,7 +114,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // CheckOutBox
             // 
-            this.CheckOutBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.CheckOutBox.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.CheckOutBox.Controls.Add(this.cmdCheckOut);
             this.CheckOutBox.Controls.Add(this.Label9);
             this.CheckOutBox.Controls.Add(this.txtUseReason);
@@ -135,7 +135,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // cmdCheckOut
             // 
-            this.cmdCheckOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdCheckOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.cmdCheckOut.Location = new System.Drawing.Point(601, 109);
             this.cmdCheckOut.Name = "cmdCheckOut";
             this.cmdCheckOut.Size = new System.Drawing.Size(160, 51);
@@ -147,7 +147,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label9
             // 
             this.Label9.AutoSize = true;
-            this.Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label9.Location = new System.Drawing.Point(353, 74);
             this.Label9.Name = "Label9";
             this.Label9.Size = new System.Drawing.Size(84, 16);
@@ -156,7 +156,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // txtUseReason
             // 
-            this.txtUseReason.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtUseReason.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtUseReason.Location = new System.Drawing.Point(270, 93);
             this.txtUseReason.MaxLength = 200;
             this.txtUseReason.Multiline = true;
@@ -168,7 +168,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label8
             // 
             this.Label8.AutoSize = true;
-            this.Label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label8.Location = new System.Drawing.Point(17, 116);
             this.Label8.Name = "Label8";
             this.Label8.Size = new System.Drawing.Size(37, 16);
@@ -178,7 +178,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // txtUser
             // 
-            this.txtUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtUser.Location = new System.Drawing.Point(15, 138);
             this.txtUser.Name = "txtUser";
             this.txtUser.ReadOnly = true;
@@ -189,7 +189,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label7
             // 
             this.Label7.AutoSize = true;
-            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label7.Location = new System.Drawing.Point(494, 16);
             this.Label7.Name = "Label7";
             this.Label7.Size = new System.Drawing.Size(87, 16);
@@ -198,7 +198,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // txtUseLocation
             // 
-            this.txtUseLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtUseLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.txtUseLocation.Location = new System.Drawing.Point(492, 38);
             this.txtUseLocation.Name = "txtUseLocation";
             this.txtUseLocation.Size = new System.Drawing.Size(184, 22);
@@ -208,7 +208,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label6
             // 
             this.Label6.AutoSize = true;
-            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label6.Location = new System.Drawing.Point(305, 16);
             this.Label6.Name = "Label6";
             this.Label6.Size = new System.Drawing.Size(99, 16);
@@ -217,9 +217,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // dtDueBack
             // 
-            this.dtDueBack.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtDueBack.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.dtDueBack.CustomFormat = "MM-dd-yyyy hh:mm tt";
-            this.dtDueBack.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtDueBack.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.dtDueBack.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtDueBack.Location = new System.Drawing.Point(308, 38);
             this.dtDueBack.Name = "dtDueBack";
@@ -229,7 +229,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label5.Location = new System.Drawing.Point(128, 16);
             this.Label5.Name = "Label5";
             this.Label5.Size = new System.Drawing.Size(101, 16);
@@ -238,9 +238,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // dtCheckOut
             // 
-            this.dtCheckOut.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtCheckOut.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.dtCheckOut.CustomFormat = "MM-dd-yyyy hh:mm tt";
-            this.dtCheckOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtCheckOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.dtCheckOut.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtCheckOut.Location = new System.Drawing.Point(131, 38);
             this.dtCheckOut.Name = "dtCheckOut";
@@ -249,7 +249,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // DeviceInfoBox
             // 
-            this.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.DeviceInfoBox.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.DeviceInfoBox.Controls.Add(this.Label4);
             this.DeviceInfoBox.Controls.Add(this.txtDeviceType);
             this.DeviceInfoBox.Controls.Add(this.Label3);
@@ -268,7 +268,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label4
             // 
             this.Label4.AutoSize = true;
-            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label4.Location = new System.Drawing.Point(604, 27);
             this.Label4.Name = "Label4";
             this.Label4.Size = new System.Drawing.Size(86, 16);
@@ -277,7 +277,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // txtDeviceType
             // 
-            this.txtDeviceType.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDeviceType.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtDeviceType.Location = new System.Drawing.Point(607, 49);
             this.txtDeviceType.Name = "txtDeviceType";
             this.txtDeviceType.ReadOnly = true;
@@ -287,7 +287,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label3.Location = new System.Drawing.Point(334, 27);
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(76, 16);
@@ -296,7 +296,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // txtDescription
             // 
-            this.txtDescription.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDescription.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtDescription.Location = new System.Drawing.Point(332, 49);
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.ReadOnly = true;
@@ -306,7 +306,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label2
             // 
             this.Label2.AutoSize = true;
-            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label2.Location = new System.Drawing.Point(167, 26);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(43, 16);
@@ -315,7 +315,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // txtSerial
             // 
-            this.txtSerial.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSerial.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtSerial.Location = new System.Drawing.Point(165, 48);
             this.txtSerial.Name = "txtSerial";
             this.txtSerial.ReadOnly = true;
@@ -325,7 +325,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label1.Location = new System.Drawing.Point(28, 26);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(70, 16);
@@ -334,7 +334,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // txtAssetTag
             // 
-            this.txtAssetTag.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAssetTag.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtAssetTag.Location = new System.Drawing.Point(26, 48);
             this.txtAssetTag.Name = "txtAssetTag";
             this.txtAssetTag.ReadOnly = true;
@@ -345,7 +345,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.ClientSize = new System.Drawing.Size(816, 470);
             this.Controls.Add(this.DeviceInfoBox);
             this.Controls.Add(this.CheckOutBox);

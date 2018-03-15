@@ -85,7 +85,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             // 
             // MaxUpdates
             // 
-            this.MaxUpdates.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MaxUpdates.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.MaxUpdates.Location = new System.Drawing.Point(302, 40);
             this.MaxUpdates.Maximum = new decimal(new int[] {
             10,
@@ -109,7 +109,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             // 
             // cmdCancelAll
             // 
-            this.cmdCancelAll.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdCancelAll.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.cmdCancelAll.Location = new System.Drawing.Point(441, 45);
             this.cmdCancelAll.Name = "cmdCancelAll";
             this.cmdCancelAll.Size = new System.Drawing.Size(120, 27);
@@ -121,7 +121,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.Label1.Location = new System.Drawing.Point(277, 18);
             this.Label1.Name = "Label1";
             this.Label1.Padding = new System.Windows.Forms.Padding(5);
@@ -131,7 +131,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             // 
             // cmdPauseResume
             // 
-            this.cmdPauseResume.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdPauseResume.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.cmdPauseResume.Location = new System.Drawing.Point(441, 12);
             this.cmdPauseResume.Name = "cmdPauseResume";
             this.cmdPauseResume.Size = new System.Drawing.Size(120, 27);
@@ -143,7 +143,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             // lblTotUpdates
             // 
             this.lblTotUpdates.AutoSize = true;
-            this.lblTotUpdates.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotUpdates.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.lblTotUpdates.Location = new System.Drawing.Point(6, 18);
             this.lblTotUpdates.Name = "lblTotUpdates";
             this.lblTotUpdates.Padding = new System.Windows.Forms.Padding(5);
@@ -154,7 +154,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             // lblComplete
             // 
             this.lblComplete.AutoSize = true;
-            this.lblComplete.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblComplete.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.lblComplete.Location = new System.Drawing.Point(145, 42);
             this.lblComplete.Name = "lblComplete";
             this.lblComplete.Padding = new System.Windows.Forms.Padding(5);
@@ -165,7 +165,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             // lblRunning
             // 
             this.lblRunning.AutoSize = true;
-            this.lblRunning.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRunning.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.lblRunning.Location = new System.Drawing.Point(145, 18);
             this.lblRunning.Name = "lblRunning";
             this.lblRunning.Padding = new System.Windows.Forms.Padding(5);
@@ -176,7 +176,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             // lblQueued
             // 
             this.lblQueued.AutoSize = true;
-            this.lblQueued.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblQueued.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.lblQueued.Location = new System.Drawing.Point(6, 42);
             this.lblQueued.Name = "lblQueued";
             this.lblQueued.Padding = new System.Windows.Forms.Padding(5);
@@ -263,7 +263,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.MenuStrip);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.MainMenuStrip = this.MenuStrip;
             this.MinimumSize = new System.Drawing.Size(1010, 428);
             this.Name = "GKUpdaterForm";

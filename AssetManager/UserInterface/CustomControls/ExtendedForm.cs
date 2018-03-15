@@ -247,6 +247,9 @@ namespace AssetManager.UserInterface.CustomControls
                 this.Disposed -= ExtendedForm_Disposed;
                 this.FormClosing -= ExtendedForm_FormClosing;
                 CloseChildren();
+                parentForm = null;
+                childForms.Clear();
+                childForms = null;
             }
         }
 

@@ -33,7 +33,7 @@ namespace AssetManager.UserInterface.Forms
             this.GroupBox1.Controls.Add(this.Label1);
             this.GroupBox1.Controls.Add(this.PasswordTextBox);
             this.GroupBox1.Controls.Add(this.UsernameTextBox);
-            this.GroupBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GroupBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.GroupBox1.Location = new System.Drawing.Point(7, 9);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(279, 224);
@@ -43,7 +43,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // CredDescriptionLabel
             // 
-            this.CredDescriptionLabel.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CredDescriptionLabel.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.CredDescriptionLabel.ForeColor = System.Drawing.Color.Gray;
             this.CredDescriptionLabel.Location = new System.Drawing.Point(2, 19);
             this.CredDescriptionLabel.Name = "CredDescriptionLabel";

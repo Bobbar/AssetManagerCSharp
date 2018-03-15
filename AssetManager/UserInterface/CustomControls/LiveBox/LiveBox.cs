@@ -423,22 +423,12 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region "IDisposable Support"
 
-        // To detect redundant calls
+
         private bool disposedValue;
 
-        // TODO: override Finalize() only if Dispose(disposing As Boolean) above has code to free unmanaged resources.
-        //Protected Overrides Sub Finalize()
-        //    ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
-        //    Dispose(False)
-        //    MyBase.Finalize()
-        //End Sub
-        // This code added by Visual Basic to correctly implement the disposable pattern.
         public void Dispose()
         {
-            // Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
             Dispose(true);
-            // TODO: uncomment the following line if Finalize() is overridden above.
-            // GC.SuppressFinalize(Me)
         }
 
         // IDisposable
@@ -448,14 +438,11 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
                     RemovedHandlers();
                     liveListBox.Dispose();
                     liveBoxControls.Clear();
                     liveBoxFont.Dispose();
                 }
-                // TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.
-                // TODO: set large fields to null.
             }
             disposedValue = true;
         }

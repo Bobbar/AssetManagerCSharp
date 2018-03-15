@@ -78,7 +78,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // cmdUpload
             // 
-            this.cmdUpload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdUpload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.cmdUpload.Location = new System.Drawing.Point(29, 46);
             this.cmdUpload.Name = "cmdUpload";
             this.cmdUpload.Size = new System.Drawing.Size(92, 46);
@@ -150,7 +150,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // cmdDelete
             // 
-            this.cmdDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.cmdDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.cmdDelete.Location = new System.Drawing.Point(29, 160);
             this.cmdDelete.Name = "cmdDelete";
@@ -162,7 +162,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // cmdOpen
             // 
-            this.cmdOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.cmdOpen.Location = new System.Drawing.Point(29, 98);
             this.cmdOpen.Name = "cmdOpen";
             this.cmdOpen.Size = new System.Drawing.Size(92, 23);
@@ -177,12 +177,12 @@ namespace AssetManager.UserInterface.Forms
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.GroupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.GroupBox1.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.GroupBox1.Controls.Add(this.Panel1);
             this.GroupBox1.Controls.Add(this.cmdOpen);
             this.GroupBox1.Controls.Add(this.cmdDelete);
             this.GroupBox1.Controls.Add(this.cmdUpload);
-            this.GroupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GroupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.GroupBox1.Location = new System.Drawing.Point(12, 113);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(793, 440);
@@ -198,7 +198,7 @@ namespace AssetManager.UserInterface.Forms
             this.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Panel1.Controls.Add(this.AttachContainer);
             this.Panel1.Controls.Add(this.AllowDragCheckBox);
-            this.Panel1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Panel1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Panel1.Location = new System.Drawing.Point(150, 21);
             this.Panel1.Name = "Panel1";
             this.Panel1.Size = new System.Drawing.Size(637, 413);
@@ -227,7 +227,7 @@ namespace AssetManager.UserInterface.Forms
             // FolderListView
             // 
             this.FolderListView.AllowDrop = true;
-            this.FolderListView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.FolderListView.BackColor = System.Drawing.Color.FromArgb(64,64,64);
             this.FolderListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.FolderListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ColumnHeader1});
@@ -267,17 +267,17 @@ namespace AssetManager.UserInterface.Forms
             this.AttachGrid.AllowUserToDeleteRows = false;
             this.AttachGrid.AllowUserToResizeRows = false;
             this.AttachGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.AttachGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.AttachGrid.BackgroundColor = System.Drawing.Color.FromArgb(64,64,64);
             this.AttachGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.AttachGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.AttachGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.AttachGrid.ContextMenuStrip = this.RightClickMenu;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(64,64,64);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
             dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(39)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(255,152,39);
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.AttachGrid.DefaultCellStyle = dataGridViewCellStyle1;
@@ -289,8 +289,8 @@ namespace AssetManager.UserInterface.Forms
             this.AttachGrid.ReadOnly = true;
             this.AttachGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(64,64,64);
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -336,7 +336,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // SibiGroup
             // 
-            this.SibiGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.SibiGroup.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.SibiGroup.Controls.Add(this.Label4);
             this.SibiGroup.Controls.Add(this.ReqNumberTextBox);
             this.SibiGroup.Controls.Add(this.Label3);
@@ -345,7 +345,7 @@ namespace AssetManager.UserInterface.Forms
             this.SibiGroup.Controls.Add(this.txtRequestNum);
             this.SibiGroup.Controls.Add(this.Label1);
             this.SibiGroup.Controls.Add(this.ReqPO);
-            this.SibiGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SibiGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.SibiGroup.Location = new System.Drawing.Point(0, 3);
             this.SibiGroup.Name = "SibiGroup";
             this.SibiGroup.Size = new System.Drawing.Size(793, 95);
@@ -356,7 +356,7 @@ namespace AssetManager.UserInterface.Forms
             // Label4
             // 
             this.Label4.AutoSize = true;
-            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label4.Location = new System.Drawing.Point(598, 29);
             this.Label4.Name = "Label4";
             this.Label4.Size = new System.Drawing.Size(47, 16);
@@ -365,7 +365,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // ReqNumberTextBox
             // 
-            this.ReqNumberTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReqNumberTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.ReqNumberTextBox.Location = new System.Drawing.Point(601, 49);
             this.ReqNumberTextBox.Name = "ReqNumberTextBox";
             this.ReqNumberTextBox.ReadOnly = true;
@@ -375,7 +375,7 @@ namespace AssetManager.UserInterface.Forms
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label3.Location = new System.Drawing.Point(20, 29);
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(79, 16);
@@ -384,7 +384,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // txtDescription
             // 
-            this.txtDescription.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDescription.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtDescription.Location = new System.Drawing.Point(23, 49);
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.ReadOnly = true;
@@ -394,7 +394,7 @@ namespace AssetManager.UserInterface.Forms
             // Label2
             // 
             this.Label2.AutoSize = true;
-            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label2.Location = new System.Drawing.Point(317, 29);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(72, 16);
@@ -403,7 +403,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // txtRequestNum
             // 
-            this.txtRequestNum.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtRequestNum.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtRequestNum.Location = new System.Drawing.Point(320, 49);
             this.txtRequestNum.Name = "txtRequestNum";
             this.txtRequestNum.ReadOnly = true;
@@ -413,7 +413,7 @@ namespace AssetManager.UserInterface.Forms
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label1.Location = new System.Drawing.Point(439, 29);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(40, 16);
@@ -422,7 +422,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // ReqPO
             // 
-            this.ReqPO.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReqPO.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.ReqPO.Location = new System.Drawing.Point(442, 49);
             this.ReqPO.Name = "ReqPO";
             this.ReqPO.ReadOnly = true;
@@ -431,7 +431,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // StatusStrip1
             // 
-            this.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.StatusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLabel,
             this.ProgressBar1,
@@ -448,7 +448,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // StatusLabel
             // 
-            this.StatusLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
             this.StatusLabel.Size = new System.Drawing.Size(86, 17);
@@ -479,7 +479,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // statMBPS
             // 
-            this.statMBPS.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.statMBPS.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.statMBPS.Name = "statMBPS";
             this.statMBPS.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.statMBPS.Size = new System.Drawing.Size(10, 17);
@@ -492,7 +492,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // cmdCancel
             // 
-            this.cmdCancel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdCancel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.cmdCancel.Image = global::AssetManager.Properties.Resources.CloseCancelDeleteIcon;
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.ShowDropDownArrow = false;
@@ -507,14 +507,14 @@ namespace AssetManager.UserInterface.Forms
             // 
             // DeviceGroup
             // 
-            this.DeviceGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.DeviceGroup.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.DeviceGroup.Controls.Add(this.Label5);
             this.DeviceGroup.Controls.Add(this.txtDeviceDescription);
             this.DeviceGroup.Controls.Add(this.Label6);
             this.DeviceGroup.Controls.Add(this.txtSerial);
             this.DeviceGroup.Controls.Add(this.Label7);
             this.DeviceGroup.Controls.Add(this.txtAssetTag);
-            this.DeviceGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DeviceGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.DeviceGroup.Location = new System.Drawing.Point(817, 3);
             this.DeviceGroup.Name = "DeviceGroup";
             this.DeviceGroup.Size = new System.Drawing.Size(633, 95);
@@ -525,7 +525,7 @@ namespace AssetManager.UserInterface.Forms
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label5.Location = new System.Drawing.Point(331, 29);
             this.Label5.Name = "Label5";
             this.Label5.Size = new System.Drawing.Size(79, 16);
@@ -534,7 +534,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // txtDeviceDescription
             // 
-            this.txtDeviceDescription.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDeviceDescription.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtDeviceDescription.Location = new System.Drawing.Point(334, 49);
             this.txtDeviceDescription.Name = "txtDeviceDescription";
             this.txtDeviceDescription.ReadOnly = true;
@@ -544,7 +544,7 @@ namespace AssetManager.UserInterface.Forms
             // Label6
             // 
             this.Label6.AutoSize = true;
-            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label6.Location = new System.Drawing.Point(175, 29);
             this.Label6.Name = "Label6";
             this.Label6.Size = new System.Drawing.Size(46, 16);
@@ -553,7 +553,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // txtSerial
             // 
-            this.txtSerial.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSerial.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtSerial.Location = new System.Drawing.Point(178, 49);
             this.txtSerial.Name = "txtSerial";
             this.txtSerial.ReadOnly = true;
@@ -563,7 +563,7 @@ namespace AssetManager.UserInterface.Forms
             // Label7
             // 
             this.Label7.AutoSize = true;
-            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             this.Label7.Location = new System.Drawing.Point(30, 29);
             this.Label7.Name = "Label7";
             this.Label7.Size = new System.Drawing.Size(73, 16);
@@ -572,7 +572,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // txtAssetTag
             // 
-            this.txtAssetTag.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAssetTag.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
             this.txtAssetTag.Location = new System.Drawing.Point(33, 49);
             this.txtAssetTag.Name = "txtAssetTag";
             this.txtAssetTag.ReadOnly = true;
@@ -595,7 +595,7 @@ namespace AssetManager.UserInterface.Forms
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.BackColor = System.Drawing.Color.FromArgb(232,232,232);
             this.ClientSize = new System.Drawing.Size(817, 578);
             this.Controls.Add(this.StatusStrip1);
             this.Controls.Add(this.GroupBox1);
