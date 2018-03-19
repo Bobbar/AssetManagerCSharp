@@ -14,7 +14,7 @@ namespace AssetManager.Data.Communications
 
         #region Fields
 
-        private const string MSSQLConnectString = "server=svr-munis5.core.co.fairfield.oh.us; database=mu_live; trusted_connection=True;";
+        private const string msSqlConnectString = "server=svr-munis5.core.co.fairfield.oh.us; database=mu_live; trusted_connection=True;";
 
         #endregion
 
@@ -22,7 +22,7 @@ namespace AssetManager.Data.Communications
 
         public SqlCommand ReturnSqlCommand(string sqlQry)
         {
-            SqlConnection conn = new SqlConnection(MSSQLConnectString);
+            SqlConnection conn = new SqlConnection(msSqlConnectString);
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
             cmd.CommandText = sqlQry;
@@ -31,68 +31,52 @@ namespace AssetManager.Data.Communications
 
         public DataTable ReturnSqlTable(string sqlQry)
         {
-            using (SqlConnection conn = new SqlConnection(MSSQLConnectString))
+            using (SqlConnection conn = new SqlConnection(msSqlConnectString))
+            using (DataTable NewTable = new DataTable())
+            using (SqlDataAdapter da = new SqlDataAdapter())
             {
-                using (DataTable NewTable = new DataTable())
-                {
-                    using (SqlDataAdapter da = new SqlDataAdapter())
-                    {
-                        da.SelectCommand = new SqlCommand(sqlQry);
-                        da.SelectCommand.Connection = conn;
-                        da.Fill(NewTable);
-                        return NewTable;
-                    }
-                }
+                da.SelectCommand = new SqlCommand(sqlQry);
+                da.SelectCommand.Connection = conn;
+                da.Fill(NewTable);
+                return NewTable;
             }
-
         }
 
         public async Task<DataTable> ReturnSqlTableAsync(string sqlQry)
         {
-            using (SqlConnection conn = new SqlConnection(MSSQLConnectString))
+            using (SqlConnection conn = new SqlConnection(msSqlConnectString))
+            using (DataTable NewTable = new DataTable())
+            using (SqlCommand cmd = new SqlCommand(sqlQry, conn))
             {
-                using (DataTable NewTable = new DataTable())
-                {
-                    using (SqlCommand cmd = new SqlCommand(sqlQry, conn))
-                    {
-                        await conn.OpenAsync();
-                        SqlDataReader dr = await cmd.ExecuteReaderAsync();
-                        NewTable.Load(dr);
-                        return NewTable;
-                    }
-                }
+                await conn.OpenAsync();
+                SqlDataReader dr = await cmd.ExecuteReaderAsync();
+                NewTable.Load(dr);
+                return NewTable;
             }
-
         }
 
         public DataTable ReturnSqlTableFromCmd(SqlCommand cmd)
         {
             using (DataTable NewTable = new DataTable())
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
             {
-                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                {
-                    da.Fill(NewTable);
-                    cmd.Dispose();
-                    return NewTable;
-                }
+                da.Fill(NewTable);
+                cmd.Dispose();
+                return NewTable;
             }
-
         }
 
         public async Task<DataTable> ReturnSqlTableFromCmdAsync(SqlCommand cmd)
         {
             using (var conn = cmd.Connection)
+            using (DataTable NewTable = new DataTable())
             {
-                using (DataTable NewTable = new DataTable())
-                {
-                    await conn.OpenAsync();
-                    SqlDataReader dr = await cmd.ExecuteReaderAsync();
-                    NewTable.Load(dr);
-                    cmd.Dispose();
-                    return NewTable;
-                }
+                await conn.OpenAsync();
+                SqlDataReader dr = await cmd.ExecuteReaderAsync();
+                NewTable.Load(dr);
+                cmd.Dispose();
+                return NewTable;
             }
-
         }
 
         public object ReturnSqlValue(string table, object fieldIn, object valueIn, string fieldOut, object fieldIn2 = null, object valueIn2 = null)
@@ -114,12 +98,10 @@ namespace AssetManager.Data.Communications
                 queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
             }
             using (var cmd = GetSqlCommandFromParams(sqlQRY, queryParams.Parameters))
+            using (var conn = cmd.Connection)
             {
-                using (var conn = cmd.Connection)
-                {
-                    cmd.Connection.Open();
-                    return cmd.ExecuteScalar();
-                }
+                cmd.Connection.Open();
+                return cmd.ExecuteScalar();
             }
         }
 
@@ -144,16 +126,15 @@ namespace AssetManager.Data.Communications
 
                     queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
                 }
+
                 using (var cmd = GetSqlCommandFromParams(sqlQRY, queryParams.Parameters))
+                using (var conn = cmd.Connection)
                 {
-                    using (var conn = cmd.Connection)
+                    await cmd.Connection.OpenAsync();
+                    var Value = await cmd.ExecuteScalarAsync();
+                    if (Value != null)
                     {
-                        await cmd.Connection.OpenAsync();
-                        var Value = await cmd.ExecuteScalarAsync();
-                        if (Value != null)
-                        {
-                            return Value.ToString();
-                        }
+                        return Value.ToString();
                     }
                 }
             }
@@ -174,32 +155,31 @@ namespace AssetManager.Data.Communications
         {
             var cmd = ReturnSqlCommand(partialQuery);
             cmd.CommandText += " WHERE";
-            string ParamString = "";
-            int ValSeq = 1;
+            string paramString = "";
+            int valueSeq = 1;
             foreach (var fld in parameters)
             {
                 if (fld.IsExact)
                 {
-                    ParamString += " " + fld.FieldName + "=@Value" + ValSeq.ToString() + " " + fld.OperatorString;
-                    cmd.Parameters.AddWithValue("@Value" + ValSeq.ToString(), fld.Value);
+                    paramString += " " + fld.FieldName + "=@Value" + valueSeq.ToString();
+                    cmd.Parameters.AddWithValue("@Value" + valueSeq.ToString(), fld.Value);
                 }
                 else
                 {
-                    ParamString += " " + fld.FieldName + " LIKE CONCAT('%', @Value" + ValSeq.ToString() + ", '%') " + fld.OperatorString;
-                    cmd.Parameters.AddWithValue("@Value" + ValSeq.ToString(), fld.Value);
+                    paramString += " " + fld.FieldName + " LIKE CONCAT('%', @Value" + valueSeq.ToString() + ", '%')";
+                    cmd.Parameters.AddWithValue("@Value" + valueSeq.ToString(), fld.Value);
                 }
-                ValSeq++;
-            }
-            if (ParamString.Substring(ParamString.Length - 3, 3) == "AND") //remove trailing AND from query string
-            {
-                ParamString = ParamString.Substring(0, ParamString.Length - 3);
+
+                // Add operator if we are not on the last parameter.
+                if (parameters.IndexOf(fld) < parameters.Count - 1)
+                {
+                    paramString += " " + fld.OperatorString;
+                }
+
+                valueSeq++;
             }
 
-            if (ParamString.Substring(ParamString.Length - 2, 2) == "OR") //remove trailing AND from query string
-            {
-                ParamString = ParamString.Substring(0, ParamString.Length - 2);
-            }
-            cmd.CommandText += ParamString;
+            cmd.CommandText += paramString;
             return cmd;
         }
 

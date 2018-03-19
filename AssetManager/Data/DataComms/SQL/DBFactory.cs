@@ -6,9 +6,9 @@ namespace AssetManager.Data
 {
     public static class DBFactory
     {
-        private const string EncSQLitePass = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU";
-        private const string EncMySqlPass = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG";
-
+        private const string sqlitePass = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU";
+        private const string mySqllPass = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG";
+        private const string mySqlUser = "asset_mgr_usr";
         public static IDataBase GetDatabase()
         {
             if (GlobalSwitches.CachedMode)
@@ -23,12 +23,12 @@ namespace AssetManager.Data
 
         public static IDataBase GetMySqlDatabase()
         {
-            return new MySQLDatabase(ServerInfo.MySQLServerIP, "asset_mgr_usr", SecurityTools.DecodePassword(EncMySqlPass), ServerInfo.CurrentDataBase.ToString());
+            return new MySQLDatabase(ServerInfo.MySQLServerIP, mySqlUser, SecurityTools.DecodePassword(mySqllPass), ServerInfo.CurrentDataBase.ToString());
         }
 
         public static IDataBase GetSqliteDatabase()
         {
-            return new SqliteDatabase(Paths.SQLitePath, SecurityTools.DecodePassword(EncSQLitePass));
+            return new SqliteDatabase(Paths.SQLitePath, SecurityTools.DecodePassword(sqlitePass));
         }
     }
 
