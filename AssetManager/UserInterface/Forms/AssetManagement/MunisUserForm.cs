@@ -1,3 +1,4 @@
+using AssetManager.Data;
 using AssetManager.Data.Classes;
 using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
@@ -31,21 +32,29 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ShowDialog(parentForm);
         }
 
-        private async void EmpNameSearch(string Name)
+        private async void EmpNameSearch(string name)
         {
             try
             {
-                MunisResults.DataSource = null;
-                string strColumns = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short";
-                string strQRY = "SELECT TOP " + intMaxResults + " " + strColumns + " FROM pr_employee_master WHERE a_name_last LIKE '%" + Name.ToUpper() + "%' OR a_name_first LIKE '" + Name.ToUpper() + "'";
-                MunisComms MunisComms = new MunisComms();
+                string columns = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short";
+                string query = "SELECT TOP " + intMaxResults + " " + columns + " FROM pr_employee_master";
+
+                var searchParams = new QueryParamCollection();
+                searchParams.Add("a_name_last", name.ToUpper(), false, "OR");
+                searchParams.Add("a_name_first", name.ToUpper(), false, "OR");
+
                 SetWorking(true);
-                using (DataTable results = await MunisComms.ReturnSqlTableAsync(strQRY))
+
+                MunisComms comms = new MunisComms();
+                using (var cmd = comms.GetSqlCommandFromParams(query, searchParams.Parameters))
+                using (DataTable results = await comms.ReturnSqlTableFromCmdAsync(cmd))
                 {
-                    if (results.Rows.Count < 1)
-                        return;
-                    MunisResults.DataSource = results;
-                    MunisResults.ClearSelection();
+                    if (results.Rows.Count > 0)
+                    {
+                        MunisResults.DataSource = null;
+                        MunisResults.DataSource = results;
+                        MunisResults.ClearSelection();
+                    }
                 }
             }
             catch (Exception ex)
