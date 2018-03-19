@@ -35,8 +35,8 @@ namespace AssetManager.UserInterface.CustomControls
         private const int defaultDisplayTime = 4;
         private const int animationTimerInterval = 15;
 
-        private const SlideDirection defaultSlideInDirection = SlideDirection.Up;
-        private const SlideDirection defaultSlideOutDirection = SlideDirection.Left;
+        private const SlideDirection defaultSlideInDirection = SlideDirection.Right;
+        private const SlideDirection defaultSlideOutDirection = SlideDirection.Down;
 
         private float slideAcceleration = 0.5F;
 

@@ -205,7 +205,7 @@ namespace AssetManager.UserInterface.CustomControls
             // Enables double-buffering.
             get
             {
-                bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+                bool designMode = (System.Diagnostics.Process.GetCurrentProcess().ProcessName == "devenv");
                 bool terminalSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
                 CreateParams cp = base.CreateParams;
                 if (!designMode)
