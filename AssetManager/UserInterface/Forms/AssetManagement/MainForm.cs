@@ -4,10 +4,8 @@ using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.Security;
-using AssetManager.Tools;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AdminTools;
-using MyDialogLib;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +13,6 @@ using System.Data.Common;
 using System.Deployment.Application;
 using System.Diagnostics;
 using System.Drawing;
-using System.Management.Automation.Runspaces;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -69,8 +66,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Icon = Properties.Resources.asset_icon;
             ShowAll();
             MyLiveBox = new LiveBox(this);
-            MyMunisToolBar = new CustomControls.MunisToolBar(this);
-            MyWindowList = new CustomControls.WindowList(this);
+            MyMunisToolBar = new MunisToolBar(this);
+            MyWindowList = new WindowList(this);
 
             DateTimeLabel.Text = DateTime.Now.ToString();
             ToolStrip1.BackColor = Colors.AssetToolBarColor;
@@ -199,12 +196,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 if (!ChildFormControl.FormIsOpenByGuid(typeof(ViewDeviceForm), deviceGuid))
                 {
                     Waiting();
-                    OtherFunctions.StartTimer();
-
-                    var newView = ChildFormControl.GetViewDeviceFormInstance();
-                    newView.InitForm(this, new Device(deviceGuid));
-
-                    //  new ViewDeviceForm(this, new Device(deviceGuid));
+                    var newView = ChildFormControl.GetNewViewDeviceForm();
+                    newView.InitView(this, new Device(deviceGuid));
                 }
             }
             catch (Exception ex)
@@ -924,7 +917,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             Helpers.ChildFormControl.SplashScreenInstance().Dispose();
             //  MemoryTweaks.SetWorkingSet();
-            ChildFormControl.SwapInstances();
+            ChildFormControl.CacheViewDeviceForm();
         }
 
         private void CommitButton_Click(object sender, EventArgs e)

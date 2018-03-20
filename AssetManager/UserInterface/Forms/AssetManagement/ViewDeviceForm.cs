@@ -56,45 +56,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #region Constructors
 
-        public ViewDeviceForm(ExtendedForm parentForm, MappableObject device) : base(parentForm, device)
-        {
-            currentViewDevice = (Device)device;
-
-            InitializeComponent();
-            InitDBControls();
-
-            controlParser = new DBControlParser(this);
-            controlParser.EnableFieldValidation();
-
-            defaultFormTitle = this.Text;
-
-            liveBox = new LiveBox(this);
-            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.UserSelect, DevicesCols.MunisEmpNum);
-            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxSelectionType.SelectValue);
-
-            munisToolBar = new MunisToolBar(this);
-            munisToolBar.InsertMunisDropDown(ToolStrip1, 6);
-
-            windowList = new WindowList(this);
-            windowList.InsertWindowList(ToolStrip1);
-
-            statusSlider = new SliderLabel();
-            StatusStrip1.Items.Add(statusSlider.ToToolStripControl(StatusStrip1));
-
-            RefreshCombos();
-
-            DataGridHistory.DoubleBufferedDataGrid(true);
-            TrackingGrid.DoubleBufferedDataGrid(true);
-
-            SetEditMode(false);
-
-            LoadCurrentDevice();
-        }
-
         public ViewDeviceForm() : base()
         {
-            //currentViewDevice = (Device)device;
-
             InitializeComponent();
             InitDBControls();
 
@@ -122,20 +85,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             TrackingGrid.DoubleBufferedDataGrid(true);
 
             SetEditMode(false);
-
-            // LoadCurrentDevice();
         }
 
         #endregion Constructors
 
         #region Methods
 
-        public void InitForm(ExtendedForm parentForm, Device device)
+        public void InitView(ExtendedForm parentForm, Device device)
         {
             currentViewDevice = device;
             this.ParentForm = parentForm;
             LoadCurrentDevice();
         }
+
         public async void SetPingHistoryLink()
         {
             bool hasPingHist = await AssetManagerFunctions.HasPingHistory(currentViewDevice);
@@ -158,7 +120,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 this.Show();
                 DataGridHistory.ClearSelection();
                 gridFilling = false;
-                OtherFunctions.StopTimer();
             }
             catch (Exception ex)
             {
@@ -1195,5 +1156,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         #endregion Methods
+
+
     }
 }

@@ -14,28 +14,23 @@ namespace AssetManager.Helpers
     public static class ChildFormControl
     {
 
-        private static ViewDeviceForm viewDevInstance;
+        private static ViewDeviceForm viewDeviceInstance;
 
 
-        public async static void SwapInstances()
+        public async static void CacheViewDeviceForm()
         {
-            viewDevInstance = await Task.Run(() =>
+            viewDeviceInstance = await Task.Run(() =>
             {
-                var tmp = new ViewDeviceForm();
-                return tmp;
+                var newInstance = new ViewDeviceForm();
+                return newInstance;
             });
-
         }
 
-        public static ViewDeviceForm GetViewDeviceFormInstance()
+        public static ViewDeviceForm GetNewViewDeviceForm()
         {
-
-            var currentInstance = viewDevInstance;
-
-            SwapInstances();
-
+            var currentInstance = viewDeviceInstance;
+            CacheViewDeviceForm();
             return currentInstance;
-
         }
 
         public static void ActivateForm(ExtendedForm form)
@@ -65,7 +60,8 @@ namespace AssetManager.Helpers
             {
                 if (!FormIsOpenByGuid(typeof(ViewDeviceForm), device.Guid))
                 {
-                    new ViewDeviceForm(parentForm, device);
+                    var newView = GetNewViewDeviceForm();
+                    newView.InitView(parentForm, device);
                 }
             }
             else
