@@ -277,7 +277,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     var cmb = (ComboBox)c;
                     cmb.SelectedIndex = -1;
-                    cmb.Text = null;
+                    cmb.Text = string.Empty;
                 }
                 else if (c is DateTimePicker)
                 {
@@ -1514,7 +1514,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void RefreshMenuButton_Click(object sender, EventArgs e)
         {
-            if (!isNewRequest)
+            if (!isNewRequest & CancelModify())
             {
                 OpenRequest(currentRequest.Guid);
             }
