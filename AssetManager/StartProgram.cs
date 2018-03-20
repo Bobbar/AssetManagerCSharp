@@ -69,6 +69,8 @@ namespace AssetManager
 
             Status("Loading Indexes...");
             AttributeFunctions.PopulateAttributeIndexes();
+            Status("Collecting Database Info...");
+            DBControlExtensions.GetColumnLengths();
             Status("Checking Access Level...");
             SecurityTools.PopulateAccessGroups();
             SecurityTools.GetUserAccess();

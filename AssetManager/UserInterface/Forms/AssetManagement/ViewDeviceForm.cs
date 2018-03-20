@@ -622,24 +622,24 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void InitDBControls()
         {
             //Required Fields
-            AssetTagTextBox.Tag = new DBControlInfo(DevicesBaseCols.AssetTag, true);
-            SerialTextBox.Tag = new DBControlInfo(DevicesBaseCols.Serial, true);
-            CurrentUserTextBox.Tag = new DBControlInfo(DevicesBaseCols.CurrentUser, true);
-            DescriptionTextBox.Tag = new DBControlInfo(DevicesBaseCols.Description, true);
-            PurchaseDatePicker.Tag = new DBControlInfo(DevicesBaseCols.PurchaseDate, true);
-            EquipTypeComboBox.Tag = new DBControlInfo(DevicesBaseCols.EQType, Attributes.DeviceAttribute.EquipType, true);
-            LocationComboBox.Tag = new DBControlInfo(DevicesBaseCols.Location, Attributes.DeviceAttribute.Locations, true);
-            OSVersionComboBox.Tag = new DBControlInfo(DevicesBaseCols.OSVersion, Attributes.DeviceAttribute.OSType, true);
-            StatusComboBox.Tag = new DBControlInfo(DevicesBaseCols.Status, Attributes.DeviceAttribute.StatusType, true);
+            AssetTagTextBox.SetDBInfo(DevicesBaseCols.AssetTag, true);
+            SerialTextBox.SetDBInfo(DevicesBaseCols.Serial, true);
+            CurrentUserTextBox.SetDBInfo(DevicesBaseCols.CurrentUser, true);
+            DescriptionTextBox.SetDBInfo(DevicesBaseCols.Description, true);
+            PurchaseDatePicker.SetDBInfo(DevicesBaseCols.PurchaseDate, true);
+            EquipTypeComboBox.SetDBInfo(DevicesBaseCols.EQType, Attributes.DeviceAttribute.EquipType, true);
+            LocationComboBox.SetDBInfo(DevicesBaseCols.Location, Attributes.DeviceAttribute.Locations, true);
+            OSVersionComboBox.SetDBInfo(DevicesBaseCols.OSVersion, Attributes.DeviceAttribute.OSType, true);
+            StatusComboBox.SetDBInfo(DevicesBaseCols.Status, Attributes.DeviceAttribute.StatusType, true);
 
             //Non-required and Misc Fields
-            PONumberTextBox.Tag = new DBControlInfo(DevicesBaseCols.PO, false);
-            ReplaceYearTextBox.Tag = new DBControlInfo(DevicesBaseCols.ReplacementYear, false);
-            PhoneNumberTextBox.Tag = new DBControlInfo(DevicesBaseCols.PhoneNumber, false);
-            GuidLabel.Tag = new DBControlInfo(DevicesBaseCols.DeviceGuid, ParseType.DisplayOnly, false);
-            TrackableCheckBox.Tag = new DBControlInfo(DevicesBaseCols.Trackable, false);
-            HostnameTextBox.Tag = new DBControlInfo(DevicesBaseCols.HostName, false);
-            iCloudTextBox.Tag = new DBControlInfo(DevicesBaseCols.iCloudAccount, false);
+            PONumberTextBox.SetDBInfo(DevicesBaseCols.PO, false);
+            ReplaceYearTextBox.SetDBInfo(DevicesBaseCols.ReplacementYear, false);
+            PhoneNumberTextBox.SetDBInfo(DevicesBaseCols.PhoneNumber, false);
+            GuidLabel.SetDBInfo(DevicesBaseCols.DeviceGuid, ParseType.DisplayOnly, false);
+            TrackableCheckBox.SetDBInfo(DevicesBaseCols.Trackable, false);
+            HostnameTextBox.SetDBInfo(DevicesBaseCols.HostName, false);
+            iCloudTextBox.SetDBInfo(DevicesBaseCols.iCloudAccount, false);
         }
 
         private void LoadHistoryAndFields()

@@ -183,7 +183,8 @@
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\FTPFunctions.cs" />
     <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\MunisFunctions.cs" />
     <Compile Include="Data\DataFunctions\DBCacheFunctions.cs" />
-    <Compile Include="Data\DataFunctions\DBControlParser.cs" />
+    <Compile Include="Data\DataFunctions\DBControls\DBControlExtensions.cs" />
+    <Compile Include="Data\DataFunctions\DBControls\DBControlParser.cs" />
     <Compile Include="GlobalObjects\GlobalSwitches.cs" />
     <Compile Include="GlobalObjects\Paths.cs" />
     <Compile Include="Helpers\ChildFormControl.cs" />

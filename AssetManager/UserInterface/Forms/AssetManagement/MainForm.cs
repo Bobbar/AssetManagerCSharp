@@ -432,16 +432,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void InitDBControls()
         {
-            txtSerialSearch.Tag = new DBControlInfo(DevicesCols.Serial);
-            txtAssetTagSearch.Tag = new DBControlInfo(DevicesCols.AssetTag);
-            txtDescription.Tag = new DBControlInfo(DevicesCols.Description);
-            cmbEquipType.Tag = new DBControlInfo(DevicesCols.EQType, Attributes.DeviceAttribute.EquipType);
-            txtReplaceYear.Tag = new DBControlInfo(DevicesCols.ReplacementYear);
-            cmbOSType.Tag = new DBControlInfo(DevicesCols.OSVersion, Attributes.DeviceAttribute.OSType);
-            cmbLocation.Tag = new DBControlInfo(DevicesCols.Location, Attributes.DeviceAttribute.Locations);
-            txtCurUser.Tag = new DBControlInfo(DevicesCols.CurrentUser);
-            cmbStatus.Tag = new DBControlInfo(DevicesCols.Status, Attributes.DeviceAttribute.StatusType);
-            chkTrackables.Tag = new DBControlInfo(DevicesCols.Trackable);
+            txtSerialSearch.SetDBInfo(DevicesCols.Serial);
+            txtAssetTagSearch.SetDBInfo(DevicesCols.AssetTag);
+            txtDescription.SetDBInfo(DevicesCols.Description);
+            cmbEquipType.SetDBInfo(DevicesCols.EQType, Attributes.DeviceAttribute.EquipType);
+            txtReplaceYear.SetDBInfo(DevicesCols.ReplacementYear);
+            cmbOSType.SetDBInfo(DevicesCols.OSVersion, Attributes.DeviceAttribute.OSType);
+            cmbLocation.SetDBInfo(DevicesCols.Location, Attributes.DeviceAttribute.Locations);
+            txtCurUser.SetDBInfo(DevicesCols.CurrentUser);
+            cmbStatus.SetDBInfo(DevicesCols.Status, Attributes.DeviceAttribute.StatusType);
+            chkTrackables.SetDBInfo(DevicesCols.Trackable);
         }
 
         private void InitLiveBox()
