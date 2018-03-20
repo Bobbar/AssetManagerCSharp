@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Fairfield County Board of DD")]
 [assembly: AssemblyProduct("AssetManager")]
-[assembly: AssemblyCopyright("Copyright © FCBDD 2017")]
+[assembly: AssemblyCopyright("Copyright © FCBDD 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -30,7 +30,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("4.4.3.0")]
-[assembly: AssemblyFileVersion("4.4.3.0")]
+[assembly: AssemblyVersion("4.7.0.0")]
+[assembly: AssemblyFileVersion("4.7.0.0")]
 [assembly: NeutralResourcesLanguage("en-US")]
 
