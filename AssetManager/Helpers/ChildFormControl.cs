@@ -5,12 +5,39 @@ using AssetManager.UserInterface.Forms;
 using AssetManager.Data.Classes;
 using System;
 using System.Windows.Forms;
-
+using System.Threading.Tasks;
 
 namespace AssetManager.Helpers
 {
+
+
     public static class ChildFormControl
     {
+
+        private static ViewDeviceForm viewDevInstance;
+
+
+        public async static void SwapInstances()
+        {
+            viewDevInstance = await Task.Run(() =>
+            {
+                var tmp = new ViewDeviceForm();
+                return tmp;
+            });
+
+        }
+
+        public static ViewDeviceForm GetViewDeviceFormInstance()
+        {
+
+            var currentInstance = viewDevInstance;
+
+            SwapInstances();
+
+            return currentInstance;
+
+        }
+
         public static void ActivateForm(ExtendedForm form)
         {
             if (!form.IsDisposed)

@@ -199,7 +199,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 if (!ChildFormControl.FormIsOpenByGuid(typeof(ViewDeviceForm), deviceGuid))
                 {
                     Waiting();
-                    new ViewDeviceForm(this, new Device(deviceGuid));
+                    OtherFunctions.StartTimer();
+
+                    var newView = ChildFormControl.GetViewDeviceFormInstance();
+                    newView.InitForm(this, new Device(deviceGuid));
+
+                    //  new ViewDeviceForm(this, new Device(deviceGuid));
                 }
             }
             catch (Exception ex)
@@ -918,7 +923,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void MainForm_Shown(object sender, EventArgs e)
         {
             Helpers.ChildFormControl.SplashScreenInstance().Dispose();
-            MemoryTweaks.SetWorkingSet();
+            //  MemoryTweaks.SetWorkingSet();
+            ChildFormControl.SwapInstances();
         }
 
         private void CommitButton_Click(object sender, EventArgs e)
