@@ -20,9 +20,6 @@ namespace AssetManager.Data
         public const string HostName = "dev_hostname";
         public const string iCloudAccount = "dev_icloud_account";
     }
-}
-namespace AssetManager.Data
-{
 
     public class DevicesCols : DevicesBaseCols
     {
@@ -34,9 +31,6 @@ namespace AssetManager.Data
         public const string SibiLinkGuid = "dev_sibi_link";
         public const string MunisEmpNum = "dev_cur_user_emp_num";
     }
-}
-namespace AssetManager.Data
-{
 
     public class HistoricalDevicesCols : DevicesBaseCols
     {
@@ -47,9 +41,6 @@ namespace AssetManager.Data
         public const string ActionDateTime = "dev_lastmod_date";
         public const string ActionUser = "hist_action_user";
     }
-}
-namespace AssetManager.Data
-{
 
     public class TrackablesCols
     {
@@ -68,13 +59,9 @@ namespace AssetManager.Data
         public const string DeviceGuid = "track_device_uid";
         public const string DateStamp = "track_datestamp";
     }
-}
-namespace AssetManager.Data
-{
 
     public abstract class AttachmentsBaseCols
     {
-
         public abstract string TableName { get; }
         public string Timestamp { get; } = "attach_timestamp";
         public string FKey { get; } = "attach_fkey_UID";
@@ -86,25 +73,16 @@ namespace AssetManager.Data
         public string FolderName { get; } = "attach_folder_name";
         public string FolderNameGuid { get; } = "attach_folder_uid";
     }
-}
-namespace AssetManager.Data
-{
 
     public class DeviceAttachmentsCols : AttachmentsBaseCols
     {
         public override string TableName { get; } = "dev_attachments";
     }
-}
-namespace AssetManager.Data
-{
 
     public class SibiAttachmentsCols : AttachmentsBaseCols
     {
         public override string TableName { get; } = "sibi_attachments";
     }
-}
-namespace AssetManager.Data
-{
 
     public class SibiRequestCols
     {
@@ -124,9 +102,6 @@ namespace AssetManager.Data
         public const string RequestNumber = "sibi_request_number";
         public const string RTNumber = "sibi_RT_number";
     }
-}
-namespace AssetManager.Data
-{
 
     public class SibiRequestItemsCols
     {
@@ -148,9 +123,6 @@ namespace AssetManager.Data
         public const string ModifiedDate = "sibi_items_modified";
         public const string ModifiedBy = "sibi_items_modifiedby";
     }
-}
-namespace AssetManager.Data
-{
 
     public class SibiNotesCols
     {
@@ -160,9 +132,6 @@ namespace AssetManager.Data
         public const string DateStamp = "sibi_datestamp";
         public const string Note = "sibi_note";
     }
-}
-namespace AssetManager.Data
-{
 
     public class ComboCodesBaseCols
     {
@@ -172,26 +141,17 @@ namespace AssetManager.Data
         public const string Id = "id";
         public const string Color = "hex_color";
     }
-}
-namespace AssetManager.Data
-{
 
     public class DeviceComboCodesCols : ComboCodesBaseCols
     {
         public const string TableName = "dev_codes";
         public const string MunisCode = "munis_code";
     }
-}
-namespace AssetManager.Data
-{
 
     public class SibiComboCodesCols : ComboCodesBaseCols
     {
         public const string TableName = "sibi_codes";
     }
-}
-namespace AssetManager.Data
-{
 
     public class SecurityCols
     {
@@ -201,9 +161,6 @@ namespace AssetManager.Data
         public const string Description = "sec_desc";
         public const string AvailOffline = "sec_availoffline";
     }
-}
-namespace AssetManager.Data
-{
 
     public class UsersCols
     {
@@ -213,9 +170,6 @@ namespace AssetManager.Data
         public const string AccessLevel = "usr_access_level";
         public const string Guid = "usr_UID";
     }
-}
-namespace AssetManager.Data
-{
 
     public class EmployeesCols
     {
@@ -224,9 +178,6 @@ namespace AssetManager.Data
         public const string Number = "emp_number";
         public const string Guid = "emp_UID";
     }
-}
-namespace AssetManager.Data
-{
 
     public sealed class DeviceAttribType
     {
@@ -234,24 +185,16 @@ namespace AssetManager.Data
         public const string ChangeType = "CHANGETYPE";
         public const string EquipType = "EQ_TYPE";
         public const string OSType = "OS_TYPE";
-
         public const string StatusType = "STATUS_TYPE";
     }
-}
-namespace AssetManager.Data
-{
 
     public sealed class SibiAttribType
     {
-
         public const string SibiStatusType = "STATUS";
         public const string SibiItemStatusType = "ITEM_STATUS";
         public const string SibiRequestType = "REQ_TYPE";
         public const string SibiAttachFolder = "ATTACH_FOLDER";
     }
-}
-namespace AssetManager.Data
-{
 
     public sealed class CheckType
     {

@@ -313,13 +313,12 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                var AttachmentFolderID = GetSqlValue(attachment.AttachTable.TableName, attachment.AttachTable.FileGuid, attachment.FileGuid, attachment.AttachTable.FKey);
                 //Delete FTP Attachment
-                if (FtpFunctions.DeleteFtpAttachment(attachment.FileGuid, AttachmentFolderID))
+                if (FtpFunctions.DeleteFtpAttachment(attachment.FileGuid, attachment.FolderGuid))
                 {
                     //delete SQL entry
-                    var SQLDeleteQry = "DELETE FROM " + attachment.AttachTable.TableName + " WHERE " + attachment.AttachTable.FileGuid + "='" + attachment.FileGuid + "'";
-                    return DBFactory.GetDatabase().ExecuteNonQuery(SQLDeleteQry);
+                    var deleteQuery = "DELETE FROM " + attachment.AttachTable.TableName + " WHERE " + attachment.AttachTable.FileGuid + "='" + attachment.FileGuid + "'";
+                    return DBFactory.GetDatabase().ExecuteNonQuery(deleteQuery);
                 }
                 return -1;
             }
@@ -332,36 +331,36 @@ namespace AssetManager.Data.Functions
 
         public static bool DeviceExists(string assetTag, string serial)
         {
-            bool bolAsset = false;
-            bool bolSerial = false;
+            bool assetExists = false;
+            bool serialExists = false;
             //Allow NA value because users do not always have an Asset Tag for new devices.
             if (assetTag == "NA")
             {
-                bolAsset = false;
+                assetExists = false;
             }
             else
             {
-                string CheckAsset = GetSqlValue(DevicesCols.TableName, DevicesCols.AssetTag, assetTag, DevicesCols.AssetTag);
-                if (!string.IsNullOrEmpty(CheckAsset))
+                string assetResult = GetSqlValue(DevicesCols.TableName, DevicesCols.AssetTag, assetTag, DevicesCols.AssetTag);
+                if (!string.IsNullOrEmpty(assetResult))
                 {
-                    bolAsset = true;
+                    assetExists = true;
                 }
                 else
                 {
-                    bolAsset = false;
+                    assetExists = false;
                 }
             }
 
-            string CheckSerial = GetSqlValue(DevicesCols.TableName, DevicesCols.Serial, serial, DevicesCols.Serial);
-            if (!string.IsNullOrEmpty(CheckSerial))
+            string serialResult = GetSqlValue(DevicesCols.TableName, DevicesCols.Serial, serial, DevicesCols.Serial);
+            if (!string.IsNullOrEmpty(serialResult))
             {
-                bolSerial = true;
+                serialExists = true;
             }
             else
             {
-                bolSerial = false;
+                serialExists = false;
             }
-            if (bolSerial | bolAsset)
+            if (serialExists | assetExists)
             {
                 return true;
             }
@@ -375,25 +374,24 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                MunisEmployee SupInfo = default(MunisEmployee);
-                SupInfo = MunisFunctions.MunisUserSearch(parentForm);
-                if (!string.IsNullOrEmpty(SupInfo.Number))
+                var supervisor = MunisFunctions.MunisUserSearch(parentForm);
+                if (!string.IsNullOrEmpty(supervisor.Number))
                 {
                     OtherFunctions.SetWaitCursor(true, parentForm);
-                    using (DataTable DeviceList = new DataTable())
+
+                    using (DataTable deviceList = new DataTable())
+                    using (DataTable empList = MunisFunctions.ListOfEmpsBySup(supervisor.Number))
                     {
-                        using (DataTable EmpList = MunisFunctions.ListOfEmpsBySup(SupInfo.Number))
+                        foreach (DataRow r in empList.Rows)
                         {
-                            foreach (DataRow r in EmpList.Rows)
+                            using (DataTable tmpTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevicesByEmpNum(r["a_employee_number"].ToString())))
                             {
-                                using (DataTable tmpTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevicesByEmpNum(r["a_employee_number"].ToString())))
-                                {
-                                    DeviceList.Merge(tmpTable);
-                                }
+                                deviceList.Merge(tmpTable);
                             }
-                            return DeviceList;
                         }
+                        return deviceList;
                     }
+
                 }
                 else
                 {
@@ -465,10 +463,10 @@ namespace AssetManager.Data.Functions
 
             QueryParamCollection searchParam = new QueryParamCollection();
             searchParam.Add(fieldIn, valueIn, true);
-            var Result = DBFactory.GetDatabase().ExecuteScalarFromCommand(DBFactory.GetDatabase().GetCommandFromParams(sqlQRY, searchParam.Parameters));
-            if (Result != null)
+            var result = DBFactory.GetDatabase().ExecuteScalarFromCommand(DBFactory.GetDatabase().GetCommandFromParams(sqlQRY, searchParam.Parameters));
+            if (result != null)
             {
-                return Result.ToString();
+                return result.ToString();
             }
             else
             {
