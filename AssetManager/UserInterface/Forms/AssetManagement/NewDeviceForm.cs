@@ -98,6 +98,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     bool Success = AddNewDevice();
                     if (Success)
                     {
+                        ParentForm.RefreshData();
                         var blah = OtherFunctions.Message("New Device Added.   Add another?", MessageBoxButtons.YesNo, MessageBoxIcon.Information, "Complete", this);
                         if (!NoClearCheckBox.Checked)
                         {
@@ -107,7 +108,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         {
                             this.Dispose();
                         }
-                        ParentForm.RefreshData();
                     }
                     else
                     {
@@ -259,22 +259,22 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void InitDBControls()
         {
-            DescriptionTextBox.Tag = new DBControlInfo(DevicesBaseCols.Description, true);
-            AssetTagTextBox.Tag = new DBControlInfo(DevicesBaseCols.AssetTag, true);
-            SerialTextBox.Tag = new DBControlInfo(DevicesBaseCols.Serial, true);
-            PurchaseDatePicker.Tag = new DBControlInfo(DevicesBaseCols.PurchaseDate, true);
-            ReplaceYearTextBox.Tag = new DBControlInfo(DevicesBaseCols.ReplacementYear, false);
-            LocationComboBox.Tag = new DBControlInfo(DevicesBaseCols.Location, Attributes.DeviceAttribute.Locations, true);
-            CurrentUserTextBox.Tag = new DBControlInfo(DevicesBaseCols.CurrentUser, true);
-            // txtNotes.Tag = New DBControlInfo(historical_dev.Notes, False)
-            OSTypeComboBox.Tag = new DBControlInfo(DevicesBaseCols.OSVersion, Attributes.DeviceAttribute.OSType, true);
-            PhoneNumTextBox.Tag = new DBControlInfo(DevicesBaseCols.PhoneNumber, false);
-            EquipTypeComboBox.Tag = new DBControlInfo(DevicesBaseCols.EQType, Attributes.DeviceAttribute.EquipType, true);
-            StatusComboBox.Tag = new DBControlInfo(DevicesBaseCols.Status, Attributes.DeviceAttribute.StatusType, true);
-            TrackableCheckBox.Tag = new DBControlInfo(DevicesBaseCols.Trackable, false);
-            POTextBox.Tag = new DBControlInfo(DevicesBaseCols.PO, false);
-            HostnameTextBox.Tag = new DBControlInfo(DevicesBaseCols.HostName, false);
-            iCloudTextBox.Tag = new DBControlInfo(DevicesBaseCols.iCloudAccount, false);
+            DescriptionTextBox.SetDBInfo(DevicesBaseCols.Description, true);
+            AssetTagTextBox.SetDBInfo(DevicesBaseCols.AssetTag, true);
+            SerialTextBox.SetDBInfo(DevicesBaseCols.Serial, true);
+            PurchaseDatePicker.SetDBInfo(DevicesBaseCols.PurchaseDate, true);
+            ReplaceYearTextBox.SetDBInfo(DevicesBaseCols.ReplacementYear, false);
+            LocationComboBox.SetDBInfo(DevicesBaseCols.Location, Attributes.DeviceAttribute.Locations, true);
+            CurrentUserTextBox.SetDBInfo(DevicesBaseCols.CurrentUser, true);
+            // txtNotes.SetDBInfo(historical_dev.Notes, False)
+            OSTypeComboBox.SetDBInfo(DevicesBaseCols.OSVersion, Attributes.DeviceAttribute.OSType, true);
+            PhoneNumTextBox.SetDBInfo(DevicesBaseCols.PhoneNumber, false);
+            EquipTypeComboBox.SetDBInfo(DevicesBaseCols.EQType, Attributes.DeviceAttribute.EquipType, true);
+            StatusComboBox.SetDBInfo(DevicesBaseCols.Status, Attributes.DeviceAttribute.StatusType, true);
+            TrackableCheckBox.SetDBInfo(DevicesBaseCols.Trackable, false);
+            POTextBox.SetDBInfo(DevicesBaseCols.PO, false);
+            HostnameTextBox.SetDBInfo(DevicesBaseCols.HostName, false);
+            iCloudTextBox.SetDBInfo(DevicesBaseCols.iCloudAccount, false);
         }
 
         private void RefreshCombos()

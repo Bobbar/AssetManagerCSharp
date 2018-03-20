@@ -60,7 +60,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.NeedByDatePicker = new System.Windows.Forms.DateTimePicker();
             this.Label3 = new System.Windows.Forms.Label();
             this.Label2 = new System.Windows.Forms.Label();
-            this.txtUser = new System.Windows.Forms.TextBox();
+            this.RequestUserTextBox = new System.Windows.Forms.TextBox();
             this.Label1 = new System.Windows.Forms.Label();
             this.DescriptionTextBox = new System.Windows.Forms.TextBox();
             this.GroupBox3 = new System.Windows.Forms.GroupBox();
@@ -261,7 +261,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox1.Controls.Add(this.NeedByDatePicker);
             this.GroupBox1.Controls.Add(this.Label3);
             this.GroupBox1.Controls.Add(this.Label2);
-            this.GroupBox1.Controls.Add(this.txtUser);
+            this.GroupBox1.Controls.Add(this.RequestUserTextBox);
             this.GroupBox1.Controls.Add(this.Label1);
             this.GroupBox1.Controls.Add(this.DescriptionTextBox);
             this.GroupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -515,13 +515,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Label2.TabIndex = 3;
             this.Label2.Text = "Request User:";
             // 
-            // txtUser
+            // RequestUserTextBox
             // 
-            this.txtUser.Location = new System.Drawing.Point(18, 90);
-            this.txtUser.Margin = new System.Windows.Forms.Padding(2);
-            this.txtUser.Name = "txtUser";
-            this.txtUser.Size = new System.Drawing.Size(137, 21);
-            this.txtUser.TabIndex = 1;
+            this.RequestUserTextBox.Location = new System.Drawing.Point(18, 90);
+            this.RequestUserTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.RequestUserTextBox.Name = "RequestUserTextBox";
+            this.RequestUserTextBox.Size = new System.Drawing.Size(137, 21);
+            this.RequestUserTextBox.TabIndex = 1;
             // 
             // Label1
             // 
@@ -883,7 +883,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         internal DateTimePicker NeedByDatePicker;
         internal Label Label3;
         internal Label Label2;
-        internal TextBox txtUser;
+        internal TextBox RequestUserTextBox;
         internal Label Label1;
         internal TextBox DescriptionTextBox;
         internal GroupBox GroupBox3;

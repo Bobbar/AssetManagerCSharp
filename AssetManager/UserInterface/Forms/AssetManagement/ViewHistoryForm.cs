@@ -30,27 +30,27 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         //TODO: Iterate through properties and dynamically generate controls at runtime.
         private void InitDBControls()
         {
-            txtEntryTime.Tag = new DBControlInfo(HistoricalDevicesCols.ActionDateTime, ParseType.DisplayOnly, false);
-            txtActionUser.Tag = new DBControlInfo(HistoricalDevicesCols.ActionUser, ParseType.DisplayOnly, false);
-            txtChangeType.Tag = new DBControlInfo(HistoricalDevicesCols.ChangeType, Attributes.DeviceAttribute.ChangeType, ParseType.DisplayOnly, false);
-            txtDescription.Tag = new DBControlInfo(HistoricalDevicesCols.Description, ParseType.DisplayOnly, false);
-            txtGuid.Tag = new DBControlInfo(HistoricalDevicesCols.DeviceGuid, ParseType.DisplayOnly, false);
-            txtCurrentUser.Tag = new DBControlInfo(HistoricalDevicesCols.CurrentUser, ParseType.DisplayOnly, false);
-            txtLocation.Tag = new DBControlInfo(HistoricalDevicesCols.Location, Attributes.DeviceAttribute.Locations, ParseType.DisplayOnly, false);
-            txtPONumber.Tag = new DBControlInfo(HistoricalDevicesCols.PO, ParseType.DisplayOnly, false);
-            txtAssetTag.Tag = new DBControlInfo(HistoricalDevicesCols.AssetTag, ParseType.DisplayOnly, false);
-            txtPurchaseDate.Tag = new DBControlInfo(HistoricalDevicesCols.PurchaseDate, ParseType.DisplayOnly, false);
-            txtOSVersion.Tag = new DBControlInfo(HistoricalDevicesCols.OSVersion, Attributes.DeviceAttribute.OSType, ParseType.DisplayOnly, false);
-            txtSerial.Tag = new DBControlInfo(HistoricalDevicesCols.Serial, ParseType.DisplayOnly, false);
-            txtReplaceYear.Tag = new DBControlInfo(HistoricalDevicesCols.ReplacementYear, ParseType.DisplayOnly, false);
-            txtEQType.Tag = new DBControlInfo(HistoricalDevicesCols.EQType, Attributes.DeviceAttribute.EquipType, ParseType.DisplayOnly, false);
-            NotesTextBox.Tag = new DBControlInfo(HistoricalDevicesCols.Notes, ParseType.DisplayOnly, false);
-            txtStatus.Tag = new DBControlInfo(HistoricalDevicesCols.Status, Attributes.DeviceAttribute.StatusType, ParseType.DisplayOnly, false);
-            txtEntryGuid.Tag = new DBControlInfo(HistoricalDevicesCols.HistoryEntryGuid, ParseType.DisplayOnly, false);
-            chkTrackable.Tag = new DBControlInfo(HistoricalDevicesCols.Trackable, ParseType.DisplayOnly, false);
-            txtPhoneNumber.Tag = new DBControlInfo(HistoricalDevicesCols.PhoneNumber, ParseType.DisplayOnly, false);
-            txtHostname.Tag = new DBControlInfo(HistoricalDevicesCols.HostName, ParseType.DisplayOnly, false);
-            iCloudTextBox.Tag = new DBControlInfo(HistoricalDevicesCols.iCloudAccount, ParseType.DisplayOnly, false);
+            txtEntryTime.SetDBInfo(HistoricalDevicesCols.ActionDateTime, ParseType.DisplayOnly, false);
+            txtActionUser.SetDBInfo(HistoricalDevicesCols.ActionUser, ParseType.DisplayOnly, false);
+            txtChangeType.SetDBInfo(HistoricalDevicesCols.ChangeType, Attributes.DeviceAttribute.ChangeType, ParseType.DisplayOnly, false);
+            txtDescription.SetDBInfo(HistoricalDevicesCols.Description, ParseType.DisplayOnly, false);
+            txtGuid.SetDBInfo(HistoricalDevicesCols.DeviceGuid, ParseType.DisplayOnly, false);
+            txtCurrentUser.SetDBInfo(HistoricalDevicesCols.CurrentUser, ParseType.DisplayOnly, false);
+            txtLocation.SetDBInfo(HistoricalDevicesCols.Location, Attributes.DeviceAttribute.Locations, ParseType.DisplayOnly, false);
+            txtPONumber.SetDBInfo(HistoricalDevicesCols.PO, ParseType.DisplayOnly, false);
+            txtAssetTag.SetDBInfo(HistoricalDevicesCols.AssetTag, ParseType.DisplayOnly, false);
+            txtPurchaseDate.SetDBInfo(HistoricalDevicesCols.PurchaseDate, ParseType.DisplayOnly, false);
+            txtOSVersion.SetDBInfo(HistoricalDevicesCols.OSVersion, Attributes.DeviceAttribute.OSType, ParseType.DisplayOnly, false);
+            txtSerial.SetDBInfo(HistoricalDevicesCols.Serial, ParseType.DisplayOnly, false);
+            txtReplaceYear.SetDBInfo(HistoricalDevicesCols.ReplacementYear, ParseType.DisplayOnly, false);
+            txtEQType.SetDBInfo(HistoricalDevicesCols.EQType, Attributes.DeviceAttribute.EquipType, ParseType.DisplayOnly, false);
+            NotesTextBox.SetDBInfo(HistoricalDevicesCols.Notes, ParseType.DisplayOnly, false);
+            txtStatus.SetDBInfo(HistoricalDevicesCols.Status, Attributes.DeviceAttribute.StatusType, ParseType.DisplayOnly, false);
+            txtEntryGuid.SetDBInfo(HistoricalDevicesCols.HistoryEntryGuid, ParseType.DisplayOnly, false);
+            chkTrackable.SetDBInfo(HistoricalDevicesCols.Trackable, ParseType.DisplayOnly, false);
+            txtPhoneNumber.SetDBInfo(HistoricalDevicesCols.PhoneNumber, ParseType.DisplayOnly, false);
+            txtHostname.SetDBInfo(HistoricalDevicesCols.HostName, ParseType.DisplayOnly, false);
+            iCloudTextBox.SetDBInfo(HistoricalDevicesCols.iCloudAccount, ParseType.DisplayOnly, false);
         }
 
         private void FillControls(DataTable data)

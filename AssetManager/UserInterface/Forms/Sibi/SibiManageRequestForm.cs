@@ -633,16 +633,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void InitDBControls()
         {
-            DescriptionTextBox.Tag = new DBControlInfo(SibiRequestCols.Description, true);
-            txtUser.Tag = new DBControlInfo(SibiRequestCols.RequestUser, true);
-            TypeComboBox.Tag = new DBControlInfo(SibiRequestCols.Type, Attributes.SibiAttribute.RequestType, true);
-            NeedByDatePicker.Tag = new DBControlInfo(SibiRequestCols.NeedBy, true);
-            StatusComboBox.Tag = new DBControlInfo(SibiRequestCols.Status, Attributes.SibiAttribute.StatusType, true);
-            POTextBox.Tag = new DBControlInfo(SibiRequestCols.PO, false);
-            ReqNumberTextBox.Tag = new DBControlInfo(SibiRequestCols.RequisitionNumber, false);
-            RequestNumTextBox.Tag = new DBControlInfo(SibiRequestCols.RequestNumber, ParseType.DisplayOnly, false);
-            RTNumberTextBox.Tag = new DBControlInfo(SibiRequestCols.RTNumber, false);
-            CreateDateTextBox.Tag = new DBControlInfo(SibiRequestCols.DateStamp, ParseType.DisplayOnly, false);
+            DescriptionTextBox.SetDBInfo(SibiRequestCols.Description, true);
+            RequestUserTextBox.SetDBInfo(SibiRequestCols.RequestUser, true);
+            TypeComboBox.SetDBInfo(SibiRequestCols.Type, Attributes.SibiAttribute.RequestType, true);
+            NeedByDatePicker.SetDBInfo(SibiRequestCols.NeedBy, true);
+            StatusComboBox.SetDBInfo(SibiRequestCols.Status, Attributes.SibiAttribute.StatusType, true);
+            POTextBox.SetDBInfo(SibiRequestCols.PO, false);
+            ReqNumberTextBox.SetDBInfo(SibiRequestCols.RequisitionNumber, false);
+            RequestNumTextBox.SetDBInfo(SibiRequestCols.RequestNumber, ParseType.DisplayOnly, false);
+            RTNumberTextBox.SetDBInfo(SibiRequestCols.RTNumber, false);
+            CreateDateTextBox.SetDBInfo(SibiRequestCols.DateStamp, ParseType.DisplayOnly, false);
         }
 
         private void InitForm()
