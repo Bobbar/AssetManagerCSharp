@@ -145,6 +145,8 @@ namespace AssetManager.Tools.Deployment
             else
             {
                 RTBLog.AppendText(DateTime.Now.ToString() + ": " + message + "\r\n");
+                RTBLog.SelectionStart = RTBLog.Text.Length;
+                RTBLog.ScrollToCaret();
             }
         }
 
