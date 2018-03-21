@@ -466,14 +466,12 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void RemoteToolsControl_VisibleChanged(object sender, EventArgs e)
         {
-            // If control is hidden, dispose the pingVis instance to reset the ping result collections.
+            // If control is hidden, clear the pingvis results.
             if (!this.Visible)
             {
                 if (pingVis != null)
                 {
-                    pingVis.NewPingResult -= PingVis_NewPingResult;
-                    pingVis.Dispose();
-                    pingVis = null;
+                    pingVis.ClearResults();
                 }
             }
         }

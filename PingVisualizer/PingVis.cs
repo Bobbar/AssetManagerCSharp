@@ -96,6 +96,11 @@ namespace PingVisualizer
             }
         }
 
+        public void ClearResults()
+        {
+            pingReplies.Clear();
+        }
+
         public PingVis(Control targetControl, string hostName)
         {
             InitControl(targetControl);
