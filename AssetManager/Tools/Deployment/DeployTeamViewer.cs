@@ -51,6 +51,8 @@ namespace AssetManager.Tools.Deployment
             {
                 if (targetDevice != null && !string.IsNullOrEmpty(targetDevice.HostName))
                 {
+                    deploy.SetTitle(targetDevice.CurrentUser);
+
                     bool TVExists = false;
 
                     deploy.LogMessage("Starting new TeamViewer deployment to " + targetDevice.HostName);

@@ -95,6 +95,8 @@ namespace AssetManager.Tools.Deployment
             {
                 if (targetDevice != null && !string.IsNullOrEmpty(targetDevice.HostName))
                 {
+                    deploy.SetTitle(targetDevice.CurrentUser);
+
                     string configFile = SelectConfigFile();
 
                     if (string.IsNullOrEmpty(configFile)) return false;

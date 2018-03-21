@@ -19,6 +19,7 @@ namespace AssetManager.Tools.Deployment
         private bool finished = false;
         private long lastActivity;
         private long startTime = 0;
+        private string defaultTitle = "Deployment Log (Close to cancel)";
         private ExtendedForm logView;
         private ExtendedForm parentForm;
         private PowerShellWrapper powerShellWrapper;
@@ -81,11 +82,19 @@ namespace AssetManager.Tools.Deployment
             pSExecWrapper.OutputReceived += PsExecOutputReceived;
         }
 
+        public void SetTitle(string value)
+        {
+            if (logView != null)
+            {
+                logView.Text = value + " - " + defaultTitle;
+            }
+        }
+        
         private void InitLogWindow()
         {
             logView = new ExtendedForm(parentForm);
             logView.FormClosing += new FormClosingEventHandler(LogClosed);
-            logView.Text = "Deployment Log (Close to cancel)";
+            logView.Text = defaultTitle;
             logView.Width = 600;
             logView.Height = 700;
             logView.Owner = parentForm;
