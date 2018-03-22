@@ -1000,8 +1000,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 if (isModifying)
                 {
-                    var dropRow = (DataGridViewRow)(dropDataObject.GetData(typeof(DataGridViewRow))); //Cast the DGVRow
-                    if (dropRow.DataBoundItem != null)
+                    var dropRow = dropDataObject.GetData(typeof(DataGridViewRow)) as DataGridViewRow; //Cast the DGVRow
+
+                    if (dropRow != null && dropRow.DataBoundItem != null)
                     {
                         var newDataRow = ((DataRowView)dropRow.DataBoundItem).Row; //Get the databound row
                         List<object> itemArray = new List<object>();
@@ -1031,6 +1032,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         OtherFunctions.Message("You must be modifying this request before you can drag-drop rows from another request.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Not Allowed", this);
                     }
                 }
+            }
+            catch (InvalidCastException)
+            {
+                // InvalidCastException expected when drag/drop is performed from another instance of this application.
             }
             catch (Exception ex)
             {
