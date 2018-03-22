@@ -160,10 +160,10 @@ namespace AssetManager.Helpers
                         var rowStringSizes = MeasureStrings(rowStringCollection, gfx, targetGrid.DefaultCellStyle.Font);
 
                         // Sort the array by string widths.
-                        rowStringSizes = rowStringSizes.OrderBy((x) => x.Size.Width).ToArray();
+                        rowStringSizes = rowStringSizes.OrderBy((x) => x.Width).ToArray();
 
                         // Get the last and longest string in the array.
-                        var longestStringSize = rowStringSizes.Last().Size;
+                        var longestStringSize = rowStringSizes.Last();
 
                         // Measure the width of the header text.
                         var headerSize = gfx.MeasureString(targetGrid.Columns[c].HeaderText, targetGrid.ColumnHeadersDefaultCellStyle.Font);
@@ -202,33 +202,14 @@ namespace AssetManager.Helpers
             comboColumn.DropDownWidth = (int)maxSize.Width;
         }
 
-        private static StringSize[] MeasureStrings(string[] stringArray, Graphics gfx, Font font)
+        private static SizeF[] MeasureStrings(string[] stringArray, Graphics gfx, Font font)
         {
-            var tempArray = new StringSize[stringArray.Length];
+            var tempArray = new SizeF[stringArray.Length];
             for (int i = 0; i < stringArray.Length; i++)
             {
-                tempArray[i] = new StringSize(stringArray[i], gfx.MeasureString(stringArray[i], font));
+                tempArray[i] = new SizeF(gfx.MeasureString(stringArray[i], font));
             }
             return tempArray;
         }
-
-        private class StringSize
-        {
-            public string Text { get; set; } = string.Empty;
-            public SizeF Size { get; set; } = new SizeF();
-
-            public StringSize()
-            {
-                Text = string.Empty;
-                Size = new SizeF();
-            }
-
-            public StringSize(string text, SizeF size)
-            {
-                Text = text;
-                Size = size;
-            }
-        }
-
     }
 }
