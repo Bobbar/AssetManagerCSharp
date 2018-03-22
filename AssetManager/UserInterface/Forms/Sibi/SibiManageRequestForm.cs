@@ -1171,9 +1171,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void SetTitle(bool isNewRequest = false)
+        private void SetTitle(bool isNew = false)
         {
-            if (!isNewRequest)
+            if (!isNew)
             {
                 this.Text = titleText + " - " + currentRequest.Description;
             }

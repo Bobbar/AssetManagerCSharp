@@ -165,7 +165,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 using (UpdateTypeForm updateTypePrompt = new UpdateTypeForm(this))
                 {
-
                     if (updateTypePrompt.ShowDialog(this) == DialogResult.OK)
                     {
                         if (!ConcurrencyCheck())
@@ -715,7 +714,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 if (!string.IsNullOrEmpty(currentViewDevice.HostName))
                 {
-
                     if (ServerInfo.CurrentDataBase == Database.vintondd)
                     {
                         if (SecurityTools.VerifyAdminCreds("Credentials for Vinton AD"))
@@ -1102,9 +1100,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void remoteToolsControl_NewStatusPrompt(object sender, RemoteToolsControl.StatusPrompt e)
+        private void remoteToolsControl_NewStatusPrompt(object sender, UserPromptEventArgs e)
         {
-            statusSlider.NewSlideMessage(e.Message, e.DisplayTime);
+            statusSlider.NewSlideMessage(e.Text, e.DisplayTime);
         }
 
         private void CurrentUserTextBox_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1117,10 +1115,20 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         void ILiveBox.LoadDevice(string deviceGuid)
         {
+            LoadDevice(deviceGuid);
+        }
+
+        protected void LoadDevice(string deviceGuid)
+        {
             throw new NotImplementedException();
         }
 
         void ILiveBox.DynamicSearch()
+        {
+            DynamicSearch();
+        }
+
+        protected void DynamicSearch()
         {
             throw new NotImplementedException();
         }
@@ -1143,7 +1151,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     munisToolBar.Dispose();
                     currentViewDevice.Dispose();
                     controlParser.Dispose();
-
                 }
             }
             finally

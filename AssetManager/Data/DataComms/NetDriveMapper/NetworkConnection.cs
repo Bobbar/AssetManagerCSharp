@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.Data.Communications
 {
@@ -62,10 +63,11 @@ namespace AssetManager.Data.Communications
             WNetCancelConnection2(_networkName, 0, true);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1060")]
         [DllImport("mpr.dll", CharSet = CharSet.Unicode)]
         private static extern int WNetAddConnection2(NetResource netResource, string password, string username, int flags);
 
-
+        [SuppressMessage("Microsoft.Design", "CA1060")]
         [DllImport("mpr.dll", CharSet = CharSet.Unicode)]
         private static extern int WNetCancelConnection2(string name, int flags, bool force);
       

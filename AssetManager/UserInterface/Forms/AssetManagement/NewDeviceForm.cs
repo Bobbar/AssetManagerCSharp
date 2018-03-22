@@ -18,6 +18,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private MunisEmployee _munisUser;
 
+        private DBControlParser controlParser;
+
+        private LiveBox liveBox;
+
+        private string newGuid;
+
+        private int replacementYears = 4;
+
         public MunisEmployee MunisUser
         {
             get
@@ -31,12 +39,41 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private int replacementYears = 4;
-        private DBControlParser controlParser;
-        private LiveBox liveBox;
-        private string newGuid;
-
         #endregion Fields
+
+        #region Methods
+
+        void ILiveBox.DynamicSearch()
+        {
+            DynamicSearch();
+        }
+
+        void ILiveBox.LoadDevice(string deviceGuid)
+        {
+            LoadDevice(deviceGuid);
+        }
+
+        public override bool OkToClose()
+        {
+            var prompt = OtherFunctions.Message("Close this window?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, "Are you sure?", this);
+            if (prompt == DialogResult.OK)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        protected void DynamicSearch()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected void LoadDevice(string deviceGuid)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion Methods
 
         #region Methods
 
@@ -67,16 +104,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             PurchaseDatePicker.Value = POPurchaseDate;
         }
 
-        private List<DBRemappingInfo> ImportColumnRemaps()
+        private void AddButton_Click(object sender, EventArgs e)
         {
-            List<DBRemappingInfo> newMap = new List<DBRemappingInfo>();
-            newMap.Add(new DBRemappingInfo(SibiRequestItemsCols.User, DevicesCols.CurrentUser));
-            newMap.Add(new DBRemappingInfo(SibiRequestItemsCols.NewAsset, DevicesCols.AssetTag));
-            newMap.Add(new DBRemappingInfo(SibiRequestItemsCols.NewSerial, DevicesCols.Serial));
-            newMap.Add(new DBRemappingInfo(SibiRequestItemsCols.Description, DevicesCols.Description));
-            newMap.Add(new DBRemappingInfo(SibiRequestItemsCols.Location, DevicesCols.Location));
-            newMap.Add(new DBRemappingInfo(SibiRequestCols.PO, DevicesCols.PO));
-            return newMap;
+            AddDevice();
         }
 
         private void AddDevice()
@@ -178,22 +208,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return validFields;
         }
 
-        private void LockUnlockUserField()
-        {
-            if (!string.IsNullOrEmpty(MunisUser.Number))
-            {
-                CurrentUserTextBox.BackColor = Colors.EditColor;
-                CurrentUserTextBox.ReadOnly = true;
-                ToolTip1.SetToolTip(CurrentUserTextBox, "Munis Linked Employee - Double-Click to change.");
-            }
-            else
-            {
-                CurrentUserTextBox.BackColor = Color.Empty;
-                CurrentUserTextBox.ReadOnly = false;
-                ToolTip1.SetToolTip(CurrentUserTextBox, "");
-            }
-        }
-
         private void ClearAll()
         {
             RefreshCombos();
@@ -204,6 +218,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             TrackableCheckBox.Checked = false;
             NoClearCheckBox.Checked = false;
             controlParser.ClearErrors();
+        }
+
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            ClearAll();
         }
 
         private void ClearFields(Control Parent)
@@ -226,6 +245,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     ClearFields(ctl);
                 }
             }
+        }
+
+        private void CurrentUserTextBox_DoubleClick(object sender, EventArgs e)
+        {
+            CurrentUserTextBox.ReadOnly = false;
+            MunisUser = new MunisEmployee();
+            CurrentUserTextBox.SelectAll();
         }
 
         private DataTable DeviceInsertTable(string selectQuery)
@@ -257,6 +283,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return tmpTable;
         }
 
+        private List<DBRemappingInfo> ImportColumnRemaps()
+        {
+            List<DBRemappingInfo> newMap = new List<DBRemappingInfo>();
+            newMap.Add(new DBRemappingInfo(SibiRequestItemsCols.User, DevicesCols.CurrentUser));
+            newMap.Add(new DBRemappingInfo(SibiRequestItemsCols.NewAsset, DevicesCols.AssetTag));
+            newMap.Add(new DBRemappingInfo(SibiRequestItemsCols.NewSerial, DevicesCols.Serial));
+            newMap.Add(new DBRemappingInfo(SibiRequestItemsCols.Description, DevicesCols.Description));
+            newMap.Add(new DBRemappingInfo(SibiRequestItemsCols.Location, DevicesCols.Location));
+            newMap.Add(new DBRemappingInfo(SibiRequestCols.PO, DevicesCols.PO));
+            return newMap;
+        }
+
         private void InitDBControls()
         {
             DescriptionTextBox.SetDBInfo(DevicesBaseCols.Description, true);
@@ -277,28 +315,20 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             iCloudTextBox.SetDBInfo(DevicesBaseCols.iCloudAccount, false);
         }
 
-        private void RefreshCombos()
+        private void LockUnlockUserField()
         {
-            LocationComboBox.FillComboBox(Attributes.DeviceAttribute.Locations);
-            EquipTypeComboBox.FillComboBox(Attributes.DeviceAttribute.EquipType);
-            OSTypeComboBox.FillComboBox(Attributes.DeviceAttribute.OSType);
-            StatusComboBox.FillComboBox(Attributes.DeviceAttribute.StatusType);
-        }
-
-        private void SetReplacementYear(DateTime PurDate)
-        {
-            int ReplaceYear = PurDate.Year + replacementYears;
-            ReplaceYearTextBox.Text = ReplaceYear.ToString();
-        }
-
-        private void AddButton_Click(object sender, EventArgs e)
-        {
-            AddDevice();
-        }
-
-        private void ClearButton_Click(object sender, EventArgs e)
-        {
-            ClearAll();
+            if (!string.IsNullOrEmpty(MunisUser.Number))
+            {
+                CurrentUserTextBox.BackColor = Colors.EditColor;
+                CurrentUserTextBox.ReadOnly = true;
+                ToolTip1.SetToolTip(CurrentUserTextBox, "Munis Linked Employee - Double-Click to change.");
+            }
+            else
+            {
+                CurrentUserTextBox.BackColor = Color.Empty;
+                CurrentUserTextBox.ReadOnly = false;
+                ToolTip1.SetToolTip(CurrentUserTextBox, "");
+            }
         }
 
         private void MunisSearchButton_Click(object sender, EventArgs e)
@@ -311,11 +341,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void CurrentUserTextBox_DoubleClick(object sender, EventArgs e)
+        private void NewDeviceForm_Load(object sender, EventArgs e)
         {
-            CurrentUserTextBox.ReadOnly = false;
-            MunisUser = new MunisEmployee();
-            CurrentUserTextBox.SelectAll();
+            liveBox = new LiveBox(this);
+            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.UserSelect, DevicesCols.MunisEmpNum);
+            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxSelectionType.SelectValue);
         }
 
         private void PhoneNumTextBox_Leave(object sender, EventArgs e)
@@ -325,6 +355,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 OtherFunctions.Message("Invalid phone number.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
                 PhoneNumTextBox.Focus();
             }
+        }
+
+        private void RefreshCombos()
+        {
+            LocationComboBox.FillComboBox(Attributes.DeviceAttribute.Locations);
+            EquipTypeComboBox.FillComboBox(Attributes.DeviceAttribute.EquipType);
+            OSTypeComboBox.FillComboBox(Attributes.DeviceAttribute.OSType);
+            StatusComboBox.FillComboBox(Attributes.DeviceAttribute.StatusType);
         }
 
         private void SerialTextBox_TextChanged(object sender, EventArgs e)
@@ -348,14 +386,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void NewDeviceForm_Load(object sender, EventArgs e)
+        private void SetReplacementYear(DateTime PurDate)
         {
-            liveBox = new LiveBox(this);
-            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.UserSelect, DevicesCols.MunisEmpNum);
-            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxSelectionType.SelectValue);
+            int ReplaceYear = PurDate.Year + replacementYears;
+            ReplaceYearTextBox.Text = ReplaceYear.ToString();
         }
-
-        #endregion Methods
 
         private void OSTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -367,25 +402,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             SetReplacementYear(PurchaseDatePicker.Value);
         }
 
-        void ILiveBox.LoadDevice(string deviceGuid)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ILiveBox.DynamicSearch()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool OkToClose()
-        {
-            var prompt = OtherFunctions.Message("Close this window?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, "Are you sure?", this);
-            if (prompt == DialogResult.OK)
-            {
-                return true;
-            }
-            return false;
-        }
+        #endregion Methods
 
         protected override void Dispose(bool disposing)
         {

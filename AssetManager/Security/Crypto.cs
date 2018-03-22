@@ -1,19 +1,19 @@
+using AssetManager.Helpers;
 using System;
 using System.Security.Cryptography;
-using AssetManager.Helpers;
 
 namespace AssetManager.Security
 {
     public class Simple3Des : IDisposable
     {
+        private TripleDESCryptoServiceProvider TripleDes = new TripleDESCryptoServiceProvider();
+
         public Simple3Des(string key)
         {
             // Initialize the crypto provider.
             TripleDes.Key = TruncateHash(key, TripleDes.KeySize / 8);
             TripleDes.IV = TruncateHash("", TripleDes.BlockSize / 8);
         }
-
-        private TripleDESCryptoServiceProvider TripleDes = new TripleDESCryptoServiceProvider();
 
         private byte[] TruncateHash(string key, int length)
         {
@@ -43,7 +43,6 @@ namespace AssetManager.Security
                 // Convert the encrypted stream to a printable string.
                 return Convert.ToBase64String(ms.ToArray());
             }
-
         }
 
         public string DecryptData(string encryptedtext)
@@ -64,7 +63,6 @@ namespace AssetManager.Security
                     encryptedBytes = null;
                     return System.Text.Encoding.Unicode.GetString(ms.ToArray());
                 }
-
             }
             catch (Exception ex)
             {
@@ -79,7 +77,7 @@ namespace AssetManager.Security
         private bool disposedValue;
 
         // IDisposable
-        protected void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
@@ -90,6 +88,7 @@ namespace AssetManager.Security
             }
             disposedValue = true;
         }
+
         public void Dispose()
         {
             Dispose(true);

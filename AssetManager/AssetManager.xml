@@ -948,6 +948,28 @@
             <param name="parent"></param>
             <returns></returns>
         </member>
+        <member name="T:AssetManager.UserInterface.CustomControls.UserPromptEventArgs">
+            <summary>
+            Custom event args which contains message info to be displayed to the user.
+            </summary>
+        </member>
+        <member name="P:AssetManager.UserInterface.CustomControls.UserPromptEventArgs.Text">
+            <summary>
+            The text to be displayed in the user prompt.
+            </summary>
+        </member>
+        <member name="P:AssetManager.UserInterface.CustomControls.UserPromptEventArgs.DisplayTime">
+            <summary>
+            How long to display the message in seconds.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.UserPromptEventArgs.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AssetManager.UserInterface.CustomControls.UserPromptEventArgs"/> class.
+            </summary>
+            <param name="message"></param>
+            <param name="displayTime"></param>
+        </member>
         <member name="E:AssetManager.UserInterface.CustomControls.IWindowList.ChildCountChanged">
             <summary>
             Occurs when the number of child forms has changed.

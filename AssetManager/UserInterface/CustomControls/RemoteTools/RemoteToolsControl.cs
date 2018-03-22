@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -61,13 +62,17 @@ namespace AssetManager.UserInterface.CustomControls
         public event EventHandler HostBackOnline;
 
         [Browsable(true)]
-        public event EventHandler<StatusPrompt> NewStatusPrompt;
+        public event UserPromptEventHandler NewStatusPrompt;
+        public delegate void UserPromptEventHandler(object sender, UserPromptEventArgs e);
 
+        [SuppressMessage("Microsoft.Design", "CA1009")]
         [Browsable(true)]
         public event EventHandler<bool> VisibleChanging;
 
+        [SuppressMessage("Microsoft.Design", "CA1009")]
         [Browsable(true)]
         public event EventHandler<bool> HostOnlineStatus;
+
 
         #endregion Fields
 
@@ -84,7 +89,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void OnStatusPrompt(string message, int displayTime = -1)
         {
-            NewStatusPrompt(this, new StatusPrompt(message, displayTime));
+            NewStatusPrompt(this, new UserPromptEventArgs(message, displayTime));
         }
 
         private void OnVisibleChanging(bool newState)
@@ -391,7 +396,7 @@ namespace AssetManager.UserInterface.CustomControls
             return string.Empty;
         }
 
-        private async Task StartPowerShellSession(Device targetDevice)
+        private void StartPowerShellSession(Device targetDevice)
         {
             if (SecurityTools.VerifyAdminCreds())
             {
@@ -537,18 +542,5 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         #endregion Control Events
-
-        // METODO: Un-nest.
-        public struct StatusPrompt
-        {
-            public string Message { get; set; }
-            public int DisplayTime { get; set; }
-
-            public StatusPrompt(string message, int displayTime)
-            {
-                Message = message;
-                DisplayTime = displayTime;
-            }
-        }
     }
 }

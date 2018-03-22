@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.Tools
 {
@@ -8,6 +9,7 @@ namespace AssetManager.Tools
     /// </summary>
     public static class TaskBarNotify
     {
+        [SuppressMessage("Microsoft.Design", "CA1060")]
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool FlashWindowEx(ref FLASHWINFO fwInfo);

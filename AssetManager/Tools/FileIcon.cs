@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using AssetManager.Helpers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.Tools
 {
@@ -31,10 +32,12 @@ namespace AssetManager.Tools
             SHGFI_LARGEICON = 0,
             SHGFI_SMALLICON = 1
         }
-        [DllImport("shell32.dll", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
 
+        [SuppressMessage("Microsoft.Design", "CA1060")]
+        [DllImport("shell32.dll", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         private static extern IntPtr SHGetFileInfo(string pszPath, Int32 dwFileAttributes, ref SHFILEINFO psfi, Int32 cbFileInfo, Int32 uFlags);
 
+        [SuppressMessage("Microsoft.Design", "CA1060")]
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool DestroyIcon(IntPtr hIcon);
 

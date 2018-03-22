@@ -291,10 +291,10 @@ namespace AssetManager.UserInterface.CustomControls
             parentForm?.OnWindowCountChanged(e);
         }
 
-        private void SetTheme(ExtendedForm parentForm)
+        private void SetTheme(ExtendedForm parent)
         {
-            Icon = parentForm.Icon;
-            GridTheme = parentForm.GridTheme;
+            Icon = parent.Icon;
+            GridTheme = parent.GridTheme;
         }
 
         #endregion Methods

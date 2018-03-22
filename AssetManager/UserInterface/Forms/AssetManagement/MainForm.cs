@@ -7,7 +7,6 @@ using AssetManager.Security;
 using AssetManager.Tools;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AdminTools;
-using MyDialogLib;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +14,6 @@ using System.Data.Common;
 using System.Deployment.Application;
 using System.Diagnostics;
 using System.Drawing;
-using System.Management.Automation.Runspaces;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -27,13 +25,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private bool bolGridFilling = false;
         private DbCommand LastCommand;
-
         private LiveBox MyLiveBox;
         private MunisToolBar MyMunisToolBar;
         private WindowList MyWindowList;
         private bool QueryRunning = false;
         private ConnectionWatchdog WatchDog;
-
         private DbTransaction CurrentTransaction = null;
 
         public MunisEmployee MunisUser

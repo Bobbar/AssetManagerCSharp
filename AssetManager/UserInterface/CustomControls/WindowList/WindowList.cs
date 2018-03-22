@@ -48,11 +48,11 @@ namespace AssetManager.UserInterface.CustomControls
         /// <summary>
         /// Recursively build ToolStripItemCollections of Forms and their Children and add them to the ToolStrip. Making sure to add SibiMain to the top of the list.
         /// </summary>
-        /// <param name="parentForm">Form to add to ToolStrip.</param>
+        /// <param name="target">Form to add to ToolStrip.</param>
         /// <param name="targetMenuItem">Item to add the Form item to.</param>
-        private void BuildWindowList(IWindowList parentForm, ToolStripItemCollection targetMenuItem)
+        private void BuildWindowList(IWindowList target, ToolStripItemCollection targetMenuItem)
         {
-            foreach (var frm in parentForm.ChildForms)
+            foreach (var frm in target.ChildForms)
             {
                 if (frm.ChildForms.Count > 0)
                 {
