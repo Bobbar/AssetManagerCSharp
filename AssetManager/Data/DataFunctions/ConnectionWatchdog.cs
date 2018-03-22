@@ -17,7 +17,7 @@ namespace AssetManager.Data.Functions
 
         public event EventHandler WatcherTick;
 
-        protected virtual void OnStatusChanged(WatchDogStatusEventArgs e)
+        protected virtual void OnStatusChanged(WatchdogStatusEventArgs e)
         {
             if (StatusChanged != null)
             {
@@ -47,9 +47,9 @@ namespace AssetManager.Data.Functions
         private bool cacheIsAvailable;
 
         private bool inCachedMode;
-        private WatchDogConnectionStatus currentWatchdogStatus = WatchDogConnectionStatus.Online;
+        private WatchdogConnectionStatus currentWatchdogStatus = WatchdogConnectionStatus.Online;
 
-        private WatchDogConnectionStatus previousWatchdogStatus;
+        private WatchdogConnectionStatus previousWatchdogStatus;
         private const int maxFailedPings = 2;
         private const int watcherInterval = 5000;
 
@@ -61,8 +61,8 @@ namespace AssetManager.Data.Functions
             watcherTask.Start();
             if (inCachedMode)
             {
-                currentWatchdogStatus = WatchDogConnectionStatus.CachedMode;
-                OnStatusChanged(new WatchDogStatusEventArgs(WatchDogConnectionStatus.CachedMode));
+                currentWatchdogStatus = WatchdogConnectionStatus.CachedMode;
+                OnStatusChanged(new WatchdogStatusEventArgs(WatchdogConnectionStatus.CachedMode));
             }
         }
 
@@ -81,13 +81,13 @@ namespace AssetManager.Data.Functions
                 if (status != currentWatchdogStatus)
                 {
                     currentWatchdogStatus = status;
-                    OnStatusChanged(new WatchDogStatusEventArgs(currentWatchdogStatus));
+                    OnStatusChanged(new WatchdogStatusEventArgs(currentWatchdogStatus));
                 }
 
                 if (serverIsOnline)
                 {
                     //Fire tick event to update server datatime.
-                    OnWatcherTick(new WatchDogTickEventArgs(GetServerTime()));
+                    OnWatcherTick(new WatchdogTickEventArgs(GetServerTime()));
                 }
 
                 CheckForCacheRebuild();
@@ -98,13 +98,13 @@ namespace AssetManager.Data.Functions
 
         private void CheckForCacheRebuild()
         {
-            if (currentWatchdogStatus == WatchDogConnectionStatus.Online)
+            if (currentWatchdogStatus == WatchdogConnectionStatus.Online)
             {
                 if (!cacheIsAvailable)
                 {
                     OnRebuildCache(new EventArgs());
                 }
-                if (previousWatchdogStatus == WatchDogConnectionStatus.CachedMode || previousWatchdogStatus == WatchDogConnectionStatus.Offline)
+                if (previousWatchdogStatus == WatchdogConnectionStatus.CachedMode || previousWatchdogStatus == WatchdogConnectionStatus.Offline)
                 {
                     OnRebuildCache(new EventArgs());
                 }
@@ -187,25 +187,25 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        private WatchDogConnectionStatus GetWatchdogStatus()
+        private WatchdogConnectionStatus GetWatchdogStatus()
         {
             if (serverIsOnline & !inCachedMode)
             {
-                return WatchDogConnectionStatus.Online;
+                return WatchdogConnectionStatus.Online;
             }
             else if (serverIsOnline & inCachedMode)
             {
                 inCachedMode = false;
-                return WatchDogConnectionStatus.Online;
+                return WatchdogConnectionStatus.Online;
             }
             else if (!serverIsOnline & cacheIsAvailable)
             {
                 inCachedMode = true;
-                return WatchDogConnectionStatus.CachedMode;
+                return WatchdogConnectionStatus.CachedMode;
             }
             else
             {
-                return WatchDogConnectionStatus.Offline;
+                return WatchdogConnectionStatus.Offline;
             }
         }
 
@@ -233,27 +233,27 @@ namespace AssetManager.Data.Functions
         #endregion "IDisposable Support"
     }
 
-    public class WatchDogTickEventArgs : EventArgs
+    public class WatchdogTickEventArgs : EventArgs
     {
         public string ServerTime { get; }
 
-        public WatchDogTickEventArgs(string serverTime)
+        public WatchdogTickEventArgs(string serverTime)
         {
             this.ServerTime = serverTime;
         }
     }
 
-    public class WatchDogStatusEventArgs : EventArgs
+    public class WatchdogStatusEventArgs : EventArgs
     {
-        public WatchDogConnectionStatus ConnectionStatus { get; set; }
+        public WatchdogConnectionStatus ConnectionStatus { get; set; }
 
-        public WatchDogStatusEventArgs(WatchDogConnectionStatus connectionStatus)
+        public WatchdogStatusEventArgs(WatchdogConnectionStatus connectionStatus)
         {
             this.ConnectionStatus = connectionStatus;
         }
     }
 
-    public enum WatchDogConnectionStatus
+    public enum WatchdogConnectionStatus
     {
         Online,
         Offline,

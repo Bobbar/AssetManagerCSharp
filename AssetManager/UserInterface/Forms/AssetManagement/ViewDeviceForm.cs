@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
@@ -648,6 +649,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             SetEditMode(true);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void NewEntryView()
         {
             string entryGuid = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryGuid);
@@ -659,6 +661,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void NewTrackingView(string Guid)
         {
             Waiting();
@@ -666,6 +669,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DoneWaiting();
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void OpenSibiLink(Device LinkDevice)
         {
             try
@@ -822,6 +826,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             StyleFunctions.SetGridStyle(TrackingGrid, GridTheme);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void StartTrackDeviceForm()
         {
             SecurityTools.CheckForAccess(SecurityGroups.Tracking);
@@ -884,6 +889,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void ViewAttachments()
         {
             SecurityTools.CheckForAccess(SecurityGroups.ViewAttachment);
@@ -906,6 +912,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             AssetManagerFunctions.ShowPingHistory(this, currentViewDevice);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void AssetDisposalFormToolItem_Click(object sender, EventArgs e)
         {
             new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.DisposeForm);
@@ -1044,6 +1051,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             AddNewNote();
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void AssetInputFormToolItem_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(currentViewDevice.PO))
@@ -1056,6 +1064,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void AssetTransferFormToolItem_Click(object sender, EventArgs e)
         {
             new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.TransferForm);

@@ -12,6 +12,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
@@ -1331,6 +1332,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             return RowsValid;
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void ViewAttachments()
         {
             SecurityTools.CheckForAccess(SecurityGroups.ViewAttachment);
@@ -1359,6 +1361,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void ViewNote()
         {
             try

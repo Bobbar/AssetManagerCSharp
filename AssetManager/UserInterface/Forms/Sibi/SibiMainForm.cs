@@ -14,6 +14,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
@@ -321,6 +322,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void cmdManage_Click(object sender, EventArgs e)
         {
             try
@@ -339,6 +341,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             if (SibiResultGrid.CurrentRow.Index > -1) OpenRequest(SibiResultGrid.CurrentRowStringValue(SibiRequestCols.Guid));
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void OpenRequest(string strGuid)
         {
             try

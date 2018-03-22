@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
@@ -29,7 +30,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private MunisToolBar MyMunisToolBar;
         private WindowList MyWindowList;
         private bool QueryRunning = false;
-        private ConnectionWatchdog WatchDog;
+        private ConnectionWatchdog Watchdog;
         private DbTransaction CurrentTransaction = null;
 
         public MunisEmployee MunisUser
@@ -74,11 +75,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             CheckForAdmin();
             GetGridStyles();
 
-            WatchDog = new ConnectionWatchdog(GlobalSwitches.CachedMode);
-            WatchDog.StatusChanged += WatchDogStatusChanged;
-            WatchDog.RebuildCache += WatchDogRebuildCache;
-            WatchDog.WatcherTick += WatchDogTick;
-            WatchDog.StartWatcher();
+            Watchdog = new ConnectionWatchdog(GlobalSwitches.CachedMode);
+            Watchdog.StatusChanged += WatchdogStatusChanged;
+            Watchdog.RebuildCache += WatchdogRebuildCache;
+            Watchdog.WatcherTick += WatchdogTick;
+            Watchdog.StartWatcher();
 
             MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 2);
             MyWindowList.InsertWindowList(ToolStrip1);
@@ -188,6 +189,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         public void LoadDevice(string deviceGuid)
         {
             try
@@ -220,6 +222,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             StartBigQuery(LastCommand);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void AddNewDevice()
         {
             SecurityTools.CheckForAccess(SecurityGroups.AddDevice);
@@ -292,7 +295,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             RefreshCombos();
         }
 
-        private async void WatchDogRebuildCache(object sender, EventArgs e)
+        private async void WatchdogRebuildCache(object sender, EventArgs e)
         {
             if (GlobalSwitches.BuildingCache) return;
 
@@ -316,36 +319,36 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void WatchDogTick(object sender, EventArgs e)
+        private void WatchdogTick(object sender, EventArgs e)
         {
-            var TickEvent = (WatchDogTickEventArgs)e;
+            var TickEvent = (WatchdogTickEventArgs)e;
             if (DateTimeLabel.Text != TickEvent.ServerTime)
             {
                 SetServerTime(TickEvent.ServerTime);
             }
         }
 
-        private void WatchDogStatusChanged(object sender, EventArgs e)
+        private void WatchdogStatusChanged(object sender, EventArgs e)
         {
-            var ConnectionEventArgs = (WatchDogStatusEventArgs)e;
+            var ConnectionEventArgs = (WatchdogStatusEventArgs)e;
             Logging.Logger("Connection Status changed to: " + ConnectionEventArgs.ConnectionStatus.ToString());
             switch (ConnectionEventArgs.ConnectionStatus)
             {
-                case WatchDogConnectionStatus.Online:
+                case WatchdogConnectionStatus.Online:
                     ConnectStatus("Connected", Color.Green, Colors.DefaultFormBackColor, "Connection OK");
                     GlobalSwitches.CachedMode = false;
                     ServerInfo.ServerPinging = true;
                     CheckForAdmin();
                     break;
 
-                case WatchDogConnectionStatus.Offline:
+                case WatchdogConnectionStatus.Offline:
                     ConnectStatus("Offline", Color.Red, Colors.StatusBarProblem, "No connection. Cache unavailable.");
                     GlobalSwitches.CachedMode = false;
                     ServerInfo.ServerPinging = false;
                     AdminDropDown.Visible = false;
                     break;
 
-                case WatchDogConnectionStatus.CachedMode:
+                case WatchdogConnectionStatus.CachedMode:
                     ConnectStatus("Cached Mode", Color.Black, Colors.StatusBarProblem, "Server Offline. Using Local DB Cache.");
                     GlobalSwitches.CachedMode = true;
                     ServerInfo.ServerPinging = false;
@@ -452,12 +455,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DatabaseToolCombo.SelectedIndex = (int)ServerInfo.CurrentDataBase;
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void NewTextCrypterForm()
         {
             SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
             new CrypterForm(this);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void OpenSibiMainForm()
         {
             try
@@ -551,6 +556,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             StartBigQuery(cmd);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void StartAdvancedSearch()
         {
             SecurityTools.CheckForAccess(SecurityGroups.AdvancedSearch);
@@ -594,6 +600,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void StartUserManager()
         {
             SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
@@ -974,7 +981,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     MyLiveBox.Dispose();
                     MyMunisToolBar.Dispose();
                     MyWindowList.Dispose();
-                    WatchDog.Dispose();
+                    Watchdog.Dispose();
                     OtherFunctions.EndProgram();
                 }
             }

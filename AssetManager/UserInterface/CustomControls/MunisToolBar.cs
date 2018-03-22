@@ -3,6 +3,7 @@ using AssetManager.UserInterface.Forms.AdminTools;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -87,6 +88,7 @@ namespace AssetManager.UserInterface.CustomControls
             munisDropDown.AutoSize = true;
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         private void InitToolItems(ExtendedForm parentForm)
         {
             List<ToolStripMenuItem> ToolItemList = new List<ToolStripMenuItem>();

@@ -26,8 +26,8 @@ namespace AssetManager.Tools.Deployment
         private PSExecWrapper pSExecWrapper;
         private RichTextBox RTBLog;
         private int timeoutSeconds = 120;
-        private Task watchDogTask;
-        private CancellationTokenSource watchDogCancelTokenSource;
+        private Task WatchdogTask;
+        private CancellationTokenSource WatchdogCancelTokenSource;
 
         private delegate void RTBLogDelegate(string message);
 
@@ -59,8 +59,8 @@ namespace AssetManager.Tools.Deployment
         {
             this.parentForm = parentForm;
 
-            watchDogCancelTokenSource = new CancellationTokenSource();
-            watchDogTask = new Task(() => WatchDog(watchDogCancelTokenSource.Token), watchDogCancelTokenSource.Token);
+            WatchdogCancelTokenSource = new CancellationTokenSource();
+            WatchdogTask = new Task(() => Watchdog(WatchdogCancelTokenSource.Token), WatchdogCancelTokenSource.Token);
 
             InitLogWindow();
         }
@@ -108,7 +108,7 @@ namespace AssetManager.Tools.Deployment
             logView.Controls.Add(RTBLog);
             logView.Show();
 
-            watchDogTask.Start();
+            WatchdogTask.Start();
         }
 
         public async Task SimplePSExecCommand(Device targetDevice, string command, string title)
@@ -127,10 +127,10 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
-        public async Task SimplePowerShellCommand(Device targetDevice, byte[] scriptBytes, string title)
+        public async Task SimplePowerShellCommand(Device targetDevice, byte[] script, string title)
         {
             LogMessage("Starting " + title);
-            var success = await PowerShellWrap.ExecutePowerShellScript(targetDevice.HostName, scriptBytes);
+            var success = await PowerShellWrap.ExecutePowerShellScript(targetDevice.HostName, script);
             if (success)
             {
                 LogMessage(title + " complete!");
@@ -218,7 +218,7 @@ namespace AssetManager.Tools.Deployment
         {
             PrintElapsedTime();
             finished = true;
-            watchDogCancelTokenSource.Cancel();
+            WatchdogCancelTokenSource.Cancel();
         }
 
         private void StopRemoteProcesses()
@@ -244,7 +244,7 @@ namespace AssetManager.Tools.Deployment
             return -1;
         }
 
-        private void WatchDog(CancellationToken cancelToken)
+        private void Watchdog(CancellationToken cancelToken)
         {
             try
             {
@@ -313,9 +313,9 @@ namespace AssetManager.Tools.Deployment
         }
 
         // Wrapper to shorten calls.
-        public string GetString(string stringName)
+        public string GetString(string name)
         {
-            return AssetManagerFunctions.GetDeployString(stringName);
+            return AssetManagerFunctions.GetDeployString(name);
         }
 
         private class DeploymentCanceledException : Exception
@@ -345,8 +345,8 @@ namespace AssetManager.Tools.Deployment
                 {
                     logView.Dispose();
                     RTBLog.Dispose();
-                    watchDogCancelTokenSource.Dispose();
-                    watchDogTask.Dispose();
+                    WatchdogCancelTokenSource.Dispose();
+                    WatchdogTask.Dispose();
                 }
 
                 disposedValue = true;

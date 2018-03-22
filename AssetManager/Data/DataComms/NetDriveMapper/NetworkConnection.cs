@@ -58,6 +58,7 @@ namespace AssetManager.Data.Communications
             GC.SuppressFinalize(this);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         protected virtual void Dispose(bool disposing)
         {
             WNetCancelConnection2(_networkName, 0, true);

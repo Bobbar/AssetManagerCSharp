@@ -13,8 +13,8 @@ namespace AssetManager
 
 		public static readonly string AppDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\AssetManager\\";
         public static readonly string PsExecPath = AppDomain.CurrentDomain.BaseDirectory + "Tools\\PsExec\\PsExec.exe";
-        public static readonly string PsExecTempDir = @"C:\Temp\";
-        public static readonly string PsExecTempPath = @"C:\Temp\PsExec.exe";
+        public const string PsExecTempDir = @"C:\Temp\";
+        public const string PsExecTempPath = @"C:\Temp\PsExec.exe";
         public const string LogName = "log.log";
 		public static readonly string LogPath = AppDir + LogName;
 

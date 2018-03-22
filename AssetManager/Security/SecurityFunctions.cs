@@ -110,11 +110,11 @@ namespace AssetManager.Security
             var serializer = new DataContractSerializer(typeof(DataTable));
             using (var memoryStream = new MemoryStream())
             {
-                using (var SHA = new SHA1CryptoServiceProvider())
+                using (var sha = new SHA1CryptoServiceProvider())
                 {
                     serializer.WriteObject(memoryStream, table);
                     byte[] serializedData = memoryStream.ToArray();
-                    byte[] hash = SHA.ComputeHash(serializedData);
+                    byte[] hash = sha.ComputeHash(serializedData);
                     return Convert.ToBase64String(hash);
                 }
             }

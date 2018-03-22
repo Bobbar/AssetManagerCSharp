@@ -20,84 +20,84 @@ namespace AssetManager.Data.Communications
 
         #region Methods
 
-        public SqlCommand ReturnSqlCommand(string sqlQry)
+        public SqlCommand ReturnSqlCommand(string query)
         {
             SqlConnection conn = new SqlConnection(msSqlConnectString);
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = conn;
-            cmd.CommandText = sqlQry;
+            cmd.CommandText = query;
             return cmd;
         }
 
-        public DataTable ReturnSqlTable(string sqlQry)
+        public DataTable ReturnSqlTable(string query)
         {
             using (SqlConnection conn = new SqlConnection(msSqlConnectString))
-            using (DataTable NewTable = new DataTable())
+            using (DataTable newTable = new DataTable())
             using (SqlDataAdapter da = new SqlDataAdapter())
             {
-                da.SelectCommand = new SqlCommand(sqlQry);
+                da.SelectCommand = new SqlCommand(query);
                 da.SelectCommand.Connection = conn;
-                da.Fill(NewTable);
-                return NewTable;
+                da.Fill(newTable);
+                return newTable;
             }
         }
 
-        public async Task<DataTable> ReturnSqlTableAsync(string sqlQry)
+        public async Task<DataTable> ReturnSqlTableAsync(string query)
         {
             using (SqlConnection conn = new SqlConnection(msSqlConnectString))
-            using (DataTable NewTable = new DataTable())
-            using (SqlCommand cmd = new SqlCommand(sqlQry, conn))
+            using (DataTable newTable = new DataTable())
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 await conn.OpenAsync();
                 SqlDataReader dr = await cmd.ExecuteReaderAsync();
-                NewTable.Load(dr);
-                return NewTable;
+                newTable.Load(dr);
+                return newTable;
             }
         }
 
         public DataTable ReturnSqlTableFromCmd(SqlCommand cmd)
         {
-            using (DataTable NewTable = new DataTable())
+            using (DataTable newTable = new DataTable())
             using (SqlDataAdapter da = new SqlDataAdapter(cmd))
             {
-                da.Fill(NewTable);
+                da.Fill(newTable);
                 cmd.Dispose();
-                return NewTable;
+                return newTable;
             }
         }
 
         public async Task<DataTable> ReturnSqlTableFromCmdAsync(SqlCommand cmd)
         {
             using (var conn = cmd.Connection)
-            using (DataTable NewTable = new DataTable())
+            using (DataTable newTable = new DataTable())
             {
                 await conn.OpenAsync();
                 SqlDataReader dr = await cmd.ExecuteReaderAsync();
-                NewTable.Load(dr);
+                newTable.Load(dr);
                 cmd.Dispose();
-                return NewTable;
+                return newTable;
             }
         }
 
         public object ReturnSqlValue(string table, object fieldIn, object valueIn, string fieldOut, object fieldIn2 = null, object valueIn2 = null)
         {
-            string sqlQRY = "";
+            string query = "";
             QueryParamCollection queryParams = new QueryParamCollection();
 
             if (fieldIn2 != null && valueIn2 != null)
             {
-                sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table;
+                query = "SELECT TOP 1 " + fieldOut + " FROM " + table;
 
                 queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
                 queryParams.Add(fieldIn2.ToString(), valueIn2.ToString(), true);
             }
             else
             {
-                sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table;
+                query = "SELECT TOP 1 " + fieldOut + " FROM " + table;
 
                 queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
             }
-            using (var cmd = GetSqlCommandFromParams(sqlQRY, queryParams.Parameters))
+            using (var cmd = GetSqlCommandFromParams(query, queryParams.Parameters))
             using (var conn = cmd.Connection)
             {
                 cmd.Connection.Open();
@@ -109,25 +109,25 @@ namespace AssetManager.Data.Communications
         {
             try
             {
-                string sqlQRY = "";
+                string query = "";
 
                 QueryParamCollection queryParams = new QueryParamCollection();
 
                 if (fieldIn2 != null && valueIn2 != null)
                 {
-                    sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table;
+                    query = "SELECT TOP 1 " + fieldOut + " FROM " + table;
 
                     queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
                     queryParams.Add(fieldIn2.ToString(), valueIn2.ToString(), true);
                 }
                 else
                 {
-                    sqlQRY = "SELECT TOP 1 " + fieldOut + " FROM " + table;
+                    query = "SELECT TOP 1 " + fieldOut + " FROM " + table;
 
                     queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
                 }
 
-                using (var cmd = GetSqlCommandFromParams(sqlQRY, queryParams.Parameters))
+                using (var cmd = GetSqlCommandFromParams(query, queryParams.Parameters))
                 using (var conn = cmd.Connection)
                 {
                     await cmd.Connection.OpenAsync();

@@ -5,7 +5,7 @@ using AssetManager.UserInterface.Forms;
 using AssetManager.Data.Classes;
 using System;
 using System.Windows.Forms;
-
+using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.Helpers
 {
@@ -32,6 +32,7 @@ namespace AssetManager.Helpers
             return false;
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1806")]
         public static void LookupDevice(ExtendedForm parentForm, Device device)
         {
             if (device != null)

@@ -17,9 +17,9 @@ namespace AssetManager.Data.Functions
         #region "Methods"
 
 
-        public static string GetDeployString(string stringName)
+        public static string GetDeployString(string name)
         {
-            string query = "SELECT value FROM deployment_strings WHERE name = '" + stringName + "'";
+            string query = "SELECT value FROM deployment_strings WHERE name = '" + name + "'";
             var results = DBFactory.GetDatabase().ExecuteScalarFromQueryString(query);
 
             if (results != null)
