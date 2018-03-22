@@ -54,7 +54,6 @@ namespace AssetManager.Data.Classes
         {
             var row = ((DataTable)data).Rows[0];
             populatingTable = data;
-            populatingTable.TableName = TableName;
             MapProperty(this, row);
         }
 
@@ -62,7 +61,6 @@ namespace AssetManager.Data.Classes
         {
             var row = data;
             populatingTable = row.Table;
-            populatingTable.TableName = TableName;
             MapProperty(this, row);
         }
 
