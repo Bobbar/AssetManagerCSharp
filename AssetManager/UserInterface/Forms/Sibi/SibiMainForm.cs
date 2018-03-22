@@ -370,7 +370,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 ForeCol = Color.Black;
                 dvgCell.Style.BackColor = BackCol;
                 dvgCell.Style.ForeColor = ForeCol;
-                dvgCell.Style.SelectionBackColor = Colors.ColorAlphaBlend(BackCol, Color.FromArgb(87, 87, 87));
+                dvgCell.Style.SelectionBackColor = StyleFunctions.ColorAlphaBlend(BackCol, Color.FromArgb(87, 87, 87));
             }
         }
 
@@ -398,7 +398,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Use List.Find to locate the matching attribute.
             var attribColor = attribList.Find((i) => { return i.Code == code; }).Color;
             // Return the a blended color.
-            return Colors.ColorAlphaBlend(attribColor, DarkColor);
+            return StyleFunctions.ColorAlphaBlend(attribColor, DarkColor);
         }
 
         private void HighlightCurrentRow(int Row)

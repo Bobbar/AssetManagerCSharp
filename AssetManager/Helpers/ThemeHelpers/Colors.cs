@@ -22,20 +22,6 @@ namespace AssetManager.Helpers
 
         public static Color DefaultGridBackColor { get; set; }
 
-        /// <summary>
-        /// Alpha blend two colors.
-        /// </summary>
-        /// <param name="InColor"></param>
-        /// <param name="BlendColor"></param>
-        /// <returns></returns>
-        public static Color ColorAlphaBlend(Color InColor, Color BlendColor)
-        {
-            Color OutColor = default(Color);
-            OutColor = Color.FromArgb(Convert.ToInt32((Convert.ToInt32(InColor.A) + Convert.ToInt32(BlendColor.A)) / 2),
-                Convert.ToInt32((Convert.ToInt32(InColor.R) + Convert.ToInt32(BlendColor.R)) / 2),
-                Convert.ToInt32((Convert.ToInt32(InColor.G) + Convert.ToInt32(BlendColor.G)) / 2),
-                Convert.ToInt32((Convert.ToInt32(InColor.B) + Convert.ToInt32(BlendColor.B)) / 2));
-            return OutColor;
-        }
+        
     }
 }

@@ -539,12 +539,12 @@
             <param name="comboColumn"></param>
             <param name="gfx"></param>
         </member>
-        <member name="M:AssetManager.Helpers.Colors.ColorAlphaBlend(System.Drawing.Color,System.Drawing.Color)">
+        <member name="M:AssetManager.Helpers.StyleFunctions.ColorAlphaBlend(System.Drawing.Color,System.Drawing.Color)">
             <summary>
             Alpha blend two colors.
             </summary>
-            <param name="InColor"></param>
-            <param name="BlendColor"></param>
+            <param name="color"></param>
+            <param name="blendColor"></param>
             <returns></returns>
         </member>
         <member name="T:AssetManager.Properties.Resources">
