@@ -95,11 +95,11 @@ namespace AssetManager.Helpers
         }
 
         public delegate void SetWaitCursorVoidDelegate(bool waiting, Form parentForm = null);
-        public static void SetWaitCursor(bool Waiting, Form parentForm = null)
+        public static void SetWaitCursor(bool waiting, Form parentForm = null)
         {
             if (parentForm == null)
             {
-                Application.UseWaitCursor = Waiting;
+                Application.UseWaitCursor = waiting;
                 Application.DoEvents();
             }
             else
@@ -107,17 +107,17 @@ namespace AssetManager.Helpers
                 if (parentForm.InvokeRequired)
                 {
                     SetWaitCursorVoidDelegate d = new SetWaitCursorVoidDelegate(SetWaitCursor);
-                    parentForm.Invoke(d, new object[] { Waiting, parentForm });
+                    parentForm.Invoke(d, new object[] { waiting, parentForm });
                 }
                 else
                 {
-                    if (Waiting)
+                    if (waiting)
                     {
-                        parentForm.Cursor = Cursors.AppStarting;
+                        parentForm.UseWaitCursor = true;
                     }
                     else
                     {
-                        parentForm.Cursor = Cursors.Default;
+                        parentForm.UseWaitCursor = false;
                     }
                     parentForm.Update();
                 }

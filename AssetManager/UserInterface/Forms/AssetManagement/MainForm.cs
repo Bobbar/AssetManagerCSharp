@@ -13,10 +13,10 @@ using System.Data;
 using System.Data.Common;
 using System.Deployment.Application;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
@@ -24,14 +24,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
     {
         #region "Fields"
 
-        private bool bolGridFilling = false;
-        private DbCommand LastCommand;
-        private LiveBox MyLiveBox;
-        private MunisToolBar MyMunisToolBar;
-        private WindowList MyWindowList;
-        private bool QueryRunning = false;
-        private ConnectionWatchdog Watchdog;
-        private DbTransaction CurrentTransaction = null;
+        private bool gridIsFilling = false;
+        private bool queryRunning = false;
+        private DbCommand lastCommand;
+        private LiveBox liveBox;
+        private MunisToolBar munisToolBar;
+        private WindowList windowList;
+        private ConnectionWatchdog watchdog;
+        private DbTransaction currentTransaction = null;
 
         public MunisEmployee MunisUser
         {
@@ -65,9 +65,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             InitializeComponent();
             this.Icon = Properties.Resources.asset_icon;
             ShowAll();
-            MyLiveBox = new LiveBox(this);
-            MyMunisToolBar = new CustomControls.MunisToolBar(this);
-            MyWindowList = new CustomControls.WindowList(this);
+            liveBox = new LiveBox(this);
+            munisToolBar = new CustomControls.MunisToolBar(this);
+            windowList = new CustomControls.WindowList(this);
 
             DateTimeLabel.Text = DateTime.Now.ToString();
             ToolStrip1.BackColor = Colors.AssetToolBarColor;
@@ -75,14 +75,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             CheckForAdmin();
             GetGridStyles();
 
-            Watchdog = new ConnectionWatchdog(GlobalSwitches.CachedMode);
-            Watchdog.StatusChanged += WatchdogStatusChanged;
-            Watchdog.RebuildCache += WatchdogRebuildCache;
-            Watchdog.WatcherTick += WatchdogTick;
-            Watchdog.StartWatcher();
+            watchdog = new ConnectionWatchdog(GlobalSwitches.CachedMode);
+            watchdog.StatusChanged += WatchdogStatusChanged;
+            watchdog.RebuildCache += WatchdogRebuildCache;
+            watchdog.WatcherTick += WatchdogTick;
+            watchdog.StartWatcher();
 
-            MyMunisToolBar.InsertMunisDropDown(ToolStrip1, 2);
-            MyWindowList.InsertWindowList(ToolStrip1);
+            munisToolBar.InsertMunisDropDown(ToolStrip1, 2);
+            windowList.InsertWindowList(ToolStrip1);
             InitLiveBox();
 
             InitDBControls();
@@ -97,7 +97,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
             if (OtherFunctions.Message("This will allow unchecked changes to the database. Incorrect inputs WILL BREAK THINGS! \r\n" + Environment.NewLine + "Changes must be 'applied' and 'committed' before they will be permanently stored in the database.", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "WARNING", this) == DialogResult.OK)
             {
-                CurrentTransaction = DBFactory.GetDatabase().StartTransaction();
+                currentTransaction = DBFactory.GetDatabase().StartTransaction();
                 RefreshData();
                 GridEditMode(true);
                 DoneWaiting();
@@ -106,13 +106,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void CommitTransaction()
         {
-            if (CurrentTransaction != null)
+            if (currentTransaction != null)
             {
                 if (OtherFunctions.Message("Are you sure? This will permanently apply the changes to the database.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Commit Transaction", this) == DialogResult.Yes)
                 {
-                    CurrentTransaction.Commit();
-                    CurrentTransaction.Dispose();
-                    CurrentTransaction = null;
+                    currentTransaction.Commit();
+                    currentTransaction.Dispose();
+                    currentTransaction = null;
                     RefreshData();
                     GridEditMode(false);
                     DoneWaiting();
@@ -122,13 +122,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RollbackTransaction()
         {
-            if (CurrentTransaction != null)
+            if (currentTransaction != null)
             {
                 if (OtherFunctions.Message("Restore database to original state?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Rollback Transaction", this) == DialogResult.Yes)
                 {
-                    CurrentTransaction.Rollback();
-                    CurrentTransaction.Dispose();
-                    CurrentTransaction = null;
+                    currentTransaction.Rollback();
+                    currentTransaction.Dispose();
+                    currentTransaction = null;
                     RefreshData();
                     GridEditMode(false);
                     DoneWaiting();
@@ -138,9 +138,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void UpdateRecords()
         {
-            if (CurrentTransaction != null)
+            if (currentTransaction != null)
             {
-                DBFactory.GetDatabase().UpdateTable(Queries.SelectDevicesTable, (DataTable)ResultGrid.DataSource, CurrentTransaction);
+                DBFactory.GetDatabase().UpdateTable(Queries.SelectDevicesTable, (DataTable)ResultGrid.DataSource, currentTransaction);
                 RefreshData();
                 DoneWaiting();
             }
@@ -162,24 +162,26 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        //dynamically creates sql query using any combination of search filters the users wants
+        /// <summary>
+        /// Builds a query from the populated search controls.
+        /// </summary>
         public void DynamicSearch()
         {
             try
             {
                 QueryParamCollection searchParams = BuildSearchList();
-                string strStartQry;
-                if (chkHistorical.Checked)
+                string query;
+                if (HistoricalCheckBox.Checked)
                 {
-                    strStartQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE";
-                    var searchCommand = DBFactory.GetDatabase().GetCommandFromParams(strStartQry, searchParams.Parameters);
+                    query = "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE";
+                    var searchCommand = DBFactory.GetDatabase().GetCommandFromParams(query, searchParams.Parameters);
                     searchCommand.CommandText += " GROUP BY " + DevicesCols.DeviceGuid;
                     StartBigQuery(searchCommand);
                 }
                 else
                 {
-                    strStartQry = "SELECT * FROM " + DevicesCols.TableName + " WHERE";
-                    var searchCommand = DBFactory.GetDatabase().GetCommandFromParams(strStartQry, searchParams.Parameters);
+                    query = "SELECT * FROM " + DevicesCols.TableName + " WHERE";
+                    var searchCommand = DBFactory.GetDatabase().GetCommandFromParams(query, searchParams.Parameters);
                     StartBigQuery(searchCommand);
                 }
             }
@@ -219,7 +221,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public override void RefreshData()
         {
-            StartBigQuery(LastCommand);
+            StartBigQuery(lastCommand);
         }
 
         [SuppressMessage("Microsoft.Design", "CA1806")]
@@ -227,27 +229,27 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             SecurityTools.CheckForAccess(SecurityGroups.AddDevice);
 
-            var NewDevForm = Helpers.ChildFormControl.FindChildOfType(this, typeof(NewDeviceForm));
-            if (NewDevForm == null)
+            var newDevForm = Helpers.ChildFormControl.FindChildOfType(this, typeof(NewDeviceForm));
+            if (newDevForm == null)
             {
                 new NewDeviceForm(this);
             }
             else
             {
-                Helpers.ChildFormControl.ActivateForm(NewDevForm);
+                Helpers.ChildFormControl.ActivateForm(newDevForm);
             }
         }
 
         private QueryParamCollection BuildSearchList()
         {
-            QueryParamCollection searchParams = new QueryParamCollection();
+            var searchParams = new QueryParamCollection();
 
-            using (DBControlParser controlParser = new DBControlParser(this))
+            using (var controlParser = new DBControlParser(this))
             {
-                foreach (Control ctl in controlParser.GetDBControls(this))
+                foreach (var ctl in controlParser.GetDBControls(this))
                 {
-                    object CtlValue = controlParser.GetDBControlValue(ctl);
-                    if (!object.ReferenceEquals(CtlValue, DBNull.Value) && !string.IsNullOrEmpty(CtlValue.ToString()))
+                    var ctlValue = controlParser.GetDBControlValue(ctl);
+                    if (!ReferenceEquals(ctlValue, DBNull.Value) && !string.IsNullOrEmpty(ctlValue.ToString()))
                     {
                         var DBInfo = (DBControlInfo)ctl.Tag;
                         bool IsExact = false;
@@ -274,7 +276,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                                 break;
                         }
 
-                        searchParams.Add(DBInfo.DataColumn, CtlValue, IsExact);
+                        searchParams.Add(DBInfo.DataColumn, ctlValue, IsExact);
                     }
                 }
                 return searchParams;
@@ -283,15 +285,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void Clear_All()
         {
-            txtAssetTag.Clear();
-            txtAssetTagSearch.Clear();
-            txtSerial.Clear();
-            txtSerialSearch.Clear();
-            txtCurUser.Clear();
-            txtDescription.Clear();
-            txtReplaceYear.Clear();
-            chkTrackables.Checked = false;
-            chkHistorical.Checked = false;
+            AssetTagTextBox.Clear();
+            AssetTagSearchTextBox.Clear();
+            SerialTextBox.Clear();
+            SerialSearchTextBox.Clear();
+            CurrrentUserTextBox.Clear();
+            DescriptionTextBox.Clear();
+            ReplaceYearTextBox.Clear();
+            TrackablesCheckBox.Checked = false;
+            HistoricalCheckBox.Checked = false;
             RefreshCombos();
         }
 
@@ -321,18 +323,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void WatchdogTick(object sender, EventArgs e)
         {
-            var TickEvent = (WatchdogTickEventArgs)e;
-            if (DateTimeLabel.Text != TickEvent.ServerTime)
+            var tickEvent = (WatchdogTickEventArgs)e;
+            if (DateTimeLabel.Text != tickEvent.ServerTime)
             {
-                SetServerTime(TickEvent.ServerTime);
+                SetServerTime(tickEvent.ServerTime);
             }
         }
 
         private void WatchdogStatusChanged(object sender, EventArgs e)
         {
-            var ConnectionEventArgs = (WatchdogStatusEventArgs)e;
-            Logging.Logger("Connection Status changed to: " + ConnectionEventArgs.ConnectionStatus.ToString());
-            switch (ConnectionEventArgs.ConnectionStatus)
+            var connectionEventArgs = (WatchdogStatusEventArgs)e;
+            Logging.Logger("Connection Status changed to: " + connectionEventArgs.ConnectionStatus.ToString());
+            switch (connectionEventArgs.ConnectionStatus)
             {
                 case WatchdogConnectionStatus.Online:
                     ConnectStatus("Connected", Color.Green, Colors.DefaultFormBackColor, "Connection OK");
@@ -379,9 +381,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void DisplayRecords(int NumberOf)
+        private void DisplayRecordCount(int count)
         {
-            lblRecords.Text = "Records: " + NumberOf;
+            RecordsCountLabel.Text = "Records: " + count;
         }
 
         private void DoneWaiting()
@@ -395,21 +397,21 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (SecurityTools.VerifyAdminCreds())
             {
-                List<Device> SelectedDevices = new List<Device>();
-                HashSet<int> Rows = new HashSet<int>();
+                var selectedDevices = new List<Device>();
+                var rows = new HashSet<int>();
                 //Iterate selected cells and collect unique row indexes via a HashSet.(HashSet only allows unique values to be added to collection).
                 foreach (DataGridViewCell cell in ResultGrid.SelectedCells)
                 {
-                    Rows.Add(cell.RowIndex);
+                    rows.Add(cell.RowIndex);
                 }
 
-                foreach (var row in Rows)
+                foreach (var row in rows)
                 {
-                    string DevGuid = ResultGrid[DevicesCols.DeviceGuid, row].Value.ToString();
-                    SelectedDevices.Add(new Device(DevGuid));
+                    var devGuid = ResultGrid[DevicesCols.DeviceGuid, row].Value.ToString();
+                    selectedDevices.Add(new Device(devGuid));
                 }
 
-                Helpers.ChildFormControl.GKUpdaterInstance().AddMultipleUpdates(SelectedDevices);
+                Helpers.ChildFormControl.GKUpdaterInstance().AddMultipleUpdates(selectedDevices);
             }
         }
 
@@ -426,24 +428,24 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void InitDBControls()
         {
-            txtSerialSearch.SetDBInfo(DevicesCols.Serial);
-            txtAssetTagSearch.SetDBInfo(DevicesCols.AssetTag);
-            txtDescription.SetDBInfo(DevicesCols.Description);
-            cmbEquipType.SetDBInfo(DevicesCols.EQType, Attributes.DeviceAttribute.EquipType);
-            txtReplaceYear.SetDBInfo(DevicesCols.ReplacementYear);
-            cmbOSType.SetDBInfo(DevicesCols.OSVersion, Attributes.DeviceAttribute.OSType);
-            cmbLocation.SetDBInfo(DevicesCols.Location, Attributes.DeviceAttribute.Locations);
-            txtCurUser.SetDBInfo(DevicesCols.CurrentUser);
-            cmbStatus.SetDBInfo(DevicesCols.Status, Attributes.DeviceAttribute.StatusType);
-            chkTrackables.SetDBInfo(DevicesCols.Trackable);
+            SerialSearchTextBox.SetDBInfo(DevicesCols.Serial);
+            AssetTagSearchTextBox.SetDBInfo(DevicesCols.AssetTag);
+            DescriptionTextBox.SetDBInfo(DevicesCols.Description);
+            EquipTypeComboBox.SetDBInfo(DevicesCols.EQType, Attributes.DeviceAttribute.EquipType);
+            ReplaceYearTextBox.SetDBInfo(DevicesCols.ReplacementYear);
+            OSTypeComboBox.SetDBInfo(DevicesCols.OSVersion, Attributes.DeviceAttribute.OSType);
+            LocationComboBox.SetDBInfo(DevicesCols.Location, Attributes.DeviceAttribute.Locations);
+            CurrrentUserTextBox.SetDBInfo(DevicesCols.CurrentUser);
+            StatusComboBox.SetDBInfo(DevicesCols.Status, Attributes.DeviceAttribute.StatusType);
+            TrackablesCheckBox.SetDBInfo(DevicesCols.Trackable);
         }
 
         private void InitLiveBox()
         {
-            MyLiveBox.AttachToControl(txtDescription, DevicesCols.Description, LiveBox.LiveBoxSelectionType.DynamicSearch);
-            MyLiveBox.AttachToControl(txtCurUser, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.DynamicSearch);
-            MyLiveBox.AttachToControl(txtSerial, DevicesCols.Serial, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceGuid);
-            MyLiveBox.AttachToControl(txtAssetTag, DevicesCols.AssetTag, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceGuid);
+            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxSelectionType.DynamicSearch);
+            liveBox.AttachToControl(CurrrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.DynamicSearch);
+            liveBox.AttachToControl(SerialTextBox, DevicesCols.Serial, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceGuid);
+            liveBox.AttachToControl(AssetTagTextBox, DevicesCols.AssetTag, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceGuid);
         }
 
         private void InitDBCombo()
@@ -470,14 +472,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 SecurityTools.CheckForAccess(SecurityGroups.ViewSibi);
 
                 Waiting();
-                var SibiForm = Helpers.ChildFormControl.FindChildOfType(this, typeof(Sibi.SibiMainForm));
-                if (SibiForm == null)
+                var sibiForm = Helpers.ChildFormControl.FindChildOfType(this, typeof(Sibi.SibiMainForm));
+                if (sibiForm == null)
                 {
                     new Sibi.SibiMainForm(this);
                 }
                 else
                 {
-                    Helpers.ChildFormControl.ActivateForm(SibiForm);
+                    Helpers.ChildFormControl.ActivateForm(sibiForm);
                 }
             }
             finally
@@ -488,37 +490,37 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RefreshCombos()
         {
-            cmbEquipType.FillComboBox(Attributes.DeviceAttribute.EquipType);
-            cmbLocation.FillComboBox(Attributes.DeviceAttribute.Locations);
-            cmbStatus.FillComboBox(Attributes.DeviceAttribute.StatusType);
-            cmbOSType.FillComboBox(Attributes.DeviceAttribute.OSType);
+            EquipTypeComboBox.FillComboBox(Attributes.DeviceAttribute.EquipType);
+            LocationComboBox.FillComboBox(Attributes.DeviceAttribute.Locations);
+            StatusComboBox.FillComboBox(Attributes.DeviceAttribute.StatusType);
+            OSTypeComboBox.FillComboBox(Attributes.DeviceAttribute.OSType);
         }
 
         private List<GridColumnAttrib> ResultGridColumns()
         {
-            ColumnFormatType AttribColumnType;
-            if (CurrentTransaction != null)
+            ColumnFormatType attribColumnType;
+            if (currentTransaction != null)
             {
-                AttribColumnType = ColumnFormatType.AttributeCombo;
+                attribColumnType = ColumnFormatType.AttributeCombo;
             }
             else
             {
-                AttribColumnType = ColumnFormatType.AttributeDisplayMemberOnly;
+                attribColumnType = ColumnFormatType.AttributeDisplayMemberOnly;
             }
-            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(DevicesCols.CurrentUser, "User"));
-            ColList.Add(new GridColumnAttrib(DevicesCols.AssetTag, "Asset ID"));
-            ColList.Add(new GridColumnAttrib(DevicesCols.Serial, "Serial"));
-            ColList.Add(new GridColumnAttrib(DevicesCols.EQType, "Device Type", Attributes.DeviceAttribute.EquipType, AttribColumnType));
-            ColList.Add(new GridColumnAttrib(DevicesCols.Description, "Description"));
-            ColList.Add(new GridColumnAttrib(DevicesCols.OSVersion, "OS Version", Attributes.DeviceAttribute.OSType, AttribColumnType));
-            ColList.Add(new GridColumnAttrib(DevicesCols.Location, "Location", Attributes.DeviceAttribute.Locations, AttribColumnType));
-            ColList.Add(new GridColumnAttrib(DevicesCols.PO, "PO Number"));
-            ColList.Add(new GridColumnAttrib(DevicesCols.PurchaseDate, "Purchase Date"));
-            ColList.Add(new GridColumnAttrib(DevicesCols.ReplacementYear, "Replace Year"));
-            ColList.Add(new GridColumnAttrib(DevicesCols.LastModDate, "Modified"));
-            ColList.Add(new GridColumnAttrib(DevicesCols.DeviceGuid, "Guid"));
-            return ColList;
+            var columnList = new List<GridColumnAttrib>();
+            columnList.Add(new GridColumnAttrib(DevicesCols.CurrentUser, "User"));
+            columnList.Add(new GridColumnAttrib(DevicesCols.AssetTag, "Asset ID"));
+            columnList.Add(new GridColumnAttrib(DevicesCols.Serial, "Serial"));
+            columnList.Add(new GridColumnAttrib(DevicesCols.EQType, "Device Type", Attributes.DeviceAttribute.EquipType, attribColumnType));
+            columnList.Add(new GridColumnAttrib(DevicesCols.Description, "Description"));
+            columnList.Add(new GridColumnAttrib(DevicesCols.OSVersion, "OS Version", Attributes.DeviceAttribute.OSType, attribColumnType));
+            columnList.Add(new GridColumnAttrib(DevicesCols.Location, "Location", Attributes.DeviceAttribute.Locations, attribColumnType));
+            columnList.Add(new GridColumnAttrib(DevicesCols.PO, "PO Number"));
+            columnList.Add(new GridColumnAttrib(DevicesCols.PurchaseDate, "Purchase Date"));
+            columnList.Add(new GridColumnAttrib(DevicesCols.ReplacementYear, "Replace Year"));
+            columnList.Add(new GridColumnAttrib(DevicesCols.LastModDate, "Modified"));
+            columnList.Add(new GridColumnAttrib(DevicesCols.DeviceGuid, "Guid"));
+            return columnList;
         }
 
         private void SendToGrid(ref DataTable results)
@@ -532,8 +534,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 ResultGrid.ColumnHeadersHeight = 38;
                 ResultGrid.ScrollBars = ScrollBars.None;
                 ResultGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                bolGridFilling = true;
-                if (CurrentTransaction != null)
+                gridIsFilling = true;
+
+                if (currentTransaction != null)
                 {
                     ResultGrid.Populate(results, ResultGridColumns(), true);
                 }
@@ -541,10 +544,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     ResultGrid.Populate(results, ResultGridColumns());
                 }
-                ResultGrid.FastAutoSizeColumns();
 
-                bolGridFilling = false;
-                DisplayRecords(ResultGrid.Rows.Count);
+                ResultGrid.FastAutoSizeColumns();
+                gridIsFilling = false;
+                DisplayRecordCount(ResultGrid.Rows.Count);
                 ResultGrid.ScrollBars = ScrollBars.Both;
                 ResultGrid.ResumeLayout();
             }
@@ -574,16 +577,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                if (!QueryRunning)
+                if (!queryRunning)
                 {
                     OtherFunctions.SetWaitCursor(true, this);
                     StripSpinner.Visible = true;
                     SetStatusBar("Background query running...");
-                    QueryRunning = true;
+                    queryRunning = true;
                     var Results = await Task.Run(() =>
                     {
-                        LastCommand = QryCommand;
-                        return DBFactory.GetDatabase().DataTableFromCommand(QryCommand, CurrentTransaction);
+                        lastCommand = QryCommand;
+                        return DBFactory.GetDatabase().DataTableFromCommand(QryCommand, currentTransaction);
                     });
                     QryCommand.Dispose();
                     SendToGrid(ref Results);
@@ -595,7 +598,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             finally
             {
-                QueryRunning = false;
+                queryRunning = false;
                 DoneWaiting();
             }
         }
@@ -651,7 +654,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                if (CurrentTransaction == null)
+                if (currentTransaction == null)
                 {
                     if (!GlobalSwitches.CachedMode & ServerInfo.ServerPinging)
                     {
@@ -739,32 +742,32 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             StartAdvancedSearch();
         }
 
-        private void AddDeviceTool_Click(object sender, EventArgs e)
+        private void AddDeviceToolButton_Click(object sender, EventArgs e)
         {
             AddNewDevice();
         }
 
-        private void cmdClear_Click(object sender, EventArgs e)
+        private void ClearButton_Click(object sender, EventArgs e)
         {
             Clear_All();
         }
 
-        private void cmdSearch_Click(object sender, EventArgs e)
+        private void SearchButton_Click(object sender, EventArgs e)
         {
             DynamicSearch();
         }
 
-        private void cmdShowAll_Click(object sender, EventArgs e)
+        private void ShowAllButon_Click(object sender, EventArgs e)
         {
             ShowAll();
         }
 
-        private void cmdSibi_Click(object sender, EventArgs e)
+        private void StartSibiButton_Click(object sender, EventArgs e)
         {
             OpenSibiMainForm();
         }
 
-        private void cmdSupDevSearch_Click(object sender, EventArgs e)
+        private void DevBySupButton_Click(object sender, EventArgs e)
         {
             try
             {
@@ -786,7 +789,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void CopyTool_Click(object sender, EventArgs e)
+        private void CopySelectedMenuItem_Click(object sender, EventArgs e)
         {
             ResultGrid.CopyToClipboard();
         }
@@ -805,12 +808,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void PanelNoScrollOnFocus1_Scroll(object sender, ScrollEventArgs e)
         {
-            MyLiveBox.HideLiveBox();
+            liveBox.HideLiveBox();
         }
 
         private void ResultGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (!bolGridFilling)
+            if (!gridIsFilling)
             {
                 StyleFunctions.HighlightRow(ResultGrid, GridTheme, e.RowIndex);
             }
@@ -852,12 +855,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             NewTextCrypterForm();
         }
 
-        private void tsmAddGKUpdate_Click(object sender, EventArgs e)
+        private void AddGKUpdateMenuItem_Click(object sender, EventArgs e)
         {
             EnqueueGKUpdate();
         }
 
-        private void tsmGKUpdater_Click(object sender, EventArgs e)
+        private void GKUpdaterMenuItem_Click(object sender, EventArgs e)
         {
             var GKUpdater = Helpers.ChildFormControl.GKUpdaterInstance();
             if (!GKUpdater.Visible)
@@ -871,22 +874,22 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void tsmSendToGridForm_Click(object sender, EventArgs e)
+        private void SendToGridFormMemuItem_Click(object sender, EventArgs e)
         {
             ResultGrid.CopyToGridForm(this);
         }
 
-        private void tsmUserManager_Click(object sender, EventArgs e)
+        private void UserManagerMenuItem_Click(object sender, EventArgs e)
         {
             StartUserManager();
         }
 
-        private void txtGuid_KeyDown(object sender, KeyEventArgs e)
+        private void GuidTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
             {
-                LoadDevice(txtGuid.Text.Trim());
-                txtGuid.Clear();
+                LoadDevice(GuidTextBox.Text.Trim());
+                GuidTextBox.Clear();
             }
         }
 
@@ -895,7 +898,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid));
         }
 
-        private void ReEnterLACredentialsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ReEnterLACredentialsMenuItem_Click(object sender, EventArgs e)
         {
             SecurityTools.ClearAdminCreds();
             SecurityTools.VerifyAdminCreds();
@@ -951,7 +954,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public override bool OkToClose()
         {
-            if (CurrentTransaction != null)
+            if (currentTransaction != null)
             {
                 OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Close");
                 return false;
@@ -977,11 +980,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         components.Dispose();
                     }
 
-                    LastCommand?.Dispose();
-                    MyLiveBox.Dispose();
-                    MyMunisToolBar.Dispose();
-                    MyWindowList.Dispose();
-                    Watchdog.Dispose();
+                    lastCommand?.Dispose();
+                    liveBox.Dispose();
+                    munisToolBar.Dispose();
+                    windowList.Dispose();
+                    watchdog.Dispose();
                     OtherFunctions.EndProgram();
                 }
             }

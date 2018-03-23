@@ -451,19 +451,19 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
                 QueryParamCollection searchParams = new QueryParamCollection();
                 searchParams.Add("e.a_name_last", name.ToUpper(), "OR");
                 searchParams.Add("e.a_name_first", name.ToUpper(), "OR");
-
-                GridForm newGridForm = new GridForm(parentForm, "MUNIS Employee Info");
+                
                 using (var cmd = MunisComms.GetSqlCommandFromParams(query, searchParams.Parameters))
+                using (var results = await MunisComms.ReturnSqlTableFromCmdAsync(cmd))
                 {
-                    using (var results = await MunisComms.ReturnSqlTableFromCmdAsync(cmd))
+                    if (HasResults(results, parentForm))
                     {
-                        if (HasResults(results, parentForm))
-                        {
-                            newGridForm.AddGrid("EmpGrid", "MUNIS Info:", results);
-                            newGridForm.Show();
-                        }
+                        OtherFunctions.SetWaitCursor(false, parentForm);
+                        GridForm newGridForm = new GridForm(parentForm, "MUNIS Employee Info");
+                        newGridForm.AddGrid("EmpGrid", "MUNIS Info:", results);
+                        newGridForm.Show();
                     }
                 }
+
             }
             catch (Exception ex)
             {
