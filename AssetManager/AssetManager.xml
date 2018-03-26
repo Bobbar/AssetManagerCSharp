@@ -1173,6 +1173,11 @@
             the contents of this method with the code editor.
             </summary>
         </member>
+        <member name="M:AssetManager.UserInterface.Forms.AssetManagement.MainForm.DynamicSearch">
+            <summary>
+            Builds a query from the populated search controls.
+            </summary>
+        </member>
         <member name="F:AssetManager.UserInterface.Forms.AssetManagement.MainForm.components">
             <summary>
             Required designer variable.

@@ -330,19 +330,17 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             SecurityTools.CheckForAccess(SecurityGroups.ModifySibi);
 
-            if (NotesGrid.CurrentRow != null && NotesGrid.CurrentRow.Index > -1)
+            string noteGuid = NotesGrid.CurrentRowStringValue(SibiNotesCols.NoteGuid);
+
+            if (!string.IsNullOrEmpty(noteGuid))
             {
                 var blah = OtherFunctions.Message("Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Delete Note", this);
                 if (blah == DialogResult.Yes)
                 {
-                    string noteGuid = NotesGrid.CurrentRowStringValue(SibiNotesCols.NoteGuid);
-                    if (!string.IsNullOrEmpty(noteGuid))
+                    if (DeleteNote(noteGuid))
                     {
-                        if (DeleteNote(noteGuid))
-                        {
-                            statusSlider.NewSlideMessage("Note deleted successfully!");
-                            OpenRequest(currentRequest.Guid);
-                        }
+                        statusSlider.NewSlideMessage("Note deleted successfully!");
+                        OpenRequest(currentRequest.Guid);
                     }
                 }
             }
