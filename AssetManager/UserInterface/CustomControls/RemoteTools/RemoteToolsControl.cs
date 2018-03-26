@@ -1,4 +1,5 @@
 ﻿using AssetManager.Data;
+using AssetManager.Data.Functions;
 using AssetManager.Data.Classes;
 using AssetManager.Data.Communications;
 using AssetManager.Helpers;
@@ -131,7 +132,9 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (this.device == null) return;
 
-            if (this.device.OSVersion.Contains("WIN"))
+            var osName = AttributeFunctions.GetDisplayValueFromCode(Attributes.DeviceAttribute.OSType, this.device.OSVersion).ToUpper();
+
+            if (osName.Contains("WIN"))
             {
                 if (ReferenceEquals(pingVis, null))
                 {
