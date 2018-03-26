@@ -1158,7 +1158,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     windowList.Dispose();
                     liveBox.Dispose();
                     munisToolBar.Dispose();
-                    currentViewDevice.Dispose();
+                    currentViewDevice?.Dispose();
                     controlParser.Dispose();
                 }
             }
