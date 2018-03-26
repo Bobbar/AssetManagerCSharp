@@ -720,7 +720,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     if (ServerInfo.CurrentDataBase == Database.vintondd)
                     {
-                        if (SecurityTools.VerifyAdminCreds("Credentials for Vinton AD"))
+                        if (!SecurityTools.VerifyAdminCreds("Credentials for Vinton AD"))
                         {
                             ActiveDirectoryBox.Visible = false;
                             return;

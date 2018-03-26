@@ -89,11 +89,8 @@ namespace AssetManager.Tools
                 {
                     if (ServerInfo.CurrentDataBase == Database.vintondd)
                     {
-                        if (ServerInfo.CurrentDataBase == Database.vintondd)
-                        {
-                            rootDSE.Username = SecurityTools.AdminCreds.UserName;
-                            rootDSE.Password = SecurityTools.AdminCreds.Password;
-                        }
+                        rootDSE.Username = SecurityTools.AdminCreds.UserName;
+                        rootDSE.Password = SecurityTools.AdminCreds.Password;
                     }
 
                     var defaultNamingContext = rootDSE.Properties["defaultNamingContext"].Value.ToString();

@@ -46,25 +46,27 @@ namespace AssetManager.Security
                         return false;
                     }
                 }
-            }
-            validCreds = CredentialIsValid(AdminCreds);
-            if (!validCreds)
-            {
-                string currentUsername = AdminCreds.UserName;
-                ClearAdminCreds();
-                if (OtherFunctions.Message("Could not authenticate with provided credentials.  Do you wish to re-enter?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "Auth Error") == DialogResult.OK)
+
+                validCreds = CredentialIsValid(AdminCreds);
+                if (!validCreds)
                 {
-                    return VerifyAdminCreds(credentialDescription, currentUsername);
+                    string currentUsername = AdminCreds.UserName;
+                    ClearAdminCreds();
+                    if (OtherFunctions.Message("Could not authenticate with provided credentials.  Do you wish to re-enter?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "Auth Error") == DialogResult.OK)
+                    {
+                        return VerifyAdminCreds(credentialDescription, currentUsername);
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
-                    return false;
+                    return validCreds;
                 }
             }
-            else
-            {
-                return validCreds;
-            }
+            return true;
         }
 
         private static bool CredentialIsValid(NetworkCredential creds)
