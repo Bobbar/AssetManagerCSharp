@@ -340,7 +340,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     {
                         if (DeleteNote(noteGuid))
                         {
-                            statusSlider.NewSlideMessage("Delete note successful!");
+                            statusSlider.NewSlideMessage("Note deleted successfully!");
                             OpenRequest(currentRequest.Guid);
                         }
                     }

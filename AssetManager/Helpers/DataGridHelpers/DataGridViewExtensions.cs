@@ -57,7 +57,15 @@ namespace AssetManager.Helpers
         /// <returns></returns>
         public static object CurrentRowValue(this DataGridView grid, string columnName)
         {
-            return grid.CurrentRow.Cells[columnName].Value;
+            if (grid.CurrentRow != null)
+            {
+                var cellValue = grid.CurrentRow.Cells[columnName].Value;
+                if (cellValue != null)
+                {
+                    return cellValue;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -68,7 +76,12 @@ namespace AssetManager.Helpers
         /// <returns></returns>
         public static string CurrentRowStringValue(this DataGridView grid, string columnName)
         {
-            return grid.CurrentRow.Cells[columnName].Value.ToString();
+            var cellValue = CurrentRowValue(grid, columnName);
+            if (cellValue != null)
+            {
+                return cellValue.ToString();
+            }
+            return string.Empty;
         }
 
         /// <summary>
