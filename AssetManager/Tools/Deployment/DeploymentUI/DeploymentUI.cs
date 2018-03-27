@@ -149,7 +149,7 @@ namespace AssetManager.Tools.Deployment
             if (RTBLog.InvokeRequired)
             {
                 RTBLogDelegate d = new RTBLogDelegate(LogMessage);
-                RTBLog.Invoke(d, message);
+                RTBLog.BeginInvoke(d, message);
             }
             else
             {

@@ -791,7 +791,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (StatusStrip1.InvokeRequired)
             {
                 StatusVoidDelegate d = new StatusVoidDelegate(SetStatusBar);
-                StatusStrip1.Invoke(d, new object[] { text });
+                StatusStrip1.BeginInvoke(d, new object[] { text });
             }
             else
             {

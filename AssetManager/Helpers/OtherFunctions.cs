@@ -107,7 +107,7 @@ namespace AssetManager.Helpers
                 if (parentForm.InvokeRequired)
                 {
                     SetWaitCursorVoidDelegate d = new SetWaitCursorVoidDelegate(SetWaitCursor);
-                    parentForm.Invoke(d, new object[] { waiting, parentForm });
+                    parentForm.BeginInvoke(d, new object[] { waiting, parentForm });
                 }
                 else
                 {

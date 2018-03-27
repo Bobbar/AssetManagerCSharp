@@ -364,7 +364,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (StatusStrip1.InvokeRequired)
             {
                 ConnectStatusVoidDelegate d = new ConnectStatusVoidDelegate(ConnectStatus);
-                StatusStrip1.Invoke(d, new object[] {
+                StatusStrip1.BeginInvoke(d, new object[] {
                 text,
                 foreColor,
                 backColor,
@@ -615,7 +615,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (StatusStrip1.InvokeRequired)
             {
                 StatusVoidDelegate d = new StatusVoidDelegate(SetStatusBar);
-                StatusStrip1.Invoke(d, new object[] { text, timeOut });
+                StatusStrip1.BeginInvoke(d, new object[] { text, timeOut });
             }
             else
             {
@@ -629,7 +629,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             if (StatusStrip1.InvokeRequired)
             {
                 ServerTimeVoidDelegate d = new ServerTimeVoidDelegate(SetServerTime);
-                StatusStrip1.Invoke(d, new object[] { serverTime });
+                StatusStrip1.BeginInvoke(d, new object[] { serverTime });
             }
             else
             {
