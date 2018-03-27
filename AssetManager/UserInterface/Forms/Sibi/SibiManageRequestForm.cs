@@ -339,7 +339,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     if (DeleteNote(noteGuid))
                     {
-                        statusSlider.NewSlideMessage("Note deleted successfully!");
+                        statusSlider.QueueMessage("Note deleted successfully!");
                         OpenRequest(currentRequest.Guid);
                     }
                 }
@@ -1248,7 +1248,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     trans.Commit();
                     ParentForm.RefreshData();
                     this.RefreshData();
-                    statusSlider.NewSlideMessage("Update successful!");
+                    statusSlider.QueueMessage("Update successful!");
                 }
                 catch (Exception ex)
                 {
