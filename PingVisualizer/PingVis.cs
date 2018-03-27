@@ -19,13 +19,12 @@ namespace PingVisualizer
         private Graphics upscaledGraphics;
         private Bitmap upscaledImage;
         private int imageUpscaleMulti = 5;
-        private int upscaledImageWidth;
-        private int upscaledImageHeight;
+        private Size upscaledImageSize;
 
         private Graphics downsampleGraphics;
         private Bitmap downsampleImage;
-        private int downsampleImageWidth;
-        private int downsampleImageHeight;
+        private Size downsampleImageSize;
+
 
         private Ping ping = new Ping();
         private List<PingInfo> pingReplies = new List<PingInfo>();
@@ -112,11 +111,14 @@ namespace PingVisualizer
 
         private void InitGraphics()
         {
-            upscaledImage = new Bitmap(upscaledImageWidth, upscaledImageHeight, PixelFormat.Format32bppPArgb);
+            upscaledImageSize = new Size(targetControl.ClientSize.Width * imageUpscaleMulti, targetControl.ClientSize.Height * imageUpscaleMulti);
+            downsampleImageSize = targetControl.ClientSize;
+
+            upscaledImage = new Bitmap(upscaledImageSize.Width, upscaledImageSize.Height, PixelFormat.Format32bppPArgb);
             upscaledGraphics = Graphics.FromImage(upscaledImage);
             upscaledGraphics.SmoothingMode = SmoothingMode.None;
 
-            downsampleImage = new Bitmap(downsampleImageWidth, downsampleImageHeight, PixelFormat.Format32bppPArgb);
+            downsampleImage = new Bitmap(downsampleImageSize.Width, downsampleImageSize.Height, PixelFormat.Format32bppPArgb);
             downsampleImage.SetResolution(upscaledImage.HorizontalResolution, upscaledImage.VerticalResolution);
             downsampleGraphics = Graphics.FromImage(downsampleImage);
             downsampleGraphics.CompositingMode = CompositingMode.SourceCopy;
@@ -134,12 +136,7 @@ namespace PingVisualizer
         private void InitControl(Control targetControl)
         {
             this.targetControl = targetControl;
-            upscaledImageWidth = targetControl.ClientSize.Width * imageUpscaleMulti;
-            upscaledImageHeight = targetControl.ClientSize.Height * imageUpscaleMulti;
-
-            downsampleImageWidth = targetControl.ClientSize.Width;
-            downsampleImageHeight = targetControl.ClientSize.Height;
-
+            
             targetControl.MouseWheel -= ControlMouseWheel;
             targetControl.MouseWheel += ControlMouseWheel;
 
@@ -213,7 +210,7 @@ namespace PingVisualizer
         private void SetScale()
         {
             // Fraction width multiplier.
-            // Determines the Y location of the highest peak. 
+            // Determines the Y location of the highest peak.
             // 0.5 = middle of the image, 1 = all the way to the right.
             float scaleWidthFraction = 0.55f;
 
@@ -221,7 +218,7 @@ namespace PingVisualizer
             {
                 long maxPing = CurrentDisplayResults().OrderByDescending(p => p.RoundTripTime).FirstOrDefault().RoundTripTime;
                 if (maxPing <= 0) maxPing = 1;
-                float newScale = ((upscaledImageWidth * scaleWidthFraction) / maxPing);
+                float newScale = ((upscaledImageSize.Width * scaleWidthFraction) / maxPing);
                 if (newScale > maxViewScale) newScale = maxViewScale;
 
                 if (targetViewScale != newScale)
@@ -508,7 +505,7 @@ namespace PingVisualizer
         private void DrawScaleLines(Graphics gfx)
         {
             float stepSize = currentViewScale * 15;
-            int numOfLines = (int)(upscaledImageWidth / stepSize);
+            int numOfLines = (int)(upscaledImageSize.Width / stepSize);
             if (numOfLines < maxViewScaleLines)
             {
                 float scaleXPos = stepSize;
@@ -516,7 +513,7 @@ namespace PingVisualizer
                 {
                     for (int a = 0; a < numOfLines; a++)
                     {
-                        gfx.DrawLine(pen, new PointF(scaleXPos, 0), new PointF(scaleXPos, upscaledImageHeight));
+                        gfx.DrawLine(pen, new PointF(scaleXPos, 0), new PointF(scaleXPos, upscaledImageSize.Height));
                         scaleXPos += stepSize;
                     }
                 }
@@ -597,7 +594,7 @@ namespace PingVisualizer
             {
                 string infoText = GetReplyStatusText(pingReplies.Last());
                 SizeF textSize = gfx.MeasureString(infoText, pingInfoFont);
-                gfx.DrawString(infoText, pingInfoFont, Brushes.White, new PointF((upscaledImageWidth - 5) - (textSize.Width), upscaledImageHeight - (textSize.Height + 5)));
+                gfx.DrawString(infoText, pingInfoFont, Brushes.White, new PointF((upscaledImageSize.Width - 5) - (textSize.Width), upscaledImageSize.Height - (textSize.Height + 5)));
             }
         }
 
@@ -608,15 +605,15 @@ namespace PingVisualizer
                 float scrollLocation = 0;
                 if (topIndex > 0)
                 {
-                    scrollLocation = (upscaledImageHeight / (pingReplies.Count / (float)topIndex));
+                    scrollLocation = (upscaledImageSize.Height / (pingReplies.Count / (float)topIndex));
                 }
-                gfx.FillRectangle(Brushes.White, new RectangleF(upscaledImageWidth - (20 + imageUpscaleMulti), scrollLocation, 10 + imageUpscaleMulti, 5 + imageUpscaleMulti));
+                gfx.FillRectangle(Brushes.White, new RectangleF(upscaledImageSize.Width - (20 + imageUpscaleMulti), scrollLocation, 10 + imageUpscaleMulti, 5 + imageUpscaleMulti));
             }
         }
 
         private void DownsampleImage()
         {
-            var destRect = new Rectangle(0, 0, downsampleImageWidth, downsampleImageHeight);
+            var destRect = new Rectangle(0, 0, downsampleImageSize.Width, downsampleImageSize.Height);
             using (var wrapMode = new ImageAttributes())
             {
                 wrapMode.SetWrapMode(WrapMode.TileFlipXY);
@@ -672,7 +669,7 @@ namespace PingVisualizer
             DisposeBarList(currentBarList);
 
             float currentYPos = barTopPadding;
-            float barHeight = (upscaledImageHeight - barBottomPadding - barTopPadding - (barGap * maxBars)) / maxBars;
+            float barHeight = (upscaledImageSize.Height - barBottomPadding - barTopPadding - (barGap * maxBars)) / maxBars;
 
             foreach (PingInfo result in CurrentDisplayResults())
             {
@@ -742,7 +739,7 @@ namespace PingVisualizer
                 if (targetControl.InvokeRequired)
                 {
                     var del = new SetControlImageDelegate(SetControlImage);
-                    targetControl.Invoke(del, new object[] { targetControl, image });
+                    targetControl.BeginInvoke(del, new object[] { targetControl, image });
                 }
                 else
                 {
