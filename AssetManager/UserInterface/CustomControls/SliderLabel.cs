@@ -293,7 +293,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             currentMessage.Direction = currentMessage.SlideInDirection;
             currentMessage.SlideState = SlideState.SlideIn;
-            currentMessage.Position = new LocationF();
+            currentMessage.Position = new PointF();
             currentMessage.SlideVelocity = 0;
             currentMessage.AnimationComplete = false;
             switch (currentMessage.SlideInDirection)
@@ -550,9 +550,12 @@ namespace AssetManager.UserInterface.CustomControls
             public SlideDirection Direction { get; set; }
             public SlideState SlideState { get; set; }
             public float SlideVelocity { get; set; }
-            public LocationF Position { get; set; }
-            public LocationF StartPosition { get; set; }
-            public LocationF EndPosition { get; set; }
+            /// <summary>
+            /// Current position.
+            /// </summary>
+            public PointF Position;
+            public PointF StartPosition;
+            public PointF EndPosition;
             public bool AnimationComplete { get; set; }
 
             #endregion Fields
@@ -569,9 +572,9 @@ namespace AssetManager.UserInterface.CustomControls
                 Direction = SlideDirection.DefaultSlide;
                 SlideState = SlideState.Done;
                 SlideVelocity = 0;
-                Position = new LocationF();
-                StartPosition = new LocationF();
-                EndPosition = new LocationF();
+                Position = new PointF();
+                StartPosition = new PointF();
+                EndPosition = new PointF();
                 AnimationComplete = false;
             }
 
@@ -585,57 +588,15 @@ namespace AssetManager.UserInterface.CustomControls
                 Direction = SlideDirection.DefaultSlide;
                 SlideState = SlideState.Done;
                 SlideVelocity = 0;
-                Position = new LocationF();
-                StartPosition = new LocationF();
-                EndPosition = new LocationF();
+                Position = new PointF();
+                StartPosition = new PointF();
+                EndPosition = new PointF();
                 AnimationComplete = false;
             }
 
             #endregion Constructors
         }
-
-        private class LocationF
-        {
-            private float _x;
-            private float _y;
-
-            public float X
-            {
-                get
-                {
-                    return _x;
-                }
-                set
-                {
-                    _x = value;
-                }
-            }
-
-            public float Y
-            {
-                get
-                {
-                    return _y;
-                }
-                set
-                {
-                    _y = value;
-                }
-            }
-
-            public LocationF()
-            {
-                _x = 0;
-                _y = 0;
-            }
-
-            public LocationF(float x, float y)
-            {
-                _x = x;
-                _y = y;
-            }
-        }
-
+                
         #endregion Structs
     }
 }
