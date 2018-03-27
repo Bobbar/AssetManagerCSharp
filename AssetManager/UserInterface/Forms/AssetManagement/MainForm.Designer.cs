@@ -17,10 +17,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.ResultGrid = new System.Windows.Forms.DataGridView();
             this.ContextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -104,8 +104,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.GroupBox1.Controls.Add(this.ResultGrid);
@@ -121,44 +121,44 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ResultGrid.AllowUserToAddRows = false;
             this.ResultGrid.AllowUserToDeleteRows = false;
             this.ResultGrid.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(80,80,80);
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(255,152,30);
-            this.ResultGrid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.ResultGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(30)))));
+            this.ResultGrid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            this.ResultGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(64,64,64);
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ResultGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.ResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ResultGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.ResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ResultGrid.ContextMenuStrip = this.ContextMenuStrip1;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(64,64,64);
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(255,152,39);
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ResultGrid.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(39)))));
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ResultGrid.DefaultCellStyle = dataGridViewCellStyle7;
             this.ResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.ResultGrid.Location = new System.Drawing.Point(9, 19);
             this.ResultGrid.Name = "ResultGrid";
             this.ResultGrid.ReadOnly = true;
             this.ResultGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(64,64,64);
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ResultGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ResultGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.ResultGrid.RowHeadersVisible = false;
             this.ResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.ResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
@@ -187,7 +187,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // ViewToolStripMenuItem
             // 
-            this.ViewToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            this.ViewToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ViewToolStripMenuItem.Image = global::AssetManager.Properties.Resources.DetailsIcon;
             this.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem";
             this.ViewToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
@@ -225,9 +225,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // RecordsCountLabel
             // 
-            this.RecordsCountLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.RecordsCountLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.RecordsCountLabel.ForeColor = System.Drawing.Color.FromArgb(53,53,53);
+            this.RecordsCountLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(53)))), ((int)(((byte)(53)))));
             this.RecordsCountLabel.Location = new System.Drawing.Point(15, 497);
             this.RecordsCountLabel.Name = "RecordsCountLabel";
             this.RecordsCountLabel.Size = new System.Drawing.Size(1329, 13);
@@ -237,39 +237,39 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // InstantSearchGroupBox
             // 
-            this.InstantSearchGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.InstantSearchGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.InstantSearchGroupBox.BackColor = System.Drawing.Color.FromArgb(232,232,232);
+            this.InstantSearchGroupBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.InstantSearchGroupBox.Controls.Add(this.Panel1);
-            this.InstantSearchGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            this.InstantSearchGroupBox.Location = new System.Drawing.Point(9, 19);
+            this.InstantSearchGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InstantSearchGroupBox.Location = new System.Drawing.Point(9, 15);
             this.InstantSearchGroupBox.Name = "InstantSearchGroupBox";
-            this.InstantSearchGroupBox.Size = new System.Drawing.Size(177, 201);
+            this.InstantSearchGroupBox.Size = new System.Drawing.Size(177, 205);
             this.InstantSearchGroupBox.TabIndex = 34;
             this.InstantSearchGroupBox.TabStop = false;
             this.InstantSearchGroupBox.Text = "Instant Lookup";
             // 
             // Panel1
             // 
-            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.Panel1.BackColor = System.Drawing.Color.FromArgb(224,224,224);
-            this.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Panel1.Controls.Add(this.Label9);
             this.Panel1.Controls.Add(this.Label8);
             this.Panel1.Controls.Add(this.AssetTagTextBox);
             this.Panel1.Controls.Add(this.SerialTextBox);
             this.Panel1.Location = new System.Drawing.Point(6, 20);
             this.Panel1.Name = "Panel1";
-            this.Panel1.Size = new System.Drawing.Size(165, 173);
+            this.Panel1.Size = new System.Drawing.Size(165, 177);
             this.Panel1.TabIndex = 39;
             // 
             // Label9
             // 
             this.Label9.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.Label9.AutoSize = true;
-            this.Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.Label9.Location = new System.Drawing.Point(12, 80);
+            this.Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label9.Location = new System.Drawing.Point(11, 81);
             this.Label9.Name = "Label9";
             this.Label9.Size = new System.Drawing.Size(46, 16);
             this.Label9.TabIndex = 38;
@@ -279,8 +279,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.Label8.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.Label8.AutoSize = true;
-            this.Label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.Label8.Location = new System.Drawing.Point(12, 31);
+            this.Label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label8.Location = new System.Drawing.Point(11, 32);
             this.Label8.Name = "Label8";
             this.Label8.Size = new System.Drawing.Size(73, 16);
             this.Label8.TabIndex = 37;
@@ -289,8 +289,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // AssetTagTextBox
             // 
             this.AssetTagTextBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.AssetTagTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            this.AssetTagTextBox.Location = new System.Drawing.Point(15, 50);
+            this.AssetTagTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AssetTagTextBox.Location = new System.Drawing.Point(14, 51);
             this.AssetTagTextBox.MaxLength = 45;
             this.AssetTagTextBox.Name = "AssetTagTextBox";
             this.AssetTagTextBox.Size = new System.Drawing.Size(135, 23);
@@ -299,8 +299,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // SerialTextBox
             // 
             this.SerialTextBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.SerialTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            this.SerialTextBox.Location = new System.Drawing.Point(15, 99);
+            this.SerialTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SerialTextBox.Location = new System.Drawing.Point(14, 100);
             this.SerialTextBox.MaxLength = 45;
             this.SerialTextBox.Name = "SerialTextBox";
             this.SerialTextBox.Size = new System.Drawing.Size(135, 23);
@@ -308,26 +308,26 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // SearchGroupBox
             // 
-            this.SearchGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.SearchGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.SearchGroupBox.Controls.Add(this.SearchPanel);
             this.SearchGroupBox.Controls.Add(this.SearchButton);
             this.SearchGroupBox.Controls.Add(this.ClearButton);
-            this.SearchGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            this.SearchGroupBox.Location = new System.Drawing.Point(192, 19);
+            this.SearchGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SearchGroupBox.Location = new System.Drawing.Point(192, 15);
             this.SearchGroupBox.Name = "SearchGroupBox";
-            this.SearchGroupBox.Size = new System.Drawing.Size(862, 201);
+            this.SearchGroupBox.Size = new System.Drawing.Size(839, 205);
             this.SearchGroupBox.TabIndex = 31;
             this.SearchGroupBox.TabStop = false;
             this.SearchGroupBox.Text = "Custom Search";
             // 
             // SearchPanel
             // 
-            this.SearchPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.SearchPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.SearchPanel.AutoScrollMargin = new System.Drawing.Size(10, 20);
-            this.SearchPanel.BackColor = System.Drawing.Color.FromArgb(224,224,224);
-            this.SearchPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SearchPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.SearchPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.SearchPanel.Controls.Add(this.HistoricalCheckBox);
             this.SearchPanel.Controls.Add(this.DevBySupButton);
             this.SearchPanel.Controls.Add(this.Label6);
@@ -349,17 +349,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.SearchPanel.Controls.Add(this.CurrrentUserTextBox);
             this.SearchPanel.Controls.Add(this.AssetTagSearchTextBox);
             this.SearchPanel.Controls.Add(this.Label11);
-            this.SearchPanel.Location = new System.Drawing.Point(11, 20);
+            this.SearchPanel.Location = new System.Drawing.Point(6, 20);
             this.SearchPanel.Name = "SearchPanel";
-            this.SearchPanel.Size = new System.Drawing.Size(732, 173);
+            this.SearchPanel.Size = new System.Drawing.Size(715, 177);
             this.SearchPanel.TabIndex = 52;
             this.SearchPanel.Scroll += new System.Windows.Forms.ScrollEventHandler(this.PanelNoScrollOnFocus1_Scroll);
             // 
             // HistoricalCheckBox
             // 
             this.HistoricalCheckBox.AutoSize = true;
-            this.HistoricalCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.HistoricalCheckBox.Location = new System.Drawing.Point(444, 126);
+            this.HistoricalCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HistoricalCheckBox.Location = new System.Drawing.Point(433, 127);
             this.HistoricalCheckBox.Name = "HistoricalCheckBox";
             this.HistoricalCheckBox.Size = new System.Drawing.Size(89, 22);
             this.HistoricalCheckBox.TabIndex = 56;
@@ -368,7 +368,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // DevBySupButton
             // 
-            this.DevBySupButton.Location = new System.Drawing.Point(577, 114);
+            this.DevBySupButton.Location = new System.Drawing.Point(551, 115);
             this.DevBySupButton.Name = "DevBySupButton";
             this.DevBySupButton.Size = new System.Drawing.Size(125, 44);
             this.DevBySupButton.TabIndex = 55;
@@ -379,8 +379,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label6
             // 
             this.Label6.AutoSize = true;
-            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.Label6.Location = new System.Drawing.Point(183, 108);
+            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label6.Location = new System.Drawing.Point(172, 109);
             this.Label6.Name = "Label6";
             this.Label6.Size = new System.Drawing.Size(95, 16);
             this.Label6.TabIndex = 54;
@@ -389,8 +389,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label4
             // 
             this.Label4.AutoSize = true;
-            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.Label4.Location = new System.Drawing.Point(22, 12);
+            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label4.Location = new System.Drawing.Point(11, 13);
             this.Label4.Name = "Label4";
             this.Label4.Size = new System.Drawing.Size(73, 16);
             this.Label4.TabIndex = 48;
@@ -398,8 +398,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // ReplaceYearTextBox
             // 
-            this.ReplaceYearTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            this.ReplaceYearTextBox.Location = new System.Drawing.Point(186, 127);
+            this.ReplaceYearTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReplaceYearTextBox.Location = new System.Drawing.Point(175, 128);
             this.ReplaceYearTextBox.MaxLength = 200;
             this.ReplaceYearTextBox.Name = "ReplaceYearTextBox";
             this.ReplaceYearTextBox.Size = new System.Drawing.Size(100, 23);
@@ -408,8 +408,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // DescriptionTextBox
             // 
-            this.DescriptionTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            this.DescriptionTextBox.Location = new System.Drawing.Point(186, 78);
+            this.DescriptionTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DescriptionTextBox.Location = new System.Drawing.Point(175, 79);
             this.DescriptionTextBox.MaxLength = 200;
             this.DescriptionTextBox.Name = "DescriptionTextBox";
             this.DescriptionTextBox.Size = new System.Drawing.Size(330, 23);
@@ -418,9 +418,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // OSTypeComboBox
             // 
-            this.OSTypeComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            this.OSTypeComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OSTypeComboBox.FormattingEnabled = true;
-            this.OSTypeComboBox.Location = new System.Drawing.Point(25, 127);
+            this.OSTypeComboBox.Location = new System.Drawing.Point(14, 128);
             this.OSTypeComboBox.Name = "OSTypeComboBox";
             this.OSTypeComboBox.Size = new System.Drawing.Size(135, 23);
             this.OSTypeComboBox.TabIndex = 51;
@@ -429,8 +429,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label2
             // 
             this.Label2.AutoSize = true;
-            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.Label2.Location = new System.Drawing.Point(183, 59);
+            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label2.Location = new System.Drawing.Point(172, 60);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(79, 16);
             this.Label2.TabIndex = 44;
@@ -439,8 +439,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.Label5.Location = new System.Drawing.Point(22, 108);
+            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label5.Location = new System.Drawing.Point(11, 109);
             this.Label5.Name = "Label5";
             this.Label5.Size = new System.Drawing.Size(65, 16);
             this.Label5.TabIndex = 52;
@@ -449,8 +449,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.Label1.Location = new System.Drawing.Point(534, 59);
+            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Location = new System.Drawing.Point(523, 60);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(48, 16);
             this.Label1.TabIndex = 42;
@@ -459,8 +459,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label10
             // 
             this.Label10.AutoSize = true;
-            this.Label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.Label10.Location = new System.Drawing.Point(354, 12);
+            this.Label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label10.Location = new System.Drawing.Point(343, 13);
             this.Label10.Name = "Label10";
             this.Label10.Size = new System.Drawing.Size(110, 16);
             this.Label10.TabIndex = 36;
@@ -468,9 +468,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // StatusComboBox
             // 
-            this.StatusComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            this.StatusComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StatusComboBox.FormattingEnabled = true;
-            this.StatusComboBox.Location = new System.Drawing.Point(537, 78);
+            this.StatusComboBox.Location = new System.Drawing.Point(526, 79);
             this.StatusComboBox.Name = "StatusComboBox";
             this.StatusComboBox.Size = new System.Drawing.Size(165, 23);
             this.StatusComboBox.TabIndex = 41;
@@ -479,8 +479,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // TrackablesCheckBox
             // 
             this.TrackablesCheckBox.AutoSize = true;
-            this.TrackablesCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.TrackablesCheckBox.Location = new System.Drawing.Point(323, 126);
+            this.TrackablesCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TrackablesCheckBox.Location = new System.Drawing.Point(312, 127);
             this.TrackablesCheckBox.Name = "TrackablesCheckBox";
             this.TrackablesCheckBox.Size = new System.Drawing.Size(100, 22);
             this.TrackablesCheckBox.TabIndex = 50;
@@ -490,8 +490,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label12
             // 
             this.Label12.AutoSize = true;
-            this.Label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.Label12.Location = new System.Drawing.Point(534, 12);
+            this.Label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label12.Location = new System.Drawing.Point(523, 13);
             this.Label12.Name = "Label12";
             this.Label12.Size = new System.Drawing.Size(62, 16);
             this.Label12.TabIndex = 40;
@@ -499,9 +499,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // EquipTypeComboBox
             // 
-            this.EquipTypeComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            this.EquipTypeComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.EquipTypeComboBox.FormattingEnabled = true;
-            this.EquipTypeComboBox.Location = new System.Drawing.Point(357, 30);
+            this.EquipTypeComboBox.Location = new System.Drawing.Point(346, 31);
             this.EquipTypeComboBox.Name = "EquipTypeComboBox";
             this.EquipTypeComboBox.Size = new System.Drawing.Size(159, 23);
             this.EquipTypeComboBox.TabIndex = 35;
@@ -509,8 +509,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // SerialSearchTextBox
             // 
-            this.SerialSearchTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            this.SerialSearchTextBox.Location = new System.Drawing.Point(25, 78);
+            this.SerialSearchTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SerialSearchTextBox.Location = new System.Drawing.Point(14, 79);
             this.SerialSearchTextBox.MaxLength = 45;
             this.SerialSearchTextBox.Name = "SerialSearchTextBox";
             this.SerialSearchTextBox.Size = new System.Drawing.Size(135, 23);
@@ -520,8 +520,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.Label3.Location = new System.Drawing.Point(22, 59);
+            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label3.Location = new System.Drawing.Point(11, 60);
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(46, 16);
             this.Label3.TabIndex = 49;
@@ -529,9 +529,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // LocationComboBox
             // 
-            this.LocationComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            this.LocationComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LocationComboBox.FormattingEnabled = true;
-            this.LocationComboBox.Location = new System.Drawing.Point(537, 30);
+            this.LocationComboBox.Location = new System.Drawing.Point(526, 31);
             this.LocationComboBox.Name = "LocationComboBox";
             this.LocationComboBox.Size = new System.Drawing.Size(165, 23);
             this.LocationComboBox.TabIndex = 39;
@@ -539,8 +539,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // CurrrentUserTextBox
             // 
-            this.CurrrentUserTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            this.CurrrentUserTextBox.Location = new System.Drawing.Point(186, 30);
+            this.CurrrentUserTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CurrrentUserTextBox.Location = new System.Drawing.Point(175, 31);
             this.CurrrentUserTextBox.MaxLength = 45;
             this.CurrrentUserTextBox.Name = "CurrrentUserTextBox";
             this.CurrrentUserTextBox.Size = new System.Drawing.Size(148, 23);
@@ -549,8 +549,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // AssetTagSearchTextBox
             // 
-            this.AssetTagSearchTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
-            this.AssetTagSearchTextBox.Location = new System.Drawing.Point(25, 30);
+            this.AssetTagSearchTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AssetTagSearchTextBox.Location = new System.Drawing.Point(14, 31);
             this.AssetTagSearchTextBox.MaxLength = 45;
             this.AssetTagSearchTextBox.Name = "AssetTagSearchTextBox";
             this.AssetTagSearchTextBox.Size = new System.Drawing.Size(135, 23);
@@ -560,8 +560,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // Label11
             // 
             this.Label11.AutoSize = true;
-            this.Label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.Label11.Location = new System.Drawing.Point(183, 12);
+            this.Label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label11.Location = new System.Drawing.Point(172, 13);
             this.Label11.Name = "Label11";
             this.Label11.Size = new System.Drawing.Size(85, 16);
             this.Label11.TabIndex = 38;
@@ -569,10 +569,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // SearchButton
             // 
-            this.SearchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.SearchButton.Location = new System.Drawing.Point(758, 32);
+            this.SearchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SearchButton.Location = new System.Drawing.Point(736, 45);
             this.SearchButton.Name = "SearchButton";
-            this.SearchButton.Size = new System.Drawing.Size(88, 56);
+            this.SearchButton.Size = new System.Drawing.Size(88, 35);
             this.SearchButton.TabIndex = 45;
             this.SearchButton.Text = "Search";
             this.SearchButton.UseVisualStyleBackColor = true;
@@ -580,10 +580,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // ClearButton
             // 
-            this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.ClearButton.Location = new System.Drawing.Point(758, 142);
+            this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClearButton.Location = new System.Drawing.Point(736, 144);
             this.ClearButton.Name = "ClearButton";
-            this.ClearButton.Size = new System.Drawing.Size(88, 32);
+            this.ClearButton.Size = new System.Drawing.Size(88, 35);
             this.ClearButton.TabIndex = 18;
             this.ClearButton.Text = "Clear";
             this.ClearButton.UseVisualStyleBackColor = true;
@@ -591,8 +591,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // ShowAllButon
             // 
-            this.ShowAllButon.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            this.ShowAllButon.Location = new System.Drawing.Point(1066, 63);
+            this.ShowAllButon.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShowAllButon.Location = new System.Drawing.Point(1046, 60);
             this.ShowAllButon.Name = "ShowAllButon";
             this.ShowAllButon.Size = new System.Drawing.Size(134, 35);
             this.ShowAllButon.TabIndex = 27;
@@ -602,8 +602,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // StatusStrip1
             // 
-            this.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(232,232,232);
-            this.StatusStrip1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            this.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.StatusStrip1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StatusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLabel,
             this.StripSpinner,
@@ -646,14 +646,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // ToolStripStatusLabel4
             // 
-            this.ToolStripStatusLabel4.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            this.ToolStripStatusLabel4.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ToolStripStatusLabel4.Name = "ToolStripStatusLabel4";
             this.ToolStripStatusLabel4.Size = new System.Drawing.Size(12, 17);
             this.ToolStripStatusLabel4.Text = "|";
             // 
             // DateTimeLabel
             // 
-            this.DateTimeLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            this.DateTimeLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DateTimeLabel.Name = "DateTimeLabel";
             this.DateTimeLabel.Size = new System.Drawing.Size(76, 17);
             this.DateTimeLabel.Text = "ServerTime";
@@ -668,17 +668,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.GroupBox2.Controls.Add(this.InstantSearchGroupBox);
             this.GroupBox2.Location = new System.Drawing.Point(12, 40);
             this.GroupBox2.Name = "GroupBox2";
-            this.GroupBox2.Size = new System.Drawing.Size(1215, 226);
+            this.GroupBox2.Size = new System.Drawing.Size(1196, 226);
             this.GroupBox2.TabIndex = 7;
             this.GroupBox2.TabStop = false;
             // 
             // TransactionBox
             // 
-            this.TransactionBox.BackColor = System.Drawing.Color.FromArgb(232,232,232);
+            this.TransactionBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.TransactionBox.Controls.Add(this.UpdateButton);
             this.TransactionBox.Controls.Add(this.CommitButton);
             this.TransactionBox.Controls.Add(this.RollbackButton);
-            this.TransactionBox.Location = new System.Drawing.Point(1066, 118);
+            this.TransactionBox.Location = new System.Drawing.Point(1046, 118);
             this.TransactionBox.Name = "TransactionBox";
             this.TransactionBox.Size = new System.Drawing.Size(134, 92);
             this.TransactionBox.TabIndex = 38;
@@ -688,7 +688,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // UpdateButton
             // 
-            this.UpdateButton.BackColor = System.Drawing.Color.FromArgb(232,232,232);
+            this.UpdateButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.UpdateButton.Location = new System.Drawing.Point(6, 18);
             this.UpdateButton.Name = "UpdateButton";
             this.UpdateButton.Size = new System.Drawing.Size(122, 22);
@@ -699,7 +699,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // CommitButton
             // 
-            this.CommitButton.BackColor = System.Drawing.Color.FromArgb(0,192,0);
+            this.CommitButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.CommitButton.Location = new System.Drawing.Point(6, 41);
             this.CommitButton.Name = "CommitButton";
             this.CommitButton.Size = new System.Drawing.Size(122, 22);
@@ -722,8 +722,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // ToolStrip1
             // 
             this.ToolStrip1.AutoSize = false;
-            this.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(249,226,166);
-            this.ToolStrip1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            this.ToolStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(226)))), ((int)(((byte)(166)))));
+            this.ToolStrip1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ToolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
             this.ToolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AddDeviceToolButton,
@@ -771,9 +771,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // GuidTextBox
             // 
             this.GuidTextBox.AutoSize = false;
-            this.GuidTextBox.BackColor = System.Drawing.Color.FromArgb(224,224,224);
+            this.GuidTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.GuidTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.GuidTextBox.Name = "GuidTextBox ";
+            this.GuidTextBox.Name = "GuidTextBox";
             this.GuidTextBox.Size = new System.Drawing.Size(150, 23);
             this.GuidTextBox.ToolTipText = "Guid Lookup. (Press Enter)";
             this.GuidTextBox.Visible = false;
@@ -781,7 +781,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // DatabaseToolCombo
             // 
-            this.DatabaseToolCombo.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            this.DatabaseToolCombo.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DatabaseToolCombo.Name = "DatabaseToolCombo";
             this.DatabaseToolCombo.Size = new System.Drawing.Size(121, 25);
             this.DatabaseToolCombo.ToolTipText = "Change Database";
@@ -795,7 +795,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.UserManagerMenuItem.Text = "User Manager";
             this.UserManagerMenuItem.Click += new System.EventHandler(this.UserManagerMenuItem_Click);
             // 
-            // ReEnterLACredentialsToolStripMenuItem
+            // ReEnterLACredentialsMenuItem
             // 
             this.ReEnterLACredentialsMenuItem.Name = "ReEnterLACredentialsMenuItem";
             this.ReEnterLACredentialsMenuItem.Size = new System.Drawing.Size(242, 26);
@@ -852,7 +852,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // StartSibiButton
             // 
             this.StartSibiButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.StartSibiButton.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            this.StartSibiButton.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StartSibiButton.Image = global::AssetManager.Properties.Resources.SibiLogo;
             this.StartSibiButton.Name = "StartSibiButton";
             this.StartSibiButton.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
@@ -865,7 +865,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(232,232,232);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.ClientSize = new System.Drawing.Size(1381, 809);
             this.Controls.Add(this.GroupBox2);
             this.Controls.Add(this.ToolStrip1);
