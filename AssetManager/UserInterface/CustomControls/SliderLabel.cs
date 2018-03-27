@@ -94,7 +94,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
             set
             {
-                AddMessageToQueue(value, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime);
+                AddMessageToQueue(value, this.ForeColor, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime);
             }
         }
 
@@ -109,11 +109,31 @@ namespace AssetManager.UserInterface.CustomControls
         private void DrawText(Graphics canvas)
         {
             canvas.Clear(this.BackColor);
-            using (var textBrush = new SolidBrush(this.ForeColor))
+            using (var textBrush = new SolidBrush(currentMessage.TextColor))
             {
                 canvas.DrawString(this.SlideText, this.Font, textBrush, currentMessage.Position.X, currentMessage.Position.Y);
             }
             lastPositionRect = new RectangleF(currentMessage.Position.X, currentMessage.Position.Y, currentMessage.TextSize.Width, currentMessage.TextSize.Height);
+        }
+
+        /// <summary>
+        /// Adds new message to queue.
+        /// </summary>
+        /// <param name="text">Text to be displayed.</param>
+        /// <param name="color">Forecolor of the text.</param>
+        /// <param name="slideInDirection">Slide in direction.</param>
+        /// <param name="slideOutDirection">Slide out direction.</param>
+        /// <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
+        public void NewSlideMessage(string text, Color color, SlideDirection slideInDirection = SlideDirection.Up, SlideDirection slideOutDirection = SlideDirection.Left, int displayTime = 4)
+        {
+            if (displayTime >= 0)
+            {
+                AddMessageToQueue(text, color, slideInDirection, slideOutDirection, displayTime);
+            }
+            else
+            {
+                AddMessageToQueue(text, color, slideInDirection, slideOutDirection, defaultDisplayTime);
+            }
         }
 
         /// <summary>
@@ -127,11 +147,11 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (displayTime >= 0)
             {
-                AddMessageToQueue(text, slideInDirection, slideOutDirection, displayTime);
+                AddMessageToQueue(text, this.ForeColor, slideInDirection, slideOutDirection, displayTime);
             }
             else
             {
-                AddMessageToQueue(text, slideInDirection, slideOutDirection, defaultDisplayTime);
+                AddMessageToQueue(text, this.ForeColor, slideInDirection, slideOutDirection, defaultDisplayTime);
             }
         }
 
@@ -139,17 +159,17 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (displayTime >= 0)
             {
-                AddMessageToQueue(text, defaultSlideInDirection, defaultSlideOutDirection, displayTime);
+                AddMessageToQueue(text, this.ForeColor, defaultSlideInDirection, defaultSlideOutDirection, displayTime);
             }
             else
             {
-                AddMessageToQueue(text, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime);
+                AddMessageToQueue(text, this.ForeColor, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime);
             }
         }
 
         public void NewSlideMessage(string text)
         {
-            AddMessageToQueue(text, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime);
+            AddMessageToQueue(text, this.ForeColor, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime);
         }
 
         /// <summary>
@@ -189,15 +209,16 @@ namespace AssetManager.UserInterface.CustomControls
         /// <summary>
         /// Adds a new text message to the queue.
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="slideInDirection"></param>
-        /// <param name="slideOutDirection"></param>
-        /// <param name="displayTime"></param>
-        private void AddMessageToQueue(string text, SlideDirection slideInDirection, SlideDirection slideOutDirection, int displayTime)
+        /// <param name="text">Text to be displayed.</param>
+        /// <param name="color">Forecolor of the text.</param>
+        /// <param name="slideInDirection">Slide in direction.</param>
+        /// <param name="slideOutDirection">Slide out direction.</param>
+        /// <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
+        private void AddMessageToQueue(string text, Color color, SlideDirection slideInDirection, SlideDirection slideOutDirection, int displayTime)
         {
             if (messageQueue.Count <= maxMessages)
             {
-                messageQueue.Add(new MessageParameters(text, slideInDirection, slideOutDirection, displayTime));
+                messageQueue.Add(new MessageParameters(text, color, slideInDirection, slideOutDirection, displayTime));
                 ProcessQueue();
             }
         }
@@ -545,6 +566,7 @@ namespace AssetManager.UserInterface.CustomControls
             public int DisplayTime { get; set; }
             public string Text { get; set; }
             public SizeF TextSize { get; set; }
+            public Color TextColor { get; set; }
             public SlideDirection SlideInDirection { get; set; }
             public SlideDirection SlideOutDirection { get; set; }
             public SlideDirection Direction { get; set; }
@@ -557,14 +579,14 @@ namespace AssetManager.UserInterface.CustomControls
             public PointF StartPosition;
             public PointF EndPosition;
             public bool AnimationComplete { get; set; }
-
+          
             #endregion Fields
 
             #region Constructors
 
-            public MessageParameters(string message, SlideDirection slideInDirection, SlideDirection slideOutDirection, int displayTime)
+            public MessageParameters(string text, Color color, SlideDirection slideInDirection, SlideDirection slideOutDirection, int displayTime)
             {
-                this.Text = message;
+                this.Text = text;
                 this.DisplayTime = displayTime;
                 this.SlideInDirection = slideInDirection;
                 this.SlideOutDirection = slideOutDirection;
@@ -576,6 +598,7 @@ namespace AssetManager.UserInterface.CustomControls
                 StartPosition = new PointF();
                 EndPosition = new PointF();
                 AnimationComplete = false;
+                TextColor = color;
             }
 
             public MessageParameters()
@@ -592,11 +615,12 @@ namespace AssetManager.UserInterface.CustomControls
                 StartPosition = new PointF();
                 EndPosition = new PointF();
                 AnimationComplete = false;
+                TextColor = Color.Black;
             }
 
             #endregion Constructors
         }
-                
+
         #endregion Structs
     }
 }

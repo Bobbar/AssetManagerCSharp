@@ -1031,6 +1031,16 @@
             </summary>
             <param name="canvas"></param>
         </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.NewSlideMessage(System.String,System.Drawing.Color,AssetManager.UserInterface.CustomControls.SlideDirection,AssetManager.UserInterface.CustomControls.SlideDirection,System.Int32)">
+            <summary>
+            Adds new message to queue.
+            </summary>
+            <param name="text">Text to be displayed.</param>
+            <param name="color">Forecolor of the text.</param>
+            <param name="slideInDirection">Slide in direction.</param>
+            <param name="slideOutDirection">Slide out direction.</param>
+            <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
+        </member>
         <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.NewSlideMessage(System.String,AssetManager.UserInterface.CustomControls.SlideDirection,AssetManager.UserInterface.CustomControls.SlideDirection,System.Int32)">
             <summary>
             Adds new message to queue.
@@ -1052,14 +1062,15 @@
             <param name="parentControl">Target strip for this control. For inheriting font and color.</param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.AddMessageToQueue(System.String,AssetManager.UserInterface.CustomControls.SlideDirection,AssetManager.UserInterface.CustomControls.SlideDirection,System.Int32)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.AddMessageToQueue(System.String,System.Drawing.Color,AssetManager.UserInterface.CustomControls.SlideDirection,AssetManager.UserInterface.CustomControls.SlideDirection,System.Int32)">
             <summary>
             Adds a new text message to the queue.
             </summary>
-            <param name="text"></param>
-            <param name="slideInDirection"></param>
-            <param name="slideOutDirection"></param>
-            <param name="displayTime"></param>
+            <param name="text">Text to be displayed.</param>
+            <param name="color">Forecolor of the text.</param>
+            <param name="slideInDirection">Slide in direction.</param>
+            <param name="slideOutDirection">Slide out direction.</param>
+            <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.StartNewSlide(AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters)">
             <summary>
@@ -1116,6 +1127,11 @@
         <member name="T:AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters">
             <summary>
             Parameters for messages to be queued.
+            </summary>
+        </member>
+        <member name="F:AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters.Position">
+            <summary>
+            Current position.
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.WindowList.BuildWindowList(AssetManager.UserInterface.CustomControls.IWindowList,System.Windows.Forms.ToolStripItemCollection)">
