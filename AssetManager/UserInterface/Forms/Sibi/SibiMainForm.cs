@@ -244,6 +244,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     SibiResultGrid.ColumnHeadersHeight = 38;
                     StatusColors = GetStatusColors(results);
                     SibiResultGrid.Populate(results, SibiTableColumns());
+                    SetStatusCellColors();
                     SibiResultGrid.FastAutoSizeColumns();
                     SibiResultGrid.ClearSelection();
                     SibiResultGrid.ResumeLayout();
@@ -253,6 +254,18 @@ namespace AssetManager.UserInterface.Forms.Sibi
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+            }
+        }
+
+        private void SetStatusCellColors()
+        {
+            foreach (DataGridViewRow row in SibiResultGrid.Rows)
+            {
+                var cell = row.Cells[SibiRequestCols.Status];
+                var backColor = GetRowColorFromID(row.Cells[SibiRequestCols.RequestNumber].Value.ToString());
+                var foreColor = Color.Black;
+                cell.Style.BackColor = backColor;
+                cell.Style.ForeColor = foreColor;
             }
         }
 
@@ -358,22 +371,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void ResultGrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
-        {
-            if (e.RowIndex > -1)
-            {
-                DataGridViewCell dvgCell = SibiResultGrid.Rows[e.RowIndex].Cells[SibiRequestCols.Status];
-                DataGridViewRow dvgRow = SibiResultGrid.Rows[e.RowIndex];
-                Color BackCol = default(Color);
-                Color ForeCol = default(Color);
-                BackCol = GetRowColorFromID(dvgRow.Cells[SibiRequestCols.RequestNumber].Value.ToString());
-                ForeCol = Color.Black;
-                dvgCell.Style.BackColor = BackCol;
-                dvgCell.Style.ForeColor = ForeCol;
-                dvgCell.Style.SelectionBackColor = StyleFunctions.ColorAlphaBlend(BackCol, Color.FromArgb(87, 87, 87));
-            }
-        }
-
         private Color GetRowColorFromID(string ReqID)
         {
             foreach (StatusColumnColor status in StatusColors)
@@ -423,6 +420,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void ResultGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
             StyleFunctions.LeaveRow(SibiResultGrid, e.RowIndex);
+            SetStatusCellColors();
         }
 
         private void cmbDisplayYear_SelectedIndexChanged(object sender, EventArgs e)

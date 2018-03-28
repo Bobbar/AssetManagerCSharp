@@ -282,7 +282,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.SibiResultGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellDoubleClick);
             this.SibiResultGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellEnter);
             this.SibiResultGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellLeave);
-            this.SibiResultGrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.ResultGrid_RowPostPaint);
             // 
             // ToolStrip1
             // 
