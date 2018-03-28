@@ -24,9 +24,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private WindowList windowList;
         private DbCommand lastCmd;
         private bool rebuildingCombo = false;
-
-        private List<StatusColumnColor> StatusColors;
-
+        private Dictionary<string, Color> statusColumnColors;
         public SibiMainForm(ExtendedForm parentForm) : base(parentForm, false)
         {
             windowList = new WindowList(this);
@@ -242,7 +240,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     SibiResultGrid.SuspendLayout();
                     SibiResultGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
                     SibiResultGrid.ColumnHeadersHeight = 38;
-                    StatusColors = GetStatusColors(results);
+                    GetStatusColors(results);
                     SibiResultGrid.Populate(results, SibiTableColumns());
                     SetStatusCellColors();
                     SibiResultGrid.FastAutoSizeColumns();
@@ -262,21 +260,25 @@ namespace AssetManager.UserInterface.Forms.Sibi
             foreach (DataGridViewRow row in SibiResultGrid.Rows)
             {
                 var cell = row.Cells[SibiRequestCols.Status];
-                var backColor = GetRowColorFromID(row.Cells[SibiRequestCols.RequestNumber].Value.ToString());
+                var backColor = statusColumnColors[row.Cells[SibiRequestCols.RequestNumber].Value.ToString()];
                 var foreColor = Color.Black;
                 cell.Style.BackColor = backColor;
                 cell.Style.ForeColor = foreColor;
             }
         }
 
-        private List<StatusColumnColor> GetStatusColors(DataTable Results)
+        // Since the data grid is not setup with a value/display member we need another way to
+        // record the color values for the status row. This method populates a dictionary with
+        // the unique request ID as a key and the corresponding status color as the value. 
+        // This is then referenced later to set the status cells to the correct color.
+        private void GetStatusColors(DataTable results)
         {
-            List<StatusColumnColor> StatusList = new List<StatusColumnColor>();
-            foreach (DataRow row in Results.Rows)
+            statusColumnColors = new Dictionary<string, Color>();
+
+            foreach (DataRow row in results.Rows)
             {
-                StatusList.Add(new StatusColumnColor(row[SibiRequestCols.RequestNumber].ToString(), GetRowColor(row[SibiRequestCols.Status].ToString())));
+                statusColumnColors.Add(row[SibiRequestCols.RequestNumber].ToString(), GetRowColor(row[SibiRequestCols.Status].ToString()));
             }
-            return StatusList;
         }
 
         private List<GridColumnAttrib> SibiTableColumns()
@@ -369,16 +371,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 OtherFunctions.SetWaitCursor(false, this);
             }
-        }
-
-        private Color GetRowColorFromID(string ReqID)
-        {
-            foreach (StatusColumnColor status in StatusColors)
-            {
-                if (status.StatusID == ReqID)
-                    return status.StatusColor;
-            }
-            return Color.Red;
         }
 
         /// <summary>
