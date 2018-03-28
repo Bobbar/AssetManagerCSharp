@@ -14,29 +14,29 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.GroupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.searchSlider = new AssetManager.UserInterface.CustomControls.SliderLabel();
             this.ItemSearchButton = new System.Windows.Forms.Button();
             this.ItemSearchTextBox = new System.Windows.Forms.TextBox();
-            this.txtRTNum = new System.Windows.Forms.TextBox();
-            this.txtReq = new System.Windows.Forms.TextBox();
-            this.txtPO = new System.Windows.Forms.TextBox();
+            this.RTNumberTextBox = new System.Windows.Forms.TextBox();
+            this.ReqNumberTextBox = new System.Windows.Forms.TextBox();
+            this.POTextBox = new System.Windows.Forms.TextBox();
             this.Label5 = new System.Windows.Forms.Label();
             this.Label4 = new System.Windows.Forms.Label();
-            this.txtDescription = new System.Windows.Forms.TextBox();
+            this.DescriptionTextBox = new System.Windows.Forms.TextBox();
             this.Label3 = new System.Windows.Forms.Label();
             this.RefreshResetButton = new System.Windows.Forms.Button();
             this.Label1 = new System.Windows.Forms.Label();
-            this.cmbDisplayYear = new System.Windows.Forms.ComboBox();
+            this.DisplayYearComboBox = new System.Windows.Forms.ComboBox();
             this.Label2 = new System.Windows.Forms.Label();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.SibiResultGrid = new System.Windows.Forms.DataGridView();
             this.ToolStrip1 = new AssetManager.UserInterface.CustomControls.OneClickToolStrip();
-            this.cmdManage = new System.Windows.Forms.ToolStripButton();
+            this.NewRequestButton = new System.Windows.Forms.ToolStripButton();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.Panel1.SuspendLayout();
             this.GroupBox2.SuspendLayout();
@@ -48,8 +48,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // Panel1
             // 
-            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel1.Controls.Add(this.GroupBox2);
             this.Panel1.Controls.Add(this.GroupBox1);
@@ -61,19 +61,19 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // GroupBox2
             // 
-            this.GroupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox2.Controls.Add(this.groupBox3);
-            this.GroupBox2.Controls.Add(this.txtRTNum);
-            this.GroupBox2.Controls.Add(this.txtReq);
-            this.GroupBox2.Controls.Add(this.txtPO);
+            this.GroupBox2.Controls.Add(this.RTNumberTextBox);
+            this.GroupBox2.Controls.Add(this.ReqNumberTextBox);
+            this.GroupBox2.Controls.Add(this.POTextBox);
             this.GroupBox2.Controls.Add(this.Label5);
             this.GroupBox2.Controls.Add(this.Label4);
-            this.GroupBox2.Controls.Add(this.txtDescription);
+            this.GroupBox2.Controls.Add(this.DescriptionTextBox);
             this.GroupBox2.Controls.Add(this.Label3);
             this.GroupBox2.Controls.Add(this.RefreshResetButton);
             this.GroupBox2.Controls.Add(this.Label1);
-            this.GroupBox2.Controls.Add(this.cmbDisplayYear);
+            this.GroupBox2.Controls.Add(this.DisplayYearComboBox);
             this.GroupBox2.Controls.Add(this.Label2);
             this.GroupBox2.Location = new System.Drawing.Point(6, 16);
             this.GroupBox2.Name = "GroupBox2";
@@ -123,29 +123,29 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ItemSearchTextBox.TabIndex = 29;
             this.ItemSearchTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ItemSearchTextBox_KeyDown);
             // 
-            // txtRTNum
+            // RTNumberTextBox
             // 
-            this.txtRTNum.Location = new System.Drawing.Point(624, 40);
-            this.txtRTNum.Name = "txtRTNum";
-            this.txtRTNum.Size = new System.Drawing.Size(77, 23);
-            this.txtRTNum.TabIndex = 27;
-            this.txtRTNum.TextChanged += new System.EventHandler(this.txtRTNum_TextChanged);
+            this.RTNumberTextBox.Location = new System.Drawing.Point(624, 40);
+            this.RTNumberTextBox.Name = "RTNumberTextBox";
+            this.RTNumberTextBox.Size = new System.Drawing.Size(77, 23);
+            this.RTNumberTextBox.TabIndex = 27;
+            this.RTNumberTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.RTNumberTextBox_KeyUp);
             // 
-            // txtReq
+            // ReqNumberTextBox
             // 
-            this.txtReq.Location = new System.Drawing.Point(519, 40);
-            this.txtReq.Name = "txtReq";
-            this.txtReq.Size = new System.Drawing.Size(77, 23);
-            this.txtReq.TabIndex = 23;
-            this.txtReq.TextChanged += new System.EventHandler(this.txtReq_TextChanged);
+            this.ReqNumberTextBox.Location = new System.Drawing.Point(519, 40);
+            this.ReqNumberTextBox.Name = "ReqNumberTextBox";
+            this.ReqNumberTextBox.Size = new System.Drawing.Size(77, 23);
+            this.ReqNumberTextBox.TabIndex = 23;
+            this.ReqNumberTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ReqNumberTextBox_KeyUp);
             // 
-            // txtPO
+            // POTextBox
             // 
-            this.txtPO.Location = new System.Drawing.Point(374, 40);
-            this.txtPO.Name = "txtPO";
-            this.txtPO.Size = new System.Drawing.Size(121, 23);
-            this.txtPO.TabIndex = 21;
-            this.txtPO.TextChanged += new System.EventHandler(this.txtPO_TextChanged);
+            this.POTextBox.Location = new System.Drawing.Point(374, 40);
+            this.POTextBox.Name = "POTextBox";
+            this.POTextBox.Size = new System.Drawing.Size(121, 23);
+            this.POTextBox.TabIndex = 21;
+            this.POTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.POTextBox_KeyUp);
             // 
             // Label5
             // 
@@ -165,13 +165,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Label4.TabIndex = 26;
             this.Label4.Text = "Description";
             // 
-            // txtDescription
+            // DescriptionTextBox
             // 
-            this.txtDescription.Location = new System.Drawing.Point(168, 40);
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(184, 23);
-            this.txtDescription.TabIndex = 25;
-            this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
+            this.DescriptionTextBox.Location = new System.Drawing.Point(168, 40);
+            this.DescriptionTextBox.Name = "DescriptionTextBox";
+            this.DescriptionTextBox.Size = new System.Drawing.Size(184, 23);
+            this.DescriptionTextBox.TabIndex = 25;
+            this.DescriptionTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DescriptionTextBox_KeyUp);
             // 
             // Label3
             // 
@@ -202,15 +202,15 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Label1.TabIndex = 22;
             this.Label1.Text = "PO #";
             // 
-            // cmbDisplayYear
+            // DisplayYearComboBox
             // 
-            this.cmbDisplayYear.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbDisplayYear.FormattingEnabled = true;
-            this.cmbDisplayYear.Location = new System.Drawing.Point(9, 40);
-            this.cmbDisplayYear.Name = "cmbDisplayYear";
-            this.cmbDisplayYear.Size = new System.Drawing.Size(115, 23);
-            this.cmbDisplayYear.TabIndex = 19;
-            this.cmbDisplayYear.SelectedIndexChanged += new System.EventHandler(this.cmbDisplayYear_SelectedIndexChanged);
+            this.DisplayYearComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DisplayYearComboBox.FormattingEnabled = true;
+            this.DisplayYearComboBox.Location = new System.Drawing.Point(9, 40);
+            this.DisplayYearComboBox.Name = "DisplayYearComboBox";
+            this.DisplayYearComboBox.Size = new System.Drawing.Size(115, 23);
+            this.DisplayYearComboBox.TabIndex = 19;
+            this.DisplayYearComboBox.SelectedIndexChanged += new System.EventHandler(this.DisplayYearComboBox_SelectedIndexChanged);
             // 
             // Label2
             // 
@@ -224,8 +224,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.Controls.Add(this.SibiResultGrid);
             this.GroupBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -241,35 +241,35 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.SibiResultGrid.AllowUserToAddRows = false;
             this.SibiResultGrid.AllowUserToDeleteRows = false;
             this.SibiResultGrid.AllowUserToResizeRows = false;
-            this.SibiResultGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.SibiResultGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SibiResultGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.SibiResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.SibiResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.SibiResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(39)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.SibiResultGrid.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(39)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.SibiResultGrid.DefaultCellStyle = dataGridViewCellStyle5;
             this.SibiResultGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.SibiResultGrid.Location = new System.Drawing.Point(6, 22);
             this.SibiResultGrid.MultiSelect = false;
             this.SibiResultGrid.Name = "SibiResultGrid";
             this.SibiResultGrid.ReadOnly = true;
             this.SibiResultGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.SibiResultGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.SibiResultGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.SibiResultGrid.RowHeadersVisible = false;
             this.SibiResultGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.SibiResultGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
@@ -290,7 +290,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ToolStrip1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ToolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
             this.ToolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmdManage,
+            this.NewRequestButton,
             this.ToolStripSeparator1});
             this.ToolStrip1.Location = new System.Drawing.Point(0, 0);
             this.ToolStrip1.Name = "ToolStrip1";
@@ -300,15 +300,15 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ToolStrip1.TabIndex = 2;
             this.ToolStrip1.Text = "ToolStrip1";
             // 
-            // cmdManage
+            // NewRequestButton
             // 
-            this.cmdManage.Image = global::AssetManager.Properties.Resources.AddIcon;
-            this.cmdManage.Name = "cmdManage";
-            this.cmdManage.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.cmdManage.Size = new System.Drawing.Size(141, 34);
-            this.cmdManage.Text = "New Request";
-            this.cmdManage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cmdManage.Click += new System.EventHandler(this.cmdManage_Click);
+            this.NewRequestButton.Image = global::AssetManager.Properties.Resources.AddIcon;
+            this.NewRequestButton.Name = "NewRequestButton";
+            this.NewRequestButton.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.NewRequestButton.Size = new System.Drawing.Size(141, 34);
+            this.NewRequestButton.Text = "New Request";
+            this.NewRequestButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.NewRequestButton.Click += new System.EventHandler(this.NewRequestButton_Click);
             // 
             // ToolStripSeparator1
             // 
@@ -343,20 +343,20 @@ namespace AssetManager.UserInterface.Forms.Sibi
         internal DataGridView SibiResultGrid;
         internal Button RefreshResetButton;
         internal OneClickToolStrip ToolStrip1;
-        internal ToolStripButton cmdManage;
+        internal ToolStripButton NewRequestButton;
         internal Label Label2;
-        internal ComboBox cmbDisplayYear;
+        internal ComboBox DisplayYearComboBox;
         internal ToolStripSeparator ToolStripSeparator1;
         internal GroupBox GroupBox1;
         internal GroupBox GroupBox2;
         internal Label Label3;
-        internal TextBox txtReq;
+        internal TextBox ReqNumberTextBox;
         internal Label Label1;
-        internal TextBox txtPO;
+        internal TextBox POTextBox;
         internal Label Label4;
-        internal TextBox txtDescription;
+        internal TextBox DescriptionTextBox;
         internal Label Label5;
-        internal TextBox txtRTNum;
+        internal TextBox RTNumberTextBox;
         internal TextBox ItemSearchTextBox;
         private GroupBox groupBox3;
         private Button ItemSearchButton;

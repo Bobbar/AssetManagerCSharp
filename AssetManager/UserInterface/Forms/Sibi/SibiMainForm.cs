@@ -3,28 +3,33 @@ using AssetManager.Data.Classes;
 using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
-using AssetManager.Tools;
 using AssetManager.UserInterface.CustomControls;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
     public partial class SibiMainForm : ExtendedForm
     {
+        #region Fields
+
         private bool gridFilling = false;
-        private WindowList windowList;
         private DbCommand lastCmd;
         private bool rebuildingCombo = false;
         private Dictionary<string, Color> statusColumnColors;
+        private WindowList windowList;
+
+        #endregion Fields
+
+        #region Constructors
+
         public SibiMainForm(ExtendedForm parentForm) : base(parentForm, false)
         {
             windowList = new WindowList(this);
@@ -34,37 +39,38 @@ namespace AssetManager.UserInterface.Forms.Sibi
             InitForm();
         }
 
-        private void InitForm()
-        {
-            try
-            {
-                this.Icon = Properties.Resources.sibi_icon;
-                SibiResultGrid.DoubleBufferedDataGrid(true);
-                this.GridTheme = new GridTheme(Colors.HighlightBlue, Colors.SibiSelectColor, Colors.SibiSelectAltColor, SibiResultGrid.DefaultCellStyle.BackColor);
-                StyleFunctions.SetGridStyle(SibiResultGrid, this.GridTheme);
-                ToolStrip1.BackColor = Colors.SibiToolBarColor;
-                windowList.InsertWindowList(ToolStrip1);
-                SetDisplayYears();
-                this.Show();
-                this.Activate();
-                Application.DoEvents();
-                ShowAll("All");
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-                this.Dispose();
-            }
-        }
+        #endregion Constructors
+
+        #region Methods
 
         public override void RefreshData()
         {
             ExecuteCmd(ref lastCmd);
         }
 
-        private void ClearAll(System.Windows.Forms.Control.ControlCollection TopControl)
+        private QueryParamCollection BuildSearchListNew()
         {
-            foreach (Control ctl in TopControl)
+            var searchParams = new QueryParamCollection();
+            searchParams.Add(SibiRequestCols.RTNumber, RTNumberTextBox.Text.Trim(), false);
+            searchParams.Add(SibiRequestCols.Description, DescriptionTextBox.Text.Trim(), false);
+            searchParams.Add(SibiRequestCols.PO, POTextBox.Text, false);
+            searchParams.Add(SibiRequestCols.RequisitionNumber, ReqNumberTextBox.Text, false);
+
+            //Filter out unpopulated fields.
+            QueryParamCollection popSearchParams = new QueryParamCollection();
+            foreach (var param in searchParams.Parameters)
+            {
+                if (param.Value.ToString() != "")
+                {
+                    popSearchParams.Add(param);
+                }
+            }
+            return popSearchParams;
+        }
+
+        private void ClearAll(Control parentControl)
+        {
+            foreach (Control ctl in parentControl.Controls)
             {
                 if (ctl is TextBox)
                 {
@@ -78,49 +84,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 }
                 else if (ctl.Controls.Count > 0)
                 {
-                    ClearAll(ctl.Controls);
+                    ClearAll(ctl);
                 }
             }
-        }
-
-        private void RefreshResetButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                OtherFunctions.SetWaitCursor(true, this);
-                searchSlider.Clear();
-                ClearAll(this.Controls);
-                SetDisplayYears();
-                ShowAll();
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-            }
-            finally
-            {
-                OtherFunctions.SetWaitCursor(false, this);
-            }
-        }
-
-        private QueryParamCollection BuildSearchListNew()
-        {
-            QueryParamCollection searchParams = new QueryParamCollection();
-            searchParams.Add(SibiRequestCols.RTNumber, txtRTNum.Text.Trim(), false);
-            searchParams.Add(SibiRequestCols.Description, txtDescription.Text.Trim(), false);
-            searchParams.Add(SibiRequestCols.PO, txtPO.Text, false);
-            searchParams.Add(SibiRequestCols.RequisitionNumber, txtReq.Text, false);
-
-            //Filter out unpopulated fields.
-            QueryParamCollection popSearchParams = new QueryParamCollection();
-            foreach (var param in searchParams.Parameters)
-            {
-                if (param.Value.ToString() != "")
-                {
-                    popSearchParams.Add(param);
-                }
-            }
-            return popSearchParams;
         }
 
         //dynamically creates sql query using any combination of search filters the users wants
@@ -157,6 +123,82 @@ namespace AssetManager.UserInterface.Forms.Sibi
             ExecuteCmd(ref cmd);
         }
 
+        private void ExecuteCmd(ref DbCommand cmd)
+        {
+            try
+            {
+                lastCmd = cmd;
+                SendToGrid(DBFactory.GetDatabase().DataTableFromCommand(cmd));
+            }
+            catch (Exception ex)
+            {
+                //InvalidCastException is expected when the last LastCmd was populated while in cached DB mode and now cached mode is currently false.
+                //ShowAll will start a new connection and populate LastCmd with a correctly matching DBCommand. See DBFactory.GetCommand()
+                if (ex is InvalidCastException)
+                {
+                    ShowAll();
+                }
+                else
+                {
+                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the color associated with the specified attribute code. Alpha blended with gray to make it more pastel.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        private Color GetRowColor(string code)
+        {
+            //gray color
+            Color DarkColor = Color.FromArgb(222, 222, 222);
+            // Get a list from the attrib array.
+            var attribList = Attributes.SibiAttribute.StatusType.OfType<DBCode>().ToList();
+            // Use List.Find to locate the matching attribute.
+            var attribColor = attribList.Find((i) => { return i.Code == code; }).Color;
+            // Return the a blended color.
+            return StyleFunctions.ColorAlphaBlend(attribColor, DarkColor);
+        }
+
+        // Since the data grid is not setup with a value/display member we need another way to
+        // record the color values for the status row. This method populates a dictionary with
+        // the unique request ID as a key and the corresponding status color as the value.
+        // This is then referenced later to set the status cells to the correct color.
+        private void GetStatusColors(DataTable results)
+        {
+            statusColumnColors = new Dictionary<string, Color>();
+
+            foreach (DataRow row in results.Rows)
+            {
+                statusColumnColors.Add(row[SibiRequestCols.RequestNumber].ToString(), GetRowColor(row[SibiRequestCols.Status].ToString()));
+            }
+        }
+
+        private void InitForm()
+        {
+            try
+            {
+                this.Icon = Properties.Resources.sibi_icon;
+                SibiResultGrid.DoubleBufferedDataGrid(true);
+                this.GridTheme = new GridTheme(Colors.HighlightBlue, Colors.SibiSelectColor, Colors.SibiSelectAltColor, SibiResultGrid.DefaultCellStyle.BackColor);
+                StyleFunctions.SetGridStyle(SibiResultGrid, this.GridTheme);
+                ToolStrip1.BackColor = Colors.SibiToolBarColor;
+                windowList.InsertWindowList(ToolStrip1);
+                SetDisplayYears();
+                this.Show();
+                this.Activate();
+                Application.DoEvents();
+                ShowAll("All");
+            }
+            catch (Exception ex)
+            {
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                this.Dispose();
+            }
+        }
+
         /// <summary>
         /// Searches all request item columns for item that match the specified search string.
         /// </summary>
@@ -170,16 +212,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
 
             // Get a new AdvancedSearch instance.
-            AdvancedSearch AdvSearch = new AdvancedSearch();
+            var AdvSearch = new AdvancedSearch();
 
             // Perform search on Request Items table
-            using (DataTable results = AdvSearch.GetSingleTableResults(searchString.Trim(), SibiRequestItemsCols.TableName))
+            using (var results = AdvSearch.GetSingleTableResults(searchString.Trim(), SibiRequestItemsCols.TableName))
             {
-
                 // Make sure we have results.
                 if (results.Rows.Count > 0)
                 {
-
                     //Clear slider label of any previous errors.
                     searchSlider.Clear();
 
@@ -207,30 +247,44 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-
-        private void ExecuteCmd(ref DbCommand cmd)
+        [SuppressMessage("Microsoft.Design", "CA1806")]
+        private void OpenRequest(string strGuid)
         {
             try
             {
-                lastCmd = cmd;
-                SendToGrid(DBFactory.GetDatabase().DataTableFromCommand(cmd));
+                OtherFunctions.SetWaitCursor(true, this);
+                if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(SibiManageRequestForm), strGuid))
+                {
+                    new SibiManageRequestForm(this, strGuid);
+                }
             }
-            catch (Exception ex)
+            finally
             {
-                //InvalidCastException is expected when the last LastCmd was populated while in cached DB mode and now cached mode is currently false.
-                //ShowAll will start a new connection and populate LastCmd with a correctly matching DBCommand. See DBFactory.GetCommand()
-                if (ex is InvalidCastException)
-                {
-                    ShowAll();
-                }
-                else
-                {
-                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-                }
+                OtherFunctions.SetWaitCursor(false, this);
             }
         }
 
-        public void SendToGrid(DataTable results)
+        private void ResetView()
+        {
+            try
+            {
+                OtherFunctions.SetWaitCursor(true, this);
+                searchSlider.Clear();
+                ClearAll(this);
+                SetDisplayYears();
+                ShowAll();
+            }
+            catch (Exception ex)
+            {
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+            }
+            finally
+            {
+                OtherFunctions.SetWaitCursor(false, this);
+            }
+        }
+
+        private void SendToGrid(DataTable results)
         {
             try
             {
@@ -255,74 +309,54 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
+        private void SetDisplayYears()
+        {
+            rebuildingCombo = true;
+            using (var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiDisplayYears))
+            {
+                var years = new List<string>();
+                years.Add("All");
+                foreach (DataRow r in results.Rows)
+                {
+                    var yr = DataConsistency.YearFromDate(DateTime.Parse(r[SibiRequestCols.DateStamp].ToString()));
+                    if (!years.Contains(yr))
+                    {
+                        years.Add(yr);
+                    }
+                }
+                DisplayYearComboBox.DataSource = years;
+                DisplayYearComboBox.SelectedIndex = 0;
+                rebuildingCombo = false;
+            }
+        }
+
         private void SetStatusCellColors()
         {
             foreach (DataGridViewRow row in SibiResultGrid.Rows)
             {
                 var cell = row.Cells[SibiRequestCols.Status];
-                var backColor = statusColumnColors[row.Cells[SibiRequestCols.RequestNumber].Value.ToString()];
+                var reqID = row.Cells[SibiRequestCols.RequestNumber].Value.ToString();
+                var backColor = new Color();
                 var foreColor = Color.Black;
+
+                if (statusColumnColors.ContainsKey(reqID))
+                {
+                    backColor = statusColumnColors[reqID];
+                }
+                else
+                {
+                    backColor = row.InheritedStyle.BackColor;
+                }
+
                 cell.Style.BackColor = backColor;
                 cell.Style.ForeColor = foreColor;
-            }
-        }
-
-        // Since the data grid is not setup with a value/display member we need another way to
-        // record the color values for the status row. This method populates a dictionary with
-        // the unique request ID as a key and the corresponding status color as the value. 
-        // This is then referenced later to set the status cells to the correct color.
-        private void GetStatusColors(DataTable results)
-        {
-            statusColumnColors = new Dictionary<string, Color>();
-
-            foreach (DataRow row in results.Rows)
-            {
-                statusColumnColors.Add(row[SibiRequestCols.RequestNumber].ToString(), GetRowColor(row[SibiRequestCols.Status].ToString()));
-            }
-        }
-
-        private List<GridColumnAttrib> SibiTableColumns()
-        {
-            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestNumber, "Request #"));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.Status, "Status", Attributes.SibiAttribute.StatusType, ColumnFormatType.AttributeDisplayMemberOnly));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.Description, "Description"));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequestUser, "Request User"));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", Attributes.SibiAttribute.RequestType, ColumnFormatType.AttributeDisplayMemberOnly));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.NeedBy, "Need By"));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.PO, "PO Number"));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.RequisitionNumber, "Req. Number"));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.RTNumber, "RT Number"));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.DateStamp, "Create Date"));
-            ColList.Add(new GridColumnAttrib(SibiRequestCols.Guid, "Guid"));
-            return ColList;
-        }
-
-        private void SetDisplayYears()
-        {
-            rebuildingCombo = true;
-            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiDisplayYears))
-            {
-                List<string> Years = new List<string>();
-                Years.Add("All");
-                foreach (DataRow r in results.Rows)
-                {
-                    var yr = DataConsistency.YearFromDate(DateTime.Parse(r[SibiRequestCols.DateStamp].ToString()));
-                    if (!Years.Contains(yr))
-                    {
-                        Years.Add(yr);
-                    }
-                }
-                cmbDisplayYear.DataSource = Years;
-                cmbDisplayYear.SelectedIndex = 0;
-                rebuildingCombo = false;
             }
         }
 
         private void ShowAll(string Year = "")
         {
             if (string.IsNullOrEmpty(Year))
-                Year = cmbDisplayYear.Text;
+                Year = DisplayYearComboBox.Text;
             if (Year == "All")
             {
                 DbCommand newCommand;
@@ -337,110 +371,33 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1806")]
-        private void cmdManage_Click(object sender, EventArgs e)
+        private List<GridColumnAttrib> SibiTableColumns()
         {
-            try
+            var columnList = new List<GridColumnAttrib>();
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.RequestNumber, "Request #"));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.Status, "Status", Attributes.SibiAttribute.StatusType, ColumnFormatType.AttributeDisplayMemberOnly));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.Description, "Description"));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.RequestUser, "Request User"));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", Attributes.SibiAttribute.RequestType, ColumnFormatType.AttributeDisplayMemberOnly));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.NeedBy, "Need By"));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.PO, "PO Number"));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.RequisitionNumber, "Req. Number"));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.RTNumber, "RT Number"));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.DateStamp, "Create Date"));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.Guid, "Guid"));
+            return columnList;
+        }
+
+        #endregion Methods
+
+        #region Control Events
+
+        private void DisplayYearComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (DisplayYearComboBox.Text != null & !rebuildingCombo)
             {
-                OtherFunctions.SetWaitCursor(true, this);
-                new SibiManageRequestForm(this);
+                ShowAll(DisplayYearComboBox.Text);
             }
-            finally
-            {
-                OtherFunctions.SetWaitCursor(false, this);
-            }
-        }
-
-        private void ResultGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (SibiResultGrid.CurrentRow.Index > -1) OpenRequest(SibiResultGrid.CurrentRowStringValue(SibiRequestCols.Guid));
-        }
-
-        [SuppressMessage("Microsoft.Design", "CA1806")]
-        private void OpenRequest(string strGuid)
-        {
-            try
-            {
-                OtherFunctions.SetWaitCursor(true, this);
-                if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(SibiManageRequestForm), strGuid))
-                {
-                    new SibiManageRequestForm(this, strGuid);
-                }
-            }
-            finally
-            {
-                OtherFunctions.SetWaitCursor(false, this);
-            }
-        }
-
-        /// <summary>
-        /// Gets the color associated with the specified attribute code. Alpha blended with gray to make it more pastel.
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
-        private Color GetRowColor(string code)
-        {
-            //gray color
-            Color DarkColor = Color.FromArgb(222, 222, 222);
-            // Get a list from the attrib array.
-            var attribList = Attributes.SibiAttribute.StatusType.OfType<DBCode>().ToList();
-            // Use List.Find to locate the matching attribute.
-            var attribColor = attribList.Find((i) => { return i.Code == code; }).Color;
-            // Return the a blended color.
-            return StyleFunctions.ColorAlphaBlend(attribColor, DarkColor);
-        }
-
-        private void HighlightCurrentRow(int Row)
-        {
-            try
-            {
-                if (!gridFilling)
-                {
-                    StyleFunctions.HighlightRow(SibiResultGrid, GridTheme, Row);
-                }
-            }
-            catch
-            {
-            }
-        }
-
-        private void ResultGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            HighlightCurrentRow(e.RowIndex);
-        }
-
-        private void ResultGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            StyleFunctions.LeaveRow(SibiResultGrid, e.RowIndex);
-            SetStatusCellColors();
-        }
-
-        private void cmbDisplayYear_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmbDisplayYear.Text != null & !rebuildingCombo)
-            {
-                ShowAll(cmbDisplayYear.Text);
-            }
-        }
-
-        private void txtPO_TextChanged(object sender, EventArgs e)
-        {
-            DynamicSearch();
-        }
-
-        private void txtReq_TextChanged(object sender, EventArgs e)
-        {
-            DynamicSearch();
-        }
-
-        private void txtDescription_TextChanged(object sender, EventArgs e)
-        {
-            DynamicSearch();
-        }
-
-        private void txtRTNum_TextChanged(object sender, EventArgs e)
-        {
-            DynamicSearch();
         }
 
         private void ItemSearchButton_Click(object sender, EventArgs e)
@@ -455,6 +412,66 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 ItemSearch(ItemSearchTextBox.Text);
             }
         }
+
+        [SuppressMessage("Microsoft.Design", "CA1806")]
+        private void NewRequestButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OtherFunctions.SetWaitCursor(true, this);
+                new SibiManageRequestForm(this);
+            }
+            finally
+            {
+                OtherFunctions.SetWaitCursor(false, this);
+            }
+        }
+
+        private void DescriptionTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            DynamicSearch();
+        }
+
+        private void POTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            DynamicSearch();
+        }
+
+        private void ReqNumberTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            DynamicSearch();
+        }
+
+        private void RTNumberTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            DynamicSearch();
+        }
+
+        private void RefreshResetButton_Click(object sender, EventArgs e)
+        {
+            ResetView();
+        }
+
+        private void ResultGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (SibiResultGrid.CurrentRow.Index > -1) OpenRequest(SibiResultGrid.CurrentRowStringValue(SibiRequestCols.Guid));
+        }
+
+        private void ResultGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!gridFilling)
+            {
+                StyleFunctions.HighlightRow(SibiResultGrid, GridTheme, e.RowIndex);
+            }
+        }
+
+        private void ResultGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            StyleFunctions.LeaveRow(SibiResultGrid, e.RowIndex);
+            SetStatusCellColors();
+        }
+
+        #endregion Control Events
 
         protected override void Dispose(bool disposing)
         {
