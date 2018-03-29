@@ -288,11 +288,11 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private async void NewDeviceDeployment(Device targetDevice)
+        private async void NewSoftwareDeployment(Device targetDevice)
         {
             SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
 
-            if (OtherFunctions.Message("Start new device software deployment?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
+            if (OtherFunctions.Message("Start new software deployment?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
                 return;
             }
@@ -301,20 +301,20 @@ namespace AssetManager.UserInterface.CustomControls
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
                     var newDeviceDeploy = new SoftwareDeployment(hostForm);
-                    OnStatusPrompt("Deploying New Device Software...", 0);
+                    OnStatusPrompt("Deploying Software...", 0);
                     if (await newDeviceDeploy.DeployToDevice(targetDevice))
                     {
-                        OnStatusPrompt("New Device Deployment Complete!");
+                        OnStatusPrompt("Software Deployment Complete!");
                     }
                     else
                     {
-                        OnStatusPrompt("New Device Deployment Failed...");
+                        OnStatusPrompt("Software Deployment Failed...");
                     }
                 }
             }
             catch (Exception ex)
             {
-                OnStatusPrompt("Office 365 deployment failed...");
+                OnStatusPrompt("Software Deployment Failed...");
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
@@ -536,7 +536,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void NewDeployButton_Click(object sender, EventArgs e)
         {
-            NewDeviceDeployment(this.device);
+            NewSoftwareDeployment(this.device);
         }
 
         private void PowerShellButton_Click(object sender, EventArgs e)
