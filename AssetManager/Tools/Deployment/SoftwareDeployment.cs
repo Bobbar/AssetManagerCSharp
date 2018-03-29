@@ -59,6 +59,7 @@ namespace AssetManager.Tools.Deployment
             depList.Add(new TaskInfo(() => InstallGatekeeper(targetDevice), "Gatekeeper"));
             depList.Add(new TaskInfo(() => InstallChrome(targetDevice), "Chrome"));
             depList.Add(new TaskInfo(() => InstallTeamViewer(targetDevice), "Team Viewer"));
+            depList.Add(new TaskInfo(() => InstallSpark(targetDevice), "Spark Communicator"));
             depList.Add(new TaskInfo(() => InstallOffice(targetDevice), "Office 365"));
             depList.Add(new TaskInfo(() => InstallCarbonBlack(targetDevice), "Carbon Black"));
             depList.Add(new TaskInfo(() => InstallVPNClient(targetDevice), "Shrewsoft VPN"));
@@ -301,6 +302,19 @@ namespace AssetManager.Tools.Deployment
             {
                 await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("vcredist_install"), "Visual C++ Redist Install");
                 await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("mapwingis_install"), "MapWinGIS Install");
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private async Task<bool> InstallSpark(Device targetDevice)
+        {
+            try
+            {
+                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("spark_install"), "Spark Communicator Install");
                 return true;
             }
             catch (Exception)
