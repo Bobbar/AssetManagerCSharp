@@ -60,6 +60,7 @@ namespace AssetManager.Tools.Deployment
             depList.Add(new TaskInfo(() => InstallChrome(targetDevice), "Chrome"));
             depList.Add(new TaskInfo(() => InstallTeamViewer(targetDevice), "Team Viewer"));
             depList.Add(new TaskInfo(() => InstallSpark(targetDevice), "Spark Communicator"));
+            depList.Add(new TaskInfo(() => InstallAdobe(targetDevice), "Adobe Reader"));
             depList.Add(new TaskInfo(() => InstallOffice(targetDevice), "Office 365"));
             depList.Add(new TaskInfo(() => InstallCarbonBlack(targetDevice), "Carbon Black"));
             depList.Add(new TaskInfo(() => InstallVPNClient(targetDevice), "Shrewsoft VPN"));
@@ -315,6 +316,19 @@ namespace AssetManager.Tools.Deployment
             try
             {
                 await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("spark_install"), "Spark Communicator Install");
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private async Task<bool> InstallAdobe(Device targetDevice)
+        {
+            try
+            {
+                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("adobe_install"), "Adobe Reader Install");
                 return true;
             }
             catch (Exception)
