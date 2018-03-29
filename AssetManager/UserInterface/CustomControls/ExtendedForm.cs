@@ -4,7 +4,6 @@ using AssetManager.Tools;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.ComponentModel;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -16,10 +15,7 @@ namespace AssetManager.UserInterface.CustomControls
         #region Fields
 
         private List<ExtendedForm> childForms = new List<ExtendedForm>();
-
         private bool inheritTheme = true;
-        private bool cacheImages = true;
-
         private ExtendedForm parentForm;
 
         #endregion Fields
@@ -28,44 +24,34 @@ namespace AssetManager.UserInterface.CustomControls
 
         public ExtendedForm()
         {
-            this.Load += ExtendedForm_Load;
-            this.Disposed += ExtendedForm_Disposed;
-            this.FormClosing += ExtendedForm_FormClosing;
+            SubscribeEvents();
         }
 
         public ExtendedForm(ExtendedForm parentForm)
         {
             ParentForm = parentForm;
-            this.Load += ExtendedForm_Load;
-            this.Disposed += ExtendedForm_Disposed;
-            this.FormClosing += ExtendedForm_FormClosing;
+            SubscribeEvents();
         }
 
         public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject)
         {
             ParentForm = parentForm;
             FormGuid = currentObject.Guid;
-            this.Load += ExtendedForm_Load;
-            this.Disposed += ExtendedForm_Disposed;
-            this.FormClosing += ExtendedForm_FormClosing;
+            SubscribeEvents();
         }
 
         public ExtendedForm(ExtendedForm parentForm, string formGuid)
         {
             ParentForm = parentForm;
             FormGuid = formGuid;
-            this.Load += ExtendedForm_Load;
-            this.Disposed += ExtendedForm_Disposed;
-            this.FormClosing += ExtendedForm_FormClosing;
+            SubscribeEvents();
         }
 
         public ExtendedForm(ExtendedForm parentForm, bool inheritTheme = true)
         {
             this.inheritTheme = inheritTheme;
             ParentForm = parentForm;
-            this.Load += ExtendedForm_Load;
-            this.Disposed += ExtendedForm_Disposed;
-            this.FormClosing += ExtendedForm_FormClosing;
+            SubscribeEvents();
         }
 
         #endregion Constructors
@@ -111,23 +97,6 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         /// <summary>
-        /// Gets or sets the value indicating whether the controls will have their images cached with a global reference. See <see cref="ImageCaching"/>.
-        /// </summary>
-        public bool CacheControlImages
-        {
-            get
-            {
-                return cacheImages;
-            }
-
-            set
-            {
-                this.cacheImages = value;
-            }
-        }
-
-
-        /// <summary>
         /// Overloads the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="GridTheme"/> from the parent form.
         /// </summary>
         /// <returns></returns>
@@ -151,6 +120,20 @@ namespace AssetManager.UserInterface.CustomControls
         #endregion Properties
 
         #region Methods
+
+        private void SubscribeEvents()
+        {
+            this.Load += ExtendedForm_Load;
+            this.Disposed += ExtendedForm_Disposed;
+            this.FormClosing += ExtendedForm_FormClosing;
+        }
+
+        private void UnSubscribeEvents()
+        {
+            this.Load -= ExtendedForm_Load;
+            this.Disposed -= ExtendedForm_Disposed;
+            this.FormClosing -= ExtendedForm_FormClosing;
+        }
 
         public void AddChild(ExtendedForm child)
         {
@@ -243,9 +226,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (!IsDisposed)
             {
-                this.Load -= ExtendedForm_Load;
-                this.Disposed -= ExtendedForm_Disposed;
-                this.FormClosing -= ExtendedForm_FormClosing;
+                UnSubscribeEvents();
                 CloseChildren();
                 parentForm = null;
                 childForms.Clear();
@@ -264,7 +245,6 @@ namespace AssetManager.UserInterface.CustomControls
         private void ExtendedForm_Load(object sender, EventArgs e)
         {
             parentForm?.AddChild(this);
-            if (cacheImages) ImageCaching.CacheControlImages(this);
             MemoryTweaks.SetWorkingSet();
         }
 

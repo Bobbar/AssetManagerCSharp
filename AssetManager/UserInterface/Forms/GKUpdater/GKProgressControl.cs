@@ -367,18 +367,18 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             switch (Status)
             {
                 case ProgressStatus.Running:
-                    pbRestart.Image = ImageCaching.ImageCache("PauseIcon", Properties.Resources.PauseIcon);
+                    pbRestart.Image = Properties.Resources.PauseIcon;
                     MyToolTip.SetToolTip(pbRestart, "Pause");
                     break;
 
                 case ProgressStatus.Paused:
                 case ProgressStatus.Queued:
-                    pbRestart.Image = ImageCaching.ImageCache("PlayIcon", Properties.Resources.PlayIcon);
+                    pbRestart.Image = Properties.Resources.PlayIcon;
                     MyToolTip.SetToolTip(pbRestart, "Resume");
                     break;
 
                 default:
-                    pbRestart.Image = ImageCaching.ImageCache("RestartIcon", Properties.Resources.RestartIcon);
+                    pbRestart.Image = Properties.Resources.RestartIcon;
                     MyToolTip.SetToolTip(pbRestart, "Restart");
                     break;
             }

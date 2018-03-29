@@ -129,7 +129,7 @@
             // 
             // EventViewerButton
             // 
-            this.EventViewerButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("EventViewerButton.BackgroundImage")));
+            this.EventViewerButton.BackgroundImage = global::AssetManager.Properties.Resources.EventIcon;
             this.EventViewerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.EventViewerButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.EventViewerButton.Location = new System.Drawing.Point(142, 1);
@@ -212,7 +212,7 @@
             // 
             // PowerShellButton
             // 
-            this.PowerShellButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PowerShellButton.BackgroundImage")));
+            this.PowerShellButton.BackgroundImage = global::AssetManager.Properties.Resources.PowerShellIcon2;
             this.PowerShellButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.PowerShellButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.PowerShellButton.Location = new System.Drawing.Point(189, 1);

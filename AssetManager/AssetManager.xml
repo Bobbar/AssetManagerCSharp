@@ -4,6 +4,20 @@
         <name>AssetManager</name>
     </assembly>
     <members>
+        <member name="T:AssetManager.CachedResourceManager">
+            <summary>
+            An extended Resource Manager that provides cached objects.  
+            This differs from the stock ResourceManager class which always
+            deserializes and creates new instances of every object.
+            After the first time an object is requested, it will be cached
+            for all future requests.
+            </summary>
+        </member>
+        <member name="F:AssetManager.CachedResourceManager.objectCache">
+            <summary>
+            A hashtable is used to store the objects. Since it uses
+            </summary>
+        </member>
         <member name="T:AssetManager.Data.Classes.MappableObject">
             <summary>
             Data mapper for classes tagged with <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/>
@@ -863,42 +877,6 @@
             Provides flashing window and taskbar support.
             </summary>
         </member>
-        <member name="T:AssetManager.Tools.ImageCaching">
-            <summary>
-             These methods allow me to add a single line after the
-             InitializeComponent call in a Forms constructor that will efficiently reassign
-             all control images set from the recklessly leaky 'spawn-a-new-instance-of-every-object' - ResourceManager.GetObject method.
-             By using a global HashTable to contain and pass out single instances of the images, I can
-             reduce memory usage by comical orders of magnitude.
-             ResourceManager.GetObject can "Die a prolonged and relentlessly agonizing death."
-            </summary>
-        </member>
-        <member name="M:AssetManager.Tools.ImageCaching.CacheControlImages(System.Object)">
-            <summary>
-            Controls passed to this method will have all their child Control images replaced with a single centrally cached instance of that image.
-            </summary>
-            <param name="control">Parent container object containing the controls you wish to have cached images applied to. Typically a Form.</param>
-        </member>
-        <member name="M:AssetManager.Tools.ImageCaching.ImageCache(System.Object,System.Drawing.Image)">
-            <summary>
-            This method manages the image cache. Images not found with the corresponding key are added to the cache. Returns a cached image.
-            </summary>
-            <param name="key">The identifying key for cached image. Can be anything, but a control.name of a frequently duplicated control is a good value.</param>
-            <param name="image">The image to be cached.</param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Tools.ImageCaching.SetToolStripImages(System.Windows.Forms.ToolStripItemCollection)">
-            <summary>
-            Recursively loops through a toolstrip and replaces any images found with a cached instance.
-            </summary>
-            <param name="tools"></param>
-        </member>
-        <member name="M:AssetManager.Tools.ImageCaching.SetControlImage(System.Object)">
-            <summary>
-            Sets a controls image to a cached instance. Checks the control type and sets the correct image property accordingly.
-            </summary>
-            <param name="ctl"></param>
-        </member>
         <member name="M:AssetManager.Tools.PowerShellWrapper.ExecuteRemotePSScript(System.String,System.Byte[],System.Net.NetworkCredential)">
             <summary>
             Execute the specified PowerShell script on the specified host.
@@ -924,11 +902,6 @@
             Gets or sets the Grid Theme for the DataGridView controls within the form.
             </summary>
             <returns></returns>
-        </member>
-        <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.CacheControlImages">
-            <summary>
-            Gets or sets the value indicating whether the controls will have their images cached with a global reference. See <see cref="T:AssetManager.Tools.ImageCaching"/>.
-            </summary>
         </member>
         <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.ParentForm">
             <summary>
