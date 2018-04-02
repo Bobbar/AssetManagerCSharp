@@ -315,15 +315,18 @@ namespace AssetManager.UserInterface.Forms.Sibi
             using (var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiDisplayYears))
             {
                 var years = new List<string>();
+
                 years.Add("All");
-                foreach (DataRow r in results.Rows)
+
+                foreach (DataRow row in results.Rows)
                 {
-                    var yr = DataConsistency.YearFromDate(DateTime.Parse(r[SibiRequestCols.DateStamp].ToString()));
+                    var yr = DateTime.Parse(row[SibiRequestCols.DateStamp].ToString()).Year.ToString();
                     if (!years.Contains(yr))
                     {
                         years.Add(yr);
                     }
                 }
+
                 DisplayYearComboBox.DataSource = years;
                 DisplayYearComboBox.SelectedIndex = 0;
                 rebuildingCombo = false;

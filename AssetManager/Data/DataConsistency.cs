@@ -1,76 +1,70 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AssetManager.Helpers;
+
 namespace AssetManager.Data
 {
-
-    static class DataConsistency
+    internal static class DataConsistency
     {
+        public const string DBDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
-        public const string strDBDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-        public static string NoNull(object dbVal)
+        /// <summary>
+        ///  Returns a <see cref="string.Empty"/> if the value is a <see cref="DBNull"/>.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string NoNull(object value)
         {
-            try
+            if (value == DBNull.Value)
             {
-                if (dbVal == DBNull.Value)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return dbVal.ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 return string.Empty;
+            }
+            else
+            {
+                return value.ToString();
             }
         }
 
         /// <summary>
         /// Trims, removes LF and CR chars and returns a DBNull if string is empty.
         /// </summary>
-        /// <param name="Value"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static object CleanDBValue(string Value)
+        public static object CleanDBValue(string value)
         {
-            if (Value == null) return DBNull.Value;
+            if (value == null) return DBNull.Value;
 
-            string CleanString = Regex.Replace(Value.Trim(), "[/\\r?\\n|\\r]+", string.Empty);
-            if (CleanString == string.Empty)
+            string cleanString = Regex.Replace(value.Trim(), "[/\\r?\\n|\\r]+", string.Empty);
+
+            if (cleanString == string.Empty)
             {
                 return DBNull.Value;
             }
             else
             {
-                return CleanString;
+                return cleanString;
             }
-
-            //  return (CleanString == string.Empty ? DBNull.Value : CleanString);
         }
 
-        public static bool ValidPhoneNumber(string PhoneNum)
+        public static bool ValidPhoneNumber(string value)
         {
-            if (!string.IsNullOrEmpty(PhoneNum.Trim()))
+            if (!string.IsNullOrEmpty(value.Trim()))
             {
                 const int nDigits = 10;
-                string fPhoneNum = "";
-                char[] NumArray = PhoneNum.ToCharArray();
-                foreach (char num in NumArray)
+                string phoneNum = "";
+                char[] numArray = value.ToCharArray();
+
+                foreach (char num in numArray)
                 {
-                    if (char.IsDigit(num))
-                        fPhoneNum += num.ToString();
+                    if (char.IsDigit(num)) phoneNum += num.ToString();
                 }
-                if (fPhoneNum.Length != nDigits)
-                {
-                    return false;
-                }
-                else
+
+                if (phoneNum.Length == nDigits)
                 {
                     return true;
                 }
+
+                return false;
             }
             else
             {
@@ -78,23 +72,18 @@ namespace AssetManager.Data
             }
         }
 
-        public static string YearFromDate(System.DateTime dtDate)
+        public static string DeviceHostnameFormat(string serial)
         {
-            return dtDate.Year.ToString();
+            return "D" + serial.Trim();
         }
 
-        public static string DeviceHostnameFormat(string Serial)
-        {
-            return "D" + Serial.Trim();
-        }
-
-        public static bool IsValidYear(string Year)
+        public static bool IsValidYear(string year)
         {
             try
             {
-                if (!string.IsNullOrEmpty(Year.Trim()))
+                if (!string.IsNullOrEmpty(year.Trim()))
                 {
-                    if (Enumerable.Range(1900, 200).Contains(Convert.ToInt32(Year)))
+                    if (Enumerable.Range(1900, 200).Contains(Convert.ToInt32(year)))
                     {
                         return true;
                     }
@@ -106,6 +95,5 @@ namespace AssetManager.Data
                 return false;
             }
         }
-
     }
 }

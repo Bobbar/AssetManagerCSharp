@@ -84,7 +84,7 @@ namespace AssetManager.Data.Communications
         /// <returns></returns>
         public static string SelectDevHistoricalEntriesOlderThan(string deviceGuid, DateTime startDate)
         {
-            return "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.DeviceGuid + " = '" + deviceGuid + "' AND " + HistoricalDevicesCols.ActionDateTime + " < '" + startDate.ToString(DataConsistency.strDBDateTimeFormat) + "' ORDER BY " + HistoricalDevicesCols.ActionDateTime + " DESC";
+            return "SELECT * FROM " + HistoricalDevicesCols.TableName + " WHERE " + HistoricalDevicesCols.DeviceGuid + " = '" + deviceGuid + "' AND " + HistoricalDevicesCols.ActionDateTime + " < '" + startDate.ToString(DataConsistency.DBDateTimeFormat) + "' ORDER BY " + HistoricalDevicesCols.ActionDateTime + " DESC";
         }
 
         /// <summary>

@@ -1072,7 +1072,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void PhoneNumberTextBox_Leave(object sender, EventArgs e)
         {
-            if (PhoneNumberTextBox.Text.Trim() != "" && !DataConsistency.ValidPhoneNumber(PhoneNumberTextBox.Text))
+            if (!DataConsistency.ValidPhoneNumber(PhoneNumberTextBox.Text))
             {
                 OtherFunctions.Message("Invalid phone number.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
             }
