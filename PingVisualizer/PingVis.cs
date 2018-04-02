@@ -54,7 +54,7 @@ namespace PingVisualizer
         private const int pingTimeOut = 1000;
         private const int maxBadPing = 300; // Ping time at which the bar color will be fully red.
         private const int maxViewScaleLines = 30; // Scale lines will fade out and stop being drawn after this is reached.
-        private const int goodPingInterval = 250;//1000;
+        private const int goodPingInterval = 1000;
         private const int noPingInterval = 3000;
         private int currentPingInterval = goodPingInterval;
 
