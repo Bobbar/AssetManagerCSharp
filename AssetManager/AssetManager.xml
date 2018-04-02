@@ -458,11 +458,18 @@
             </summary>
             <param name="DBRow">DataRow to be modified.</param>
         </member>
+        <member name="M:AssetManager.Data.DataConsistency.NoNull(System.Object)">
+            <summary>
+             Returns a <see cref="F:System.String.Empty"/> if the value is a <see cref="T:System.DBNull"/>.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
         <member name="M:AssetManager.Data.DataConsistency.CleanDBValue(System.String)">
             <summary>
             Trims, removes LF and CR chars and returns a DBNull if string is empty.
             </summary>
-            <param name="Value"></param>
+            <param name="value"></param>
             <returns></returns>
         </member>
         <member name="M:AssetManager.Helpers.ChildFormControl.FindFormByType(System.Type)">

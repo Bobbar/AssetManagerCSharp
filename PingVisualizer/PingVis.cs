@@ -54,7 +54,7 @@ namespace PingVisualizer
         private const int pingTimeOut = 1000;
         private const int maxBadPing = 300; // Ping time at which the bar color will be fully red.
         private const int maxViewScaleLines = 30; // Scale lines will fade out and stop being drawn after this is reached.
-        private const int goodPingInterval = 1000;
+        private const int goodPingInterval = 250;//1000;
         private const int noPingInterval = 3000;
         private int currentPingInterval = goodPingInterval;
 
@@ -136,7 +136,7 @@ namespace PingVisualizer
         private void InitControl(Control targetControl)
         {
             this.targetControl = targetControl;
-            
+
             targetControl.MouseWheel -= ControlMouseWheel;
             targetControl.MouseWheel += ControlMouseWheel;
 
@@ -409,17 +409,25 @@ namespace PingVisualizer
                 if (topIndex != newIdx)
                 {
                     topIndex = newIdx;
-                    Render(false, true);
+                    Render(true, true);
                 }
             }
         }
 
+        private int moves = 0;
+
         private void ControlMouseMove(object sender, MouseEventArgs e)
         {
+            moves++;
             mouseLocation = e.Location;
             if (mouseIsScrolling)
             {
-                Render();
+                if ((moves >= 3))
+                {
+                    moves = 0;
+                    Render();
+                }
+
             }
         }
 
@@ -463,7 +471,7 @@ namespace PingVisualizer
                     }
 
                     // Framerate limiter with override.
-                    if (!forceDraw && !CanDraw(Environment.TickCount))
+                    if (!forceDraw && !CanDraw(DateTime.Now.Ticks))
                     {
                         return;
                     }
@@ -639,7 +647,7 @@ namespace PingVisualizer
 
         private bool CanDraw(long timeTick)
         {
-            long elapTime = timeTick - lastDrawTime;
+            long elapTime = (timeTick - lastDrawTime) / 10000;
             float minFrameDelay = 1000 / (float)maxDrawRateFPS;
             if (elapTime >= minFrameDelay)
             {
