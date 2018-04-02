@@ -245,7 +245,6 @@ namespace AssetManager.UserInterface.CustomControls
         private void ExtendedForm_Load(object sender, EventArgs e)
         {
             parentForm?.AddChild(this);
-            MemoryTweaks.SetWorkingSet();
         }
 
         /// <summary>

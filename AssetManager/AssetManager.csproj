@@ -218,7 +218,6 @@
     <Compile Include="Data\NetworkInfo.cs" />
     <Compile Include="Tools\Deployment\DeployOffice.cs" />
     <Compile Include="Tools\TaskBarNotify.cs" />
-    <Compile Include="Tools\PerformanceTweaks\MemoryTweaks.cs" />
     <Compile Include="Tools\PowerShellWrapper.cs" />
     <Compile Include="Tools\ProgressCounter.cs" />
     <Compile Include="Tools\PsExec\PsExecWrapper.cs" />
