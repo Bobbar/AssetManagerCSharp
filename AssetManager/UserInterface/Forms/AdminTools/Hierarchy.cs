@@ -1,13 +1,13 @@
-﻿using AssetManager.Data.Classes;
+﻿using AssetManager.Data;
 using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
-using AssetManager.UserInterface.CustomControls;
 using AssetManager.Helpers;
+using AssetManager.UserInterface.CustomControls;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System;
 
 namespace AssetManager.UserInterface.Forms.AdminTools
 {
@@ -15,6 +15,8 @@ namespace AssetManager.UserInterface.Forms.AdminTools
     {
         private int employeesFound = 0;
         private List<Employee> employeeList;
+        private Employee currentSupervisor;
+        private EmployeeTree currentTree;
 
         public Hierarchy(ExtendedForm parentForm) : base(parentForm)
         {
@@ -30,6 +32,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                 // Prompt user for supervisor.
                 var supervisorMunis = MunisFunctions.MunisUserSearch(this);
                 var supervisorThis = new Employee(supervisorMunis.Name, supervisorMunis.Number);
+                currentSupervisor = supervisorThis;
                 // Setup form and display working spinner.
                 this.Text += " for " + supervisorThis.Name;
                 this.Show();
@@ -43,6 +46,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                 {
                     // Build employee hierarchy tree.
                     var empTree = GetSubordinates(supervisorThis);
+                    currentTree = empTree;
                     // Build node tree from the employee tree.
                     var nodeTree = new TreeNode(empTree.Employee.Name);
                     BuildTree(empTree, nodeTree);
@@ -63,6 +67,52 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                 workingSpinner.Visible = false;
                 employeeList.Clear();
                 employeeList = null;
+            }
+        }
+
+        /// <summary>
+        /// Collect and display a table containing all the devices associated with the current employee tree.
+        /// </summary>
+        private void ListDevices()
+        {
+            var deviceTable = new DataTable("devices");
+
+            GetDevices(currentTree, deviceTable);
+
+            if (deviceTable.Rows.Count > 0)
+            {
+                var newGridView = new GridForm(ParentForm);
+                newGridView.Text = "Supervisor Devices";
+                newGridView.AddGrid("devices", "Supervisor Devices - " + currentSupervisor.Name, deviceTable);
+                newGridView.Show();
+            }
+        }
+
+        /// <summary>
+        /// Recursively collects a table of all devices associated with the employees in the specified tree.
+        /// </summary>
+        /// <param name="tree"></param>
+        /// <param name="table"></param>
+        private void GetDevices(EmployeeTree tree, DataTable table)
+        {
+            if (table == null)
+            {
+                table = new DataTable("devices");
+            }
+
+            var results = DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.MunisEmpNum + " = '" + tree.Employee.Number + "'");
+
+            if (results.Rows.Count > 0)
+            {
+                table.Merge(results);
+            }
+
+            if (tree.Subordinates.Count > 0)
+            {
+                foreach (var sub in tree.Subordinates)
+                {
+                    GetDevices(sub, table);
+                }
             }
         }
 
@@ -165,6 +215,11 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             }
 
             return tree;
+        }
+
+        private void ListDevicesMenuItem_Click(object sender, EventArgs e)
+        {
+            ListDevices();
         }
 
         /// <summary>
