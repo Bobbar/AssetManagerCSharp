@@ -121,13 +121,29 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region Methods
 
+        /// <summary>
+        /// Disables double buffering for any future control instantiations.
+        /// </summary>
         public void DisableDoubleBuffering()
         {
             doubleBuffering = false;
         }
 
+        /// <summary>
+        /// Disables double buffering if the current environment is in the designer or a terminal session.
+        /// </summary>
+        private void SetDoubleBuffering()
+        {
+            var designMode = (System.Diagnostics.Process.GetCurrentProcess().ProcessName == "devenv");
+            var terminalSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
+
+            if (designMode || terminalSession) doubleBuffering = false;
+        }
+
         private void SubscribeEvents()
         {
+            SetDoubleBuffering();
+
             this.Load += ExtendedForm_Load;
             this.Disposed += ExtendedForm_Disposed;
             this.FormClosing += ExtendedForm_FormClosing;
@@ -195,16 +211,11 @@ namespace AssetManager.UserInterface.CustomControls
             // Enables double-buffering.
             get
             {
-                bool designMode = (System.Diagnostics.Process.GetCurrentProcess().ProcessName == "devenv");
-                bool terminalSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
                 CreateParams cp = base.CreateParams;
 
-                if (!designMode && !terminalSession)
+                if (doubleBuffering)
                 {
-                    if (doubleBuffering)
-                    {
-                        cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
-                    }
+                    cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
                 }
 
                 return cp;

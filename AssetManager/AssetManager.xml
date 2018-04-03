@@ -936,6 +936,16 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.DisableDoubleBuffering">
+            <summary>
+            Disables double buffering for any future control instantiations.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.SetDoubleBuffering">
+            <summary>
+            Disables double buffering if the current environment is in the designer or a terminal session.
+            </summary>
+        </member>
         <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.RefreshData">
             <summary>
             Override and add code to refresh data from the database.
