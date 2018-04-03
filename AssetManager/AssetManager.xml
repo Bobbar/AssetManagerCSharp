@@ -494,7 +494,7 @@
         </member>
         <member name="M:AssetManager.Helpers.MiscExtensions.DoubleBuffered(System.Windows.Forms.Control,System.Boolean)">
             <summary>
-            Sets 
+            Sets the protected Control.DoubleBuffered property. Does not set if we are running within a terminal session (RDP).
             </summary>
             <param name="control"></param>
             <param name="setting"></param>

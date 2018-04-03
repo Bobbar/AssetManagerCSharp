@@ -82,7 +82,7 @@ namespace AssetManager.UserInterface.CustomControls
             CommandBox.Text = string.Empty;
 
             // Add new unique commands to the combo items for later convenience.
-            if (!CommandBox.Items.Contains(command))
+            if (!CommandBox.Items.Contains(command) && !string.IsNullOrEmpty(command))
             {
                 CommandBox.Items.Add(command);
             }
@@ -201,10 +201,13 @@ namespace AssetManager.UserInterface.CustomControls
                 {
                     ExecuteCommand();
                 }
-                else if (e.KeyCode == Keys.Down)
-                {
-                }
             }
+        }
+
+        private void CommandBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            CommandBox.SelectionStart = CommandBox.Text.Length;
+            CommandBox.SelectionLength = 0;
         }
     }
 }

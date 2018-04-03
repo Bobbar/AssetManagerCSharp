@@ -155,6 +155,7 @@
             this.CommandBox.Size = new System.Drawing.Size(389, 23);
             this.CommandBox.TabIndex = 0;
             this.CommandBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CommandBox_KeyDown);
+            this.CommandBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.CommandBox_KeyUp);
             // 
             // PSExecCommandForm
             // 

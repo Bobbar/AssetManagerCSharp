@@ -16,11 +16,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RemoteToolsControl));
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.ShowIPButton = new System.Windows.Forms.Button();
             this.FlowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.PSExecButton = new System.Windows.Forms.Button();
             this.RestartDeviceButton = new System.Windows.Forms.PictureBox();
             this.BrowseFilesButton = new System.Windows.Forms.Button();
             this.StartRDPButton = new System.Windows.Forms.Button();
@@ -31,6 +30,8 @@
             this.UpdateChromeButton = new System.Windows.Forms.Button();
             this.DeployOfficeButton = new System.Windows.Forms.Button();
             this.NewDeployButton = new System.Windows.Forms.Button();
+            this.PSExecButton = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox.SuspendLayout();
             this.FlowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).BeginInit();
@@ -74,31 +75,17 @@
             this.FlowLayoutPanel1.Controls.Add(this.StartRDPButton);
             this.FlowLayoutPanel1.Controls.Add(this.EventViewerButton);
             this.FlowLayoutPanel1.Controls.Add(this.PowerShellButton);
+            this.FlowLayoutPanel1.Controls.Add(this.PSExecButton);
             this.FlowLayoutPanel1.Controls.Add(this.GKUpdateButton);
             this.FlowLayoutPanel1.Controls.Add(this.DeployTVButton);
             this.FlowLayoutPanel1.Controls.Add(this.UpdateChromeButton);
             this.FlowLayoutPanel1.Controls.Add(this.DeployOfficeButton);
             this.FlowLayoutPanel1.Controls.Add(this.NewDeployButton);
-            this.FlowLayoutPanel1.Controls.Add(this.PSExecButton);
             this.FlowLayoutPanel1.Location = new System.Drawing.Point(5, 14);
             this.FlowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.FlowLayoutPanel1.Name = "FlowLayoutPanel1";
             this.FlowLayoutPanel1.Size = new System.Drawing.Size(320, 86);
             this.FlowLayoutPanel1.TabIndex = 58;
-            // 
-            // PSExecButton
-            // 
-            this.PSExecButton.BackgroundImage = global::AssetManager.Properties.Resources.PsExecIcon;
-            this.PSExecButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.PSExecButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.PSExecButton.Location = new System.Drawing.Point(189, 48);
-            this.PSExecButton.Margin = new System.Windows.Forms.Padding(1);
-            this.PSExecButton.Name = "PSExecButton";
-            this.PSExecButton.Size = new System.Drawing.Size(45, 45);
-            this.PSExecButton.TabIndex = 63;
-            this.toolTip.SetToolTip(this.PSExecButton, "Execute PSExec Commands");
-            this.PSExecButton.UseVisualStyleBackColor = true;
-            this.PSExecButton.Click += new System.EventHandler(this.PSExecButton_Click);
             // 
             // RestartDeviceButton
             // 
@@ -174,7 +161,7 @@
             // 
             this.GKUpdateButton.BackgroundImage = global::AssetManager.Properties.Resources.GK__UpdateIcon;
             this.GKUpdateButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.GKUpdateButton.Location = new System.Drawing.Point(236, 1);
+            this.GKUpdateButton.Location = new System.Drawing.Point(1, 48);
             this.GKUpdateButton.Margin = new System.Windows.Forms.Padding(1);
             this.GKUpdateButton.Name = "GKUpdateButton";
             this.GKUpdateButton.Size = new System.Drawing.Size(45, 45);
@@ -188,7 +175,7 @@
             this.DeployTVButton.BackgroundImage = global::AssetManager.Properties.Resources.TeamViewerIcon;
             this.DeployTVButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.DeployTVButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.DeployTVButton.Location = new System.Drawing.Point(1, 48);
+            this.DeployTVButton.Location = new System.Drawing.Point(48, 48);
             this.DeployTVButton.Margin = new System.Windows.Forms.Padding(1);
             this.DeployTVButton.Name = "DeployTVButton";
             this.DeployTVButton.Size = new System.Drawing.Size(45, 45);
@@ -202,7 +189,7 @@
             this.UpdateChromeButton.BackgroundImage = global::AssetManager.Properties.Resources.ChromeIcon;
             this.UpdateChromeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.UpdateChromeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.UpdateChromeButton.Location = new System.Drawing.Point(48, 48);
+            this.UpdateChromeButton.Location = new System.Drawing.Point(95, 48);
             this.UpdateChromeButton.Margin = new System.Windows.Forms.Padding(1);
             this.UpdateChromeButton.Name = "UpdateChromeButton";
             this.UpdateChromeButton.Size = new System.Drawing.Size(45, 45);
@@ -216,7 +203,7 @@
             this.DeployOfficeButton.BackgroundImage = global::AssetManager.Properties.Resources.O365SquareLogo;
             this.DeployOfficeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.DeployOfficeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.DeployOfficeButton.Location = new System.Drawing.Point(95, 48);
+            this.DeployOfficeButton.Location = new System.Drawing.Point(142, 48);
             this.DeployOfficeButton.Margin = new System.Windows.Forms.Padding(1);
             this.DeployOfficeButton.Name = "DeployOfficeButton";
             this.DeployOfficeButton.Size = new System.Drawing.Size(45, 45);
@@ -230,7 +217,7 @@
             this.NewDeployButton.BackgroundImage = global::AssetManager.Properties.Resources.DeployIcon;
             this.NewDeployButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.NewDeployButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.NewDeployButton.Location = new System.Drawing.Point(142, 48);
+            this.NewDeployButton.Location = new System.Drawing.Point(189, 48);
             this.NewDeployButton.Margin = new System.Windows.Forms.Padding(1);
             this.NewDeployButton.Name = "NewDeployButton";
             this.NewDeployButton.Size = new System.Drawing.Size(45, 45);
@@ -238,6 +225,20 @@
             this.toolTip.SetToolTip(this.NewDeployButton, "Software Deployments");
             this.NewDeployButton.UseVisualStyleBackColor = true;
             this.NewDeployButton.Click += new System.EventHandler(this.NewDeployButton_Click);
+            // 
+            // PSExecButton
+            // 
+            this.PSExecButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PSExecButton.BackgroundImage")));
+            this.PSExecButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PSExecButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.PSExecButton.Location = new System.Drawing.Point(236, 1);
+            this.PSExecButton.Margin = new System.Windows.Forms.Padding(1);
+            this.PSExecButton.Name = "PSExecButton";
+            this.PSExecButton.Size = new System.Drawing.Size(45, 45);
+            this.PSExecButton.TabIndex = 63;
+            this.toolTip.SetToolTip(this.PSExecButton, "Execute PSExec Commands");
+            this.PSExecButton.UseVisualStyleBackColor = true;
+            this.PSExecButton.Click += new System.EventHandler(this.PSExecButton_Click);
             // 
             // RemoteToolsControl
             // 
