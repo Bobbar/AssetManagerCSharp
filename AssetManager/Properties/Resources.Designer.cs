@@ -24,7 +24,7 @@ namespace AssetManager.Properties {
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
         
-        private static global::System.Resources.ResourceManager resourceMan;
+        private static CachedResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
@@ -39,7 +39,7 @@ namespace AssetManager.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AssetManager.Properties.Resources", typeof(Resources).Assembly);
+                    CachedResourceManager temp = new CachedResourceManager("AssetManager.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
