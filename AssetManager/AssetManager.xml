@@ -779,6 +779,11 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:AssetManager.Properties.Resources.PsExecIcon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:AssetManager.Properties.Resources.RDPIcon">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -942,6 +947,39 @@
             </summary>
             <param name="parent"></param>
             <returns></returns>
+        </member>
+        <member name="T:AssetManager.UserInterface.CustomControls.PSExecCommandForm">
+            <summary>
+            Form and methods for sending manual PSExec commands to a device.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.PSExecCommandForm.ExecuteCommand">
+            <summary>
+            Executes the current command and displays the output.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.PSExecCommandForm.GetCommand">
+            <summary>
+            Builds and returns the final command from user input.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:AssetManager.UserInterface.CustomControls.PSExecCommandForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.PSExecCommandForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.PSExecCommandForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
         </member>
         <member name="T:AssetManager.UserInterface.CustomControls.UserPromptEventArgs">
             <summary>
@@ -1138,6 +1176,18 @@
             </summary>
             <param name="target">Form to add to ToolStrip.</param>
             <param name="targetMenuItem">Item to add the Form item to.</param>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.ListDevices">
+            <summary>
+            Collect and display a table containing all the devices associated with the current employee tree.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.GetDevices(AssetManager.UserInterface.Forms.AdminTools.Hierarchy.EmployeeTree,System.Data.DataTable)">
+            <summary>
+            Recursively collects a table of all devices associated with the employees in the specified tree.
+            </summary>
+            <param name="tree"></param>
+            <param name="table"></param>
         </member>
         <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.GetEmployeeList">
             <summary>

@@ -1,6 +1,5 @@
 using AssetManager.Data.Classes;
 using AssetManager.Helpers;
-using AssetManager.Tools;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -17,6 +16,7 @@ namespace AssetManager.UserInterface.CustomControls
         private List<ExtendedForm> childForms = new List<ExtendedForm>();
         private bool inheritTheme = true;
         private ExtendedForm parentForm;
+        private bool doubleBuffering = true;
 
         #endregion Fields
 
@@ -121,6 +121,11 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region Methods
 
+        public void DisableDoubleBuffering()
+        {
+            doubleBuffering = false;
+        }
+
         private void SubscribeEvents()
         {
             this.Load += ExtendedForm_Load;
@@ -176,6 +181,8 @@ namespace AssetManager.UserInterface.CustomControls
                 {
                     if (!child.OkToClose() || !child.OkToCloseChildren())
                     {
+                        child.WindowState = FormWindowState.Normal;
+                        child.Activate();
                         closeAllowed = false;
                     }
                 }
@@ -191,13 +198,15 @@ namespace AssetManager.UserInterface.CustomControls
                 bool designMode = (System.Diagnostics.Process.GetCurrentProcess().ProcessName == "devenv");
                 bool terminalSession = System.Windows.Forms.SystemInformation.TerminalServerSession;
                 CreateParams cp = base.CreateParams;
-                if (!designMode)
+
+                if (!designMode && !terminalSession)
                 {
-                    if (!terminalSession)
+                    if (doubleBuffering)
                     {
                         cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
                     }
                 }
+
                 return cp;
             }
         }

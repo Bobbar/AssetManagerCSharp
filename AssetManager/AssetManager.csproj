@@ -214,7 +214,9 @@
     <Compile Include="Tools\ActiveDirectory\ActiveDirectoryWrapper.cs" />
     <Compile Include="Tools\Deployment\DeployChrome.cs" />
     <Compile Include="Tools\Deployment\SoftwareDeployment.cs" />
-    <Compile Include="Tools\FileIcon.cs" />
+    <Compile Include="Tools\FileIcon.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Data\NetworkInfo.cs" />
     <Compile Include="Tools\Deployment\DeployOffice.cs" />
     <Compile Include="Tools\TaskBarNotify.cs" />
@@ -228,6 +230,12 @@
     </Compile>
     <Compile Include="UserInterface\CustomControls\ExtendedForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\CustomControls\RemoteTools\PSExecCommandForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\CustomControls\RemoteTools\PSExecCommandForm.Designer.cs">
+      <DependentUpon>PSExecCommandForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\CustomControls\RemoteTools\UserPromptEventArgs.cs" />
     <Compile Include="UserInterface\CustomControls\WindowList\IWindowList.cs" />
@@ -421,6 +429,9 @@
     <EmbeddedResource Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
     <EmbeddedResource Include="Resources\Exh_K-02_Asset_Disposal_Form.pdf" />
     <EmbeddedResource Include="Resources\Exh_K-03_Asset_Transfer_Form.pdf" />
+    <EmbeddedResource Include="UserInterface\CustomControls\RemoteTools\PSExecCommandForm.resx">
+      <DependentUpon>PSExecCommandForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\CustomControls\RemoteTools\RemoteToolsControl.resx">
       <DependentUpon>RemoteToolsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -622,6 +633,7 @@
     <None Include="Resources\O365SquareLogo.png" />
     <None Include="Resources\DeployIcon.png" />
     <None Include="Resources\PowerShellIcon2.png" />
+    <None Include="Resources\PsExecIcon.png" />
     <Content Include="Tools\PsExec\PsExec.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

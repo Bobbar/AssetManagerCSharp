@@ -59,55 +59,83 @@ namespace AssetManager.Tools
 
         public async Task<int> ExecuteRemoteCommand(Device targetDevice, string command)
         {
+            return await ExecuteRemoteCommand(targetDevice, command, !SecurityTools.IsAdministrator());
+        }
+
+        public async Task<int> ExecuteRemoteCommand(Device targetDevice, string command, bool runAsAdmin = true)
+        {
             int exitCode = -1;
 
-            exitCode = await Task.Run(() =>
-              {
-                  using (Process p = new Process())
-                  {
-                      currentProcess = p;
+            if (currentProcess != null)
+            {
+                throw new Exception("A process is already running.");
+            }
 
-                      if (!SecurityTools.IsAdministrator())
-                      {
-                          p.StartInfo.Domain = SecurityTools.AdminCreds.Domain;
-                          p.StartInfo.UserName = SecurityTools.AdminCreds.UserName;
-                          p.StartInfo.Password = SecurityTools.AdminCreds.SecurePassword;
-                      }
+            try
+            {
+                exitCode = await Task.Run(() =>
+                {
+                    using (Process p = new Process())
+                    {
+                        currentProcess = p;
 
-                      p.StartInfo.UseShellExecute = false;
-                      p.StartInfo.RedirectStandardOutput = true;
-                      p.StartInfo.RedirectStandardError = true;
-                      p.StartInfo.CreateNoWindow = true;
-                      p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                      p.StartInfo.WorkingDirectory = Paths.PsExecTempDir;
-                      p.StartInfo.FileName = Paths.PsExecTempPath;
+                        if (runAsAdmin)
+                        {
+                            p.StartInfo.Domain = SecurityTools.AdminCreds.Domain;
+                            p.StartInfo.UserName = SecurityTools.AdminCreds.UserName;
+                            p.StartInfo.Password = SecurityTools.AdminCreds.SecurePassword;
+                        }
 
-                      p.StartInfo.Arguments = "\\\\" + targetDevice.HostName + " -accepteula -nobanner -h -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
+                        p.StartInfo.UseShellExecute = false;
+                        p.StartInfo.RedirectStandardOutput = true;
+                        p.StartInfo.RedirectStandardError = true;
+                        p.StartInfo.CreateNoWindow = true;
+                        p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                        p.StartInfo.WorkingDirectory = Paths.PsExecTempDir;
+                        p.StartInfo.FileName = Paths.PsExecTempPath;
 
-                      p.OutputDataReceived += P_OutputDataReceived;
-                      p.ErrorDataReceived += P_ErrorDataReceived;
+                        p.StartInfo.Arguments = "\\\\" + targetDevice.HostName + " -accepteula -nobanner -h -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
 
-                      p.Start();
+                        p.OutputDataReceived += P_OutputDataReceived;
+                        p.ErrorDataReceived += P_ErrorDataReceived;
 
-                      p.BeginOutputReadLine();
-                      p.BeginErrorReadLine();
+                        p.Start();
 
+                        p.BeginOutputReadLine();
+                        p.BeginErrorReadLine();
 
-                      p.WaitForExit();
+                        p.WaitForExit();
 
-                      return p.ExitCode;
-                  }
-              });
+                        return p.ExitCode;
+                    }
+                });
 
-            return exitCode;
+                return exitCode;
+            }
+            finally
+            {
+                StopProcess();
+            }
         }
 
         public void StopProcess()
         {
             if (currentProcess != null)
             {
-                currentProcess.Kill();
-                currentProcess.Close();
+                try
+                {
+                    if (!currentProcess.HasExited)
+                    {
+                        currentProcess.Kill();
+                        currentProcess.Close();
+                    }
+                    currentProcess = null;
+                }
+                catch (Exception ex)
+                {
+                    currentProcess = null;
+                    throw ex;
+                }
             }
         }
 

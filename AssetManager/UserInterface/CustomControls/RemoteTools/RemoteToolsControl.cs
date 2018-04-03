@@ -424,6 +424,14 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
+        private void StartPsExecWindow(Device targetDevice)
+        {
+            if (SecurityTools.VerifyAdminCreds())
+            {
+                new PSExecCommandForm(hostForm, targetDevice);
+            }
+        }
+
         private void ShowIP()
         {
             if (pingVis.CurrentResult != null)
@@ -544,6 +552,13 @@ namespace AssetManager.UserInterface.CustomControls
             StartPowerShellSession(this.device);
         }
 
+        private void PSExecButton_Click(object sender, EventArgs e)
+        {
+            StartPsExecWindow(this.Device);
+        }
+
         #endregion Control Events
+
+
     }
 }

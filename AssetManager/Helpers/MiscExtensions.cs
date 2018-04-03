@@ -7,8 +7,9 @@ using AssetManager.UserInterface.CustomControls;
 namespace AssetManager.Helpers
 {
     internal static class MiscExtensions
-
     {
+        // METODO: Create a single extension method for the base Control type.
+
         public static void DoubleBufferedDataGrid(this DataGridView dgv, bool setting)
         {
             Type dgvType = dgv.GetType();
