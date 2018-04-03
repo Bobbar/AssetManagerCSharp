@@ -88,7 +88,7 @@ namespace AssetManager.UserInterface.Forms
             InitializeComponent();
             AttachCountChanged += attachCountChangeHandler;
             AttachGrid.DefaultCellStyle.SelectionBackColor = GridTheme.CellSelectColor;
-            AttachGrid.DoubleBufferedDataGrid(true);
+            AttachGrid.DoubleBuffered(true);
             SetStatusBarText("Idle...");
             attachmentColumns = attachTable;
             if (!ReferenceEquals(attachDataObject, null))

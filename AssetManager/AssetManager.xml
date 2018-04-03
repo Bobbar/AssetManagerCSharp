@@ -492,6 +492,13 @@
             <param name="columns"></param>
             <returns></returns>
         </member>
+        <member name="M:AssetManager.Helpers.MiscExtensions.DoubleBuffered(System.Windows.Forms.Control,System.Boolean)">
+            <summary>
+            Sets 
+            </summary>
+            <param name="control"></param>
+            <param name="setting"></param>
+        </member>
         <member name="M:AssetManager.Helpers.MiscExtensions.AddParameterWithValue(System.Data.Common.DbCommand,System.String,System.Object)">
             <summary>
             Adds a parameter to the command.

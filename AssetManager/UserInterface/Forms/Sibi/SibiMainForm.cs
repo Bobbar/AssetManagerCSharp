@@ -181,7 +181,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 this.Icon = Properties.Resources.sibi_icon;
-                SibiResultGrid.DoubleBufferedDataGrid(true);
+                SibiResultGrid.DoubleBuffered(true);
                 this.GridTheme = new GridTheme(Colors.HighlightBlue, Colors.SibiSelectColor, Colors.SibiSelectAltColor, SibiResultGrid.DefaultCellStyle.BackColor);
                 StyleFunctions.SetGridStyle(SibiResultGrid, this.GridTheme);
                 ToolStrip1.BackColor = Colors.SibiToolBarColor;

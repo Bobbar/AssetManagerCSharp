@@ -656,8 +656,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             controlParser = new DBControlParser(this);
             controlParser.EnableFieldValidation();
 
-            RequestItemsGrid.DoubleBufferedDataGrid(true);
-            NotesGrid.DoubleBufferedDataGrid(true);
+            RequestItemsGrid.DoubleBuffered(true);
+            NotesGrid.DoubleBuffered(true);
             munisToolBar.InsertMunisDropDown(ToolStrip);
             windowList.InsertWindowList(ToolStrip);
             StyleFunctions.SetGridStyle(RequestItemsGrid, GridTheme);

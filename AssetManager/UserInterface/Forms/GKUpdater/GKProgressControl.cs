@@ -62,7 +62,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             MyUpdater.StatusUpdate += GKStatusUpdateEvent;
             MyUpdater.UpdateComplete += GKUpdate_Complete;
             MyUpdater.UpdateCanceled += GKUpdate_Cancelled;
-            Panel1.DoubleBufferedPanel(true);
+            Panel1.DoubleBuffered(true);
         }
 
         public GKProgressControl(Form parentForm, Device device, bool createMissingDirs, string sourcePath, string destPath, int seq = 0)
@@ -90,7 +90,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             MyUpdater.StatusUpdate += GKStatusUpdateEvent;
             MyUpdater.UpdateComplete += GKUpdate_Complete;
             MyUpdater.UpdateCanceled += GKUpdate_Cancelled;
-            Panel1.DoubleBufferedPanel(true);
+            Panel1.DoubleBuffered(true);
         }
 
         public event EventHandler CriticalStopError;

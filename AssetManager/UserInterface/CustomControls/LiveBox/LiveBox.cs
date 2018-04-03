@@ -173,7 +173,7 @@ namespace AssetManager.UserInterface.CustomControls
             liveListBox.KeyDown += LiveBox_KeyDown;
             liveListBox.LostFocus += LiveBox_LostFocus;
             liveListBox.PreviewKeyDown += LiveBox_PreviewKeyDown;
-            liveListBox.DoubleBufferedListBox(true);
+            liveListBox.DoubleBuffered(true);
             liveListBox.Visible = false;
             currentLiveBoxArgs = new LiveBoxArgs();
             SetStyle();

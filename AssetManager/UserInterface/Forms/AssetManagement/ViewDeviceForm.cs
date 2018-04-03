@@ -84,8 +84,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
             RefreshCombos();
 
-            DataGridHistory.DoubleBufferedDataGrid(true);
-            TrackingGrid.DoubleBufferedDataGrid(true);
+            DataGridHistory.DoubleBuffered(true);
+            TrackingGrid.DoubleBuffered(true);
 
             SetEditMode(false);
 

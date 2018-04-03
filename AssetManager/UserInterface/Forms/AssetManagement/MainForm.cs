@@ -71,7 +71,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
             DateTimeLabel.Text = DateTime.Now.ToString();
             ToolStrip1.BackColor = Colors.AssetToolBarColor;
-            ResultGrid.DoubleBufferedDataGrid(true);
+            ResultGrid.DoubleBuffered(true);
             CheckForAdmin();
             GetGridStyles();
 

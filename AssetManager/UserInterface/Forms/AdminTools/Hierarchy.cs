@@ -21,7 +21,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         public Hierarchy(ExtendedForm parentForm) : base(parentForm)
         {
             InitializeComponent();
-            HierarchyTree.DoubleBufferedTreeView(true);
+            HierarchyTree.DoubleBuffered(true);
             StartSearch();
         }
 
