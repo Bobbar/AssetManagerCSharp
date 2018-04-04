@@ -838,6 +838,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.InfoDataSplitter.Size = new System.Drawing.Size(1268, 288);
             this.InfoDataSplitter.SplitterDistance = 833;
             this.InfoDataSplitter.TabIndex = 55;
+            this.InfoDataSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.splitCont_MouseDown);
+            this.InfoDataSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.splitCont_MouseMove);
+            this.InfoDataSplitter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.splitCont_MouseUp);
             // 
             // FieldTabs
             // 
