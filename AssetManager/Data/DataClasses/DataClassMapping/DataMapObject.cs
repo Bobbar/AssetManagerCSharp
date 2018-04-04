@@ -85,34 +85,30 @@ namespace AssetManager.Data.Classes
         /// <param name="row">DataRow with columns matching the <see cref="DataColumnNameAttribute"/> in the objects properties.</param>
         private void MapProperty(object obj, DataRow row)
         {
-            //Collect list of all properties in the object class.
-            List<System.Reflection.PropertyInfo> Props = (obj.GetType().GetProperties().ToList());
+            // Collect list of all properties in the object class.
+            List<System.Reflection.PropertyInfo> props = obj.GetType().GetProperties().ToList();
 
-            //Iterate through the properties.
-
-            foreach (System.Reflection.PropertyInfo prop in Props)
+            // Iterate through the properties.
+            foreach (var prop in props)
             {
-                //Check if the property contains a target attribute.
-
+                // Check if the property contains a target attribute.
                 if (prop.GetCustomAttributes(typeof(DataColumnNameAttribute), true).Length > 0)
                 {
-                    //Get the column name attached to the property.
-                    var propColumn = ((DataColumnNameAttribute)prop.GetCustomAttributes(false)[0]).ColumnName;
+                    // Get the column name attached to the property.
+                    var columnName = ((DataColumnNameAttribute)prop.GetCustomAttributes(false)[0]).ColumnName;
 
-                    //Make sure the DataTable contains a matching column name.
-
-                    if (row.Table.Columns.Contains(propColumn))
+                    // Make sure the DataTable contains a matching column name.
+                    if (row.Table.Columns.Contains(columnName))
                     {
-                        //Check the type of the propery and set its value accordingly.
-
+                        // Check the type of the propery and set its value accordingly.
                         if (prop.PropertyType == typeof(string))
                         {
-                            prop.SetValue(obj, row[propColumn].ToString(), null);
+                            prop.SetValue(obj, row[columnName].ToString(), null);
                         }
                         else if (prop.PropertyType == typeof(DateTime))
                         {
-                            DateTime pDate = default(DateTime);
-                            if (DateTime.TryParse(DataConsistency.NoNull(row[propColumn].ToString()), out pDate))
+                            var pDate = new DateTime();
+                            if (DateTime.TryParse(DataConsistency.NoNull(row[columnName].ToString()), out pDate))
                             {
                                 prop.SetValue(obj, pDate);
                             }
@@ -123,26 +119,27 @@ namespace AssetManager.Data.Classes
                         }
                         else if (prop.PropertyType == typeof(bool))
                         {
-                            prop.SetValue(obj, Convert.ToBoolean(row[propColumn]));
+                            prop.SetValue(obj, Convert.ToBoolean(row[columnName]));
                         }
                         else if (prop.PropertyType == typeof(int))
                         {
-                            prop.SetValue(obj, Convert.ToInt32(row[propColumn]));
+                            prop.SetValue(obj, Convert.ToInt32(row[columnName]));
                         }
                         else
                         {
-                            //Throw an error if type is unexpected.
+                            // Throw an error if type is unexpected.
                             Debug.Print(prop.PropertyType.ToString());
                             throw new Exception("Unexpected property type.");
                         }
                     }
-                    //If the property does not contain a target attribute, check to see if it is a nested class inheriting the DataMapping class.
+
                 }
                 else
                 {
+                    // If the property does not contain a target attribute, check to see if it is a nested class inheriting the DataMapping class.
                     if (typeof(MappableObject).IsAssignableFrom(prop.PropertyType))
                     {
-                        //Recurse with nested DataMapping properties.
+                        // Recurse with nested DataMapping properties.
                         var nestObject = prop.GetValue(obj, null);
                         MapProperty(nestObject, row);
                         // MapProperty(prop.GetValue(obj, null), row);
@@ -153,15 +150,11 @@ namespace AssetManager.Data.Classes
 
         #region IDisposable Support
 
-        private bool disposedValue = false; // To detect redundant calls
+        private bool disposedValue = false;
 
-        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -170,22 +163,12 @@ namespace AssetManager.Data.Classes
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
-                   if (PopulatingTable != null) PopulatingTable.Dispose();
+                    populatingTable?.Dispose();
                 }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
 
                 disposedValue = true;
             }
         }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~DataMappingObject() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
 
         #endregion IDisposable Support
 

@@ -422,6 +422,9 @@ namespace PingVisualizer
             mouseLocation = e.Location;
             if (mouseIsScrolling)
             {
+                // Limit the rate of Render calls.
+                // This event can fire very rapidly which can flood the Renderer
+                // preventing other calls from getting past the frame rate limiter.
                 if ((moves >= 3))
                 {
                     moves = 0;
