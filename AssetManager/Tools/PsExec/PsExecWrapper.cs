@@ -131,6 +131,18 @@ namespace AssetManager.Tools
                     }
                     currentProcess = null;
                 }
+                catch (InvalidOperationException ioe)
+                {
+                    // This occures when the process has already exited.
+                    if (ioe.HResult == -2146233079)
+                    {
+                        currentProcess = null;
+                    }
+                    else
+                    {
+                        throw ioe;
+                    }
+                }
                 catch (Exception ex)
                 {
                     currentProcess = null;
