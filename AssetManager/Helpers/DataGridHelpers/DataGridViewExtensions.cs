@@ -42,10 +42,10 @@ namespace AssetManager.Helpers
         /// </summary>
         /// <param name="grid"></param>
         /// <param name="parentForm"></param>
-        public static void CopyToGridForm(this DataGridView grid, ExtendedForm parentForm)
+        public static void CopyToGridForm(this DataGridView grid, ExtendedForm parentForm, DoubleClickAction type = DoubleClickAction.ViewOnly)
         {
             GridForm NewGridForm = new GridForm(parentForm, grid.Name + " Copy");
-            NewGridForm.AddGrid(grid.Name, grid.Name, ((DataTable)grid.DataSource).Copy());
+            NewGridForm.AddGrid(grid.Name, grid.Name, type, ((DataTable)grid.DataSource).Copy());
             NewGridForm.Show();
         }
 

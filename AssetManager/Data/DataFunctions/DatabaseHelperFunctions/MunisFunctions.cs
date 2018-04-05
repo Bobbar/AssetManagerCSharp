@@ -537,7 +537,7 @@ FROM poheader";
                     }
                     else
                     {
-                        newGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", ReqLineItemsTable);
+                        newGridForm.AddGrid("ReqLineGrid", "Requisition Line Items:", DoubleClickAction.SelectValue, ReqLineItemsTable);
                         newGridForm.ShowDialog(parentForm);
                         if (newGridForm.DialogResult == DialogResult.OK)
                         {

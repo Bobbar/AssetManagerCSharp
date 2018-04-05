@@ -529,7 +529,7 @@
             <param name="grid"></param>
             <param name="includeHeaders">False to exclude column headers. Default: True. </param>
         </member>
-        <member name="M:AssetManager.Helpers.DataGridViewExtensions.CopyToGridForm(System.Windows.Forms.DataGridView,AssetManager.UserInterface.CustomControls.ExtendedForm)">
+        <member name="M:AssetManager.Helpers.DataGridViewExtensions.CopyToGridForm(System.Windows.Forms.DataGridView,AssetManager.UserInterface.CustomControls.ExtendedForm,AssetManager.UserInterface.Forms.DoubleClickAction)">
             <summary>
             Sends a copy of this grid to a new <see cref="T:AssetManager.UserInterface.Forms.GridForm"/> instance.
             </summary>

@@ -775,7 +775,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 if (results != null)
                 {
                     var newGridForm = new GridForm(this, "Devices By Supervisor");
-                    newGridForm.AddGrid("DevBySup", "Devices", results);
+                    newGridForm.AddGrid("DevBySup", "Devices", DoubleClickAction.ViewDevice, results);
                     newGridForm.Show();
                 }
             }
@@ -876,7 +876,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void SendToGridFormMemuItem_Click(object sender, EventArgs e)
         {
-            ResultGrid.CopyToGridForm(this);
+            ResultGrid.CopyToGridForm(this, DoubleClickAction.ViewDevice);
         }
 
         private void UserManagerMenuItem_Click(object sender, EventArgs e)

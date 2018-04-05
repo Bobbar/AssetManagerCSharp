@@ -377,12 +377,13 @@
     <Compile Include="UserInterface\Forms\GKUpdater\PackFileForm.Designer.cs">
       <DependentUpon>PackFileForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\GridForm.cs">
+    <Compile Include="UserInterface\Forms\GridForm\GridForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\Forms\GridForm.Designer.cs">
+    <Compile Include="UserInterface\Forms\GridForm\GridForm.Designer.cs">
       <DependentUpon>GridForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserInterface\Forms\GridForm\GridType.cs" />
     <Compile Include="UserInterface\Forms\Sibi\SibiMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -491,7 +492,7 @@
     <EmbeddedResource Include="UserInterface\Forms\GKUpdater\PackFileForm.resx">
       <DependentUpon>PackFileForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\GridForm.resx">
+    <EmbeddedResource Include="UserInterface\Forms\GridForm\GridForm.resx">
       <DependentUpon>GridForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Sibi\SibiMainForm.resx">

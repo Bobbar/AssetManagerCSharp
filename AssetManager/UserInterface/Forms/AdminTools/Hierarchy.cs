@@ -86,7 +86,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             {
                 var newGridView = new GridForm(ParentForm);
                 newGridView.Text = "Supervisor Devices";
-                newGridView.AddGrid("devices", "Supervisor Devices - " + currentSupervisor.Name, deviceTable);
+                newGridView.AddGrid("devices", "Supervisor Devices - " + currentSupervisor.Name, DoubleClickAction.ViewDevice, deviceTable);
                 newGridView.Show();
             }
         }

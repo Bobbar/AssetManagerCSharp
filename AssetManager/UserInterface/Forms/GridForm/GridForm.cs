@@ -1,8 +1,9 @@
+using AssetManager.Data;
+using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
 
@@ -23,14 +24,9 @@ namespace AssetManager.UserInterface.Forms
 
         public GridForm(ExtendedForm parentForm, string title = "") : base(parentForm)
         {
-            Load += GridForm_Load;
-            Resize += GridForm_Resize;
-            Closing += GridForm_Closing;
-            // This call is required by the designer.
             InitializeComponent();
-            if (!string.IsNullOrEmpty(title))
-                this.Text = title;
-            // Add any initialization after the InitializeComponent() call.
+            if (!string.IsNullOrEmpty(title)) this.Text = title;
+
             GridPanel.DoubleBuffered(true);
             Panel1.DoubleBuffered(true);
             GridPanel.RowStyles.Clear();
@@ -56,9 +52,16 @@ namespace AssetManager.UserInterface.Forms
 
         public void AddGrid(string name, string label, DataTable datatable)
         {
-            var NewGrid = GetNewGrid(name, label + " (" + datatable.Rows.Count.ToString() + " rows)");
-            FillGrid(NewGrid, datatable);
-            gridList.Add(NewGrid);
+            var newGrid = GetNewGrid(name, label + " (" + datatable.Rows.Count.ToString() + " rows)", DoubleClickAction.ViewOnly);
+            FillGrid(newGrid, datatable);
+            gridList.Add(newGrid);
+        }
+
+        public void AddGrid(string name, string label, DoubleClickAction type, DataTable datatable)
+        {
+            var newGrid = GetNewGrid(name, label + " (" + datatable.Rows.Count.ToString() + " rows)", type);
+            FillGrid(newGrid, datatable);
+            gridList.Add(newGrid);
         }
 
         private void CopySelectedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -99,11 +102,11 @@ namespace AssetManager.UserInterface.Forms
             return null;
         }
 
-        private DataGridView GetNewGrid(string name, string label)
+        private DataGridView GetNewGrid(string name, string label, DoubleClickAction type)
         {
             DataGridView newGrid = new DataGridView();
+            var gridLabel = label;
             newGrid.Name = name;
-            newGrid.Tag = label;
             newGrid.Dock = DockStyle.Fill;
             newGrid.RowHeadersVisible = false;
             newGrid.EditMode = DataGridViewEditMode.EditProgrammatically;
@@ -117,16 +120,46 @@ namespace AssetManager.UserInterface.Forms
             StyleFunctions.SetGridStyle(newGrid, ParentForm.GridTheme);
             newGrid.CellLeave += GridLeaveCell;
             newGrid.CellEnter += GridEnterCell;
-            newGrid.CellDoubleClick += GridDoubleClickCell;
+
+            // Set double-click event according to specified action.
+            switch (type)
+            {
+                case DoubleClickAction.ViewDevice:
+                    gridLabel += " - [Double-Click to view]";
+                    newGrid.CellDoubleClick += DoubleClickDevice;
+                    break;
+
+                case DoubleClickAction.SelectValue:
+                    newGrid.CellDoubleClick += DoubleClickSelect;
+                    break;
+
+                case DoubleClickAction.ViewOnly:
+                    // Don't subscribe double-click event.
+                    break;
+            }
+
+            newGrid.Tag = gridLabel;
             newGrid.DoubleBuffered(true);
             return newGrid;
         }
 
-        private void GridDoubleClickCell(object sender, EventArgs e)
+        private void DoubleClickSelect(object sender, EventArgs e)
         {
-            DataGridView SenderGrid = (DataGridView)sender;
-            lastDoubleClickRow = SenderGrid.CurrentRow;
+            var clickedGrid = (DataGridView)sender;
+            lastDoubleClickRow = clickedGrid.CurrentRow;
             this.DialogResult = DialogResult.OK;
+        }
+
+        private void DoubleClickDevice(object sender, EventArgs e)
+        {
+            var clickedGrid = (DataGridView)sender;
+            var selectedGuid = clickedGrid.CurrentRowStringValue(DevicesBaseCols.DeviceGuid);
+
+            if (!string.IsNullOrEmpty(selectedGuid))
+            {
+                var device = new Device(selectedGuid);
+                ChildFormControl.LookupDevice(this.ParentForm, device);
+            }
         }
 
         private void GridEnterCell(object sender, DataGridViewCellEventArgs e)
@@ -135,16 +168,6 @@ namespace AssetManager.UserInterface.Forms
             {
                 StyleFunctions.HighlightRow((DataGridView)sender, this.GridTheme, e.RowIndex);
             }
-        }
-
-        private void GridForm_Closing(object sender, CancelEventArgs e)
-        {
-            if (!Modal) this.Dispose();
-        }
-
-        private void GridForm_Resize(object sender, EventArgs e)
-        {
-            if (!gridFilling) ResizeGridPanel();
         }
 
         private int GridHeight()
@@ -159,11 +182,6 @@ namespace AssetManager.UserInterface.Forms
             {
                 return CalcHeight;
             }
-        }
-
-        private void GridLeaveCell(object sender, DataGridViewCellEventArgs e)
-        {
-            StyleFunctions.LeaveRow((DataGridView)sender, e.RowIndex);
         }
 
         private void ResizeGridPanel()
@@ -184,6 +202,21 @@ namespace AssetManager.UserInterface.Forms
                 grid.FastAutoSizeColumns();
                 grid.AllowUserToResizeColumns = true;
             }
+        }
+
+        private void GridForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!Modal) this.Dispose();
+        }
+
+        private void GridForm_Resize(object sender, EventArgs e)
+        {
+            if (!gridFilling) ResizeGridPanel();
+        }
+
+        private void GridLeaveCell(object sender, DataGridViewCellEventArgs e)
+        {
+            StyleFunctions.LeaveRow((DataGridView)sender, e.RowIndex);
         }
 
         private void SendToNewGridForm_Click(object sender, EventArgs e)
@@ -223,7 +256,6 @@ namespace AssetManager.UserInterface.Forms
                 base.Dispose(disposing);
             }
         }
-
 
         #endregion "Methods"
     }

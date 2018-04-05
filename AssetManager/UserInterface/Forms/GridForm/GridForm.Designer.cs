@@ -25,14 +25,14 @@ namespace AssetManager.UserInterface.Forms
             // 
             // GridPanel
             // 
-            this.GridPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.GridPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GridPanel.AutoSize = true;
             this.GridPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.GridPanel.ColumnCount = 1;
             this.GridPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.GridPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.GridPanel.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            this.GridPanel.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GridPanel.Location = new System.Drawing.Point(3, 3);
             this.GridPanel.Name = "GridPanel";
             this.GridPanel.RowCount = 1;
@@ -50,8 +50,8 @@ namespace AssetManager.UserInterface.Forms
             // 
             // Panel1
             // 
-            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel1.AutoScroll = true;
             this.Panel1.AutoScrollMargin = new System.Drawing.Size(0, 20);
@@ -93,12 +93,15 @@ namespace AssetManager.UserInterface.Forms
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this.StatusStrip1);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(439, 282);
             this.Name = "GridForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "GridForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GridForm_FormClosing);
+            this.Load += new System.EventHandler(this.GridForm_Load);
+            this.Resize += new System.EventHandler(this.GridForm_Resize);
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
             this.PopUpMenu.ResumeLayout(false);
