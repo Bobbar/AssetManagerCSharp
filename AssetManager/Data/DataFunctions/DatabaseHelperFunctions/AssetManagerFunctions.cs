@@ -370,40 +370,6 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static DataTable DevicesBySupervisor(ExtendedForm parentForm)
-        {
-            try
-            {
-                var supervisor = MunisFunctions.MunisUserSearch(parentForm);
-                if (!string.IsNullOrEmpty(supervisor.Number))
-                {
-                    OtherFunctions.SetWaitCursor(true, parentForm);
-
-                    using (DataTable deviceList = new DataTable())
-                    using (DataTable empList = MunisFunctions.ListOfEmpsBySup(supervisor.Number))
-                    {
-                        foreach (DataRow r in empList.Rows)
-                        {
-                            using (DataTable tmpTable = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevicesByEmpNum(r["a_employee_number"].ToString())))
-                            {
-                                deviceList.Merge(tmpTable);
-                            }
-                        }
-                        return deviceList;
-                    }
-
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            finally
-            {
-                OtherFunctions.SetWaitCursor(false, parentForm);
-            }
-        }
-
         public static bool IsEmployeeInDB(string empNumber)
         {
             string empName = GetSqlValue(EmployeesCols.TableName, EmployeesCols.Number, empNumber, EmployeesCols.Name);

@@ -59,7 +59,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                     HierarchyTree.Nodes.Add(nodeTree);
                     HierarchyTree.Nodes[0].Expand();
                     // Report completion.
-                    statusLabel.Text = "Done. " + employeesFound + " employees found.";
+                    statusLabel.Text = employeesFound + " employees found.";
                 }
             }
             catch (Exception ex)
@@ -78,9 +78,13 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         /// <summary>
         /// Collect and display a table containing all the devices associated with the current employee tree.
         /// </summary>
-        private void ListDevices()
+        private async void ShowDevices()
         {
-            var deviceTable = GetDevicesTable(currentTree);
+            OtherFunctions.SetWaitCursor(true, this);
+
+            var deviceTable = await Task.Run(() => { return GetDevicesTable(currentTree); });
+
+            OtherFunctions.SetWaitCursor(false, this);
 
             if (deviceTable.Rows.Count > 0)
             {
@@ -225,9 +229,9 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             return tree;
         }
 
-        private void ListDevicesMenuItem_Click(object sender, EventArgs e)
+        private void ShowDevicesDropDown_Click(object sender, EventArgs e)
         {
-            ListDevices();
+            ShowDevices();
         }
 
         /// <summary>

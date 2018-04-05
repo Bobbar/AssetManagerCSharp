@@ -359,7 +359,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.HistoricalCheckBox.AutoSize = true;
             this.HistoricalCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HistoricalCheckBox.Location = new System.Drawing.Point(433, 127);
+            this.HistoricalCheckBox.Location = new System.Drawing.Point(418, 127);
             this.HistoricalCheckBox.Name = "HistoricalCheckBox";
             this.HistoricalCheckBox.Size = new System.Drawing.Size(89, 22);
             this.HistoricalCheckBox.TabIndex = 56;
@@ -368,11 +368,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // DevBySupButton
             // 
-            this.DevBySupButton.Location = new System.Drawing.Point(551, 115);
+            this.DevBySupButton.Location = new System.Drawing.Point(528, 113);
             this.DevBySupButton.Name = "DevBySupButton";
-            this.DevBySupButton.Size = new System.Drawing.Size(125, 44);
+            this.DevBySupButton.Size = new System.Drawing.Size(163, 44);
             this.DevBySupButton.TabIndex = 55;
-            this.DevBySupButton.Text = "Devices By Supervisor";
+            this.DevBySupButton.Text = "Supervisor Hierarchy & Devices";
+            this.DevBySupButton.UseMnemonic = false;
             this.DevBySupButton.UseVisualStyleBackColor = true;
             this.DevBySupButton.Click += new System.EventHandler(this.DevBySupButton_Click);
             // 

@@ -769,24 +769,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DevBySupButton_Click(object sender, EventArgs e)
         {
-            try
-            {
-                DataTable results = AssetManagerFunctions.DevicesBySupervisor(this);
-                if (results != null)
-                {
-                    var newGridForm = new GridForm(this, "Devices By Supervisor");
-                    newGridForm.AddGrid("DevBySup", "Devices", DoubleClickAction.ViewDevice, results);
-                    newGridForm.Show();
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-            }
-            finally
-            {
-                DoneWaiting();
-            }
+            new Hierarchy(this);
         }
 
         private void CopySelectedMenuItem_Click(object sender, EventArgs e)

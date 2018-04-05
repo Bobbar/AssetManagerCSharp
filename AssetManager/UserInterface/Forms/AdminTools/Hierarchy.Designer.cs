@@ -33,9 +33,9 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.workingSpinner = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ShowDevicesDropDown = new System.Windows.Forms.ToolStripDropDownButton();
             this.HierarchyTree = new AssetManager.UserInterface.CustomControls.CorrectedTreeView();
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.ListDevicesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -60,25 +60,45 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel,
             this.workingSpinner,
-            this.toolStripDropDownButton1});
-            this.statusStrip1.Location = new System.Drawing.Point(3, 455);
+            this.toolStripStatusLabel1,
+            this.ShowDevicesDropDown});
+            this.statusStrip1.Location = new System.Drawing.Point(3, 454);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(393, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(393, 23);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(0, 17);
+            this.statusLabel.Size = new System.Drawing.Size(0, 18);
             // 
             // workingSpinner
             // 
             this.workingSpinner.Image = global::AssetManager.Properties.Resources.LoadingAni;
             this.workingSpinner.Name = "workingSpinner";
-            this.workingSpinner.Size = new System.Drawing.Size(16, 17);
+            this.workingSpinner.Size = new System.Drawing.Size(16, 18);
             this.workingSpinner.Visible = false;
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(235, 18);
+            this.toolStripStatusLabel1.Spring = true;
+            // 
+            // ShowDevicesDropDown
+            // 
+            this.ShowDevicesDropDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(176)))), ((int)(((byte)(240)))), ((int)(((byte)(179)))));
+            this.ShowDevicesDropDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.ShowDevicesDropDown.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShowDevicesDropDown.Image = ((System.Drawing.Image)(resources.GetObject("ShowDevicesDropDown.Image")));
+            this.ShowDevicesDropDown.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ShowDevicesDropDown.Name = "ShowDevicesDropDown";
+            this.ShowDevicesDropDown.ShowDropDownArrow = false;
+            this.ShowDevicesDropDown.Size = new System.Drawing.Size(94, 21);
+            this.ShowDevicesDropDown.Text = "Show Devices";
+            this.ShowDevicesDropDown.Click += new System.EventHandler(this.ShowDevicesDropDown_Click);
             // 
             // HierarchyTree
             // 
@@ -91,26 +111,8 @@
             this.HierarchyTree.LineColor = System.Drawing.Color.DarkGray;
             this.HierarchyTree.Location = new System.Drawing.Point(6, 20);
             this.HierarchyTree.Name = "HierarchyTree";
-            this.HierarchyTree.Size = new System.Drawing.Size(387, 432);
+            this.HierarchyTree.Size = new System.Drawing.Size(387, 431);
             this.HierarchyTree.TabIndex = 0;
-            // 
-            // toolStripDropDownButton1
-            // 
-            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ListDevicesMenuItem});
-            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(72, 20);
-            this.toolStripDropDownButton1.Text = "Functions";
-            // 
-            // ListDevicesMenuItem
-            // 
-            this.ListDevicesMenuItem.Name = "ListDevicesMenuItem";
-            this.ListDevicesMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.ListDevicesMenuItem.Text = "List Devices";
-            this.ListDevicesMenuItem.Click += new System.EventHandler(this.ListDevicesMenuItem_Click);
             // 
             // Hierarchy
             // 
@@ -138,7 +140,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
         private System.Windows.Forms.ToolStripStatusLabel workingSpinner;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
-        private System.Windows.Forms.ToolStripMenuItem ListDevicesMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton ShowDevicesDropDown;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }

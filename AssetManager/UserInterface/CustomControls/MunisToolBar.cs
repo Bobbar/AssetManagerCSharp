@@ -97,7 +97,6 @@ namespace AssetManager.UserInterface.CustomControls
             ToolItemList.Add(NewToolItem("tsmPOLookUp", "PO Lookup", () => MunisFunctions.POSearch(parentForm)));
             ToolItemList.Add(NewToolItem("tsmReqNumLookUp", "Requisition # Lookup", () => MunisFunctions.ReqSearch(parentForm)));
             ToolItemList.Add(NewToolItem("tsmDeviceLookUp", "Device Lookup", () => MunisFunctions.AssetSearch(parentForm)));
-            ToolItemList.Add(NewToolItem("HierarchySearch", "View Supervisor Hierarchy", () => new Hierarchy(parentForm)));
             foreach (ToolStripMenuItem item in ToolItemList)
             {
                 AddToolItem(item);
