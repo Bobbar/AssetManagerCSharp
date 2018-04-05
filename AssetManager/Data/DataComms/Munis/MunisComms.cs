@@ -14,7 +14,7 @@ namespace AssetManager.Data.Communications
 
         #region Fields
 
-        private const string msSqlConnectString = "server=svr-munis5.core.co.fairfield.oh.us; database=mu_live; trusted_connection=True;";
+        private const string msSqlConnectString = "server=svr-munis5.core.co.fairfield.oh.us; database=mu_live; trusted_connection=True; Connection Timeout=5";
 
         #endregion
 

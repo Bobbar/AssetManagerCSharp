@@ -31,8 +31,13 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             {
                 // Prompt user for supervisor.
                 var supervisorMunis = MunisFunctions.MunisUserSearch(this);
+
+                // Make sure we have an employee number to work with.
+                if (string.IsNullOrEmpty(supervisorMunis.Number)) return;
+
                 var supervisorThis = new Employee(supervisorMunis.Name, supervisorMunis.Number);
                 currentSupervisor = supervisorThis;
+
                 // Setup form and display working spinner.
                 this.Text += " for " + supervisorThis.Name;
                 this.Show();
@@ -65,7 +70,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             {
                 // Stop the spinner and remove the big employee list from scope.
                 workingSpinner.Visible = false;
-                employeeList.Clear();
+                employeeList?.Clear();
                 employeeList = null;
             }
         }
@@ -75,9 +80,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         /// </summary>
         private void ListDevices()
         {
-            var deviceTable = new DataTable("devices");
-
-            GetDevices(currentTree, deviceTable);
+            var deviceTable = GetDevicesTable(currentTree);
 
             if (deviceTable.Rows.Count > 0)
             {
@@ -93,27 +96,32 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         /// </summary>
         /// <param name="tree"></param>
         /// <param name="table"></param>
-        private void GetDevices(EmployeeTree tree, DataTable table)
+        private DataTable GetDevicesTable(EmployeeTree tree, DataTable table = null)
         {
             if (table == null)
             {
                 table = new DataTable("devices");
             }
 
-            var results = DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.MunisEmpNum + " = '" + tree.Employee.Number + "'");
+            string query = "SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.MunisEmpNum + " = '" + tree.Employee.Number + "'";
 
-            if (results.Rows.Count > 0)
+            using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
             {
-                table.Merge(results);
+                if (results.Rows.Count > 0)
+                {
+                    table.Merge(results);
+                }
             }
 
             if (tree.Subordinates.Count > 0)
             {
                 foreach (var sub in tree.Subordinates)
                 {
-                    GetDevices(sub, table);
+                    table.Merge(GetDevicesTable(sub, table));
                 }
             }
+
+            return table;
         }
 
         /// <summary>

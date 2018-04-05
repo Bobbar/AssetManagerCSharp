@@ -1199,7 +1199,7 @@
             Collect and display a table containing all the devices associated with the current employee tree.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.GetDevices(AssetManager.UserInterface.Forms.AdminTools.Hierarchy.EmployeeTree,System.Data.DataTable)">
+        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.GetDevicesTable(AssetManager.UserInterface.Forms.AdminTools.Hierarchy.EmployeeTree,System.Data.DataTable)">
             <summary>
             Recursively collects a table of all devices associated with the employees in the specified tree.
             </summary>
