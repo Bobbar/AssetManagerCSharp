@@ -7,8 +7,23 @@ namespace AssetManager.Data
     public static class DBFactory
     {
         private const string sqlitePass = "X9ow0zCwpGKyVeFR6K3yB4A7lQ2HgOgU";
-        private const string mySqllPass = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG";
+        private const string mySqlCryptPass = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG";
+        private static string mySqlPass;
         private const string mySqlUser = "asset_mgr_usr";
+
+        private static string MySqlPassword
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(mySqlPass))
+                {
+                    mySqlPass = SecurityTools.DecodePassword(mySqlCryptPass);
+                }
+
+                return mySqlPass;
+            }
+        }
+
         public static IDataBase GetDatabase()
         {
             if (GlobalSwitches.CachedMode)
@@ -23,7 +38,7 @@ namespace AssetManager.Data
 
         public static IDataBase GetMySqlDatabase()
         {
-            return new MySQLDatabase(ServerInfo.MySQLServerIP, mySqlUser, SecurityTools.DecodePassword(mySqllPass), ServerInfo.CurrentDataBase.ToString());
+            return new MySQLDatabase(ServerInfo.MySQLServerIP, mySqlUser, MySqlPassword, ServerInfo.CurrentDataBase.ToString());
         }
 
         public static IDataBase GetSqliteDatabase()
@@ -31,7 +46,7 @@ namespace AssetManager.Data
             return new SqliteDatabase(Paths.SQLitePath, SecurityTools.DecodePassword(sqlitePass));
         }
     }
-
+    
     /// <summary>
     /// Wrapper for DBParameter
     /// </summary>
