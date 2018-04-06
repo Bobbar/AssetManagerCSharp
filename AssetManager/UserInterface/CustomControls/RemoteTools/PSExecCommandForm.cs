@@ -206,8 +206,11 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void CommandBox_KeyUp(object sender, KeyEventArgs e)
         {
-            CommandBox.SelectionStart = CommandBox.Text.Length;
-            CommandBox.SelectionLength = 0;
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
+            {
+                CommandBox.SelectionStart = CommandBox.Text.Length;
+                CommandBox.SelectionLength = 0;
+            }
         }
     }
 }
