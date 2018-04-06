@@ -151,7 +151,6 @@ namespace PingVisualizer
         {
             ServicePointManager.DnsRefreshTimeout = 0;
             InitPingTimer();
-            StartPing();
         }
 
         private void InitPingTimer()
@@ -163,7 +162,7 @@ namespace PingVisualizer
                     pingTimer = new System.Threading.Timer(new System.Threading.TimerCallback(PingTimer_Tick));
                 }
 
-                pingTimer.Change(currentPingInterval, 0);
+                pingTimer.Change(500, currentPingInterval);
             }
         }
 
@@ -187,7 +186,6 @@ namespace PingVisualizer
             if (!this.disposedValue)
             {
                 StartPing();
-                pingTimer.Change(currentPingInterval, 0);
             }
         }
 
@@ -369,8 +367,9 @@ namespace PingVisualizer
             if (currentPingInterval != interval)
             {
                 currentPingInterval = interval;
-                InitPingTimer();
             }
+
+            if (!this.disposedValue) pingTimer.Change(currentPingInterval, 0);
         }
 
         private void ControlMouseLeave(object sender, EventArgs e)
