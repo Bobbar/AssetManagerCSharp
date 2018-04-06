@@ -1,5 +1,4 @@
 ﻿using AssetManager.Data;
-using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.Security;
@@ -19,31 +18,39 @@ namespace AssetManager
         [STAThread]
         public static void Main()
         {
+            bool connectionSuccessful = false;
+            bool cacheAvailable = false;
+
+            NetworkInfo.LocalDomainUser = Environment.UserName;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
             Application.ThreadException += MyApplication_UnhandledException;
 
             Helpers.ChildFormControl.SplashScreenInstance().Show();
 
             ProcessCommandArgs();
 
-            NetworkInfo.LocalDomainUser = Environment.UserName;
-
-            bool ConnectionSuccessful = false;
-            bool CacheAvailable = false;
-
             Logging.Logger("Starting AssetManager...");
+
             Status("Checking Server Connection...");
+            connectionSuccessful = CheckConnection();
+            ServerInfo.ServerPinging = connectionSuccessful;
 
-            //check connection
-            ConnectionSuccessful = CheckConnection();
-
-            ServerInfo.ServerPinging = ConnectionSuccessful;
-
-            Status("Checking Local Cache...");
-            if (ConnectionSuccessful)
+            if (connectionSuccessful)
             {
+                Status("Checking Access Level...");
+                SecurityTools.PopulateAccessGroups();
+                SecurityTools.GetUserAccess();
+
+                if (!SecurityTools.CanAccess(SecurityGroups.CanRun))
+                {
+                    OtherFunctions.Message("You do not have permission to run this software.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Access Denied");
+                    // e.Cancel = true;
+                    Application.Exit();
+                    return;
+                }
+
+                Status("Checking Local Cache...");
                 if (!DBCacheFunctions.CacheUpToDate())
                 {
                     Status("Building Cache DB...");
@@ -52,35 +59,27 @@ namespace AssetManager
             }
             else
             {
-                CacheAvailable = DBCacheFunctions.CacheUpToDate(ConnectionSuccessful);
+                cacheAvailable = DBCacheFunctions.CacheUpToDate(connectionSuccessful);
             }
-            if (!ConnectionSuccessful & !CacheAvailable)
+
+            if (!connectionSuccessful & !cacheAvailable)
             {
                 OtherFunctions.Message("Could not connect to server and the local DB cache is unavailable.  The application will now close.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "No Connection");
-                // e.Cancel = true;
                 Application.Exit();
                 return;
             }
-            else if (!ConnectionSuccessful & CacheAvailable)
+            else if (!connectionSuccessful & cacheAvailable)
             {
                 GlobalSwitches.CachedMode = true;
                 OtherFunctions.Message("Could not connect to server. Running from local DB cache.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cached Mode");
             }
 
-            Status("Loading Indexes...");
+            Status("Caching Attributes...");
             AttributeFunctions.PopulateAttributeIndexes();
-            Status("Collecting Database Info...");
-            DBControlExtensions.GetColumnLengths();
-            Status("Checking Access Level...");
-            SecurityTools.PopulateAccessGroups();
-            SecurityTools.GetUserAccess();
-            if (!SecurityTools.CanAccess(SecurityGroups.CanRun))
-            {
-                OtherFunctions.Message("You do not have permission to run this software.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Access Denied");
-                // e.Cancel = true;
-                Application.Exit();
-                return;
-            }
+
+            Status("Collecting Field Info...");
+            DBControlExtensions.GetFieldLengths();
+
             Status("Ready!");
             Application.Run(new UserInterface.Forms.AssetManagement.MainForm());
         }
@@ -109,12 +108,13 @@ namespace AssetManager
         {
             try
             {
-                var Args = Environment.GetCommandLineArgs();
-                for (int i = 1; i <= Args.Length - 1; i++)
+                var args = Environment.GetCommandLineArgs();
+
+                for (int i = 1; i <= args.Length - 1; i++)
                 {
                     try
                     {
-                        var ArgToEnum = (CommandArgs)CommandArgs.Parse(typeof(CommandArgs), (Args[i]).ToUpper());
+                        var ArgToEnum = (CommandArgs)CommandArgs.Parse(typeof(CommandArgs), (args[i]).ToUpper());
                         switch (ArgToEnum)
                         {
                             case CommandArgs.TESTDB:
@@ -128,7 +128,7 @@ namespace AssetManager
                     }
                     catch (ArgumentException)
                     {
-                        Logging.Logger("Invalid argument: " + Args[i]);
+                        Logging.Logger("Invalid argument: " + args[i]);
                     }
                 }
             }
@@ -138,9 +138,9 @@ namespace AssetManager
             }
         }
 
-        private static void Status(string Text)
+        private static void Status(string text)
         {
-            Helpers.ChildFormControl.SplashScreenInstance().SetStatus(Text);
+            Helpers.ChildFormControl.SplashScreenInstance().SetStatus(text);
         }
 
         private enum CommandArgs

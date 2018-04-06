@@ -10,7 +10,7 @@ namespace AssetManager.Data.Functions
     {
         private static Dictionary<string, int> ColumnLengths = new Dictionary<string, int>();
 
-        public static void GetColumnLengths()
+        public static void GetFieldLengths()
         {
             if (GlobalSwitches.CachedMode) return;
 
