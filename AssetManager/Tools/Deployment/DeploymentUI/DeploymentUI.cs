@@ -97,6 +97,7 @@ namespace AssetManager.Tools.Deployment
             logView.Text = defaultTitle;
             logView.Width = 600;
             logView.Height = 700;
+            logView.MinimumSize = new System.Drawing.Size(400, 200);
             logView.Owner = parentForm;
             logView.StartPosition = FormStartPosition.CenterScreen;
             RTBLog = new RichTextBox();
