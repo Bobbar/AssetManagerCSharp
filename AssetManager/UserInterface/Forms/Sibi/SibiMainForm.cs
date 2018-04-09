@@ -172,7 +172,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
             foreach (DataRow row in results.Rows)
             {
-                statusColumnColors.Add(row[SibiRequestCols.RequestNumber].ToString(), GetRowColor(row[SibiRequestCols.Status].ToString()));
+                var key = row[SibiRequestCols.RequestNumber].ToString();
+
+                if (!statusColumnColors.ContainsKey(key))
+                {
+                    statusColumnColors.Add(row[SibiRequestCols.RequestNumber].ToString(), GetRowColor(row[SibiRequestCols.Status].ToString()));
+                }
             }
         }
 
