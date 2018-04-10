@@ -155,7 +155,7 @@ namespace AssetManager.Security
             return accessGroups[accessGroupName].Level;
         }
 
-        public static void GetUserAccess()
+        public static void PopulateUserAccess()
         {
             try
             {
@@ -179,25 +179,18 @@ namespace AssetManager.Security
             catch (Exception ex)
             {
                 localUser = new LocalUser();
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                throw ex;
             }
         }
 
         public static void PopulateAccessGroups()
         {
-            try
+            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSecurityTable))
             {
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSecurityTable))
+                foreach (DataRow row in results.Rows)
                 {
-                    foreach (DataRow row in results.Rows)
-                    {
-                        accessGroups.Add(row[SecurityCols.SecModule].ToString(), new AccessGroup(row));
-                    }
+                    accessGroups.Add(row[SecurityCols.SecModule].ToString(), new AccessGroup(row));
                 }
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -207,6 +200,7 @@ namespace AssetManager.Security
             int mask = 1;
             int calc_level;
             int usrLevel;
+
             if (accessLevel == -1)
             {
                 usrLevel = localUser.AccessLevel;
@@ -215,6 +209,7 @@ namespace AssetManager.Security
             {
                 usrLevel = accessLevel;
             }
+
             foreach (AccessGroup group in accessGroups.Values)
             {
                 calc_level = usrLevel & mask;

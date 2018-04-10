@@ -136,7 +136,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                     AddGuids();
                     DBFactory.GetDatabase().UpdateTable(Queries.SelectUsersTable, (DataTable)UserGrid.DataSource);
                     ListUsers();
-                    SecurityTools.GetUserAccess();
+                    SecurityTools.PopulateUserAccess();
                 }
                 else
                 {

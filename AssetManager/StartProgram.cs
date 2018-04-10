@@ -21,67 +21,74 @@ namespace AssetManager
             bool connectionSuccessful = false;
             bool cacheAvailable = false;
 
-            NetworkInfo.LocalDomainUser = Environment.UserName;
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.ThreadException += MyApplication_UnhandledException;
-
-            Helpers.ChildFormControl.SplashScreenInstance().Show();
-
-            ProcessCommandArgs();
-
-            Logging.Logger("Starting AssetManager...");
-
-            Status("Checking Server Connection...");
-            connectionSuccessful = CheckConnection();
-            ServerInfo.ServerPinging = connectionSuccessful;
-
-            if (connectionSuccessful)
+            try
             {
-                Status("Checking Access Level...");
-                SecurityTools.PopulateAccessGroups();
-                SecurityTools.GetUserAccess();
+                NetworkInfo.LocalDomainUser = Environment.UserName;
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.ThreadException += MyApplication_UnhandledException;
 
-                if (!SecurityTools.CanAccess(SecurityGroups.CanRun))
-                {
-                    OtherFunctions.Message("You do not have permission to run this software.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Access Denied");
-                    // e.Cancel = true;
-                    Application.Exit();
-                    return;
-                }
+                ChildFormControl.SplashScreenInstance().Show();
 
-                Status("Checking Local Cache...");
-                if (!DBCacheFunctions.CacheUpToDate())
+                ProcessCommandArgs();
+
+                Logging.Logger("Starting AssetManager...");
+
+                Status("Checking Server Connection...");
+                connectionSuccessful = CheckConnection();
+                ServerInfo.ServerPinging = connectionSuccessful;
+
+                Status("Checking Cache State...");
+                cacheAvailable = DBCacheFunctions.CacheUpToDate(connectionSuccessful);
+
+                // If connected to DB and cache is out-of-date, rebuild it.
+                if (connectionSuccessful && !cacheAvailable)
                 {
                     Status("Building Cache DB...");
                     DBCacheFunctions.RefreshLocalDBCache();
                 }
-            }
-            else
-            {
-                cacheAvailable = DBCacheFunctions.CacheUpToDate(connectionSuccessful);
-            }
 
-            if (!connectionSuccessful & !cacheAvailable)
+                // No DB connection and cache not ready. Don't run.
+                if (!connectionSuccessful & !cacheAvailable)
+                {
+                    OtherFunctions.Message("Could not connect to server and the local DB cache is unavailable.  The application will now close.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "No Connection");
+                    Application.Exit();
+                    return;
+                }
+                // No DB connection but cache is ready. Prompt and run.
+                else if (!connectionSuccessful & cacheAvailable)
+                {
+                    GlobalSwitches.CachedMode = true;
+                    OtherFunctions.Message("Could not connect to server. Running from local DB cache.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cached Mode");
+                }
+
+                // Try to populate access groups and user from DB.
+                Status("Checking Access Level...");
+                SecurityTools.PopulateAccessGroups();
+                SecurityTools.PopulateUserAccess();
+
+                // Make sure the current user is allowed to run the software.
+                if (!SecurityTools.CanAccess(SecurityGroups.CanRun))
+                {
+                    OtherFunctions.Message("You do not have permission to run this software.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Access Denied");
+                    Application.Exit();
+                    return;
+                }
+
+                Status("Caching Attributes...");
+                AttributeFunctions.PopulateAttributeIndexes();
+
+                Status("Collecting Field Info...");
+                DBControlExtensions.GetFieldLengths();
+
+                Status("Ready!");
+                Application.Run(new UserInterface.Forms.AssetManagement.MainForm());
+            }
+            catch (Exception ex)
             {
-                OtherFunctions.Message("Could not connect to server and the local DB cache is unavailable.  The application will now close.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "No Connection");
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 Application.Exit();
-                return;
             }
-            else if (!connectionSuccessful & cacheAvailable)
-            {
-                GlobalSwitches.CachedMode = true;
-                OtherFunctions.Message("Could not connect to server. Running from local DB cache.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cached Mode");
-            }
-
-            Status("Caching Attributes...");
-            AttributeFunctions.PopulateAttributeIndexes();
-
-            Status("Collecting Field Info...");
-            DBControlExtensions.GetFieldLengths();
-
-            Status("Ready!");
-            Application.Run(new UserInterface.Forms.AssetManagement.MainForm());
         }
 
         private static bool CheckConnection()

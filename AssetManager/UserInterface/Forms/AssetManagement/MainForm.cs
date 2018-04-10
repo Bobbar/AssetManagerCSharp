@@ -669,7 +669,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                                     ServerInfo.CurrentDataBase = database;
                                     AttributeFunctions.PopulateAttributeIndexes();
                                     RefreshCombos();
-                                    SecurityTools.GetUserAccess();
+                                    SecurityTools.PopulateUserAccess();
                                     InitDBControls();
                                     GlobalSwitches.BuildingCache = true;
                                     Task.Run(() => DBCacheFunctions.RefreshLocalDBCache());
