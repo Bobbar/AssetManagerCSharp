@@ -89,37 +89,40 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        //dynamically creates sql query using any combination of search filters the users wants
+        // Dynamically creates query using any combination of search filters.
         private void DynamicSearch()
         {
             var cmd = DBFactory.GetDatabase().GetCommand();
-            string strStartQry = null;
-            strStartQry = "SELECT * FROM " + SibiRequestCols.TableName + " WHERE";
-            string strDynaQry = "";
-            QueryParamCollection searchValCol = BuildSearchListNew();
-            foreach (var fld in searchValCol.Parameters)
+            var partialQuery = "SELECT * FROM " + SibiRequestCols.TableName + " WHERE";
+            var dynaQuery = "";
+            QueryParamCollection searchValCols = BuildSearchListNew();
+
+            foreach (var fld in searchValCols.Parameters)
             {
                 if ((fld.Value != null))
                 {
                     if (!string.IsNullOrEmpty(fld.Value.ToString()))
                     {
-                        strDynaQry += " " + fld.FieldName + " LIKE @" + fld.FieldName;
+                        dynaQuery += " " + fld.FieldName + " LIKE @" + fld.FieldName;
                         string Value = "%" + fld.Value.ToString() + "%";
                         cmd.AddParameterWithValue("@" + fld.FieldName, Value);
-                        if (searchValCol.Parameters.IndexOf(fld) != searchValCol.Parameters.Count - 1)
+                        if (searchValCols.Parameters.IndexOf(fld) != searchValCols.Parameters.Count - 1)
                         {
-                            strDynaQry += " AND";
+                            dynaQuery += " AND";
                         }
                     }
                 }
             }
-            if (string.IsNullOrEmpty(strDynaQry))
+
+            if (string.IsNullOrEmpty(dynaQuery))
             {
                 return;
             }
-            var strQry = strStartQry + strDynaQry;
-            strQry += " ORDER BY " + SibiRequestCols.RequestNumber + " DESC";
-            cmd.CommandText = strQry;
+
+            var completeQuery = partialQuery + dynaQuery;
+            completeQuery += " ORDER BY " + SibiRequestCols.RequestNumber + " DESC";
+            cmd.CommandText = completeQuery;
+
             ExecuteCmd(ref cmd);
         }
 
@@ -129,6 +132,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 lastCmd = cmd;
                 SendToGrid(DBFactory.GetDatabase().DataTableFromCommand(cmd));
+                cmd.Dispose();
             }
             catch (Exception ex)
             {
@@ -152,14 +156,17 @@ namespace AssetManager.UserInterface.Forms.Sibi
         /// <returns></returns>
         private Color GetRowColor(string code)
         {
-            //gray color
-            Color DarkColor = Color.FromArgb(222, 222, 222);
+            // Gray color.
+            Color blendColor = Color.FromArgb(222, 222, 222);
+
             // Get a list from the attrib array.
             var attribList = Attributes.SibiAttribute.StatusType.OfType<DBCode>().ToList();
+
             // Use List.Find to locate the matching attribute.
-            var attribColor = attribList.Find((i) => { return i.Code == code; }).Color;
+            var attribColor = attribList.Find((a) => { return a.Code == code; }).Color;
+
             // Return the a blended color.
-            return StyleFunctions.ColorAlphaBlend(attribColor, DarkColor);
+            return StyleFunctions.ColorAlphaBlend(attribColor, blendColor);
         }
 
         // Since the data grid is not setup with a value/display member we need another way to
@@ -172,11 +179,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
             foreach (DataRow row in results.Rows)
             {
-                var key = row[SibiRequestCols.RequestNumber].ToString();
+                var requestNum = row[SibiRequestCols.RequestNumber].ToString();
+                var status = row[SibiRequestCols.Status].ToString();
 
-                if (!statusColumnColors.ContainsKey(key))
+                if (!statusColumnColors.ContainsKey(requestNum))
                 {
-                    statusColumnColors.Add(row[SibiRequestCols.RequestNumber].ToString(), GetRowColor(row[SibiRequestCols.Status].ToString()));
+                    statusColumnColors.Add(requestNum, GetRowColor(status));
                 }
             }
         }
