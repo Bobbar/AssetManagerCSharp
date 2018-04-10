@@ -82,6 +82,8 @@ namespace AssetManager.UserInterface.CustomControls
         public RemoteToolsControl()
         {
             InitializeComponent();
+            ToolsLayoutPanel.DoubleBuffered(true);
+            ToolsGroupBox.DoubleBuffered(true);
         }
 
         #endregion Constructors

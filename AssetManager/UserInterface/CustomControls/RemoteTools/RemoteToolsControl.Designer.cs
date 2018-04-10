@@ -17,9 +17,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RemoteToolsControl));
-            this.groupBox = new System.Windows.Forms.GroupBox();
+            this.ToolsGroupBox = new System.Windows.Forms.GroupBox();
             this.ShowIPButton = new System.Windows.Forms.Button();
-            this.FlowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.ToolsLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.RestartDeviceButton = new System.Windows.Forms.PictureBox();
             this.BrowseFilesButton = new System.Windows.Forms.Button();
             this.StartRDPButton = new System.Windows.Forms.Button();
@@ -32,23 +32,23 @@
             this.NewDeployButton = new System.Windows.Forms.Button();
             this.PSExecButton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.groupBox.SuspendLayout();
-            this.FlowLayoutPanel1.SuspendLayout();
+            this.ToolsGroupBox.SuspendLayout();
+            this.ToolsLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox
             // 
-            this.groupBox.Controls.Add(this.ShowIPButton);
-            this.groupBox.Controls.Add(this.FlowLayoutPanel1);
-            this.groupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox.Location = new System.Drawing.Point(0, 0);
-            this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(421, 108);
-            this.groupBox.TabIndex = 0;
-            this.groupBox.TabStop = false;
-            this.groupBox.Text = "Remote Tools";
+            this.ToolsGroupBox.Controls.Add(this.ShowIPButton);
+            this.ToolsGroupBox.Controls.Add(this.ToolsLayoutPanel);
+            this.ToolsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ToolsGroupBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ToolsGroupBox.Location = new System.Drawing.Point(0, 0);
+            this.ToolsGroupBox.Name = "groupBox";
+            this.ToolsGroupBox.Size = new System.Drawing.Size(421, 108);
+            this.ToolsGroupBox.TabIndex = 0;
+            this.ToolsGroupBox.TabStop = false;
+            this.ToolsGroupBox.Text = "Remote Tools";
             // 
             // ShowIPButton
             // 
@@ -68,24 +68,24 @@
             // 
             // FlowLayoutPanel1
             // 
-            this.FlowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.FlowLayoutPanel1.AutoScroll = true;
-            this.FlowLayoutPanel1.Controls.Add(this.RestartDeviceButton);
-            this.FlowLayoutPanel1.Controls.Add(this.BrowseFilesButton);
-            this.FlowLayoutPanel1.Controls.Add(this.StartRDPButton);
-            this.FlowLayoutPanel1.Controls.Add(this.EventViewerButton);
-            this.FlowLayoutPanel1.Controls.Add(this.PowerShellButton);
-            this.FlowLayoutPanel1.Controls.Add(this.PSExecButton);
-            this.FlowLayoutPanel1.Controls.Add(this.GKUpdateButton);
-            this.FlowLayoutPanel1.Controls.Add(this.DeployTVButton);
-            this.FlowLayoutPanel1.Controls.Add(this.UpdateChromeButton);
-            this.FlowLayoutPanel1.Controls.Add(this.DeployOfficeButton);
-            this.FlowLayoutPanel1.Controls.Add(this.NewDeployButton);
-            this.FlowLayoutPanel1.Location = new System.Drawing.Point(5, 14);
-            this.FlowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.FlowLayoutPanel1.Name = "FlowLayoutPanel1";
-            this.FlowLayoutPanel1.Size = new System.Drawing.Size(320, 86);
-            this.FlowLayoutPanel1.TabIndex = 58;
+            this.ToolsLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.ToolsLayoutPanel.AutoScroll = true;
+            this.ToolsLayoutPanel.Controls.Add(this.RestartDeviceButton);
+            this.ToolsLayoutPanel.Controls.Add(this.BrowseFilesButton);
+            this.ToolsLayoutPanel.Controls.Add(this.StartRDPButton);
+            this.ToolsLayoutPanel.Controls.Add(this.EventViewerButton);
+            this.ToolsLayoutPanel.Controls.Add(this.PowerShellButton);
+            this.ToolsLayoutPanel.Controls.Add(this.PSExecButton);
+            this.ToolsLayoutPanel.Controls.Add(this.GKUpdateButton);
+            this.ToolsLayoutPanel.Controls.Add(this.DeployTVButton);
+            this.ToolsLayoutPanel.Controls.Add(this.UpdateChromeButton);
+            this.ToolsLayoutPanel.Controls.Add(this.DeployOfficeButton);
+            this.ToolsLayoutPanel.Controls.Add(this.NewDeployButton);
+            this.ToolsLayoutPanel.Location = new System.Drawing.Point(5, 14);
+            this.ToolsLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.ToolsLayoutPanel.Name = "FlowLayoutPanel1";
+            this.ToolsLayoutPanel.Size = new System.Drawing.Size(320, 86);
+            this.ToolsLayoutPanel.TabIndex = 58;
             // 
             // RestartDeviceButton
             // 
@@ -244,15 +244,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.groupBox);
+            this.Controls.Add(this.ToolsGroupBox);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "RemoteToolsControl";
             this.Size = new System.Drawing.Size(421, 108);
             this.Load += new System.EventHandler(this.RemoteToolsControl_Load);
             this.VisibleChanged += new System.EventHandler(this.RemoteToolsControl_VisibleChanged);
-            this.groupBox.ResumeLayout(false);
-            this.FlowLayoutPanel1.ResumeLayout(false);
+            this.ToolsGroupBox.ResumeLayout(false);
+            this.ToolsLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).EndInit();
             this.ResumeLayout(false);
 
@@ -260,8 +260,8 @@
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox;
-        internal System.Windows.Forms.FlowLayoutPanel FlowLayoutPanel1;
+        private System.Windows.Forms.GroupBox ToolsGroupBox;
+        internal System.Windows.Forms.FlowLayoutPanel ToolsLayoutPanel;
         internal System.Windows.Forms.Button GKUpdateButton;
         internal System.Windows.Forms.Button BrowseFilesButton;
         internal System.Windows.Forms.PictureBox RestartDeviceButton;

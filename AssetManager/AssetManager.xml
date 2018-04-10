@@ -991,6 +991,11 @@
             <param name="parent"></param>
             <returns></returns>
         </member>
+        <member name="P:AssetManager.UserInterface.CustomControls.HotTrackSplitContainer.HotTracking">
+            <summary>
+            Changes to the splitter bar position will be updated and drawn immediately.
+            </summary>
+        </member>
         <member name="T:AssetManager.UserInterface.CustomControls.PSExecCommandForm">
             <summary>
             Form and methods for sending manual PSExec commands to a device.

@@ -1,19 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.CustomControls
 {
     public class HotTrackSplitContainer : SplitContainer
     {
+        private bool hotTracking = false;
+
+        /// <summary>
+        /// Changes to the splitter bar position will be updated and drawn immediately.
+        /// </summary>
+        [Browsable(true)]
+        [Description("Changes to the splitter bar position will be updated and drawn immediately.")]
+        public bool HotTracking
+        {
+            get
+            {
+                return hotTracking;
+            }
+
+            set
+            {
+                hotTracking = value;
+
+                if (hotTracking)
+                {
+                    this.MouseMove -= HotTrackSplitContainer_MouseMove;
+                    this.MouseDown -= HotTrackSplitContainer_MouseDown;
+                    this.MouseUp -= HotTrackSplitContainer_MouseUp;
+
+                    this.MouseMove += HotTrackSplitContainer_MouseMove;
+                    this.MouseDown += HotTrackSplitContainer_MouseDown;
+                    this.MouseUp += HotTrackSplitContainer_MouseUp;
+                }
+                else
+                {
+                    this.MouseMove -= HotTrackSplitContainer_MouseMove;
+                    this.MouseDown -= HotTrackSplitContainer_MouseDown;
+                    this.MouseUp -= HotTrackSplitContainer_MouseUp;
+                }
+            }
+        }
+
         public HotTrackSplitContainer() : base()
         {
-            this.MouseMove += HotTrackSplitContainer_MouseMove;
-            this.MouseDown += HotTrackSplitContainer_MouseDown;
-            this.MouseUp += HotTrackSplitContainer_MouseUp;
+            this.DoubleBuffered = true;
         }
 
         //CREDIT TO: http://dotnetpulse.blogspot.com/2006/08/how-can-i-make-splitcontainer.html
