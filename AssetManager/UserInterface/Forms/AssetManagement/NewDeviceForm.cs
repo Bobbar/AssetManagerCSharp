@@ -41,11 +41,42 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #endregion Fields
 
+        #region Constructors
+
+        public NewDeviceForm(ExtendedForm parentForm) : base(parentForm)
+        {
+            InitializeComponent();
+            InitDBControls();
+            controlParser = new DBControlParser(this);
+            controlParser.EnableFieldValidation();
+            ClearAll();
+            this.Show();
+            this.Activate();
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         void ILiveBox.DynamicSearch()
         {
             DynamicSearch();
+        }
+
+        public void ImportFromSibi(string itemGuid)
+        {
+            string itemQuery = Queries.SelectSibiRequestAndItemByItemGuid(itemGuid);
+            DateTime POPurchaseDate = default(DateTime);
+            using (var results = DBFactory.GetDatabase().DataTableFromQueryString(itemQuery))
+            {
+                controlParser.FillDBFields(results, ImportColumnRemaps());
+                MunisUser = LevenshteinSearch.SmartEmployeeSearch(results.Rows[0][SibiRequestItemsCols.User].ToString().ToUpper());
+                POPurchaseDate = MunisFunctions.GetPODate(results.Rows[0][SibiRequestCols.PO].ToString());
+            }
+
+            CurrentUserTextBox.Text = MunisUser.Name;
+            CheckFields();
+            PurchaseDatePicker.Value = POPurchaseDate;
         }
 
         void ILiveBox.LoadDevice(string deviceGuid)
@@ -63,6 +94,27 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return false;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (components != null)
+                    {
+                        components.Dispose();
+                    }
+
+                    liveBox.Dispose();
+                    controlParser.Dispose();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
+
         protected void DynamicSearch()
         {
             throw new NotImplementedException();
@@ -72,38 +124,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             throw new NotImplementedException();
         }
-
-        #endregion Methods
-
-        #region Methods
-
-        public NewDeviceForm(ExtendedForm parentForm) : base(parentForm)
-        {
-            InitializeComponent();
-            InitDBControls();
-            controlParser = new DBControlParser(this);
-            controlParser.EnableFieldValidation();
-            ClearAll();
-            this.Show();
-            this.Activate();
-        }
-
-        public void ImportFromSibi(string itemGuid)
-        {
-            string itemQuery = Queries.SelectSibiRequestAndItemByItemGuid(itemGuid);
-            DateTime POPurchaseDate = default(DateTime);
-            using (var results = DBFactory.GetDatabase().DataTableFromQueryString(itemQuery))
-            {
-                controlParser.FillDBFields(results, ImportColumnRemaps());
-                MunisUser = AssetManagerFunctions.SmartEmployeeSearch(results.Rows[0][SibiRequestItemsCols.User].ToString().ToUpper());
-                POPurchaseDate = MunisFunctions.GetPODate(results.Rows[0][SibiRequestCols.PO].ToString());
-            }
-
-            CurrentUserTextBox.Text = MunisUser.Name;
-            CheckFields();
-            PurchaseDatePicker.Value = POPurchaseDate;
-        }
-
         private void AddButton_Click(object sender, EventArgs e)
         {
             AddDevice();
@@ -348,6 +368,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxSelectionType.SelectValue);
         }
 
+        private void OSTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetHostname();
+        }
+
         private void PhoneNumTextBox_Leave(object sender, EventArgs e)
         {
             if (PhoneNumTextBox.Text.ToString().Trim() != "" && !DataConsistency.ValidPhoneNumber(PhoneNumTextBox.Text))
@@ -355,6 +380,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 OtherFunctions.Message("Invalid phone number.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
                 PhoneNumTextBox.Focus();
             }
+        }
+
+        private void PurchaseDatePicker_ValueChanged(object sender, EventArgs e)
+        {
+            SetReplacementYear(PurchaseDatePicker.Value);
         }
 
         private void RefreshCombos()
@@ -392,37 +422,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ReplaceYearTextBox.Text = ReplaceYear.ToString();
         }
 
-        private void OSTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SetHostname();
-        }
-
-        private void PurchaseDatePicker_ValueChanged(object sender, EventArgs e)
-        {
-            SetReplacementYear(PurchaseDatePicker.Value);
-        }
-
         #endregion Methods
 
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing)
-                {
-                    if (components != null)
-                    {
-                        components.Dispose();
-                    }
-
-                    liveBox.Dispose();
-                    controlParser.Dispose();
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
     }
 }

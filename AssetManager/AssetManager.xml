@@ -4,34 +4,195 @@
         <name>AssetManager</name>
     </assembly>
     <members>
-        <member name="T:AssetManager.CachedResourceManager">
+        <member name="T:AssetManager.Data.Functions.LevenshteinSearch">
             <summary>
-            An extended Resource Manager that provides cached instances of objects.
-            This differs from the stock ResourceManager class which always
-            deserializes and creates new instances of every object.
-            After the first time an object is requested, it will be cached
-            for all future requests.
+            Contains functions for performing accurate employee name searches using a fast Levenshtein algorithm.
             </summary>
         </member>
-        <member name="F:AssetManager.CachedResourceManager.objectCache">
+        <member name="M:AssetManager.Data.Functions.LevenshteinSearch.SmartEmployeeSearch(System.String,System.Int32)">
             <summary>
-            A hashtable is used to store the objects.
+            Searches the database for the best possible match to the specified search name using a Levenshtein distance algorithm.
             </summary>
-        </member>
-        <member name="M:AssetManager.CachedResourceManager.GetObject(System.String)">
-            <summary>
-            Returns a cached instance of the specified resource.
-            </summary>
-            <param name="name"></param>
+            <param name="searchName"></param>
+            <param name="minSearchDistance"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.CachedResourceManager.GetObject(System.String,System.Globalization.CultureInfo)">
+        <member name="M:AssetManager.Data.Functions.LevenshteinSearch.NarrowResults(System.Collections.Generic.List{AssetManager.Data.Classes.SmartEmpSearchInfo})">
             <summary>
-            Returns a cached instance of the specified resource.
+            Reprocesses the search results to obtain a more accurate Levenshtein distance calculation.
             </summary>
-            <param name="name"></param>
-            <param name="culture"></param>
+            <param name="results"></param>
+            <remarks>This is done because the initial calculations are performed against the full length
+            of the returned names (First and last name), and the distance between the search string and name string may be inaccurate.</remarks>
             <returns></returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.LevenshteinSearch.FindBestSmartSearchMatch(System.Collections.Generic.List{AssetManager.Data.Classes.SmartEmpSearchInfo})">
+            <summary>
+            Finds the best match within the results. The item with shortest Levenshtein distance and the longest match length (string length) is preferred.
+            </summary>
+            <param name="results"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.LevenshteinSearch.GetEmpSearchResults(System.String,System.String,System.String,System.String)">
+            <summary>
+            Queries the database for a list of results that contains the employee name result and computed Levenshtein distance to the search string.
+            </summary>
+            <param name="tableName"></param>
+            <param name="searchEmpName"></param>
+            <param name="empNameColumn"></param>
+            <param name="empNumColumn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.FtpFunctions.CheckForPrimaryItem(System.String)">
+            <summary>
+            Checks if supplied Guid exists in Devices or Sibi tables.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.FtpFunctions.ListMissingSQLDirs(System.Collections.Generic.List{AssetManager.Data.Functions.FtpFunctions.AttachScanInfo},System.Collections.Generic.List{System.String})">
+            <summary>
+            Returns list of SQL entries not found in FTP directory list.
+            </summary>
+            <param name="sqlFiles"></param>
+            <param name="ftpDirs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.FtpFunctions.ListMissingFTPDirs(System.Collections.Generic.List{System.String})">
+            <summary>
+            Returns list of FTP dirs that do not have an associated Device or Sibi request.
+            </summary>
+            <param name="ftpDirs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.FtpFunctions.ListMissingSQLFiles(System.Collections.Generic.List{AssetManager.Data.Functions.FtpFunctions.AttachScanInfo},System.Collections.Generic.List{AssetManager.Data.Functions.FtpFunctions.AttachScanInfo})">
+            <summary>
+            Returns list of SQL files not found in FTP file list.
+            </summary>
+            <param name="sqlFiles"></param>
+            <param name="ftpFiles"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.FtpFunctions.ListMissingFTPFiles(System.Collections.Generic.List{AssetManager.Data.Functions.FtpFunctions.AttachScanInfo},System.Collections.Generic.List{AssetManager.Data.Functions.FtpFunctions.AttachScanInfo})">
+            <summary>
+            Returns list of FTP files not found in SQL file list.
+            </summary>
+            <param name="sqlFiles"></param>
+            <param name="ftpFiles"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.DBCacheFunctions.BuildCreateStatement(System.Data.DataTable)">
+            <summary>
+            Builds a Sqlite compatible CREATE statement from a MySQL 'SHOW FULL COLUMNS FROM' query result.
+            </summary>
+            <param name="columnResults"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AssetManager.Data.Functions.ParseType">
+            <summary>
+            Determines how the parser handles the updating and filling of a control.
+            </summary>
+        </member>
+        <member name="F:AssetManager.Data.Functions.ParseType.DisplayOnly">
+            <summary>
+            The control is filled only.
+            </summary>
+        </member>
+        <member name="F:AssetManager.Data.Functions.ParseType.UpdateAndDisplay">
+            <summary>
+            The control is filled and will also be added to Update and Insert tables.
+            </summary>
+        </member>
+        <member name="T:AssetManager.Data.Functions.DBControlInfo">
+            <summary>
+            Instantiate and assign to <see cref="P:System.Windows.Forms.Control.Tag"/> property to enable DBParsing functions.
+            </summary>
+        </member>
+        <member name="P:AssetManager.Data.Functions.DBControlInfo.AttribIndex">
+            <summary>
+            Gets or sets the <see cref="T:AssetManager.Data.Classes.DBCode"/> index for <see cref="T:System.Windows.Forms.ComboBox"/> controls.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.Data.Functions.DBControlInfo.DataColumn">
+            <summary>
+            Gets or sets the Database Column used to update and/or populate the assigned control.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.Data.Functions.DBControlInfo.ParseType">
+            <summary>
+            Gets or sets <seealso cref="P:AssetManager.Data.Functions.DBControlInfo.ParseType"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.Data.Functions.DBControlInfo.Required">
+            <summary>
+            Is the Control a required field?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.DBControlParser.#ctor(System.Windows.Forms.Form)">
+            <summary>
+            Instantiate new instance of <see cref="T:AssetManager.Data.Functions.DBControlParser"/>
+            </summary>
+            <param name="parentForm">Form that contains controls initiated with <see cref="T:AssetManager.Data.Functions.DBControlInfo"/> </param>
+        </member>
+        <member name="M:AssetManager.Data.Functions.DBControlParser.FillDBFields(System.Data.DataTable,System.Collections.Generic.List{AssetManager.Data.Functions.DBRemappingInfo})">
+            <summary>
+            Populates all Controls in the ParentForm that have been initiated via <see cref="T:AssetManager.Data.Functions.DBControlInfo"/> with their corresponding column names.
+            </summary>
+            <param name="data">DataTable that contains the rows and columns associated with the controls.</param>
+            <param name="remappingList">List of remapping objects for mapping between different column names.</param>
+        </member>
+        <member name="M:AssetManager.Data.Functions.DBControlParser.GetRemappedColumnName(System.String,System.Collections.Generic.List{AssetManager.Data.Functions.DBRemappingInfo})">
+            <summary>
+            Get remapped column name for the specified column and remapping info. Returns new column name if a match is found in the map; otherwise, returns the original column name.
+            </summary>
+            <param name="columnName"></param>
+            <param name="mappingInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.DBControlParser.EnableFieldValidation">
+            <summary>
+            Instantiates an error provider and sets all required DBControls validation events.
+            </summary>
+        </member>
+        <member name="M:AssetManager.Data.Functions.DBControlParser.GetDBControls(System.Windows.Forms.Control,System.Collections.Generic.List{System.Windows.Forms.Control})">
+            <summary>
+            Recursively collects list of controls initiated with <see cref="T:AssetManager.Data.Functions.DBControlInfo"/> tags within Parent control.
+            </summary>
+            <param name="parentControl">Parent control. Usually a Form to start from.</param>
+            <param name="controlList">Blank List of Control to be filled.</param>
+        </member>
+        <member name="M:AssetManager.Data.Functions.DBControlParser.ReturnInsertTable(System.String)">
+            <summary>
+            Collects an EMPTY DataTable via a SQL Select statement and adds a new row for SQL Insertion.
+            </summary>
+            <remarks>
+            The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="M:AssetManager.Data.Functions.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
+            </remarks>
+            <param name="selectQry">A SQL Select query string that will return an EMPTY table. Ex: "SELECT * FROM table LIMIT 0"</param>
+            <returns>
+            Returns a DataTable with a new row added via <see cref="M:AssetManager.Data.Functions.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
+            </returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.DBControlParser.ReturnUpdateTable(System.String)">
+            <summary>
+            Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="M:AssetManager.Data.Functions.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
+            </summary>
+            <remarks>
+            The SQL SELECT statement should return a single row only. This is will be the table row that you wish to update.
+            </remarks>
+            <param name="selectQry">A SQL Select query string that will return the table row that is to be updated.</param>
+            <returns>
+            Returns a DataTable modified by the controls identified by <see cref="M:AssetManager.Data.Functions.DBControlParser.GetDBControls(System.Windows.Forms.Control,System.Collections.Generic.List{System.Windows.Forms.Control})"/>
+            </returns>
+        </member>
+        <member name="M:AssetManager.Data.Functions.DBControlParser.UpdateDBControlRow(System.Data.DataRow)">
+            <summary>
+            Modifies a DataRow with data parsed from controls collected by <see cref="M:AssetManager.Data.Functions.DBControlParser.GetDBControlValue(System.Windows.Forms.Control)"/>
+            </summary>
+            <param name="DBRow">DataRow to be modified.</param>
         </member>
         <member name="T:AssetManager.Data.Classes.MappableObject">
             <summary>
@@ -273,191 +434,6 @@
             Credit to: http://stackoverflow.com/questions/295538/how-to-provide-user-name-and-password-when-connecting-to-a-network-share
             </summary>
         </member>
-        <member name="M:AssetManager.Data.Functions.AssetManagerFunctions.SmartEmployeeSearch(System.String,System.Int32)">
-            <summary>
-            Searches the database for the best possible match to the specified search name using a Levenshtein distance algorithm.
-            </summary>
-            <param name="searchName"></param>
-            <param name="minSearchDistance"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.AssetManagerFunctions.NarrowResults(System.Collections.Generic.List{AssetManager.Data.Classes.SmartEmpSearchInfo})">
-            <summary>
-            Reprocesses the search results to obtain a more accurate Levenshtein distance calculation.
-            </summary>
-            <param name="results"></param>
-            <remarks>This is done because the initial calculations are performed against the full length
-            of the returned names (First and last name), and the distance between the search string and name string may be inaccurate.</remarks>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.AssetManagerFunctions.FindBestSmartSearchMatch(System.Collections.Generic.List{AssetManager.Data.Classes.SmartEmpSearchInfo})">
-            <summary>
-            Finds the best match within the results. The item with shortest Levenshtein distance and the longest match length (string length) is preferred.
-            </summary>
-            <param name="results"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.AssetManagerFunctions.GetEmpSearchResults(System.String,System.String,System.String,System.String)">
-            <summary>
-            Queries the database for a list of results that contains the employee name result and computed Levenshtein distance to the search string.
-            </summary>
-            <param name="tableName"></param>
-            <param name="searchEmpName"></param>
-            <param name="empNameColumn"></param>
-            <param name="empNumColumn"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.FtpFunctions.CheckForPrimaryItem(System.String)">
-            <summary>
-            Checks if supplied Guid exists in Devices or Sibi tables.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.FtpFunctions.ListMissingSQLDirs(System.Collections.Generic.List{AssetManager.Data.Functions.FtpFunctions.AttachScanInfo},System.Collections.Generic.List{System.String})">
-            <summary>
-            Returns list of SQL entries not found in FTP directory list.
-            </summary>
-            <param name="sqlFiles"></param>
-            <param name="ftpDirs"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.FtpFunctions.ListMissingFTPDirs(System.Collections.Generic.List{System.String})">
-            <summary>
-            Returns list of FTP dirs that do not have an associated Device or Sibi request.
-            </summary>
-            <param name="ftpDirs"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.FtpFunctions.ListMissingSQLFiles(System.Collections.Generic.List{AssetManager.Data.Functions.FtpFunctions.AttachScanInfo},System.Collections.Generic.List{AssetManager.Data.Functions.FtpFunctions.AttachScanInfo})">
-            <summary>
-            Returns list of SQL files not found in FTP file list.
-            </summary>
-            <param name="sqlFiles"></param>
-            <param name="ftpFiles"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.FtpFunctions.ListMissingFTPFiles(System.Collections.Generic.List{AssetManager.Data.Functions.FtpFunctions.AttachScanInfo},System.Collections.Generic.List{AssetManager.Data.Functions.FtpFunctions.AttachScanInfo})">
-            <summary>
-            Returns list of FTP files not found in SQL file list.
-            </summary>
-            <param name="sqlFiles"></param>
-            <param name="ftpFiles"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.DBCacheFunctions.BuildCreateStatement(System.Data.DataTable)">
-            <summary>
-            Builds a Sqlite compatible CREATE statement from a MySQL 'SHOW FULL COLUMNS FROM' query result.
-            </summary>
-            <param name="columnResults"></param>
-            <returns></returns>
-        </member>
-        <member name="T:AssetManager.Data.Functions.ParseType">
-            <summary>
-            Determines how the parser handles the updating and filling of a control.
-            </summary>
-        </member>
-        <member name="F:AssetManager.Data.Functions.ParseType.DisplayOnly">
-            <summary>
-            The control is filled only.
-            </summary>
-        </member>
-        <member name="F:AssetManager.Data.Functions.ParseType.UpdateAndDisplay">
-            <summary>
-            The control is filled and will also be added to Update and Insert tables.
-            </summary>
-        </member>
-        <member name="T:AssetManager.Data.Functions.DBControlInfo">
-            <summary>
-            Instantiate and assign to <see cref="P:System.Windows.Forms.Control.Tag"/> property to enable DBParsing functions.
-            </summary>
-        </member>
-        <member name="P:AssetManager.Data.Functions.DBControlInfo.AttribIndex">
-            <summary>
-            Gets or sets the <see cref="T:AssetManager.Data.Classes.DBCode"/> index for <see cref="T:System.Windows.Forms.ComboBox"/> controls.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:AssetManager.Data.Functions.DBControlInfo.DataColumn">
-            <summary>
-            Gets or sets the Database Column used to update and/or populate the assigned control.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:AssetManager.Data.Functions.DBControlInfo.ParseType">
-            <summary>
-            Gets or sets <seealso cref="P:AssetManager.Data.Functions.DBControlInfo.ParseType"/>
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:AssetManager.Data.Functions.DBControlInfo.Required">
-            <summary>
-            Is the Control a required field?
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.DBControlParser.#ctor(System.Windows.Forms.Form)">
-            <summary>
-            Instantiate new instance of <see cref="T:AssetManager.Data.Functions.DBControlParser"/>
-            </summary>
-            <param name="parentForm">Form that contains controls initiated with <see cref="T:AssetManager.Data.Functions.DBControlInfo"/> </param>
-        </member>
-        <member name="M:AssetManager.Data.Functions.DBControlParser.FillDBFields(System.Data.DataTable,System.Collections.Generic.List{AssetManager.Data.Functions.DBRemappingInfo})">
-            <summary>
-            Populates all Controls in the ParentForm that have been initiated via <see cref="T:AssetManager.Data.Functions.DBControlInfo"/> with their corresponding column names.
-            </summary>
-            <param name="data">DataTable that contains the rows and columns associated with the controls.</param>
-            <param name="remappingList">List of remapping objects for mapping between different column names.</param>
-        </member>
-        <member name="M:AssetManager.Data.Functions.DBControlParser.GetRemappedColumnName(System.String,System.Collections.Generic.List{AssetManager.Data.Functions.DBRemappingInfo})">
-            <summary>
-            Get remapped column name for the specified column and remapping info. Returns new column name if a match is found in the map; otherwise, returns the original column name.
-            </summary>
-            <param name="columnName"></param>
-            <param name="mappingInfo"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.DBControlParser.EnableFieldValidation">
-            <summary>
-            Instantiates an error provider and sets all required DBControls validation events.
-            </summary>
-        </member>
-        <member name="M:AssetManager.Data.Functions.DBControlParser.GetDBControls(System.Windows.Forms.Control,System.Collections.Generic.List{System.Windows.Forms.Control})">
-            <summary>
-            Recursively collects list of controls initiated with <see cref="T:AssetManager.Data.Functions.DBControlInfo"/> tags within Parent control.
-            </summary>
-            <param name="parentControl">Parent control. Usually a Form to start from.</param>
-            <param name="controlList">Blank List of Control to be filled.</param>
-        </member>
-        <member name="M:AssetManager.Data.Functions.DBControlParser.ReturnInsertTable(System.String)">
-            <summary>
-            Collects an EMPTY DataTable via a SQL Select statement and adds a new row for SQL Insertion.
-            </summary>
-            <remarks>
-            The SQL SELECT statement should return an EMPTY table. A new row will be added to this table via <see cref="M:AssetManager.Data.Functions.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
-            </remarks>
-            <param name="selectQry">A SQL Select query string that will return an EMPTY table. Ex: "SELECT * FROM table LIMIT 0"</param>
-            <returns>
-            Returns a DataTable with a new row added via <see cref="M:AssetManager.Data.Functions.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
-            </returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.DBControlParser.ReturnUpdateTable(System.String)">
-            <summary>
-            Collects a DataTable via a SQL Select statement and modifies the topmost row with data parsed from <seealso cref="M:AssetManager.Data.Functions.DBControlParser.UpdateDBControlRow(System.Data.DataRow)"/>
-            </summary>
-            <remarks>
-            The SQL SELECT statement should return a single row only. This is will be the table row that you wish to update.
-            </remarks>
-            <param name="selectQry">A SQL Select query string that will return the table row that is to be updated.</param>
-            <returns>
-            Returns a DataTable modified by the controls identified by <see cref="M:AssetManager.Data.Functions.DBControlParser.GetDBControls(System.Windows.Forms.Control,System.Collections.Generic.List{System.Windows.Forms.Control})"/>
-            </returns>
-        </member>
-        <member name="M:AssetManager.Data.Functions.DBControlParser.UpdateDBControlRow(System.Data.DataRow)">
-            <summary>
-            Modifies a DataRow with data parsed from controls collected by <see cref="M:AssetManager.Data.Functions.DBControlParser.GetDBControlValue(System.Windows.Forms.Control)"/>
-            </summary>
-            <param name="DBRow">DataRow to be modified.</param>
-        </member>
         <member name="M:AssetManager.Data.DataConsistency.NoNull(System.Object)">
             <summary>
              Returns a <see cref="F:System.String.Empty"/> if the value is a <see cref="T:System.DBNull"/>.
@@ -470,6 +446,35 @@
             Trims, removes LF and CR chars and returns a DBNull if string is empty.
             </summary>
             <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AssetManager.CachedResourceManager">
+            <summary>
+            An extended Resource Manager that provides cached instances of objects.
+            This differs from the stock ResourceManager class which always
+            deserializes and creates new instances of every object.
+            After the first time an object is requested, it will be cached
+            for all future requests.
+            </summary>
+        </member>
+        <member name="F:AssetManager.CachedResourceManager.objectCache">
+            <summary>
+            A hashtable is used to store the objects.
+            </summary>
+        </member>
+        <member name="M:AssetManager.CachedResourceManager.GetObject(System.String)">
+            <summary>
+            Returns a cached instance of the specified resource.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.CachedResourceManager.GetObject(System.String,System.Globalization.CultureInfo)">
+            <summary>
+            Returns a cached instance of the specified resource.
+            </summary>
+            <param name="name"></param>
+            <param name="culture"></param>
             <returns></returns>
         </member>
         <member name="M:AssetManager.Helpers.ChildFormControl.FindFormByType(System.Type)">

@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\PDFFormFilling.cs" />
+    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\LevenshteinSearch.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedResourceManager.cs" />
     <Compile Include="Data\Databases.cs" />
     <Compile Include="Data\DataClasses\DataClassMapping\ColumnNameAttribute.cs" />
