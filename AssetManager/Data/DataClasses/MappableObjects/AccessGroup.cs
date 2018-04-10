@@ -19,7 +19,7 @@ namespace AssetManager.Data.Classes
         #region Properties
 
         [DataColumnName(SecurityCols.SecModule)]
-        public string AccessModule { get; set; }
+        public string Name { get; set; }
 
         [DataColumnName(SecurityCols.AvailOffline)]
         public bool AvailableOffline { get; set; }
@@ -28,6 +28,7 @@ namespace AssetManager.Data.Classes
         public string Description { get; set; }
 
         public override string Guid { get; set; }
+
         [DataColumnName(SecurityCols.AccessLevel)]
         public int Level { get; set; }
 

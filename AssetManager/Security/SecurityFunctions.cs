@@ -194,38 +194,55 @@ namespace AssetManager.Security
             }
         }
 
-        public static bool CanAccess(string module, int accessLevel = -1)
+        /// <summary>
+        /// Returns true if the specified user level has access the the specified security group.
+        /// </summary>
+        /// <param name="groupName">Name of the security group.</param>
+        public static bool CanAccess(string groupName)
         {
-            //bitwise access levels
-            int mask = 1;
-            int calc_level;
-            int usrLevel;
+            return CanAccess(groupName, localUser.AccessLevel);
+        }
 
-            if (accessLevel == -1)
-            {
-                usrLevel = localUser.AccessLevel;
-            }
-            else
-            {
-                usrLevel = accessLevel;
-            }
+        /// <summary>
+        /// Returns true if the specified user level has access the the specified security group.
+        /// </summary>
+        /// <param name="groupName">Name of the security group.</param>
+        /// <param name="userLevel">Access level to check against.</param>
+        /// <remarks>
+        /// Bitwise mask operation.
+        /// The user access level will be the sum of one or more groups, whos values increment
+        /// by multiple of 2. (ie. 1,2,4,8,16,32,64,...) So a user access level of 5 contains
+        /// only groups 1 and 3.
+        ///
+        /// A mask integer with the initial value of 1 is shifted left by 1 bit on each iteration.
+        /// A left bit shift increments the integer value by multiples of 2, same as the above example.
+        /// Then a bit AND operation is performed against the users access level and the mask. The AND
+        /// operation will result in the value of the mask only if the user access level contains
+        /// the mask bit.  So if groupMask = 4 and userLevel = 5, the value of (userLevel AND groupMask)
+        /// will equal 4. If levelMask = 2 the value of (userLevel AND groupMask) will equal 0.
+        /// </remarks>
+        public static bool CanAccess(string groupName, int userLevel)
+        {
+            int groupMask = 1;
 
             foreach (AccessGroup group in accessGroups.Values)
             {
-                calc_level = usrLevel & mask;
-                if (calc_level != 0)
+                // If the AND operation != 0 then the userLevel contains the current groupMask bit.
+                bool hasGroup = (userLevel & groupMask) != 0;
+
+                if (hasGroup)
                 {
-                    if (group.AccessModule == module)
+                    // We know that the current access level contains this group bit.
+                    // Now we need to see if the group name matches the specified value.
+                    if (group.Name == groupName)
                     {
+                        // If we are in offline cached mode, see if the current
+                        // is allowed to be accessed offline. Otherwise, return true.
                         if (GlobalSwitches.CachedMode)
                         {
                             if (group.AvailableOffline)
                             {
                                 return true;
-                            }
-                            else
-                            {
-                                return false;
                             }
                         }
                         else
@@ -234,7 +251,9 @@ namespace AssetManager.Security
                         }
                     }
                 }
-                mask = mask << 1;
+
+                // Bitwise Left shift.
+                groupMask <<= 1;
             }
             return false;
         }

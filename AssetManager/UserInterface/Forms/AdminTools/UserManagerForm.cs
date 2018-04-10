@@ -92,7 +92,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             {
                 chkModuleBox = new CheckBox();
                 chkModuleBox.Text = ModuleBox.Description;
-                chkModuleBox.Name = ModuleBox.AccessModule;
+                chkModuleBox.Name = ModuleBox.Name;
                 clbModules.DisplayMember = "Text";
                 clbModules.Items.Add(chkModuleBox);
             }
