@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using AssetManager.UserInterface.CustomControls;
 namespace AssetManager.UserInterface.Forms
 {
 
@@ -30,7 +31,7 @@ namespace AssetManager.UserInterface.Forms
             this.cmdOpen = new System.Windows.Forms.Button();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.Panel1 = new System.Windows.Forms.Panel();
-            this.AttachContainer = new System.Windows.Forms.SplitContainer();
+            this.AttachContainer = new HotTrackSplitContainer();
             this.FolderListView = new System.Windows.Forms.ListView();
             this.ColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.folderImageList = new System.Windows.Forms.ImageList(this.components);
@@ -667,7 +668,7 @@ namespace AssetManager.UserInterface.Forms
         internal ToolStripMenuItem SaveToMenuItem;
         internal Label Label4;
         internal TextBox ReqNumberTextBox;
-        internal SplitContainer AttachContainer;
+        internal HotTrackSplitContainer AttachContainer;
         internal ListView FolderListView;
         internal ColumnHeader ColumnHeader1;
         internal ImageList folderImageList;

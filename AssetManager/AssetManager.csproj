@@ -231,6 +231,9 @@
     <Compile Include="UserInterface\CustomControls\ExtendedForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\CustomControls\HotTrackSplitContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserInterface\CustomControls\RemoteTools\PSExecCommandForm.cs">
       <SubType>Form</SubType>
     </Compile>

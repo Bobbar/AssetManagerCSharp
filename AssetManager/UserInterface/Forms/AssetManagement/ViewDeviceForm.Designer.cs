@@ -77,7 +77,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.CancelToolButton = new System.Windows.Forms.ToolStripButton();
             this.ToolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.FieldsPanel = new System.Windows.Forms.Panel();
-            this.InfoDataSplitter = new System.Windows.Forms.SplitContainer();
+            this.InfoDataSplitter = new HotTrackSplitContainer();
             this.FieldTabs = new System.Windows.Forms.TabControl();
             this.AssetInfoTab = new System.Windows.Forms.TabPage();
             this.MiscInfoTab = new System.Windows.Forms.TabPage();
@@ -483,8 +483,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // TabControl1
             // 
-            this.TabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.TabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TabControl1.Controls.Add(this.HistoryTab);
             this.TabControl1.Controls.Add(this.TrackingTab);
@@ -809,7 +809,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // FieldsPanel
             // 
-            this.FieldsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.FieldsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FieldsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.FieldsPanel.Controls.Add(this.InfoDataSplitter);
@@ -838,9 +838,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.InfoDataSplitter.Size = new System.Drawing.Size(1268, 288);
             this.InfoDataSplitter.SplitterDistance = 833;
             this.InfoDataSplitter.TabIndex = 55;
-            this.InfoDataSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.splitCont_MouseDown);
-            this.InfoDataSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.splitCont_MouseMove);
-            this.InfoDataSplitter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.splitCont_MouseUp);
             // 
             // FieldTabs
             // 
@@ -1431,7 +1428,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal TextBox ADOSTextBox;
         internal ToolStripButton RefreshToolButton;
         internal ToolStripStatusLabel StatusLabel;
-        internal SplitContainer InfoDataSplitter;
+        internal HotTrackSplitContainer InfoDataSplitter;
         internal Panel Panel3;
         private RemoteToolsControl remoteToolsControl;
         private Label PingHistLabel;

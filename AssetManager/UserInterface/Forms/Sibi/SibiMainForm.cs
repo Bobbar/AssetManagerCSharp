@@ -255,7 +255,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 else
                 {
                     // Notify user of no results.
-                    searchSlider.QueueMessage("No matches found!", SlideDirection.Up, SlideDirection.Down, 0);
+                    searchSlider.QueueMessage("No matches found!", Color.Red, SlideDirection.Up, SlideDirection.Down, 0);
                 }
             }
         }
