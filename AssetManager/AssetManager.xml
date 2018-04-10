@@ -846,6 +846,32 @@
               Looks up a localized resource of type System.Byte[].
             </summary>
         </member>
+        <member name="M:AssetManager.Security.SecurityTools.CanAccess(System.String)">
+            <summary>
+            Returns true if the specified user level has access the the specified security group.
+            </summary>
+            <param name="groupName">Name of the security group.</param>
+        </member>
+        <member name="M:AssetManager.Security.SecurityTools.CanAccess(System.String,System.Int32)">
+             <summary>
+             Returns true if the specified user level has access the the specified security group.
+             </summary>
+             <param name="groupName">Name of the security group.</param>
+             <param name="userLevel">Access level to check against.</param>
+             <remarks>
+             Bitwise mask operation.
+             The user access level will be the sum of one or more groups, whos values increment
+             by multiple of 2. (ie. 1,2,4,8,16,32,64,...) So a user access level of 5 contains
+             only groups 1 and 3.
+            
+             A mask integer with the initial value of 1 is shifted left by 1 bit on each iteration.
+             A left bit shift increments the integer value by multiples of 2, same as the above example.
+             Then a bit AND operation is performed against the users access level and the mask. The AND
+             operation will result in the value of the mask only if the user access level contains
+             the mask bit.  So if groupMask = 4 and userLevel = 5, the value of (userLevel AND groupMask)
+             will equal 4. If levelMask = 2 the value of (userLevel AND groupMask) will equal 0.
+             </remarks>
+        </member>
         <member name="M:AssetManager.Security.SecurityTools.CheckForAccess(System.String)">
             <summary>
             Checks if current user has access to the specified group. Throws a <see cref="T:AssetManager.Security.InvalidAccessException"/> if they do not.
