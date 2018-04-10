@@ -1178,7 +1178,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolStrip1.Location = new System.Drawing.Point(3, 74);
             this.ToolStrip1.Name = "ToolStrip1";
             this.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.ToolStrip1.Size = new System.Drawing.Size(404, 37);
+            this.ToolStrip1.Size = new System.Drawing.Size(435, 37);
             this.ToolStrip1.TabIndex = 45;
             this.ToolStrip1.Text = "MyToolStrip1";
             // 
@@ -1234,6 +1234,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.AttachmentsToolButton.Name = "AttachmentsToolButton";
             this.AttachmentsToolButton.Padding = new System.Windows.Forms.Padding(5, 5, 5, 0);
             this.AttachmentsToolButton.Size = new System.Drawing.Size(39, 34);
+            this.AttachmentsToolButton.ToolTipText = "Attachments";
             this.AttachmentsToolButton.Click += new System.EventHandler(this.AttachmentsToolButton_Click);
             // 
             // ToolStripSeparator7
