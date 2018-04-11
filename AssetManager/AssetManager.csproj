@@ -160,7 +160,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\PDFFormFilling.cs" />
-    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\LevenshteinSearch.cs" />
+    <Compile Include="Data\Functions\DatabaseHelperFunctions\LevenshteinSearch.cs" />
+    <Compile Include="Data\Functions\DBControls\DBControlInfo.cs" />
+    <Compile Include="Data\Functions\DBControls\DBRemappingInfo.cs" />
+    <Compile Include="Data\Functions\DBControls\ParseType.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedResourceManager.cs" />
     <Compile Include="Data\Databases.cs" />
     <Compile Include="Data\DataClasses\DataClassMapping\ColumnNameAttribute.cs" />
@@ -177,16 +180,16 @@
     <Compile Include="Data\DataComms\SQL\Queries.cs" />
     <Compile Include="Data\DataComms\Munis\MunisComms.cs" />
     <Compile Include="Data\DataComms\NetDriveMapper\NetworkConnection.cs" />
-    <Compile Include="Data\DataFunctions\ClientSideFunctions\AttribIndexFunctions.cs" />
+    <Compile Include="Data\Functions\ClientSideFunctions\AttribIndexFunctions.cs" />
     <Compile Include="Data\DataConsistency.cs" />
-    <Compile Include="Data\DataFunctions\ConnectionWatchdog.cs" />
-    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AdvancedSearch.cs" />
-    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\AssetManagerFunctions.cs" />
-    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\FTPFunctions.cs" />
-    <Compile Include="Data\DataFunctions\DatabaseHelperFunctions\MunisFunctions.cs" />
-    <Compile Include="Data\DataFunctions\DBCacheFunctions.cs" />
-    <Compile Include="Data\DataFunctions\DBControls\DBControlExtensions.cs" />
-    <Compile Include="Data\DataFunctions\DBControls\DBControlParser.cs" />
+    <Compile Include="Data\Functions\ConnectionWatchdog.cs" />
+    <Compile Include="Data\Functions\DatabaseHelperFunctions\AdvancedSearch.cs" />
+    <Compile Include="Data\Functions\DatabaseHelperFunctions\AssetManagerFunctions.cs" />
+    <Compile Include="Data\Functions\DatabaseHelperFunctions\FTPFunctions.cs" />
+    <Compile Include="Data\Functions\DatabaseHelperFunctions\MunisFunctions.cs" />
+    <Compile Include="Data\Functions\DBCacheFunctions.cs" />
+    <Compile Include="Data\Functions\DBControls\DBControlExtensions.cs" />
+    <Compile Include="Data\Functions\DBControls\DBControlParser.cs" />
     <Compile Include="GlobalObjects\GlobalSwitches.cs" />
     <Compile Include="GlobalObjects\Paths.cs" />
     <Compile Include="Helpers\ChildFormControl.cs" />

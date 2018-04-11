@@ -43,6 +43,50 @@
             <param name="empNumColumn"></param>
             <returns></returns>
         </member>
+        <member name="T:AssetManager.Data.Functions.DBControlInfo">
+            <summary>
+            Instantiate and assign to <see cref="P:System.Windows.Forms.Control.Tag"/> property to enable DBParsing functions.
+            </summary>
+        </member>
+        <member name="P:AssetManager.Data.Functions.DBControlInfo.Attributes">
+            <summary>
+            Gets or sets the <see cref="T:AssetManager.Data.Classes.DbAttributes"/> for <see cref="T:System.Windows.Forms.ComboBox"/> controls.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.Data.Functions.DBControlInfo.ColumnName">
+            <summary>
+            Gets or sets the Database Column used to update and/or populate the assigned control.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.Data.Functions.DBControlInfo.ParseType">
+            <summary>
+            Gets or sets <seealso cref="P:AssetManager.Data.Functions.DBControlInfo.ParseType"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:AssetManager.Data.Functions.DBControlInfo.Required">
+            <summary>
+            Is the Control a required field?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:AssetManager.Data.Functions.ParseType">
+            <summary>
+            Determines how the parser handles the updating and filling of a control.
+            </summary>
+        </member>
+        <member name="F:AssetManager.Data.Functions.ParseType.DisplayOnly">
+            <summary>
+            The control is filled only.
+            </summary>
+        </member>
+        <member name="F:AssetManager.Data.Functions.ParseType.UpdateAndDisplay">
+            <summary>
+            The control is filled and will also be added to Update and Insert tables.
+            </summary>
+        </member>
         <member name="M:AssetManager.Data.Functions.FtpFunctions.CheckForPrimaryItem(System.String)">
             <summary>
             Checks if supplied Guid exists in Devices or Sibi tables.
@@ -85,50 +129,6 @@
             Builds a Sqlite compatible CREATE statement from a MySQL 'SHOW FULL COLUMNS FROM' query result.
             </summary>
             <param name="columnResults"></param>
-            <returns></returns>
-        </member>
-        <member name="T:AssetManager.Data.Functions.ParseType">
-            <summary>
-            Determines how the parser handles the updating and filling of a control.
-            </summary>
-        </member>
-        <member name="F:AssetManager.Data.Functions.ParseType.DisplayOnly">
-            <summary>
-            The control is filled only.
-            </summary>
-        </member>
-        <member name="F:AssetManager.Data.Functions.ParseType.UpdateAndDisplay">
-            <summary>
-            The control is filled and will also be added to Update and Insert tables.
-            </summary>
-        </member>
-        <member name="T:AssetManager.Data.Functions.DBControlInfo">
-            <summary>
-            Instantiate and assign to <see cref="P:System.Windows.Forms.Control.Tag"/> property to enable DBParsing functions.
-            </summary>
-        </member>
-        <member name="P:AssetManager.Data.Functions.DBControlInfo.Attributes">
-            <summary>
-            Gets or sets the <see cref="T:AssetManager.Data.Classes.DbAttributes"/> for <see cref="T:System.Windows.Forms.ComboBox"/> controls.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:AssetManager.Data.Functions.DBControlInfo.ColumnName">
-            <summary>
-            Gets or sets the Database Column used to update and/or populate the assigned control.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:AssetManager.Data.Functions.DBControlInfo.ParseType">
-            <summary>
-            Gets or sets <seealso cref="P:AssetManager.Data.Functions.DBControlInfo.ParseType"/>
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:AssetManager.Data.Functions.DBControlInfo.Required">
-            <summary>
-            Is the Control a required field?
-            </summary>
             <returns></returns>
         </member>
         <member name="M:AssetManager.Data.Functions.DBControlParser.#ctor(System.Windows.Forms.Form)">

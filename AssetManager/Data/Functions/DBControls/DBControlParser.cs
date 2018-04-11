@@ -1,117 +1,8 @@
-using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
-
-namespace AssetManager.Data.Functions
-{
-    /// <summary>
-    /// Determines how the parser handles the updating and filling of a control.
-    /// </summary>
-    public enum ParseType
-    {
-        /// <summary>
-        /// The control is filled only.
-        /// </summary>
-        DisplayOnly,
-
-        /// <summary>
-        /// The control is filled and will also be added to Update and Insert tables.
-        /// </summary>
-        UpdateAndDisplay
-    }
-}
-
-namespace AssetManager.Data.Functions
-{
-    /// <summary>
-    /// Instantiate and assign to <see cref="Control.Tag"/> property to enable DBParsing functions.
-    /// </summary>
-    public class DBControlInfo
-    {
-        #region "Fields"
-
-        private DbAttributes attribute;
-        private string columnName;
-        private ParseType parseType;
-        private bool isRequired;
-
-        #endregion "Fields"
-
-        #region "Constructors"
-
-        public DBControlInfo(string columnName, DbAttributes attribute, ParseType parseType, bool required)
-        {
-            this.columnName = columnName;
-            isRequired = required;
-            this.parseType = parseType;
-            this.attribute = attribute;
-        }
-
-        #endregion "Constructors"
-
-        #region "Properties"
-
-        /// <summary>
-        /// Gets or sets the <see cref="DbAttributes"/> for <see cref="ComboBox"/> controls.
-        /// </summary>
-        /// <returns></returns>
-        public DbAttributes Attributes
-        {
-            get { return attribute; }
-            set { attribute = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the Database Column used to update and/or populate the assigned control.
-        /// </summary>
-        /// <returns></returns>
-        public string ColumnName
-        {
-            get { return columnName; }
-            set { columnName = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets <seealso cref="ParseType"/>
-        /// </summary>
-        /// <returns></returns>
-        public ParseType ParseType
-        {
-            get { return parseType; }
-            set { parseType = value; }
-        }
-
-        /// <summary>
-        /// Is the Control a required field?
-        /// </summary>
-        /// <returns></returns>
-        public bool Required
-        {
-            get { return isRequired; }
-            set { isRequired = value; }
-        }
-
-        #endregion "Properties"
-    }
-}
-
-namespace AssetManager.Data.Functions
-{
-    public struct DBRemappingInfo
-    {
-        public string FromColumnName { get; set; }
-        public string ToColumnName { get; set; }
-
-        public DBRemappingInfo(string fromColumn, string toColumn)
-        {
-            FromColumnName = fromColumn;
-            ToColumnName = toColumn;
-        }
-    }
-}
 
 namespace AssetManager.Data.Functions
 {
@@ -170,7 +61,7 @@ namespace AssetManager.Data.Functions
                 {
                     if (ctl is TextBox)
                     {
-                        TextBox dbTxt = (TextBox)ctl;
+                        var dbTxt = (TextBox)ctl;
                         if (dbInfo.Attributes != null)
                         {
                             dbTxt.Text = dbInfo.Attributes[(dataRow[columnName].ToString())].DisplayValue;
@@ -182,32 +73,32 @@ namespace AssetManager.Data.Functions
                     }
                     else if (ctl is MaskedTextBox)
                     {
-                        MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
+                        var dbMaskTxt = (MaskedTextBox)ctl;
                         dbMaskTxt.Text = dataRow[columnName].ToString();
                     }
                     else if (ctl is DateTimePicker)
                     {
-                        DateTimePicker dbDtPick = (DateTimePicker)ctl;
+                        var dbDtPick = (DateTimePicker)ctl;
                         dbDtPick.Value = DateTime.Parse(dataRow[columnName].ToString());
                     }
                     else if (ctl is ComboBox)
                     {
-                        ComboBox dbCmb = (ComboBox)ctl;
+                        var dbCmb = (ComboBox)ctl;
                         dbCmb.SetSelectedAttribute(dbInfo.Attributes[dataRow[columnName].ToString()]);
                     }
                     else if (ctl is Label)
                     {
-                        Label dbLbl = (Label)ctl;
+                        var dbLbl = (Label)ctl;
                         dbLbl.Text = dataRow[columnName].ToString();
                     }
                     else if (ctl is CheckBox)
                     {
-                        CheckBox dbChk = (CheckBox)ctl;
+                        var dbChk = (CheckBox)ctl;
                         dbChk.Checked = Convert.ToBoolean(dataRow[columnName]);
                     }
                     else if (ctl is RichTextBox)
                     {
-                        RichTextBox dbRtb = (RichTextBox)ctl;
+                        var dbRtb = (RichTextBox)ctl;
                         dbRtb.TextOrRtf(dataRow[columnName].ToString());
                     }
                     else
