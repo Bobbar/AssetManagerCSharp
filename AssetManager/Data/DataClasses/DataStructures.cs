@@ -54,6 +54,10 @@ namespace AssetManager.Data.Classes
             Add(new DbAttribute(displayValue, code, id, color));
         }
 
+        /// <summary>
+        /// Creates and adds a new <see cref="DbAttribute"/> to the collection.
+        /// </summary>
+        /// <param name="attribute">The new <see cref="DbAttribute"/> object to be added to the collection.</param>
         public void Add(DbAttribute attribute)
         {
             if (!attributes.ContainsKey(attribute.Code))
@@ -62,6 +66,10 @@ namespace AssetManager.Data.Classes
             }
         }
 
+        /// <summary>
+        /// Returns an array of <see cref="DbAttribute"/> from the collection.
+        /// </summary>
+        /// <returns></returns>
         public DbAttribute[] GetArray()
         {
             var tmpList = new List<DbAttribute>();
@@ -112,10 +120,6 @@ namespace AssetManager.Data.Classes
             public static DbAttributes StatusType;
             public static DbAttributes ItemStatusType;
             public static DbAttributes RequestType;
-
-            //public static DBCode[] StatusType;
-            //public static DBCode[] ItemStatusType;
-            //public static DBCode[] RequestType;
         }
 
         public static class DeviceAttributes
@@ -125,12 +129,6 @@ namespace AssetManager.Data.Classes
             public static DbAttributes EquipType;
             public static DbAttributes OSType;
             public static DbAttributes StatusType;
-
-            //public static DBCode[] Locations;
-            //public static DBCode[] ChangeType;
-            //public static DBCode[] EquipType;
-            //public static DBCode[] OSType;
-            //public static DBCode[] StatusType;
         }
     }
 

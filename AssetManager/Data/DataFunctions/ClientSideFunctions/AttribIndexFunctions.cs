@@ -11,11 +11,11 @@ namespace AssetManager.Data.Functions
 {
     internal static class AttributeFunctions
     {
-        public static Dictionary<string, string> DepartmentCodes;
+        private static Dictionary<string, string> departmentCodes;
 
         public static void PopulateAttributeIndexes()
         {
-            var BuildIdxs = Task.Run((Action)(() =>
+            var BuildIdxs = Task.Run(() =>
             {
                 Attributes.DeviceAttributes.Locations = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.Location);
                 Attributes.DeviceAttributes.ChangeType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.ChangeType);
@@ -26,28 +26,28 @@ namespace AssetManager.Data.Functions
                 Attributes.SibiAttributes.ItemStatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiItemStatusType);
                 Attributes.SibiAttributes.RequestType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiRequestType);
                 PopulateDepartments();
-            }));
+            });
             BuildIdxs.Wait();
         }
 
         private static void PopulateDepartments()
         {
-            DepartmentCodes = new Dictionary<string, string>();
+            departmentCodes = new Dictionary<string, string>();
             var selectDpmtQuery = "SELECT * FROM munis_departments";
             using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(selectDpmtQuery))
             {
                 foreach (DataRow row in results.Rows)
                 {
-                    DepartmentCodes.Add(row["asset_location_code"].ToString(), row["munis_department_code"].ToString());
+                    departmentCodes.Add(row["asset_location_code"].ToString(), row["munis_department_code"].ToString());
                 }
             }
         }
 
         public static string DepartmentOf(string location)
         {
-            if (DepartmentCodes.ContainsKey(location))
+            if (departmentCodes.ContainsKey(location))
             {
-                return DepartmentCodes[location];
+                return departmentCodes[location];
             }
             return string.Empty;
         }

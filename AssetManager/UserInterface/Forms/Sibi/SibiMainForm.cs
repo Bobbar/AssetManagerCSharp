@@ -152,19 +152,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
         /// <summary>
         /// Gets the color associated with the specified attribute code. Alpha blended with gray to make it more pastel.
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="statusCode"></param>
         /// <returns></returns>
-        private Color GetRowColor(string code)
+        private Color GetRowColor(string statusCode)
         {
             // Gray color.
-            Color blendColor = Color.FromArgb(222, 222, 222);
-
-            // Get a list from the attrib array.
-           // var attribList = Attributes.SibiAttributes.StatusType.OfType<DBCode>().ToList();
-
-            // Use List.Find to locate the matching attribute.
-            var attribColor = Attributes.SibiAttributes.StatusType[code].Color;
-            //var attribColor = attribList.Find((a) => { return a.Code == code; }).Color;
+            var blendColor = Color.FromArgb(222, 222, 222);
+            var attribColor = Attributes.SibiAttributes.StatusType[statusCode].Color;
 
             // Return the a blended color.
             return StyleFunctions.ColorAlphaBlend(attribColor, blendColor);

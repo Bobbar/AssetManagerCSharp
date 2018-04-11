@@ -2,10 +2,6 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Linq;
-using System.ComponentModel;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace AssetManager.Helpers
 {
@@ -46,6 +42,7 @@ namespace AssetManager.Helpers
             using (Graphics gfx = senderComboBox.CreateGraphics())
             {
                 int vertScrollBarWidth = 0;
+
                 if (senderComboBox.Items.Count > senderComboBox.MaxDropDownItems)
                 {
                     vertScrollBarWidth = SystemInformation.VerticalScrollBarWidth;
@@ -54,6 +51,7 @@ namespace AssetManager.Helpers
                 {
                     vertScrollBarWidth = 0;
                 }
+
                 foreach (var s in senderComboBox.Items)
                 {
                     newWidth = Convert.ToInt32(gfx.MeasureString(s.ToString(), senderComboBox.Font).Width) + vertScrollBarWidth;

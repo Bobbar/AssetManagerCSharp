@@ -152,7 +152,7 @@ namespace AssetManager.Data.Functions
     {
         #region "Fields"
 
-        private Form ParentForm;
+        private Form parentForm;
         private ErrorProvider errorProvider;
 
         public ErrorProvider ErrorProvider
@@ -170,7 +170,7 @@ namespace AssetManager.Data.Functions
         /// <param name="parentForm">Form that contains controls initiated with <see cref="DBControlInfo"/> </param>
         public DBControlParser(Form parentForm)
         {
-            this.ParentForm = parentForm;
+            this.parentForm = parentForm;
         }
 
         #endregion "Constructors"
@@ -185,9 +185,9 @@ namespace AssetManager.Data.Functions
         public void FillDBFields(DataTable data, List<DBRemappingInfo> remappingList = null)
         {
             var dataRow = data.Rows[0];
-            foreach (Control ctl in GetDBControls(ParentForm))
+            foreach (var ctl in GetDBControls(parentForm))
             {
-                DBControlInfo dbInfo = (DBControlInfo)ctl.Tag;
+                var dbInfo = (DBControlInfo)ctl.Tag;
                 string columnName = null;
 
                 if (remappingList != null)
@@ -284,7 +284,7 @@ namespace AssetManager.Data.Functions
 
         private void SetValidateEvents()
         {
-            foreach (Control ctl in GetDBControls(ParentForm))
+            foreach (Control ctl in GetDBControls(parentForm))
             {
                 var DBInfo = (DBControlInfo)ctl.Tag;
                 if (DBInfo.Required)
@@ -353,7 +353,7 @@ namespace AssetManager.Data.Functions
         public bool ValidateFields()
         {
             bool fieldsValid = true;
-            foreach (Control ctl in GetDBControls(ParentForm))
+            foreach (Control ctl in GetDBControls(parentForm))
             {
                 if (!ValidateControl(ctl))
                 {
@@ -386,7 +386,7 @@ namespace AssetManager.Data.Functions
         {
             errorProvider.Clear();
 
-            foreach (Control c in GetDBControls(ParentForm))
+            foreach (Control c in GetDBControls(parentForm))
             {
                 c.BackColor = System.Drawing.Color.Empty;
             }
@@ -501,7 +501,7 @@ namespace AssetManager.Data.Functions
         /// <param name="DBRow">DataRow to be modified.</param>
         private void UpdateDBControlRow(DataRow DBRow)
         {
-            foreach (Control ctl in GetDBControls(ParentForm))
+            foreach (Control ctl in GetDBControls(parentForm))
             {
                 DBControlInfo DBInfo = (DBControlInfo)ctl.Tag;
                 if (DBInfo.ParseType != ParseType.DisplayOnly)
