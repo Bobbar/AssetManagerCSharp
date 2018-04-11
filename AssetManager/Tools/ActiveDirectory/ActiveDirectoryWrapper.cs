@@ -152,7 +152,7 @@ namespace AssetManager.Tools
         {
             try
             {
-                if (value.GetType() == typeof(long))
+                if (value is long)
                 {
                     var longTime = System.Convert.ToInt64(value);
                     return DateTime.FromFileTime(longTime).ToString();

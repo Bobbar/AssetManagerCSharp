@@ -22,36 +22,32 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region Constructors
 
-        public ExtendedForm()
-        {
-            SubscribeEvents();
-        }
-
-        public ExtendedForm(ExtendedForm parentForm)
-        {
-            ParentForm = parentForm;
-            SubscribeEvents();
-        }
-
-        public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject)
-        {
-            ParentForm = parentForm;
-            FormGuid = currentObject.Guid;
-            SubscribeEvents();
-        }
-
-        public ExtendedForm(ExtendedForm parentForm, string formGuid)
-        {
-            ParentForm = parentForm;
-            FormGuid = formGuid;
-            SubscribeEvents();
-        }
-
-        public ExtendedForm(ExtendedForm parentForm, bool inheritTheme = true)
+        public ExtendedForm(ExtendedForm parentForm, string formGuid, bool inheritTheme)
         {
             this.inheritTheme = inheritTheme;
+            FormGuid = formGuid;
             ParentForm = parentForm;
             SubscribeEvents();
+        }
+
+        public ExtendedForm() : this(null, string.Empty, true)
+        {
+        }
+
+        public ExtendedForm(ExtendedForm parentForm) : this(parentForm, string.Empty, true)
+        {
+        }
+
+        public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject) : this(parentForm, currentObject.Guid, true)
+        {
+        }
+
+        public ExtendedForm(ExtendedForm parentForm, string formGuid) : this(parentForm, formGuid, true)
+        {
+        }
+
+        public ExtendedForm(ExtendedForm parentForm, bool inheritTheme) : this(parentForm, string.Empty, inheritTheme)
+        {
         }
 
         #endregion Constructors
@@ -110,7 +106,7 @@ namespace AssetManager.UserInterface.CustomControls
             set
             {
                 this.parentForm = value;
-                if (inheritTheme)
+                if (inheritTheme && parentForm != null)
                 {
                     SetTheme(this.parentForm);
                 }
