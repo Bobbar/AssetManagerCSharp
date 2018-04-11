@@ -8,7 +8,7 @@ namespace AssetManager.Data.Functions
 {
     public static class DBControlExtensions
     {
-        private static Dictionary<string, int> ColumnLengths = new Dictionary<string, int>();
+        private static Dictionary<string, int> columnLengths = new Dictionary<string, int>();
 
         public static void GetFieldLengths()
         {
@@ -22,47 +22,49 @@ namespace AssetManager.Data.Functions
                 {
                     if (!(row["CHARACTER_MAXIMUM_LENGTH"] is DBNull))
                     {
-                        if (!ColumnLengths.ContainsKey(row["COLUMN_NAME"].ToString()))
+                        if (!columnLengths.ContainsKey(row["COLUMN_NAME"].ToString()))
                         {
-                            ColumnLengths.Add(row["COLUMN_NAME"].ToString(), Convert.ToInt32(row["CHARACTER_MAXIMUM_LENGTH"]));
+                            columnLengths.Add(row["COLUMN_NAME"].ToString(), Convert.ToInt32(row["CHARACTER_MAXIMUM_LENGTH"]));
                         }
                     }
                 }
             }
         }
 
-        public static void SetDBInfo(this Control control, string dataColumn, bool required = false)
+        public static void SetDBInfo(this Control control, string columnName)
         {
-            SetControlMaxLength(control, dataColumn);
-            control.Tag = new DBControlInfo(dataColumn, required);
+            SetDBInfo(control, columnName, null, ParseType.DisplayOnly, false);
         }
 
-        public static void SetDBInfo(this Control control, string dataColumn, ParseType parseType, bool required = false)
+        public static void SetDBInfo(this Control control, string columnName, bool required)
         {
-            SetControlMaxLength(control, dataColumn);
-            control.Tag = new DBControlInfo(dataColumn, parseType, required);
+            SetDBInfo(control, columnName, null, ParseType.UpdateAndDisplay, required);
         }
 
-        public static void SetDBInfo(this Control control, string dataColumn, DbAttributes attribs, bool required = false)
+        public static void SetDBInfo(this Control control, string columnName, ParseType parseType, bool required)
         {
-            SetControlMaxLength(control, dataColumn);
-            control.Tag = new DBControlInfo(dataColumn, attribs, required);
+            SetDBInfo(control, columnName, null, parseType, required);
         }
 
-        public static void SetDBInfo(this Control control, string dataColumn, DbAttributes attribs, ParseType parseType, bool required = false)
+        public static void SetDBInfo(this Control control, string columnName, DbAttributes attribs, bool required = false)
         {
-            SetControlMaxLength(control, dataColumn);
-            control.Tag = new DBControlInfo(dataColumn, attribs, parseType, required);
+            SetDBInfo(control, columnName, attribs, ParseType.UpdateAndDisplay, required);
+        }
+
+        public static void SetDBInfo(this Control control, string columnName, DbAttributes attribs, ParseType parseType, bool required = false)
+        {
+            SetControlMaxLength(control, columnName);
+            control.Tag = new DBControlInfo(columnName, attribs, parseType, required);
         }
 
         private static void SetControlMaxLength(Control control, string dataColumn)
         {
-            if (ColumnLengths.ContainsKey(dataColumn))
+            if (columnLengths.ContainsKey(dataColumn))
             {
                 if (control is TextBox)
                 {
                     var txt = (TextBox)control;
-                    txt.MaxLength = ColumnLengths[dataColumn];
+                    txt.MaxLength = columnLengths[dataColumn];
                 }
             }
         }

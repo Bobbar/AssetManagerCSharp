@@ -33,54 +33,21 @@ namespace AssetManager.Data.Functions
     {
         #region "Fields"
 
-        private DbAttributes dbAttrib;
+        private DbAttributes attribute;
         private string columnName;
         private ParseType parseType;
-
-        private bool db_required;
+        private bool isRequired;
 
         #endregion "Fields"
 
         #region "Constructors"
 
-        public DBControlInfo()
+        public DBControlInfo(string columnName, DbAttributes attribute, ParseType parseType, bool required)
         {
-            columnName = "";
-            db_required = false;
-            parseType = ParseType.DisplayOnly;
-            dbAttrib = null;
-        }
-
-        public DBControlInfo(string dataColumn, ParseType parseType, bool required = false)
-        {
-            columnName = dataColumn;
-            db_required = required;
+            this.columnName = columnName;
+            isRequired = required;
             this.parseType = parseType;
-            dbAttrib = null;
-        }
-
-        public DBControlInfo(string dataColumn, bool required = false)
-        {
-            columnName = dataColumn;
-            db_required = required;
-            parseType = ParseType.UpdateAndDisplay;
-            dbAttrib = null;
-        }
-
-        public DBControlInfo(string dataColumn, DbAttributes attribute, bool required = false)
-        {
-            columnName = dataColumn;
-            db_required = required;
-            parseType = ParseType.UpdateAndDisplay;
-            dbAttrib = attribute;
-        }
-
-        public DBControlInfo(string dataColumn, DbAttributes attribute, ParseType parseType, bool required = false)
-        {
-            columnName = dataColumn;
-            db_required = required;
-            this.parseType = parseType;
-            dbAttrib = attribute;
+            this.attribute = attribute;
         }
 
         #endregion "Constructors"
@@ -93,8 +60,8 @@ namespace AssetManager.Data.Functions
         /// <returns></returns>
         public DbAttributes Attributes
         {
-            get { return dbAttrib; }
-            set { dbAttrib = value; }
+            get { return attribute; }
+            set { attribute = value; }
         }
 
         /// <summary>
@@ -123,8 +90,8 @@ namespace AssetManager.Data.Functions
         /// <returns></returns>
         public bool Required
         {
-            get { return db_required; }
-            set { db_required = value; }
+            get { return isRequired; }
+            set { isRequired = value; }
         }
 
         #endregion "Properties"
@@ -201,9 +168,7 @@ namespace AssetManager.Data.Functions
 
                 if (dataRow.Table.Columns.Contains(columnName))
                 {
-                    Type ctlType = ctl.GetType();
-
-                    if (ctlType == typeof(TextBox))
+                    if (ctl is TextBox)
                     {
                         TextBox dbTxt = (TextBox)ctl;
                         if (dbInfo.Attributes != null)
@@ -215,32 +180,32 @@ namespace AssetManager.Data.Functions
                             dbTxt.Text = dataRow[columnName].ToString();
                         }
                     }
-                    else if (ctlType == typeof(MaskedTextBox))
+                    else if (ctl is MaskedTextBox)
                     {
                         MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
                         dbMaskTxt.Text = dataRow[columnName].ToString();
                     }
-                    else if (ctlType == typeof(DateTimePicker))
+                    else if (ctl is DateTimePicker)
                     {
                         DateTimePicker dbDtPick = (DateTimePicker)ctl;
                         dbDtPick.Value = DateTime.Parse(dataRow[columnName].ToString());
                     }
-                    else if (ctlType == typeof(ComboBox))
+                    else if (ctl is ComboBox)
                     {
                         ComboBox dbCmb = (ComboBox)ctl;
                         dbCmb.SetSelectedAttribute(dbInfo.Attributes[dataRow[columnName].ToString()]);
                     }
-                    else if (ctlType == typeof(Label))
+                    else if (ctl is Label)
                     {
                         Label dbLbl = (Label)ctl;
                         dbLbl.Text = dataRow[columnName].ToString();
                     }
-                    else if (ctlType == typeof(CheckBox))
+                    else if (ctl is CheckBox)
                     {
                         CheckBox dbChk = (CheckBox)ctl;
                         dbChk.Checked = Convert.ToBoolean(dataRow[columnName]);
                     }
-                    else if (ctlType == typeof(RichTextBox))
+                    else if (ctl is RichTextBox)
                     {
                         RichTextBox dbRtb = (RichTextBox)ctl;
                         dbRtb.TextOrRtf(dataRow[columnName].ToString());
@@ -286,8 +251,8 @@ namespace AssetManager.Data.Functions
         {
             foreach (Control ctl in GetDBControls(parentForm))
             {
-                var DBInfo = (DBControlInfo)ctl.Tag;
-                if (DBInfo.Required)
+                var dbInfo = (DBControlInfo)ctl.Tag;
+                if (dbInfo.Required)
                 {
                     ctl.Validated += ControlValidateEvent;
                 }
@@ -298,7 +263,7 @@ namespace AssetManager.Data.Functions
         {
             if (errorProvider != null)
             {
-                Control ctl = (Control)sender;
+                var ctl = (Control)sender;
                 if (ctl.Enabled)
                 {
                     ValidateControl(ctl);
@@ -353,7 +318,7 @@ namespace AssetManager.Data.Functions
         public bool ValidateFields()
         {
             bool fieldsValid = true;
-            foreach (Control ctl in GetDBControls(parentForm))
+            foreach (var ctl in GetDBControls(parentForm))
             {
                 if (!ValidateControl(ctl))
                 {
@@ -386,9 +351,9 @@ namespace AssetManager.Data.Functions
         {
             errorProvider.Clear();
 
-            foreach (Control c in GetDBControls(parentForm))
+            foreach (var ctl in GetDBControls(parentForm))
             {
-                c.BackColor = System.Drawing.Color.Empty;
+                ctl.BackColor = System.Drawing.Color.Empty;
             }
         }
 
@@ -416,26 +381,26 @@ namespace AssetManager.Data.Functions
             return controlList;
         }
 
-        public object GetDBControlValue(Control dbControl)
+        public object GetDBControlValue(Control control)
         {
-            if (dbControl is TextBox)
+            if (control is TextBox)
             {
-                TextBox dbTxt = (TextBox)dbControl;
+                var dbTxt = (TextBox)control;
                 return DataConsistency.CleanDBValue(dbTxt.Text);
             }
-            else if (dbControl is MaskedTextBox)
+            else if (control is MaskedTextBox)
             {
-                MaskedTextBox dbMaskTxt = (MaskedTextBox)dbControl;
+                var dbMaskTxt = (MaskedTextBox)control;
                 return DataConsistency.CleanDBValue(dbMaskTxt.Text);
             }
-            else if (dbControl is DateTimePicker)
+            else if (control is DateTimePicker)
             {
-                DateTimePicker dbDtPick = (DateTimePicker)dbControl;
+                var dbDtPick = (DateTimePicker)control;
                 return dbDtPick.Value;
             }
-            else if (dbControl is ComboBox)
+            else if (control is ComboBox)
             {
-                ComboBox dbCmb = (ComboBox)dbControl;
+                var dbCmb = (ComboBox)control;
                 if (dbCmb.SelectedIndex > -1)
                 {
                     return dbCmb.SelectedValue.ToString();
@@ -445,9 +410,9 @@ namespace AssetManager.Data.Functions
                     return dbCmb.Text;
                 }
             }
-            else if (dbControl is CheckBox)
+            else if (control is CheckBox)
             {
-                CheckBox dbChk = (CheckBox)dbControl;
+                var dbChk = (CheckBox)control;
                 return dbChk.Checked;
             }
             else
@@ -498,15 +463,15 @@ namespace AssetManager.Data.Functions
         /// <summary>
         /// Modifies a DataRow with data parsed from controls collected by <see cref="GetDBControlValue(Control)"/>
         /// </summary>
-        /// <param name="DBRow">DataRow to be modified.</param>
-        private void UpdateDBControlRow(DataRow DBRow)
+        /// <param name="row">DataRow to be modified.</param>
+        private void UpdateDBControlRow(DataRow row)
         {
-            foreach (Control ctl in GetDBControls(parentForm))
+            foreach (var ctl in GetDBControls(parentForm))
             {
-                DBControlInfo DBInfo = (DBControlInfo)ctl.Tag;
-                if (DBInfo.ParseType != ParseType.DisplayOnly)
+                var dbInfo = (DBControlInfo)ctl.Tag;
+                if (dbInfo.ParseType != ParseType.DisplayOnly)
                 {
-                    DBRow[DBInfo.ColumnName] = GetDBControlValue(ctl);
+                    row[dbInfo.ColumnName] = GetDBControlValue(ctl);
                 }
             }
         }

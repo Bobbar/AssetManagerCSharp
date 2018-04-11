@@ -192,7 +192,7 @@
             <summary>
             Modifies a DataRow with data parsed from controls collected by <see cref="M:AssetManager.Data.Functions.DBControlParser.GetDBControlValue(System.Windows.Forms.Control)"/>
             </summary>
-            <param name="DBRow">DataRow to be modified.</param>
+            <param name="row">DataRow to be modified.</param>
         </member>
         <member name="T:AssetManager.Data.Classes.MappableObject">
             <summary>
@@ -1495,7 +1495,7 @@
             <summary>
             Gets the color associated with the specified attribute code. Alpha blended with gray to make it more pastel.
             </summary>
-            <param name="code"></param>
+            <param name="statusCode"></param>
             <returns></returns>
         </member>
         <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiMainForm.ItemSearch(System.String)">
