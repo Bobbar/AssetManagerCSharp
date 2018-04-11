@@ -1,7 +1,81 @@
+using System.Collections.Generic;
 using System.Drawing;
+
 namespace AssetManager.Data.Classes
 {
-    public struct DBCode
+    /// <summary>
+    /// Wrapper for storing and accessing a collection of <see cref="DbAttribute"/>.
+    /// </summary>
+    public class DbAttributes
+    {
+        private Dictionary<string, DbAttribute> attributes;
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="DbAttributes"/> class.
+        /// </summary>
+        public DbAttributes()
+        {
+            attributes = new Dictionary<string, DbAttribute>();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="DbAttribute"/> from the collection with the specified code value.
+        /// </summary>
+        /// <param name="codeValue">The <see cref="DbAttribute.Code"/> of the attribute to return.</param>
+        /// <returns>The <see cref="DbAttribute"/> in the collection with the specified <see cref="DbAttribute.Code"/>; otherwise will throw <see cref="KeyNotFoundException"/> if the <see cref="DbAttribute.Code"/> is not found.</returns>
+        public DbAttribute this[string codeValue]
+        {
+            get
+            {
+                return attributes[codeValue];
+            }
+        }
+
+        /// <summary>
+        /// Creates and adds a new <see cref="DbAttribute"/> to the collection.
+        /// </summary>
+        /// <param name="displayValue">The human friendly display value for the attribute.</param>
+        /// <param name="code">The non-friendly value stored in the database.</param>
+        /// <param name="id">The unique database index ID for the attribute.</param>
+        public void Add(string displayValue, string code, int id)
+        {
+            Add(displayValue, code, id, Color.Empty);
+        }
+
+        /// <summary>
+        /// Creates and adds a new <see cref="DbAttribute"/> to the collection.
+        /// </summary>
+        /// <param name="displayValue">The human friendly display value for the attribute.</param>
+        /// <param name="code">The non-friendly value stored in the database.</param>
+        /// <param name="id">The unique database index ID for the attribute.</param>
+        /// <param name="color">The hex color value associated with this attribute.</param>
+        public void Add(string displayValue, string code, int id, Color color)
+        {
+            Add(new DbAttribute(displayValue, code, id, color));
+        }
+
+        public void Add(DbAttribute attribute)
+        {
+            if (!attributes.ContainsKey(attribute.Code))
+            {
+                attributes.Add(attribute.Code, attribute);
+            }
+        }
+
+        public DbAttribute[] GetArray()
+        {
+            var tmpList = new List<DbAttribute>();
+
+            foreach (var attrib in attributes)
+            {
+                tmpList.Add(attrib.Value);
+            }
+
+            return tmpList.ToArray();
+        }
+    }
+
+    public struct DbAttribute
     {
         private string displayValue;
         private string code;
@@ -13,15 +87,11 @@ namespace AssetManager.Data.Classes
         public int Id { get { return id; } }
         public Color Color { get { return color; } }
 
-        public DBCode(string displayValue, string code, int id)
+        public DbAttribute(string displayValue, string code, int id) : this(displayValue, code, id, Color.Empty)
         {
-            this.displayValue = displayValue;
-            this.code = code;
-            this.id = id;
-            this.color = Color.Empty;
         }
 
-        public DBCode(string displayValue, string code, int id, Color color)
+        public DbAttribute(string displayValue, string code, int id, Color color)
         {
             this.displayValue = displayValue;
             this.code = code;
@@ -34,45 +104,41 @@ namespace AssetManager.Data.Classes
             return DisplayValue;
         }
     }
-}
 
-namespace AssetManager.Data.Classes
-{
     public static class Attributes
     {
-        public class SibiAttributes
+        public static class SibiAttributes
         {
-            public DBCode[] StatusType;
-            public DBCode[] ItemStatusType;
-            public DBCode[] RequestType;
+            public static DbAttributes StatusType;
+            public static DbAttributes ItemStatusType;
+            public static DbAttributes RequestType;
+
+            //public static DBCode[] StatusType;
+            //public static DBCode[] ItemStatusType;
+            //public static DBCode[] RequestType;
         }
 
-        public class DeviceAttributes
+        public static class DeviceAttributes
         {
-            public DBCode[] Locations;
-            public DBCode[] ChangeType;
-            public DBCode[] EquipType;
-            public DBCode[] OSType;
-            public DBCode[] StatusType;
+            public static DbAttributes Locations;
+            public static DbAttributes ChangeType;
+            public static DbAttributes EquipType;
+            public static DbAttributes OSType;
+            public static DbAttributes StatusType;
+
+            //public static DBCode[] Locations;
+            //public static DBCode[] ChangeType;
+            //public static DBCode[] EquipType;
+            //public static DBCode[] OSType;
+            //public static DBCode[] StatusType;
         }
-
-        public static DeviceAttributes DeviceAttribute = new DeviceAttributes();
-        public static SibiAttributes SibiAttribute = new SibiAttributes();
-
     }
-}
-
-namespace AssetManager.Data.Classes
-{
 
     public struct DeviceUpdateInfo
     {
         public string Note;
         public string ChangeType;
     }
-}
-namespace AssetManager.Data.Classes
-{
 
     public class LocalUser
     {
@@ -81,12 +147,8 @@ namespace AssetManager.Data.Classes
         public int AccessLevel { get; }
         public string Guid { get; }
 
-        public LocalUser()
+        public LocalUser() : this(string.Empty, string.Empty, 0, string.Empty)
         {
-            UserName = string.Empty;
-            Fullname = string.Empty;
-            AccessLevel = 0;
-            Guid = string.Empty;
         }
 
         public LocalUser(string userName, string fullName, int accessLevel, string guid)
@@ -98,27 +160,20 @@ namespace AssetManager.Data.Classes
         }
     }
 
-}
-namespace AssetManager.Data.Classes
-{
-
     public class MunisEmployee
     {
-        public string Number;
-        public string Name;
-        public string Guid;
+        public string Number { get; set; }
+        public string Name { get; set; }
+        public string Guid { get; set; }
+
+        public MunisEmployee() : this(string.Empty, string.Empty)
+        {
+        }
 
         public MunisEmployee(string name, string number)
         {
             this.Name = name;
             this.Number = number;
-            this.Guid = string.Empty;
-        }
-
-        public MunisEmployee()
-        {
-            this.Name = string.Empty;
-            this.Number = string.Empty;
             this.Guid = string.Empty;
         }
 
@@ -128,9 +183,6 @@ namespace AssetManager.Data.Classes
             return infoString;
         }
     }
-}
-namespace AssetManager.Data.Classes
-{
 
     public struct SmartEmpSearchInfo
     {
@@ -139,23 +191,16 @@ namespace AssetManager.Data.Classes
         public int MatchDistance { get; set; }
         public int MatchLength { get; set; }
 
+        public SmartEmpSearchInfo(MunisEmployee munisInfo, string searchValue) : this(munisInfo, searchValue, 0)
+        {
+        }
 
         public SmartEmpSearchInfo(MunisEmployee munisInfo, string searchValue, int matchDistance)
         {
             this.SearchResult = munisInfo;
             this.SearchString = searchValue;
-            MatchLength = searchValue.Length;
+            this.MatchLength = searchValue.Length;
             this.MatchDistance = matchDistance;
-
-        }
-
-        public SmartEmpSearchInfo(MunisEmployee munisInfo, string searchValue)
-        {
-            this.SearchResult = munisInfo;
-            this.SearchString = searchValue;
-            MatchLength = searchValue.Length;
-            this.MatchDistance = 0;
-
         }
     }
 }

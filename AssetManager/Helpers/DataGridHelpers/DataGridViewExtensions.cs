@@ -202,7 +202,7 @@ namespace AssetManager.Helpers
         /// <param name="gfx"></param>
         private static void SetComboDropWidth(DataGridViewComboBoxColumn comboColumn, Graphics gfx)
         {
-            var comboData = (DBCode[])comboColumn.DataSource;
+            var comboData = (DbAttribute[])comboColumn.DataSource;
             var itemsArray = new string[comboData.Length];
 
             for (int i = 0; i < itemsArray.Length; i++)

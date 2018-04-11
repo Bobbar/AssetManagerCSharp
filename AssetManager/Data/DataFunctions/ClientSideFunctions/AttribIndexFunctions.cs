@@ -13,40 +13,20 @@ namespace AssetManager.Data.Functions
     {
         public static Dictionary<string, string> DepartmentCodes;
 
-        public static string GetDisplayValueFromCode(DBCode[] codeIndex, string code)
-        {
-            foreach (DBCode item in codeIndex)
-            {
-                if (item.Code == code)
-                    return item.DisplayValue;
-            }
-            return string.Empty;
-        }
-
-        public static int GetComboIndexFromCode(DBCode[] codeIndex, string code)
-        {
-            for (int i = 0; i <= codeIndex.Length - 1; i++)
-            {
-                if (codeIndex[i].Code == code)
-                    return i;
-            }
-            return -1;
-        }
-
         public static void PopulateAttributeIndexes()
         {
-            var BuildIdxs = Task.Run(() =>
+            var BuildIdxs = Task.Run((Action)(() =>
             {
-                Attributes.DeviceAttribute.Locations = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.Location);
-                Attributes.DeviceAttribute.ChangeType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.ChangeType);
-                Attributes.DeviceAttribute.EquipType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.EquipType);
-                Attributes.DeviceAttribute.OSType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.OSType);
-                Attributes.DeviceAttribute.StatusType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.StatusType);
-                Attributes.SibiAttribute.StatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiStatusType);
-                Attributes.SibiAttribute.ItemStatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiItemStatusType);
-                Attributes.SibiAttribute.RequestType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiRequestType);
+                Attributes.DeviceAttributes.Locations = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.Location);
+                Attributes.DeviceAttributes.ChangeType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.ChangeType);
+                Attributes.DeviceAttributes.EquipType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.EquipType);
+                Attributes.DeviceAttributes.OSType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.OSType);
+                Attributes.DeviceAttributes.StatusType = BuildIndex(DevicesBaseCols.AttribTable, DeviceAttribType.StatusType);
+                Attributes.SibiAttributes.StatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiStatusType);
+                Attributes.SibiAttributes.ItemStatusType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiItemStatusType);
+                Attributes.SibiAttributes.RequestType = BuildIndex(SibiRequestCols.AttribTable, SibiAttribType.SibiRequestType);
                 PopulateDepartments();
-            });
+            }));
             BuildIdxs.Wait();
         }
 
@@ -72,13 +52,13 @@ namespace AssetManager.Data.Functions
             return string.Empty;
         }
 
-        private static DBCode[] BuildIndex(string codeType, string typeName)
+        private static DbAttributes BuildIndex(string codeType, string typeName)
         {
             try
             {
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectAttributeCodes(codeType, typeName)))
                 {
-                    List<DBCode> tmpArray = new List<DBCode>();
+                    var tmpAttrib = new DbAttributes();
                     foreach (DataRow r in results.Rows)
                     {
                         string DisplayValue = "";
@@ -104,9 +84,9 @@ namespace AssetManager.Data.Functions
                             attribColor = ColorTranslator.FromHtml(r[ComboCodesBaseCols.Color].ToString());
                         }
 
-                        tmpArray.Add(new DBCode(DisplayValue, r[ComboCodesBaseCols.CodeValue].ToString(), Convert.ToInt32(r[ComboCodesBaseCols.Id]), attribColor));
+                        tmpAttrib.Add(DisplayValue, r[ComboCodesBaseCols.CodeValue].ToString(), Convert.ToInt32(r[ComboCodesBaseCols.Id]), attribColor);
                     }
-                    return tmpArray.ToArray();
+                    return tmpAttrib;
                 }
             }
             catch (Exception ex)

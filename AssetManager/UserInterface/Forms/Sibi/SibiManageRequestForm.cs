@@ -547,8 +547,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void FillCombos()
         {
-            StatusComboBox.FillComboBox(Attributes.SibiAttribute.StatusType);
-            TypeComboBox.FillComboBox(Attributes.SibiAttribute.RequestType);
+            StatusComboBox.FillComboBox(Attributes.SibiAttributes.StatusType);
+            TypeComboBox.FillComboBox(Attributes.SibiAttributes.RequestType);
         }
 
         private string GetHash(DataTable requestTable, DataTable itemsTable)
@@ -634,9 +634,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             DescriptionTextBox.SetDBInfo(SibiRequestCols.Description, true);
             RequestUserTextBox.SetDBInfo(SibiRequestCols.RequestUser, true);
-            TypeComboBox.SetDBInfo(SibiRequestCols.Type, Attributes.SibiAttribute.RequestType, true);
+            TypeComboBox.SetDBInfo(SibiRequestCols.Type, Attributes.SibiAttributes.RequestType, true);
             NeedByDatePicker.SetDBInfo(SibiRequestCols.NeedBy, true);
-            StatusComboBox.SetDBInfo(SibiRequestCols.Status, Attributes.SibiAttribute.StatusType, true);
+            StatusComboBox.SetDBInfo(SibiRequestCols.Status, Attributes.SibiAttributes.StatusType, true);
             POTextBox.SetDBInfo(SibiRequestCols.PO, false);
             ReqNumberTextBox.SetDBInfo(SibiRequestCols.RequisitionNumber, false);
             RequestNumTextBox.SetDBInfo(SibiRequestCols.RequestNumber, ParseType.DisplayOnly, false);
@@ -1048,8 +1048,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.User, "User"));
             ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Description, "Description"));
             ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Qty, "Qty"));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Location, "Location", Attributes.DeviceAttribute.Locations, ColumnFormatType.AttributeCombo));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Status, "Status", Attributes.SibiAttribute.ItemStatusType, ColumnFormatType.AttributeCombo));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Location, "Location", Attributes.DeviceAttributes.Locations, ColumnFormatType.AttributeCombo));
+            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Status, "Status", Attributes.SibiAttributes.ItemStatusType, ColumnFormatType.AttributeCombo));
             ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceAsset, "Replace Asset"));
             ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceSerial, "Replace Serial"));
             ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewAsset, "New Asset"));

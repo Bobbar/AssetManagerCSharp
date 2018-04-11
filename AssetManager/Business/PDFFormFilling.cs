@@ -294,11 +294,11 @@ namespace AssetManager.Business
                 newDialog.Text = "Additional Input Required";
 
                 ComboBox cmbFrom = new ComboBox();
-                cmbFrom.FillComboBox(Attributes.DeviceAttribute.Locations);
+                cmbFrom.FillComboBox(Attributes.DeviceAttributes.Locations);
                 newDialog.AddCustomControl("cmbFromLoc", "Transfer FROM:", (Control)cmbFrom);
 
                 ComboBox cmbTo = new ComboBox();
-                cmbTo.FillComboBox(Attributes.DeviceAttribute.Locations);
+                cmbTo.FillComboBox(Attributes.DeviceAttributes.Locations);
                 newDialog.AddCustomControl("cmbToLoc", "Transfer TO:", (Control)cmbTo);
 
                 newDialog.AddLabel("Reason For Transfer-Check One:", true);

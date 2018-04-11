@@ -20,10 +20,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         public UpdateTypeForm(ExtendedForm parentForm, bool isNoteOnly = false) : base(parentForm)
         {
             InitializeComponent();
-            UpdateTypeCombo.FillComboBox(Attributes.DeviceAttribute.ChangeType);
+            UpdateTypeCombo.FillComboBox(Attributes.DeviceAttributes.ChangeType);
             if (isNoteOnly)
             {
-                UpdateTypeCombo.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(Attributes.DeviceAttribute.ChangeType, "NOTE");
+                UpdateTypeCombo.SetSelectedAttribute(Attributes.DeviceAttributes.ChangeType["NOTE"]);
                 UpdateTypeCombo.Enabled = false;
                 ValidateUpdateType();
             }

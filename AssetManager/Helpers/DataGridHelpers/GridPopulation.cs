@@ -68,7 +68,7 @@ namespace AssetManager.Helpers
                                 break;
 
                             case ColumnFormatType.AttributeDisplayMemberOnly:
-                                newRow[col.ColumnName] = AttributeFunctions.GetDisplayValueFromCode(col.AttributeIndex, row[col.ColumnName].ToString());
+                                newRow[col.ColumnName] = col.Attributes[row[col.ColumnName].ToString()].DisplayValue;
 
                                 break;
 
@@ -129,7 +129,7 @@ namespace AssetManager.Helpers
                     return GenericColumn(column);
 
                 case ColumnFormatType.AttributeCombo:
-                    return DataGridComboColumn(column.AttributeIndex, column.ColumnCaption, column.ColumnName);
+                    return DataGridComboColumn(column.Attributes, column.ColumnCaption, column.ColumnName);
 
                 case ColumnFormatType.Image:
                     return DataGridImageColumn(column);
@@ -166,7 +166,7 @@ namespace AssetManager.Helpers
             return NewCol;
         }
 
-        private static DataGridViewComboBoxColumn DataGridComboColumn(DBCode[] indexType, string headerText, string name)
+        private static DataGridViewComboBoxColumn DataGridComboColumn(DbAttributes attributes, string headerText, string name)
         {
             DataGridViewComboBoxColumn NewCombo = new DataGridViewComboBoxColumn();
             NewCombo.Items.Clear();
@@ -175,9 +175,9 @@ namespace AssetManager.Helpers
             NewCombo.Name = name;
             NewCombo.Width = 200;
             NewCombo.SortMode = DataGridViewColumnSortMode.Automatic;
-            NewCombo.DisplayMember = nameof(DBCode.DisplayValue);
-            NewCombo.ValueMember = nameof(DBCode.Code);
-            NewCombo.DataSource = indexType;
+            NewCombo.DisplayMember = nameof(DbAttribute.DisplayValue);
+            NewCombo.ValueMember = nameof(DbAttribute.Code);
+            NewCombo.DataSource = attributes.GetArray();
             return NewCombo;
         }
 

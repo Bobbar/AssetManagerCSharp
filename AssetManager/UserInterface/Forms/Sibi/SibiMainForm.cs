@@ -160,10 +160,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             Color blendColor = Color.FromArgb(222, 222, 222);
 
             // Get a list from the attrib array.
-            var attribList = Attributes.SibiAttribute.StatusType.OfType<DBCode>().ToList();
+           // var attribList = Attributes.SibiAttributes.StatusType.OfType<DBCode>().ToList();
 
             // Use List.Find to locate the matching attribute.
-            var attribColor = attribList.Find((a) => { return a.Code == code; }).Color;
+            var attribColor = Attributes.SibiAttributes.StatusType[code].Color;
+            //var attribColor = attribList.Find((a) => { return a.Code == code; }).Color;
 
             // Return the a blended color.
             return StyleFunctions.ColorAlphaBlend(attribColor, blendColor);
@@ -391,10 +392,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             var columnList = new List<GridColumnAttrib>();
             columnList.Add(new GridColumnAttrib(SibiRequestCols.RequestNumber, "Request #"));
-            columnList.Add(new GridColumnAttrib(SibiRequestCols.Status, "Status", Attributes.SibiAttribute.StatusType, ColumnFormatType.AttributeDisplayMemberOnly));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.Status, "Status", Attributes.SibiAttributes.StatusType, ColumnFormatType.AttributeDisplayMemberOnly));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.Description, "Description"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.RequestUser, "Request User"));
-            columnList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", Attributes.SibiAttribute.RequestType, ColumnFormatType.AttributeDisplayMemberOnly));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", Attributes.SibiAttributes.RequestType, ColumnFormatType.AttributeDisplayMemberOnly));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.NeedBy, "Need By"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.PO, "PO Number"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.RequisitionNumber, "Req. Number"));

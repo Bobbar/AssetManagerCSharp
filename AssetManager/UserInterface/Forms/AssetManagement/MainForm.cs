@@ -253,7 +253,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         var DBInfo = (DBControlInfo)ctl.Tag;
                         bool IsExact = false;
-                        switch (DBInfo.DataColumn)
+                        switch (DBInfo.ColumnName)
                         {
                             //case DevicesCols.OSVersion:
                             //    IsExact = true;
@@ -276,7 +276,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                                 break;
                         }
 
-                        searchParams.Add(DBInfo.DataColumn, ctlValue, IsExact);
+                        searchParams.Add(DBInfo.ColumnName, ctlValue, IsExact);
                     }
                 }
                 return searchParams;
@@ -431,12 +431,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             SerialSearchTextBox.SetDBInfo(DevicesCols.Serial);
             AssetTagSearchTextBox.SetDBInfo(DevicesCols.AssetTag);
             DescriptionTextBox.SetDBInfo(DevicesCols.Description);
-            EquipTypeComboBox.SetDBInfo(DevicesCols.EQType, Attributes.DeviceAttribute.EquipType);
+            EquipTypeComboBox.SetDBInfo(DevicesCols.EQType, Attributes.DeviceAttributes.EquipType);
             ReplaceYearTextBox.SetDBInfo(DevicesCols.ReplacementYear);
-            OSTypeComboBox.SetDBInfo(DevicesCols.OSVersion, Attributes.DeviceAttribute.OSType);
-            LocationComboBox.SetDBInfo(DevicesCols.Location, Attributes.DeviceAttribute.Locations);
+            OSTypeComboBox.SetDBInfo(DevicesCols.OSVersion, Attributes.DeviceAttributes.OSType);
+            LocationComboBox.SetDBInfo(DevicesCols.Location, Attributes.DeviceAttributes.Locations);
             CurrrentUserTextBox.SetDBInfo(DevicesCols.CurrentUser);
-            StatusComboBox.SetDBInfo(DevicesCols.Status, Attributes.DeviceAttribute.StatusType);
+            StatusComboBox.SetDBInfo(DevicesCols.Status, Attributes.DeviceAttributes.StatusType);
             TrackablesCheckBox.SetDBInfo(DevicesCols.Trackable);
         }
 
@@ -490,10 +490,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RefreshCombos()
         {
-            EquipTypeComboBox.FillComboBox(Attributes.DeviceAttribute.EquipType);
-            LocationComboBox.FillComboBox(Attributes.DeviceAttribute.Locations);
-            StatusComboBox.FillComboBox(Attributes.DeviceAttribute.StatusType);
-            OSTypeComboBox.FillComboBox(Attributes.DeviceAttribute.OSType);
+            EquipTypeComboBox.FillComboBox(Attributes.DeviceAttributes.EquipType);
+            LocationComboBox.FillComboBox(Attributes.DeviceAttributes.Locations);
+            StatusComboBox.FillComboBox(Attributes.DeviceAttributes.StatusType);
+            OSTypeComboBox.FillComboBox(Attributes.DeviceAttributes.OSType);
         }
 
         private List<GridColumnAttrib> ResultGridColumns()
@@ -511,10 +511,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             columnList.Add(new GridColumnAttrib(DevicesCols.CurrentUser, "User"));
             columnList.Add(new GridColumnAttrib(DevicesCols.AssetTag, "Asset ID"));
             columnList.Add(new GridColumnAttrib(DevicesCols.Serial, "Serial"));
-            columnList.Add(new GridColumnAttrib(DevicesCols.EQType, "Device Type", Attributes.DeviceAttribute.EquipType, attribColumnType));
+            columnList.Add(new GridColumnAttrib(DevicesCols.EQType, "Device Type", Attributes.DeviceAttributes.EquipType, attribColumnType));
             columnList.Add(new GridColumnAttrib(DevicesCols.Description, "Description"));
-            columnList.Add(new GridColumnAttrib(DevicesCols.OSVersion, "OS Version", Attributes.DeviceAttribute.OSType, attribColumnType));
-            columnList.Add(new GridColumnAttrib(DevicesCols.Location, "Location", Attributes.DeviceAttribute.Locations, attribColumnType));
+            columnList.Add(new GridColumnAttrib(DevicesCols.OSVersion, "OS Version", Attributes.DeviceAttributes.OSType, attribColumnType));
+            columnList.Add(new GridColumnAttrib(DevicesCols.Location, "Location", Attributes.DeviceAttributes.Locations, attribColumnType));
             columnList.Add(new GridColumnAttrib(DevicesCols.PO, "PO Number"));
             columnList.Add(new GridColumnAttrib(DevicesCols.PurchaseDate, "Purchase Date"));
             columnList.Add(new GridColumnAttrib(DevicesCols.ReplacementYear, "Replace Year"));

@@ -234,7 +234,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             MunisUser = new MunisEmployee();
             ClearFields(this);
             PurchaseDatePicker.Value = DateTime.Now;
-            StatusComboBox.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(Attributes.DeviceAttribute.StatusType, "INSRV");
+            StatusComboBox.SetSelectedAttribute(Attributes.DeviceAttributes.StatusType["INSRV"]);
             TrackableCheckBox.Checked = false;
             NoClearCheckBox.Checked = false;
             controlParser.ClearErrors();
@@ -322,13 +322,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             SerialTextBox.SetDBInfo(DevicesBaseCols.Serial, true);
             PurchaseDatePicker.SetDBInfo(DevicesBaseCols.PurchaseDate, true);
             ReplaceYearTextBox.SetDBInfo(DevicesBaseCols.ReplacementYear, false);
-            LocationComboBox.SetDBInfo(DevicesBaseCols.Location, Attributes.DeviceAttribute.Locations, true);
+            LocationComboBox.SetDBInfo(DevicesBaseCols.Location, Attributes.DeviceAttributes.Locations, true);
             CurrentUserTextBox.SetDBInfo(DevicesBaseCols.CurrentUser, true);
             // txtNotes.SetDBInfo(historical_dev.Notes, False)
-            OSTypeComboBox.SetDBInfo(DevicesBaseCols.OSVersion, Attributes.DeviceAttribute.OSType, true);
+            OSTypeComboBox.SetDBInfo(DevicesBaseCols.OSVersion, Attributes.DeviceAttributes.OSType, true);
             PhoneNumTextBox.SetDBInfo(DevicesBaseCols.PhoneNumber, false);
-            EquipTypeComboBox.SetDBInfo(DevicesBaseCols.EQType, Attributes.DeviceAttribute.EquipType, true);
-            StatusComboBox.SetDBInfo(DevicesBaseCols.Status, Attributes.DeviceAttribute.StatusType, true);
+            EquipTypeComboBox.SetDBInfo(DevicesBaseCols.EQType, Attributes.DeviceAttributes.EquipType, true);
+            StatusComboBox.SetDBInfo(DevicesBaseCols.Status, Attributes.DeviceAttributes.StatusType, true);
             TrackableCheckBox.SetDBInfo(DevicesBaseCols.Trackable, false);
             POTextBox.SetDBInfo(DevicesBaseCols.PO, false);
             HostnameTextBox.SetDBInfo(DevicesBaseCols.HostName, false);
@@ -389,10 +389,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RefreshCombos()
         {
-            LocationComboBox.FillComboBox(Attributes.DeviceAttribute.Locations);
-            EquipTypeComboBox.FillComboBox(Attributes.DeviceAttribute.EquipType);
-            OSTypeComboBox.FillComboBox(Attributes.DeviceAttribute.OSType);
-            StatusComboBox.FillComboBox(Attributes.DeviceAttribute.StatusType);
+            LocationComboBox.FillComboBox(Attributes.DeviceAttributes.Locations);
+            EquipTypeComboBox.FillComboBox(Attributes.DeviceAttributes.EquipType);
+            OSTypeComboBox.FillComboBox(Attributes.DeviceAttributes.OSType);
+            StatusComboBox.FillComboBox(Attributes.DeviceAttributes.StatusType);
         }
 
         private void SerialTextBox_TextChanged(object sender, EventArgs e)

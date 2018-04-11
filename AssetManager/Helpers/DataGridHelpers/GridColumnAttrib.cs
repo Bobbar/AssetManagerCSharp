@@ -12,7 +12,7 @@ namespace AssetManager.Helpers
         public Type ColumnType { get; set; }
         public bool ColumnReadOnly { get; set; }
         public bool ColumnVisible { get; set; }
-        public DBCode[] AttributeIndex { get; set; }
+        public DbAttributes Attributes { get; set; }
         public ColumnFormatType ColumnFormatType { get; set; }
 
         public GridColumnAttrib(string colName, string caption)
@@ -22,7 +22,7 @@ namespace AssetManager.Helpers
             ColumnType = null;
             ColumnReadOnly = false;
             ColumnVisible = true;
-            AttributeIndex = null;
+            Attributes = null;
             ColumnFormatType = ColumnFormatType.DefaultFormat;
         }
 
@@ -40,18 +40,18 @@ namespace AssetManager.Helpers
             }
             ColumnReadOnly = false;
             ColumnVisible = true;
-            AttributeIndex = null;
+            Attributes = null;
             ColumnFormatType = displayMode;
         }
 
-        public GridColumnAttrib(string colName, string caption, DBCode[] attribIndex, ColumnFormatType displayMode)
+        public GridColumnAttrib(string colName, string caption, DbAttributes attribs, ColumnFormatType displayMode)
         {
             ColumnName = colName;
             ColumnCaption = caption;
             ColumnType = typeof(string);
             ColumnReadOnly = false;
             ColumnVisible = true;
-            this.AttributeIndex = attribIndex;
+            this.Attributes = attribs;
             ColumnFormatType = displayMode;
         }
 
@@ -62,7 +62,7 @@ namespace AssetManager.Helpers
             ColumnType = null;
             ColumnReadOnly = isReadOnly;
             ColumnVisible = visible;
-            AttributeIndex = null;
+            Attributes = null;
             ColumnFormatType = ColumnFormatType.DefaultFormat;
         }
     }

@@ -32,20 +32,20 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             txtEntryTime.SetDBInfo(HistoricalDevicesCols.ActionDateTime, ParseType.DisplayOnly, false);
             txtActionUser.SetDBInfo(HistoricalDevicesCols.ActionUser, ParseType.DisplayOnly, false);
-            txtChangeType.SetDBInfo(HistoricalDevicesCols.ChangeType, Attributes.DeviceAttribute.ChangeType, ParseType.DisplayOnly, false);
+            txtChangeType.SetDBInfo(HistoricalDevicesCols.ChangeType, Attributes.DeviceAttributes.ChangeType, ParseType.DisplayOnly, false);
             txtDescription.SetDBInfo(HistoricalDevicesCols.Description, ParseType.DisplayOnly, false);
             txtGuid.SetDBInfo(HistoricalDevicesCols.DeviceGuid, ParseType.DisplayOnly, false);
             txtCurrentUser.SetDBInfo(HistoricalDevicesCols.CurrentUser, ParseType.DisplayOnly, false);
-            txtLocation.SetDBInfo(HistoricalDevicesCols.Location, Attributes.DeviceAttribute.Locations, ParseType.DisplayOnly, false);
+            txtLocation.SetDBInfo(HistoricalDevicesCols.Location, Attributes.DeviceAttributes.Locations, ParseType.DisplayOnly, false);
             txtPONumber.SetDBInfo(HistoricalDevicesCols.PO, ParseType.DisplayOnly, false);
             txtAssetTag.SetDBInfo(HistoricalDevicesCols.AssetTag, ParseType.DisplayOnly, false);
             txtPurchaseDate.SetDBInfo(HistoricalDevicesCols.PurchaseDate, ParseType.DisplayOnly, false);
-            txtOSVersion.SetDBInfo(HistoricalDevicesCols.OSVersion, Attributes.DeviceAttribute.OSType, ParseType.DisplayOnly, false);
+            txtOSVersion.SetDBInfo(HistoricalDevicesCols.OSVersion, Attributes.DeviceAttributes.OSType, ParseType.DisplayOnly, false);
             txtSerial.SetDBInfo(HistoricalDevicesCols.Serial, ParseType.DisplayOnly, false);
             txtReplaceYear.SetDBInfo(HistoricalDevicesCols.ReplacementYear, ParseType.DisplayOnly, false);
-            txtEQType.SetDBInfo(HistoricalDevicesCols.EQType, Attributes.DeviceAttribute.EquipType, ParseType.DisplayOnly, false);
+            txtEQType.SetDBInfo(HistoricalDevicesCols.EQType, Attributes.DeviceAttributes.EquipType, ParseType.DisplayOnly, false);
             NotesTextBox.SetDBInfo(HistoricalDevicesCols.Notes, ParseType.DisplayOnly, false);
-            txtStatus.SetDBInfo(HistoricalDevicesCols.Status, Attributes.DeviceAttribute.StatusType, ParseType.DisplayOnly, false);
+            txtStatus.SetDBInfo(HistoricalDevicesCols.Status, Attributes.DeviceAttributes.StatusType, ParseType.DisplayOnly, false);
             txtEntryGuid.SetDBInfo(HistoricalDevicesCols.HistoryEntryGuid, ParseType.DisplayOnly, false);
             chkTrackable.SetDBInfo(HistoricalDevicesCols.Trackable, ParseType.DisplayOnly, false);
             txtPhoneNumber.SetDBInfo(HistoricalDevicesCols.PhoneNumber, ParseType.DisplayOnly, false);
@@ -114,7 +114,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     //Get a list of all the controls whose data columns match the ChangedColumns.
                     foreach (string col in changedColumns)
                     {
-                        changedControls.Add(ControlList.Find(c => ((DBControlInfo)c.Tag).DataColumn == col));
+                        changedControls.Add(ControlList.Find(c => ((DBControlInfo)c.Tag).ColumnName == col));
                     }
                 }
             }

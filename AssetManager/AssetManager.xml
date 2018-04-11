@@ -107,13 +107,13 @@
             Instantiate and assign to <see cref="P:System.Windows.Forms.Control.Tag"/> property to enable DBParsing functions.
             </summary>
         </member>
-        <member name="P:AssetManager.Data.Functions.DBControlInfo.AttribIndex">
+        <member name="P:AssetManager.Data.Functions.DBControlInfo.Attributes">
             <summary>
-            Gets or sets the <see cref="T:AssetManager.Data.Classes.DBCode"/> index for <see cref="T:System.Windows.Forms.ComboBox"/> controls.
+            Gets or sets the <see cref="T:AssetManager.Data.Classes.DbAttributes"/> for <see cref="T:System.Windows.Forms.ComboBox"/> controls.
             </summary>
             <returns></returns>
         </member>
-        <member name="P:AssetManager.Data.Functions.DBControlInfo.DataColumn">
+        <member name="P:AssetManager.Data.Functions.DBControlInfo.ColumnName">
             <summary>
             Gets or sets the Database Column used to update and/or populate the assigned control.
             </summary>

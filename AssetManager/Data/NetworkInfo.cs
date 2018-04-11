@@ -43,11 +43,11 @@ namespace AssetManager.Data
 
             try
             {
-                string Subnet = ip.Substring(0, 8) + ".0";
-                if (SubnetLocations.ContainsKey(Subnet))
+                string subnet = ip.Substring(0, 8) + ".0";
+                if (SubnetLocations.ContainsKey(subnet))
                 {
 
-                    return SubnetLocations[Subnet];
+                    return SubnetLocations[subnet];
                 }
                 else
                 {

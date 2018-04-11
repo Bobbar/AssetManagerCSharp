@@ -316,7 +316,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGuid)))
                 {
                     string dateStamp = results.Rows[0][HistoricalDevicesCols.ActionDateTime].ToString();
-                    string actionType = AttributeFunctions.GetDisplayValueFromCode(Attributes.DeviceAttribute.ChangeType, results.Rows[0][HistoricalDevicesCols.ChangeType].ToString());
+                    string actionType = Attributes.DeviceAttributes.ChangeType[results.Rows[0][HistoricalDevicesCols.ChangeType].ToString()].DisplayValue;
                     var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + dateStamp + " - " + actionType + " - " + entryGuid, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "Are you sure?", this);
                     if (blah == DialogResult.Yes)
                     {
@@ -486,7 +486,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             else
             {
                 TrackingStatusTextBox.BackColor = Colors.CheckIn;
-                TrackingLocationTextBox.Text = AttributeFunctions.GetDisplayValueFromCode(Attributes.DeviceAttribute.Locations, currentViewDevice.Location);
+                TrackingLocationTextBox.Text = Attributes.DeviceAttributes.Locations[currentViewDevice.Location].DisplayValue;
                 CheckTimeLabel.Text = "CheckIn Time:";
                 CheckTimeTextBox.Text = currentViewDevice.Tracking.CheckinTime.ToString();
                 CheckUserLabel.Text = "CheckIn User:";
@@ -564,14 +564,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionDateTime, "Time Stamp"));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ChangeType, "Change Type", Attributes.DeviceAttribute.ChangeType, ColumnFormatType.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ChangeType, "Change Type", Attributes.DeviceAttributes.ChangeType, ColumnFormatType.AttributeDisplayMemberOnly));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionUser, "Action User"));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Notes, "Note Peek", ColumnFormatType.NotePreview));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.CurrentUser, "User"));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.AssetTag, "Asset ID"));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Serial, "Serial"));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Description, "Description"));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Location, "Location", Attributes.DeviceAttribute.Locations, ColumnFormatType.AttributeDisplayMemberOnly));
+            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Location, "Location", Attributes.DeviceAttributes.Locations, ColumnFormatType.AttributeDisplayMemberOnly));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.PurchaseDate, "Purchase Date"));
             ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.HistoryEntryGuid, "Guid"));
             return ColList;
@@ -585,10 +585,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             CurrentUserTextBox.SetDBInfo(DevicesBaseCols.CurrentUser, true);
             DescriptionTextBox.SetDBInfo(DevicesBaseCols.Description, true);
             PurchaseDatePicker.SetDBInfo(DevicesBaseCols.PurchaseDate, true);
-            EquipTypeComboBox.SetDBInfo(DevicesBaseCols.EQType, Attributes.DeviceAttribute.EquipType, true);
-            LocationComboBox.SetDBInfo(DevicesBaseCols.Location, Attributes.DeviceAttribute.Locations, true);
-            OSVersionComboBox.SetDBInfo(DevicesBaseCols.OSVersion, Attributes.DeviceAttribute.OSType, true);
-            StatusComboBox.SetDBInfo(DevicesBaseCols.Status, Attributes.DeviceAttribute.StatusType, true);
+            EquipTypeComboBox.SetDBInfo(DevicesBaseCols.EQType, Attributes.DeviceAttributes.EquipType, true);
+            LocationComboBox.SetDBInfo(DevicesBaseCols.Location, Attributes.DeviceAttributes.Locations, true);
+            OSVersionComboBox.SetDBInfo(DevicesBaseCols.OSVersion, Attributes.DeviceAttributes.OSType, true);
+            StatusComboBox.SetDBInfo(DevicesBaseCols.Status, Attributes.DeviceAttributes.StatusType, true);
 
             //Non-required and Misc Fields
             PONumberTextBox.SetDBInfo(DevicesBaseCols.PO, false);
@@ -706,10 +706,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RefreshCombos()
         {
-            EquipTypeComboBox.FillComboBox(Attributes.DeviceAttribute.EquipType);
-            LocationComboBox.FillComboBox(Attributes.DeviceAttribute.Locations);
-            OSVersionComboBox.FillComboBox(Attributes.DeviceAttribute.OSType);
-            StatusComboBox.FillComboBox(Attributes.DeviceAttribute.StatusType);
+            EquipTypeComboBox.FillComboBox(Attributes.DeviceAttributes.EquipType);
+            LocationComboBox.FillComboBox(Attributes.DeviceAttributes.Locations);
+            OSVersionComboBox.FillComboBox(Attributes.DeviceAttributes.OSType);
+            StatusComboBox.FillComboBox(Attributes.DeviceAttributes.StatusType);
         }
 
         private async void SetADInfo()

@@ -33,9 +33,9 @@ namespace AssetManager.Data.Functions
     {
         #region "Fields"
 
-        private DBCode[] db_attrib_index;
-        private string db_column;
-        private ParseType db_parse_type;
+        private DbAttributes dbAttrib;
+        private string columnName;
+        private ParseType parseType;
 
         private bool db_required;
 
@@ -45,42 +45,42 @@ namespace AssetManager.Data.Functions
 
         public DBControlInfo()
         {
-            db_column = "";
+            columnName = "";
             db_required = false;
-            db_parse_type = ParseType.DisplayOnly;
-            db_attrib_index = null;
+            parseType = ParseType.DisplayOnly;
+            dbAttrib = null;
         }
 
         public DBControlInfo(string dataColumn, ParseType parseType, bool required = false)
         {
-            db_column = dataColumn;
+            columnName = dataColumn;
             db_required = required;
-            db_parse_type = parseType;
-            db_attrib_index = null;
+            this.parseType = parseType;
+            dbAttrib = null;
         }
 
         public DBControlInfo(string dataColumn, bool required = false)
         {
-            db_column = dataColumn;
+            columnName = dataColumn;
             db_required = required;
-            db_parse_type = ParseType.UpdateAndDisplay;
-            db_attrib_index = null;
+            parseType = ParseType.UpdateAndDisplay;
+            dbAttrib = null;
         }
 
-        public DBControlInfo(string dataColumn, DBCode[] attribIndex, bool required = false)
+        public DBControlInfo(string dataColumn, DbAttributes attribute, bool required = false)
         {
-            db_column = dataColumn;
+            columnName = dataColumn;
             db_required = required;
-            db_parse_type = ParseType.UpdateAndDisplay;
-            db_attrib_index = attribIndex;
+            parseType = ParseType.UpdateAndDisplay;
+            dbAttrib = attribute;
         }
 
-        public DBControlInfo(string dataColumn, DBCode[] attribIndex, ParseType parseType, bool required = false)
+        public DBControlInfo(string dataColumn, DbAttributes attribute, ParseType parseType, bool required = false)
         {
-            db_column = dataColumn;
+            columnName = dataColumn;
             db_required = required;
-            db_parse_type = parseType;
-            db_attrib_index = attribIndex;
+            this.parseType = parseType;
+            dbAttrib = attribute;
         }
 
         #endregion "Constructors"
@@ -88,23 +88,23 @@ namespace AssetManager.Data.Functions
         #region "Properties"
 
         /// <summary>
-        /// Gets or sets the <see cref="DBCode"/> index for <see cref="ComboBox"/> controls.
+        /// Gets or sets the <see cref="DbAttributes"/> for <see cref="ComboBox"/> controls.
         /// </summary>
         /// <returns></returns>
-        public DBCode[] AttribIndex
+        public DbAttributes Attributes
         {
-            get { return db_attrib_index; }
-            set { db_attrib_index = value; }
+            get { return dbAttrib; }
+            set { dbAttrib = value; }
         }
 
         /// <summary>
         /// Gets or sets the Database Column used to update and/or populate the assigned control.
         /// </summary>
         /// <returns></returns>
-        public string DataColumn
+        public string ColumnName
         {
-            get { return db_column; }
-            set { db_column = value; }
+            get { return columnName; }
+            set { columnName = value; }
         }
 
         /// <summary>
@@ -113,8 +113,8 @@ namespace AssetManager.Data.Functions
         /// <returns></returns>
         public ParseType ParseType
         {
-            get { return db_parse_type; }
-            set { db_parse_type = value; }
+            get { return parseType; }
+            set { parseType = value; }
         }
 
         /// <summary>
@@ -184,66 +184,66 @@ namespace AssetManager.Data.Functions
         /// <param name="remappingList">List of remapping objects for mapping between different column names.</param>
         public void FillDBFields(DataTable data, List<DBRemappingInfo> remappingList = null)
         {
-            DataRow Row = data.Rows[0];
+            var dataRow = data.Rows[0];
             foreach (Control ctl in GetDBControls(ParentForm))
             {
-                DBControlInfo DBInfo = (DBControlInfo)ctl.Tag;
-                string DBColumn = null;
+                DBControlInfo dbInfo = (DBControlInfo)ctl.Tag;
+                string columnName = null;
 
                 if (remappingList != null)
                 {
-                    DBColumn = GetRemappedColumnName(DBInfo.DataColumn, remappingList);
+                    columnName = GetRemappedColumnName(dbInfo.ColumnName, remappingList);
                 }
                 else
                 {
-                    DBColumn = DBInfo.DataColumn;
+                    columnName = dbInfo.ColumnName;
                 }
 
-                if (Row.Table.Columns.Contains(DBColumn))
+                if (dataRow.Table.Columns.Contains(columnName))
                 {
                     Type ctlType = ctl.GetType();
 
                     if (ctlType == typeof(TextBox))
                     {
                         TextBox dbTxt = (TextBox)ctl;
-                        if (DBInfo.AttribIndex != null)
+                        if (dbInfo.Attributes != null)
                         {
-                            dbTxt.Text = AttributeFunctions.GetDisplayValueFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
+                            dbTxt.Text = dbInfo.Attributes[(dataRow[columnName].ToString())].DisplayValue;
                         }
                         else
                         {
-                            dbTxt.Text = Row[DBColumn].ToString();
+                            dbTxt.Text = dataRow[columnName].ToString();
                         }
                     }
                     else if (ctlType == typeof(MaskedTextBox))
                     {
                         MaskedTextBox dbMaskTxt = (MaskedTextBox)ctl;
-                        dbMaskTxt.Text = Row[DBColumn].ToString();
+                        dbMaskTxt.Text = dataRow[columnName].ToString();
                     }
                     else if (ctlType == typeof(DateTimePicker))
                     {
                         DateTimePicker dbDtPick = (DateTimePicker)ctl;
-                        dbDtPick.Value = DateTime.Parse(Row[DBColumn].ToString());
+                        dbDtPick.Value = DateTime.Parse(dataRow[columnName].ToString());
                     }
                     else if (ctlType == typeof(ComboBox))
                     {
                         ComboBox dbCmb = (ComboBox)ctl;
-                        dbCmb.SelectedIndex = AttributeFunctions.GetComboIndexFromCode(DBInfo.AttribIndex, Row[DBColumn].ToString());
+                        dbCmb.SetSelectedAttribute(dbInfo.Attributes[dataRow[columnName].ToString()]);
                     }
                     else if (ctlType == typeof(Label))
                     {
                         Label dbLbl = (Label)ctl;
-                        dbLbl.Text = Row[DBColumn].ToString();
+                        dbLbl.Text = dataRow[columnName].ToString();
                     }
                     else if (ctlType == typeof(CheckBox))
                     {
                         CheckBox dbChk = (CheckBox)ctl;
-                        dbChk.Checked = Convert.ToBoolean(Row[DBColumn]);
+                        dbChk.Checked = Convert.ToBoolean(dataRow[columnName]);
                     }
                     else if (ctlType == typeof(RichTextBox))
                     {
                         RichTextBox dbRtb = (RichTextBox)ctl;
-                        dbRtb.TextOrRtf(Row[DBColumn].ToString());
+                        dbRtb.TextOrRtf(dataRow[columnName].ToString());
                     }
                     else
                     {
@@ -506,7 +506,7 @@ namespace AssetManager.Data.Functions
                 DBControlInfo DBInfo = (DBControlInfo)ctl.Tag;
                 if (DBInfo.ParseType != ParseType.DisplayOnly)
                 {
-                    DBRow[DBInfo.DataColumn] = GetDBControlValue(ctl);
+                    DBRow[DBInfo.ColumnName] = GetDBControlValue(ctl);
                 }
             }
         }

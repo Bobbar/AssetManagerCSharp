@@ -134,7 +134,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (this.device == null) return;
 
-            var osName = AttributeFunctions.GetDisplayValueFromCode(Attributes.DeviceAttribute.OSType, this.device.OSVersion).ToUpper();
+            var osName = Attributes.DeviceAttributes.OSType[this.device.OSVersion].DisplayValue.ToUpper();
 
             if (osName.Contains("WIN"))
             {

@@ -43,16 +43,16 @@ namespace AssetManager.Data.Functions
             control.Tag = new DBControlInfo(dataColumn, parseType, required);
         }
 
-        public static void SetDBInfo(this Control control, string dataColumn, DBCode[] attribIndex, bool required = false)
+        public static void SetDBInfo(this Control control, string dataColumn, DbAttributes attribs, bool required = false)
         {
             SetControlMaxLength(control, dataColumn);
-            control.Tag = new DBControlInfo(dataColumn, attribIndex, required);
+            control.Tag = new DBControlInfo(dataColumn, attribs, required);
         }
 
-        public static void SetDBInfo(this Control control, string dataColumn, DBCode[] attribIndex, ParseType parseType, bool required = false)
+        public static void SetDBInfo(this Control control, string dataColumn, DbAttributes attribs, ParseType parseType, bool required = false)
         {
             SetControlMaxLength(control, dataColumn);
-            control.Tag = new DBControlInfo(dataColumn, attribIndex, parseType, required);
+            control.Tag = new DBControlInfo(dataColumn, attribs, parseType, required);
         }
 
         private static void SetControlMaxLength(Control control, string dataColumn)

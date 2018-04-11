@@ -2,22 +2,26 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
+using System.ComponentModel;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace AssetManager.Helpers
 {
     public static class ComboBoxExtensions
     {
-        public static void FillComboBox(this ComboBox combo, DBCode[] index)
+        public static void FillComboBox(this ComboBox combo, DbAttributes attributes)
         {
             combo.SuspendLayout();
             combo.BeginUpdate();
             combo.DataSource = null;
             combo.Text = "";
             AddAutoSizeDropWidthHandler(combo);
-            combo.DisplayMember = nameof(DBCode.DisplayValue);
-            combo.ValueMember = nameof(DBCode.Code);
+            combo.DisplayMember = nameof(DbAttribute.DisplayValue);
+            combo.ValueMember = nameof(DbAttribute.Code);
             combo.BindingContext = new BindingContext();
-            combo.DataSource = index;
+            combo.DataSource = attributes.GetArray();
             combo.SelectedIndex = -1;
             combo.EndUpdate();
             combo.ResumeLayout();
@@ -27,6 +31,11 @@ namespace AssetManager.Helpers
         {
             combo.DropDown -= AdjustComboBoxWidth;
             combo.DropDown += AdjustComboBoxWidth;
+        }
+
+        public static void SetSelectedAttribute(this ComboBox combo, DbAttribute attribute)
+        {
+            combo.SelectedIndex = combo.Items.IndexOf(attribute);
         }
 
         private static void AdjustComboBoxWidth(object sender, EventArgs e)
