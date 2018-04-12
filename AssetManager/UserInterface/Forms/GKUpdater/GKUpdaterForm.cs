@@ -1,35 +1,27 @@
-﻿using System;
+﻿using AssetManager.Data.Classes;
+using AssetManager.Helpers;
+using AssetManager.Security;
+using AssetManager.UserInterface.CustomControls;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AssetManager.UserInterface.CustomControls;
-using AssetManager.Data.Classes;
-using AssetManager.Helpers;
-using AssetManager.Security;
-
 
 namespace AssetManager.UserInterface.Forms.GKUpdater
 {
     public partial class GKUpdaterForm : ExtendedForm
     {
-        private bool QueueIsRunning = false;
-        private int MaxSimUpdates = 4;
-        private List<GKProgressControl> MyUpdates = new List<GKProgressControl>();
-        private bool bolStarting = true;
-        private bool bolCheckForDups = true;
-        private bool bolCreateMissingDirs = false;
-
-        private bool PackFileReady = false;
+        private bool queueIsRunning = false;
+        private int concurrentUpdates = 4;
+        private List<GKProgressControl> progressControls = new List<GKProgressControl>();
+        private bool createMissingDirs = false;
+        private bool packFileReady = false;
 
         public GKUpdaterForm(ExtendedForm parentForm) : base(parentForm)
         {
-            // This call is required by the designer.
             InitializeComponent();
-            this.Icon = Properties.Resources.asset_icon;
-            bolStarting = false;
-            MaxUpdates.Value = MaxSimUpdates;
-            // Add any initialization after the InitializeComponent() call.
-            Updater_Table.DoubleBuffered(true);
+            MaxUpdates.Value = concurrentUpdates;
+            ProgressControlsTable.DoubleBuffered(true);
         }
 
         public void AddMultipleUpdates(List<Device> devices)
@@ -37,22 +29,22 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             try
             {
                 OtherFunctions.SetWaitCursor(true, this);
-                foreach (Device device in devices)
+                foreach (var device in devices)
                 {
-                    if (bolCheckForDups && !Exists(device))
+                    if (!Exists(device))
                     {
-                        GKProgressControl NewProgCtl = new GKProgressControl(this, device, bolCreateMissingDirs, Paths.GKExtractDir, MyUpdates.Count + 1);
-                        MyUpdates.Add(NewProgCtl);
-                        NewProgCtl.CriticalStopError += CriticalStop;
+                        var newProgCtl = new GKProgressControl(this, device, createMissingDirs, Paths.GKExtractDir, progressControls.Count + 1);
+                        progressControls.Add(newProgCtl);
+                        newProgCtl.CriticalStopError += CriticalStop;
                     }
                 }
 
-                Updater_Table.SuspendLayout();
+                ProgressControlsTable.SuspendLayout();
                 this.SuspendLayout();
 
-                Updater_Table.Controls.AddRange(MyUpdates.ToArray());
+                ProgressControlsTable.Controls.AddRange(progressControls.ToArray());
 
-                Updater_Table.ResumeLayout();
+                ProgressControlsTable.ResumeLayout();
                 this.ResumeLayout();
 
                 ProcessUpdates();
@@ -70,12 +62,12 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
         {
             try
             {
-                if (bolCheckForDups && !Exists(device))
+                if (!Exists(device))
                 {
-                    GKProgressControl NewProgCtl = new GKProgressControl(this, device, bolCreateMissingDirs, Paths.GKExtractDir, MyUpdates.Count + 1);
-                    Updater_Table.Controls.Add(NewProgCtl);
-                    MyUpdates.Add(NewProgCtl);
-                    NewProgCtl.CriticalStopError += CriticalStop;
+                    var newProgCtl = new GKProgressControl(this, device, createMissingDirs, Paths.GKExtractDir, progressControls.Count + 1);
+                    ProgressControlsTable.Controls.Add(newProgCtl);
+                    progressControls.Add(newProgCtl);
+                    newProgCtl.CriticalStopError += CriticalStop;
                     ProcessUpdates();
                 }
                 else
@@ -84,7 +76,6 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
                     if (blah == DialogResult.OK)
                     {
                         StartUpdateByDevice(device);
-
                     }
                 }
             }
@@ -98,24 +89,24 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void StartUpdateByDevice(Device device)
         {
-            MyUpdates.Find(upd => upd.Device.Guid == device.Guid).StartUpdate();
+            progressControls.Find(upd => upd.Device.Guid == device.Guid).StartUpdate();
         }
 
         private bool Exists(Device device)
         {
-            return MyUpdates.Exists(upd => upd.Device.Guid == device.Guid);
+            return progressControls.Exists(upd => upd.Device.Guid == device.Guid);
         }
 
         public bool ActiveUpdates()
         {
-            return MyUpdates.Exists(upd => upd.ProgStatus == GKProgressControl.ProgressStatus.Running | upd.ProgStatus == GKProgressControl.ProgressStatus.Paused);
+            return progressControls.Exists(upd => upd.ProgStatus == ProgressStatus.Running | upd.ProgStatus == ProgressStatus.Paused);
         }
 
         private void CancelAll()
         {
-            foreach (GKProgressControl upd in MyUpdates)
+            foreach (GKProgressControl upd in progressControls)
             {
-                if (upd.ProgStatus == GKProgressControl.ProgressStatus.Running)
+                if (upd.ProgStatus == ProgressStatus.Running)
                 {
                     upd.CancelUpdate();
                 }
@@ -124,7 +115,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void DisposeUpdates()
         {
-            foreach (GKProgressControl upd in MyUpdates)
+            foreach (GKProgressControl upd in progressControls)
             {
                 if (!upd.IsDisposed)
                 {
@@ -139,37 +130,36 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
         /// <returns></returns>
         private bool CanRunMoreUpdates()
         {
-            if (QueueIsRunning)
+            if (queueIsRunning)
             {
-                int RunningUpdates = 0;
-                foreach (GKProgressControl upd in MyUpdates)
+                int runningUpdates = 0;
+                foreach (GKProgressControl upd in progressControls)
                 {
-
                     switch (upd.ProgStatus)
                     {
-                        case GKProgressControl.ProgressStatus.Running:
-                        case GKProgressControl.ProgressStatus.Starting:
-                        case GKProgressControl.ProgressStatus.Paused:
+                        case ProgressStatus.Running:
+                        case ProgressStatus.Starting:
+                        case ProgressStatus.Paused:
                             if (!upd.IsDisposed)
-                                RunningUpdates += 1;
+                                runningUpdates += 1;
                             break;
                     }
                 }
-                if (RunningUpdates < MaxSimUpdates)
+                if (runningUpdates < concurrentUpdates)
                     return true;
             }
             return false;
         }
 
-        private void cmdCancelAll_Click(object sender, EventArgs e)
+        private void CancelAllButton_Click(object sender, EventArgs e)
         {
             CancelAll();
             StopQueue();
         }
 
-        private void cmdPauseResume_Click(object sender, EventArgs e)
+        private void PauseResumeButton_Click(object sender, EventArgs e)
         {
-            if (QueueIsRunning)
+            if (queueIsRunning)
             {
                 StopQueue();
             }
@@ -179,7 +169,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             }
         }
 
-        private void cmdSort_Click(object sender, EventArgs e)
+        private void SortButton_Click(object sender, EventArgs e)
         {
             SortUpdates();
         }
@@ -210,7 +200,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void MaxUpdates_ValueChanged(object sender, EventArgs e)
         {
-            if (!bolStarting) MaxSimUpdates = (int)MaxUpdates.Value;
+            concurrentUpdates = (int)MaxUpdates.Value;
         }
 
         private void ProcessUpdates()
@@ -228,7 +218,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
         /// </summary>
         private void PruneQueue()
         {
-            MyUpdates = MyUpdates.FindAll(upd => !upd.IsDisposed);
+            progressControls = progressControls.FindAll(upd => !upd.IsDisposed);
         }
 
         private void QueueChecker_Tick(object sender, EventArgs e)
@@ -238,46 +228,51 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void SetStats()
         {
-            int intQueued = 0;
-            int intRunning = 0;
-            int intComplete = 0;
-            double TransferRateSum = 0;
-            foreach (GKProgressControl upd in MyUpdates)
-            {
+            int queued = 0;
+            int running = 0;
+            int complete = 0;
+            double transferRateSum = 0;
 
+            foreach (GKProgressControl upd in progressControls)
+            {
                 switch (upd.ProgStatus)
                 {
-                    case GKProgressControl.ProgressStatus.Queued:
-                        intQueued += 1;
+                    case ProgressStatus.Queued:
+                        queued += 1;
                         break;
-                    case GKProgressControl.ProgressStatus.Running:
-                        TransferRateSum += upd.MyUpdater.UpdateStatus.CurTransferRate;
-                        intRunning += 1;
+
+                    case ProgressStatus.Running:
+                        transferRateSum += upd.GKUpdater.UpdateStatus.CurTransferRate;
+                        running += 1;
                         break;
-                    case GKProgressControl.ProgressStatus.Complete:
-                        intComplete += 1;
+
+                    case ProgressStatus.Complete:
+                        complete += 1;
                         break;
                 }
             }
-            lblQueued.Text = "Queued: " + intQueued;
-            lblRunning.Text = "Running: " + intRunning;
-            lblComplete.Text = "Complete: " + intComplete;
-            lblTotUpdates.Text = "Tot Updates: " + MyUpdates.Count;
-            lblTransferRate.Text = "Total Transfer Rate: " + TransferRateSum.ToString("0.00") + " MB/s";
+
+            QueuedUpdatesLabel.Text = "Queued: " + queued;
+            RunningUpdatesLabel.Text = "Running: " + running;
+            CompleteUpdatesLabel.Text = "Complete: " + complete;
+            TotalUpdatesLabel.Text = "Tot Updates: " + progressControls.Count;
+            TransferRateLabel.Text = "Total Transfer Rate: " + transferRateSum.ToString("0.00") + " MB/s";
         }
 
         /// <summary>
-        /// Sorts all the GKProgressControls in order of the <see cref="GKProgressControl.ProgressStatus"/> enum.
+        /// Sorts all the GKProgressControls in order of the <see cref="ProgressStatus"/> enum.
         /// </summary>
         private void SortUpdates()
         {
-            List<GKProgressControl> sortUpdates = new List<GKProgressControl>();
-            foreach (GKProgressControl.ProgressStatus status in Enum.GetValues(typeof(GKProgressControl.ProgressStatus)))
+            var sortUpdates = new List<GKProgressControl>();
+
+            foreach (ProgressStatus status in Enum.GetValues(typeof(ProgressStatus)))
             {
-                sortUpdates.AddRange(MyUpdates.FindAll(upd => upd.ProgStatus == status));
+                sortUpdates.AddRange(progressControls.FindAll(upd => upd.ProgStatus == status));
             }
-            Updater_Table.Controls.Clear();
-            Updater_Table.Controls.AddRange(sortUpdates.ToArray());
+
+            ProgressControlsTable.Controls.Clear();
+            ProgressControlsTable.Controls.AddRange(sortUpdates.ToArray());
         }
 
         /// <summary>
@@ -285,9 +280,8 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
         /// </summary>
         private void StartNextUpdate()
         {
-            GKProgressControl NextUpd = MyUpdates.Find(upd => upd.ProgStatus == GKProgressControl.ProgressStatus.Queued);
-            if (NextUpd != null)
-                NextUpd.StartUpdate();
+            var nextUpdate = progressControls.Find(upd => upd.ProgStatus == ProgressStatus.Queued);
+            if (nextUpdate != null)  nextUpdate.StartUpdate();
         }
 
         private void RunQueue(bool canRunQueue)
@@ -304,31 +298,31 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void StartQueue()
         {
-            QueueIsRunning = true;
+            queueIsRunning = true;
             SetQueueButton();
         }
 
         private void StopQueue()
         {
-            QueueIsRunning = false;
+            queueIsRunning = false;
             SetQueueButton();
         }
 
         private void SetQueueButton()
         {
-            if (QueueIsRunning)
+            if (queueIsRunning)
             {
-                cmdPauseResume.Text = "Pause Queue";
+                PauseResumeButton.Text = "Pause Queue";
             }
             else
             {
-                cmdPauseResume.Text = "Resume Queue";
+                PauseResumeButton.Text = "Resume Queue";
             }
         }
 
-        private void tsmCreateDirs_Click(object sender, EventArgs e)
+        private void CreateDirsToolItem_Click(object sender, EventArgs e)
         {
-            bolCreateMissingDirs = tsmCreateDirs.Checked;
+            createMissingDirs = CreateDirsToolItem.Checked;
         }
 
         private async void GKUpdaterForm_Shown(object sender, EventArgs e)
@@ -339,20 +333,22 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void ProcessPackFile()
         {
-            using (PackFileForm NewUnPack = new PackFileForm(false))
+            using (var packFileForm = new PackFileForm(false))
             {
-                NewUnPack.ShowDialog(this);
-                PackFileReady = NewUnPack.PackVerified;
-                RunQueue(PackFileReady);
+                packFileForm.ShowDialog(this);
+                packFileReady = packFileForm.PackVerified;
+                RunQueue(packFileReady);
             }
         }
 
         private async Task<bool> CheckPackFile()
         {
-            ManagePackFile PackFileManager = new ManagePackFile();
-            PackFileReady = await PackFileManager.VerifyPackFile();
-            RunQueue(PackFileReady);
-            if (!PackFileReady)
+            var packFileManager = new ManagePackFile();
+            packFileReady = await packFileManager.VerifyPackFile();
+
+            RunQueue(packFileReady);
+
+            if (!packFileReady)
             {
                 CancelAll();
                 OtherFunctions.Message("The local pack file does not match the server. All running updates will be stopped and a new copy will now be downloaded and unpacked.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Pack file out of date", this);
@@ -361,12 +357,12 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             return true;
         }
 
-        private void GKPackageVeriToolStripMenuItem_Click(object sender, EventArgs e)
+        private void VerifyPackFileToolItem_Click(object sender, EventArgs e)
         {
             if (!Helpers.ChildFormControl.FormTypeIsOpen(typeof(PackFileForm)))
             {
-                PackFileForm NewUnPack = new PackFileForm(true);
-                NewUnPack.Show();
+                var newPackFileForm = new PackFileForm(true);
+                newPackFileForm.Show();
             }
         }
 
@@ -382,7 +378,6 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
                     }
 
                     DisposeUpdates();
-
                 }
             }
             finally

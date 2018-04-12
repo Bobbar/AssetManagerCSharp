@@ -384,6 +384,7 @@
     <Compile Include="UserInterface\Forms\GKUpdater\PackFileForm.Designer.cs">
       <DependentUpon>PackFileForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserInterface\Forms\GKUpdater\ProgressStatus.cs" />
     <Compile Include="UserInterface\Forms\GridForm\GridForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,127 +1,125 @@
+using AssetManager.Data.Classes;
+using AssetManager.Helpers;
+using AssetManager.Security;
 using GKUpdaterLib;
 using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using AssetManager.Data.Classes;
-using AssetManager.Tools;
-using AssetManager.Helpers;
-using AssetManager.Security;
-
 
 namespace AssetManager.UserInterface.Forms.GKUpdater
 {
     public partial class GKProgressControl : IDisposable
     {
-        public GKUpdaterLibClass MyUpdater;
-        public ProgressStatus ProgStatus;
-        private bool logVisible = false;
-        private GKUpdaterLibClass.Status_Stats currentStatus;
-        private Device currentDevice;
-        private string logBuffer = "";
-        private Form MyParentForm;
-        private Color prevColor;
-        private Bitmap statusLight;
+        public GKUpdaterLibClass GKUpdater { get; }
+
+        public ProgressStatus ProgStatus { get { return progStatus; } }
 
         public Device Device
         {
             get { return currentDevice; }
         }
 
+        private ProgressStatus progStatus;
+        private bool logVisible = false;
+        private GKUpdaterLibClass.Status_Stats currentStatus;
+        private Device currentDevice;
+        private string logBuffer = "";
+        private Form parentForm;
+        private Color prevStatusColor;
+        private Bitmap statusLight;
+
+        public event EventHandler CriticalStopError;
+
         public GKProgressControl()
         {
-            Disposed += GK_Progress_Fragment_Disposed;
-            // This call is required by the designer.
-            InitializeComponent();
+            Disposed += GKProgressControl_Disposed;
 
-            // Add any initialization after the InitializeComponent() call.
+            InitializeComponent();
         }
 
         public GKProgressControl(Form parentForm, Device device, bool createMissingDirs, string gkPath, int seq = 0)
         {
-            Disposed += GK_Progress_Fragment_Disposed;
             InitializeComponent();
-             this.Size = this.MinimumSize;
-            MyParentForm = parentForm;
             currentDevice = device;
-            MyUpdater = new GKUpdaterLibClass(currentDevice.HostName, gkPath);
-            MyUpdater.CreateMissingDirectories = createMissingDirs;
+            this.parentForm = parentForm;
+
+            this.Disposed += GKProgressControl_Disposed;
+            this.Size = this.MinimumSize;
             this.DoubleBuffered = true;
-            lblInfo.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
-            lblTransRate.Text = "0.00MB/s";
+            Panel1.DoubleBuffered(true);
+            LogTextBox.DoubleBuffered(true);
+
+            GKUpdater = new GKUpdaterLibClass(currentDevice.HostName, gkPath);
+            GKUpdater.CreateMissingDirectories = createMissingDirs;
+            GKUpdater.LogEvent += GKLogEvent;
+            GKUpdater.StatusUpdate += GKStatusUpdateEvent;
+            GKUpdater.UpdateComplete += GKUpdate_Complete;
+            GKUpdater.UpdateCanceled += GKUpdate_Cancelled;
+
+            DeviceInfoLabel.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
+            TransferRateLabel.Text = "0.00MB/s";
+
             SetStatus(ProgressStatus.Queued);
+
             if (seq > 0)
             {
-                lblSeq.Text = "#" + seq;
+                SequenceLabel.Text = "#" + seq;
             }
             else
             {
-                lblSeq.Text = "";
+                SequenceLabel.Text = "";
             }
-            MyUpdater.LogEvent += GKLogEvent;
-            MyUpdater.StatusUpdate += GKStatusUpdateEvent;
-            MyUpdater.UpdateComplete += GKUpdate_Complete;
-            MyUpdater.UpdateCanceled += GKUpdate_Cancelled;
-            Panel1.DoubleBuffered(true);
         }
 
         public GKProgressControl(Form parentForm, Device device, bool createMissingDirs, string sourcePath, string destPath, int seq = 0)
         {
-            Disposed += GK_Progress_Fragment_Disposed;
             InitializeComponent();
-            this.Size = this.MinimumSize;
-            MyParentForm = parentForm;
             currentDevice = device;
-            MyUpdater = new GKUpdaterLibClass(currentDevice.HostName, sourcePath, destPath);
-            MyUpdater.CreateMissingDirectories = createMissingDirs;
+            this.parentForm = parentForm;
+
+            this.Disposed += GKProgressControl_Disposed;
+            this.Size = this.MinimumSize;
             this.DoubleBuffered = true;
-            lblInfo.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
-            lblTransRate.Text = "0.00MB/s";
+            Panel1.DoubleBuffered(true);
+            LogTextBox.DoubleBuffered(true);
+
+            GKUpdater = new GKUpdaterLibClass(currentDevice.HostName, sourcePath, destPath);
+            GKUpdater.CreateMissingDirectories = createMissingDirs;
+            GKUpdater.LogEvent += GKLogEvent;
+            GKUpdater.StatusUpdate += GKStatusUpdateEvent;
+            GKUpdater.UpdateComplete += GKUpdate_Complete;
+            GKUpdater.UpdateCanceled += GKUpdate_Cancelled;
+
+            DeviceInfoLabel.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
+            TransferRateLabel.Text = "0.00MB/s";
+
             SetStatus(ProgressStatus.Queued);
+
             if (seq > 0)
             {
-                lblSeq.Text = "#" + seq;
+                SequenceLabel.Text = "#" + seq;
             }
             else
             {
-                lblSeq.Text = "";
+                SequenceLabel.Text = "";
             }
-            MyUpdater.LogEvent += GKLogEvent;
-            MyUpdater.StatusUpdate += GKStatusUpdateEvent;
-            MyUpdater.UpdateComplete += GKUpdate_Complete;
-            MyUpdater.UpdateCanceled += GKUpdate_Cancelled;
-            Panel1.DoubleBuffered(true);
-        }
-
-        public event EventHandler CriticalStopError;
-
-        // METODO: Un-nest.
-        public enum ProgressStatus
-        {
-            Starting,
-            Running,
-            Paused,
-            Queued,
-            Complete,
-            CompleteWithErrors,
-            Canceled,
-            Errors
         }
 
         public void CancelUpdate()
         {
-            if (!MyUpdater.IsDisposed) MyUpdater.CancelUpdate();
+            if (!GKUpdater.IsDisposed) GKUpdater.CancelUpdate();
         }
 
         public void StartUpdate()
         {
             try
             {
-                if (ProgStatus != ProgressStatus.Running)
+                if (progStatus != ProgressStatus.Running)
                 {
                     logBuffer = "";
                     SetStatus(ProgressStatus.Starting);
-                    MyUpdater.StartUpdate(SecurityTools.AdminCreds);
+                    GKUpdater.StartUpdate(SecurityTools.AdminCreds);
                 }
             }
             catch (Exception ex)
@@ -141,41 +139,41 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void DrawLight(Color color)
         {
-            if (color != prevColor)
+            if (color != prevStatusColor)
             {
-                prevColor = color;
+                prevStatusColor = color;
 
                 if (statusLight == null)
                 {
-                    statusLight = new Bitmap(pbStatus.Width, pbStatus.Height);
+                    statusLight = new Bitmap(StatusPictureBox.Width, StatusPictureBox.Height);
                 }
 
-                using (SolidBrush MyBrush = new SolidBrush(color))
-                using (Pen StrokePen = new Pen(Color.Black, 1.5f))
+                using (SolidBrush brush = new SolidBrush(color))
+                using (Pen strokePen = new Pen(Color.Black, 1.5f))
                 using (Graphics gr = Graphics.FromImage(statusLight))
                 {
-                    gr.Clear(pbStatus.BackColor);
+                    gr.Clear(StatusPictureBox.BackColor);
                     gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                    float XLoc = 0;
-                    float YLoc = 0;
-                    float Size = 0;
-                    Size = 20;
-                    XLoc = Convert.ToSingle(pbStatus.Width / 2 - Size / 2);
-                    YLoc = Convert.ToSingle(pbStatus.Height / 2 - Size / 2);
-                    gr.FillEllipse(MyBrush, XLoc, YLoc, Size, Size);
-                    gr.DrawEllipse(StrokePen, XLoc, YLoc, Size, Size);
-                    pbStatus.Image = statusLight;
+
+                    float size = 20F;
+                    float xLoc = Convert.ToSingle(StatusPictureBox.Width / 2 - size / 2); ;
+                    float yLoc = Convert.ToSingle(StatusPictureBox.Height / 2 - size / 2);
+
+                    gr.FillEllipse(brush, xLoc, yLoc, size, size);
+                    gr.DrawEllipse(strokePen, xLoc, yLoc, size, size);
+
+                    StatusPictureBox.Image = statusLight;
                 }
             }
         }
 
-        private void GK_Progress_Fragment_Disposed(object sender, EventArgs e)
+        private void GKProgressControl_Disposed(object sender, EventArgs e)
         {
-            MyUpdater.LogEvent -= GKLogEvent;
-            MyUpdater.StatusUpdate -= GKStatusUpdateEvent;
-            MyUpdater.UpdateComplete -= GKUpdate_Complete;
-            MyUpdater.UpdateCanceled -= GKUpdate_Cancelled;
-            MyUpdater.Dispose();
+            GKUpdater.LogEvent -= GKLogEvent;
+            GKUpdater.StatusUpdate -= GKStatusUpdateEvent;
+            GKUpdater.UpdateComplete -= GKUpdate_Complete;
+            GKUpdater.UpdateCanceled -= GKUpdate_Cancelled;
+            GKUpdater.Dispose();
             statusLight?.Dispose();
         }
 
@@ -188,9 +186,9 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             Log(LogEvent.LogData.Message);
         }
 
-        private void Log(string Message)
+        private void Log(string text)
         {
-            logBuffer += Message + Environment.NewLine;
+            logBuffer += text + Environment.NewLine;
         }
 
         private void GKStatusUpdateEvent(object sender, EventArgs e)
@@ -198,9 +196,9 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             var UpdateEvent = (GKUpdaterLibClass.GKUpdateEvents)e;
             SetStatus(ProgressStatus.Running);
             currentStatus = UpdateEvent.CurrentStatus;
-            pbarProgress.Maximum = currentStatus.TotFiles;
-            pbarProgress.Value = currentStatus.CurFileIdx;
-            lblStatus.Text = currentStatus.CurFileName;
+            TotalProgressBar.Maximum = currentStatus.TotFiles;
+            TotalProgressBar.Value = currentStatus.CurFileIdx;
+            StatusLabel.Text = currentStatus.CurFileName;
         }
 
         private void GKUpdate_Cancelled(object sender, EventArgs e)
@@ -238,7 +236,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             }
             else
             {
-                if (MyUpdater.ErrorList.Count == 0)
+                if (GKUpdater.ErrorList.Count == 0)
                 {
                     SetStatus(ProgressStatus.Complete);
                 }
@@ -253,7 +251,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
         {
             this.Size = this.MinimumSize;
             logVisible = false;
-            lblShowHide.Text = "s";
+            ShowHideLabel.Text = "s";
             //"+"
         }
 
@@ -262,16 +260,16 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             UpdateLogBox();
             this.Size = this.MaximumSize;
             logVisible = true;
-            lblShowHide.Text = "r";
+            ShowHideLabel.Text = "r";
             //"-"
         }
 
-        private void lblInfo_Click(object sender, EventArgs e)
+        private void InfoLabel_Click(object sender, EventArgs e)
         {
-            Helpers.ChildFormControl.LookupDevice(Helpers.ChildFormControl.MainFormInstance(), currentDevice);
+            ChildFormControl.LookupDevice(Helpers.ChildFormControl.MainFormInstance(), currentDevice);
         }
 
-        private void lblShowHide_Click(object sender, EventArgs e)
+        private void ShowHideLabel_Click(object sender, EventArgs e)
         {
             if (!logVisible)
             {
@@ -285,11 +283,11 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void pbCancelClose_Click(object sender, EventArgs e)
         {
-            if (ProgStatus == ProgressStatus.Running | ProgStatus == ProgressStatus.Paused)
+            if (progStatus == ProgressStatus.Running | progStatus == ProgressStatus.Paused)
             {
-                if (!MyUpdater.IsDisposed)
+                if (!GKUpdater.IsDisposed)
                 {
-                    MyUpdater.CancelUpdate();
+                    GKUpdater.CancelUpdate();
                     SetStatus(ProgressStatus.Canceled);
                 }
                 else
@@ -305,20 +303,20 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void pbRestart_Click(object sender, EventArgs e)
         {
-            switch (ProgStatus)
+            switch (progStatus)
             {
                 case ProgressStatus.Paused:
-                    MyUpdater.ResumeUpdate();
+                    GKUpdater.ResumeUpdate();
                     SetStatus(ProgressStatus.Running);
                     break;
 
                 case ProgressStatus.Running:
-                    MyUpdater.PauseUpdate();
+                    GKUpdater.PauseUpdate();
                     SetStatus(ProgressStatus.Paused);
                     break;
 
                 case ProgressStatus.Queued:
-                    var blah = OtherFunctions.Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Warning", MyParentForm);
+                    var blah = OtherFunctions.Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Warning", parentForm);
                     if (blah == DialogResult.Yes)
                     {
                         StartUpdate();
@@ -333,9 +331,9 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void SetStatus(ProgressStatus Status)
         {
-            if (ProgStatus != Status)
+            if (progStatus != Status)
             {
-                ProgStatus = Status;
+                progStatus = Status;
                 SetStatusLight(Status);
                 SetButtons(Status);
                 SetStatusLabel(Status);
@@ -367,19 +365,19 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             switch (Status)
             {
                 case ProgressStatus.Running:
-                    pbRestart.Image = Properties.Resources.PauseIcon;
-                    MyToolTip.SetToolTip(pbRestart, "Pause");
+                    RestartPictureBox.Image = Properties.Resources.PauseIcon;
+                    ToolTip.SetToolTip(RestartPictureBox, "Pause");
                     break;
 
                 case ProgressStatus.Paused:
                 case ProgressStatus.Queued:
-                    pbRestart.Image = Properties.Resources.PlayIcon;
-                    MyToolTip.SetToolTip(pbRestart, "Resume");
+                    RestartPictureBox.Image = Properties.Resources.PlayIcon;
+                    ToolTip.SetToolTip(RestartPictureBox, "Resume");
                     break;
 
                 default:
-                    pbRestart.Image = Properties.Resources.RestartIcon;
-                    MyToolTip.SetToolTip(pbRestart, "Restart");
+                    RestartPictureBox.Image = Properties.Resources.RestartIcon;
+                    ToolTip.SetToolTip(RestartPictureBox, "Restart");
                     break;
             }
         }
@@ -389,31 +387,31 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             switch (Status)
             {
                 case ProgressStatus.Queued:
-                    lblStatus.Text = "Queued...";
+                    StatusLabel.Text = "Queued...";
                     break;
 
                 case ProgressStatus.Canceled:
-                    lblStatus.Text = "Canceled!";
+                    StatusLabel.Text = "Canceled!";
                     break;
 
                 case ProgressStatus.Errors:
-                    lblStatus.Text = "ERROR!";
+                    StatusLabel.Text = "ERROR!";
                     break;
 
                 case ProgressStatus.CompleteWithErrors:
-                    lblStatus.Text = "Completed with errors: " + MyUpdater.ErrorList.Count;
+                    StatusLabel.Text = "Completed with errors: " + GKUpdater.ErrorList.Count;
                     break;
 
                 case ProgressStatus.Complete:
-                    lblStatus.Text = "Complete!";
+                    StatusLabel.Text = "Complete!";
                     break;
 
                 case ProgressStatus.Starting:
-                    lblStatus.Text = "Starting...";
+                    StatusLabel.Text = "Starting...";
                     break;
 
                 case ProgressStatus.Paused:
-                    lblStatus.Text = "Paused.";
+                    StatusLabel.Text = "Paused.";
                     break;
             }
         }
@@ -427,22 +425,22 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             {
                 UpdateLogBox();
             }
-            if (ProgStatus == ProgressStatus.Running)
+            if (progStatus == ProgressStatus.Running)
             {
-                pbarFileProgress.Value = MyUpdater.UpdateStatus.CurFileProgress;
-                if (pbarFileProgress.Value > 1)
-                    pbarFileProgress.Value = pbarFileProgress.Value - 1;
+                FileProgressBar.Value = GKUpdater.UpdateStatus.CurFileProgress;
+                if (FileProgressBar.Value > 1)
+                    FileProgressBar.Value = FileProgressBar.Value - 1;
                 //doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
-                pbarFileProgress.Value = MyUpdater.UpdateStatus.CurFileProgress;
-                lblTransRate.Text = MyUpdater.UpdateStatus.CurTransferRate.ToString("0.00") + "MB/s";
+                FileProgressBar.Value = GKUpdater.UpdateStatus.CurFileProgress;
+                TransferRateLabel.Text = GKUpdater.UpdateStatus.CurTransferRate.ToString("0.00") + "MB/s";
                 this.Update();
             }
         }
 
         private void UpdateLogBox()
         {
-            rtbLog.AppendText(logBuffer);
-            rtbLog.Refresh();
+            LogTextBox.AppendText(logBuffer);
+            LogTextBox.Refresh();
             logBuffer = "";
         }
     }

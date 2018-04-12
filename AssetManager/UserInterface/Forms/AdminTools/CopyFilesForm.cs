@@ -30,7 +30,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 
                 var Done = await Task.Run(() =>
                 {
-                    while (!(pushFilesControl.ProgStatus != GKProgressControl.ProgressStatus.Running && pushFilesControl.ProgStatus != GKProgressControl.ProgressStatus.Starting))
+                    while (!(pushFilesControl.ProgStatus != ProgressStatus.Running && pushFilesControl.ProgStatus != ProgressStatus.Starting))
                     {
                         if (cancel)
                         {
@@ -39,7 +39,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                         }
                         Task.Delay(1000).Wait();
                     }
-                    if (pushFilesControl.ProgStatus != GKProgressControl.ProgressStatus.CompleteWithErrors && pushFilesControl.ProgStatus != GKProgressControl.ProgressStatus.Complete)
+                    if (pushFilesControl.ProgStatus != ProgressStatus.CompleteWithErrors && pushFilesControl.ProgStatus != ProgressStatus.Complete)
                     {
                         return false;
                     }

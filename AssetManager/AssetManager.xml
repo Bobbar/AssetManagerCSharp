@@ -1483,7 +1483,7 @@
         </member>
         <member name="M:AssetManager.UserInterface.Forms.GKUpdater.GKUpdaterForm.SortUpdates">
             <summary>
-            Sorts all the GKProgressControls in order of the <see cref="T:AssetManager.UserInterface.Forms.GKUpdater.GKProgressControl.ProgressStatus"/> enum.
+            Sorts all the GKProgressControls in order of the <see cref="T:AssetManager.UserInterface.Forms.GKUpdater.ProgressStatus"/> enum.
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.Forms.GKUpdater.GKUpdaterForm.StartNextUpdate">
