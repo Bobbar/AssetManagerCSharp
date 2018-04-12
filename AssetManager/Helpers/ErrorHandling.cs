@@ -428,7 +428,7 @@ namespace AssetManager.Helpers
             if (ServerInfo.ServerPinging)
             {
                 PromptUser("ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "ERROR");
-                OtherFunctions.EndProgram();
+                OtherFunctions.EndProgram(true);
                 return false;
             }
             else
@@ -441,7 +441,7 @@ namespace AssetManager.Helpers
         {
             Logging.Logger("UNHANDLED ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ErrorCode + "  Message:" + ex.Message);
             PromptUser("UNHANDLED ERROR:  MethodName=" + Method.Name + "  Type: " + ex.GetType().Name + "  #:" + ErrorCode + "  Message:" + ex.Message + Environment.NewLine + Environment.NewLine + "file://" + Paths.LogPath, MessageBoxButtons.OK, MessageBoxIcon.Error, "ERROR");
-            OtherFunctions.EndProgram();
+            OtherFunctions.EndProgram(true);
         }
 
         private static void PromptUser(string Prompt, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.Information, string Title = null, Form ParentFrm = null)

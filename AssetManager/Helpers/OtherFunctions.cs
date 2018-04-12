@@ -1,16 +1,17 @@
+using MyDialogLib;
 using System;
 using System.Diagnostics;
-using System.Windows.Forms;
 using System.IO;
-using MyDialogLib;
+using System.Windows.Forms;
+
 namespace AssetManager.Helpers
 {
-
-    static class OtherFunctions
+    internal static class OtherFunctions
     {
         public static Stopwatch stpw = new Stopwatch();
 
         private static int intTimerHits = 0;
+
         public static void StartTimer()
         {
             stpw.Stop();
@@ -34,12 +35,17 @@ namespace AssetManager.Helpers
             return results;
         }
 
-        public static void EndProgram()
+        public static void EndProgram(bool forceEnd = false)
         {
             GlobalSwitches.ProgramEnding = true;
             Logging.Logger("Ending Program...");
             PurgeTempDir();
-            // Application.Exit();
+
+            // Forcefully kill the process. Used when unhandled or critical exceptions occur.
+            if (forceEnd)
+            {
+                Environment.Exit(-1);
+            }
         }
 
         public static void PurgeTempDir()
@@ -53,6 +59,7 @@ namespace AssetManager.Helpers
             }
             catch
             {
+                // Sometimes a file will be in use, so we don't care if this fails.
             }
         }
 
@@ -95,6 +102,7 @@ namespace AssetManager.Helpers
         }
 
         public delegate void SetWaitCursorVoidDelegate(bool waiting, Form parentForm = null);
+
         public static void SetWaitCursor(bool waiting, Form parentForm = null)
         {
             if (parentForm == null)
@@ -125,6 +133,7 @@ namespace AssetManager.Helpers
         }
 
         private static RichTextBox rtfBox = new RichTextBox();
+
         public static string RTFToPlainText(string rtfText)
         {
             try
@@ -145,8 +154,5 @@ namespace AssetManager.Helpers
                 return rtfText;
             }
         }
-
-
-
     }
 }
