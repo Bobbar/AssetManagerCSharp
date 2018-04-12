@@ -238,6 +238,7 @@
     <Compile Include="UserInterface\CustomControls\HotTrackSplitContainer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserInterface\CustomControls\LiveBox\LiveBoxSelectAction.cs" />
     <Compile Include="UserInterface\CustomControls\RemoteTools\PSExecCommandForm.cs">
       <SubType>Form</SubType>
     </Compile>

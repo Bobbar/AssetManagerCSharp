@@ -70,8 +70,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             defaultFormTitle = this.Text;
 
             liveBox = new LiveBox(this);
-            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.UserSelect, DevicesCols.MunisEmpNum);
-            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxSelectionType.SelectValue);
+            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBoxSelectAction.UserSelect, DevicesCols.MunisEmpNum);
+            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBoxSelectAction.SelectValue);
 
             munisToolBar = new MunisToolBar(this);
             munisToolBar.InsertMunisDropDown(ToolStrip1, 6);

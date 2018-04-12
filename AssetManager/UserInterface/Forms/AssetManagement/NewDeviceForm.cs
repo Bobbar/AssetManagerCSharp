@@ -364,8 +364,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void NewDeviceForm_Load(object sender, EventArgs e)
         {
             liveBox = new LiveBox(this);
-            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.UserSelect, DevicesCols.MunisEmpNum);
-            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxSelectionType.SelectValue);
+            liveBox.AttachToControl(CurrentUserTextBox, DevicesCols.CurrentUser, LiveBoxSelectAction.UserSelect, DevicesCols.MunisEmpNum);
+            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBoxSelectAction.SelectValue);
         }
 
         private void OSTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)

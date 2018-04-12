@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -13,14 +14,17 @@ namespace AssetManager.UserInterface.CustomControls
     public class LiveBox : IDisposable
     {
         #region "Fields"
+
         private Font liveBoxFont = new Font("Consolas", 11.25f, FontStyle.Bold);
-        private LiveBoxArgs currentLiveBoxArgs;
+        private LiveBoxConfig currentLiveBoxConfig;
         private ListBox liveListBox;
-        private List<LiveBoxArgs> liveBoxControls = new List<LiveBoxArgs>();
+        private List<LiveBoxConfig> liveBoxConfigs = new List<LiveBoxConfig>();
         private int rowLimit = 30;
         private bool queryRunning = false;
         private string previousSearchString;
         private int previousIndex = -1;
+        private Graphics liveBoxGraphics;
+        private bool liveBoxSelected = false;
 
         #endregion "Fields"
 
@@ -35,14 +39,14 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region "Methods"
 
-        public void AttachToControl(TextBox control, string displayMember, LiveBoxSelectionType type, string valueMember = null)
+        public void AttachToControl(TextBox targetTextBox, string displayMember, LiveBoxSelectAction selectAction, string valueMember = null)
         {
-            LiveBoxArgs controlArgs = new LiveBoxArgs(control, displayMember, type, valueMember);
-            liveBoxControls.Add(controlArgs);
-            controlArgs.Control.KeyUp += Control_KeyUp;
-            controlArgs.Control.KeyDown += Control_KeyDown;
-            controlArgs.Control.LostFocus += Control_LostFocus;
-            controlArgs.Control.ReadOnlyChanged += Control_LostFocus;
+            var config = new LiveBoxConfig(targetTextBox, displayMember, selectAction, valueMember);
+            liveBoxConfigs.Add(config);
+            config.TargetTextBox.KeyDown += TargetTextBox_KeyDown;
+            config.TargetTextBox.LostFocus += TargetTextBox_LostFocus;
+            config.TargetTextBox.ReadOnlyChanged += TargetTextBox_ReadOnlyChanged;
+            config.TargetTextBox.TextChanged += TargetTextBox_TextChanged;
         }
 
         public void GiveLiveBoxFocus()
@@ -56,87 +60,81 @@ namespace AssetManager.UserInterface.CustomControls
 
         public void HideLiveBox()
         {
-            liveListBox.Visible = false;
-            liveListBox.DataSource = null;
+            if (liveListBox.Visible)
+            {
+                liveListBox.Visible = false;
+                liveListBox.DataSource = null;
+            }
         }
 
-        private void Control_KeyDown(object sender, KeyEventArgs e)
+        private void TargetTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!liveBoxSelected)
+            {
+                var config = GetSenderConfig(sender);
+                if (!config.TargetTextBox.ReadOnly)
+                {
+                    StartLiveSearch(config);
+                }
+            }
+        }
+
+        private void TargetTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Down)
             {
                 GiveLiveBoxFocus();
             }
-        }
-
-        private void Control_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
+            else if (e.KeyCode == Keys.Escape)
             {
                 HideLiveBox();
             }
-            else
-            {
-                //don't respond to non-alpha keys
-                if (e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.Alt || e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.Menu)
-                {
-                    //do nothing
-                }
-                else
-                {
-                    LiveBoxArgs arg = GetSenderArgs(sender);
-                    if (!arg.Control.ReadOnly)
-                    {
-                        StartLiveSearch(arg);
-                    }
-                }
-            }
         }
 
-        private void Control_LostFocus(object sender, EventArgs e)
+        private void TargetTextBox_LostFocus(object sender, EventArgs e)
         {
-            if (currentLiveBoxArgs.Control != null)
+            if (currentLiveBoxConfig.TargetTextBox != null)
             {
-                if (!currentLiveBoxArgs.Control.Focused & !liveListBox.Focused)
+                if (!currentLiveBoxConfig.TargetTextBox.Focused & !liveListBox.Focused)
                 {
-                    if (liveListBox.Visible)
-                        HideLiveBox();
+                    HideLiveBox();
                 }
-                if (!currentLiveBoxArgs.Control.Enabled)
+
+                if (!currentLiveBoxConfig.TargetTextBox.Enabled)
                 {
-                    if (liveListBox.Visible)
-                        HideLiveBox();
+                    HideLiveBox();
                 }
-                if (currentLiveBoxArgs.Control is TextBox)
+
+                if (currentLiveBoxConfig.TargetTextBox.ReadOnly)
                 {
-                    TextBox txt = currentLiveBoxArgs.Control;
-                    if (txt.ReadOnly)
-                    {
-                        if (liveListBox.Visible)
-                            HideLiveBox();
-                    }
+                    HideLiveBox();
                 }
             }
         }
 
-        private void DrawLiveBox(DataTable results)
+        private void TargetTextBox_ReadOnlyChanged(object sender, EventArgs e)
+        {
+            if (((TextBox)sender).ReadOnly) HideLiveBox();
+        }
+
+        private void DisplayLiveBox(DataTable results)
         {
             try
             {
                 if (results.Rows.Count > 0)
                 {
                     liveListBox.SuspendLayout();
-                    liveListBox.BeginUpdate();
+                    liveListBox.ValueMember = currentLiveBoxConfig.ValueMember;
+                    liveListBox.DisplayMember = currentLiveBoxConfig.DisplayMember;
                     liveListBox.DataSource = results;
-                    liveListBox.DisplayMember = currentLiveBoxArgs.DisplayMember;
-                    liveListBox.ValueMember = currentLiveBoxArgs.ValueMember;
                     liveListBox.ClearSelected();
                     PosistionLiveBox();
                     liveListBox.Visible = true;
-                    liveListBox.EndUpdate();
                     liveListBox.ResumeLayout();
-                    if (previousSearchString != currentLiveBoxArgs.Control.Text.Trim())
+
+                    if (previousSearchString != currentLiveBoxConfig.TargetTextBox.Text.Trim())
                     {
-                        StartLiveSearch(currentLiveBoxArgs);
+                        StartLiveSearch(currentLiveBoxConfig);
                         //if search string has changed since last completion, run again.
                     }
                 }
@@ -151,13 +149,13 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private LiveBoxArgs GetSenderArgs(object sender)
+        private LiveBoxConfig GetSenderConfig(object sender)
         {
-            foreach (LiveBoxArgs arg in liveBoxControls)
+            foreach (var config in liveBoxConfigs)
             {
-                if (object.ReferenceEquals(arg.Control, (TextBox)sender))
+                if (ReferenceEquals(config.TargetTextBox, (TextBox)sender))
                 {
-                    return arg;
+                    return config;
                 }
             }
             return null;
@@ -168,15 +166,29 @@ namespace AssetManager.UserInterface.CustomControls
             liveListBox = new ListBox();
             liveListBox.Parent = parentForm;
             liveListBox.BringToFront();
+            AddLiveBoxEvents();
+            liveListBox.DoubleBuffered(true);
+            liveListBox.Visible = false;
+            liveBoxGraphics = liveListBox.CreateGraphics();
+            SetStyle();
+        }
+
+        private void AddLiveBoxEvents()
+        {
             liveListBox.MouseDown += LiveBox_MouseDown;
             liveListBox.MouseMove += LiveBox_MouseMove;
             liveListBox.KeyDown += LiveBox_KeyDown;
             liveListBox.LostFocus += LiveBox_LostFocus;
             liveListBox.PreviewKeyDown += LiveBox_PreviewKeyDown;
-            liveListBox.DoubleBuffered(true);
-            liveListBox.Visible = false;
-            currentLiveBoxArgs = new LiveBoxArgs();
-            SetStyle();
+        }
+
+        private void RemoveLiveBoxEvents()
+        {
+            liveListBox.MouseDown -= LiveBox_MouseDown;
+            liveListBox.MouseMove -= LiveBox_MouseMove;
+            liveListBox.KeyDown -= LiveBox_KeyDown;
+            liveListBox.LostFocus -= LiveBox_LostFocus;
+            liveListBox.PreviewKeyDown -= LiveBox_PreviewKeyDown;
         }
 
         private void LiveBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -229,81 +241,104 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void LiveBoxSelect()
         {
-            string selectedText = liveListBox.Text;
-            string selectedValue = liveListBox.SelectedValue.ToString();
-            HideLiveBox();
-
-            var parentForm = currentLiveBoxArgs.Control.FindForm();
-            if (parentForm is ILiveBox)
+            try
             {
-                var liveboxForm = (ILiveBox)parentForm;
+                liveBoxSelected = true;
+                string selectedText = liveListBox.Text;
+                string selectedValue = liveListBox.SelectedValue.ToString();
 
-                switch (currentLiveBoxArgs.Type)
+                HideLiveBox();
+
+                var parentForm = currentLiveBoxConfig.TargetTextBox.FindForm();
+                if (parentForm is ILiveBox)
                 {
-                    case LiveBoxSelectionType.DynamicSearch:
-                        currentLiveBoxArgs.Control.Text = selectedText;
-                        liveboxForm.DynamicSearch();
-                        break;
+                    var liveboxForm = (ILiveBox)parentForm;
 
-                    case LiveBoxSelectionType.LoadDevice:
-                        currentLiveBoxArgs.Control.Text = "";
-                        liveboxForm.LoadDevice(selectedValue);
-                        break;
+                    switch (currentLiveBoxConfig.SelectionType)
+                    {
+                        case LiveBoxSelectAction.DynamicSearch:
+                            currentLiveBoxConfig.TargetTextBox.Text = selectedText;
+                            liveboxForm.DynamicSearch();
+                            break;
 
-                    case LiveBoxSelectionType.SelectValue:
-                        currentLiveBoxArgs.Control.Text = selectedText;
-                        break;
+                        case LiveBoxSelectAction.LoadDevice:
+                            currentLiveBoxConfig.TargetTextBox.Text = "";
+                            liveboxForm.LoadDevice(selectedValue);
+                            break;
 
-                    case LiveBoxSelectionType.UserSelect:
-                        currentLiveBoxArgs.Control.Text = selectedText;
-                        liveboxForm.MunisUser = new MunisEmployee(selectedText, selectedValue);
-                        break;
+                        case LiveBoxSelectAction.SelectValue:
+                            currentLiveBoxConfig.TargetTextBox.Text = selectedText;
+                            break;
+
+                        case LiveBoxSelectAction.UserSelect:
+                            currentLiveBoxConfig.TargetTextBox.Text = selectedText;
+                            liveboxForm.MunisUser = new MunisEmployee(selectedText, selectedValue);
+                            break;
+                    }
+                }
+                else
+                {
+                    throw new Exception(nameof(ILiveBox) + " is not implemented in parent Form.");
                 }
             }
-            else
+            finally
             {
-                throw new Exception(nameof(ILiveBox) + " is not implemented in parent Form.");
+                liveBoxSelected = false;
             }
+
         }
 
         private void PosistionLiveBox()
         {
-            Point ScreenPos = liveListBox.Parent.PointToClient(currentLiveBoxArgs.Control.Parent.PointToScreen(currentLiveBoxArgs.Control.Location));
-            ScreenPos.Y += currentLiveBoxArgs.Control.Height - 1;
-            liveListBox.Location = ScreenPos;
+            // Get top-left location of the target control.
+            var targetLocation = liveListBox.Parent.PointToClient(currentLiveBoxConfig.TargetTextBox.Parent.PointToScreen(currentLiveBoxConfig.TargetTextBox.Location));
+
+            // Shift the location down to the bottom of the target control.
+            targetLocation.Y += currentLiveBoxConfig.TargetTextBox.Height - 1;
+
+            // Set the listbox location.
+            liveListBox.Location = targetLocation;
+
+            // Set the listbox width to fit the contents.
             liveListBox.Width = PreferredWidth();
-            Rectangle FormBounds = liveListBox.Parent.ClientRectangle;
-            if (liveListBox.PreferredHeight + liveListBox.Top > FormBounds.Bottom)
+
+            // Get the height of the listbox and the bounds of the parent form
+            // and adjust the height as needed to keep the listbox within the form.
+            var formBounds = liveListBox.Parent.ClientRectangle;
+            var prefHeight = liveListBox.PreferredHeight;
+
+            if (liveListBox.Top + prefHeight > formBounds.Bottom)
             {
-                liveListBox.Height = FormBounds.Bottom - liveListBox.Top - liveListBox.Padding.Bottom;
+                liveListBox.Height = formBounds.Bottom - liveListBox.Top - liveListBox.Padding.Bottom;
             }
             else
             {
-                liveListBox.Height = liveListBox.PreferredHeight;
+                liveListBox.Height = prefHeight;
             }
         }
 
         private int PreferredWidth()
         {
-            using (Graphics gfx = liveListBox.CreateGraphics())
+            // Cast and convert items to an array.
+            var itemArray = liveListBox.Items.Cast<DataRowView>().ToArray();
+
+            // Sort the items by the display member string length.
+            itemArray = itemArray.OrderBy((i) => i[currentLiveBoxConfig.DisplayMember].ToString().Length).ToArray();
+
+            // Get the last and longest string.
+            var longestItem = itemArray.Last()[currentLiveBoxConfig.DisplayMember].ToString();
+
+            // Measure the size of the string and collect the width.
+            float maxLen = liveBoxGraphics.MeasureString(longestItem, liveListBox.Font).Width;
+
+            // If the longest string is wider than the target textbox width, return the new width.
+            if (maxLen > currentLiveBoxConfig.TargetTextBox.Width)
             {
-                int MaxLen = 0;
-                foreach (DataRowView row in liveListBox.Items)
-                {
-                    int ItemLen = (int)gfx.MeasureString(row[currentLiveBoxArgs.DisplayMember].ToString(), liveListBox.Font).Width;
-                    if (ItemLen > MaxLen)
-                    {
-                        MaxLen = ItemLen;
-                    }
-                }
-                if (MaxLen > currentLiveBoxArgs.Control.Width)
-                {
-                    return MaxLen;
-                }
-                else
-                {
-                    return currentLiveBoxArgs.Control.Width;
-                }
+                return (int)maxLen;
+            }
+            else
+            {
+                return currentLiveBoxConfig.TargetTextBox.Width;
             }
         }
 
@@ -317,20 +352,21 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (queryRunning) return;
                 queryRunning = true;
-                DataTable Results = await Task.Run(() =>
-                {
-                    string strQry;
 
-                    if (currentLiveBoxArgs.ValueMember == null)
+                DataTable results = await Task.Run(() =>
+                {
+                    string query;
+
+                    if (currentLiveBoxConfig.ValueMember == null)
                     {
-                        strQry = "SELECT " + DevicesCols.DeviceGuid + "," + currentLiveBoxArgs.DisplayMember + " FROM " + DevicesCols.TableName + " WHERE " + currentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + currentLiveBoxArgs.DisplayMember + " ORDER BY " + currentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
+                        query = "SELECT " + DevicesCols.DeviceGuid + "," + currentLiveBoxConfig.DisplayMember + " FROM " + DevicesCols.TableName + " WHERE " + currentLiveBoxConfig.DisplayMember + " LIKE  @Search_Value  GROUP BY " + currentLiveBoxConfig.DisplayMember + " ORDER BY " + currentLiveBoxConfig.DisplayMember + " LIMIT " + rowLimit;
                     }
                     else
                     {
-                        strQry = "SELECT " + DevicesCols.DeviceGuid + "," + currentLiveBoxArgs.DisplayMember + "," + currentLiveBoxArgs.ValueMember + " FROM " + DevicesCols.TableName + " WHERE " + currentLiveBoxArgs.DisplayMember + " LIKE  @Search_Value  GROUP BY " + currentLiveBoxArgs.DisplayMember + " ORDER BY " + currentLiveBoxArgs.DisplayMember + " LIMIT " + rowLimit;
+                        query = "SELECT " + DevicesCols.DeviceGuid + "," + currentLiveBoxConfig.DisplayMember + "," + currentLiveBoxConfig.ValueMember + " FROM " + DevicesCols.TableName + " WHERE " + currentLiveBoxConfig.DisplayMember + " LIKE  @Search_Value  GROUP BY " + currentLiveBoxConfig.DisplayMember + " ORDER BY " + currentLiveBoxConfig.DisplayMember + " LIMIT " + rowLimit;
                     }
 
-                    using (var cmd = DBFactory.GetDatabase().GetCommand(strQry))
+                    using (var cmd = DBFactory.GetDatabase().GetCommand(query))
                     {
                         cmd.AddParameterWithValue("@Search_Value", "%" + searchString + "%");
                         return DBFactory.GetDatabase().DataTableFromCommand(cmd);
@@ -338,7 +374,8 @@ namespace AssetManager.UserInterface.CustomControls
                 });
                 previousSearchString = searchString;
                 queryRunning = false;
-                DrawLiveBox(Results);
+
+                DisplayLiveBox(results);
             }
             catch (Exception ex)
             {
@@ -356,13 +393,13 @@ namespace AssetManager.UserInterface.CustomControls
             liveListBox.Padding = new Padding(0, 0, 0, 10);
         }
 
-        private void StartLiveSearch(LiveBoxArgs args)
+        private void StartLiveSearch(LiveBoxConfig args)
         {
-            currentLiveBoxArgs = args;
-            string strSearchString = currentLiveBoxArgs.Control.Text.Trim();
-            if (!string.IsNullOrEmpty(strSearchString))
+            currentLiveBoxConfig = args;
+            string searchString = currentLiveBoxConfig.TargetTextBox.Text.Trim();
+            if (!string.IsNullOrEmpty(searchString))
             {
-                ProcessSearch(strSearchString);
+                ProcessSearch(searchString);
             }
             else
             {
@@ -370,14 +407,14 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private void RemovedHandlers()
+        private void RemoveTargetEvents()
         {
-            foreach (var control in liveBoxControls)
+            foreach (var config in liveBoxConfigs)
             {
-                control.Control.KeyUp -= Control_KeyUp;
-                control.Control.KeyDown -= Control_KeyDown;
-                control.Control.LostFocus -= Control_LostFocus;
-                control.Control.ReadOnlyChanged -= Control_LostFocus;
+                config.TargetTextBox.TextChanged -= TargetTextBox_TextChanged;
+                config.TargetTextBox.KeyDown -= TargetTextBox_KeyDown;
+                config.TargetTextBox.LostFocus -= TargetTextBox_LostFocus;
+                config.TargetTextBox.ReadOnlyChanged -= TargetTextBox_LostFocus;
             }
         }
 
@@ -385,44 +422,25 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region "Structs"
 
-        private class LiveBoxArgs
+        private class LiveBoxConfig
         {
-            public TextBox Control { get; set; }
-            public string DisplayMember { get; set; }
-            public Nullable<LiveBoxSelectionType> Type { get; set; }
-            public string ValueMember { get; set; }
+            public TextBox TargetTextBox { get; }
+            public string DisplayMember { get; }
+            public LiveBoxSelectAction SelectionType { get; }
+            public string ValueMember { get; }
 
-            public LiveBoxArgs(TextBox control, string displayMember, LiveBoxSelectionType type, string valueMember)
+            public LiveBoxConfig(TextBox targetTextBox, string displayMember, LiveBoxSelectAction selectAction, string valueMember)
             {
-                this.Control = control;
+                this.TargetTextBox = targetTextBox;
                 this.DisplayMember = displayMember;
-                this.Type = type;
+                this.SelectionType = selectAction;
                 this.ValueMember = valueMember;
             }
-
-            public LiveBoxArgs()
-            {
-                this.Control = null;
-                this.DisplayMember = null;
-                this.Type = null;
-                this.ValueMember = null;
-            }
-        }
-
-
-        // METODO: Un-nest.
-        public enum LiveBoxSelectionType
-        {
-            DynamicSearch,
-            LoadDevice,
-            SelectValue,
-            UserSelect
         }
 
         #endregion "Structs"
 
         #region "IDisposable Support"
-
 
         private bool disposedValue;
 
@@ -438,10 +456,12 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (disposing)
                 {
-                    RemovedHandlers();
+                    RemoveTargetEvents();
+                    RemoveLiveBoxEvents();
                     liveListBox.Dispose();
-                    liveBoxControls.Clear();
+                    liveBoxConfigs.Clear();
                     liveBoxFont.Dispose();
+                    liveBoxGraphics.Dispose();
                 }
             }
             disposedValue = true;

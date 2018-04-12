@@ -442,10 +442,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void InitLiveBox()
         {
-            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBox.LiveBoxSelectionType.DynamicSearch);
-            liveBox.AttachToControl(CurrrentUserTextBox, DevicesCols.CurrentUser, LiveBox.LiveBoxSelectionType.DynamicSearch);
-            liveBox.AttachToControl(SerialTextBox, DevicesCols.Serial, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceGuid);
-            liveBox.AttachToControl(AssetTagTextBox, DevicesCols.AssetTag, LiveBox.LiveBoxSelectionType.LoadDevice, DevicesCols.DeviceGuid);
+            liveBox.AttachToControl(DescriptionTextBox, DevicesCols.Description, LiveBoxSelectAction.DynamicSearch);
+            liveBox.AttachToControl(CurrrentUserTextBox, DevicesCols.CurrentUser, LiveBoxSelectAction.DynamicSearch);
+            liveBox.AttachToControl(SerialTextBox, DevicesCols.Serial, LiveBoxSelectAction.LoadDevice, DevicesCols.DeviceGuid);
+            liveBox.AttachToControl(AssetTagTextBox, DevicesCols.AssetTag, LiveBoxSelectAction.LoadDevice, DevicesCols.DeviceGuid);
         }
 
         private void InitDBCombo()
