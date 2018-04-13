@@ -2,7 +2,7 @@
 using AssetManager.Security;
 using AssetManager.Tools;
 using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms.GKUpdater;
+using AssetManager.UserInterface.Forms.Gatekeeper;
 using System;
 using System.Threading.Tasks;
 

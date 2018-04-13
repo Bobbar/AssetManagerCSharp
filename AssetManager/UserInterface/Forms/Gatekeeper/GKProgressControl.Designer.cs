@@ -1,5 +1,5 @@
 using System.Windows.Forms;
-namespace AssetManager.UserInterface.Forms.GKUpdater
+namespace AssetManager.UserInterface.Forms.Gatekeeper
 {
 
     partial class GKProgressControl : System.Windows.Forms.UserControl
@@ -13,7 +13,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             {
                 if (disposing && components != null)
                 {
-                    GKUpdater.Dispose();
+                    updater.Dispose();
                     components.Dispose();
                 }
             }

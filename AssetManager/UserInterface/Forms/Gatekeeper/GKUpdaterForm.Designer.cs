@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-namespace AssetManager.UserInterface.Forms.GKUpdater
+namespace AssetManager.UserInterface.Forms.Gatekeeper
 {
 
     partial class GKUpdaterForm

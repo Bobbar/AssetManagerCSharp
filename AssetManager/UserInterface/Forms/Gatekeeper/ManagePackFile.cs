@@ -6,7 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AssetManager.UserInterface.Forms.GKUpdater
+namespace AssetManager.UserInterface.Forms.Gatekeeper
 {
     public class ManagePackFile
     {

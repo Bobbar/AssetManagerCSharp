@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AssetManager.UserInterface.Forms.GKUpdater
+namespace AssetManager.UserInterface.Forms.Gatekeeper
 {
     public partial class GKUpdaterForm : ExtendedForm
     {
@@ -242,7 +242,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
                         break;
 
                     case ProgressStatus.Running:
-                        transferRateSum += upd.GKUpdater.UpdateStatus.CurTransferRate;
+                        transferRateSum += upd.updater.UpdateStatus.CurTransferRate;
                         running += 1;
                         break;
 

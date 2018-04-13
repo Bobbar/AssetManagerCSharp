@@ -1,4 +1,4 @@
-﻿namespace AssetManager.UserInterface.Forms.GKUpdater
+﻿namespace AssetManager.UserInterface.Forms.Gatekeeper
 {
     public enum ProgressStatus
     {

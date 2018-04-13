@@ -365,27 +365,27 @@
     <Compile Include="UserInterface\Forms\GetCredentialsForm.Designer.cs">
       <DependentUpon>GetCredentialsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\GKUpdater\GKProgressControl.cs">
+    <Compile Include="UserInterface\Forms\Gatekeeper\GKProgressControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserInterface\Forms\GKUpdater\GKProgressControl.Designer.cs">
+    <Compile Include="UserInterface\Forms\Gatekeeper\GKProgressControl.Designer.cs">
       <DependentUpon>GKProgressControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\GKUpdater\GZipCompress.cs" />
-    <Compile Include="UserInterface\Forms\GKUpdater\ManagePackFile.cs" />
-    <Compile Include="UserInterface\Forms\GKUpdater\GKUpdaterForm.cs">
+    <Compile Include="UserInterface\Forms\Gatekeeper\GZipCompress.cs" />
+    <Compile Include="UserInterface\Forms\Gatekeeper\ManagePackFile.cs" />
+    <Compile Include="UserInterface\Forms\Gatekeeper\GKUpdaterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\Forms\GKUpdater\GKUpdaterForm.Designer.cs">
+    <Compile Include="UserInterface\Forms\Gatekeeper\GKUpdaterForm.Designer.cs">
       <DependentUpon>GKUpdaterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\GKUpdater\PackFileForm.cs">
+    <Compile Include="UserInterface\Forms\Gatekeeper\PackFileForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\Forms\GKUpdater\PackFileForm.Designer.cs">
+    <Compile Include="UserInterface\Forms\Gatekeeper\PackFileForm.Designer.cs">
       <DependentUpon>PackFileForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\GKUpdater\ProgressStatus.cs" />
+    <Compile Include="UserInterface\Forms\Gatekeeper\ProgressStatus.cs" />
     <Compile Include="UserInterface\Forms\GridForm\GridForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -492,13 +492,13 @@
     <EmbeddedResource Include="UserInterface\Forms\Attachments\AttachmentsForm.resx">
       <DependentUpon>AttachmentsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\GKUpdater\GKProgressControl.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Gatekeeper\GKProgressControl.resx">
       <DependentUpon>GKProgressControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\GKUpdater\GKUpdaterForm.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Gatekeeper\GKUpdaterForm.resx">
       <DependentUpon>GKUpdaterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\GKUpdater\PackFileForm.resx">
+    <EmbeddedResource Include="UserInterface\Forms\Gatekeeper\PackFileForm.resx">
       <DependentUpon>PackFileForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GridForm\GridForm.resx">
@@ -591,9 +591,9 @@
       <Project>{32bcf1fc-0f86-4fac-8d01-05f84fa0d736}</Project>
       <Name>AssetDatabase</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GK_Updater_Module\GKUpdaterLib.vbproj">
-      <Project>{583f28b2-c2f5-4422-bac8-e3d15cb61df0}</Project>
-      <Name>GKUpdaterLib</Name>
+    <ProjectReference Include="..\GKUpdaterLibC\GKUpdaterLibC.csproj">
+      <Project>{7dfb8c7f-38ba-49fd-be57-9f96e786d35b}</Project>
+      <Name>GKUpdaterLibC</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyDialog\AdvancedDialogLib.vbproj">
       <Project>{5a65f4bf-4b06-44e4-ae55-5935e03955f6}</Project>

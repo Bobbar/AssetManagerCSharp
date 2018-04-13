@@ -532,7 +532,7 @@
         </member>
         <member name="M:AssetManager.Helpers.ChildFormControl.GKUpdaterInstance">
             <summary>
-            Returns the current instance of <see cref="T:AssetManager.UserInterface.Forms.GKUpdater.GKUpdaterForm"/>. If one does not exists, creates new instance and returns it.
+            Returns the current instance of <see cref="T:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm"/>. If one does not exists, creates new instance and returns it.
             </summary>
             <returns></returns>
         </member>
@@ -1371,17 +1371,17 @@
             <param name="row">Row of the attachment to be renamed.</param>
             <param name="newFilename">New filename for the attachment.</param>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.GKProgressControl.GKLogEvent(System.Object,System.EventArgs)">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKProgressControl.GKLogEvent(System.Object,System.EventArgs)">
             <summary>
             Log message event from GKUpdater.  This even can fire very rapidly. So the result is stored in a buffer to be added to the rtbLog control in a more controlled manner.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.GKProgressControl.UI_Timer_Tick(System.Object,System.EventArgs)">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKProgressControl.UI_Timer_Tick(System.Object,System.EventArgs)">
             <summary>
             Timer that updates the rtbLog control with chunks of data from the log buffer.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.GZipCompress.GetGZOriginalFileSize(System.String)">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GZipCompress.GetGZOriginalFileSize(System.String)">
             <summary>
             Extracts the original filesize of the compressed file.
             </summary>
@@ -1389,7 +1389,7 @@
             <returns>Size of the compressed file, when its decompressed.</returns>
             <remarks>More information at <a href="http://tools.ietf.org/html/rfc1952">http://tools.ietf.org/html/rfc1952</a> section 2.3</remarks>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.GZipCompress.GetGZOriginalFileSize(System.IO.FileInfo)">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GZipCompress.GetGZOriginalFileSize(System.IO.FileInfo)">
             <summary>
             Extracts the original filesize of the compressed file.
             </summary>
@@ -1397,13 +1397,13 @@
             <returns>Size of the compressed file, when its decompressed.</returns>
             <remarks>More information at <a href="http://tools.ietf.org/html/rfc1952">http://tools.ietf.org/html/rfc1952</a> section 2.3</remarks>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.ManagePackFile.DownloadPack">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.DownloadPack">
             <summary>
             Creates and cleans the pack file directories then downloads a new pack file from the server location.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.ManagePackFile.VerifyPackFile">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.VerifyPackFile">
              <summary>
              Verifies directory structure, checks if pack file is present, then compares local and remote hashes of the pack file.
             
@@ -1411,13 +1411,13 @@
              </summary>
              <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.ManagePackFile.GetRemoteHash">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.GetRemoteHash">
             <summary>
             Returns the contents of the hash text file located in <see cref="F:AssetManager.Paths.GKRemotePackFileDir"/>
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.ManagePackFile.CopyPackFile(System.String,System.String)">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.CopyPackFile(System.String,System.String)">
             <summary>
             Copies a single file to the <paramref name="dest"/> path.
             </summary>
@@ -1427,66 +1427,66 @@
             Path of destination.
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.ManagePackFile.CopyFile(System.String,System.String)">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.CopyFile(System.String,System.String)">
             <summary>
             Performs a buffered file stream transfer.
             </summary>
             <param name="Source"></param>
             <param name="Dest"></param>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.ManagePackFile.PackGKDir">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.PackGKDir">
             <summary>
             Compresses the local Gatekeeper directory into a new pack file.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.ManagePackFile.UnPackGKDir">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.UnPackGKDir">
             <summary>
             Decompresses the pack file into a local working directory.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.ManagePackFile.UploadPackFiles">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.UploadPackFiles">
             <summary>
             Copies the pack file and hash file to the server directory.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.ManagePackFile.ProcessPackFile">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.ProcessPackFile">
             <summary>
             Verifies the local pack file and downloads a new one if needed.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.ManagePackFile.CreateNewPackFile">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.CreateNewPackFile">
             <summary>
             Creates a new pack file and hash file and copies them to the server location.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.ManagePackFile.CreateHashFile">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.CreateHashFile">
             <summary>
             Creates a text file containing the hash string of the pack file.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.GKUpdaterForm.CanRunMoreUpdates">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm.CanRunMoreUpdates">
             <summary>
             Returns True if number of running updates is less than the maximum simultaneous allowed updates and RunQueue is True.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.GKUpdaterForm.PruneQueue">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm.PruneQueue">
             <summary>
             Removes disposed update fragments from list.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.GKUpdaterForm.SortUpdates">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm.SortUpdates">
             <summary>
-            Sorts all the GKProgressControls in order of the <see cref="T:AssetManager.UserInterface.Forms.GKUpdater.ProgressStatus"/> enum.
+            Sorts all the GKProgressControls in order of the <see cref="T:AssetManager.UserInterface.Forms.Gatekeeper.ProgressStatus"/> enum.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.GKUpdater.GKUpdaterForm.StartNextUpdate">
+        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm.StartNextUpdate">
             <summary>
             Starts the next update that has a queued status.
             </summary>

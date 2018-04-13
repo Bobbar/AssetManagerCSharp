@@ -4,7 +4,7 @@ using System.IO.Compression;
 using System.Text;
 using AssetManager.Tools;
 
-namespace AssetManager.UserInterface.Forms.GKUpdater
+namespace AssetManager.UserInterface.Forms.Gatekeeper
 {
     public class GZipCompress
     {

@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using System.Diagnostics;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Net.NetworkInformation;
+using System.Text;
 using System.Windows.Forms;
 
 namespace GKUpdaterLibC
 {
-
     public class GKUpdater
     {
-
-
         private BackgroundWorker CopyWorker;
         private Timer SpeedTimer;
         private Status_Stats CurrentStatus;
@@ -35,8 +30,6 @@ namespace GKUpdaterLibC
 
         private string PushTypeMessage = "GK Update";
 
-
-
         public GKUpdater(string HostName, string SourcePath)
         {
             GKSourcePath = SourcePath;
@@ -46,7 +39,6 @@ namespace GKUpdaterLibC
             InitWorker();
             InitializeTimer();
         }
-
 
         public GKUpdater(string HostName, string SourcePath, string DestPath)
         {
@@ -58,9 +50,6 @@ namespace GKUpdaterLibC
             InitWorker();
             InitializeTimer();
         }
-
-
-
 
         public event EventHandler LogEvent;
 
@@ -103,8 +92,6 @@ namespace GKUpdaterLibC
             }
         }
 
-
-
         public bool IsDisposed
         {
             get { return disposedValue; }
@@ -125,8 +112,6 @@ namespace GKUpdaterLibC
             get { return bolCreateMissingDirectory; }
             set { bolCreateMissingDirectory = value; }
         }
-
-
 
         public void CancelUpdate()
         {
@@ -212,7 +197,7 @@ namespace GKUpdaterLibC
         private void CopyFile(string Source, string Dest)
         {
             int BufferSize = 256000;
-            byte[] buffer = new byte[BufferSize - 1];
+            byte[] buffer = new byte[BufferSize];
             int bytesIn = 1;
             FileInfo CurrentFile = new FileInfo(Source);
             Progress.ResetProgress();
@@ -251,7 +236,7 @@ namespace GKUpdaterLibC
 
                 string[] files = Directory.GetFiles(sourceDir, "*", SearchOption.AllDirectories);
                 //Loop through file array
-                for (int i = StartIdx; i <= files.Length; i++)
+                for (int i = StartIdx; i < files.Length; i++)
                 {
                     var file__1 = files[i];
                     if (CopyWorker.CancellationPending)
@@ -282,7 +267,7 @@ namespace GKUpdaterLibC
                         if ((FileAttrib & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                         {
                             CopyWorker.ReportProgress(99, "******* File is read-only. Changing attributes...");
-                            FileAttrib = FileAttrib & (!FileAttributes.ReadOnly);
+                            FileAttrib = FileAttrib & ~FileAttributes.ReadOnly;
                             File.SetAttributes(cPath, FileAttrib);
                         }
                     }
@@ -307,7 +292,6 @@ namespace GKUpdaterLibC
             }
         }
 
-
         private void CopyWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             if (e.ProgressPercentage == 1)
@@ -320,7 +304,7 @@ namespace GKUpdaterLibC
             }
             else
             {
-                GKLog(e.UserState.ToString, true);
+                GKLog(e.UserState.ToString(), true);
             }
         }
 
@@ -335,7 +319,7 @@ namespace GKUpdaterLibC
                     if (ErrList.Count > 0)
                     {
                         GKLog("Listing Errors: ");
-                        foreach (ErrMsg in ErrList)
+                        foreach (var ErrMsg in ErrList)
                         {
                             GKLog("---  " + (ErrList.IndexOf(ErrMsg) + 1) + " of " + ErrList.Count);
                             GKLog(ErrMsg);
@@ -379,7 +363,7 @@ namespace GKUpdaterLibC
 
             if (ToErrList)
             {
-                string ErrMsg = "Error: " + Message + vbCrLf + "Info: \r\n" + CurrentStatus.CurFileIdx + " of " + CurrentStatus.TotFiles + vbCrLf + "Source: " + CurrentStatus.SourceFileName + vbCrLf + "Dest: " + CurrentStatus.CurFileName;
+                string ErrMsg = "Error: " + Message + "\n Info: \r\n" + CurrentStatus.CurFileIdx + " of " + CurrentStatus.TotFiles + "\n Source: " + CurrentStatus.SourceFileName + "\n Dest: " + CurrentStatus.CurFileName;
                 ErrList.Add(ErrMsg);
             }
         }
@@ -398,8 +382,8 @@ namespace GKUpdaterLibC
             CopyWorker.DoWork += CopyWorker_DoWork;
             CopyWorker.RunWorkerCompleted += CopyWorker_RunWorkerCompleted;
             CopyWorker.ProgressChanged += CopyWorker_ProgressChanged;
-            // ERROR: Not supported in C#: WithStatement
-
+            CopyWorker.WorkerReportsProgress = true;
+            CopyWorker.WorkerSupportsCancellation = true;
         }
 
         private void SpeedTimer_Tick(object sender, EventArgs e)
@@ -416,8 +400,6 @@ namespace GKUpdaterLibC
             }
         }
 
-
-
         public struct GK_Log_Info
         {
             public string Message { get; set; }
@@ -428,7 +410,6 @@ namespace GKUpdaterLibC
                 Message = Msg;
                 ToErrList = ToErrLst;
             }
-
         }
 
         public struct Status_Stats
@@ -449,7 +430,6 @@ namespace GKUpdaterLibC
                 CurFileProgress = CurFileProg;
                 CurTransferRate = CurTransRate;
             }
-
         }
 
         private struct WorkerArgs
@@ -464,7 +444,6 @@ namespace GKUpdaterLibC
                 StartIndex = startIndex;
                 Credentials = credential;
             }
-
         }
 
         public class GKUpdateCompleteEvents : EventArgs
@@ -472,6 +451,7 @@ namespace GKUpdaterLibC
             private Exception ErrExeption;
 
             private bool Errs;
+
             public GKUpdateCompleteEvents(bool Errs, Exception Ex = null)
             {
                 this.Errs = Errs;
@@ -487,13 +467,12 @@ namespace GKUpdaterLibC
             {
                 get { return Errs; }
             }
-
         }
 
         public class GKUpdateEvents : EventArgs
         {
-
             private Status_Stats eStatus;
+
             public GKUpdateEvents(Status_Stats Status)
             {
                 eStatus = Status;
@@ -503,13 +482,12 @@ namespace GKUpdaterLibC
             {
                 get { return eStatus; }
             }
-
         }
 
         public class LogEvents : EventArgs
         {
-
             private GK_Log_Info MyLogInfo;
+
             public LogEvents(GK_Log_Info LogInfo)
             {
                 MyLogInfo = LogInfo;
@@ -519,52 +497,33 @@ namespace GKUpdaterLibC
             {
                 get { return MyLogInfo; }
             }
-
         }
 
         public class MissingDirectoryException : Exception
         {
-
             public MissingDirectoryException() : base("Directory not found on target.")
             {
             }
-
         }
 
-
-
-        // To detect redundant calls
         private bool disposedValue;
 
-        // This code added by Visual Basic to correctly implement the disposable pattern.
-        public void IDisposable.Dispose()
+        public void Dispose()
         {
-            // Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
             Dispose(true);
-            // TODO: uncomment the following line if Finalize() is overridden above.
-            // GC.SuppressFinalize(Me)
         }
 
-        // IDisposable
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
                     CopyWorker.Dispose();
                     SpeedTimer.Dispose();
                 }
-
-
             }
             disposedValue = true;
         }
-
-
     }
-
-
-
 }

@@ -1,17 +1,19 @@
 using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 using AssetManager.Security;
-using GKUpdaterLib;
+//using GKUpdaterLib;
+using GKUpdaterLibC;
+
 using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace AssetManager.UserInterface.Forms.GKUpdater
+namespace AssetManager.UserInterface.Forms.Gatekeeper
 {
     public partial class GKProgressControl : IDisposable
     {
-        public GKUpdaterLibClass GKUpdater { get; }
+        public GKUpdater updater { get; }
 
         public ProgressStatus ProgStatus { get { return progStatus; } }
 
@@ -22,7 +24,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private ProgressStatus progStatus;
         private bool logVisible = false;
-        private GKUpdaterLibClass.Status_Stats currentStatus;
+        private GKUpdater.Status_Stats currentStatus;
         private Device currentDevice;
         private string logBuffer = "";
         private Form parentForm;
@@ -50,12 +52,12 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             Panel1.DoubleBuffered(true);
             LogTextBox.DoubleBuffered(true);
 
-            GKUpdater = new GKUpdaterLibClass(currentDevice.HostName, gkPath);
-            GKUpdater.CreateMissingDirectories = createMissingDirs;
-            GKUpdater.LogEvent += GKLogEvent;
-            GKUpdater.StatusUpdate += GKStatusUpdateEvent;
-            GKUpdater.UpdateComplete += GKUpdate_Complete;
-            GKUpdater.UpdateCanceled += GKUpdate_Cancelled;
+            updater = new GKUpdater(currentDevice.HostName, gkPath);
+            updater.CreateMissingDirectories = createMissingDirs;
+            updater.LogEvent += GKLogEvent;
+            updater.StatusUpdate += GKStatusUpdateEvent;
+            updater.UpdateComplete += GKUpdate_Complete;
+            updater.UpdateCanceled += GKUpdate_Cancelled;
 
             DeviceInfoLabel.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
             TransferRateLabel.Text = "0.00MB/s";
@@ -84,12 +86,12 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             Panel1.DoubleBuffered(true);
             LogTextBox.DoubleBuffered(true);
 
-            GKUpdater = new GKUpdaterLibClass(currentDevice.HostName, sourcePath, destPath);
-            GKUpdater.CreateMissingDirectories = createMissingDirs;
-            GKUpdater.LogEvent += GKLogEvent;
-            GKUpdater.StatusUpdate += GKStatusUpdateEvent;
-            GKUpdater.UpdateComplete += GKUpdate_Complete;
-            GKUpdater.UpdateCanceled += GKUpdate_Cancelled;
+            updater = new GKUpdater(currentDevice.HostName, sourcePath, destPath);
+            updater.CreateMissingDirectories = createMissingDirs;
+            updater.LogEvent += GKLogEvent;
+            updater.StatusUpdate += GKStatusUpdateEvent;
+            updater.UpdateComplete += GKUpdate_Complete;
+            updater.UpdateCanceled += GKUpdate_Cancelled;
 
             DeviceInfoLabel.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
             TransferRateLabel.Text = "0.00MB/s";
@@ -108,7 +110,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         public void CancelUpdate()
         {
-            if (!GKUpdater.IsDisposed) GKUpdater.CancelUpdate();
+            if (!updater.IsDisposed) updater.CancelUpdate();
         }
 
         public void StartUpdate()
@@ -119,7 +121,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
                 {
                     logBuffer = "";
                     SetStatus(ProgressStatus.Starting);
-                    GKUpdater.StartUpdate(SecurityTools.AdminCreds);
+                    updater.StartUpdate(SecurityTools.AdminCreds);
                 }
             }
             catch (Exception ex)
@@ -169,11 +171,11 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void GKProgressControl_Disposed(object sender, EventArgs e)
         {
-            GKUpdater.LogEvent -= GKLogEvent;
-            GKUpdater.StatusUpdate -= GKStatusUpdateEvent;
-            GKUpdater.UpdateComplete -= GKUpdate_Complete;
-            GKUpdater.UpdateCanceled -= GKUpdate_Cancelled;
-            GKUpdater.Dispose();
+            updater.LogEvent -= GKLogEvent;
+            updater.StatusUpdate -= GKStatusUpdateEvent;
+            updater.UpdateComplete -= GKUpdate_Complete;
+            updater.UpdateCanceled -= GKUpdate_Cancelled;
+            updater.Dispose();
             statusLight?.Dispose();
         }
 
@@ -182,7 +184,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
         /// </summary>
         private void GKLogEvent(object sender, EventArgs e)
         {
-            var LogEvent = (GKUpdaterLibClass.LogEvents)e;
+            var LogEvent = (GKUpdater.LogEvents)e;
             Log(LogEvent.LogData.Message);
         }
 
@@ -193,7 +195,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void GKStatusUpdateEvent(object sender, EventArgs e)
         {
-            var UpdateEvent = (GKUpdaterLibClass.GKUpdateEvents)e;
+            var UpdateEvent = (GKUpdater.GKUpdateEvents)e;
             SetStatus(ProgressStatus.Running);
             currentStatus = UpdateEvent.CurrentStatus;
             TotalProgressBar.Maximum = currentStatus.TotFiles;
@@ -208,7 +210,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
 
         private void GKUpdate_Complete(object sender, EventArgs e)
         {
-            var CompleteEvent = (GKUpdaterLibClass.GKUpdateCompleteEvents)e;
+            var CompleteEvent = (GKUpdater.GKUpdateCompleteEvents)e;
             if (CompleteEvent.HasErrors)
             {
                 SetStatus(ProgressStatus.Errors);
@@ -228,7 +230,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
                 }
                 else
                 {
-                    if (CompleteEvent.Errors is GKUpdaterLibClass.MissingDirectoryException)
+                    if (CompleteEvent.Errors is GKUpdater.MissingDirectoryException)
                     {
                         Log("Enable 'Create Missing Directories' option and re-enqueue this device to force creation.");
                     }
@@ -236,7 +238,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             }
             else
             {
-                if (GKUpdater.ErrorList.Count == 0)
+                if (updater.ErrorList.Count == 0)
                 {
                     SetStatus(ProgressStatus.Complete);
                 }
@@ -285,9 +287,9 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
         {
             if (progStatus == ProgressStatus.Running | progStatus == ProgressStatus.Paused)
             {
-                if (!GKUpdater.IsDisposed)
+                if (!updater.IsDisposed)
                 {
-                    GKUpdater.CancelUpdate();
+                    updater.CancelUpdate();
                     SetStatus(ProgressStatus.Canceled);
                 }
                 else
@@ -306,12 +308,12 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             switch (progStatus)
             {
                 case ProgressStatus.Paused:
-                    GKUpdater.ResumeUpdate();
+                    updater.ResumeUpdate();
                     SetStatus(ProgressStatus.Running);
                     break;
 
                 case ProgressStatus.Running:
-                    GKUpdater.PauseUpdate();
+                    updater.PauseUpdate();
                     SetStatus(ProgressStatus.Paused);
                     break;
 
@@ -399,7 +401,7 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
                     break;
 
                 case ProgressStatus.CompleteWithErrors:
-                    StatusLabel.Text = "Completed with errors: " + GKUpdater.ErrorList.Count;
+                    StatusLabel.Text = "Completed with errors: " + updater.ErrorList.Count;
                     break;
 
                 case ProgressStatus.Complete:
@@ -427,12 +429,12 @@ namespace AssetManager.UserInterface.Forms.GKUpdater
             }
             if (progStatus == ProgressStatus.Running)
             {
-                FileProgressBar.Value = GKUpdater.UpdateStatus.CurFileProgress;
+                FileProgressBar.Value = updater.UpdateStatus.CurFileProgress;
                 if (FileProgressBar.Value > 1)
                     FileProgressBar.Value = FileProgressBar.Value - 1;
                 //doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
-                FileProgressBar.Value = GKUpdater.UpdateStatus.CurFileProgress;
-                TransferRateLabel.Text = GKUpdater.UpdateStatus.CurTransferRate.ToString("0.00") + "MB/s";
+                FileProgressBar.Value = updater.UpdateStatus.CurFileProgress;
+                TransferRateLabel.Text = updater.UpdateStatus.CurTransferRate.ToString("0.00") + "MB/s";
                 this.Update();
             }
         }
