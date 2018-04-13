@@ -37,7 +37,7 @@ namespace AssetManager.Helpers
         private static void AdjustComboBoxWidth(object sender, EventArgs e)
         {
             var senderComboBox = (ComboBox)sender;
-            int correctWidth = senderComboBox.DropDownWidth;
+            int currentWidth = senderComboBox.DropDownWidth;
             int newWidth = 0;
             using (Graphics gfx = senderComboBox.CreateGraphics())
             {
@@ -55,13 +55,13 @@ namespace AssetManager.Helpers
                 foreach (var s in senderComboBox.Items)
                 {
                     newWidth = Convert.ToInt32(gfx.MeasureString(s.ToString(), senderComboBox.Font).Width) + vertScrollBarWidth;
-                    if (correctWidth < newWidth)
+                    if (currentWidth < newWidth)
                     {
-                        correctWidth = newWidth;
+                        currentWidth = newWidth;
                     }
                 }
             }
-            senderComboBox.DropDownWidth = correctWidth;
+            senderComboBox.DropDownWidth = currentWidth;
         }
     }
 }

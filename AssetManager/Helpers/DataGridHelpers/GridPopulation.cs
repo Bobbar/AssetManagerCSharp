@@ -22,7 +22,6 @@ namespace AssetManager.Helpers
 
         private static void SetupGrid(DataGridView grid, List<GridColumnAttrib> columns)
         {
-            grid.DataSource = null;
             grid.Rows.Clear();
             grid.Columns.Clear();
             grid.AutoGenerateColumns = false;
@@ -54,8 +53,7 @@ namespace AssetManager.Helpers
 
                 foreach (DataRow row in data.Rows)
                 {
-                    DataRow newRow = null;
-                    newRow = newTable.NewRow();
+                    DataRow newRow = newTable.NewRow();
 
                     foreach (GridColumnAttrib col in columns)
                     {
@@ -102,7 +100,7 @@ namespace AssetManager.Helpers
 
         private static bool ColumnsRequireRebuild(List<GridColumnAttrib> columns)
         {
-            bool RebuildRequired = false;
+            bool rebuildRequired = false;
             foreach (GridColumnAttrib col in columns)
             {
                 switch (col.ColumnFormatType)
@@ -111,11 +109,11 @@ namespace AssetManager.Helpers
                     case ColumnFormatType.NotePreview:
                     case ColumnFormatType.FileSize:
                     case ColumnFormatType.Image:
-                        RebuildRequired = true;
+                        rebuildRequired = true;
                         break;
                 }
             }
-            return RebuildRequired;
+            return rebuildRequired;
         }
 
         private static DataGridViewColumn GetColumn(GridColumnAttrib column)
@@ -139,46 +137,46 @@ namespace AssetManager.Helpers
 
         private static DataGridViewColumn DataGridImageColumn(GridColumnAttrib column)
         {
-            DataGridViewImageColumn NewCol = new DataGridViewImageColumn();
-            NewCol.Name = column.ColumnName;
-            NewCol.DataPropertyName = column.ColumnName;
-            NewCol.HeaderText = column.ColumnCaption;
-            NewCol.ValueType = column.ColumnType;
-            NewCol.CellTemplate = new DataGridViewImageCell();
-            NewCol.SortMode = DataGridViewColumnSortMode.Automatic;
-            NewCol.ReadOnly = column.ColumnReadOnly;
-            NewCol.Visible = column.ColumnVisible;
-            NewCol.Width = 40;
-            return NewCol;
+            var newCol = new DataGridViewImageColumn();
+            newCol.Name = column.ColumnName;
+            newCol.DataPropertyName = column.ColumnName;
+            newCol.HeaderText = column.ColumnCaption;
+            newCol.ValueType = column.ColumnType;
+            newCol.CellTemplate = new DataGridViewImageCell();
+            newCol.SortMode = DataGridViewColumnSortMode.Automatic;
+            newCol.ReadOnly = column.ColumnReadOnly;
+            newCol.Visible = column.ColumnVisible;
+            newCol.Width = 40;
+            return newCol;
         }
 
         private static DataGridViewColumn GenericColumn(GridColumnAttrib column)
         {
-            DataGridViewColumn NewCol = new DataGridViewColumn();
-            NewCol.Name = column.ColumnName;
-            NewCol.DataPropertyName = column.ColumnName;
-            NewCol.HeaderText = column.ColumnCaption;
-            NewCol.ValueType = column.ColumnType;
-            NewCol.CellTemplate = new DataGridViewTextBoxCell();
-            NewCol.SortMode = DataGridViewColumnSortMode.Automatic;
-            NewCol.ReadOnly = column.ColumnReadOnly;
-            NewCol.Visible = column.ColumnVisible;
-            return NewCol;
+            var newCol = new DataGridViewColumn();
+            newCol.Name = column.ColumnName;
+            newCol.DataPropertyName = column.ColumnName;
+            newCol.HeaderText = column.ColumnCaption;
+            newCol.ValueType = column.ColumnType;
+            newCol.CellTemplate = new DataGridViewTextBoxCell();
+            newCol.SortMode = DataGridViewColumnSortMode.Automatic;
+            newCol.ReadOnly = column.ColumnReadOnly;
+            newCol.Visible = column.ColumnVisible;
+            return newCol;
         }
 
         private static DataGridViewComboBoxColumn DataGridComboColumn(DbAttributes attributes, string headerText, string name)
         {
-            DataGridViewComboBoxColumn NewCombo = new DataGridViewComboBoxColumn();
-            NewCombo.Items.Clear();
-            NewCombo.HeaderText = headerText;
-            NewCombo.DataPropertyName = name;
-            NewCombo.Name = name;
-            NewCombo.Width = 200;
-            NewCombo.SortMode = DataGridViewColumnSortMode.Automatic;
-            NewCombo.DisplayMember = nameof(DbAttribute.DisplayValue);
-            NewCombo.ValueMember = nameof(DbAttribute.Code);
-            NewCombo.DataSource = attributes.GetArray();
-            return NewCombo;
+            var newCombo = new DataGridViewComboBoxColumn();
+            newCombo.Items.Clear();
+            newCombo.HeaderText = headerText;
+            newCombo.DataPropertyName = name;
+            newCombo.Name = name;
+            newCombo.Width = 200;
+            newCombo.SortMode = DataGridViewColumnSortMode.Automatic;
+            newCombo.DisplayMember = nameof(DbAttribute.DisplayValue);
+            newCombo.ValueMember = nameof(DbAttribute.Code);
+            newCombo.DataSource = attributes.GetArray();
+            return newCombo;
         }
 
 
