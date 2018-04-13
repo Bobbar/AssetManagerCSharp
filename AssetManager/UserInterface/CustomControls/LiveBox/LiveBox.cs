@@ -93,6 +93,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void TargetTextBox_LostFocus(object sender, EventArgs e)
         {
+            if (currentLiveBoxConfig == null) return;
+
             if (currentLiveBoxConfig.TargetTextBox != null)
             {
                 if (!currentLiveBoxConfig.TargetTextBox.Focused & !liveListBox.Focused)

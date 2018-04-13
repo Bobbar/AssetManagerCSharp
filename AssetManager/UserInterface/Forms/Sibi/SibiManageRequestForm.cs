@@ -72,7 +72,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         public override bool OkToClose()
         {
             bool canClose = true;
-            if (isModifying && !CancelModify())
+            if (isModifying && !TryCancelModify())
             {
                 canClose = false;
             }
@@ -188,7 +188,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private bool CancelModify()
+        private bool TryCancelModify()
         {
             if (isModifying)
             {
@@ -208,8 +208,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         return true;
                     }
                 }
+                return false;
             }
-            return false;
+            return true;
         }
 
         private void CellSelected(int columnIndex, int rowIndex)
@@ -231,7 +232,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             if (!string.IsNullOrEmpty(currentRequest.RequisitionNumber) && string.IsNullOrEmpty(currentRequest.PO))
             {
                 string po = await MunisFunctions.GetPOFromReqNumberAsync(currentRequest.RequisitionNumber, currentRequest.NeedByDate.Year.ToString());
-                if (!string.IsNullOrEmpty(po))
+                if (!string.IsNullOrEmpty(po) && po != "0")
                 {
                     var blah = OtherFunctions.Message("PO Number " + po + " was detected in the Requisition. Do you wish to add it to this request?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "New PO Detected", this);
                     if (blah == DialogResult.Yes)
@@ -1476,7 +1477,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void DiscardChangesButton_Click(object sender, EventArgs e)
         {
-            CancelModify();
+            TryCancelModify();
         }
 
         private void GLBudgetMenuItem_Click(object sender, EventArgs e)
@@ -1520,7 +1521,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void RefreshMenuButton_Click(object sender, EventArgs e)
         {
-            if (!isNewRequest & CancelModify())
+            if (!isNewRequest & TryCancelModify())
             {
                 OpenRequest(currentRequest.Guid);
             }
