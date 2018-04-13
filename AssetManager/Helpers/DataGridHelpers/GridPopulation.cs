@@ -15,13 +15,13 @@ namespace AssetManager.Helpers
             SetupGrid(grid, columns);
             using (data)
             {
-                grid.DataSource = null;
                 grid.DataSource = BuildDataSource(data, columns, forceRawData);
             }
         }
 
         private static void SetupGrid(DataGridView grid, List<GridColumnAttrib> columns)
         {
+            grid.DataSource = null;
             grid.Rows.Clear();
             grid.Columns.Clear();
             grid.AutoGenerateColumns = false;

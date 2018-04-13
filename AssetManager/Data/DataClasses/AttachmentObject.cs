@@ -236,9 +236,9 @@ namespace AssetManager.Data.Classes
 
         private string GetHash(FileInfo Fileinfo)
         {
-            using (FileStream HashStream = Fileinfo.OpenRead())
+            using (FileStream hashStream = Fileinfo.OpenRead())
             {
-                return SecurityTools.GetMD5OfStream(HashStream);
+                return SecurityTools.GetMD5OfStream(hashStream);
             }
         }
 

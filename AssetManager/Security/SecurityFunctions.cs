@@ -139,9 +139,8 @@ namespace AssetManager.Security
             {
                 stream.Position = 0;
                 byte[] hash = md5Hash.ComputeHash(stream);
-                StringBuilder sBuilder = new StringBuilder();
-                int i;
-                for (i = 0; i <= hash.Length - 1; i++)
+                var sBuilder = new StringBuilder();
+                for (int i = 0; i < hash.Length; i++)
                 {
                     sBuilder.Append(hash[i].ToString("x2"));
                 }

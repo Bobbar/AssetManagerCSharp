@@ -207,6 +207,7 @@ namespace RemoteFileTransferTool
                         progress.BytesMoved = bytesIn;
                     }
                 }
+                buffer = null;
             }
         }
 
