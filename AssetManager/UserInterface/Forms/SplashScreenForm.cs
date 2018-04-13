@@ -8,22 +8,33 @@ namespace AssetManager.UserInterface.Forms
 {
     public partial class SplashScreenForm : ExtendedForm
     {
+
         private void SplashScreen1_Load(object sender, System.EventArgs e)
         {
             this.FormBorderStyle = FormBorderStyle.None;
+
             using (System.Drawing.Drawing2D.GraphicsPath p = new System.Drawing.Drawing2D.GraphicsPath())
             {
+                int roundedSize = 70;
                 p.StartFigure();
-                p.AddArc(new Rectangle(0, 0, 40, 40), 180, 90);
-                p.AddLine(40, 0, this.Width - 40, 0);
-                p.AddArc(new Rectangle(this.Width - 40, 0, 40, 40), -90, 90);
-                p.AddLine(this.Width, 40, this.Width, this.Height - 40);
-                p.AddArc(new Rectangle(this.Width - 40, this.Height - 40, 40, 40), 0, 90);
-                p.AddLine(this.Width - 40, this.Height, 40, this.Height);
-                p.AddArc(new Rectangle(0, this.Height - 40, 40, 40), 90, 90);
+                // Top-left
+                p.AddArc(new Rectangle(-1, -1, roundedSize, roundedSize), 180, 90);
+                // Top
+                p.AddLine(roundedSize, -1, this.Width - roundedSize, -1);
+                // Top-right
+                p.AddArc(new Rectangle(this.Width - roundedSize, -1, roundedSize, roundedSize), -90, 90);
+                // Right
+                p.AddLine(this.Width, roundedSize, this.Width, this.Height - roundedSize);
+                // Bottom-right
+                p.AddArc(new Rectangle(this.Width - roundedSize, this.Height - roundedSize, roundedSize, roundedSize), 0, 90);
+                // Bottom
+                p.AddLine(this.Width - roundedSize, this.Height, roundedSize, this.Height);
+                // Bottom-left;
+                p.AddArc(new Rectangle(-1, this.Height - roundedSize, roundedSize, roundedSize), 90, 90);
                 p.CloseFigure();
                 this.Region = new Region(p);
             }
+
             if (ApplicationDeployment.IsNetworkDeployed)
             {
                 Version.Text = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
