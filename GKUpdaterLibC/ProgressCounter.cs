@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GKUpdaterLibC
+namespace RemoteFileTransferTool
 {
     public class ProgressCounter
     {
-
         #region "Fields"
 
-        private int _currentTick;
-        private int _progBytesMoved;
-        private int _progTotalBytes;
-        private int _speedBytesMoved;
+        private long _currentTick;
+        private long _progBytesMoved;
+        private long _progTotalBytes;
+        private long _speedBytesMoved;
         private double _speedThroughput;
 
-        private int _startTick;
-        #endregion
+        private long _startTick;
+
+        #endregion "Fields"
 
         #region "Constructors"
 
@@ -32,11 +28,11 @@ namespace GKUpdaterLibC
             _speedThroughput = 0;
         }
 
-        #endregion
+        #endregion "Constructors"
 
         #region "Properties"
 
-        public int BytesMoved
+        public long BytesMoved
         {
             get { return _progBytesMoved; }
             set
@@ -46,7 +42,7 @@ namespace GKUpdaterLibC
             }
         }
 
-        public int BytesToTransfer
+        public long BytesToTransfer
         {
             get { return _progTotalBytes; }
             set { _progTotalBytes = value; }
@@ -72,7 +68,7 @@ namespace GKUpdaterLibC
             get { return _speedThroughput; }
         }
 
-        #endregion
+        #endregion "Properties"
 
         #region "Methods"
 
@@ -83,13 +79,13 @@ namespace GKUpdaterLibC
 
         public void Tick()
         {
-            _currentTick = Environment.TickCount;
+            _currentTick = DateTime.Now.Ticks;
             if (_startTick > 0)
             {
                 if (_speedBytesMoved > 0)
                 {
                     double elapTime = _currentTick - _startTick;
-                    _speedThroughput = Math.Round((_speedBytesMoved / elapTime) / 1000, 2);
+                    _speedThroughput = Math.Round((_speedBytesMoved / (elapTime / 10000)) / 1000, 2);
                 }
             }
             else
@@ -98,7 +94,6 @@ namespace GKUpdaterLibC
             }
         }
 
-        #endregion
-
+        #endregion "Methods"
     }
 }

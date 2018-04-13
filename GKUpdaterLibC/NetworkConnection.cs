@@ -8,7 +8,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 
-namespace GKUpdaterLibC
+namespace RemoteFileTransferTool
 {
     /// <summary>
     /// Credit to: http://stackoverflow.com/questions/295538/how-to-provide-user-name-and-password-when-connecting-to-a-network-share

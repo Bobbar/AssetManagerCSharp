@@ -1,4 +1,4 @@
-﻿namespace AssetManager.UserInterface.Forms.Gatekeeper
+﻿namespace AssetManager.UserInterface.CustomControls
 {
     public enum ProgressStatus
     {

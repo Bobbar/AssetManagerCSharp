@@ -1,8 +1,8 @@
 using System.Windows.Forms;
-namespace AssetManager.UserInterface.Forms.Gatekeeper
+namespace AssetManager.UserInterface.CustomControls
 {
 
-    partial class GKProgressControl : System.Windows.Forms.UserControl
+    partial class FileTransferUI : System.Windows.Forms.UserControl
     {
 
         //UserControl overrides dispose to clean up the component list.
@@ -13,7 +13,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             {
                 if (disposing && components != null)
                 {
-                    updater.Dispose();
+                    remoteTransfer.Dispose();
                     components.Dispose();
                 }
             }

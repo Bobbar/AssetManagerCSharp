@@ -10,13 +10,13 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 {
     public partial class CopyFilesForm : ExtendedForm
     {
-        private GKProgressControl pushFilesControl;
+        private FileTransferUI pushFilesControl;
         private bool cancel = false;
         public CopyFilesForm(ExtendedForm parentForm, Device targetDevice, string sourceDirectory, string targetDirectory) : base(parentForm)
         {
             InitializeComponent();
             this.Owner = parentForm;
-            pushFilesControl = new GKProgressControl(this, targetDevice, true, sourceDirectory, targetDirectory);
+            pushFilesControl = new FileTransferUI(this, targetDevice, true, sourceDirectory, targetDirectory, "Push Files");
             this.Controls.Add(pushFilesControl);
             pushFilesControl.CriticalStopError += new System.EventHandler(CopyCritcalError);
             this.Show();

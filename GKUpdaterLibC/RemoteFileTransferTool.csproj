@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GKUpdater.cs" />
+    <Compile Include="RemoteTransfer.cs" />
     <Compile Include="NetworkConnection.cs" />
     <Compile Include="ProgressCounter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

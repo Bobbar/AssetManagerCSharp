@@ -35,8 +35,8 @@ namespace AssetManager
 
         public static readonly string SQLiteDir = AppDir + @"SQLiteCache\";
         //Gatekeeper package paths
-
-        public const string GKInstallDir = @"C:\PSi\Gatekeeper";
+        public const string GKRemoteDir = @"\PSi\Gatekeeper\";
+        public const string GKLocalInstallDir = @"C:\PSi\Gatekeeper";
         public const string GKPackFileName = "GatekeeperPack.gz";
         public const string GKPackHashName = "hash.md5";
         public static readonly string GKPackFileFDir = AppDir + @"GKUpdateFiles\PackFile\";

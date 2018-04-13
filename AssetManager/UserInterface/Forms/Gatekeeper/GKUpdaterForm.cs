@@ -13,7 +13,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
     {
         private bool queueIsRunning = false;
         private int concurrentUpdates = 4;
-        private List<GKProgressControl> progressControls = new List<GKProgressControl>();
+        private List<FileTransferUI> progressControls = new List<FileTransferUI>();
         private bool createMissingDirs = false;
         private bool packFileReady = false;
 
@@ -33,7 +33,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 {
                     if (!Exists(device))
                     {
-                        var newProgCtl = new GKProgressControl(this, device, createMissingDirs, Paths.GKExtractDir, progressControls.Count + 1);
+                        var newProgCtl = new FileTransferUI(this, device, createMissingDirs, Paths.GKExtractDir, Paths.GKRemoteDir, "Gatekeeper Update", progressControls.Count + 1);
                         progressControls.Add(newProgCtl);
                         newProgCtl.CriticalStopError += CriticalStop;
                     }
@@ -64,7 +64,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             {
                 if (!Exists(device))
                 {
-                    var newProgCtl = new GKProgressControl(this, device, createMissingDirs, Paths.GKExtractDir, progressControls.Count + 1);
+                    var newProgCtl = new FileTransferUI(this, device, createMissingDirs, Paths.GKExtractDir, Paths.GKRemoteDir, "Gatekeeper Update", progressControls.Count + 1);
                     ProgressControlsTable.Controls.Add(newProgCtl);
                     progressControls.Add(newProgCtl);
                     newProgCtl.CriticalStopError += CriticalStop;
@@ -104,7 +104,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         private void CancelAll()
         {
-            foreach (GKProgressControl upd in progressControls)
+            foreach (FileTransferUI upd in progressControls)
             {
                 if (upd.ProgStatus == ProgressStatus.Running)
                 {
@@ -115,7 +115,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         private void DisposeUpdates()
         {
-            foreach (GKProgressControl upd in progressControls)
+            foreach (FileTransferUI upd in progressControls)
             {
                 if (!upd.IsDisposed)
                 {
@@ -133,7 +133,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             if (queueIsRunning)
             {
                 int runningUpdates = 0;
-                foreach (GKProgressControl upd in progressControls)
+                foreach (FileTransferUI upd in progressControls)
                 {
                     switch (upd.ProgStatus)
                     {
@@ -233,7 +233,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             int complete = 0;
             double transferRateSum = 0;
 
-            foreach (GKProgressControl upd in progressControls)
+            foreach (FileTransferUI upd in progressControls)
             {
                 switch (upd.ProgStatus)
                 {
@@ -242,7 +242,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                         break;
 
                     case ProgressStatus.Running:
-                        transferRateSum += upd.updater.UpdateStatus.CurTransferRate;
+                        transferRateSum += upd.remoteTransfer.TransferStatus.CurrentTransferRate;
                         running += 1;
                         break;
 
@@ -264,7 +264,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         /// </summary>
         private void SortUpdates()
         {
-            var sortUpdates = new List<GKProgressControl>();
+            var sortUpdates = new List<FileTransferUI>();
 
             foreach (ProgressStatus status in Enum.GetValues(typeof(ProgressStatus)))
             {
@@ -281,7 +281,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         private void StartNextUpdate()
         {
             var nextUpdate = progressControls.Find(upd => upd.ProgStatus == ProgressStatus.Queued);
-            if (nextUpdate != null)  nextUpdate.StartUpdate();
+            if (nextUpdate != null) nextUpdate.StartUpdate();
         }
 
         private void RunQueue(bool canRunQueue)

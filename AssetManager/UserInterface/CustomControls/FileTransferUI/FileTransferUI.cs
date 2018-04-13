@@ -1,19 +1,17 @@
 using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 using AssetManager.Security;
-//using GKUpdaterLib;
-using GKUpdaterLibC;
-
+using RemoteFileTransferTool;
 using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace AssetManager.UserInterface.Forms.Gatekeeper
+namespace AssetManager.UserInterface.CustomControls
 {
-    public partial class GKProgressControl : IDisposable
+    public partial class FileTransferUI : UserControl, IDisposable
     {
-        public GKUpdater updater { get; }
+        public RemoteTransfer remoteTransfer { get; }
 
         public ProgressStatus ProgStatus { get { return progStatus; } }
 
@@ -24,7 +22,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         private ProgressStatus progStatus;
         private bool logVisible = false;
-        private GKUpdater.Status_Stats currentStatus;
+        private RemoteTransfer.TranferStatus currentStatus;
         private Device currentDevice;
         private string logBuffer = "";
         private Form parentForm;
@@ -33,65 +31,23 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         public event EventHandler CriticalStopError;
 
-        public GKProgressControl()
-        {
-            Disposed += GKProgressControl_Disposed;
-
-            InitializeComponent();
-        }
-
-        public GKProgressControl(Form parentForm, Device device, bool createMissingDirs, string gkPath, int seq = 0)
+        public FileTransferUI(Form parentForm, Device targetDevice, bool createMissingDirs, string sourcePath, string destPath, string transferDescription, int seq = 0)
         {
             InitializeComponent();
-            currentDevice = device;
+            currentDevice = targetDevice;
             this.parentForm = parentForm;
-
             this.Disposed += GKProgressControl_Disposed;
             this.Size = this.MinimumSize;
             this.DoubleBuffered = true;
             Panel1.DoubleBuffered(true);
             LogTextBox.DoubleBuffered(true);
 
-            updater = new GKUpdater(currentDevice.HostName, gkPath);
-            updater.CreateMissingDirectories = createMissingDirs;
-            updater.LogEvent += GKLogEvent;
-            updater.StatusUpdate += GKStatusUpdateEvent;
-            updater.UpdateComplete += GKUpdate_Complete;
-            updater.UpdateCanceled += GKUpdate_Cancelled;
-
-            DeviceInfoLabel.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
-            TransferRateLabel.Text = "0.00MB/s";
-
-            SetStatus(ProgressStatus.Queued);
-
-            if (seq > 0)
-            {
-                SequenceLabel.Text = "#" + seq;
-            }
-            else
-            {
-                SequenceLabel.Text = "";
-            }
-        }
-
-        public GKProgressControl(Form parentForm, Device device, bool createMissingDirs, string sourcePath, string destPath, int seq = 0)
-        {
-            InitializeComponent();
-            currentDevice = device;
-            this.parentForm = parentForm;
-
-            this.Disposed += GKProgressControl_Disposed;
-            this.Size = this.MinimumSize;
-            this.DoubleBuffered = true;
-            Panel1.DoubleBuffered(true);
-            LogTextBox.DoubleBuffered(true);
-
-            updater = new GKUpdater(currentDevice.HostName, sourcePath, destPath);
-            updater.CreateMissingDirectories = createMissingDirs;
-            updater.LogEvent += GKLogEvent;
-            updater.StatusUpdate += GKStatusUpdateEvent;
-            updater.UpdateComplete += GKUpdate_Complete;
-            updater.UpdateCanceled += GKUpdate_Cancelled;
+            remoteTransfer = new RemoteTransfer(currentDevice.HostName, sourcePath, destPath, transferDescription);
+            remoteTransfer.CreateMissingDirectories = createMissingDirs;
+            remoteTransfer.LogEvent += GKLogEvent;
+            remoteTransfer.StatusUpdate += GKStatusUpdateEvent;
+            remoteTransfer.TransferComplete += GKUpdate_Complete;
+            remoteTransfer.TransferCanceled += GKUpdate_Cancelled;
 
             DeviceInfoLabel.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
             TransferRateLabel.Text = "0.00MB/s";
@@ -110,7 +66,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         public void CancelUpdate()
         {
-            if (!updater.IsDisposed) updater.CancelUpdate();
+            if (!remoteTransfer.IsDisposed) remoteTransfer.CancelTransfer();
         }
 
         public void StartUpdate()
@@ -121,7 +77,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 {
                     logBuffer = "";
                     SetStatus(ProgressStatus.Starting);
-                    updater.StartUpdate(SecurityTools.AdminCreds);
+                    remoteTransfer.StartTransfer(SecurityTools.AdminCreds);
                 }
             }
             catch (Exception ex)
@@ -171,11 +127,11 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         private void GKProgressControl_Disposed(object sender, EventArgs e)
         {
-            updater.LogEvent -= GKLogEvent;
-            updater.StatusUpdate -= GKStatusUpdateEvent;
-            updater.UpdateComplete -= GKUpdate_Complete;
-            updater.UpdateCanceled -= GKUpdate_Cancelled;
-            updater.Dispose();
+            remoteTransfer.LogEvent -= GKLogEvent;
+            remoteTransfer.StatusUpdate -= GKStatusUpdateEvent;
+            remoteTransfer.TransferComplete -= GKUpdate_Complete;
+            remoteTransfer.TransferCanceled -= GKUpdate_Cancelled;
+            remoteTransfer.Dispose();
             statusLight?.Dispose();
         }
 
@@ -184,8 +140,8 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         /// </summary>
         private void GKLogEvent(object sender, EventArgs e)
         {
-            var LogEvent = (GKUpdater.LogEvents)e;
-            Log(LogEvent.LogData.Message);
+            var LogEvent = (RemoteTransfer.LogEventArgs)e;
+            Log(LogEvent.Message.Message);
         }
 
         private void Log(string text)
@@ -195,12 +151,12 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         private void GKStatusUpdateEvent(object sender, EventArgs e)
         {
-            var UpdateEvent = (GKUpdater.GKUpdateEvents)e;
+            var UpdateEvent = (RemoteTransfer.TransferStatusEventArgs)e;
             SetStatus(ProgressStatus.Running);
-            currentStatus = UpdateEvent.CurrentStatus;
-            TotalProgressBar.Maximum = currentStatus.TotFiles;
-            TotalProgressBar.Value = currentStatus.CurFileIdx;
-            StatusLabel.Text = currentStatus.CurFileName;
+            currentStatus = UpdateEvent.Status;
+            TotalProgressBar.Maximum = currentStatus.TotalFileCount;
+            TotalProgressBar.Value = currentStatus.CurrentFileIdx;
+            StatusLabel.Text = currentStatus.DestinationFileName;
         }
 
         private void GKUpdate_Cancelled(object sender, EventArgs e)
@@ -210,7 +166,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         private void GKUpdate_Complete(object sender, EventArgs e)
         {
-            var CompleteEvent = (GKUpdater.GKUpdateCompleteEvents)e;
+            var CompleteEvent = (RemoteTransfer.TransferCompleteEventArgs)e;
             if (CompleteEvent.HasErrors)
             {
                 SetStatus(ProgressStatus.Errors);
@@ -230,7 +186,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 }
                 else
                 {
-                    if (CompleteEvent.Errors is GKUpdater.MissingDirectoryException)
+                    if (CompleteEvent.Errors is RemoteTransfer.MissingDirectoryException)
                     {
                         Log("Enable 'Create Missing Directories' option and re-enqueue this device to force creation.");
                     }
@@ -238,7 +194,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
             else
             {
-                if (updater.ErrorList.Count == 0)
+                if (remoteTransfer.ErrorList.Count == 0)
                 {
                     SetStatus(ProgressStatus.Complete);
                 }
@@ -287,9 +243,9 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         {
             if (progStatus == ProgressStatus.Running | progStatus == ProgressStatus.Paused)
             {
-                if (!updater.IsDisposed)
+                if (!remoteTransfer.IsDisposed)
                 {
-                    updater.CancelUpdate();
+                    remoteTransfer.CancelTransfer();
                     SetStatus(ProgressStatus.Canceled);
                 }
                 else
@@ -308,12 +264,12 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             switch (progStatus)
             {
                 case ProgressStatus.Paused:
-                    updater.ResumeUpdate();
+                    remoteTransfer.ResumeTransfer();
                     SetStatus(ProgressStatus.Running);
                     break;
 
                 case ProgressStatus.Running:
-                    updater.PauseUpdate();
+                    remoteTransfer.PauseTransfer();
                     SetStatus(ProgressStatus.Paused);
                     break;
 
@@ -401,7 +357,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                     break;
 
                 case ProgressStatus.CompleteWithErrors:
-                    StatusLabel.Text = "Completed with errors: " + updater.ErrorList.Count;
+                    StatusLabel.Text = "Completed with errors: " + remoteTransfer.ErrorList.Count;
                     break;
 
                 case ProgressStatus.Complete:
@@ -429,12 +385,11 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
             if (progStatus == ProgressStatus.Running)
             {
-                FileProgressBar.Value = updater.UpdateStatus.CurFileProgress;
-                if (FileProgressBar.Value > 1)
-                    FileProgressBar.Value = FileProgressBar.Value - 1;
+                FileProgressBar.Value = remoteTransfer.TransferStatus.CurrentFileProgress;
+                if (FileProgressBar.Value > 1) FileProgressBar.Value = FileProgressBar.Value - 1;
                 //doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
-                FileProgressBar.Value = updater.UpdateStatus.CurFileProgress;
-                TransferRateLabel.Text = updater.UpdateStatus.CurTransferRate.ToString("0.00") + "MB/s";
+                FileProgressBar.Value = remoteTransfer.TransferStatus.CurrentFileProgress;
+                TransferRateLabel.Text = remoteTransfer.TransferStatus.CurrentTransferRate.ToString("0.00") + "MB/s";
                 this.Update();
             }
         }

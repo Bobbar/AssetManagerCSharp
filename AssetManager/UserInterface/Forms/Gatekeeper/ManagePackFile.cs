@@ -182,7 +182,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 {
                     File.Delete(Paths.GKPackFileFullPath);
                 }
-                await Task.Run(() => { CompDir.CompressDirectory(Paths.GKInstallDir, Paths.GKPackFileFullPath); });
+                await Task.Run(() => { CompDir.CompressDirectory(Paths.GKLocalInstallDir, Paths.GKPackFileFullPath); });
                 return true;
             }
             catch (Exception ex)
