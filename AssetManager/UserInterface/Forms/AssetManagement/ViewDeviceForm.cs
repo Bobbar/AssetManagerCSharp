@@ -127,12 +127,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         public override bool OkToClose()
         {
-            bool CanClose = true;
+            bool canClose = true;
             if (editMode && !CancelModify())
             {
-                CanClose = false;
+                canClose = false;
             }
-            return CanClose;
+            return canClose;
         }
 
         public override void RefreshData()
@@ -727,14 +727,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         }
                     }
 
-                    ActiveDirectoryWrapper ADWrap = new ActiveDirectoryWrapper(currentViewDevice.HostName);
-                    if (await ADWrap.LoadResultsAsync())
+                    var activeDir = new ActiveDirectoryWrapper(currentViewDevice.HostName);
+                    if (await activeDir.LoadResultsAsync())
                     {
-                        ADOUTextBox.Text = ADWrap.GetDeviceOU();
-                        ADOSTextBox.Text = ADWrap.GetAttributeValue("operatingsystem");
-                        ADOSVerTextBox.Text = ADWrap.GetAttributeValue("operatingsystemversion");
-                        ADLastLoginTextBox.Text = ADWrap.GetAttributeValue("lastlogon");
-                        ADCreatedTextBox.Text = ADWrap.GetAttributeValue("whencreated");
+                        ADOUTextBox.Text = activeDir.GetDeviceOU();
+                        ADOSTextBox.Text = activeDir.GetAttributeValue("operatingsystem");
+                        ADOSVerTextBox.Text = activeDir.GetAttributeValue("operatingsystemversion");
+                        ADLastLoginTextBox.Text = activeDir.GetAttributeValue("lastlogon");
+                        ADCreatedTextBox.Text = activeDir.GetAttributeValue("whencreated");
                         ActiveDirectoryBox.Visible = true;
                         return;
                     }

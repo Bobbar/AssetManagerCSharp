@@ -35,7 +35,6 @@ namespace AssetManager.Data.Functions
 
             return await Task.Run(() =>
               {
-                  Task.Delay(1000).Wait();
                   using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
                   {
                       if (results.Rows.Count > 0) return true;
