@@ -93,7 +93,6 @@
             this.ShowDevicesDropDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.ShowDevicesDropDown.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ShowDevicesDropDown.Image = ((System.Drawing.Image)(resources.GetObject("ShowDevicesDropDown.Image")));
-            this.ShowDevicesDropDown.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ShowDevicesDropDown.Name = "ShowDevicesDropDown";
             this.ShowDevicesDropDown.ShowDropDownArrow = false;
             this.ShowDevicesDropDown.Size = new System.Drawing.Size(94, 21);

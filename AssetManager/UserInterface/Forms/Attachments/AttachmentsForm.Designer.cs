@@ -258,7 +258,6 @@ namespace AssetManager.UserInterface.Forms
             // folderImageList
             // 
             this.folderImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("folderImageList.ImageStream")));
-            this.folderImageList.TransparentColor = System.Drawing.Color.Transparent;
             this.folderImageList.Images.SetKeyName(0, "icons8-Folder-48.png");
             this.folderImageList.Images.SetKeyName(1, "icons8-Open-48.png");
             // 
