@@ -857,7 +857,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void SendToGridFormMemuItem_Click(object sender, EventArgs e)
+        private void SendToGridFormMenuItem_Click(object sender, EventArgs e)
         {
             ResultGrid.CopyToGridForm(this, DoubleClickAction.ViewDevice);
         }

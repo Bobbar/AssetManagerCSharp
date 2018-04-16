@@ -26,7 +26,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ContextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AddGKUpdateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SendToGridFormMemuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SendToGridFormMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.CopySelectedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RecordsCountLabel = new System.Windows.Forms.Label();
@@ -179,7 +179,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ContextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ViewToolStripMenuItem,
             this.AddGKUpdateMenuItem,
-            this.SendToGridFormMemuItem,
+            this.SendToGridFormMenuItem,
             this.ToolStripSeparator3,
             this.CopySelectedMenuItem});
             this.ContextMenuStrip1.Name = "ContextMenuStrip1";
@@ -202,13 +202,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.AddGKUpdateMenuItem.Text = "Enqueue GK Update";
             this.AddGKUpdateMenuItem.Click += new System.EventHandler(this.AddGKUpdateMenuItem_Click);
             // 
-            // SendToGridFormMemuItem
+            // SendToGridFormMenuItem
             // 
-            this.SendToGridFormMemuItem.Image = global::AssetManager.Properties.Resources.TransferArrowsIcon;
-            this.SendToGridFormMemuItem.Name = "SendToGridFormMemuItem";
-            this.SendToGridFormMemuItem.Size = new System.Drawing.Size(179, 22);
-            this.SendToGridFormMemuItem.Text = "Send to Grid Form";
-            this.SendToGridFormMemuItem.Click += new System.EventHandler(this.SendToGridFormMemuItem_Click);
+            this.SendToGridFormMenuItem.Image = global::AssetManager.Properties.Resources.TransferArrowsIcon;
+            this.SendToGridFormMenuItem.Name = "SendToGridFormMenuItem";
+            this.SendToGridFormMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.SendToGridFormMenuItem.Text = "Send to Grid Form";
+            this.SendToGridFormMenuItem.Click += new System.EventHandler(this.SendToGridFormMenuItem_Click);
             // 
             // ToolStripSeparator3
             // 
@@ -956,7 +956,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal System.Windows.Forms.ToolStripMenuItem AddGKUpdateMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem GKUpdaterMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem AdvancedSearchMenuItem;
-        internal System.Windows.Forms.ToolStripMenuItem SendToGridFormMemuItem;
+        internal System.Windows.Forms.ToolStripMenuItem SendToGridFormMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem ReEnterLACredentialsMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem ViewLogToolStripMenuItem;
         internal System.Windows.Forms.ToolStripComboBox DatabaseToolCombo;
