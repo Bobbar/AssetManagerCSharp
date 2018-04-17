@@ -1368,6 +1368,11 @@
             Builds a query from the populated search controls.
             </summary>
         </member>
+        <member name="M:AssetManager.UserInterface.Forms.AssetManagement.MainForm.LoadSelectedDevices">
+            <summary>
+            Loads and displays devices for all currently selected rows.
+            </summary>
+        </member>
         <member name="F:AssetManager.UserInterface.Forms.AssetManagement.MainForm.components">
             <summary>
             Required designer variable.

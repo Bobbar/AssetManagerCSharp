@@ -224,9 +224,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         /// </summary>
         private void LoadSelectedDevices()
         {
+            var uniqueRows = new HashSet<int>();
             foreach (DataGridViewCell cell in ResultGrid.SelectedCells)
             {
-                var row = ResultGrid.Rows[cell.RowIndex];
+                uniqueRows.Add(cell.RowIndex);
+            }
+
+            foreach (var index in uniqueRows)
+            {
+                var row = ResultGrid.Rows[index];
                 var guid = row.Cells[DevicesCols.DeviceGuid].Value.ToString();
 
                 if (!string.IsNullOrEmpty(guid))
@@ -236,6 +242,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 // Delay for just a moment to keep the UI somewhat alive.
                 Task.Delay(20).Wait();
             }
+            uniqueRows.Clear();
+            uniqueRows = null;
         }
 
         public override void RefreshData()
@@ -894,7 +902,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 GuidTextBox.Clear();
             }
         }
-               
+
         private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LoadSelectedDevices();
