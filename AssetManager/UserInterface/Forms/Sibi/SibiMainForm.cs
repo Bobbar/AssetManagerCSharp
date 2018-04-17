@@ -32,10 +32,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         public SibiMainForm(ExtendedForm parentForm) : base(parentForm, false)
         {
-            windowList = new WindowList(this);
-            // This call is required by the designer.
             InitializeComponent();
-
+            windowList = new WindowList(this);
             InitForm();
         }
 
@@ -57,7 +55,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             searchParams.Add(SibiRequestCols.RequisitionNumber, ReqNumberTextBox.Text, false);
 
             //Filter out unpopulated fields.
-            QueryParamCollection popSearchParams = new QueryParamCollection();
+            var popSearchParams = new QueryParamCollection();
             foreach (var param in searchParams.Parameters)
             {
                 if (param.Value.ToString() != "")
@@ -104,8 +102,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     if (!string.IsNullOrEmpty(fld.Value.ToString()))
                     {
                         dynaQuery += " " + fld.FieldName + " LIKE @" + fld.FieldName;
-                        string Value = "%" + fld.Value.ToString() + "%";
-                        cmd.AddParameterWithValue("@" + fld.FieldName, Value);
+
+                        string value = "%" + fld.Value.ToString() + "%";
+                        cmd.AddParameterWithValue("@" + fld.FieldName, value);
+
                         if (searchValCols.Parameters.IndexOf(fld) != searchValCols.Parameters.Count - 1)
                         {
                             dynaQuery += " AND";
@@ -197,7 +197,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 SetDisplayYears();
                 this.Show();
                 this.Activate();
-                Application.DoEvents();
                 ShowAll("All");
             }
             catch (Exception ex)
@@ -364,22 +363,23 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void ShowAll(string Year = "")
+        private void ShowAll(string year = "")
         {
-            if (string.IsNullOrEmpty(Year))
-                Year = DisplayYearComboBox.Text;
-            if (Year == "All")
+            if (string.IsNullOrEmpty(year)) year = DisplayYearComboBox.Text;
+
+            string query = "";
+
+            if (year == "All")
             {
-                DbCommand newCommand;
-                newCommand = DBFactory.GetDatabase().GetCommand(Queries.SelectSibiRequestsTable);
-                ExecuteCmd(ref newCommand);
+                query = Queries.SelectSibiRequestsTable;
             }
             else
             {
-                DbCommand newCommand;
-                newCommand = DBFactory.GetDatabase().GetCommand(Queries.SelectSibiRequestsByYear(Year));
-                ExecuteCmd(ref newCommand);
+                query = Queries.SelectSibiRequestsByYear(year);
             }
+
+            var newCommand = DBFactory.GetDatabase().GetCommand(query);
+            ExecuteCmd(ref newCommand);
         }
 
         private List<GridColumnAttrib> SibiTableColumns()

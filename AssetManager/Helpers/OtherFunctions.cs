@@ -108,7 +108,6 @@ namespace AssetManager.Helpers
             if (parentForm == null)
             {
                 Application.UseWaitCursor = waiting;
-                Application.DoEvents();
             }
             else
             {
