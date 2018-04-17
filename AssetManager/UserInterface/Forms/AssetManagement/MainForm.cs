@@ -219,6 +219,25 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
+        /// <summary>
+        /// Loads and displays devices for all currently selected rows.
+        /// </summary>
+        private void LoadSelectedDevices()
+        {
+            foreach (DataGridViewCell cell in ResultGrid.SelectedCells)
+            {
+                var row = ResultGrid.Rows[cell.RowIndex];
+                var guid = row.Cells[DevicesCols.DeviceGuid].Value.ToString();
+
+                if (!string.IsNullOrEmpty(guid))
+                {
+                    LoadDevice(guid);
+                }
+                // Delay for just a moment to keep the UI somewhat alive.
+                Task.Delay(20).Wait();
+            }
+        }
+
         public override void RefreshData()
         {
             StartBigQuery(lastCommand);
@@ -875,10 +894,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 GuidTextBox.Clear();
             }
         }
-
+               
         private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid));
+            LoadSelectedDevices();
         }
 
         private void ReEnterLACredentialsMenuItem_Click(object sender, EventArgs e)
