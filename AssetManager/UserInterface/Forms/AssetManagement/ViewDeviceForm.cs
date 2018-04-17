@@ -1111,7 +1111,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void remoteToolsControl_NewStatusPrompt(object sender, UserPromptEventArgs e)
         {
-            statusSlider.QueueMessage(e.Text, e.DisplayTime);
+            statusSlider.QueueMessage(e.Text, e.Color, SlideDirection.Right, SlideDirection.Down, e.DisplayTime);
         }
 
         private void CurrentUserTextBox_MouseDoubleClick(object sender, MouseEventArgs e)

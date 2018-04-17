@@ -13,6 +13,7 @@ using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -26,6 +27,8 @@ namespace AssetManager.UserInterface.CustomControls
         private PingVis pingVis;
         private ExtendedForm hostForm;
         private Device device;
+        private Color successColor = Color.DarkGreen;
+        private Color failColor = Color.DarkRed;
 
         /// <summary>
         /// Gets or sets the number of failed pings required before a <see cref="HostBackOnline"/> event will be fired.
@@ -93,6 +96,11 @@ namespace AssetManager.UserInterface.CustomControls
         private void OnStatusPrompt(string message, int displayTime = -1)
         {
             NewStatusPrompt(this, new UserPromptEventArgs(message, displayTime));
+        }
+
+        private void OnStatusPrompt(string message, Color color, int displayTime = -1)
+        {
+            NewStatusPrompt(this, new UserPromptEventArgs(message, color, displayTime));
         }
 
         private void OnVisibleChanging(bool newState)
@@ -205,17 +213,17 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds())
                 {
-                    string FullPath = "\\\\" + this.device.HostName + "\\c$";
+                    string fullPath = "\\\\" + this.device.HostName + "\\c$";
                     await Task.Run(() =>
                     {
-                        using (NetworkConnection NetCon = new NetworkConnection(FullPath, SecurityTools.AdminCreds))
-                        using (Process p = new Process())
+                        using (var netCon = new NetworkConnection(fullPath, SecurityTools.AdminCreds))
+                        using (var p = new Process())
                         {
                             p.StartInfo.UseShellExecute = false;
                             p.StartInfo.RedirectStandardOutput = true;
                             p.StartInfo.RedirectStandardError = true;
                             p.StartInfo.FileName = "explorer.exe";
-                            p.StartInfo.Arguments = FullPath;
+                            p.StartInfo.Arguments = fullPath;
                             p.Start();
                             p.WaitForExit();
                         }
@@ -244,17 +252,17 @@ namespace AssetManager.UserInterface.CustomControls
                     OnStatusPrompt("Deploying TeamViewer...", 0);
                     if (await newTVDeploy.DeployToDevice(targetDevice))
                     {
-                        OnStatusPrompt("TeamViewer deployment complete!");
+                        OnStatusPrompt("TeamViewer deployment complete!", successColor);
                     }
                     else
                     {
-                        OnStatusPrompt("TeamViewer deployment failed...");
+                        OnStatusPrompt("TeamViewer deployment failed...", failColor);
                     }
                 }
             }
             catch (Exception ex)
             {
-                OnStatusPrompt("TeamViewer deployment failed...");
+                OnStatusPrompt("TeamViewer deployment failed...", failColor);
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
@@ -275,17 +283,17 @@ namespace AssetManager.UserInterface.CustomControls
                     OnStatusPrompt("Deploying Office 365...", 0);
                     if (await newOfficeDeploy.DeployToDevice(targetDevice))
                     {
-                        OnStatusPrompt("Office 365 deployment complete!");
+                        OnStatusPrompt("Office 365 deployment complete!", successColor);
                     }
                     else
                     {
-                        OnStatusPrompt("Office 365 deployment failed...");
+                        OnStatusPrompt("Office 365 deployment failed...", failColor);
                     }
                 }
             }
             catch (Exception ex)
             {
-                OnStatusPrompt("Office 365 deployment failed...");
+                OnStatusPrompt("Office 365 deployment failed...", failColor);
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
@@ -306,38 +314,38 @@ namespace AssetManager.UserInterface.CustomControls
                     OnStatusPrompt("Deploying Software...", 0);
                     if (await newDeviceDeploy.DeployToDevice(targetDevice))
                     {
-                        OnStatusPrompt("Software Deployment Complete!");
+                        OnStatusPrompt("Software Deployment Complete!", successColor);
                     }
                     else
                     {
-                        OnStatusPrompt("Software Deployment Failed...");
+                        OnStatusPrompt("Software Deployment Failed...", failColor);
                     }
                 }
             }
             catch (Exception ex)
             {
-                OnStatusPrompt("Software Deployment Failed...");
+                OnStatusPrompt("Software Deployment Failed...", failColor);
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
         private void LaunchRDP()
         {
-            ProcessStartInfo StartInfo = new ProcessStartInfo();
-            StartInfo.FileName = "mstsc.exe";
-            StartInfo.Arguments = "/v:" + this.device.HostName;
-            Process.Start(StartInfo);
+            var startInfo = new ProcessStartInfo();
+            startInfo.FileName = "mstsc.exe";
+            startInfo.Arguments = "/v:" + this.device.HostName;
+            Process.Start(startInfo);
         }
 
         private void QueueGKUpdate()
         {
             if (SecurityTools.VerifyAdminCreds())
             {
-                var GKInstance = Helpers.ChildFormControl.GKUpdaterInstance();
-                GKInstance.AddUpdate(this.device);
-                if (!GKInstance.Visible)
+                var gkInstance = Helpers.ChildFormControl.GKUpdaterInstance();
+                gkInstance.AddUpdate(this.device);
+                if (!gkInstance.Visible)
                 {
-                    GKInstance.Show();
+                    gkInstance.Show();
                 }
             }
         }
@@ -353,7 +361,7 @@ namespace AssetManager.UserInterface.CustomControls
                     var restartOutput = await SendRestart(ip);
                     if ((string)restartOutput == "")
                     {
-                        OtherFunctions.Message("Success", MessageBoxButtons.OK, MessageBoxIcon.Information, "Restart Device", hostForm);
+                        OnStatusPrompt("Restart Command Successful!", successColor);
                     }
                     else
                     {
@@ -372,11 +380,12 @@ namespace AssetManager.UserInterface.CustomControls
                 string FullPath = "\\\\" + ip;
                 string output = await Task.Run(() =>
                 {
-                    using (NetworkConnection NetCon = new NetworkConnection(FullPath, SecurityTools.AdminCreds))
-                    using (Process p = new Process())
+                    using (var netCon = new NetworkConnection(FullPath, SecurityTools.AdminCreds))
+                    using (var p = new Process())
                     {
                         string results;
                         p.StartInfo.UseShellExecute = false;
+                        p.StartInfo.CreateNoWindow = true;
                         p.StartInfo.RedirectStandardOutput = true;
                         p.StartInfo.RedirectStandardError = true;
                         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -438,11 +447,11 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (pingVis.CurrentResult != null)
             {
-                string IPAddress = pingVis.CurrentResult.Address.ToString();
-                var blah = OtherFunctions.Message(IPAddress + " - " + NetworkInfo.LocationOfIP(IPAddress) + "\r\n" + "\r\n" + "Press 'Yes' to copy to clipboard.", MessageBoxButtons.YesNo, MessageBoxIcon.Information, "IP Address", hostForm);
+                string address = pingVis.CurrentResult.Address.ToString();
+                var blah = OtherFunctions.Message(address + " - " + NetworkInfo.LocationOfIP(address) + "\r\n" + "\r\n" + "Press 'Yes' to copy to clipboard.", MessageBoxButtons.YesNo, MessageBoxIcon.Information, "IP Address", hostForm);
                 if (blah == DialogResult.Yes)
                 {
-                    Clipboard.SetText(IPAddress);
+                    Clipboard.SetText(address);
                 }
             }
         }
@@ -463,17 +472,17 @@ namespace AssetManager.UserInterface.CustomControls
                     var newChromeDeploy = new DeployChrome(hostForm);
                     if (await newChromeDeploy.DeployToDevice(targetDevice))
                     {
-                        OnStatusPrompt("Chrome install complete!");
+                        OnStatusPrompt("Chrome install complete!", successColor);
                     }
                     else
                     {
-                        OnStatusPrompt("Error while installing Chrome!");
+                        OnStatusPrompt("Error while installing Chrome!", failColor);
                     }
                 }
             }
             catch (Exception ex)
             {
-                OnStatusPrompt("Error while installing Chrome!");
+                OnStatusPrompt("Error while installing Chrome!", failColor);
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }

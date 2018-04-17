@@ -1090,12 +1090,24 @@
             The text to be displayed in the user prompt.
             </summary>
         </member>
+        <member name="P:AssetManager.UserInterface.CustomControls.UserPromptEventArgs.Color">
+            <summary>
+            Color of the text.
+            </summary>
+        </member>
         <member name="P:AssetManager.UserInterface.CustomControls.UserPromptEventArgs.DisplayTime">
             <summary>
             How long to display the message in seconds.
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.UserPromptEventArgs.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AssetManager.UserInterface.CustomControls.UserPromptEventArgs"/> class.
+            </summary>
+            <param name="message"></param>
+            <param name="displayTime"></param>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.UserPromptEventArgs.#ctor(System.String,System.Drawing.Color,System.Int32)">
             <summary>
             Initializes a new instance of the <see cref="T:AssetManager.UserInterface.CustomControls.UserPromptEventArgs"/> class.
             </summary>
@@ -1109,7 +1121,7 @@
         </member>
         <member name="E:AssetManager.UserInterface.CustomControls.IWindowList.RefreshWindowList">
             <summary>
-            Occurs when a refresh is called from implementer;
+            Occurs when a refresh is called from implementer.
             </summary>
         </member>
         <member name="P:AssetManager.UserInterface.CustomControls.IWindowList.ChildForms">
@@ -1494,6 +1506,11 @@
         <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm.StartNextUpdate">
             <summary>
             Starts the next update that has a queued status.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.GridForm.ReLabelGridForm">
+            <summary>
+            Prompts user for a new form label/title text, sets the form text, and refreshes window lists.
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiMainForm.GetRowColor(System.String)">
