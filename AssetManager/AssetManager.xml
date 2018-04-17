@@ -1107,6 +1107,11 @@
             Occurs when the number of child forms has changed.
             </summary>
         </member>
+        <member name="E:AssetManager.UserInterface.CustomControls.IWindowList.RefreshWindowList">
+            <summary>
+            Occurs when a refresh is called from implementer;
+            </summary>
+        </member>
         <member name="P:AssetManager.UserInterface.CustomControls.IWindowList.ChildForms">
             <summary>
             List of child forms bound to the current form. This list ultimately comprises a tree of parent and child forms.

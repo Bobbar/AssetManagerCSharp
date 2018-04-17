@@ -15,6 +15,11 @@ namespace AssetManager.UserInterface.CustomControls
         event EventHandler<EventArgs> ChildCountChanged;
 
         /// <summary>
+        /// Occurs when a refresh is called from implementer.
+        /// </summary>
+        event EventHandler<EventArgs> RefreshWindowList;
+
+        /// <summary>
         /// List of child forms bound to the current form. This list ultimately comprises a tree of parent and child forms.
         /// </summary>
         List<ExtendedForm> ChildForms { get; }

@@ -13,12 +13,15 @@ namespace AssetManager.UserInterface.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GridForm));
             this.GridPanel = new System.Windows.Forms.TableLayoutPanel();
             this.StatusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.RenameFormStripButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.PopUpMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CopySelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SendToNewGridForm = new System.Windows.Forms.ToolStripMenuItem();
+            this.StatusStrip1.SuspendLayout();
             this.Panel1.SuspendLayout();
             this.PopUpMenu.SuspendLayout();
             this.SuspendLayout();
@@ -42,11 +45,24 @@ namespace AssetManager.UserInterface.Forms
             // 
             // StatusStrip1
             // 
+            this.StatusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RenameFormStripButton});
             this.StatusStrip1.Location = new System.Drawing.Point(0, 533);
             this.StatusStrip1.Name = "StatusStrip1";
             this.StatusStrip1.Size = new System.Drawing.Size(1067, 22);
             this.StatusStrip1.TabIndex = 1;
             this.StatusStrip1.Text = "StatusStrip1";
+            // 
+            // RenameFormStripButton
+            // 
+            this.RenameFormStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.RenameFormStripButton.Image = ((System.Drawing.Image)(resources.GetObject("RenameFormStripButton.Image")));
+            this.RenameFormStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.RenameFormStripButton.Name = "RenameFormStripButton";
+            this.RenameFormStripButton.ShowDropDownArrow = false;
+            this.RenameFormStripButton.Size = new System.Drawing.Size(85, 20);
+            this.RenameFormStripButton.Text = "Rename Form";
+            this.RenameFormStripButton.Click += new System.EventHandler(this.RenameFormStripButton_Click);
             // 
             // Panel1
             // 
@@ -102,6 +118,8 @@ namespace AssetManager.UserInterface.Forms
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GridForm_FormClosing);
             this.Load += new System.EventHandler(this.GridForm_Load);
             this.Resize += new System.EventHandler(this.GridForm_Resize);
+            this.StatusStrip1.ResumeLayout(false);
+            this.StatusStrip1.PerformLayout();
             this.Panel1.ResumeLayout(false);
             this.Panel1.PerformLayout();
             this.PopUpMenu.ResumeLayout(false);
@@ -116,7 +134,6 @@ namespace AssetManager.UserInterface.Forms
         internal System.Windows.Forms.ContextMenuStrip PopUpMenu;
         private System.Windows.Forms.ToolStripMenuItem CopySelectedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SendToNewGridForm;
-
-
+        private System.Windows.Forms.ToolStripDropDownButton RenameFormStripButton;
     }
 }

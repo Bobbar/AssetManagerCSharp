@@ -20,6 +20,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             windowListForm = parentForm;
             windowListForm.ChildCountChanged += WindowListForm_WindowCountChanged;
+            windowListForm.RefreshWindowList += WindowListForm_RefreshWindowList;
             this.parentForm = parentForm;
         }
 
@@ -221,6 +222,12 @@ namespace AssetManager.UserInterface.CustomControls
         {
             RefreshWindowList();
         }
+
+        private void WindowListForm_RefreshWindowList(object sender, EventArgs e)
+        {
+            RefreshWindowList();
+        }
+
         #endregion "Methods"
 
         #region "IDisposable Support"
@@ -241,6 +248,7 @@ namespace AssetManager.UserInterface.CustomControls
                     DisposeAllDropDownItems();
                     dropDownControl.Dispose();
                     windowListForm.ChildCountChanged -= WindowListForm_WindowCountChanged;
+                    windowListForm.RefreshWindowList -= WindowListForm_RefreshWindowList;
                     dropDownControl.DropDownClosed -= DropDownControl_DropDownClosed;
                     dropDownControl.DropDownOpened -= DropDownControl_DropDownOpened;
                 }

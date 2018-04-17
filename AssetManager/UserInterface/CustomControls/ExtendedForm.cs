@@ -56,6 +56,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         public event EventHandler<EventArgs> ChildCountChanged;
 
+        public event EventHandler<EventArgs> RefreshWindowList;
+
         #endregion Events
 
         #region Properties
@@ -233,6 +235,11 @@ namespace AssetManager.UserInterface.CustomControls
             OnWindowCountChanged(new EventArgs());
         }
 
+        public void ForceWindowListRefresh()
+        {
+            OnRefreshWindowList(new EventArgs());
+        }
+
         private void Child_Disposed(object sender, EventArgs e)
         {
             RemoveChild((ExtendedForm)sender);
@@ -284,6 +291,12 @@ namespace AssetManager.UserInterface.CustomControls
         {
             ChildCountChanged?.Invoke(this, e);
             parentForm?.OnWindowCountChanged(e);
+        }
+
+        private void OnRefreshWindowList(EventArgs e)
+        {
+            RefreshWindowList?.Invoke(this, e);
+            parentForm?.OnRefreshWindowList(e);
         }
 
         private void SetTheme(ExtendedForm parent)

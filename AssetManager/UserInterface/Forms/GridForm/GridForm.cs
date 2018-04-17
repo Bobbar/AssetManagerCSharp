@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
+using MyDialogLib;
 
 namespace AssetManager.UserInterface.Forms
 {
@@ -15,8 +16,8 @@ namespace AssetManager.UserInterface.Forms
 
         private bool gridFilling = true;
         private List<DataGridView> gridList = new List<DataGridView>();
-
         private DataGridViewRow lastDoubleClickRow;
+        private string titlePrefix = "GridForm - ";
 
         #endregion "Fields"
 
@@ -25,7 +26,7 @@ namespace AssetManager.UserInterface.Forms
         public GridForm(ExtendedForm parentForm, string title = "") : base(parentForm)
         {
             InitializeComponent();
-            if (!string.IsNullOrEmpty(title)) this.Text = title;
+            if (!string.IsNullOrEmpty(title)) this.Text = titlePrefix + title;
 
             GridPanel.DoubleBuffered(true);
             Panel1.DoubleBuffered(true);
@@ -204,6 +205,33 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
+        /// <summary>
+        /// Prompts user for a new form label/title text, sets the form text, and refreshes window lists.
+        /// </summary>
+        private void ReLabelGridForm()
+        {
+            using (var renameDialog = new AdvancedDialog(this))
+            using (var nameTextBox = new TextBox())
+            {
+                nameTextBox.Visible = true;
+                nameTextBox.Width = 100;
+
+                renameDialog.Text = "Grid Form Label";
+                renameDialog.AddCustomControl("nameTextBox", "Enter New Label:", nameTextBox);
+                renameDialog.ShowDialog();
+
+                if (renameDialog.DialogResult == DialogResult.OK)
+                {
+                    var newName = nameTextBox.Text.Trim();
+                    if (!string.IsNullOrEmpty(newName))
+                    {
+                        this.Text = titlePrefix + newName;
+                        this.ParentForm.ForceWindowListRefresh();
+                    }
+                }
+            }
+        }
+
         private void GridForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!Modal) this.Dispose();
@@ -229,6 +257,11 @@ namespace AssetManager.UserInterface.Forms
             AddGridsToForm();
             ResizeGrids();
             gridFilling = false;
+        }
+
+        private void RenameFormStripButton_Click(object sender, EventArgs e)
+        {
+            ReLabelGridForm();
         }
 
         protected override void Dispose(bool disposing)
