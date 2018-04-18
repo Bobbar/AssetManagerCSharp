@@ -28,6 +28,7 @@ namespace AssetManager.UserInterface.CustomControls
             FormGuid = formGuid;
             ParentForm = parentForm;
             SubscribeEvents();
+            SetDoubleBuffering();
         }
 
         public ExtendedForm() : this(null, string.Empty, true)
@@ -95,7 +96,7 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         /// <summary>
-        /// Overloads the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="GridTheme"/> from the parent form.
+        /// Replaces the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="GridTheme"/> from the parent form.
         /// </summary>
         /// <returns></returns>
         public new ExtendedForm ParentForm
@@ -140,8 +141,6 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void SubscribeEvents()
         {
-            SetDoubleBuffering();
-
             this.Load += ExtendedForm_Load;
             this.Disposed += ExtendedForm_Disposed;
             this.FormClosing += ExtendedForm_FormClosing;
@@ -154,26 +153,10 @@ namespace AssetManager.UserInterface.CustomControls
             this.FormClosing -= ExtendedForm_FormClosing;
         }
 
-        public void AddChild(ExtendedForm child)
-        {
-            childForms.Add(child);
-            child.Disposed += Child_Disposed;
-            OnWindowCountChanged(new EventArgs());
-        }
-
-        public int ChildFormCount()
-        {
-            return GetChildFormCount(this);
-        }
-
-        public void CloseChildren()
-        {
-            while (childForms.Count > 0)
-            {
-                childForms[0].Dispose();
-            }
-        }
-
+        /// <summary>
+        /// Override and return true if the form is in a state that is ok to close. (ie. Not in the middle of editing.)
+        /// </summary>
+        /// <returns></returns>
         public virtual bool OkToClose()
         {
             if (!this.Modal && this.Owner != null)
@@ -184,24 +167,6 @@ namespace AssetManager.UserInterface.CustomControls
                 return false;
             }
             return true;
-        }
-
-        public bool OkToCloseChildren()
-        {
-            bool closeAllowed = true;
-            if (childForms.Count > 0)
-            {
-                foreach (var child in childForms)
-                {
-                    if (!child.OkToClose() || !child.OkToCloseChildren())
-                    {
-                        child.WindowState = FormWindowState.Normal;
-                        child.Activate();
-                        closeAllowed = false;
-                    }
-                }
-            }
-            return closeAllowed;
         }
 
         protected override CreateParams CreateParams
@@ -228,21 +193,9 @@ namespace AssetManager.UserInterface.CustomControls
             this.Refresh();
         }
 
-        public void RemoveChild(ExtendedForm child)
-        {
-            childForms.Remove(child);
-            child.Disposed -= Child_Disposed;
-            OnWindowCountChanged(new EventArgs());
-        }
-
         public void ForceWindowListRefresh()
         {
             OnRefreshWindowList(new EventArgs());
-        }
-
-        private void Child_Disposed(object sender, EventArgs e)
-        {
-            RemoveChild((ExtendedForm)sender);
         }
 
         private void ExtendedForm_Disposed(object sender, System.EventArgs e)
@@ -270,23 +223,6 @@ namespace AssetManager.UserInterface.CustomControls
             parentForm?.AddChild(this);
         }
 
-        /// <summary>
-        /// Recursively counts the number of child forms within the parent/child tree.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        private int GetChildFormCount(IWindowList parent)
-        {
-            int childCount = 0;
-
-            foreach (var child in parent.ChildForms)
-            {
-                childCount += GetChildFormCount(child) + 1;
-            }
-
-            return childCount;
-        }
-
         private void OnWindowCountChanged(EventArgs e)
         {
             ChildCountChanged?.Invoke(this, e);
@@ -304,6 +240,77 @@ namespace AssetManager.UserInterface.CustomControls
             Icon = parent.Icon;
             GridTheme = parent.GridTheme;
         }
+
+        #region Child Form Methods
+
+        public void AddChild(ExtendedForm child)
+        {
+            childForms.Add(child);
+            child.Disposed += Child_Disposed;
+            OnWindowCountChanged(new EventArgs());
+        }
+
+        public void RemoveChild(ExtendedForm child)
+        {
+            childForms.Remove(child);
+            child.Disposed -= Child_Disposed;
+            OnWindowCountChanged(new EventArgs());
+        }
+
+        public int ChildFormCount()
+        {
+            return GetChildFormCount(this);
+        }
+
+        public void CloseChildren()
+        {
+            while (childForms.Count > 0)
+            {
+                childForms[0].Dispose();
+            }
+        }
+
+        public bool OkToCloseChildren()
+        {
+            bool closeAllowed = true;
+            if (childForms.Count > 0)
+            {
+                foreach (var child in childForms)
+                {
+                    if (!child.OkToClose() || !child.OkToCloseChildren())
+                    {
+                        child.WindowState = FormWindowState.Normal;
+                        child.Activate();
+                        closeAllowed = false;
+                    }
+                }
+            }
+            return closeAllowed;
+        }
+
+        /// <summary>
+        /// Recursively counts the number of child forms within the parent/child tree.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        private int GetChildFormCount(IWindowList parent)
+        {
+            int childCount = 0;
+
+            foreach (var child in parent.ChildForms)
+            {
+                childCount += GetChildFormCount(child) + 1;
+            }
+
+            return childCount;
+        }
+
+        private void Child_Disposed(object sender, EventArgs e)
+        {
+            RemoveChild((ExtendedForm)sender);
+        }
+
+        #endregion Child Form Methods
 
         #endregion Methods
     }
