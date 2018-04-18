@@ -95,7 +95,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.iCloudTextBox = new System.Windows.Forms.TextBox();
             this.Label17 = new System.Windows.Forms.Label();
             this.RemoteTrackingPanel = new System.Windows.Forms.Panel();
-            this.remoteToolsControl = new AssetManager.UserInterface.CustomControls.RemoteToolsControl();
+            this.RemoteToolsControl = new AssetManager.UserInterface.CustomControls.RemoteToolsControl();
             this.ToolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.TrackingToolStrip = new System.Windows.Forms.ToolStrip();
             this.TrackingDropDown = new System.Windows.Forms.ToolStripDropDownButton();
@@ -1047,7 +1047,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // RemoteTrackingPanel
             // 
-            this.RemoteTrackingPanel.Controls.Add(this.remoteToolsControl);
+            this.RemoteTrackingPanel.Controls.Add(this.RemoteToolsControl);
             this.RemoteTrackingPanel.Controls.Add(this.TrackingBox);
             this.RemoteTrackingPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.RemoteTrackingPanel.Location = new System.Drawing.Point(0, 0);
@@ -1057,19 +1057,19 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // remoteToolsControl
             // 
-            this.remoteToolsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.remoteToolsControl.Device = null;
-            this.remoteToolsControl.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.remoteToolsControl.Location = new System.Drawing.Point(3, 7);
-            this.remoteToolsControl.MaxFailedUntilNotify = 5;
-            this.remoteToolsControl.Name = "remoteToolsControl";
-            this.remoteToolsControl.Size = new System.Drawing.Size(422, 103);
-            this.remoteToolsControl.TabIndex = 42;
-            this.remoteToolsControl.Visible = false;
-            this.remoteToolsControl.HostBackOnline += new System.EventHandler(this.remoteToolsControl_HostBackOnline);
-            this.remoteToolsControl.NewStatusPrompt += new AssetManager.UserInterface.CustomControls.RemoteToolsControl.UserPromptEventHandler(this.remoteToolsControl_NewStatusPrompt);
-            this.remoteToolsControl.VisibleChanging += new System.EventHandler<bool>(this.remoteToolsControl_VisibleChanging);
-            this.remoteToolsControl.HostOnlineStatus += new System.EventHandler<bool>(this.remoteToolsControl_HostOnlineStatus);
+            this.RemoteToolsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.RemoteToolsControl.Device = null;
+            this.RemoteToolsControl.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RemoteToolsControl.Location = new System.Drawing.Point(3, 7);
+            this.RemoteToolsControl.MaxFailedUntilNotify = 5;
+            this.RemoteToolsControl.Name = "remoteToolsControl";
+            this.RemoteToolsControl.Size = new System.Drawing.Size(422, 103);
+            this.RemoteToolsControl.TabIndex = 42;
+            this.RemoteToolsControl.Visible = false;
+            this.RemoteToolsControl.HostBackOnline += new System.EventHandler(this.remoteToolsControl_HostBackOnline);
+            this.RemoteToolsControl.NewStatusPrompt += new AssetManager.UserInterface.CustomControls.RemoteToolsControl.UserPromptEventHandler(this.remoteToolsControl_NewStatusPrompt);
+            this.RemoteToolsControl.VisibleChanging += new System.EventHandler<bool>(this.remoteToolsControl_VisibleChanging);
+            this.RemoteToolsControl.HostOnlineStatus += new System.EventHandler<bool>(this.remoteToolsControl_HostOnlineStatus);
             // 
             // ToolStripContainer1
             // 
@@ -1418,7 +1418,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal ToolStripButton RefreshToolButton;
         internal HotTrackSplitContainer InfoDataSplitter;
         internal Panel Panel3;
-        private RemoteToolsControl remoteToolsControl;
+        private RemoteToolsControl RemoteToolsControl;
         private Label PingHistLabel;
     }
 }

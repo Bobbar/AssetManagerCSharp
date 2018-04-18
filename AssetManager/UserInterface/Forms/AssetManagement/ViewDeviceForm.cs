@@ -144,7 +144,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             else
             {
                 ActiveDirectoryBox.Visible = false;
-                remoteToolsControl.Visible = false;
+                RemoteToolsControl.Visible = false;
                 currentViewDevice = new Device(currentViewDevice.Guid);
                 LoadCurrentDevice();
             }
@@ -452,11 +452,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ExpandSplitter()
         {
-            if (remoteToolsControl.Visible || TrackingBox.Visible)
+            if (RemoteToolsControl.Visible || TrackingBox.Visible)
             {
                 InfoDataSplitter.Panel2Collapsed = false;
             }
-            else if (!remoteToolsControl.Visible && !TrackingBox.Visible)
+            else if (!RemoteToolsControl.Visible && !TrackingBox.Visible)
             {
                 InfoDataSplitter.Panel2Collapsed = true;
             }
@@ -618,7 +618,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
                 UpdateAttachCountHandler(this, new EventArgs());
                 SetADInfo();
-                remoteToolsControl.Device = currentViewDevice;
+                RemoteToolsControl.Device = currentViewDevice;
             }
         }
 
