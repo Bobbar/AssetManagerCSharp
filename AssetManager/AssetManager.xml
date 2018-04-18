@@ -1016,7 +1016,7 @@
         </member>
         <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.ParentForm">
             <summary>
-            Overloads the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="P:AssetManager.UserInterface.CustomControls.ExtendedForm.GridTheme"/> from the parent form.
+            Replaces the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="P:AssetManager.UserInterface.CustomControls.ExtendedForm.GridTheme"/> from the parent form.
             </summary>
             <returns></returns>
         </member>
@@ -1029,6 +1029,12 @@
             <summary>
             Disables double buffering if the current environment is in the designer or a terminal session.
             </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.OkToClose">
+            <summary>
+            Override and return true if the form is in a state that is ok to close. (ie. Not in the middle of editing.)
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.RefreshData">
             <summary>
