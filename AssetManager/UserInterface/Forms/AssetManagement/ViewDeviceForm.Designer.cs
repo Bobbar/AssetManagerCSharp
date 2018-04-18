@@ -70,7 +70,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label11 = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.StatusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.AcceptCancelToolStrip = new AssetManager.UserInterface.CustomControls.OneClickToolStrip();
             this.AcceptToolButton = new System.Windows.Forms.ToolStripButton();
             this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -125,7 +124,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ((System.ComponentModel.ISupportInitialize)(this.TrackingGrid)).BeginInit();
             this.TrackingBox.SuspendLayout();
             this.Panel3.SuspendLayout();
-            this.StatusStrip1.SuspendLayout();
             this.AcceptCancelToolStrip.SuspendLayout();
             this.FieldsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.InfoDataSplitter)).BeginInit();
@@ -741,20 +739,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.StatusStrip1.AutoSize = false;
             this.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.StatusStrip1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.StatusLabel});
             this.StatusStrip1.Location = new System.Drawing.Point(0, 680);
             this.StatusStrip1.Name = "StatusStrip1";
             this.StatusStrip1.Size = new System.Drawing.Size(1291, 22);
             this.StatusStrip1.Stretch = false;
             this.StatusStrip1.TabIndex = 45;
             this.StatusStrip1.Text = "StatusStrip1";
-            // 
-            // StatusLabel
-            // 
-            this.StatusLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(0, 17);
             // 
             // AcceptCancelToolStrip
             // 
@@ -1304,8 +1294,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.TrackingBox.ResumeLayout(false);
             this.Panel3.ResumeLayout(false);
             this.Panel3.PerformLayout();
-            this.StatusStrip1.ResumeLayout(false);
-            this.StatusStrip1.PerformLayout();
             this.AcceptCancelToolStrip.ResumeLayout(false);
             this.AcceptCancelToolStrip.PerformLayout();
             this.FieldsPanel.ResumeLayout(false);
@@ -1428,7 +1416,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal Label Label19;
         internal TextBox ADOSTextBox;
         internal ToolStripButton RefreshToolButton;
-        internal ToolStripStatusLabel StatusLabel;
         internal HotTrackSplitContainer InfoDataSplitter;
         internal Panel Panel3;
         private RemoteToolsControl remoteToolsControl;

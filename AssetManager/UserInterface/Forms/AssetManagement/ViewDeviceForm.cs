@@ -196,7 +196,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 SecurityTools.CheckForAccess(SecurityGroups.ModifyDevice);
 
-                using (UpdateTypeForm updateTypePrompt = new UpdateTypeForm(this, true))
+                using (var updateTypePrompt = new UpdateTypeForm(this, true))
                 {
                     if (updateTypePrompt.ShowDialog(this) == DialogResult.OK)
                     {
@@ -262,14 +262,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private bool ConcurrencyCheck()
         {
-            using (var DeviceResults = GetDevicesTable(currentViewDevice.Guid))
+            using (var deviceResults = GetDevicesTable(currentViewDevice.Guid))
             {
-                using (var HistoricalResults = GetHistoricalTable(currentViewDevice.Guid))
+                using (var historicalResults = GetHistoricalTable(currentViewDevice.Guid))
                 {
-                    DeviceResults.TableName = DevicesCols.TableName;
-                    HistoricalResults.TableName = HistoricalDevicesCols.TableName;
-                    var DBHash = GetHash(DeviceResults, HistoricalResults);
-                    if (DBHash != currentHash)
+                    var dbHash = GetHash(deviceResults, historicalResults);
+                    if (dbHash != currentHash)
                     {
                         OtherFunctions.Message("This record appears to have been modified by someone else since the start of this modification.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Concurrency Error", this);
                         return false;
@@ -504,7 +502,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private DataTable GetDevicesTable(string deviceGuid)
         {
-            return DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGuid(deviceGuid));
+            var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDeviceByGuid(deviceGuid));
+            results.TableName = DevicesCols.TableName;
+            return results;
         }
 
         private string GetHash(DataTable deviceTable, DataTable historicalTable)
@@ -519,62 +519,62 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             return results;
         }
 
-        private DataTable GetInsertTable(string selectQuery, DeviceUpdateInfo UpdateInfo)
+        private DataTable GetInsertTable(string selectQuery, DeviceUpdateInfo updateInfo)
         {
             var tmpTable = controlParser.ReturnInsertTable(selectQuery);
-            var DBRow = tmpTable.Rows[0];
+            var row = tmpTable.Rows[0];
             //Add Add'l info
-            DBRow[HistoricalDevicesCols.ChangeType] = UpdateInfo.ChangeType;
-            DBRow[HistoricalDevicesCols.Notes] = UpdateInfo.Note;
-            DBRow[HistoricalDevicesCols.ActionUser] = NetworkInfo.LocalDomainUser;
-            DBRow[HistoricalDevicesCols.DeviceGuid] = currentViewDevice.Guid;
+            row[HistoricalDevicesCols.ChangeType] = updateInfo.ChangeType;
+            row[HistoricalDevicesCols.Notes] = updateInfo.Note;
+            row[HistoricalDevicesCols.ActionUser] = NetworkInfo.LocalDomainUser;
+            row[HistoricalDevicesCols.DeviceGuid] = currentViewDevice.Guid;
             return tmpTable;
         }
 
         private DataTable GetUpdateTable(string selectQuery)
         {
             var tmpTable = controlParser.ReturnUpdateTable(selectQuery);
-            var DBRow = tmpTable.Rows[0];
+            var row = tmpTable.Rows[0];
             //Add Add'l info
             if (MunisUser.Number != null && MunisUser.Number != string.Empty)
             {
-                DBRow[DevicesCols.CurrentUser] = MunisUser.Name;
-                DBRow[DevicesCols.MunisEmpNum] = MunisUser.Number;
+                row[DevicesCols.CurrentUser] = MunisUser.Name;
+                row[DevicesCols.MunisEmpNum] = MunisUser.Number;
             }
             else
             {
                 if (currentViewDevice.CurrentUser != CurrentUserTextBox.Text.Trim())
                 {
-                    DBRow[DevicesCols.CurrentUser] = CurrentUserTextBox.Text.Trim();
-                    DBRow[DevicesCols.MunisEmpNum] = DBNull.Value;
+                    row[DevicesCols.CurrentUser] = CurrentUserTextBox.Text.Trim();
+                    row[DevicesCols.MunisEmpNum] = DBNull.Value;
                 }
                 else
                 {
-                    DBRow[DevicesCols.CurrentUser] = currentViewDevice.CurrentUser;
-                    DBRow[DevicesCols.MunisEmpNum] = currentViewDevice.CurrentUserEmpNum;
+                    row[DevicesCols.CurrentUser] = currentViewDevice.CurrentUser;
+                    row[DevicesCols.MunisEmpNum] = currentViewDevice.CurrentUserEmpNum;
                 }
             }
-            DBRow[DevicesCols.SibiLinkGuid] = DataConsistency.CleanDBValue(currentViewDevice.SibiLink);
-            DBRow[DevicesCols.LastModUser] = NetworkInfo.LocalDomainUser;
-            DBRow[DevicesCols.LastModDate] = DateTime.Now;
+            row[DevicesCols.SibiLinkGuid] = DataConsistency.CleanDBValue(currentViewDevice.SibiLink);
+            row[DevicesCols.LastModUser] = NetworkInfo.LocalDomainUser;
+            row[DevicesCols.LastModDate] = DateTime.Now;
             return tmpTable;
         }
 
         private List<GridColumnAttrib> HistoricalGridColumns()
         {
-            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionDateTime, "Time Stamp"));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ChangeType, "Change Type", Attributes.DeviceAttributes.ChangeType, ColumnFormatType.AttributeDisplayMemberOnly));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionUser, "Action User"));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Notes, "Note Peek", ColumnFormatType.NotePreview));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.CurrentUser, "User"));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.AssetTag, "Asset ID"));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Serial, "Serial"));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Description, "Description"));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.Location, "Location", Attributes.DeviceAttributes.Locations, ColumnFormatType.AttributeDisplayMemberOnly));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.PurchaseDate, "Purchase Date"));
-            ColList.Add(new GridColumnAttrib(HistoricalDevicesCols.HistoryEntryGuid, "Guid"));
-            return ColList;
+            var columnList = new List<GridColumnAttrib>();
+            columnList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionDateTime, "Time Stamp"));
+            columnList.Add(new GridColumnAttrib(HistoricalDevicesCols.ChangeType, "Change Type", Attributes.DeviceAttributes.ChangeType, ColumnFormatType.AttributeDisplayMemberOnly));
+            columnList.Add(new GridColumnAttrib(HistoricalDevicesCols.ActionUser, "Action User"));
+            columnList.Add(new GridColumnAttrib(HistoricalDevicesCols.Notes, "Note Peek", ColumnFormatType.NotePreview));
+            columnList.Add(new GridColumnAttrib(HistoricalDevicesCols.CurrentUser, "User"));
+            columnList.Add(new GridColumnAttrib(HistoricalDevicesCols.AssetTag, "Asset ID"));
+            columnList.Add(new GridColumnAttrib(HistoricalDevicesCols.Serial, "Serial"));
+            columnList.Add(new GridColumnAttrib(HistoricalDevicesCols.Description, "Description"));
+            columnList.Add(new GridColumnAttrib(HistoricalDevicesCols.Location, "Location", Attributes.DeviceAttributes.Locations, ColumnFormatType.AttributeDisplayMemberOnly));
+            columnList.Add(new GridColumnAttrib(HistoricalDevicesCols.PurchaseDate, "Purchase Date"));
+            columnList.Add(new GridColumnAttrib(HistoricalDevicesCols.HistoryEntryGuid, "Guid"));
+            return columnList;
         }
 
         private void InitDBControls()
@@ -602,9 +602,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void LoadHistoryAndFields()
         {
-            using (var HistoricalResults = GetHistoricalTable(currentViewDevice.Guid))
+            using (var historicalResults = GetHistoricalTable(currentViewDevice.Guid))
             {
-                currentHash = GetHash(currentViewDevice.PopulatingTable, HistoricalResults);
+                currentHash = GetHash(currentViewDevice.PopulatingTable, historicalResults);
                 controlParser.FillDBFields(currentViewDevice.PopulatingTable);
                 MunisUser = new MunisEmployee(currentViewDevice.CurrentUser, currentViewDevice.CurrentUserEmpNum);
                 SetMunisEmpStatus();
@@ -612,7 +612,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 DataGridHistory.SuspendLayout();
                 DataGridHistory.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
                 DataGridHistory.ColumnHeadersHeight = 38;
-                DataGridHistory.Populate(HistoricalResults, HistoricalGridColumns());
+                DataGridHistory.Populate(historicalResults, HistoricalGridColumns());
                 DataGridHistory.FastAutoSizeColumns();
                 DataGridHistory.ResumeLayout();
 
@@ -624,12 +624,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void LoadTracking(string deviceGuid)
         {
-            using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTrackingByDevGuid(deviceGuid)))
+            using (var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTrackingByDevGuid(deviceGuid)))
             {
-                if (Results.Rows.Count > 0)
+                if (results.Rows.Count > 0)
                 {
-                    CollectCurrentTracking(Results);
-                    TrackingGrid.Populate(Results, TrackingGridColumns());
+                    CollectCurrentTracking(results);
+                    TrackingGrid.Populate(results, TrackingGridColumns());
                     TrackingGrid.Columns[TrackablesCols.CheckType].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                     TrackingGrid.Columns[TrackablesCols.CheckType].DefaultCellStyle.Font = new Font(TrackingGrid.Font, FontStyle.Bold);
                     DisableSorting(TrackingGrid);
@@ -645,7 +645,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void ModifyDevice()
         {
             SecurityTools.CheckForAccess(SecurityGroups.ModifyDevice);
-
+            this.RefreshData();
             SetEditMode(true);
         }
 
@@ -662,38 +662,38 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         [SuppressMessage("Microsoft.Design", "CA1806")]
-        private void NewTrackingView(string Guid)
+        private void NewTrackingView(string itemGuid)
         {
             Waiting();
-            new ViewTrackingForm(this, Guid, currentViewDevice);
+            new ViewTrackingForm(this, itemGuid, currentViewDevice);
             DoneWaiting();
         }
 
         [SuppressMessage("Microsoft.Design", "CA1806")]
-        private void OpenSibiLink(Device LinkDevice)
+        private void OpenSibiLink(Device device)
         {
             try
             {
                 SecurityTools.CheckForAccess(SecurityGroups.ViewSibi);
 
-                if (string.IsNullOrEmpty(LinkDevice.PO))
+                if (string.IsNullOrEmpty(device.PO))
                 {
                     OtherFunctions.Message("A valid PO Number is required.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Missing Info", this);
                     return;
                 }
                 else
                 {
-                    string SibiGuid = AssetManagerFunctions.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, LinkDevice.PO, SibiRequestCols.Guid);
+                    string sibiGuid = AssetManagerFunctions.GetSqlValue(SibiRequestCols.TableName, SibiRequestCols.PO, device.PO, SibiRequestCols.Guid);
 
-                    if (string.IsNullOrEmpty(SibiGuid))
+                    if (string.IsNullOrEmpty(sibiGuid))
                     {
                         OtherFunctions.Message("No Sibi request found with matching PO number.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Not Found", this);
                     }
                     else
                     {
-                        if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(SibiManageRequestForm), SibiGuid))
+                        if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(SibiManageRequestForm), sibiGuid))
                         {
-                            new SibiManageRequestForm(this, SibiGuid);
+                            new SibiManageRequestForm(this, sibiGuid);
                         }
                     }
                 }
@@ -795,7 +795,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             else
             {
-                // StatusLabel.Text = text
                 statusSlider.SlideText = text;
                 StatusStrip1.Update();
             }
@@ -855,15 +854,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             SetEditMode(false);
             int affectedRows = 0;
-            string SelectQry = Queries.SelectDeviceByGuid(currentViewDevice.Guid);
-            string InsertQry = Queries.SelectEmptyHistoricalTable;
+            string selectQuery = Queries.SelectDeviceByGuid(currentViewDevice.Guid);
+            string insertQuery = Queries.SelectEmptyHistoricalTable;
             using (var trans = DBFactory.GetDatabase().StartTransaction())
             using (var conn = trans.Connection)
             {
                 try
                 {
-                    affectedRows += DBFactory.GetDatabase().UpdateTable(SelectQry, GetUpdateTable(SelectQry), trans);
-                    affectedRows += DBFactory.GetDatabase().UpdateTable(InsertQry, GetInsertTable(InsertQry, UpdateInfo), trans);
+                    affectedRows += DBFactory.GetDatabase().UpdateTable(selectQuery, GetUpdateTable(selectQuery), trans);
+                    affectedRows += DBFactory.GetDatabase().UpdateTable(insertQuery, GetInsertTable(insertQuery, UpdateInfo), trans);
 
                     if (affectedRows == 2)
                     {
