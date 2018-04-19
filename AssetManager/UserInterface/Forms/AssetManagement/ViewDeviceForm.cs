@@ -1093,7 +1093,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void remoteToolsControl_HostBackOnline(object sender, EventArgs e)
         {
-            TaskBarNotify.FlashWindow(this.Handle, true, true, 0);
+            TaskBarNotify.FlashWindow(this.Handle, true, true, 10);
         }
 
         private void remoteToolsControl_VisibleChanging(object sender, bool e)
