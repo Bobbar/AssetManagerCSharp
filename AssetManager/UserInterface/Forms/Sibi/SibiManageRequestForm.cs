@@ -1521,7 +1521,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void RefreshMenuButton_Click(object sender, EventArgs e)
         {
-            if (!isNewRequest & TryCancelModify())
+            if (!isNewRequest && TryCancelModify())
             {
                 OpenRequest(currentRequest.Guid);
             }
