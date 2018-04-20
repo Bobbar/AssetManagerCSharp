@@ -47,6 +47,18 @@ namespace AssetManager.UserInterface.CustomControls
             TextColor = color;
         }
 
+        public MessageParameters()
+        {
+            Direction = SlideDirection.DefaultSlide;
+            SlideState = SlideState.Done;
+            SlideVelocity = 0;
+            Position = new PointF();
+            StartPosition = new PointF();
+            EndPosition = new PointF();
+            AnimationComplete = false;
+            TextColor = Color.Black;
+        }
+        
         #endregion Constructors
     }
 }

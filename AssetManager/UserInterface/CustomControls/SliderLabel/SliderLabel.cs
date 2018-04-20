@@ -40,7 +40,7 @@ namespace AssetManager.UserInterface.CustomControls
         private float slideAcceleration = 0.5F;
 
         private Queue<MessageParameters> messageQueue = new Queue<MessageParameters>();
-        private MessageParameters currentMessage;
+        private MessageParameters currentMessage = new MessageParameters();
         private CancellationTokenSource pauseCancel;
 
         private System.Timers.Timer slideTimer;
@@ -109,7 +109,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void OnNewMessageDisplayed(MessageParameters message)
         {
-            NewMessageDisplayed(this, new MessageEventArgs(message));
+            NewMessageDisplayed?.Invoke(this, new MessageEventArgs(message));
         }
 
 

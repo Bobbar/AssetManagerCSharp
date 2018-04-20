@@ -1153,15 +1153,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void TrackingGrid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
             string checkTypeValue = TrackingGrid.Rows[e.RowIndex].Cells[TrackablesCols.CheckType].Value.ToString();
-            DataGridViewCell CheckTypeCell = TrackingGrid.Rows[e.RowIndex].Cells[TrackablesCols.CheckType];
-            CheckTypeCell.Style.ForeColor = Color.Black;
+            var checkTypeCell = TrackingGrid.Rows[e.RowIndex].Cells[TrackablesCols.CheckType];
+            checkTypeCell.Style.ForeColor = Color.Black;
+
             if (checkTypeValue == CheckType.Checkin)
             {
-                CheckTypeCell.Style.BackColor = Colors.CheckIn;
+                checkTypeCell.Style.BackColor = Colors.CheckIn;
             }
             else if (checkTypeValue == CheckType.Checkout)
             {
-                CheckTypeCell.Style.BackColor = Colors.CheckOut;
+                checkTypeCell.Style.BackColor = Colors.CheckOut;
             }
         }
 
