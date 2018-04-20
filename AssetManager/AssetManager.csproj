@@ -346,10 +346,6 @@
     <Compile Include="UserInterface\Forms\AssetManagement\ViewDeviceForm.Designer.cs">
       <DependentUpon>ViewDeviceForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\AssetManagement\ViewDeviceForm.Events.cs">
-      <DependentUpon>ViewDeviceForm.cs</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="UserInterface\Forms\AssetManagement\ViewHistoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
