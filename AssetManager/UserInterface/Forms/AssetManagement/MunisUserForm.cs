@@ -5,24 +5,15 @@ using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
 using System;
-using System.Data;
 using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
     public partial class MunisUserForm : ExtendedForm
     {
-        public MunisEmployee EmployeeInfo
-        {
-            get
-            {
-                return SelectedEmpInfo;
-            }
-        }
+        private const int maxResults = 50;
 
-        private MunisEmployee SelectedEmpInfo = new MunisEmployee();
-
-        private const int intMaxResults = 50;
+        private MunisEmployee selectedEmpInfo = new MunisEmployee();
 
         public MunisUserForm(ExtendedForm parentForm) : base(parentForm)
         {
@@ -32,12 +23,20 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ShowDialog(parentForm);
         }
 
+        public MunisEmployee EmployeeInfo
+        {
+            get
+            {
+                return selectedEmpInfo;
+            }
+        }
+
         private async void EmpNameSearch(string name)
         {
             try
             {
                 string columns = "a_employee_number,a_name_last,a_name_first,a_org_primary,a_object_primary,a_location_primary,a_location_p_desc,a_location_p_short";
-                string query = "SELECT TOP " + intMaxResults + " " + columns + " FROM pr_employee_master";
+                string query = "SELECT TOP " + maxResults + " " + columns + " FROM pr_employee_master";
 
                 var searchParams = new QueryParamCollection();
                 searchParams.Add("a_name_last", name.ToUpper(), false, "OR");
@@ -45,9 +44,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
                 SetWorking(true);
 
-                MunisComms comms = new MunisComms();
+                var comms = new MunisComms();
                 using (var cmd = comms.GetSqlCommandFromParams(query, searchParams.Parameters))
-                using (DataTable results = await comms.ReturnSqlTableFromCmdAsync(cmd))
+                using (var results = await comms.ReturnSqlTableFromCmdAsync(cmd))
                 {
                     if (results.Rows.Count > 0)
                     {
@@ -67,9 +66,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void SetWorking(bool Working)
+        private void MunisResults_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            pbWorking.Visible = Working;
+            selectedEmpInfo.Name = MunisResults.CurrentRowStringValue("a_name_first") + " " + MunisResults.CurrentRowStringValue("a_name_last");
+            selectedEmpInfo.Number = MunisResults.CurrentRowStringValue("a_employee_number");
+            SelectedEmpLabel.Text = "Selected Emp: " + selectedEmpInfo.Name + " - " + selectedEmpInfo.Number;
+        }
+
+        private void MunisResults_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            SelectEmp();
         }
 
         private void MunisUser_Load(object sender, EventArgs e)
@@ -77,25 +83,34 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             MunisResults.DefaultCellStyle = StyleFunctions.DefaultGridStyles;
         }
 
-        private void MunisResults_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void MunisUserForm_Shown(object sender, EventArgs e)
         {
-            SelectedEmpInfo.Name = MunisResults.CurrentRowStringValue("a_name_first") + " " + MunisResults.CurrentRowStringValue("a_name_last");
-            SelectedEmpInfo.Number = MunisResults.CurrentRowStringValue("a_employee_number");
-            lblSelectedEmp.Text = "Selected Emp: " + SelectedEmpInfo.Name + " - " + SelectedEmpInfo.Number;
+            SearchNameTextBox.Focus();
         }
 
-        private void cmdSearch_Click(object sender, EventArgs e)
+        private void SearchButton_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-            EmpNameSearch(txtSearchName.Text.Trim());
-            this.Cursor = Cursors.Default;
+            StartSearch();
+        }
+
+        private void SearchNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                StartSearch();
+            }
+        }
+
+        private void SelectButton_Click(object sender, EventArgs e)
+        {
+            SelectEmp();
         }
 
         private void SelectEmp()
         {
-            if (!string.IsNullOrEmpty(SelectedEmpInfo.Name) && !string.IsNullOrEmpty(SelectedEmpInfo.Number))
+            if (!string.IsNullOrEmpty(selectedEmpInfo.Name) && !string.IsNullOrEmpty(selectedEmpInfo.Number))
             {
-                AssetManagerFunctions.AddNewEmp(SelectedEmpInfo);
+                AssetManagerFunctions.AddNewEmp(selectedEmpInfo);
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
@@ -106,29 +121,27 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void cmdAccept_Click(object sender, EventArgs e)
+        private void SetWorking(bool value)
         {
-            SelectEmp();
-        }
-
-        private void txtSearchName_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
+            if (value)
             {
                 this.Cursor = Cursors.WaitCursor;
-                EmpNameSearch(txtSearchName.Text.Trim());
+            }
+            else
+            {
                 this.Cursor = Cursors.Default;
             }
+
+            WorkSpinner.Visible = value;
         }
 
-        private void MunisResults_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void StartSearch()
         {
-            SelectEmp();
-        }
-
-        private void MunisUserForm_Shown(object sender, EventArgs e)
-        {
-            txtSearchName.Focus();
+            var searchText = SearchNameTextBox.Text.Trim();
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                EmpNameSearch(searchText);
+            }
         }
     }
 }
