@@ -14,7 +14,6 @@ namespace AssetManager.UserInterface.Forms.AdminTools
     {
         private AdvancedSearch advancedSearch = new AdvancedSearch();
 
-
         public AdvancedSearchForm(ExtendedForm parentForm) : base(parentForm)
         {
             InitializeComponent();
@@ -26,21 +25,25 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         {
             try
             {
-                foreach (var table in GetTables())
+                foreach (var tableName in GetTableNames())
                 {
-                    TreeNode parentNode = new TreeNode(table);
+                    var parentNode = new TreeNode(tableName);
+                    var childAllNode = new TreeNode("*All");
+
                     parentNode.Tag = false;
-                    TreeNode childAllNode = new TreeNode("*All");
                     childAllNode.Tag = true;
                     childAllNode.Checked = true;
+
                     parentNode.Nodes.Add(childAllNode);
-                    foreach (var col in advancedSearch.GetColumns(table))
+
+                    foreach (var col in advancedSearch.GetColumns(tableName))
                     {
-                        TreeNode childNode = new TreeNode(col);
+                        var childNode = new TreeNode(col);
                         childNode.Tag = false;
                         childNode.Checked = true;
                         parentNode.Nodes.Add(childNode);
                     }
+
                     TableTree.Nodes.Add(parentNode);
                 }
             }
@@ -50,40 +53,46 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             }
         }
 
-        private List<string> GetTables()
+        private List<string> GetTableNames()
         {
-            List<string> Tables = new List<string>();
-            var Qry = "SHOW TABLES IN " + ServerInfo.CurrentDataBase.ToString();
-            using (DataTable Results = DBFactory.GetDatabase().DataTableFromQueryString(Qry))
+            var tables = new List<string>();
+            var query = "SHOW TABLES IN " + ServerInfo.CurrentDataBase.ToString();
+
+            using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
             {
-                foreach (DataRow row in Results.Rows)
+                foreach (DataRow row in results.Rows)
                 {
-                    Tables.Add(row[Results.Columns[0].ColumnName].ToString());
+                    tables.Add(row[results.Columns[0].ColumnName].ToString());
                 }
             }
 
-            return Tables;
+            return tables;
         }
-
 
         private async void StartSearch()
         {
             try
             {
                 OtherFunctions.SetWaitCursor(true, ParentForm);
-                advancedSearch = new AdvancedSearch(SearchStringTextBox.Text.Trim(), GetSelectedTables()); // GetSelectedTables.ToArray, GetSelectedColumns.ToArray)
-                GridForm DisplayGrid = new GridForm(ParentForm, "Advanced Search Results");
 
-                List<DataTable> Tables = await Task.Run(() =>
-                {
-                    return advancedSearch.GetResults();
-                });
+                var searchString = SearchStringTextBox.Text.Trim();
+                var selectedTables = GetSelectedTables();
 
-                foreach (var table in Tables)
+                if (string.IsNullOrEmpty(searchString) || selectedTables.Count < 1) return;
+
+                advancedSearch = new AdvancedSearch(searchString, selectedTables);
+
+                List<DataTable> tables = await Task.Run(() =>
+                        {
+                            return advancedSearch.GetResults();
+                        });
+
+                var displayGrid = new GridForm(ParentForm, "Advanced Search Results");
+                foreach (var table in tables)
                 {
-                    DisplayGrid.AddGrid(table.TableName, table.TableName, table);
+                    displayGrid.AddGrid(table.TableName, table.TableName, table);
                 }
-                DisplayGrid.Show();
+                displayGrid.Show();
             }
             catch (Exception ex)
             {
@@ -97,7 +106,8 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 
         private List<TableInfo> GetSelectedTables()
         {
-            List<TableInfo> tables = new List<TableInfo>();
+            var tables = new List<TableInfo>();
+
             foreach (TreeNode node in TableTree.Nodes)
             {
                 if (node.Checked)
@@ -105,12 +115,14 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                     tables.Add(new TableInfo(node.Text, GetSelectedColumns(node)));
                 }
             }
+
             return tables;
         }
 
         private List<string> GetSelectedColumns(TreeNode TableNode)
         {
-            List<string> columns = new List<string>();
+            var columns = new List<string>();
+
             foreach (TreeNode childNode in TableNode.Nodes)
             {
                 if (childNode.Index > 0)
@@ -121,6 +133,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                     }
                 }
             }
+
             return columns;
         }
 
@@ -139,26 +152,25 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 
         private void TableTree_AfterCheck(object sender, TreeViewEventArgs e)
         {
-            if (e.Action != TreeViewAction.Unknown)
+            // Set all other nodes checked values to match the top "All" node.
+
+            if ((e.Action != TreeViewAction.Unknown) && (e.Node.Level > 0))
             {
-                if (e.Node.Level > 0)
+                if (e.Node.Index == 0)
                 {
-                    if (e.Node.Index == 0)
+                    foreach (TreeNode n in e.Node.Parent.Nodes)
                     {
-                        foreach (TreeNode n in e.Node.Parent.Nodes)
+                        if (n.Index > 0)
                         {
-                            if (n.Index > 0)
-                            {
-                                n.Checked = e.Node.Checked;
-                            }
+                            n.Checked = e.Node.Checked;
                         }
                     }
-                    else
+                }
+                else
+                {
+                    if (e.Node.Checked == false && e.Node.Parent.Nodes[0].Checked)
                     {
-                        if (e.Node.Checked == false && e.Node.Parent.Nodes[0].Checked)
-                        {
-                            e.Node.Parent.Nodes[0].Checked = false;
-                        }
+                        e.Node.Parent.Nodes[0].Checked = false;
                     }
                 }
             }
