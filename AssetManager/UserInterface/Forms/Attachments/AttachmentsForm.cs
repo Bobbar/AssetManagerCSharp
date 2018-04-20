@@ -120,13 +120,13 @@ namespace AssetManager.UserInterface.Forms
 
             if (SecurityTools.CanAccess(SecurityGroups.ManageAttachment))
             {
-                cmdUpload.Enabled = true;
-                cmdDelete.Enabled = true;
+                UploadButton.Enabled = true;
+                DeleteButton.Enabled = true;
             }
             else
             {
-                cmdUpload.Enabled = false;
-                cmdDelete.Enabled = false;
+                UploadButton.Enabled = false;
+                DeleteButton.Enabled = false;
             }
             this.Show();
         }
@@ -156,18 +156,18 @@ namespace AssetManager.UserInterface.Forms
 
         private void FillSibiInfo(SibiRequest request)
         {
-            ReqPO.Text = request.PO;
+            ReqPOTextBox.Text = request.PO;
             ReqNumberTextBox.Text = request.RequisitionNumber;
-            txtRequestNum.Text = request.RequestNumber;
-            txtDescription.Text = request.Description;
+            RequestNumTextBox.Text = request.RequestNumber;
+            DescriptionTextBox.Text = request.Description;
             this.Text += " - " + request.Description;
         }
 
         private void FillDeviceInfo(Device device)
         {
-            txtAssetTag.Text = device.AssetTag;
-            txtSerial.Text = device.Serial;
-            txtDeviceDescription.Text = device.Description;
+            AssetTagTextBox.Text = device.AssetTag;
+            SerialTextBox.Text = device.Serial;
+            DeviceDescTextBox.Text = device.Description;
             this.Text += " - " + device.CurrentUser;
         }
 
@@ -1035,19 +1035,19 @@ namespace AssetManager.UserInterface.Forms
                 {
                     ProgressBar1.Value = 0;
                     ProgressBar1.Visible = true;
-                    cmdCancel.Visible = true;
+                    CancelToolButton.Visible = true;
                     Spinner.Visible = true;
-                    ProgTimer.Enabled = true;
+                    ProgressTimer.Enabled = true;
                 }
                 else
                 {
                     progress = new ProgressCounter();
                     ProgressBar1.Value = 0;
                     ProgressBar1.Visible = false;
-                    cmdCancel.Visible = false;
+                    CancelToolButton.Visible = false;
                     Spinner.Visible = false;
-                    ProgTimer.Enabled = false;
-                    statMBPS.Text = null;
+                    ProgressTimer.Enabled = false;
+                    ThroughputLabel.Text = null;
                     SetStatusBarText("Idle...");
                     DoneWaiting();
                 }
@@ -1207,12 +1207,12 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void cmdDelete_Click(object sender, EventArgs e)
+        private void DeleteButton_Click(object sender, EventArgs e)
         {
             DeleteCurrentAttachment();
         }
 
-        private void cmdOpen_Click(object sender, EventArgs e)
+        private void OpenButton_Click(object sender, EventArgs e)
         {
             DownloadAndOpenAttachment();
         }
@@ -1227,7 +1227,7 @@ namespace AssetManager.UserInterface.Forms
             Clipboard.SetDataObject(this.AttachGrid.GetClipboardContent());
         }
 
-        private void DeleteAttachmentToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DeleteAttachmentToolItem_Click(object sender, EventArgs e)
         {
             DeleteCurrentAttachment();
         }
@@ -1237,12 +1237,12 @@ namespace AssetManager.UserInterface.Forms
             DownloadAndOpenAttachment();
         }
 
-        private void ProgTimer_Tick(object sender, EventArgs e)
+        private void ProgressTimer_Tick(object sender, EventArgs e)
         {
             progress.Tick();
             if (progress.BytesMoved > 0)
             {
-                statMBPS.Text = progress.Throughput.ToString("0.00") + " MB/s";
+                ThroughputLabel.Text = progress.Throughput.ToString("0.00") + " MB/s";
 
                 ProgressBar1.Value = progress.Percent;
                 if (progress.Percent > 1)
@@ -1253,7 +1253,7 @@ namespace AssetManager.UserInterface.Forms
             }
             else
             {
-                statMBPS.Text = string.Empty;
+                ThroughputLabel.Text = string.Empty;
             }
         }
 
@@ -1262,7 +1262,7 @@ namespace AssetManager.UserInterface.Forms
             BeginRenameAttachment();
         }
 
-        private void cmdCancel_Click(object sender, EventArgs e)
+        private void CancelToolButton_Click(object sender, EventArgs e)
         {
             CancelTransfers();
         }

@@ -18,7 +18,7 @@ namespace AssetManager.UserInterface.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AttachmentsForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.cmdUpload = new System.Windows.Forms.Button();
+            this.UploadButton = new System.Windows.Forms.Button();
             this.RightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.OpenTool = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveToMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -26,42 +26,42 @@ namespace AssetManager.UserInterface.Forms
             this.NewFolderMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RenameStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.DeleteAttachmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmdDelete = new System.Windows.Forms.Button();
-            this.cmdOpen = new System.Windows.Forms.Button();
+            this.DeleteAttachmentToolItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeleteButton = new System.Windows.Forms.Button();
+            this.OpenButton = new System.Windows.Forms.Button();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.Panel1 = new System.Windows.Forms.Panel();
             this.AttachContainer = new AssetManager.UserInterface.CustomControls.HotTrackSplitContainer();
             this.FolderListView = new System.Windows.Forms.ListView();
             this.ColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.folderImageList = new System.Windows.Forms.ImageList(this.components);
+            this.FolderImageList = new System.Windows.Forms.ImageList(this.components);
             this.AttachGrid = new System.Windows.Forms.DataGridView();
             this.AllowDragCheckBox = new System.Windows.Forms.CheckBox();
             this.SibiGroup = new System.Windows.Forms.GroupBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.ReqNumberTextBox = new System.Windows.Forms.TextBox();
             this.Label3 = new System.Windows.Forms.Label();
-            this.txtDescription = new System.Windows.Forms.TextBox();
+            this.DescriptionTextBox = new System.Windows.Forms.TextBox();
             this.Label2 = new System.Windows.Forms.Label();
-            this.txtRequestNum = new System.Windows.Forms.TextBox();
+            this.RequestNumTextBox = new System.Windows.Forms.TextBox();
             this.Label1 = new System.Windows.Forms.Label();
-            this.ReqPO = new System.Windows.Forms.TextBox();
+            this.ReqPOTextBox = new System.Windows.Forms.TextBox();
             this.StatusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.ToolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.Spinner = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statMBPS = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ThroughputLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ToolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.cmdCancel = new System.Windows.Forms.ToolStripDropDownButton();
-            this.ProgTimer = new System.Windows.Forms.Timer(this.components);
+            this.CancelToolButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.ProgressTimer = new System.Windows.Forms.Timer(this.components);
             this.DeviceGroup = new System.Windows.Forms.GroupBox();
             this.Label5 = new System.Windows.Forms.Label();
-            this.txtDeviceDescription = new System.Windows.Forms.TextBox();
+            this.DeviceDescTextBox = new System.Windows.Forms.TextBox();
             this.Label6 = new System.Windows.Forms.Label();
-            this.txtSerial = new System.Windows.Forms.TextBox();
+            this.SerialTextBox = new System.Windows.Forms.TextBox();
             this.Label7 = new System.Windows.Forms.Label();
-            this.txtAssetTag = new System.Windows.Forms.TextBox();
+            this.AssetTagTextBox = new System.Windows.Forms.TextBox();
             this.Panel2 = new System.Windows.Forms.Panel();
             this.RightClickMenu.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -77,16 +77,16 @@ namespace AssetManager.UserInterface.Forms
             this.Panel2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // cmdUpload
+            // UploadButton
             // 
-            this.cmdUpload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdUpload.Location = new System.Drawing.Point(29, 46);
-            this.cmdUpload.Name = "cmdUpload";
-            this.cmdUpload.Size = new System.Drawing.Size(92, 46);
-            this.cmdUpload.TabIndex = 0;
-            this.cmdUpload.Text = "Upload";
-            this.cmdUpload.UseVisualStyleBackColor = true;
-            this.cmdUpload.Click += new System.EventHandler(this.cmdUpload_Click);
+            this.UploadButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UploadButton.Location = new System.Drawing.Point(29, 46);
+            this.UploadButton.Name = "UploadButton";
+            this.UploadButton.Size = new System.Drawing.Size(92, 46);
+            this.UploadButton.TabIndex = 0;
+            this.UploadButton.Text = "Upload";
+            this.UploadButton.UseVisualStyleBackColor = true;
+            this.UploadButton.Click += new System.EventHandler(this.cmdUpload_Click);
             // 
             // RightClickMenu
             // 
@@ -97,7 +97,7 @@ namespace AssetManager.UserInterface.Forms
             this.NewFolderMenuItem,
             this.RenameStripMenuItem,
             this.ToolStripSeparator1,
-            this.DeleteAttachmentToolStripMenuItem});
+            this.DeleteAttachmentToolItem});
             this.RightClickMenu.Name = "RightClickMenu";
             this.RightClickMenu.Size = new System.Drawing.Size(178, 142);
             // 
@@ -141,36 +141,36 @@ namespace AssetManager.UserInterface.Forms
             this.ToolStripSeparator1.Name = "ToolStripSeparator1";
             this.ToolStripSeparator1.Size = new System.Drawing.Size(174, 6);
             // 
-            // DeleteAttachmentToolStripMenuItem
+            // DeleteAttachmentToolItem
             // 
-            this.DeleteAttachmentToolStripMenuItem.Image = global::AssetManager.Properties.Resources.DeleteRedIcon;
-            this.DeleteAttachmentToolStripMenuItem.Name = "DeleteAttachmentToolStripMenuItem";
-            this.DeleteAttachmentToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.DeleteAttachmentToolStripMenuItem.Text = "Delete Attachment";
-            this.DeleteAttachmentToolStripMenuItem.Click += new System.EventHandler(this.DeleteAttachmentToolStripMenuItem_Click);
+            this.DeleteAttachmentToolItem.Image = global::AssetManager.Properties.Resources.DeleteRedIcon;
+            this.DeleteAttachmentToolItem.Name = "DeleteAttachmentToolItem";
+            this.DeleteAttachmentToolItem.Size = new System.Drawing.Size(177, 22);
+            this.DeleteAttachmentToolItem.Text = "Delete Attachment";
+            this.DeleteAttachmentToolItem.Click += new System.EventHandler(this.DeleteAttachmentToolItem_Click);
             // 
-            // cmdDelete
+            // DeleteButton
             // 
-            this.cmdDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.cmdDelete.Location = new System.Drawing.Point(29, 160);
-            this.cmdDelete.Name = "cmdDelete";
-            this.cmdDelete.Size = new System.Drawing.Size(92, 25);
-            this.cmdDelete.TabIndex = 4;
-            this.cmdDelete.Text = "Delete";
-            this.cmdDelete.UseVisualStyleBackColor = true;
-            this.cmdDelete.Click += new System.EventHandler(this.cmdDelete_Click);
+            this.DeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DeleteButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DeleteButton.Location = new System.Drawing.Point(29, 160);
+            this.DeleteButton.Name = "DeleteButton";
+            this.DeleteButton.Size = new System.Drawing.Size(92, 25);
+            this.DeleteButton.TabIndex = 4;
+            this.DeleteButton.Text = "Delete";
+            this.DeleteButton.UseVisualStyleBackColor = true;
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
-            // cmdOpen
+            // OpenButton
             // 
-            this.cmdOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdOpen.Location = new System.Drawing.Point(29, 98);
-            this.cmdOpen.Name = "cmdOpen";
-            this.cmdOpen.Size = new System.Drawing.Size(92, 23);
-            this.cmdOpen.TabIndex = 5;
-            this.cmdOpen.Text = "Open";
-            this.cmdOpen.UseVisualStyleBackColor = true;
-            this.cmdOpen.Click += new System.EventHandler(this.cmdOpen_Click);
+            this.OpenButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OpenButton.Location = new System.Drawing.Point(29, 98);
+            this.OpenButton.Name = "OpenButton";
+            this.OpenButton.Size = new System.Drawing.Size(92, 23);
+            this.OpenButton.TabIndex = 5;
+            this.OpenButton.Text = "Open";
+            this.OpenButton.UseVisualStyleBackColor = true;
+            this.OpenButton.Click += new System.EventHandler(this.OpenButton_Click);
             // 
             // GroupBox1
             // 
@@ -180,9 +180,9 @@ namespace AssetManager.UserInterface.Forms
             this.GroupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.GroupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.GroupBox1.Controls.Add(this.Panel1);
-            this.GroupBox1.Controls.Add(this.cmdOpen);
-            this.GroupBox1.Controls.Add(this.cmdDelete);
-            this.GroupBox1.Controls.Add(this.cmdUpload);
+            this.GroupBox1.Controls.Add(this.OpenButton);
+            this.GroupBox1.Controls.Add(this.DeleteButton);
+            this.GroupBox1.Controls.Add(this.UploadButton);
             this.GroupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox1.Location = new System.Drawing.Point(12, 113);
             this.GroupBox1.Name = "GroupBox1";
@@ -240,7 +240,7 @@ namespace AssetManager.UserInterface.Forms
             this.FolderListView.MultiSelect = false;
             this.FolderListView.Name = "FolderListView";
             this.FolderListView.Size = new System.Drawing.Size(122, 386);
-            this.FolderListView.StateImageList = this.folderImageList;
+            this.FolderListView.StateImageList = this.FolderImageList;
             this.FolderListView.TabIndex = 0;
             this.FolderListView.UseCompatibleStateImageBehavior = false;
             this.FolderListView.View = System.Windows.Forms.View.Details;
@@ -255,11 +255,12 @@ namespace AssetManager.UserInterface.Forms
             this.ColumnHeader1.Text = "Folder";
             this.ColumnHeader1.Width = 115;
             // 
-            // folderImageList
+            // FolderImageList
             // 
-            this.folderImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("folderImageList.ImageStream")));
-            this.folderImageList.Images.SetKeyName(0, "icons8-Folder-48.png");
-            this.folderImageList.Images.SetKeyName(1, "icons8-Open-48.png");
+            this.FolderImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("FolderImageList.ImageStream")));
+            this.FolderImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.FolderImageList.Images.SetKeyName(0, "icons8-Folder-48.png");
+            this.FolderImageList.Images.SetKeyName(1, "icons8-Open-48.png");
             // 
             // AttachGrid
             // 
@@ -341,11 +342,11 @@ namespace AssetManager.UserInterface.Forms
             this.SibiGroup.Controls.Add(this.Label4);
             this.SibiGroup.Controls.Add(this.ReqNumberTextBox);
             this.SibiGroup.Controls.Add(this.Label3);
-            this.SibiGroup.Controls.Add(this.txtDescription);
+            this.SibiGroup.Controls.Add(this.DescriptionTextBox);
             this.SibiGroup.Controls.Add(this.Label2);
-            this.SibiGroup.Controls.Add(this.txtRequestNum);
+            this.SibiGroup.Controls.Add(this.RequestNumTextBox);
             this.SibiGroup.Controls.Add(this.Label1);
-            this.SibiGroup.Controls.Add(this.ReqPO);
+            this.SibiGroup.Controls.Add(this.ReqPOTextBox);
             this.SibiGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SibiGroup.Location = new System.Drawing.Point(0, 3);
             this.SibiGroup.Name = "SibiGroup";
@@ -383,14 +384,14 @@ namespace AssetManager.UserInterface.Forms
             this.Label3.TabIndex = 5;
             this.Label3.Text = "Description:";
             // 
-            // txtDescription
+            // DescriptionTextBox
             // 
-            this.txtDescription.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDescription.Location = new System.Drawing.Point(23, 49);
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.ReadOnly = true;
-            this.txtDescription.Size = new System.Drawing.Size(259, 25);
-            this.txtDescription.TabIndex = 4;
+            this.DescriptionTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DescriptionTextBox.Location = new System.Drawing.Point(23, 49);
+            this.DescriptionTextBox.Name = "DescriptionTextBox";
+            this.DescriptionTextBox.ReadOnly = true;
+            this.DescriptionTextBox.Size = new System.Drawing.Size(259, 25);
+            this.DescriptionTextBox.TabIndex = 4;
             // 
             // Label2
             // 
@@ -402,14 +403,14 @@ namespace AssetManager.UserInterface.Forms
             this.Label2.TabIndex = 3;
             this.Label2.Text = "Request #:";
             // 
-            // txtRequestNum
+            // RequestNumTextBox
             // 
-            this.txtRequestNum.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtRequestNum.Location = new System.Drawing.Point(320, 49);
-            this.txtRequestNum.Name = "txtRequestNum";
-            this.txtRequestNum.ReadOnly = true;
-            this.txtRequestNum.Size = new System.Drawing.Size(83, 25);
-            this.txtRequestNum.TabIndex = 2;
+            this.RequestNumTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RequestNumTextBox.Location = new System.Drawing.Point(320, 49);
+            this.RequestNumTextBox.Name = "RequestNumTextBox";
+            this.RequestNumTextBox.ReadOnly = true;
+            this.RequestNumTextBox.Size = new System.Drawing.Size(83, 25);
+            this.RequestNumTextBox.TabIndex = 2;
             // 
             // Label1
             // 
@@ -421,14 +422,14 @@ namespace AssetManager.UserInterface.Forms
             this.Label1.TabIndex = 1;
             this.Label1.Text = "PO #:";
             // 
-            // ReqPO
+            // ReqPOTextBox
             // 
-            this.ReqPO.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ReqPO.Location = new System.Drawing.Point(442, 49);
-            this.ReqPO.Name = "ReqPO";
-            this.ReqPO.ReadOnly = true;
-            this.ReqPO.Size = new System.Drawing.Size(120, 25);
-            this.ReqPO.TabIndex = 0;
+            this.ReqPOTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReqPOTextBox.Location = new System.Drawing.Point(442, 49);
+            this.ReqPOTextBox.Name = "ReqPOTextBox";
+            this.ReqPOTextBox.ReadOnly = true;
+            this.ReqPOTextBox.Size = new System.Drawing.Size(120, 25);
+            this.ReqPOTextBox.TabIndex = 0;
             // 
             // StatusStrip1
             // 
@@ -438,9 +439,9 @@ namespace AssetManager.UserInterface.Forms
             this.ProgressBar1,
             this.ToolStripStatusLabel2,
             this.Spinner,
-            this.statMBPS,
+            this.ThroughputLabel,
             this.ToolStripStatusLabel1,
-            this.cmdCancel});
+            this.CancelToolButton});
             this.StatusStrip1.Location = new System.Drawing.Point(0, 556);
             this.StatusStrip1.Name = "StatusStrip1";
             this.StatusStrip1.Size = new System.Drawing.Size(817, 22);
@@ -478,12 +479,12 @@ namespace AssetManager.UserInterface.Forms
             this.Spinner.Size = new System.Drawing.Size(16, 17);
             this.Spinner.Visible = false;
             // 
-            // statMBPS
+            // ThroughputLabel
             // 
-            this.statMBPS.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.statMBPS.Name = "statMBPS";
-            this.statMBPS.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.statMBPS.Size = new System.Drawing.Size(10, 17);
+            this.ThroughputLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ThroughputLabel.Name = "ThroughputLabel";
+            this.ThroughputLabel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.ThroughputLabel.Size = new System.Drawing.Size(10, 17);
             // 
             // ToolStripStatusLabel1
             // 
@@ -491,30 +492,30 @@ namespace AssetManager.UserInterface.Forms
             this.ToolStripStatusLabel1.Size = new System.Drawing.Size(696, 17);
             this.ToolStripStatusLabel1.Spring = true;
             // 
-            // cmdCancel
+            // CancelToolButton
             // 
-            this.cmdCancel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdCancel.Image = global::AssetManager.Properties.Resources.CloseCancelDeleteIcon;
-            this.cmdCancel.Name = "cmdCancel";
-            this.cmdCancel.ShowDropDownArrow = false;
-            this.cmdCancel.Size = new System.Drawing.Size(63, 20);
-            this.cmdCancel.Text = "Cancel";
-            this.cmdCancel.Visible = false;
-            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
+            this.CancelToolButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CancelToolButton.Image = global::AssetManager.Properties.Resources.CloseCancelDeleteIcon;
+            this.CancelToolButton.Name = "CancelToolButton";
+            this.CancelToolButton.ShowDropDownArrow = false;
+            this.CancelToolButton.Size = new System.Drawing.Size(63, 20);
+            this.CancelToolButton.Text = "Cancel";
+            this.CancelToolButton.Visible = false;
+            this.CancelToolButton.Click += new System.EventHandler(this.CancelToolButton_Click);
             // 
-            // ProgTimer
+            // ProgressTimer
             // 
-            this.ProgTimer.Tick += new System.EventHandler(this.ProgTimer_Tick);
+            this.ProgressTimer.Tick += new System.EventHandler(this.ProgressTimer_Tick);
             // 
             // DeviceGroup
             // 
             this.DeviceGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.DeviceGroup.Controls.Add(this.Label5);
-            this.DeviceGroup.Controls.Add(this.txtDeviceDescription);
+            this.DeviceGroup.Controls.Add(this.DeviceDescTextBox);
             this.DeviceGroup.Controls.Add(this.Label6);
-            this.DeviceGroup.Controls.Add(this.txtSerial);
+            this.DeviceGroup.Controls.Add(this.SerialTextBox);
             this.DeviceGroup.Controls.Add(this.Label7);
-            this.DeviceGroup.Controls.Add(this.txtAssetTag);
+            this.DeviceGroup.Controls.Add(this.AssetTagTextBox);
             this.DeviceGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DeviceGroup.Location = new System.Drawing.Point(817, 3);
             this.DeviceGroup.Name = "DeviceGroup";
@@ -533,14 +534,14 @@ namespace AssetManager.UserInterface.Forms
             this.Label5.TabIndex = 5;
             this.Label5.Text = "Description:";
             // 
-            // txtDeviceDescription
+            // DeviceDescTextBox
             // 
-            this.txtDeviceDescription.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDeviceDescription.Location = new System.Drawing.Point(334, 49);
-            this.txtDeviceDescription.Name = "txtDeviceDescription";
-            this.txtDeviceDescription.ReadOnly = true;
-            this.txtDeviceDescription.Size = new System.Drawing.Size(259, 25);
-            this.txtDeviceDescription.TabIndex = 4;
+            this.DeviceDescTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DeviceDescTextBox.Location = new System.Drawing.Point(334, 49);
+            this.DeviceDescTextBox.Name = "DeviceDescTextBox";
+            this.DeviceDescTextBox.ReadOnly = true;
+            this.DeviceDescTextBox.Size = new System.Drawing.Size(259, 25);
+            this.DeviceDescTextBox.TabIndex = 4;
             // 
             // Label6
             // 
@@ -552,14 +553,14 @@ namespace AssetManager.UserInterface.Forms
             this.Label6.TabIndex = 3;
             this.Label6.Text = "Serial:";
             // 
-            // txtSerial
+            // SerialTextBox
             // 
-            this.txtSerial.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSerial.Location = new System.Drawing.Point(178, 49);
-            this.txtSerial.Name = "txtSerial";
-            this.txtSerial.ReadOnly = true;
-            this.txtSerial.Size = new System.Drawing.Size(105, 25);
-            this.txtSerial.TabIndex = 2;
+            this.SerialTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SerialTextBox.Location = new System.Drawing.Point(178, 49);
+            this.SerialTextBox.Name = "SerialTextBox";
+            this.SerialTextBox.ReadOnly = true;
+            this.SerialTextBox.Size = new System.Drawing.Size(105, 25);
+            this.SerialTextBox.TabIndex = 2;
             // 
             // Label7
             // 
@@ -571,14 +572,14 @@ namespace AssetManager.UserInterface.Forms
             this.Label7.TabIndex = 1;
             this.Label7.Text = "Asset Tag:";
             // 
-            // txtAssetTag
+            // AssetTagTextBox
             // 
-            this.txtAssetTag.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAssetTag.Location = new System.Drawing.Point(33, 49);
-            this.txtAssetTag.Name = "txtAssetTag";
-            this.txtAssetTag.ReadOnly = true;
-            this.txtAssetTag.Size = new System.Drawing.Size(105, 25);
-            this.txtAssetTag.TabIndex = 0;
+            this.AssetTagTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AssetTagTextBox.Location = new System.Drawing.Point(33, 49);
+            this.AssetTagTextBox.Name = "AssetTagTextBox";
+            this.AssetTagTextBox.ReadOnly = true;
+            this.AssetTagTextBox.Size = new System.Drawing.Size(105, 25);
+            this.AssetTagTextBox.TabIndex = 0;
             // 
             // Panel2
             // 
@@ -628,42 +629,42 @@ namespace AssetManager.UserInterface.Forms
             this.PerformLayout();
 
         }
-        internal Button cmdUpload;
+        internal Button UploadButton;
         internal ContextMenuStrip RightClickMenu;
-        internal ToolStripMenuItem DeleteAttachmentToolStripMenuItem;
-        internal Button cmdDelete;
-        internal Button cmdOpen;
+        internal ToolStripMenuItem DeleteAttachmentToolItem;
+        internal Button DeleteButton;
+        internal Button OpenButton;
         internal GroupBox GroupBox1;
         internal GroupBox SibiGroup;
         internal Label Label3;
-        internal TextBox txtDescription;
+        internal TextBox DescriptionTextBox;
         internal Label Label2;
-        internal TextBox txtRequestNum;
+        internal TextBox RequestNumTextBox;
         internal Label Label1;
-        internal TextBox ReqPO;
+        internal TextBox ReqPOTextBox;
         internal StatusStrip StatusStrip1;
         internal ToolStripStatusLabel StatusLabel;
         internal ToolStripStatusLabel Spinner;
         internal ToolStripMenuItem OpenTool;
         internal ToolStripSeparator ToolStripSeparator1;
         internal ToolStripProgressBar ProgressBar1;
-        internal Timer ProgTimer;
+        internal Timer ProgressTimer;
         internal ToolStripStatusLabel ToolStripStatusLabel2;
-        internal ToolStripStatusLabel statMBPS;
+        internal ToolStripStatusLabel ThroughputLabel;
         internal DataGridView AttachGrid;
         internal ToolStripMenuItem CopyTextTool;
         internal Panel Panel1;
         internal ToolStripStatusLabel ToolStripStatusLabel1;
-        internal ToolStripDropDownButton cmdCancel;
+        internal ToolStripDropDownButton CancelToolButton;
         internal ToolStripMenuItem RenameStripMenuItem;
         internal CheckBox AllowDragCheckBox;
         internal GroupBox DeviceGroup;
         internal Label Label5;
-        internal TextBox txtDeviceDescription;
+        internal TextBox DeviceDescTextBox;
         internal Label Label6;
-        internal TextBox txtSerial;
+        internal TextBox SerialTextBox;
         internal Label Label7;
-        internal TextBox txtAssetTag;
+        internal TextBox AssetTagTextBox;
         internal Panel Panel2;
         internal ToolStripMenuItem SaveToMenuItem;
         internal Label Label4;
@@ -671,7 +672,7 @@ namespace AssetManager.UserInterface.Forms
         internal HotTrackSplitContainer AttachContainer;
         internal ListView FolderListView;
         internal ColumnHeader ColumnHeader1;
-        internal ImageList folderImageList;
+        internal ImageList FolderImageList;
         internal ToolStripMenuItem NewFolderMenuItem;
 
     }
