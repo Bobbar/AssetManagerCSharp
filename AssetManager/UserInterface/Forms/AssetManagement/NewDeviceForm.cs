@@ -324,7 +324,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ReplaceYearTextBox.SetDBInfo(DevicesBaseCols.ReplacementYear, false);
             LocationComboBox.SetDBInfo(DevicesBaseCols.Location, Attributes.DeviceAttributes.Locations, true);
             CurrentUserTextBox.SetDBInfo(DevicesBaseCols.CurrentUser, true);
-            // txtNotes.SetDBInfo(historical_dev.Notes, False)
+
             OSTypeComboBox.SetDBInfo(DevicesBaseCols.OSVersion, Attributes.DeviceAttributes.OSType, true);
             PhoneNumTextBox.SetDBInfo(DevicesBaseCols.PhoneNumber, false);
             EquipTypeComboBox.SetDBInfo(DevicesBaseCols.EQType, Attributes.DeviceAttributes.EquipType, true);

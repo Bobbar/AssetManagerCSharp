@@ -245,13 +245,13 @@ namespace AssetManager.Data.Functions
                 using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
                 {
                     newDialog.Text = "Asset Search";
-                    newDialog.AddTextBox("txtAsset", "Asset:");
-                    newDialog.AddTextBox("txtSerial", "Serial:");
+                    newDialog.AddTextBox("AssetNumber", "Asset:");
+                    newDialog.AddTextBox("SerialNumber", "Serial:");
                     newDialog.ShowDialog();
                     if (newDialog.DialogResult == DialogResult.OK)
                     {
-                        device.AssetTag = newDialog.GetControlValue("txtAsset").ToString().Trim();
-                        device.Serial = newDialog.GetControlValue("txtSerial").ToString().Trim();
+                        device.AssetTag = newDialog.GetControlValue("AssetNumber").ToString().Trim();
+                        device.Serial = newDialog.GetControlValue("SerialNumber").ToString().Trim();
                         LoadMunisInfoByDevice(device, parentForm);
                     }
                 }
@@ -269,11 +269,11 @@ namespace AssetManager.Data.Functions
                 using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
                 {
                     newDialog.Text = "Employee Search";
-                    newDialog.AddTextBox("txtName", "First or Last Name:");
+                    newDialog.AddTextBox("Name", "First or Last Name:");
                     newDialog.ShowDialog();
                     if (newDialog.DialogResult == DialogResult.OK)
                     {
-                        var strName = newDialog.GetControlValue("txtName").ToString();
+                        var strName = newDialog.GetControlValue("Name").ToString();
                         if (strName.Trim() != "")
                         {
                             NewMunisEmployeeSearch(strName.Trim(), parentForm);
@@ -295,11 +295,11 @@ namespace AssetManager.Data.Functions
                 using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
                 {
                     newDialog.Text = "PO Search";
-                    newDialog.AddTextBox("txtPO", "PO #:");
+                    newDialog.AddTextBox("PO", "PO #:");
                     newDialog.ShowDialog();
                     if (newDialog.DialogResult == DialogResult.OK)
                     {
-                        po = newDialog.GetControlValue("txtPO").ToString();
+                        po = newDialog.GetControlValue("PO").ToString();
                         NewMunisPOSearch(po, parentForm);
                     }
                 }
@@ -319,13 +319,13 @@ namespace AssetManager.Data.Functions
                 using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
                 {
                     newDialog.Text = "Req Search";
-                    newDialog.AddTextBox("txtReqNum", "Requisition #:");
-                    newDialog.AddTextBox("txtFY", "FY:");
+                    newDialog.AddTextBox("ReqNum", "Requisition #:");
+                    newDialog.AddTextBox("FY", "FY:");
                     newDialog.ShowDialog();
                     if (newDialog.DialogResult == DialogResult.OK)
                     {
-                        reqNumber = newDialog.GetControlValue("txtReqNum").ToString();
-                        fy = newDialog.GetControlValue("txtFY").ToString();
+                        reqNumber = newDialog.GetControlValue("ReqNum").ToString();
+                        fy = newDialog.GetControlValue("FY").ToString();
                         if (DataConsistency.IsValidYear(fy))
                         {
                             OtherFunctions.SetWaitCursor(true, parentForm);
@@ -358,16 +358,16 @@ namespace AssetManager.Data.Functions
                     string obj = "";
                     string fy = "";
                     newDialog.Text = "Org/Object Code Search";
-                    newDialog.AddTextBox("txtOrg", "Org Code:");
-                    newDialog.AddTextBox("txtObj", "Object Code:");
-                    newDialog.AddTextBox("txtFY", "Fiscal Year:");
-                    newDialog.SetControlValue("txtFY", DateTime.Now.Year);
+                    newDialog.AddTextBox("Org", "Org Code:");
+                    newDialog.AddTextBox("Obj", "Object Code:");
+                    newDialog.AddTextBox("FY", "Fiscal Year:");
+                    newDialog.SetControlValue("FY", DateTime.Now.Year);
                     newDialog.ShowDialog();
                     if (newDialog.DialogResult == DialogResult.OK)
                     {
-                        org = newDialog.GetControlValue("txtOrg").ToString();
-                        obj = newDialog.GetControlValue("txtObj").ToString();
-                        fy = newDialog.GetControlValue("txtFY").ToString();
+                        org = newDialog.GetControlValue("Org").ToString();
+                        obj = newDialog.GetControlValue("Obj").ToString();
+                        fy = newDialog.GetControlValue("FY").ToString();
                         if (org.Trim() != "" && DataConsistency.IsValidYear(fy))
                         {
                             NewOrgObjView(org, obj, fy, parentForm);

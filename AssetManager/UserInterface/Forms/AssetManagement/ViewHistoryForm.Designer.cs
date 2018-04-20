@@ -1,5 +1,4 @@
-using System.Windows.Forms;
-namespace AssetManager.UserInterface.Forms.AssetManagement
+using System.Windows.Forms;namespace AssetManager.UserInterface.Forms.AssetManagement
 {
 
     partial class ViewHistoryForm
@@ -18,42 +17,42 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label20 = new System.Windows.Forms.Label();
             this.iCloudTextBox = new System.Windows.Forms.TextBox();
             this.Label19 = new System.Windows.Forms.Label();
-            this.txtHostname = new System.Windows.Forms.TextBox();
+            this.HostnameTextBox = new System.Windows.Forms.TextBox();
             this.Label18 = new System.Windows.Forms.Label();
-            this.txtPhoneNumber = new System.Windows.Forms.TextBox();
+            this.PhoneNumberTextBox = new System.Windows.Forms.TextBox();
             this.chkTrackable = new System.Windows.Forms.CheckBox();
             this.Label17 = new System.Windows.Forms.Label();
-            this.txtEntryGuid = new System.Windows.Forms.TextBox();
+            this.EntryGuidTextBox = new System.Windows.Forms.TextBox();
             this.Label16 = new System.Windows.Forms.Label();
-            this.txtStatus = new System.Windows.Forms.TextBox();
+            this.StatusTextBox = new System.Windows.Forms.TextBox();
             this.Label14 = new System.Windows.Forms.Label();
-            this.txtActionUser = new System.Windows.Forms.TextBox();
+            this.ActionUserTextBox = new System.Windows.Forms.TextBox();
             this.Label13 = new System.Windows.Forms.Label();
-            this.txtEntryTime = new System.Windows.Forms.TextBox();
+            this.EntryTimeTextBox = new System.Windows.Forms.TextBox();
             this.Label12 = new System.Windows.Forms.Label();
-            this.txtGuid = new System.Windows.Forms.TextBox();
+            this.GuidTextBox = new System.Windows.Forms.TextBox();
             this.Label11 = new System.Windows.Forms.Label();
-            this.txtEQType = new System.Windows.Forms.TextBox();
+            this.EQTypeTextBox = new System.Windows.Forms.TextBox();
             this.Label10 = new System.Windows.Forms.Label();
-            this.txtOSVersion = new System.Windows.Forms.TextBox();
+            this.OSVersionTextBox = new System.Windows.Forms.TextBox();
             this.Label9 = new System.Windows.Forms.Label();
-            this.txtPONumber = new System.Windows.Forms.TextBox();
+            this.PONumberTextBox = new System.Windows.Forms.TextBox();
             this.Label8 = new System.Windows.Forms.Label();
-            this.txtReplaceYear = new System.Windows.Forms.TextBox();
+            this.ReplaceYearTextBox = new System.Windows.Forms.TextBox();
             this.Label7 = new System.Windows.Forms.Label();
-            this.txtPurchaseDate = new System.Windows.Forms.TextBox();
+            this.PurchaseDateTextBox = new System.Windows.Forms.TextBox();
             this.Label6 = new System.Windows.Forms.Label();
-            this.txtLocation = new System.Windows.Forms.TextBox();
+            this.LocationTextBox = new System.Windows.Forms.TextBox();
             this.Label5 = new System.Windows.Forms.Label();
-            this.txtDescription = new System.Windows.Forms.TextBox();
+            this.DescriptionTextBox = new System.Windows.Forms.TextBox();
             this.Label4 = new System.Windows.Forms.Label();
-            this.txtSerial = new System.Windows.Forms.TextBox();
+            this.SerialTextBox = new System.Windows.Forms.TextBox();
             this.Label3 = new System.Windows.Forms.Label();
-            this.txtAssetTag = new System.Windows.Forms.TextBox();
+            this.AssetTagTextBox = new System.Windows.Forms.TextBox();
             this.Label2 = new System.Windows.Forms.Label();
-            this.txtCurrentUser = new System.Windows.Forms.TextBox();
+            this.CurrentUserTextBox = new System.Windows.Forms.TextBox();
             this.Label1 = new System.Windows.Forms.Label();
-            this.txtChangeType = new System.Windows.Forms.TextBox();
+            this.ChangeTypeTextBox = new System.Windows.Forms.TextBox();
             this.GroupBox1.SuspendLayout();
             this.GroupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -68,42 +67,42 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.GroupBox1.Controls.Add(this.Label20);
             this.GroupBox1.Controls.Add(this.iCloudTextBox);
             this.GroupBox1.Controls.Add(this.Label19);
-            this.GroupBox1.Controls.Add(this.txtHostname);
+            this.GroupBox1.Controls.Add(this.HostnameTextBox);
             this.GroupBox1.Controls.Add(this.Label18);
-            this.GroupBox1.Controls.Add(this.txtPhoneNumber);
+            this.GroupBox1.Controls.Add(this.PhoneNumberTextBox);
             this.GroupBox1.Controls.Add(this.chkTrackable);
             this.GroupBox1.Controls.Add(this.Label17);
-            this.GroupBox1.Controls.Add(this.txtEntryGuid);
+            this.GroupBox1.Controls.Add(this.EntryGuidTextBox);
             this.GroupBox1.Controls.Add(this.Label16);
-            this.GroupBox1.Controls.Add(this.txtStatus);
+            this.GroupBox1.Controls.Add(this.StatusTextBox);
             this.GroupBox1.Controls.Add(this.Label14);
-            this.GroupBox1.Controls.Add(this.txtActionUser);
+            this.GroupBox1.Controls.Add(this.ActionUserTextBox);
             this.GroupBox1.Controls.Add(this.Label13);
-            this.GroupBox1.Controls.Add(this.txtEntryTime);
+            this.GroupBox1.Controls.Add(this.EntryTimeTextBox);
             this.GroupBox1.Controls.Add(this.Label12);
-            this.GroupBox1.Controls.Add(this.txtGuid);
+            this.GroupBox1.Controls.Add(this.GuidTextBox);
             this.GroupBox1.Controls.Add(this.Label11);
-            this.GroupBox1.Controls.Add(this.txtEQType);
+            this.GroupBox1.Controls.Add(this.EQTypeTextBox);
             this.GroupBox1.Controls.Add(this.Label10);
-            this.GroupBox1.Controls.Add(this.txtOSVersion);
+            this.GroupBox1.Controls.Add(this.OSVersionTextBox);
             this.GroupBox1.Controls.Add(this.Label9);
-            this.GroupBox1.Controls.Add(this.txtPONumber);
+            this.GroupBox1.Controls.Add(this.PONumberTextBox);
             this.GroupBox1.Controls.Add(this.Label8);
-            this.GroupBox1.Controls.Add(this.txtReplaceYear);
+            this.GroupBox1.Controls.Add(this.ReplaceYearTextBox);
             this.GroupBox1.Controls.Add(this.Label7);
-            this.GroupBox1.Controls.Add(this.txtPurchaseDate);
+            this.GroupBox1.Controls.Add(this.PurchaseDateTextBox);
             this.GroupBox1.Controls.Add(this.Label6);
-            this.GroupBox1.Controls.Add(this.txtLocation);
+            this.GroupBox1.Controls.Add(this.LocationTextBox);
             this.GroupBox1.Controls.Add(this.Label5);
-            this.GroupBox1.Controls.Add(this.txtDescription);
+            this.GroupBox1.Controls.Add(this.DescriptionTextBox);
             this.GroupBox1.Controls.Add(this.Label4);
-            this.GroupBox1.Controls.Add(this.txtSerial);
+            this.GroupBox1.Controls.Add(this.SerialTextBox);
             this.GroupBox1.Controls.Add(this.Label3);
-            this.GroupBox1.Controls.Add(this.txtAssetTag);
+            this.GroupBox1.Controls.Add(this.AssetTagTextBox);
             this.GroupBox1.Controls.Add(this.Label2);
-            this.GroupBox1.Controls.Add(this.txtCurrentUser);
+            this.GroupBox1.Controls.Add(this.CurrentUserTextBox);
             this.GroupBox1.Controls.Add(this.Label1);
-            this.GroupBox1.Controls.Add(this.txtChangeType);
+            this.GroupBox1.Controls.Add(this.ChangeTypeTextBox);
             this.GroupBox1.Location = new System.Drawing.Point(13, 14);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(807, 407);
@@ -168,16 +167,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label19.TabIndex = 39;
             this.Label19.Text = "Hostname:";
             // 
-            // txtHostname
+            // HostnameTextBox
             // 
-            this.txtHostname.BackColor = System.Drawing.SystemColors.Window;
-            this.txtHostname.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtHostname.Location = new System.Drawing.Point(17, 181);
-            this.txtHostname.Name = "txtHostname";
-            this.txtHostname.ReadOnly = true;
-            this.txtHostname.Size = new System.Drawing.Size(155, 23);
-            this.txtHostname.TabIndex = 38;
-            this.txtHostname.TabStop = false;
+            this.HostnameTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.HostnameTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HostnameTextBox.Location = new System.Drawing.Point(17, 181);
+            this.HostnameTextBox.Name = "HostnameTextBox";
+            this.HostnameTextBox.ReadOnly = true;
+            this.HostnameTextBox.Size = new System.Drawing.Size(155, 23);
+            this.HostnameTextBox.TabIndex = 38;
+            this.HostnameTextBox.TabStop = false;
             // 
             // Label18
             // 
@@ -189,16 +188,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label18.TabIndex = 37;
             this.Label18.Text = "Phone:";
             // 
-            // txtPhoneNumber
+            // PhoneNumberTextBox
             // 
-            this.txtPhoneNumber.BackColor = System.Drawing.SystemColors.Window;
-            this.txtPhoneNumber.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPhoneNumber.Location = new System.Drawing.Point(17, 138);
-            this.txtPhoneNumber.Name = "txtPhoneNumber";
-            this.txtPhoneNumber.ReadOnly = true;
-            this.txtPhoneNumber.Size = new System.Drawing.Size(155, 23);
-            this.txtPhoneNumber.TabIndex = 36;
-            this.txtPhoneNumber.TabStop = false;
+            this.PhoneNumberTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.PhoneNumberTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PhoneNumberTextBox.Location = new System.Drawing.Point(17, 138);
+            this.PhoneNumberTextBox.Name = "PhoneNumberTextBox";
+            this.PhoneNumberTextBox.ReadOnly = true;
+            this.PhoneNumberTextBox.Size = new System.Drawing.Size(155, 23);
+            this.PhoneNumberTextBox.TabIndex = 36;
+            this.PhoneNumberTextBox.TabStop = false;
             // 
             // chkTrackable
             // 
@@ -223,16 +222,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label17.TabIndex = 34;
             this.Label17.Text = "Entry Guid";
             // 
-            // txtEntryGuid
+            // EntryGuidTextBox
             // 
-            this.txtEntryGuid.BackColor = System.Drawing.SystemColors.Window;
-            this.txtEntryGuid.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEntryGuid.Location = new System.Drawing.Point(563, 94);
-            this.txtEntryGuid.Name = "txtEntryGuid";
-            this.txtEntryGuid.ReadOnly = true;
-            this.txtEntryGuid.Size = new System.Drawing.Size(228, 23);
-            this.txtEntryGuid.TabIndex = 33;
-            this.txtEntryGuid.TabStop = false;
+            this.EntryGuidTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.EntryGuidTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EntryGuidTextBox.Location = new System.Drawing.Point(563, 94);
+            this.EntryGuidTextBox.Name = "EntryGuidTextBox";
+            this.EntryGuidTextBox.ReadOnly = true;
+            this.EntryGuidTextBox.Size = new System.Drawing.Size(228, 23);
+            this.EntryGuidTextBox.TabIndex = 33;
+            this.EntryGuidTextBox.TabStop = false;
             // 
             // Label16
             // 
@@ -244,16 +243,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label16.TabIndex = 32;
             this.Label16.Text = "Status";
             // 
-            // txtStatus
+            // StatusTextBox
             // 
-            this.txtStatus.BackColor = System.Drawing.SystemColors.Window;
-            this.txtStatus.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtStatus.Location = new System.Drawing.Point(563, 138);
-            this.txtStatus.Name = "txtStatus";
-            this.txtStatus.ReadOnly = true;
-            this.txtStatus.Size = new System.Drawing.Size(108, 23);
-            this.txtStatus.TabIndex = 31;
-            this.txtStatus.TabStop = false;
+            this.StatusTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.StatusTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusTextBox.Location = new System.Drawing.Point(563, 138);
+            this.StatusTextBox.Name = "StatusTextBox";
+            this.StatusTextBox.ReadOnly = true;
+            this.StatusTextBox.Size = new System.Drawing.Size(108, 23);
+            this.StatusTextBox.TabIndex = 31;
+            this.StatusTextBox.TabStop = false;
             // 
             // Label14
             // 
@@ -265,16 +264,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label14.TabIndex = 27;
             this.Label14.Text = "Action User";
             // 
-            // txtActionUser
+            // ActionUserTextBox
             // 
-            this.txtActionUser.BackColor = System.Drawing.SystemColors.Window;
-            this.txtActionUser.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtActionUser.Location = new System.Drawing.Point(17, 94);
-            this.txtActionUser.Name = "txtActionUser";
-            this.txtActionUser.ReadOnly = true;
-            this.txtActionUser.Size = new System.Drawing.Size(155, 23);
-            this.txtActionUser.TabIndex = 26;
-            this.txtActionUser.TabStop = false;
+            this.ActionUserTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.ActionUserTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ActionUserTextBox.Location = new System.Drawing.Point(17, 94);
+            this.ActionUserTextBox.Name = "ActionUserTextBox";
+            this.ActionUserTextBox.ReadOnly = true;
+            this.ActionUserTextBox.Size = new System.Drawing.Size(155, 23);
+            this.ActionUserTextBox.TabIndex = 26;
+            this.ActionUserTextBox.TabStop = false;
             // 
             // Label13
             // 
@@ -286,16 +285,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label13.TabIndex = 25;
             this.Label13.Text = "Time Stamp";
             // 
-            // txtEntryTime
+            // EntryTimeTextBox
             // 
-            this.txtEntryTime.BackColor = System.Drawing.SystemColors.Window;
-            this.txtEntryTime.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEntryTime.Location = new System.Drawing.Point(17, 47);
-            this.txtEntryTime.Name = "txtEntryTime";
-            this.txtEntryTime.ReadOnly = true;
-            this.txtEntryTime.Size = new System.Drawing.Size(155, 23);
-            this.txtEntryTime.TabIndex = 24;
-            this.txtEntryTime.TabStop = false;
+            this.EntryTimeTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.EntryTimeTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EntryTimeTextBox.Location = new System.Drawing.Point(17, 47);
+            this.EntryTimeTextBox.Name = "EntryTimeTextBox";
+            this.EntryTimeTextBox.ReadOnly = true;
+            this.EntryTimeTextBox.Size = new System.Drawing.Size(155, 23);
+            this.EntryTimeTextBox.TabIndex = 24;
+            this.EntryTimeTextBox.TabStop = false;
             // 
             // Label12
             // 
@@ -307,16 +306,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label12.TabIndex = 23;
             this.Label12.Text = "Device Guid";
             // 
-            // txtGuid
+            // GuidTextBox
             // 
-            this.txtGuid.BackColor = System.Drawing.SystemColors.Window;
-            this.txtGuid.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtGuid.Location = new System.Drawing.Point(563, 47);
-            this.txtGuid.Name = "txtGuid";
-            this.txtGuid.ReadOnly = true;
-            this.txtGuid.Size = new System.Drawing.Size(228, 23);
-            this.txtGuid.TabIndex = 22;
-            this.txtGuid.TabStop = false;
+            this.GuidTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.GuidTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GuidTextBox.Location = new System.Drawing.Point(563, 47);
+            this.GuidTextBox.Name = "GuidTextBox";
+            this.GuidTextBox.ReadOnly = true;
+            this.GuidTextBox.Size = new System.Drawing.Size(228, 23);
+            this.GuidTextBox.TabIndex = 22;
+            this.GuidTextBox.TabStop = false;
             // 
             // Label11
             // 
@@ -328,16 +327,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label11.TabIndex = 21;
             this.Label11.Text = "EQ Type";
             // 
-            // txtEQType
+            // EQTypeTextBox
             // 
-            this.txtEQType.BackColor = System.Drawing.SystemColors.Window;
-            this.txtEQType.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEQType.Location = new System.Drawing.Point(441, 181);
-            this.txtEQType.Name = "txtEQType";
-            this.txtEQType.ReadOnly = true;
-            this.txtEQType.Size = new System.Drawing.Size(108, 23);
-            this.txtEQType.TabIndex = 20;
-            this.txtEQType.TabStop = false;
+            this.EQTypeTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.EQTypeTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EQTypeTextBox.Location = new System.Drawing.Point(441, 181);
+            this.EQTypeTextBox.Name = "EQTypeTextBox";
+            this.EQTypeTextBox.ReadOnly = true;
+            this.EQTypeTextBox.Size = new System.Drawing.Size(108, 23);
+            this.EQTypeTextBox.TabIndex = 20;
+            this.EQTypeTextBox.TabStop = false;
             // 
             // Label10
             // 
@@ -349,16 +348,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label10.TabIndex = 19;
             this.Label10.Text = "OS Version";
             // 
-            // txtOSVersion
+            // OSVersionTextBox
             // 
-            this.txtOSVersion.BackColor = System.Drawing.SystemColors.Window;
-            this.txtOSVersion.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOSVersion.Location = new System.Drawing.Point(441, 138);
-            this.txtOSVersion.Name = "txtOSVersion";
-            this.txtOSVersion.ReadOnly = true;
-            this.txtOSVersion.Size = new System.Drawing.Size(108, 23);
-            this.txtOSVersion.TabIndex = 18;
-            this.txtOSVersion.TabStop = false;
+            this.OSVersionTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.OSVersionTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OSVersionTextBox.Location = new System.Drawing.Point(441, 138);
+            this.OSVersionTextBox.Name = "OSVersionTextBox";
+            this.OSVersionTextBox.ReadOnly = true;
+            this.OSVersionTextBox.Size = new System.Drawing.Size(108, 23);
+            this.OSVersionTextBox.TabIndex = 18;
+            this.OSVersionTextBox.TabStop = false;
             // 
             // Label9
             // 
@@ -370,16 +369,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label9.TabIndex = 17;
             this.Label9.Text = "PO Number";
             // 
-            // txtPONumber
+            // PONumberTextBox
             // 
-            this.txtPONumber.BackColor = System.Drawing.SystemColors.Window;
-            this.txtPONumber.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPONumber.Location = new System.Drawing.Point(441, 94);
-            this.txtPONumber.Name = "txtPONumber";
-            this.txtPONumber.ReadOnly = true;
-            this.txtPONumber.Size = new System.Drawing.Size(108, 23);
-            this.txtPONumber.TabIndex = 16;
-            this.txtPONumber.TabStop = false;
+            this.PONumberTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.PONumberTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PONumberTextBox.Location = new System.Drawing.Point(441, 94);
+            this.PONumberTextBox.Name = "PONumberTextBox";
+            this.PONumberTextBox.ReadOnly = true;
+            this.PONumberTextBox.Size = new System.Drawing.Size(108, 23);
+            this.PONumberTextBox.TabIndex = 16;
+            this.PONumberTextBox.TabStop = false;
             // 
             // Label8
             // 
@@ -391,16 +390,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label8.TabIndex = 15;
             this.Label8.Text = "Replacement Year";
             // 
-            // txtReplaceYear
+            // ReplaceYearTextBox
             // 
-            this.txtReplaceYear.BackColor = System.Drawing.SystemColors.Window;
-            this.txtReplaceYear.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtReplaceYear.Location = new System.Drawing.Point(320, 181);
-            this.txtReplaceYear.Name = "txtReplaceYear";
-            this.txtReplaceYear.ReadOnly = true;
-            this.txtReplaceYear.Size = new System.Drawing.Size(108, 23);
-            this.txtReplaceYear.TabIndex = 14;
-            this.txtReplaceYear.TabStop = false;
+            this.ReplaceYearTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.ReplaceYearTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReplaceYearTextBox.Location = new System.Drawing.Point(320, 181);
+            this.ReplaceYearTextBox.Name = "ReplaceYearTextBox";
+            this.ReplaceYearTextBox.ReadOnly = true;
+            this.ReplaceYearTextBox.Size = new System.Drawing.Size(108, 23);
+            this.ReplaceYearTextBox.TabIndex = 14;
+            this.ReplaceYearTextBox.TabStop = false;
             // 
             // Label7
             // 
@@ -412,16 +411,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label7.TabIndex = 13;
             this.Label7.Text = "Purchase Date";
             // 
-            // txtPurchaseDate
+            // PurchaseDateTextBox
             // 
-            this.txtPurchaseDate.BackColor = System.Drawing.SystemColors.Window;
-            this.txtPurchaseDate.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPurchaseDate.Location = new System.Drawing.Point(320, 138);
-            this.txtPurchaseDate.Name = "txtPurchaseDate";
-            this.txtPurchaseDate.ReadOnly = true;
-            this.txtPurchaseDate.Size = new System.Drawing.Size(108, 23);
-            this.txtPurchaseDate.TabIndex = 12;
-            this.txtPurchaseDate.TabStop = false;
+            this.PurchaseDateTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.PurchaseDateTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PurchaseDateTextBox.Location = new System.Drawing.Point(320, 138);
+            this.PurchaseDateTextBox.Name = "PurchaseDateTextBox";
+            this.PurchaseDateTextBox.ReadOnly = true;
+            this.PurchaseDateTextBox.Size = new System.Drawing.Size(108, 23);
+            this.PurchaseDateTextBox.TabIndex = 12;
+            this.PurchaseDateTextBox.TabStop = false;
             // 
             // Label6
             // 
@@ -433,16 +432,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label6.TabIndex = 11;
             this.Label6.Text = "Location";
             // 
-            // txtLocation
+            // LocationTextBox
             // 
-            this.txtLocation.BackColor = System.Drawing.SystemColors.Window;
-            this.txtLocation.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLocation.Location = new System.Drawing.Point(320, 94);
-            this.txtLocation.Name = "txtLocation";
-            this.txtLocation.ReadOnly = true;
-            this.txtLocation.Size = new System.Drawing.Size(108, 23);
-            this.txtLocation.TabIndex = 10;
-            this.txtLocation.TabStop = false;
+            this.LocationTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.LocationTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LocationTextBox.Location = new System.Drawing.Point(320, 94);
+            this.LocationTextBox.Name = "LocationTextBox";
+            this.LocationTextBox.ReadOnly = true;
+            this.LocationTextBox.Size = new System.Drawing.Size(108, 23);
+            this.LocationTextBox.TabIndex = 10;
+            this.LocationTextBox.TabStop = false;
             // 
             // Label5
             // 
@@ -454,16 +453,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label5.TabIndex = 9;
             this.Label5.Text = "Description";
             // 
-            // txtDescription
+            // DescriptionTextBox
             // 
-            this.txtDescription.BackColor = System.Drawing.SystemColors.Window;
-            this.txtDescription.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDescription.Location = new System.Drawing.Point(320, 47);
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.ReadOnly = true;
-            this.txtDescription.Size = new System.Drawing.Size(229, 23);
-            this.txtDescription.TabIndex = 8;
-            this.txtDescription.TabStop = false;
+            this.DescriptionTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.DescriptionTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DescriptionTextBox.Location = new System.Drawing.Point(320, 47);
+            this.DescriptionTextBox.Name = "DescriptionTextBox";
+            this.DescriptionTextBox.ReadOnly = true;
+            this.DescriptionTextBox.Size = new System.Drawing.Size(229, 23);
+            this.DescriptionTextBox.TabIndex = 8;
+            this.DescriptionTextBox.TabStop = false;
             // 
             // Label4
             // 
@@ -475,16 +474,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label4.TabIndex = 7;
             this.Label4.Text = "Serial";
             // 
-            // txtSerial
+            // SerialTextBox
             // 
-            this.txtSerial.BackColor = System.Drawing.SystemColors.Window;
-            this.txtSerial.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSerial.Location = new System.Drawing.Point(194, 181);
-            this.txtSerial.Name = "txtSerial";
-            this.txtSerial.ReadOnly = true;
-            this.txtSerial.Size = new System.Drawing.Size(108, 23);
-            this.txtSerial.TabIndex = 6;
-            this.txtSerial.TabStop = false;
+            this.SerialTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.SerialTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SerialTextBox.Location = new System.Drawing.Point(194, 181);
+            this.SerialTextBox.Name = "SerialTextBox";
+            this.SerialTextBox.ReadOnly = true;
+            this.SerialTextBox.Size = new System.Drawing.Size(108, 23);
+            this.SerialTextBox.TabIndex = 6;
+            this.SerialTextBox.TabStop = false;
             // 
             // Label3
             // 
@@ -496,16 +495,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label3.TabIndex = 5;
             this.Label3.Text = "Asset Tag";
             // 
-            // txtAssetTag
+            // AssetTagTextBox
             // 
-            this.txtAssetTag.BackColor = System.Drawing.SystemColors.Window;
-            this.txtAssetTag.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAssetTag.Location = new System.Drawing.Point(194, 138);
-            this.txtAssetTag.Name = "txtAssetTag";
-            this.txtAssetTag.ReadOnly = true;
-            this.txtAssetTag.Size = new System.Drawing.Size(108, 23);
-            this.txtAssetTag.TabIndex = 4;
-            this.txtAssetTag.TabStop = false;
+            this.AssetTagTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.AssetTagTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AssetTagTextBox.Location = new System.Drawing.Point(194, 138);
+            this.AssetTagTextBox.Name = "AssetTagTextBox";
+            this.AssetTagTextBox.ReadOnly = true;
+            this.AssetTagTextBox.Size = new System.Drawing.Size(108, 23);
+            this.AssetTagTextBox.TabIndex = 4;
+            this.AssetTagTextBox.TabStop = false;
             // 
             // Label2
             // 
@@ -517,16 +516,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label2.TabIndex = 3;
             this.Label2.Text = "User";
             // 
-            // txtCurrentUser
+            // CurrentUserTextBox
             // 
-            this.txtCurrentUser.BackColor = System.Drawing.SystemColors.Window;
-            this.txtCurrentUser.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCurrentUser.Location = new System.Drawing.Point(192, 94);
-            this.txtCurrentUser.Name = "txtCurrentUser";
-            this.txtCurrentUser.ReadOnly = true;
-            this.txtCurrentUser.Size = new System.Drawing.Size(108, 23);
-            this.txtCurrentUser.TabIndex = 2;
-            this.txtCurrentUser.TabStop = false;
+            this.CurrentUserTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.CurrentUserTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CurrentUserTextBox.Location = new System.Drawing.Point(192, 94);
+            this.CurrentUserTextBox.Name = "CurrentUserTextBox";
+            this.CurrentUserTextBox.ReadOnly = true;
+            this.CurrentUserTextBox.Size = new System.Drawing.Size(108, 23);
+            this.CurrentUserTextBox.TabIndex = 2;
+            this.CurrentUserTextBox.TabStop = false;
             // 
             // Label1
             // 
@@ -538,16 +537,16 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label1.TabIndex = 1;
             this.Label1.Text = "Change Type";
             // 
-            // txtChangeType
+            // ChangeTypeTextBox
             // 
-            this.txtChangeType.BackColor = System.Drawing.SystemColors.Window;
-            this.txtChangeType.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtChangeType.Location = new System.Drawing.Point(192, 47);
-            this.txtChangeType.Name = "txtChangeType";
-            this.txtChangeType.ReadOnly = true;
-            this.txtChangeType.Size = new System.Drawing.Size(110, 23);
-            this.txtChangeType.TabIndex = 0;
-            this.txtChangeType.TabStop = false;
+            this.ChangeTypeTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.ChangeTypeTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ChangeTypeTextBox.Location = new System.Drawing.Point(192, 47);
+            this.ChangeTypeTextBox.Name = "ChangeTypeTextBox";
+            this.ChangeTypeTextBox.ReadOnly = true;
+            this.ChangeTypeTextBox.Size = new System.Drawing.Size(110, 23);
+            this.ChangeTypeTextBox.TabIndex = 0;
+            this.ChangeTypeTextBox.TabStop = false;
             // 
             // ViewHistoryForm
             // 
@@ -569,42 +568,42 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
         internal GroupBox GroupBox1;
         internal Label Label2;
-        internal TextBox txtCurrentUser;
+        internal TextBox CurrentUserTextBox;
         internal Label Label1;
-        internal TextBox txtChangeType;
+        internal TextBox ChangeTypeTextBox;
         internal Label Label3;
-        internal TextBox txtAssetTag;
+        internal TextBox AssetTagTextBox;
         internal Label Label12;
-        internal TextBox txtGuid;
+        internal TextBox GuidTextBox;
         internal Label Label11;
-        internal TextBox txtEQType;
+        internal TextBox EQTypeTextBox;
         internal Label Label10;
-        internal TextBox txtOSVersion;
+        internal TextBox OSVersionTextBox;
         internal Label Label9;
-        internal TextBox txtPONumber;
+        internal TextBox PONumberTextBox;
         internal Label Label8;
-        internal TextBox txtReplaceYear;
+        internal TextBox ReplaceYearTextBox;
         internal Label Label7;
-        internal TextBox txtPurchaseDate;
+        internal TextBox PurchaseDateTextBox;
         internal Label Label6;
-        internal TextBox txtLocation;
+        internal TextBox LocationTextBox;
         internal Label Label5;
-        internal TextBox txtDescription;
+        internal TextBox DescriptionTextBox;
         internal Label Label4;
-        internal TextBox txtSerial;
+        internal TextBox SerialTextBox;
         internal Label Label13;
-        internal TextBox txtEntryTime;
+        internal TextBox EntryTimeTextBox;
         internal Label Label14;
-        internal TextBox txtActionUser;
+        internal TextBox ActionUserTextBox;
         internal Label Label16;
-        internal TextBox txtStatus;
+        internal TextBox StatusTextBox;
         internal Label Label17;
-        internal TextBox txtEntryGuid;
+        internal TextBox EntryGuidTextBox;
         internal CheckBox chkTrackable;
         internal Label Label18;
-        internal TextBox txtPhoneNumber;
+        internal TextBox PhoneNumberTextBox;
         internal Label Label19;
-        internal TextBox txtHostname;
+        internal TextBox HostnameTextBox;
         internal Label Label20;
         internal TextBox iCloudTextBox;
         internal GroupBox GroupBox2;

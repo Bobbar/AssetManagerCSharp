@@ -30,26 +30,26 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         //TODO: Iterate through properties and dynamically generate controls at runtime.
         private void InitDBControls()
         {
-            txtEntryTime.SetDBInfo(HistoricalDevicesCols.ActionDateTime, ParseType.DisplayOnly, false);
-            txtActionUser.SetDBInfo(HistoricalDevicesCols.ActionUser, ParseType.DisplayOnly, false);
-            txtChangeType.SetDBInfo(HistoricalDevicesCols.ChangeType, Attributes.DeviceAttributes.ChangeType, ParseType.DisplayOnly, false);
-            txtDescription.SetDBInfo(HistoricalDevicesCols.Description, ParseType.DisplayOnly, false);
-            txtGuid.SetDBInfo(HistoricalDevicesCols.DeviceGuid, ParseType.DisplayOnly, false);
-            txtCurrentUser.SetDBInfo(HistoricalDevicesCols.CurrentUser, ParseType.DisplayOnly, false);
-            txtLocation.SetDBInfo(HistoricalDevicesCols.Location, Attributes.DeviceAttributes.Locations, ParseType.DisplayOnly, false);
-            txtPONumber.SetDBInfo(HistoricalDevicesCols.PO, ParseType.DisplayOnly, false);
-            txtAssetTag.SetDBInfo(HistoricalDevicesCols.AssetTag, ParseType.DisplayOnly, false);
-            txtPurchaseDate.SetDBInfo(HistoricalDevicesCols.PurchaseDate, ParseType.DisplayOnly, false);
-            txtOSVersion.SetDBInfo(HistoricalDevicesCols.OSVersion, Attributes.DeviceAttributes.OSType, ParseType.DisplayOnly, false);
-            txtSerial.SetDBInfo(HistoricalDevicesCols.Serial, ParseType.DisplayOnly, false);
-            txtReplaceYear.SetDBInfo(HistoricalDevicesCols.ReplacementYear, ParseType.DisplayOnly, false);
-            txtEQType.SetDBInfo(HistoricalDevicesCols.EQType, Attributes.DeviceAttributes.EquipType, ParseType.DisplayOnly, false);
+            EntryTimeTextBox.SetDBInfo(HistoricalDevicesCols.ActionDateTime, ParseType.DisplayOnly, false);
+            ActionUserTextBox.SetDBInfo(HistoricalDevicesCols.ActionUser, ParseType.DisplayOnly, false);
+            ChangeTypeTextBox.SetDBInfo(HistoricalDevicesCols.ChangeType, Attributes.DeviceAttributes.ChangeType, ParseType.DisplayOnly, false);
+            DescriptionTextBox.SetDBInfo(HistoricalDevicesCols.Description, ParseType.DisplayOnly, false);
+            GuidTextBox.SetDBInfo(HistoricalDevicesCols.DeviceGuid, ParseType.DisplayOnly, false);
+            CurrentUserTextBox.SetDBInfo(HistoricalDevicesCols.CurrentUser, ParseType.DisplayOnly, false);
+            LocationTextBox.SetDBInfo(HistoricalDevicesCols.Location, Attributes.DeviceAttributes.Locations, ParseType.DisplayOnly, false);
+            PONumberTextBox.SetDBInfo(HistoricalDevicesCols.PO, ParseType.DisplayOnly, false);
+            AssetTagTextBox.SetDBInfo(HistoricalDevicesCols.AssetTag, ParseType.DisplayOnly, false);
+            PurchaseDateTextBox.SetDBInfo(HistoricalDevicesCols.PurchaseDate, ParseType.DisplayOnly, false);
+            OSVersionTextBox.SetDBInfo(HistoricalDevicesCols.OSVersion, Attributes.DeviceAttributes.OSType, ParseType.DisplayOnly, false);
+            SerialTextBox.SetDBInfo(HistoricalDevicesCols.Serial, ParseType.DisplayOnly, false);
+            ReplaceYearTextBox.SetDBInfo(HistoricalDevicesCols.ReplacementYear, ParseType.DisplayOnly, false);
+            EQTypeTextBox.SetDBInfo(HistoricalDevicesCols.EQType, Attributes.DeviceAttributes.EquipType, ParseType.DisplayOnly, false);
             NotesTextBox.SetDBInfo(HistoricalDevicesCols.Notes, ParseType.DisplayOnly, false);
-            txtStatus.SetDBInfo(HistoricalDevicesCols.Status, Attributes.DeviceAttributes.StatusType, ParseType.DisplayOnly, false);
-            txtEntryGuid.SetDBInfo(HistoricalDevicesCols.HistoryEntryGuid, ParseType.DisplayOnly, false);
+            StatusTextBox.SetDBInfo(HistoricalDevicesCols.Status, Attributes.DeviceAttributes.StatusType, ParseType.DisplayOnly, false);
+            EntryGuidTextBox.SetDBInfo(HistoricalDevicesCols.HistoryEntryGuid, ParseType.DisplayOnly, false);
             chkTrackable.SetDBInfo(HistoricalDevicesCols.Trackable, ParseType.DisplayOnly, false);
-            txtPhoneNumber.SetDBInfo(HistoricalDevicesCols.PhoneNumber, ParseType.DisplayOnly, false);
-            txtHostname.SetDBInfo(HistoricalDevicesCols.HostName, ParseType.DisplayOnly, false);
+            PhoneNumberTextBox.SetDBInfo(HistoricalDevicesCols.PhoneNumber, ParseType.DisplayOnly, false);
+            HostnameTextBox.SetDBInfo(HistoricalDevicesCols.HostName, ParseType.DisplayOnly, false);
             iCloudTextBox.SetDBInfo(HistoricalDevicesCols.iCloudAccount, ParseType.DisplayOnly, false);
         }
 
@@ -64,7 +64,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             OtherFunctions.SetWaitCursor(true, this);
             try
             {
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGuid)))
+                using (var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGuid)))
                 {
                     HighlightChangedFields(results);
                     FillControls(results);
@@ -89,18 +89,20 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         /// <returns></returns>
         private List<Control> GetChangedFields(DataTable currentData)
         {
-            List<Control> changedControls = new List<Control>();
-            System.DateTime currentTimeStamp = (System.DateTime)currentData.Rows[0][HistoricalDevicesCols.ActionDateTime];
-            //Query for all rows with a timestamp older than the current historical entry.
-            using (DataTable olderData = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevHistoricalEntriesOlderThan(deviceGuid, currentTimeStamp)))
+            var changedControls = new List<Control>();
+            var currentTimeStamp = (System.DateTime)currentData.Rows[0][HistoricalDevicesCols.ActionDateTime];
+           
+            // Query for all rows with a timestamp older than the current historical entry.
+            using (var olderData = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectDevHistoricalEntriesOlderThan(deviceGuid, currentTimeStamp)))
             {
                 if (olderData.Rows.Count > 0)
                 {
-                    //Declare the current and previous DataRows.
+                    // Declare the current and previous DataRows.
                     DataRow previousRow = olderData.Rows[0];
                     DataRow currentRow = currentData.Rows[0];
-                    List<string> changedColumns = new List<string>();
-                    //Iterate through the CurrentRow item array and compare them to the PreviousRow items.
+                    var changedColumns = new List<string>();
+
+                    // Iterate through the current row item array and compare them to the previous row items.
                     for (int i = 0; i <= currentRow.ItemArray.Length - 1; i++)
                     {
                         if (previousRow[i].ToString() != currentRow[i].ToString())
@@ -109,12 +111,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                             changedColumns.Add(previousRow.Table.Columns[i].ColumnName);
                         }
                     }
-                    //Get a list of all the controls with DBControlInfo tags.
-                    var ControlList = controlParser.GetDBControls(this);
-                    //Get a list of all the controls whose data columns match the ChangedColumns.
+
+                    // Get a list of all the controls with DBControlInfo tags.
+                    var controlList = controlParser.GetDBControls(this);
+
+                    // Get a list of all the controls whose data columns match the ChangedColumns.
                     foreach (string col in changedColumns)
                     {
-                        changedControls.Add(ControlList.Find(c => ((DBControlInfo)c.Tag).ColumnName == col));
+                        changedControls.Add(controlList.Find(c => ((DBControlInfo)c.Tag).ColumnName == col));
                     }
                 }
             }
@@ -123,11 +127,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void HighlightChangedFields(DataTable currentData)
         {
-            //Iterate through the list of changed fields and set the background color to highlight them.
-            foreach (Control ctl in GetChangedFields(currentData))
+            // Iterate through the list of changed fields and set the background color to highlight them.
+            foreach (var ctl in GetChangedFields(currentData))
             {
                 ctl.BackColor = Colors.CheckIn;
             }
+
             NotesTextBox.BackColor = Color.White;
         }
 

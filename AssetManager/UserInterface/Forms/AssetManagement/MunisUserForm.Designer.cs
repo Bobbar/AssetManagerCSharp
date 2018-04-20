@@ -106,7 +106,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.SelectButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.SelectButton.Location = new System.Drawing.Point(287, 310);
-            this.SelectButton.Name = "AcceptButton";
+            this.SelectButton.Name = "SelectButton";
             this.SelectButton.Size = new System.Drawing.Size(92, 29);
             this.SelectButton.TabIndex = 43;
             this.SelectButton.Text = "Select";
@@ -165,7 +165,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.SearchNameTextBox.Name = "SearchNameTextBox";
             this.SearchNameTextBox.Size = new System.Drawing.Size(157, 22);
             this.SearchNameTextBox.TabIndex = 0;
-            this.SearchNameTextBox.Text = "JJ";
             this.SearchNameTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SearchNameTextBox_KeyDown);
             // 
             // MunisUserForm
