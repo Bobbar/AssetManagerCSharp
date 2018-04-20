@@ -1,5 +1,4 @@
-﻿using AssetManager.Business;
-using AssetManager.Data;
+﻿using AssetManager.Data;
 using AssetManager.Data.Classes;
 using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
@@ -837,17 +836,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private List<GridColumnAttrib> TrackingGridColumns()
         {
-            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(TrackablesCols.DateStamp, "Date"));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckType, "Check Type"));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckoutUser, "Check Out User"));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckinUser, "Check In User"));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckoutTime, "Check Out"));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.CheckinTime, "Check In"));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.DueBackDate, "Due Back"));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.UseLocation, "Location"));
-            ColList.Add(new GridColumnAttrib(TrackablesCols.Guid, "Guid"));
-            return ColList;
+            var columnList = new List<GridColumnAttrib>();
+            columnList.Add(new GridColumnAttrib(TrackablesCols.DateStamp, "Date"));
+            columnList.Add(new GridColumnAttrib(TrackablesCols.CheckType, "Check Type"));
+            columnList.Add(new GridColumnAttrib(TrackablesCols.CheckoutUser, "Check Out User"));
+            columnList.Add(new GridColumnAttrib(TrackablesCols.CheckinUser, "Check In User"));
+            columnList.Add(new GridColumnAttrib(TrackablesCols.CheckoutTime, "Check Out"));
+            columnList.Add(new GridColumnAttrib(TrackablesCols.CheckinTime, "Check In"));
+            columnList.Add(new GridColumnAttrib(TrackablesCols.DueBackDate, "Due Back"));
+            columnList.Add(new GridColumnAttrib(TrackablesCols.UseLocation, "Location"));
+            columnList.Add(new GridColumnAttrib(TrackablesCols.Guid, "Guid"));
+            return columnList;
         }
 
         private void UpdateDevice(DeviceUpdateInfo UpdateInfo)
@@ -903,245 +902,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             OtherFunctions.SetWaitCursor(true, this);
         }
-
-        #region Control Events
-
-        private void PingHistLabel_Click(object sender, EventArgs e)
-        {
-            AssetManagerFunctions.ShowPingHistory(this, currentViewDevice);
-        }
-
-        [SuppressMessage("Microsoft.Design", "CA1806")]
-        private void AssetDisposalFormToolItem_Click(object sender, EventArgs e)
-        {
-            new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.DisposeForm);
-        }
-
-        private void AttachmentsToolButton_Click(object sender, EventArgs e)
-        {
-            ViewAttachments();
-        }
-
-        private void CheckInTool_Click(object sender, EventArgs e)
-        {
-            StartTrackDeviceForm();
-        }
-
-        private void CheckOutTool_Click(object sender, EventArgs e)
-        {
-            StartTrackDeviceForm();
-        }
-
-        private void AcceptToolButton_Click(object sender, EventArgs e)
-        {
-            AcceptChanges();
-        }
-
-        private void CancelToolButton_Click(object sender, EventArgs e)
-        {
-            CancelModify();
-        }
-
-        private void MunisInfoButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                MunisFunctions.LoadMunisInfoByDevice(currentViewDevice, this);
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-            }
-        }
-
-        private void MunisSearchButton_Click(object sender, EventArgs e)
-        {
-            MunisUser = MunisFunctions.MunisUserSearch(this);
-        }
-
-        private void SibiViewButton_Click(object sender, EventArgs e)
-        {
-            OpenSibiLink(currentViewDevice);
-        }
-
-        private void DataGridHistory_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            NewEntryView();
-        }
-
-        private void DataGridHistory_CellEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            if (!gridFilling)
-            {
-                StyleFunctions.HighlightRow(DataGridHistory, GridTheme, e.RowIndex);
-            }
-        }
-
-        private void DataGridHistory_CellLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            StyleFunctions.LeaveRow(DataGridHistory, e.RowIndex);
-        }
-
-        private void DataGridHistory_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right && e.ColumnIndex > -1 && e.RowIndex > -1)
-            {
-                DataGridHistory.CurrentCell = DataGridHistory[e.ColumnIndex, e.RowIndex];
-            }
-        }
-
-        private void DeleteEntryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DeleteSelectedHistoricalEntry();
-        }
-
-        private void GuidLabel_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(GuidLabel.Text);
-            OtherFunctions.Message("Guid Copied to clipboard.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Clipboard", this);
-        }
-
-        private void RefreshToolButton_Click(object sender, EventArgs e)
-        {
-            RefreshData();
-        }
-
-        private void TabControl1_MouseDown(object sender, MouseEventArgs e)
-        {
-            TrackingGrid.Refresh();
-        }
-
-        private void TrackingGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            var EntryGuid = TrackingGrid.CurrentRowStringValue(TrackablesCols.Guid);
-            if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(ViewTrackingForm), EntryGuid))
-            {
-                NewTrackingView(EntryGuid);
-            }
-        }
-
-        private void TrackingGrid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
-        {
-            string checkTypeValue = TrackingGrid.Rows[e.RowIndex].Cells[TrackablesCols.CheckType].Value.ToString();
-            DataGridViewCell CheckTypeCell = TrackingGrid.Rows[e.RowIndex].Cells[TrackablesCols.CheckType];
-            CheckTypeCell.Style.ForeColor = Color.Black;
-            if (checkTypeValue == CheckType.Checkin)
-            {
-                CheckTypeCell.Style.BackColor = Colors.CheckIn;
-            }
-            else if (checkTypeValue == CheckType.Checkout)
-            {
-                CheckTypeCell.Style.BackColor = Colors.CheckOut;
-            }
-        }
-
-        private void DeleteDeviceToolButton_Click(object sender, EventArgs e)
-        {
-            DeleteDevice();
-        }
-
-        private void ModifyToolButton_Click(object sender, EventArgs e)
-        {
-            ModifyDevice();
-        }
-
-        private void NewNoteToolButton_Click(object sender, EventArgs e)
-        {
-            AddNewNote();
-        }
-
-        [SuppressMessage("Microsoft.Design", "CA1806")]
-        private void AssetInputFormToolItem_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(currentViewDevice.PO))
-            {
-                new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.InputForm);
-            }
-            else
-            {
-                OtherFunctions.Message("Please add a valid PO number to this device.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Missing Info", this);
-            }
-        }
-
-        [SuppressMessage("Microsoft.Design", "CA1806")]
-        private void AssetTransferFormToolItem_Click(object sender, EventArgs e)
-        {
-            new PdfFormFilling(this, currentViewDevice, PdfFormFilling.PdfFormType.TransferForm);
-        }
-
-        private void PhoneNumberTextBox_Leave(object sender, EventArgs e)
-        {
-            if (!DataConsistency.ValidPhoneNumber(PhoneNumberTextBox.Text))
-            {
-                OtherFunctions.Message("Invalid phone number.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
-            }
-        }
-
-        private void ViewDeviceForm_Resize(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                Helpers.ChildFormControl.MinimizeChildren(this);
-            }
-        }
-
-        private void remoteToolsControl_HostOnlineStatus(object sender, bool e)
-        {
-            // If OnlineStatusChanged handle is not null, Invoke it.
-            OnlineStatusChanged?.Invoke(this, e);
-        }
-
-        private void remoteToolsControl_HostBackOnline(object sender, EventArgs e)
-        {
-            TaskBarNotify.FlashWindow(this.Handle, true, true, 10);
-        }
-
-        private void remoteToolsControl_VisibleChanging(object sender, bool e)
-        {
-            if (e)
-            {
-                ExpandSplitter(true);
-            }
-            else
-            {
-                ExpandSplitter(TrackingBox.Visible);
-            }
-        }
-
-        private void remoteToolsControl_NewStatusPrompt(object sender, UserPromptEventArgs e)
-        {
-            statusSlider.QueueMessage(e.Text, e.Color, SlideDirection.Right, SlideDirection.Down, e.DisplayTime);
-        }
-
-        private void CurrentUserTextBox_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (editMode)
-            {
-                MunisUser = new MunisEmployee();
-            }
-        }
-
-        void ILiveBox.LoadDevice(string deviceGuid)
-        {
-            LoadDevice(deviceGuid);
-        }
-
-        protected void LoadDevice(string deviceGuid)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ILiveBox.DynamicSearch()
-        {
-            DynamicSearch();
-        }
-
-        protected void DynamicSearch()
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion Control Events
 
         protected override void Dispose(bool disposing)
         {

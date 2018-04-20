@@ -1055,21 +1055,21 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.RemoteTrackingPanel.Size = new System.Drawing.Size(427, 284);
             this.RemoteTrackingPanel.TabIndex = 54;
             // 
-            // remoteToolsControl
+            // RemoteToolsControl
             // 
             this.RemoteToolsControl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.RemoteToolsControl.Device = null;
             this.RemoteToolsControl.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RemoteToolsControl.Location = new System.Drawing.Point(3, 7);
             this.RemoteToolsControl.MaxFailedUntilNotify = 5;
-            this.RemoteToolsControl.Name = "remoteToolsControl";
+            this.RemoteToolsControl.Name = "RemoteToolsControl";
             this.RemoteToolsControl.Size = new System.Drawing.Size(422, 103);
             this.RemoteToolsControl.TabIndex = 42;
             this.RemoteToolsControl.Visible = false;
-            this.RemoteToolsControl.HostBackOnline += new System.EventHandler(this.remoteToolsControl_HostBackOnline);
+            this.RemoteToolsControl.HostBackOnline += new System.EventHandler(this.RemoteToolsControl_HostBackOnline);
             this.RemoteToolsControl.NewStatusPrompt += new AssetManager.UserInterface.CustomControls.RemoteToolsControl.UserPromptEventHandler(this.remoteToolsControl_NewStatusPrompt);
-            this.RemoteToolsControl.VisibleChanging += new System.EventHandler<bool>(this.remoteToolsControl_VisibleChanging);
-            this.RemoteToolsControl.HostOnlineStatus += new System.EventHandler<bool>(this.remoteToolsControl_HostOnlineStatus);
+            this.RemoteToolsControl.VisibleChanging += new System.EventHandler<bool>(this.RemoteToolsControl_VisibleChanging);
+            this.RemoteToolsControl.HostOnlineStatus += new System.EventHandler<bool>(this.RemoteToolsControl_HostOnlineStatus);
             // 
             // ToolStripContainer1
             // 
