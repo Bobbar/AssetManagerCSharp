@@ -365,6 +365,7 @@
     <Compile Include="UserInterface\Forms\Attachments\AttachmentsForm.Designer.cs">
       <DependentUpon>AttachmentsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Data\DataClasses\MemoryTributary.cs" />
     <Compile Include="UserInterface\Forms\GetCredentialsForm.cs">
       <SubType>Form</SubType>
     </Compile>

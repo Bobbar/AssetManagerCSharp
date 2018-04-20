@@ -246,7 +246,7 @@ namespace AssetManager.Data.Classes
         {
             if (this.DataStream != null)
             {
-                _computedMD5 = SecurityTools.GetMD5OfStream((MemoryStream)this.DataStream);
+                 _computedMD5 = SecurityTools.GetMD5OfStream(this.DataStream);
                 if (_computedMD5 == this.MD5)
                 {
                     return true;

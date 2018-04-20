@@ -323,7 +323,7 @@ namespace AssetManager.UserInterface.Forms
                 {
                     using (Stream respStream = LocalFTPComm.ReturnFtpResponse(FtpRequestString, WebRequestMethods.Ftp.DownloadFile).GetResponseStream())
                     {
-                        MemoryStream memStream = new MemoryStream();
+                        var memStream = new MemoryTributary();
                         int bufferSize = 256000;
                         byte[] buffer = new byte[bufferSize];
                         int bytesIn = 0;
@@ -984,7 +984,7 @@ namespace AssetManager.UserInterface.Forms
                 Directory.CreateDirectory(Paths.DownloadPath);
                 using (var outputStream = File.Create(savePath))
                 {
-                    using (var memStream = (MemoryStream)attachment.DataStream)
+                    using (var memStream = (Stream)attachment.DataStream)
                     {
                         memStream.CopyTo(outputStream); //once data is verified we go ahead and copy it to disk
                     }
