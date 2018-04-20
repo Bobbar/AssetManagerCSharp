@@ -40,7 +40,7 @@ namespace AssetManager.UserInterface.CustomControls
         private float slideAcceleration = 0.5F;
 
         private Queue<MessageParameters> messageQueue = new Queue<MessageParameters>();
-        private MessageParameters currentMessage = new MessageParameters();
+        private MessageParameters currentMessage;
         private CancellationTokenSource pauseCancel;
 
         private System.Timers.Timer slideTimer;
@@ -70,6 +70,12 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         #endregion Constructors
+
+        #region Events
+
+        public event EventHandler<MessageEventArgs> NewMessageDisplayed;
+
+        #endregion Events
 
         #region Properties
 
@@ -101,13 +107,22 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region Methods
 
+        private void OnNewMessageDisplayed(MessageParameters message)
+        {
+            NewMessageDisplayed(this, new MessageEventArgs(message));
+        }
+
+
         /// <summary>
         /// Primary text renderer.
         /// </summary>
         /// <param name="canvas"></param>
         private void DrawText(Graphics canvas)
         {
-            canvas.Clear(this.BackColor);
+            if (currentMessage == null) return;
+
+            canvas.Clear(this.Parent.BackColor);
+
             using (var textBrush = new SolidBrush(currentMessage.TextColor))
             {
                 canvas.DrawString(currentMessage.Text, this.Font, textBrush, currentMessage.Position.X, currentMessage.Position.Y);
@@ -263,9 +278,10 @@ namespace AssetManager.UserInterface.CustomControls
             if (messageQueue.Count > 0)
             {
                 // If state is done, then we can display the next message.
-                if (currentMessage.SlideState == SlideState.Done)
+                if (currentMessage == null || currentMessage.SlideState == SlideState.Done)
                 {
                     StartNewSlide(messageQueue.Dequeue());
+                    OnNewMessageDisplayed(currentMessage);
                 }
                 // If the state is hold, then a permanent message is currently displayed.
                 // Trigger a slide out animation, which will change the state to done once complete.
@@ -461,10 +477,9 @@ namespace AssetManager.UserInterface.CustomControls
                 this.Invalidate(updateRegion);
                 this.Update();
             }
+
             if (currentMessage.AnimationComplete) ProcessNextState();
 
-            // Check the queue for new messages.
-            ProcessQueue();
         }
 
         private async void ProcessNextState()
@@ -524,6 +539,9 @@ namespace AssetManager.UserInterface.CustomControls
                 // Add pause between messages if desired.
                 //Await Pause(1)
             }
+
+            // Check the queue for new messages.
+            ProcessQueue();
         }
 
         private void SliderLabel_Disposed(object sender, EventArgs e)
@@ -537,70 +555,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region Structs
 
-        /// <summary>
-        /// Parameters for messages to be queued.
-        /// </summary>
-        private class MessageParameters
-        {
-            #region Fields
 
-            public int DisplayTime { get; set; }
-            public string Text { get; set; }
-            public SizeF TextSize { get; set; }
-            public Color TextColor { get; set; }
-            public SlideDirection SlideInDirection { get; set; }
-            public SlideDirection SlideOutDirection { get; set; }
-            public SlideDirection Direction { get; set; }
-            public SlideState SlideState { get; set; }
-            public float SlideVelocity { get; set; }
-            /// <summary>
-            /// Current position.
-            /// </summary>
-            public PointF Position;
-            public PointF StartPosition;
-            public PointF EndPosition;
-            public bool AnimationComplete { get; set; }
-
-            #endregion Fields
-
-            #region Constructors
-
-            public MessageParameters(string text, Color color, SlideDirection slideInDirection, SlideDirection slideOutDirection, int displayTime)
-            {
-                this.Text = text;
-                this.DisplayTime = displayTime;
-                this.SlideInDirection = slideInDirection;
-                this.SlideOutDirection = slideOutDirection;
-
-                Direction = SlideDirection.DefaultSlide;
-                SlideState = SlideState.Done;
-                SlideVelocity = 0;
-                Position = new PointF();
-                StartPosition = new PointF();
-                EndPosition = new PointF();
-                AnimationComplete = false;
-                TextColor = color;
-            }
-
-            public MessageParameters()
-            {
-                this.Text = string.Empty;
-                this.DisplayTime = defaultDisplayTime;
-                this.SlideInDirection = defaultSlideInDirection;
-                this.SlideOutDirection = defaultSlideOutDirection;
-
-                Direction = SlideDirection.DefaultSlide;
-                SlideState = SlideState.Done;
-                SlideVelocity = 0;
-                Position = new PointF();
-                StartPosition = new PointF();
-                EndPosition = new PointF();
-                AnimationComplete = false;
-                TextColor = Color.Black;
-            }
-
-            #endregion Constructors
-        }
 
         #endregion Structs
     }

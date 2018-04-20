@@ -2,7 +2,8 @@ using System;
 using System.Data.Common;
 using System.Reflection;
 using System.Windows.Forms;
-using AssetManager.UserInterface.CustomControls;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace AssetManager.Helpers
 {
@@ -58,6 +59,27 @@ namespace AssetManager.Helpers
             {
                 richTextBox.Text = text;
             }
+        }
+
+        public async static void FlashStrip(this StatusStrip statusStrip, Color flashColor, int flashes)
+        {
+            var originalColor = statusStrip.BackColor;
+            int flashDelay = 50;
+
+            for (int i = 0; i < flashes; i++)
+            {
+                statusStrip.BackColor = flashColor;
+                statusStrip.Refresh();
+
+                await Task.Delay(flashDelay);
+
+                statusStrip.BackColor = originalColor;
+                statusStrip.Refresh();
+
+                await Task.Delay(flashDelay);
+            }
+
+            statusStrip.BackColor = originalColor;
         }
     }
 }

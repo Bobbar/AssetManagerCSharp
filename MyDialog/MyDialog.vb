@@ -409,7 +409,7 @@ Public Class AdvancedDialog
     End Sub
 
     Private Sub MyDialog_Shown(sender As Object, e As EventArgs) Handles Me.Shown
-        FlashMe()
+        ' FlashMe()
     End Sub
 
     Private Sub MyDialog_Disposed(sender As Object, e As EventArgs) Handles Me.Disposed

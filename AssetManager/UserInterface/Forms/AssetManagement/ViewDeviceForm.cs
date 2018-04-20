@@ -48,12 +48,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #endregion Fields
 
-        #region Delegates
-
-        private delegate void StatusVoidDelegate(string text);
-
-        #endregion Delegates
-
         #region Constructors
 
         public ViewDeviceForm(ExtendedForm parentForm, MappableObject device) : base(parentForm, device)
@@ -79,7 +73,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             windowList.InsertWindowList(ToolStrip1);
 
             statusSlider = new SliderLabel();
-            StatusStrip1.Items.Add(statusSlider.ToToolStripControl(StatusStrip1));
+            statusSlider.NewMessageDisplayed += StatusSlider_NewMessageDisplayed;
+            StatusStrip.Items.Add(statusSlider.ToToolStripControl(StatusStrip));
 
             RefreshCombos();
 
@@ -320,7 +315,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                         int affectedRows = DBFactory.GetDatabase().ExecuteNonQuery(Queries.DeleteHistoricalEntryByGuid(entryGuid));
                         if (affectedRows > 0)
                         {
-                            SetStatusBar("Entry deleted successfully.");
+                            StatusPrompt("Entry deleted successfully.");
                             RefreshData();
                         }
                     }
@@ -785,17 +780,20 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void SetStatusBar(string text)
+        private void StatusPrompt(string text)
         {
-            if (StatusStrip1.InvokeRequired)
+            StatusPrompt(text, Color.Black);
+        }
+
+        private void StatusPrompt(string text, Color color, int displayTime = -1)
+        {
+            if (StatusStrip.InvokeRequired)
             {
-                StatusVoidDelegate d = new StatusVoidDelegate(SetStatusBar);
-                StatusStrip1.BeginInvoke(d, new object[] { text });
+                StatusStrip.BeginInvoke(new Action(() => { StatusPrompt(text, color); }));
             }
             else
             {
-                statusSlider.SlideText = text;
-                StatusStrip1.Update();
+                statusSlider.QueueMessage(text, color, SlideDirection.Right, SlideDirection.Down, displayTime);
             }
         }
 
@@ -867,7 +865,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         trans.Commit();
                         RefreshData();
-                        SetStatusBar("Update successful!");
+                        StatusPrompt("Update successful!");
                     }
                     else
                     {
@@ -919,6 +917,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     munisToolBar.Dispose();
                     currentViewDevice?.Dispose();
                     controlParser.Dispose();
+                    statusSlider.NewMessageDisplayed -= StatusSlider_NewMessageDisplayed;
+                    statusSlider.Dispose();
                 }
             }
             finally

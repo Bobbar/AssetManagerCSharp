@@ -69,7 +69,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.TrackingStatusTextBox = new System.Windows.Forms.TextBox();
             this.Label11 = new System.Windows.Forms.Label();
             this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.StatusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.AcceptCancelToolStrip = new AssetManager.UserInterface.CustomControls.OneClickToolStrip();
             this.AcceptToolButton = new System.Windows.Forms.ToolStripButton();
             this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -191,7 +191,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.GuidLabel.Size = new System.Drawing.Size(272, 23);
             this.GuidLabel.TabIndex = 54;
             this.GuidLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.ToolTip1.SetToolTip(this.GuidLabel, "Click to copy Guid.");
+            this.ToolTip1.SetToolTip(this.GuidLabel, "Click to copy GUID.");
             this.GuidLabel.Click += new System.EventHandler(this.GuidLabel_Click);
             // 
             // MunisSearchButton
@@ -291,9 +291,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label10.Location = new System.Drawing.Point(22, 130);
             this.Label10.Name = "Label10";
-            this.Label10.Size = new System.Drawing.Size(85, 16);
+            this.Label10.Size = new System.Drawing.Size(90, 16);
             this.Label10.TabIndex = 41;
-            this.Label10.Text = "Device Guid:";
+            this.Label10.Text = "Device GUID:";
             // 
             // SerialTextBox
             // 
@@ -734,17 +734,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolTip1.InitialDelay = 100;
             this.ToolTip1.ReshowDelay = 100;
             // 
-            // StatusStrip1
+            // StatusStrip
             // 
-            this.StatusStrip1.AutoSize = false;
-            this.StatusStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
-            this.StatusStrip1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatusStrip1.Location = new System.Drawing.Point(0, 680);
-            this.StatusStrip1.Name = "StatusStrip1";
-            this.StatusStrip1.Size = new System.Drawing.Size(1291, 22);
-            this.StatusStrip1.Stretch = false;
-            this.StatusStrip1.TabIndex = 45;
-            this.StatusStrip1.Text = "StatusStrip1";
+            this.StatusStrip.AutoSize = false;
+            this.StatusStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.StatusStrip.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusStrip.Location = new System.Drawing.Point(0, 680);
+            this.StatusStrip.Name = "StatusStrip";
+            this.StatusStrip.Size = new System.Drawing.Size(1291, 22);
+            this.StatusStrip.Stretch = false;
+            this.StatusStrip.TabIndex = 45;
+            this.StatusStrip.Text = "StatusStrip1";
             // 
             // AcceptCancelToolStrip
             // 
@@ -1277,7 +1277,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.ClientSize = new System.Drawing.Size(1291, 702);
             this.Controls.Add(this.ToolStripContainer1);
-            this.Controls.Add(this.StatusStrip1);
+            this.Controls.Add(this.StatusStrip);
             this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(1161, 559);
             this.Name = "ViewDeviceForm";
@@ -1364,7 +1364,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal ToolTip ToolTip1;
         internal OneClickToolStrip AcceptCancelToolStrip;
         internal ToolStripSeparator ToolStripSeparator3;
-        internal StatusStrip StatusStrip1;
+        internal StatusStrip StatusStrip;
         internal ToolStripButton CancelToolButton;
         internal ToolStripButton AcceptToolButton;
         internal Button MunisInfoButton;

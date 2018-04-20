@@ -16,6 +16,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
     {
         #region Control Events
 
+        private void StatusSlider_NewMessageDisplayed(object sender, MessageEventArgs e)
+        {
+            var flashColor = StyleFunctions.ColorAlphaBlend(e.Message.TextColor, Color.White);
+            StatusStrip.FlashStrip(flashColor, 3);
+        }
+
         void ILiveBox.DynamicSearch()
         {
             DynamicSearch();
@@ -133,7 +139,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void GuidLabel_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(GuidLabel.Text);
-            OtherFunctions.Message("Guid Copied to clipboard.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Clipboard", this);
+            StatusPrompt("GUID copied to clipboard");
         }
 
         private void ModifyToolButton_Click(object sender, EventArgs e)
@@ -194,7 +200,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void remoteToolsControl_NewStatusPrompt(object sender, UserPromptEventArgs e)
         {
-            statusSlider.QueueMessage(e.Text, e.Color, SlideDirection.Right, SlideDirection.Down, e.DisplayTime);
+            StatusPrompt(e.Text, e.Color, e.DisplayTime);
         }
 
         private void RemoteToolsControl_VisibleChanging(object sender, bool e)

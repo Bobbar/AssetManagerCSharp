@@ -1120,6 +1120,21 @@
             <param name="message"></param>
             <param name="displayTime"></param>
         </member>
+        <member name="T:AssetManager.UserInterface.CustomControls.MessageEventArgs">
+            <summary>
+            EventArg wrapper for message events.
+            </summary>
+        </member>
+        <member name="T:AssetManager.UserInterface.CustomControls.MessageParameters">
+            <summary>
+            Parameters for messages to be queued.
+            </summary>
+        </member>
+        <member name="F:AssetManager.UserInterface.CustomControls.MessageParameters.Position">
+            <summary>
+            Current position.
+            </summary>
+        </member>
         <member name="E:AssetManager.UserInterface.CustomControls.IWindowList.ChildCountChanged">
             <summary>
             Occurs when the number of child forms has changed.
@@ -1230,7 +1245,7 @@
             <param name="parentControl">Target strip for this control. For inheriting font and color.</param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.StartNewSlide(AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.StartNewSlide(AssetManager.UserInterface.CustomControls.MessageParameters)">
             <summary>
             Displays the specified text and starts the animation.
             </summary>
@@ -1255,7 +1270,7 @@
             Handles the message queue. Messages are queued until their animation is complete. Messages with a display time of 0 are moved to the slide out animation status, then replaced with the next message when complete.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.SetControlSize(AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters)">
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.SetControlSize(AssetManager.UserInterface.CustomControls.MessageParameters)">
             <summary>
             If autosize set to true, sets the control size to fit the text.
             </summary>
@@ -1280,16 +1295,6 @@
         <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.UpdateTextPosition">
             <summary>
             Primary animation routine. Messages are animated per their current state and specified directions.
-            </summary>
-        </member>
-        <member name="T:AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters">
-            <summary>
-            Parameters for messages to be queued.
-            </summary>
-        </member>
-        <member name="F:AssetManager.UserInterface.CustomControls.SliderLabel.MessageParameters.Position">
-            <summary>
-            Current position.
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.WindowList.BuildWindowList(AssetManager.UserInterface.CustomControls.IWindowList,System.Windows.Forms.ToolStripItemCollection)">

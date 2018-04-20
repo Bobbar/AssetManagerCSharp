@@ -250,6 +250,8 @@
       <DependentUpon>PSExecCommandForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\CustomControls\RemoteTools\UserPromptEventArgs.cs" />
+    <Compile Include="UserInterface\CustomControls\SliderLabel\MessageEventArgs.cs" />
+    <Compile Include="UserInterface\CustomControls\SliderLabel\MessageParameters.cs" />
     <Compile Include="UserInterface\CustomControls\WindowList\IWindowList.cs" />
     <Compile Include="UserInterface\CustomControls\WindowList\IOnlineStatus.cs" />
     <Compile Include="UserInterface\CustomControls\LiveBox\ILiveBox.cs" />
@@ -267,10 +269,10 @@
     <Compile Include="UserInterface\CustomControls\RemoteTools\RemoteToolsControl.Designer.cs">
       <DependentUpon>RemoteToolsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\CustomControls\SliderLabel.Designer.cs">
+    <Compile Include="UserInterface\CustomControls\SliderLabel\SliderLabel.Designer.cs">
       <DependentUpon>SliderLabel.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\CustomControls\SliderLabel.cs">
+    <Compile Include="UserInterface\CustomControls\SliderLabel\SliderLabel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserInterface\CustomControls\WindowList\OnlineStatusMenuItem\OnlineStatusMenuItem.cs">
@@ -453,7 +455,7 @@
     <EmbeddedResource Include="UserInterface\CustomControls\RemoteTools\RemoteToolsControl.resx">
       <DependentUpon>RemoteToolsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\CustomControls\SliderLabel.resx">
+    <EmbeddedResource Include="UserInterface\CustomControls\SliderLabel\SliderLabel.resx">
       <DependentUpon>SliderLabel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.resx">
