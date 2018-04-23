@@ -12,6 +12,7 @@ namespace AssetManager.UserInterface.CustomControls
         private bool dropDownOpen = false;
         private ExtendedForm parentForm;
         private IWindowList windowListForm;
+
         #endregion "Fields"
 
         #region "Constructors"
@@ -107,7 +108,7 @@ namespace AssetManager.UserInterface.CustomControls
                 dropDownControl.DropDownItems.Remove(item);
             }
 
-            item.MouseDown -= ItemClicked;
+            item.MouseUp -= ItemClicked;
             item.Dispose();
 
             SetVisibility();
@@ -117,7 +118,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             for (int i = 0; i < dropDownControl.DropDownItems.Count; i++)
             {
-                dropDownControl.DropDownItems[i].MouseDown -= ItemClicked;
+                dropDownControl.DropDownItems[i].MouseUp -= ItemClicked;
                 dropDownControl.DropDownItems[i].Dispose();
             }
             dropDownControl.DropDownItems.Clear();
@@ -145,6 +146,7 @@ namespace AssetManager.UserInterface.CustomControls
             AddParentMenu();
             targetToolStrip.Items.Insert(targetToolStrip.Items.Count, dropDownControl);
         }
+
         private void ItemClicked(object sender, MouseEventArgs e)
         {
             var item = (OnlineStatusMenuItem)sender;
@@ -188,7 +190,7 @@ namespace AssetManager.UserInterface.CustomControls
                 newitem.SetOnlineStatusInterface((IOnlineStatus)frm);
             }
             newitem.ToolTipText = "Right-Click to close.";
-            newitem.MouseDown += ItemClicked;
+            newitem.MouseUp += ItemClicked;
             return newitem;
         }
 
