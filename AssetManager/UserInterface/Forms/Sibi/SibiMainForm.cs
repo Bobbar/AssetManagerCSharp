@@ -484,6 +484,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             SetStatusCellColors();
         }
 
+        private void SibiResultGrid_Sorted(object sender, EventArgs e)
+        {
+            SetStatusCellColors();
+        }
+
         #endregion Control Events
 
         protected override void Dispose(bool disposing)
