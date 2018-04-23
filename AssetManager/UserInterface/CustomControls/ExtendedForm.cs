@@ -191,9 +191,10 @@ namespace AssetManager.UserInterface.CustomControls
         public virtual void RefreshData()
         {
             this.Refresh();
+            this.ForceWindowListRefresh();
         }
 
-        public void ForceWindowListRefresh()
+        private void ForceWindowListRefresh()
         {
             OnRefreshWindowList(new EventArgs());
         }

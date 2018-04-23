@@ -226,7 +226,7 @@ namespace AssetManager.UserInterface.Forms
                     if (!string.IsNullOrEmpty(newName))
                     {
                         this.Text = titlePrefix + newName;
-                        this.ParentForm.ForceWindowListRefresh();
+                        this.RefreshData();
                     }
                 }
             }

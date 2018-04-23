@@ -143,6 +143,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 currentViewDevice = new Device(currentViewDevice.Guid);
                 LoadCurrentDevice();
             }
+            base.RefreshData();
         }
 
         public void UpdateAttachCountHandler(object sender, EventArgs e)
@@ -794,7 +795,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             else
             {
-                statusSlider.QueueMessage(text, color, SlideDirection.Right, SlideDirection.Down, displayTime);
+                statusSlider.QueueMessage(text, color, displayTime);
             }
         }
 

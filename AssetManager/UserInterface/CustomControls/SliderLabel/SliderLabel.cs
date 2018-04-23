@@ -159,11 +159,33 @@ namespace AssetManager.UserInterface.CustomControls
         /// Adds new message to queue.
         /// </summary>
         /// <param name="text">Text to be displayed.</param>
+        /// <param name="color">Forecolor of the text.</param>
+        /// <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
+        public void QueueMessage(string text, Color color, int displayTime)
+        {
+            QueueMessage(text, color, defaultSlideInDirection, defaultSlideOutDirection, displayTime);
+        }
+
+        /// <summary>
+        /// Adds new message to queue.
+        /// </summary>
+        /// <param name="text">Text to be displayed.</param>
         /// <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
         public void QueueMessage(string text, int displayTime)
         {
             QueueMessage(text, this.ForeColor, defaultSlideInDirection, defaultSlideOutDirection, displayTime);
         }
+
+        /// <summary>
+        /// Adds new message to queue.
+        /// </summary>
+        /// <param name="text">Text to be displayed.</param>
+        /// <param name="color">Forecolor of the text.</param>
+        public void QueueMessage(string text, Color color)
+        {
+            QueueMessage(text, color, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime);
+        }
+              
 
         /// <summary>
         /// Adds new message to queue.

@@ -1262,12 +1262,27 @@
             <param name="slideOutDirection">Slide out direction.</param>
             <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
         </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.QueueMessage(System.String,System.Drawing.Color,System.Int32)">
+            <summary>
+            Adds new message to queue.
+            </summary>
+            <param name="text">Text to be displayed.</param>
+            <param name="color">Forecolor of the text.</param>
+            <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
+        </member>
         <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.QueueMessage(System.String,System.Int32)">
             <summary>
             Adds new message to queue.
             </summary>
             <param name="text">Text to be displayed.</param>
             <param name="displayTime">How long (in seconds) the text will be displayed before sliding out. 0 = forever.</param>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.QueueMessage(System.String,System.Drawing.Color)">
+            <summary>
+            Adds new message to queue.
+            </summary>
+            <param name="text">Text to be displayed.</param>
+            <param name="color">Forecolor of the text.</param>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.QueueMessage(System.String)">
             <summary>

@@ -64,7 +64,7 @@ namespace AssetManager.Helpers
         public async static void FlashStrip(this StatusStrip statusStrip, Color flashColor, int flashes)
         {
             var originalColor = statusStrip.BackColor;
-            int flashDelay = 50;
+            int flashDelay = 200;
 
             for (int i = 0; i < flashes; i++)
             {
