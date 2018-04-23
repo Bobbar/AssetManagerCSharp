@@ -25,7 +25,7 @@ namespace AssetManager.Data.Classes
 
         #region Properties
 
-        [DataColumnName(SibiRequestCols.DateStamp)]
+        [DataColumnName(SibiRequestCols.CreateDate)]
         public System.DateTime DateStamp { get; set; }
 
         [DataColumnName(SibiRequestCols.Description)]

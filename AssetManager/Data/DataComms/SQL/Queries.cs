@@ -127,9 +127,9 @@ namespace AssetManager.Data.Communications
         }
 
         /// <summary>
-        /// SELECT DISTINCT <see cref="SibiRequestCols.DateStamp"/> FROM <see cref="SibiRequestCols.TableName"/> ORDER BY <see cref="SibiRequestCols.DateStamp"/> DESC
+        /// SELECT DISTINCT <see cref="SibiRequestCols.CreateDate"/> FROM <see cref="SibiRequestCols.TableName"/> ORDER BY <see cref="SibiRequestCols.CreateDate"/> DESC
         /// </summary>
-        public static string SelectSibiDisplayYears { get; } = "SELECT DISTINCT " + SibiRequestCols.DateStamp + " FROM " + SibiRequestCols.TableName + " ORDER BY " + SibiRequestCols.DateStamp + " DESC";
+        public static string SelectSibiDisplayYears { get; } = "SELECT DISTINCT " + SibiRequestCols.CreateDate + " FROM " + SibiRequestCols.TableName + " ORDER BY " + SibiRequestCols.CreateDate + " DESC";
 
         /// <summary>
         /// SELECT * FROM <see cref="SibiRequestCols.TableName"/> FROM <see cref="SibiRequestCols.TableName"/> ORDER BY <see cref="SibiRequestCols.RequestNumber"/> DESC
@@ -137,13 +137,13 @@ namespace AssetManager.Data.Communications
         public static string SelectSibiRequestsTable { get; } = "SELECT * FROM " + SibiRequestCols.TableName + " ORDER BY " + SibiRequestCols.RequestNumber + " DESC";
 
         /// <summary>
-        /// SELECT * FROM <see cref="SibiRequestCols.TableName"/> WHERE <see cref="SibiRequestCols.DateStamp"/> LIKE '% <paramref name="year"/> %' ORDER BY <see cref="SibiRequestCols.RequestNumber"/> DESC
+        /// SELECT * FROM <see cref="SibiRequestCols.TableName"/> WHERE <see cref="SibiRequestCols.CreateDate"/> LIKE '% <paramref name="year"/> %' ORDER BY <see cref="SibiRequestCols.RequestNumber"/> DESC
         /// </summary>
         /// <param name="year"></param>
         /// <returns></returns>
         public static string SelectSibiRequestsByYear(string year)
         {
-            return "SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.DateStamp + " LIKE '%" + year + "%' ORDER BY " + SibiRequestCols.RequestNumber + " DESC";
+            return "SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.CreateDate + " LIKE '%" + year + "%' ORDER BY " + SibiRequestCols.RequestNumber + " DESC";
         }
 
         /// <summary>

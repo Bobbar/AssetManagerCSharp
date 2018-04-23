@@ -91,7 +91,9 @@ namespace AssetManager.Data
         public const string Guid = "sibi_uid";
         public const string RequestUser = "sibi_request_user";
         public const string Description = "sibi_description";
-        public const string DateStamp = "sibi_datestamp";
+        public const string CreateDate = "sibi_createdate";
+        public const string ModifyDate = "sibi_modifydate";
+        public const string ModifyUser = "sibi_modifyuser";
         public const string NeedBy = "sibi_need_by";
         public const string Status = "sibi_status";
         public const string Type = "sibi_type";

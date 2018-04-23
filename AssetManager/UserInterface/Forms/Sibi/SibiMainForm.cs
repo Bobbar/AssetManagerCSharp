@@ -327,7 +327,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
                 foreach (DataRow row in results.Rows)
                 {
-                    var yr = DateTime.Parse(row[SibiRequestCols.DateStamp].ToString()).Year.ToString();
+                    var yr = DateTime.Parse(row[SibiRequestCols.CreateDate].ToString()).Year.ToString();
                     if (!years.Contains(yr))
                     {
                         years.Add(yr);
@@ -394,7 +394,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             columnList.Add(new GridColumnAttrib(SibiRequestCols.PO, "PO Number"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.RequisitionNumber, "Req. Number"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.RTNumber, "RT Number"));
-            columnList.Add(new GridColumnAttrib(SibiRequestCols.DateStamp, "Create Date"));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.CreateDate, "Create Date"));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.ModifyDate, "Modified"));
+            columnList.Add(new GridColumnAttrib(SibiRequestCols.ModifyUser, "Modified By"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.Guid, "Guid"));
             return columnList;
         }

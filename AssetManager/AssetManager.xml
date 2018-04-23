@@ -409,7 +409,7 @@
         </member>
         <member name="P:AssetManager.Data.Communications.Queries.SelectSibiDisplayYears">
             <summary>
-            SELECT DISTINCT <see cref="F:AssetManager.Data.SibiRequestCols.DateStamp"/> FROM <see cref="F:AssetManager.Data.SibiRequestCols.TableName"/> ORDER BY <see cref="F:AssetManager.Data.SibiRequestCols.DateStamp"/> DESC
+            SELECT DISTINCT <see cref="F:AssetManager.Data.SibiRequestCols.CreateDate"/> FROM <see cref="F:AssetManager.Data.SibiRequestCols.TableName"/> ORDER BY <see cref="F:AssetManager.Data.SibiRequestCols.CreateDate"/> DESC
             </summary>
         </member>
         <member name="P:AssetManager.Data.Communications.Queries.SelectSibiRequestsTable">
@@ -419,7 +419,7 @@
         </member>
         <member name="M:AssetManager.Data.Communications.Queries.SelectSibiRequestsByYear(System.String)">
             <summary>
-            SELECT * FROM <see cref="F:AssetManager.Data.SibiRequestCols.TableName"/> WHERE <see cref="F:AssetManager.Data.SibiRequestCols.DateStamp"/> LIKE '% <paramref name="year"/> %' ORDER BY <see cref="F:AssetManager.Data.SibiRequestCols.RequestNumber"/> DESC
+            SELECT * FROM <see cref="F:AssetManager.Data.SibiRequestCols.TableName"/> WHERE <see cref="F:AssetManager.Data.SibiRequestCols.CreateDate"/> LIKE '% <paramref name="year"/> %' ORDER BY <see cref="F:AssetManager.Data.SibiRequestCols.RequestNumber"/> DESC
             </summary>
             <param name="year"></param>
             <returns></returns>

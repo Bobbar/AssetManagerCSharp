@@ -30,19 +30,18 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.RTNumberTextBox = new System.Windows.Forms.TextBox();
             this.CreateDateTextBox = new System.Windows.Forms.TextBox();
+            this.ModifyDateTextBox = new System.Windows.Forms.TextBox();
+            this.ModifyByTextBox = new System.Windows.Forms.TextBox();
             this.PopupMenuNotes = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.NewNoteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.DeleteNoteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
-            this.Panel4 = new System.Windows.Forms.Panel();
+            this.RequestPanel = new System.Windows.Forms.Panel();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
-            this.Panel3 = new System.Windows.Forms.Panel();
-            this.EditButtonsPanel = new System.Windows.Forms.Panel();
-            this.AcceptChangesButton = new System.Windows.Forms.Button();
-            this.DiscardChangesButton = new System.Windows.Forms.Button();
-            this.CreatePanel = new System.Windows.Forms.Panel();
-            this.CreateNewButton = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.Label8 = new System.Windows.Forms.Label();
             this.RequestNumTextBox = new System.Windows.Forms.TextBox();
             this.StatusComboBox = new System.Windows.Forms.ComboBox();
@@ -63,10 +62,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.RequestUserTextBox = new System.Windows.Forms.TextBox();
             this.Label1 = new System.Windows.Forms.Label();
             this.DescriptionTextBox = new System.Windows.Forms.TextBox();
+            this.ButtonPanel = new System.Windows.Forms.Panel();
+            this.EditButtonsPanel = new System.Windows.Forms.Panel();
+            this.AcceptChangesButton = new System.Windows.Forms.Button();
+            this.DiscardChangesButton = new System.Windows.Forms.Button();
+            this.CreatePanel = new System.Windows.Forms.Panel();
+            this.CreateNewButton = new System.Windows.Forms.Button();
             this.GroupBox3 = new System.Windows.Forms.GroupBox();
             this.Panel2 = new System.Windows.Forms.Panel();
             this.NotesGrid = new System.Windows.Forms.DataGridView();
-            this.Panel1 = new System.Windows.Forms.Panel();
+            this.ItemsPanel = new System.Windows.Forms.Panel();
             this.GroupBox4 = new System.Windows.Forms.GroupBox();
             this.RequestItemsGrid = new System.Windows.Forms.DataGridView();
             this.AllowDragCheckBox = new System.Windows.Forms.CheckBox();
@@ -82,16 +87,16 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.StatusStrip1 = new System.Windows.Forms.StatusStrip();
             this.PopupMenuItems.SuspendLayout();
             this.PopupMenuNotes.SuspendLayout();
-            this.Panel4.SuspendLayout();
+            this.RequestPanel.SuspendLayout();
             this.GroupBox1.SuspendLayout();
-            this.Panel3.SuspendLayout();
+            this.GroupBox2.SuspendLayout();
+            this.ButtonPanel.SuspendLayout();
             this.EditButtonsPanel.SuspendLayout();
             this.CreatePanel.SuspendLayout();
-            this.GroupBox2.SuspendLayout();
             this.GroupBox3.SuspendLayout();
             this.Panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NotesGrid)).BeginInit();
-            this.Panel1.SuspendLayout();
+            this.ItemsPanel.SuspendLayout();
             this.GroupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RequestItemsGrid)).BeginInit();
             this.ToolStrip.SuspendLayout();
@@ -153,9 +158,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ImportDeviceMenuItem.Text = "Import New Asset";
             this.ImportDeviceMenuItem.Click += new System.EventHandler(this.ImportDeviceMenuItem_Click);
             // 
-            // tsmSeparator
+            // MenuSeparator
             // 
-            this.MenuSeparator.Name = "tsmSeparator";
+            this.MenuSeparator.Name = "MenuSeparator";
             this.MenuSeparator.Size = new System.Drawing.Size(175, 6);
             // 
             // DeleteRequestMenuItem
@@ -187,19 +192,43 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // CreateDateTextBox
             // 
-            this.CreateDateTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.CreateDateTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.CreateDateTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.CreateDateTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CreateDateTextBox.ForeColor = System.Drawing.Color.Black;
-            this.CreateDateTextBox.Location = new System.Drawing.Point(263, 71);
+            this.CreateDateTextBox.Location = new System.Drawing.Point(397, 63);
             this.CreateDateTextBox.Name = "CreateDateTextBox";
             this.CreateDateTextBox.ReadOnly = true;
             this.CreateDateTextBox.Size = new System.Drawing.Size(137, 21);
             this.CreateDateTextBox.TabIndex = 23;
-            this.CreateDateTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ToolTip.SetToolTip(this.CreateDateTextBox, "Create Date");
             this.CreateDateTextBox.WordWrap = false;
+            // 
+            // ModifyDateTextBox
+            // 
+            this.ModifyDateTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.ModifyDateTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ModifyDateTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ModifyDateTextBox.ForeColor = System.Drawing.Color.Black;
+            this.ModifyDateTextBox.Location = new System.Drawing.Point(397, 103);
+            this.ModifyDateTextBox.Name = "ModifyDateTextBox";
+            this.ModifyDateTextBox.ReadOnly = true;
+            this.ModifyDateTextBox.Size = new System.Drawing.Size(137, 21);
+            this.ModifyDateTextBox.TabIndex = 25;
+            this.ModifyDateTextBox.WordWrap = false;
+            // 
+            // ModifyByTextBox
+            // 
+            this.ModifyByTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.ModifyByTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ModifyByTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ModifyByTextBox.ForeColor = System.Drawing.Color.Black;
+            this.ModifyByTextBox.Location = new System.Drawing.Point(397, 143);
+            this.ModifyByTextBox.Name = "ModifyByTextBox";
+            this.ModifyByTextBox.ReadOnly = true;
+            this.ModifyByTextBox.Size = new System.Drawing.Size(137, 21);
+            this.ModifyByTextBox.TabIndex = 27;
+            this.ModifyByTextBox.WordWrap = false;
             // 
             // PopupMenuNotes
             // 
@@ -236,21 +265,25 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ContentPanel.AutoScroll = true;
             this.ContentPanel.Size = new System.Drawing.Size(1014, 557);
             // 
-            // Panel4
+            // RequestPanel
             // 
-            this.Panel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.RequestPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Panel4.Controls.Add(this.GroupBox1);
-            this.Panel4.Controls.Add(this.GroupBox3);
-            this.Panel4.Location = new System.Drawing.Point(8, 40);
-            this.Panel4.Name = "Panel4";
-            this.Panel4.Size = new System.Drawing.Size(1061, 272);
-            this.Panel4.TabIndex = 5;
+            this.RequestPanel.Controls.Add(this.GroupBox1);
+            this.RequestPanel.Controls.Add(this.GroupBox3);
+            this.RequestPanel.Location = new System.Drawing.Point(8, 40);
+            this.RequestPanel.Name = "RequestPanel";
+            this.RequestPanel.Size = new System.Drawing.Size(1094, 277);
+            this.RequestPanel.TabIndex = 5;
             // 
             // GroupBox1
             // 
+            this.GroupBox1.Controls.Add(this.label12);
+            this.GroupBox1.Controls.Add(this.ModifyByTextBox);
+            this.GroupBox1.Controls.Add(this.label11);
+            this.GroupBox1.Controls.Add(this.ModifyDateTextBox);
+            this.GroupBox1.Controls.Add(this.label10);
             this.GroupBox1.Controls.Add(this.CreateDateTextBox);
-            this.GroupBox1.Controls.Add(this.Panel3);
             this.GroupBox1.Controls.Add(this.Label8);
             this.GroupBox1.Controls.Add(this.RequestNumTextBox);
             this.GroupBox1.Controls.Add(this.StatusComboBox);
@@ -264,25 +297,272 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox1.Controls.Add(this.RequestUserTextBox);
             this.GroupBox1.Controls.Add(this.Label1);
             this.GroupBox1.Controls.Add(this.DescriptionTextBox);
+            this.GroupBox1.Controls.Add(this.ButtonPanel);
             this.GroupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox1.Location = new System.Drawing.Point(5, 4);
             this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(600, 264);
+            this.GroupBox1.Size = new System.Drawing.Size(549, 264);
             this.GroupBox1.TabIndex = 0;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Request Info";
             // 
-            // Panel3
+            // label12
             // 
-            this.Panel3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.Panel3.AutoSize = true;
-            this.Panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.Panel3.Controls.Add(this.EditButtonsPanel);
-            this.Panel3.Controls.Add(this.CreatePanel);
-            this.Panel3.Location = new System.Drawing.Point(229, 102);
-            this.Panel3.Name = "Panel3";
-            this.Panel3.Size = new System.Drawing.Size(148, 148);
-            this.Panel3.TabIndex = 22;
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(394, 127);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(74, 15);
+            this.label12.TabIndex = 28;
+            this.label12.Text = "Modified By:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(394, 87);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(58, 15);
+            this.label11.TabIndex = 26;
+            this.label11.Text = "Modified:";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(394, 47);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(75, 15);
+            this.label10.TabIndex = 24;
+            this.label10.Text = "Create Date:";
+            // 
+            // Label8
+            // 
+            this.Label8.AutoSize = true;
+            this.Label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label8.Location = new System.Drawing.Point(470, 11);
+            this.Label8.Name = "Label8";
+            this.Label8.Size = new System.Drawing.Size(66, 15);
+            this.Label8.TabIndex = 16;
+            this.Label8.Text = "Request #:";
+            // 
+            // RequestNumTextBox
+            // 
+            this.RequestNumTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
+            this.RequestNumTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RequestNumTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RequestNumTextBox.Location = new System.Drawing.Point(473, 27);
+            this.RequestNumTextBox.Name = "RequestNumTextBox";
+            this.RequestNumTextBox.ReadOnly = true;
+            this.RequestNumTextBox.Size = new System.Drawing.Size(61, 23);
+            this.RequestNumTextBox.TabIndex = 15;
+            this.RequestNumTextBox.TabStop = false;
+            // 
+            // StatusComboBox
+            // 
+            this.StatusComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusComboBox.FormattingEnabled = true;
+            this.StatusComboBox.Location = new System.Drawing.Point(10, 225);
+            this.StatusComboBox.Margin = new System.Windows.Forms.Padding(2);
+            this.StatusComboBox.Name = "StatusComboBox";
+            this.StatusComboBox.Size = new System.Drawing.Size(164, 23);
+            this.StatusComboBox.TabIndex = 3;
+            // 
+            // Label7
+            // 
+            this.Label7.AutoSize = true;
+            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label7.Location = new System.Drawing.Point(7, 206);
+            this.Label7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
+            this.Label7.Name = "Label7";
+            this.Label7.Size = new System.Drawing.Size(44, 15);
+            this.Label7.TabIndex = 13;
+            this.Label7.Text = "Status:";
+            // 
+            // GroupBox2
+            // 
+            this.GroupBox2.Controls.Add(this.ReqStatusLabel);
+            this.GroupBox2.Controls.Add(this.POStatusLabel);
+            this.GroupBox2.Controls.Add(this.Label9);
+            this.GroupBox2.Controls.Add(this.RTNumberTextBox);
+            this.GroupBox2.Controls.Add(this.Label6);
+            this.GroupBox2.Controls.Add(this.ReqNumberTextBox);
+            this.GroupBox2.Controls.Add(this.Label5);
+            this.GroupBox2.Controls.Add(this.POTextBox);
+            this.GroupBox2.Location = new System.Drawing.Point(195, 80);
+            this.GroupBox2.Name = "GroupBox2";
+            this.GroupBox2.Size = new System.Drawing.Size(171, 175);
+            this.GroupBox2.TabIndex = 11;
+            this.GroupBox2.TabStop = false;
+            this.GroupBox2.Text = "Add\'l Info (Click to View)";
+            // 
+            // ReqStatusLabel
+            // 
+            this.ReqStatusLabel.AutoSize = true;
+            this.ReqStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReqStatusLabel.ForeColor = System.Drawing.Color.DimGray;
+            this.ReqStatusLabel.Location = new System.Drawing.Point(16, 112);
+            this.ReqStatusLabel.Name = "ReqStatusLabel";
+            this.ReqStatusLabel.Size = new System.Drawing.Size(61, 12);
+            this.ReqStatusLabel.TabIndex = 11;
+            this.ReqStatusLabel.Text = "Status: NA";
+            // 
+            // POStatusLabel
+            // 
+            this.POStatusLabel.AutoSize = true;
+            this.POStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.POStatusLabel.ForeColor = System.Drawing.Color.DimGray;
+            this.POStatusLabel.Location = new System.Drawing.Point(16, 59);
+            this.POStatusLabel.Name = "POStatusLabel";
+            this.POStatusLabel.Size = new System.Drawing.Size(61, 12);
+            this.POStatusLabel.TabIndex = 10;
+            this.POStatusLabel.Text = "Status: NA";
+            // 
+            // Label9
+            // 
+            this.Label9.AutoSize = true;
+            this.Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label9.Location = new System.Drawing.Point(14, 128);
+            this.Label9.Name = "Label9";
+            this.Label9.Size = new System.Drawing.Size(36, 15);
+            this.Label9.TabIndex = 9;
+            this.Label9.Text = "RT #:";
+            // 
+            // Label6
+            // 
+            this.Label6.AutoSize = true;
+            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label6.Location = new System.Drawing.Point(14, 74);
+            this.Label6.Name = "Label6";
+            this.Label6.Size = new System.Drawing.Size(82, 15);
+            this.Label6.TabIndex = 7;
+            this.Label6.Text = "Requisition #:";
+            // 
+            // ReqNumberTextBox
+            // 
+            this.ReqNumberTextBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ReqNumberTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReqNumberTextBox.Location = new System.Drawing.Point(17, 90);
+            this.ReqNumberTextBox.Name = "ReqNumberTextBox";
+            this.ReqNumberTextBox.Size = new System.Drawing.Size(137, 22);
+            this.ReqNumberTextBox.TabIndex = 6;
+            this.ReqNumberTextBox.Click += new System.EventHandler(this.ReqNumberTextBox_Click);
+            // 
+            // Label5
+            // 
+            this.Label5.AutoSize = true;
+            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label5.Location = new System.Drawing.Point(14, 21);
+            this.Label5.Name = "Label5";
+            this.Label5.Size = new System.Drawing.Size(37, 15);
+            this.Label5.TabIndex = 5;
+            this.Label5.Text = "PO #:";
+            // 
+            // POTextBox
+            // 
+            this.POTextBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.POTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.POTextBox.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.POTextBox.Location = new System.Drawing.Point(17, 37);
+            this.POTextBox.Name = "POTextBox";
+            this.POTextBox.Size = new System.Drawing.Size(137, 22);
+            this.POTextBox.TabIndex = 5;
+            this.POTextBox.Click += new System.EventHandler(this.POTextBox_Click);
+            // 
+            // TypeComboBox
+            // 
+            this.TypeComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TypeComboBox.FormattingEnabled = true;
+            this.TypeComboBox.Location = new System.Drawing.Point(10, 133);
+            this.TypeComboBox.Margin = new System.Windows.Forms.Padding(2);
+            this.TypeComboBox.Name = "TypeComboBox";
+            this.TypeComboBox.Size = new System.Drawing.Size(164, 23);
+            this.TypeComboBox.TabIndex = 2;
+            // 
+            // Label4
+            // 
+            this.Label4.AutoSize = true;
+            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label4.Location = new System.Drawing.Point(7, 114);
+            this.Label4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
+            this.Label4.Name = "Label4";
+            this.Label4.Size = new System.Drawing.Size(36, 15);
+            this.Label4.TabIndex = 8;
+            this.Label4.Text = "Type:";
+            // 
+            // NeedByDatePicker
+            // 
+            this.NeedByDatePicker.CustomFormat = "MM/dd/yyyy";
+            this.NeedByDatePicker.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NeedByDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.NeedByDatePicker.Location = new System.Drawing.Point(10, 180);
+            this.NeedByDatePicker.Margin = new System.Windows.Forms.Padding(2);
+            this.NeedByDatePicker.Name = "NeedByDatePicker";
+            this.NeedByDatePicker.Size = new System.Drawing.Size(164, 21);
+            this.NeedByDatePicker.TabIndex = 3;
+            // 
+            // Label3
+            // 
+            this.Label3.AutoSize = true;
+            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label3.Location = new System.Drawing.Point(7, 161);
+            this.Label3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
+            this.Label3.Name = "Label3";
+            this.Label3.Size = new System.Drawing.Size(56, 15);
+            this.Label3.TabIndex = 5;
+            this.Label3.Text = "Need By:";
+            // 
+            // Label2
+            // 
+            this.Label2.AutoSize = true;
+            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label2.Location = new System.Drawing.Point(7, 69);
+            this.Label2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
+            this.Label2.Name = "Label2";
+            this.Label2.Size = new System.Drawing.Size(85, 15);
+            this.Label2.TabIndex = 3;
+            this.Label2.Text = "Request User:";
+            // 
+            // RequestUserTextBox
+            // 
+            this.RequestUserTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RequestUserTextBox.Location = new System.Drawing.Point(10, 88);
+            this.RequestUserTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.RequestUserTextBox.Name = "RequestUserTextBox";
+            this.RequestUserTextBox.Size = new System.Drawing.Size(164, 21);
+            this.RequestUserTextBox.TabIndex = 1;
+            // 
+            // Label1
+            // 
+            this.Label1.AutoSize = true;
+            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Location = new System.Drawing.Point(7, 25);
+            this.Label1.Margin = new System.Windows.Forms.Padding(2);
+            this.Label1.Name = "Label1";
+            this.Label1.Size = new System.Drawing.Size(121, 15);
+            this.Label1.TabIndex = 1;
+            this.Label1.Text = "Request Description:";
+            // 
+            // DescriptionTextBox
+            // 
+            this.DescriptionTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DescriptionTextBox.Location = new System.Drawing.Point(10, 43);
+            this.DescriptionTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.DescriptionTextBox.Name = "DescriptionTextBox";
+            this.DescriptionTextBox.Size = new System.Drawing.Size(356, 21);
+            this.DescriptionTextBox.TabIndex = 0;
+            this.DescriptionTextBox.Tag = "";
+            // 
+            // ButtonPanel
+            // 
+            this.ButtonPanel.AutoSize = true;
+            this.ButtonPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ButtonPanel.Controls.Add(this.EditButtonsPanel);
+            this.ButtonPanel.Controls.Add(this.CreatePanel);
+            this.ButtonPanel.Location = new System.Drawing.Point(387, 170);
+            this.ButtonPanel.Name = "ButtonPanel";
+            this.ButtonPanel.Size = new System.Drawing.Size(147, 85);
+            this.ButtonPanel.TabIndex = 22;
             // 
             // EditButtonsPanel
             // 
@@ -321,7 +601,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // CreatePanel
             // 
             this.CreatePanel.Controls.Add(this.CreateNewButton);
-            this.CreatePanel.Location = new System.Drawing.Point(3, 90);
+            this.CreatePanel.Location = new System.Drawing.Point(2, 14);
             this.CreatePanel.Name = "CreatePanel";
             this.CreatePanel.Size = new System.Drawing.Size(142, 55);
             this.CreatePanel.TabIndex = 21;
@@ -338,231 +618,26 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.CreateNewButton.UseVisualStyleBackColor = true;
             this.CreateNewButton.Click += new System.EventHandler(this.CreateNewButton_Click);
             // 
-            // Label8
-            // 
-            this.Label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Label8.AutoSize = true;
-            this.Label8.Location = new System.Drawing.Point(484, 29);
-            this.Label8.Name = "Label8";
-            this.Label8.Size = new System.Drawing.Size(66, 15);
-            this.Label8.TabIndex = 16;
-            this.Label8.Text = "Request #:";
-            // 
-            // RequestNumTextBox
-            // 
-            this.RequestNumTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.RequestNumTextBox.Location = new System.Drawing.Point(487, 45);
-            this.RequestNumTextBox.Name = "RequestNumTextBox";
-            this.RequestNumTextBox.ReadOnly = true;
-            this.RequestNumTextBox.Size = new System.Drawing.Size(86, 21);
-            this.RequestNumTextBox.TabIndex = 15;
-            this.RequestNumTextBox.TabStop = false;
-            // 
-            // StatusComboBox
-            // 
-            this.StatusComboBox.FormattingEnabled = true;
-            this.StatusComboBox.Location = new System.Drawing.Point(18, 227);
-            this.StatusComboBox.Margin = new System.Windows.Forms.Padding(2);
-            this.StatusComboBox.Name = "StatusComboBox";
-            this.StatusComboBox.Size = new System.Drawing.Size(137, 23);
-            this.StatusComboBox.TabIndex = 3;
-            // 
-            // Label7
-            // 
-            this.Label7.AutoSize = true;
-            this.Label7.Location = new System.Drawing.Point(15, 208);
-            this.Label7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
-            this.Label7.Name = "Label7";
-            this.Label7.Size = new System.Drawing.Size(44, 15);
-            this.Label7.TabIndex = 13;
-            this.Label7.Text = "Status:";
-            // 
-            // GroupBox2
-            // 
-            this.GroupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.GroupBox2.Controls.Add(this.ReqStatusLabel);
-            this.GroupBox2.Controls.Add(this.POStatusLabel);
-            this.GroupBox2.Controls.Add(this.Label9);
-            this.GroupBox2.Controls.Add(this.RTNumberTextBox);
-            this.GroupBox2.Controls.Add(this.Label6);
-            this.GroupBox2.Controls.Add(this.ReqNumberTextBox);
-            this.GroupBox2.Controls.Add(this.Label5);
-            this.GroupBox2.Controls.Add(this.POTextBox);
-            this.GroupBox2.Location = new System.Drawing.Point(419, 82);
-            this.GroupBox2.Name = "GroupBox2";
-            this.GroupBox2.Size = new System.Drawing.Size(175, 175);
-            this.GroupBox2.TabIndex = 11;
-            this.GroupBox2.TabStop = false;
-            this.GroupBox2.Text = "Add\'l Info (Click to View)";
-            // 
-            // ReqStatusLabel
-            // 
-            this.ReqStatusLabel.AutoSize = true;
-            this.ReqStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ReqStatusLabel.ForeColor = System.Drawing.Color.DimGray;
-            this.ReqStatusLabel.Location = new System.Drawing.Point(16, 112);
-            this.ReqStatusLabel.Name = "ReqStatusLabel";
-            this.ReqStatusLabel.Size = new System.Drawing.Size(61, 12);
-            this.ReqStatusLabel.TabIndex = 11;
-            this.ReqStatusLabel.Text = "Status: NA";
-            // 
-            // POStatusLabel
-            // 
-            this.POStatusLabel.AutoSize = true;
-            this.POStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.POStatusLabel.ForeColor = System.Drawing.Color.DimGray;
-            this.POStatusLabel.Location = new System.Drawing.Point(16, 59);
-            this.POStatusLabel.Name = "POStatusLabel";
-            this.POStatusLabel.Size = new System.Drawing.Size(61, 12);
-            this.POStatusLabel.TabIndex = 10;
-            this.POStatusLabel.Text = "Status: NA";
-            // 
-            // Label9
-            // 
-            this.Label9.AutoSize = true;
-            this.Label9.Location = new System.Drawing.Point(14, 128);
-            this.Label9.Name = "Label9";
-            this.Label9.Size = new System.Drawing.Size(36, 15);
-            this.Label9.TabIndex = 9;
-            this.Label9.Text = "RT #:";
-            // 
-            // Label6
-            // 
-            this.Label6.AutoSize = true;
-            this.Label6.Location = new System.Drawing.Point(14, 74);
-            this.Label6.Name = "Label6";
-            this.Label6.Size = new System.Drawing.Size(82, 15);
-            this.Label6.TabIndex = 7;
-            this.Label6.Text = "Requisition #:";
-            // 
-            // ReqNumberTextBox
-            // 
-            this.ReqNumberTextBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ReqNumberTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ReqNumberTextBox.Location = new System.Drawing.Point(17, 90);
-            this.ReqNumberTextBox.Name = "ReqNumberTextBox";
-            this.ReqNumberTextBox.Size = new System.Drawing.Size(137, 22);
-            this.ReqNumberTextBox.TabIndex = 6;
-            this.ReqNumberTextBox.Click += new System.EventHandler(this.ReqNumberTextBox_Click);
-            // 
-            // Label5
-            // 
-            this.Label5.AutoSize = true;
-            this.Label5.Location = new System.Drawing.Point(14, 21);
-            this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(37, 15);
-            this.Label5.TabIndex = 5;
-            this.Label5.Text = "PO #:";
-            // 
-            // POTextBox
-            // 
-            this.POTextBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.POTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.POTextBox.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.POTextBox.Location = new System.Drawing.Point(17, 37);
-            this.POTextBox.Name = "POTextBox";
-            this.POTextBox.Size = new System.Drawing.Size(137, 22);
-            this.POTextBox.TabIndex = 5;
-            this.POTextBox.Click += new System.EventHandler(this.POTextBox_Click);
-            // 
-            // TypeComboBox
-            // 
-            this.TypeComboBox.FormattingEnabled = true;
-            this.TypeComboBox.Location = new System.Drawing.Point(18, 135);
-            this.TypeComboBox.Margin = new System.Windows.Forms.Padding(2);
-            this.TypeComboBox.Name = "TypeComboBox";
-            this.TypeComboBox.Size = new System.Drawing.Size(137, 23);
-            this.TypeComboBox.TabIndex = 2;
-            // 
-            // Label4
-            // 
-            this.Label4.AutoSize = true;
-            this.Label4.Location = new System.Drawing.Point(15, 116);
-            this.Label4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
-            this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(36, 15);
-            this.Label4.TabIndex = 8;
-            this.Label4.Text = "Type:";
-            // 
-            // NeedByDatePicker
-            // 
-            this.NeedByDatePicker.CustomFormat = "MM/dd/yyyy";
-            this.NeedByDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.NeedByDatePicker.Location = new System.Drawing.Point(18, 182);
-            this.NeedByDatePicker.Margin = new System.Windows.Forms.Padding(2);
-            this.NeedByDatePicker.Name = "NeedByDatePicker";
-            this.NeedByDatePicker.Size = new System.Drawing.Size(137, 21);
-            this.NeedByDatePicker.TabIndex = 3;
-            // 
-            // Label3
-            // 
-            this.Label3.AutoSize = true;
-            this.Label3.Location = new System.Drawing.Point(15, 163);
-            this.Label3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
-            this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(56, 15);
-            this.Label3.TabIndex = 5;
-            this.Label3.Text = "Need By:";
-            // 
-            // Label2
-            // 
-            this.Label2.AutoSize = true;
-            this.Label2.Location = new System.Drawing.Point(15, 71);
-            this.Label2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
-            this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(85, 15);
-            this.Label2.TabIndex = 3;
-            this.Label2.Text = "Request User:";
-            // 
-            // RequestUserTextBox
-            // 
-            this.RequestUserTextBox.Location = new System.Drawing.Point(18, 90);
-            this.RequestUserTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.RequestUserTextBox.Name = "RequestUserTextBox";
-            this.RequestUserTextBox.Size = new System.Drawing.Size(137, 21);
-            this.RequestUserTextBox.TabIndex = 1;
-            // 
-            // Label1
-            // 
-            this.Label1.AutoSize = true;
-            this.Label1.Location = new System.Drawing.Point(15, 27);
-            this.Label1.Margin = new System.Windows.Forms.Padding(2);
-            this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(121, 15);
-            this.Label1.TabIndex = 1;
-            this.Label1.Text = "Request Description:";
-            // 
-            // DescriptionTextBox
-            // 
-            this.DescriptionTextBox.Location = new System.Drawing.Point(18, 45);
-            this.DescriptionTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.DescriptionTextBox.Name = "DescriptionTextBox";
-            this.DescriptionTextBox.Size = new System.Drawing.Size(382, 21);
-            this.DescriptionTextBox.TabIndex = 0;
-            this.DescriptionTextBox.Tag = "";
-            // 
             // GroupBox3
             // 
             this.GroupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox3.Controls.Add(this.Panel2);
-            this.GroupBox3.Location = new System.Drawing.Point(611, 4);
+            this.GroupBox3.Location = new System.Drawing.Point(560, 4);
             this.GroupBox3.Name = "GroupBox3";
-            this.GroupBox3.Size = new System.Drawing.Size(447, 264);
+            this.GroupBox3.Size = new System.Drawing.Size(531, 264);
             this.GroupBox3.TabIndex = 4;
             this.GroupBox3.TabStop = false;
             this.GroupBox3.Text = "Notes";
             // 
             // Panel2
             // 
-            this.Panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel2.Controls.Add(this.NotesGrid);
+            this.Panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Panel2.Location = new System.Drawing.Point(6, 13);
+            this.Panel2.Location = new System.Drawing.Point(3, 16);
             this.Panel2.Name = "Panel2";
-            this.Panel2.Size = new System.Drawing.Size(436, 244);
+            this.Panel2.Size = new System.Drawing.Size(525, 245);
             this.Panel2.TabIndex = 0;
             // 
             // NotesGrid
@@ -604,22 +679,22 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.NotesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.NotesGrid.ShowCellErrors = false;
             this.NotesGrid.ShowCellToolTips = false;
-            this.NotesGrid.Size = new System.Drawing.Size(430, 238);
+            this.NotesGrid.Size = new System.Drawing.Size(519, 239);
             this.NotesGrid.TabIndex = 19;
             this.NotesGrid.VirtualMode = true;
             this.NotesGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.NotesGrid_CellDoubleClick);
             // 
-            // Panel1
+            // ItemsPanel
             // 
-            this.Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.ItemsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Panel1.Controls.Add(this.GroupBox4);
-            this.Panel1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Panel1.Location = new System.Drawing.Point(8, 314);
-            this.Panel1.Name = "Panel1";
-            this.Panel1.Size = new System.Drawing.Size(1061, 384);
-            this.Panel1.TabIndex = 1;
+            this.ItemsPanel.Controls.Add(this.GroupBox4);
+            this.ItemsPanel.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ItemsPanel.Location = new System.Drawing.Point(8, 314);
+            this.ItemsPanel.Name = "ItemsPanel";
+            this.ItemsPanel.Size = new System.Drawing.Size(1094, 384);
+            this.ItemsPanel.TabIndex = 1;
             // 
             // GroupBox4
             // 
@@ -628,9 +703,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox4.Controls.Add(this.RequestItemsGrid);
             this.GroupBox4.Controls.Add(this.AllowDragCheckBox);
-            this.GroupBox4.Location = new System.Drawing.Point(0, 3);
+            this.GroupBox4.Location = new System.Drawing.Point(5, 0);
             this.GroupBox4.Name = "GroupBox4";
-            this.GroupBox4.Size = new System.Drawing.Size(1058, 378);
+            this.GroupBox4.Size = new System.Drawing.Size(1086, 381);
             this.GroupBox4.TabIndex = 21;
             this.GroupBox4.TabStop = false;
             this.GroupBox4.Text = "Items";
@@ -670,7 +745,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.RequestItemsGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.RequestItemsGrid.ShowCellToolTips = false;
-            this.RequestItemsGrid.Size = new System.Drawing.Size(1046, 340);
+            this.RequestItemsGrid.Size = new System.Drawing.Size(1074, 343);
             this.RequestItemsGrid.TabIndex = 18;
             this.RequestItemsGrid.VirtualMode = true;
             this.RequestItemsGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellEnter);
@@ -691,7 +766,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.AllowDragCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.AllowDragCheckBox.AutoSize = true;
-            this.AllowDragCheckBox.Location = new System.Drawing.Point(956, 13);
+            this.AllowDragCheckBox.Location = new System.Drawing.Point(984, 13);
             this.AllowDragCheckBox.Name = "AllowDragCheckBox";
             this.AllowDragCheckBox.Size = new System.Drawing.Size(96, 19);
             this.AllowDragCheckBox.TabIndex = 20;
@@ -717,7 +792,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ToolStrip.Location = new System.Drawing.Point(0, 0);
             this.ToolStrip.Name = "ToolStrip";
             this.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.ToolStrip.Size = new System.Drawing.Size(1079, 37);
+            this.ToolStrip.Size = new System.Drawing.Size(1112, 37);
             this.ToolStrip.TabIndex = 6;
             this.ToolStrip.Text = "ToolStrip1";
             // 
@@ -797,7 +872,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.StatusStrip1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StatusStrip1.Location = new System.Drawing.Point(0, 701);
             this.StatusStrip1.Name = "StatusStrip1";
-            this.StatusStrip1.Size = new System.Drawing.Size(1079, 22);
+            this.StatusStrip1.Size = new System.Drawing.Size(1112, 22);
             this.StatusStrip1.TabIndex = 7;
             this.StatusStrip1.Text = "StatusStrip1";
             // 
@@ -806,10 +881,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
-            this.ClientSize = new System.Drawing.Size(1079, 723);
+            this.ClientSize = new System.Drawing.Size(1112, 723);
             this.Controls.Add(this.ToolStrip);
-            this.Controls.Add(this.Panel1);
-            this.Controls.Add(this.Panel4);
+            this.Controls.Add(this.ItemsPanel);
+            this.Controls.Add(this.RequestPanel);
             this.Controls.Add(this.StatusStrip1);
             this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(771, 443);
@@ -821,18 +896,18 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Resize += new System.EventHandler(this.SibiManageRequestForm_Resize);
             this.PopupMenuItems.ResumeLayout(false);
             this.PopupMenuNotes.ResumeLayout(false);
-            this.Panel4.ResumeLayout(false);
+            this.RequestPanel.ResumeLayout(false);
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
-            this.Panel3.ResumeLayout(false);
-            this.EditButtonsPanel.ResumeLayout(false);
-            this.CreatePanel.ResumeLayout(false);
             this.GroupBox2.ResumeLayout(false);
             this.GroupBox2.PerformLayout();
+            this.ButtonPanel.ResumeLayout(false);
+            this.EditButtonsPanel.ResumeLayout(false);
+            this.CreatePanel.ResumeLayout(false);
             this.GroupBox3.ResumeLayout(false);
             this.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.NotesGrid)).EndInit();
-            this.Panel1.ResumeLayout(false);
+            this.ItemsPanel.ResumeLayout(false);
             this.GroupBox4.ResumeLayout(false);
             this.GroupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RequestItemsGrid)).EndInit();
@@ -856,12 +931,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
         internal ToolStripButton DeleteMenuButton;
         internal ToolStripButton AddNoteMenuButton;
         internal ToolStripButton AttachmentsMenuButton;
-        internal Panel Panel1;
+        internal Panel ItemsPanel;
         internal DataGridView RequestItemsGrid;
-        internal Panel Panel4;
+        internal Panel RequestPanel;
         internal GroupBox GroupBox1;
         internal TextBox CreateDateTextBox;
-        internal Panel Panel3;
+        internal Panel ButtonPanel;
         internal Panel EditButtonsPanel;
         internal Button AcceptChangesButton;
         internal Button DiscardChangesButton;
@@ -903,5 +978,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
         internal ToolStripMenuItem GLBudgetMenuItem;
         internal ToolStripMenuItem ImportDeviceMenuItem;
         internal StatusStrip StatusStrip1;
+        internal Label label12;
+        internal TextBox ModifyByTextBox;
+        internal Label label11;
+        internal TextBox ModifyDateTextBox;
+        internal Label label10;
     }
 }

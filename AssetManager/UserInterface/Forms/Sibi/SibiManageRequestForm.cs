@@ -143,8 +143,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     string insertRequestQry = Queries.SelectEmptySibiRequestTable;
                     string insertRequestItemsQry = Queries.SelectEmptySibiItemsTable(GridColumnFunctions.ColumnsString(RequestItemsColumns()));
+
                     DBFactory.GetDatabase().UpdateTable(insertRequestQry, GetInsertTable(insertRequestQry, currentRequest.Guid), trans);
                     DBFactory.GetDatabase().UpdateTable(insertRequestItemsQry, currentRequest.RequestItems, trans);
+
                     CreatePanel.Visible = false;
                     trans.Commit();
                     isModifying = false;
@@ -443,9 +445,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         blah = OtherFunctions.Message("Failed to delete row.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
                     }
                 }
-                else
-                {
-                }
             }
             catch (Exception ex)
             {
@@ -513,9 +512,15 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 if (c is TextBox)
                 {
                     var txt = (TextBox)c;
-                    if (txt != RequestNumTextBox && txt != CreateDateTextBox)
+
+                    if (txt.Tag is DBControlInfo)
                     {
-                        txt.ReadOnly = false;
+                        var ctlInfo = (DBControlInfo)txt.Tag;
+
+                        if (ctlInfo.ParseType != ParseType.DisplayOnly)
+                        {
+                            txt.ReadOnly = false;
+                        }
                     }
                 }
                 else if (c is ComboBox)
@@ -566,9 +571,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 var tmpTable = controlParser.ReturnInsertTable(selectQuery);
-                var row = tmpTable.Rows[0];
+
                 //Add Add'l info
+                var row = tmpTable.Rows[0];
                 row[SibiRequestCols.Guid] = requestGuid;
+                row[SibiRequestCols.ModifyDate] = DateTime.Now;
+                row[SibiRequestCols.ModifyUser] = NetworkInfo.LocalDomainUser;
+
                 return tmpTable;
             }
             catch (Exception ex)
@@ -592,7 +601,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
             try
             {
                 var tmpTable = controlParser.ReturnUpdateTable(selectQuery);
+
                 //Add Add'l info
+                var row = tmpTable.Rows[0];
+                row[SibiRequestCols.ModifyDate] = DateTime.Now;
+                row[SibiRequestCols.ModifyUser] = NetworkInfo.LocalDomainUser;
+
                 return tmpTable;
             }
             catch (Exception ex)
@@ -640,7 +654,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             ReqNumberTextBox.SetDBInfo(SibiRequestCols.RequisitionNumber, false);
             RequestNumTextBox.SetDBInfo(SibiRequestCols.RequestNumber, ParseType.DisplayOnly, false);
             RTNumberTextBox.SetDBInfo(SibiRequestCols.RTNumber, false);
-            CreateDateTextBox.SetDBInfo(SibiRequestCols.DateStamp, ParseType.DisplayOnly, false);
+            CreateDateTextBox.SetDBInfo(SibiRequestCols.CreateDate, ParseType.DisplayOnly, false);
+            ModifyDateTextBox.SetDBInfo(SibiRequestCols.ModifyDate, ParseType.DisplayOnly, false);
+            ModifyByTextBox.SetDBInfo(SibiRequestCols.ModifyUser, ParseType.DisplayOnly, false);
         }
 
         private void InitForm()
@@ -1241,11 +1257,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         return;
                     }
 
-                    string RequestUpdateQry = Queries.SelectSibiRequestsByGuid(currentRequest.Guid);
-                    string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), currentRequest.Guid);
+                    string updateRequestQry = Queries.SelectSibiRequestsByGuid(currentRequest.Guid);
+                    string updateRequestItemsQry = Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), currentRequest.Guid);
 
-                    DBFactory.GetDatabase().UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans);
-                    DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, currentRequest.RequestItems, trans);
+                    DBFactory.GetDatabase().UpdateTable(updateRequestQry, GetUpdateTable(updateRequestQry), trans);
+                    DBFactory.GetDatabase().UpdateTable(updateRequestItemsQry, currentRequest.RequestItems, trans);
 
                     trans.Commit();
                     ParentForm.RefreshData();
