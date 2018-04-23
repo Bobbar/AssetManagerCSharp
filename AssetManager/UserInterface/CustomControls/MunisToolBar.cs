@@ -1,9 +1,8 @@
 using AssetManager.Data.Functions;
-using AssetManager.UserInterface.Forms.AdminTools;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -51,22 +50,22 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (targetToolStrip.Items.Count - 1 >= locationIndex + 1)
             {
-                if (!object.ReferenceEquals(targetToolStrip.Items[locationIndex + 1].GetType(), typeof(ToolStripSeparator)))
+                if (!(targetToolStrip.Items[locationIndex + 1] is ToolStripSeparator))
                 {
                     targetToolStrip.Items.Insert(locationIndex + 1, blankSeparator);
                 }
-                if (!object.ReferenceEquals(targetToolStrip.Items[locationIndex - 1].GetType(), typeof(ToolStripSeparator)))
+                if (!(targetToolStrip.Items[locationIndex - 1] is ToolStripSeparator))
                 {
                     targetToolStrip.Items.Insert(locationIndex, blankSeparator);
                 }
             }
             else
             {
-                if (!object.ReferenceEquals(targetToolStrip.Items[locationIndex].GetType(), typeof(ToolStripSeparator)))
+                if (!(targetToolStrip.Items[locationIndex] is ToolStripSeparator))
                 {
                     targetToolStrip.Items.Add(blankSeparator);
                 }
-                if (!object.ReferenceEquals(targetToolStrip.Items[locationIndex - 1].GetType(), typeof(ToolStripSeparator)))
+                if (!(targetToolStrip.Items[locationIndex - 1] is ToolStripSeparator))
                 {
                     targetToolStrip.Items.Insert(locationIndex, blankSeparator);
                 }
@@ -91,13 +90,14 @@ namespace AssetManager.UserInterface.CustomControls
         [SuppressMessage("Microsoft.Design", "CA1806")]
         private void InitToolItems(ExtendedForm parentForm)
         {
-            List<ToolStripMenuItem> ToolItemList = new List<ToolStripMenuItem>();
-            ToolItemList.Add(NewToolItem("tsmUserOrgObLookup", "User Lookup", () => MunisFunctions.NameSearch(parentForm)));
-            ToolItemList.Add(NewToolItem("tsmOrgObLookup", "Org/Obj Lookup", () => MunisFunctions.OrgObjSearch(parentForm)));
-            ToolItemList.Add(NewToolItem("tsmPOLookUp", "PO Lookup", () => MunisFunctions.POSearch(parentForm)));
-            ToolItemList.Add(NewToolItem("tsmReqNumLookUp", "Requisition # Lookup", () => MunisFunctions.ReqSearch(parentForm)));
-            ToolItemList.Add(NewToolItem("tsmDeviceLookUp", "Device Lookup", () => MunisFunctions.AssetSearch(parentForm)));
-            foreach (ToolStripMenuItem item in ToolItemList)
+            var toolItemList = new List<ToolStripMenuItem>();
+            toolItemList.Add(NewToolItem("tsmUserOrgObLookup", "User Lookup", () => MunisFunctions.NameSearch(parentForm)));
+            toolItemList.Add(NewToolItem("tsmOrgObLookup", "Org/Obj Lookup", () => MunisFunctions.OrgObjSearch(parentForm)));
+            toolItemList.Add(NewToolItem("tsmPOLookUp", "PO Lookup", () => MunisFunctions.POSearch(parentForm)));
+            toolItemList.Add(NewToolItem("tsmReqNumLookUp", "Requisition # Lookup", () => MunisFunctions.ReqSearch(parentForm)));
+            toolItemList.Add(NewToolItem("tsmDeviceLookUp", "Device Lookup", () => MunisFunctions.AssetSearch(parentForm)));
+
+            foreach (var item in toolItemList)
             {
                 AddToolItem(item);
             }
@@ -105,7 +105,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private ToolStripMenuItem NewToolItem(string name, string text, Action clickMethod)
         {
-            ToolStripMenuItem newItem = new ToolStripMenuItem();
+            var newItem = new ToolStripMenuItem();
             newItem.Name = name;
             newItem.Text = text;
             newItem.Tag = clickMethod;
@@ -114,9 +114,9 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void ToolItemClicked(object sender, EventArgs e)
         {
-            ToolStripMenuItem ClickedItem = (ToolStripMenuItem)sender;
-            Action ClickAction = (Action)ClickedItem.Tag;
-            ClickAction();
+            var clickedItem = (ToolStripMenuItem)sender;
+            var clickAction = (Action)clickedItem.Tag;
+            clickAction();
         }
 
         #endregion "Methods"
