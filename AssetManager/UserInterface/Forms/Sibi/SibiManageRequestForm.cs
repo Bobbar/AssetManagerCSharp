@@ -133,7 +133,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 return;
             }
-            SibiRequest requestData = GetRequestItems();
+
+            currentRequest.RequestItems = GetRequestItems();
+
             using (var trans = DBFactory.GetDatabase().StartTransaction())
             using (var conn = trans.Connection)
             {
@@ -142,7 +144,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     string insertRequestQry = Queries.SelectEmptySibiRequestTable;
                     string insertRequestItemsQry = Queries.SelectEmptySibiItemsTable(GridColumnFunctions.ColumnsString(RequestItemsColumns()));
                     DBFactory.GetDatabase().UpdateTable(insertRequestQry, GetInsertTable(insertRequestQry, currentRequest.Guid), trans);
-                    DBFactory.GetDatabase().UpdateTable(insertRequestItemsQry, requestData.RequestItems, trans);
+                    DBFactory.GetDatabase().UpdateTable(insertRequestItemsQry, currentRequest.RequestItems, trans);
                     CreatePanel.Visible = false;
                     trans.Commit();
                     isModifying = false;
@@ -576,17 +578,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private SibiRequest GetRequestItems()
+        private DataTable GetRequestItems()
         {
             RequestItemsGrid.EndEdit();
+            var requestItems = (DataTable)RequestItemsGrid.DataSource;
+            MarkupRequestItems(requestItems);
 
-            SibiRequest request = new SibiRequest();
-            request.RequestItems = (DataTable)RequestItemsGrid.DataSource;
-            request.Guid = currentRequest.Guid;
-
-            MarkupRequestItems(request.RequestItems);
-
-            return request;
+            return requestItems;
         }
 
         private DataTable GetUpdateTable(string selectQuery)
@@ -744,7 +742,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         }
 
         /// <summary>
-        /// Cleans up the request items data in prep for DB insertion.
+        /// Cleans up the request items data and prep for DB insertion.
         /// </summary>
         /// <param name="itemsData"></param>
         private void MarkupRequestItems(DataTable itemsData)
@@ -1045,25 +1043,25 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private List<GridColumnAttrib> RequestItemsColumns()
         {
-            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.User, "User"));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Description, "Description"));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Qty, "Qty"));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Location, "Location", Attributes.DeviceAttributes.Locations, ColumnFormatType.AttributeCombo));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Status, "Status", Attributes.SibiAttributes.ItemStatusType, ColumnFormatType.AttributeCombo));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceAsset, "Replace Asset"));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceSerial, "Replace Serial"));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewAsset, "New Asset"));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewSerial, "New Serial"));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.OrgCode, "Org Code"));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ObjectCode, "Object Code"));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.Timestamp, "Created", true, true));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ModifiedDate, "Modified", true, true));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ModifiedBy, "Modified By", true, true));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.ItemGuid, "Item Guid", true, true));
-            ColList.Add(new GridColumnAttrib(SibiRequestItemsCols.RequestGuid, "Request Guid", true, false));
+            var columnList = new List<GridColumnAttrib>();
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.User, "User"));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.Description, "Description"));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.Qty, "Qty"));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.Location, "Location", Attributes.DeviceAttributes.Locations, ColumnFormatType.AttributeCombo));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.Status, "Status", Attributes.SibiAttributes.ItemStatusType, ColumnFormatType.AttributeCombo));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceAsset, "Replace Asset"));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.ReplaceSerial, "Replace Serial"));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewAsset, "New Asset"));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.NewSerial, "New Serial"));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.OrgCode, "Org Code"));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.ObjectCode, "Object Code"));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.Timestamp, "Created", true, true));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.ModifiedDate, "Modified", true, true));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.ModifiedBy, "Modified By", true, true));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.ItemGuid, "Item Guid", true, true));
+            columnList.Add(new GridColumnAttrib(SibiRequestItemsCols.RequestGuid, "Request Guid", true, false));
 
-            return ColList;
+            return columnList;
         }
 
         private void SendToGrid(DataTable results)
@@ -1235,16 +1233,19 @@ namespace AssetManager.UserInterface.Forms.Sibi
                         OtherFunctions.Message("It appears that someone else has modified this request. Please refresh and try again.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Concurrency Failure", this);
                         return;
                     }
-                    SibiRequest RequestData = GetRequestItems();
-                    if (ReferenceEquals(RequestData.RequestItems, null))
+
+                    currentRequest.RequestItems = GetRequestItems();
+
+                    if (ReferenceEquals(currentRequest.RequestItems, null))
                     {
                         return;
                     }
+
                     string RequestUpdateQry = Queries.SelectSibiRequestsByGuid(currentRequest.Guid);
                     string RequestItemsUpdateQry = Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), currentRequest.Guid);
 
                     DBFactory.GetDatabase().UpdateTable(RequestUpdateQry, GetUpdateTable(RequestUpdateQry), trans);
-                    DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, RequestData.RequestItems, trans);
+                    DBFactory.GetDatabase().UpdateTable(RequestItemsUpdateQry, currentRequest.RequestItems, trans);
 
                     trans.Commit();
                     ParentForm.RefreshData();

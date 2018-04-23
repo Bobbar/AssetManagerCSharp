@@ -1585,7 +1585,7 @@
         </member>
         <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiManageRequestForm.MarkupRequestItems(System.Data.DataTable)">
             <summary>
-            Cleans up the request items data in prep for DB insertion.
+            Cleans up the request items data and prep for DB insertion.
             </summary>
             <param name="itemsData"></param>
         </member>
