@@ -1167,14 +1167,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void ViewDeviceForm_Resize(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                Helpers.ChildFormControl.MinimizeChildren(this);
-            }
-        }
-
         #endregion Control Events
     }
 }

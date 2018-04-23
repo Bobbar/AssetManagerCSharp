@@ -30,7 +30,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         #region Constructors
 
-        public SibiMainForm(ExtendedForm parentForm) : base(parentForm, false)
+        public SibiMainForm(ExtendedForm parentForm) : base(parentForm)
         {
             InitializeComponent();
             windowList = new WindowList(this);

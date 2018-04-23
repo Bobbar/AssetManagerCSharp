@@ -29,7 +29,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private bool isNewRequest = false;
         private Point mouseStartPos;
         private MunisToolBar munisToolBar;
-        private FormWindowState prevWindowState;
         private SliderLabel statusSlider;
         private string titleText = "Manage Request";
         private WindowList windowList;
@@ -1638,28 +1637,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             ViewRequestTracker();
         }
-        // METODO: Maybe move this to ExtendedForm class.
-        private void SibiManageRequestForm_Resize(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                ChildFormControl.MinimizeChildren(this);
-                prevWindowState = this.WindowState;
-            }
-            else if (this.WindowState != prevWindowState && this.WindowState == FormWindowState.Normal)
-            {
-                if (prevWindowState != FormWindowState.Maximized)
-                {
-                    ChildFormControl.RestoreChildren(this);
-                }
-            }
-        }
-
-        private void SibiManageRequestForm_ResizeBegin(object sender, EventArgs e)
-        {
-            prevWindowState = this.WindowState;
-        }
-
+             
         #endregion ControlEvents
 
         protected override void Dispose(bool disposing)

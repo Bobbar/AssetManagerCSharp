@@ -1279,11 +1279,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Controls.Add(this.ToolStripContainer1);
             this.Controls.Add(this.StatusStrip);
             this.DoubleBuffered = true;
+            this.MinimizeChildren = true;
             this.MinimumSize = new System.Drawing.Size(1161, 559);
             this.Name = "ViewDeviceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View";
-            this.Resize += new System.EventHandler(this.ViewDeviceForm_Resize);
             this.MunisSibiPanel.ResumeLayout(false);
             this.RightClickMenu.ResumeLayout(false);
             this.TabControl1.ResumeLayout(false);

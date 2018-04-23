@@ -48,22 +48,6 @@ namespace AssetManager.Helpers
             }
         }
 
-        public static void MinimizeChildren(ExtendedForm parentForm)
-        {
-            foreach (var child in parentForm.ChildForms)
-            {
-                child.WindowState = FormWindowState.Minimized;
-            }
-        }
-
-        public static void RestoreChildren(ExtendedForm parentForm)
-        {
-            foreach (var child in parentForm.ChildForms)
-            {
-                child.WindowState = FormWindowState.Normal;
-            }
-        }
-
         public static ExtendedForm FindChildOfType(ExtendedForm parentForm, Type childType)
         {
             var findForm = parentForm.ChildForms.Find(f => f.GetType() == childType);

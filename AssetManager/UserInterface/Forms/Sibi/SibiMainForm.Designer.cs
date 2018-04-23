@@ -323,6 +323,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ClientSize = new System.Drawing.Size(1188, 636);
             this.Controls.Add(this.ToolStrip1);
             this.Controls.Add(this.Panel1);
+            this.InheritTheme = false;
             this.MinimumSize = new System.Drawing.Size(1121, 371);
             this.Name = "SibiMainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;

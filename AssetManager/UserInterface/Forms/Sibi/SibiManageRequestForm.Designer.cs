@@ -887,13 +887,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Controls.Add(this.RequestPanel);
             this.Controls.Add(this.StatusStrip1);
             this.DoubleBuffered = true;
+            this.MinimizeChildren = true;
             this.MinimumSize = new System.Drawing.Size(771, 443);
             this.Name = "SibiManageRequestForm";
+            this.RestoreChildren = true;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Manage Request";
-            this.ResizeBegin += new System.EventHandler(this.SibiManageRequestForm_ResizeBegin);
-            this.Resize += new System.EventHandler(this.SibiManageRequestForm_Resize);
             this.PopupMenuItems.ResumeLayout(false);
             this.PopupMenuNotes.ResumeLayout(false);
             this.RequestPanel.ResumeLayout(false);

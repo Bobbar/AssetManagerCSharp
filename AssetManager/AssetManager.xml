@@ -1044,6 +1044,16 @@
             Custom form with project specific properties, methods and child form handling.
             </summary>
         </member>
+        <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.MinimizeChildren">
+            <summary>
+            Gets or sets the value indicating whether child forms will be minimized with parent.
+            </summary>
+        </member>
+        <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.RestoreChildren">
+            <summary>
+            Gets or sets the value indicating whether child forms will be restored with parent.
+            </summary>
+        </member>
         <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.FormGuid">
             <summary>
             Unique identifying string used to locate specific instances of this form.

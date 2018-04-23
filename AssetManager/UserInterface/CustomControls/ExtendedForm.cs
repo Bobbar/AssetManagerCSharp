@@ -2,6 +2,7 @@ using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.CustomControls
@@ -17,37 +18,31 @@ namespace AssetManager.UserInterface.CustomControls
         private bool inheritTheme = true;
         private ExtendedForm parentForm;
         private bool doubleBuffering = true;
+        private bool minimizeChildren = false;
+        private bool restoreChildren = false;
+        private FormWindowState previousWindowState;
 
         #endregion Fields
 
         #region Constructors
 
-        public ExtendedForm(ExtendedForm parentForm, string formGuid, bool inheritTheme)
+        public ExtendedForm(ExtendedForm parentForm, string formGuid)
         {
-            this.inheritTheme = inheritTheme;
             FormGuid = formGuid;
             ParentForm = parentForm;
             SubscribeEvents();
             SetDoubleBuffering();
         }
 
-        public ExtendedForm() : this(null, string.Empty, true)
+        public ExtendedForm() : this(null, string.Empty)
         {
         }
 
-        public ExtendedForm(ExtendedForm parentForm) : this(parentForm, string.Empty, true)
+        public ExtendedForm(ExtendedForm parentForm) : this(parentForm, string.Empty)
         {
         }
 
-        public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject) : this(parentForm, currentObject.Guid, true)
-        {
-        }
-
-        public ExtendedForm(ExtendedForm parentForm, string formGuid) : this(parentForm, formGuid, true)
-        {
-        }
-
-        public ExtendedForm(ExtendedForm parentForm, bool inheritTheme) : this(parentForm, string.Empty, inheritTheme)
+        public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject) : this(parentForm, currentObject.Guid)
         {
         }
 
@@ -72,17 +67,46 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         /// <summary>
-        /// Unique identifying string used to locate specific instances of this form.
+        /// Gets or sets the value indicating whether child forms will be minimized with parent.
         /// </summary>
-        /// <returns></returns>
-        public string FormGuid { get; set; }
+        [Browsable(true)]
+        [Category("Extended Features")]
+        [Description("Gets or sets the value indicating whether child forms will be minimized with parent.")]
+        public bool MinimizeChildren
+        {
+            get
+            {
+                return minimizeChildren;
+            }
+
+            set
+            {
+                minimizeChildren = value;
+            }
+        }
 
         /// <summary>
-        /// Gets or sets the Grid Theme for the DataGridView controls within the form.
+        /// Gets or sets the value indicating whether child forms will be restored with parent.
         /// </summary>
-        /// <returns></returns>
-        public GridTheme GridTheme { get; set; }
+        [Browsable(true)]
+        [Category("Extended Features")]
+        [Description("Gets or sets the value indicating whether child forms will be restored with parent.")]
+        public bool RestoreChildren
+        {
+            get
+            {
+                return restoreChildren;
+            }
 
+            set
+            {
+                restoreChildren = value;
+            }
+        }
+
+        [Browsable(true)]
+        [Category("Extended Features")]
+        [Description("Gets or sets the value indicating whether child forms will inherit the theme of their parent form.")]
         public bool InheritTheme
         {
             get
@@ -94,6 +118,18 @@ namespace AssetManager.UserInterface.CustomControls
                 this.inheritTheme = value;
             }
         }
+
+        /// <summary>
+        /// Unique identifying string used to locate specific instances of this form.
+        /// </summary>
+        /// <returns></returns>
+        public string FormGuid { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Grid Theme for the DataGridView controls within the form.
+        /// </summary>
+        /// <returns></returns>
+        public GridTheme GridTheme { get; set; }
 
         /// <summary>
         /// Replaces the stock ParentForm property with a read/writable one. And also sets the icon and <seealso cref="GridTheme"/> from the parent form.
@@ -144,6 +180,8 @@ namespace AssetManager.UserInterface.CustomControls
             this.Load += ExtendedForm_Load;
             this.Disposed += ExtendedForm_Disposed;
             this.FormClosing += ExtendedForm_FormClosing;
+            this.Resize += ExtendedForm_Resize;
+            this.ResizeBegin += ExtendedForm_ResizeBegin;
         }
 
         private void UnSubscribeEvents()
@@ -151,6 +189,8 @@ namespace AssetManager.UserInterface.CustomControls
             this.Load -= ExtendedForm_Load;
             this.Disposed -= ExtendedForm_Disposed;
             this.FormClosing -= ExtendedForm_FormClosing;
+            this.Resize -= ExtendedForm_Resize;
+            this.ResizeBegin -= ExtendedForm_ResizeBegin;
         }
 
         /// <summary>
@@ -224,6 +264,27 @@ namespace AssetManager.UserInterface.CustomControls
             parentForm?.AddChild(this);
         }
 
+        private void ExtendedForm_Resize(object sender, EventArgs e)
+        {
+            if (minimizeChildren && this.WindowState == FormWindowState.Minimized)
+            {
+                SetChildrenWindowState(FormWindowState.Minimized);
+                previousWindowState = this.WindowState;
+            }
+            else if (restoreChildren && this.WindowState != previousWindowState && this.WindowState == FormWindowState.Normal)
+            {
+                if (previousWindowState != FormWindowState.Maximized)
+                {
+                    SetChildrenWindowState(FormWindowState.Normal);
+                }
+            }
+        }
+
+        private void ExtendedForm_ResizeBegin(object sender, EventArgs e)
+        {
+            previousWindowState = this.WindowState;
+        }
+
         private void OnWindowCountChanged(EventArgs e)
         {
             ChildCountChanged?.Invoke(this, e);
@@ -243,6 +304,14 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         #region Child Form Methods
+
+        private void SetChildrenWindowState(FormWindowState state)
+        {
+            foreach (var child in childForms)
+            {
+                child.WindowState = state;
+            }
+        }
 
         public void AddChild(ExtendedForm child)
         {
