@@ -155,15 +155,12 @@ namespace PingVisualizer
 
         private void InitPingTimer()
         {
-            if (!this.disposedValue)
+            if (pingTimer == null)
             {
-                if (pingTimer == null)
-                {
-                    pingTimer = new System.Threading.Timer(new System.Threading.TimerCallback(PingTimer_Tick));
-                }
-
-                pingTimer.Change(500, currentPingInterval);
+                pingTimer = new System.Threading.Timer(new System.Threading.TimerCallback(PingTimer_Tick));
             }
+
+            pingTimer.Change(500, currentPingInterval);
         }
 
         private void InitScaleTimer()
@@ -284,6 +281,9 @@ namespace PingVisualizer
                 if (!pingRunning)
                 {
                     var reply = await GetPingReply(hostname);
+
+                    if (this.disposedValue) return;
+
                     if (reply.Status == IPStatus.Success)
                     {
                         SetPingInterval(goodPingInterval);
@@ -304,10 +304,6 @@ namespace PingVisualizer
                     AddPingReply(new PingInfo());
                     OnNewPingResult(new PingInfo());
                     SetPingInterval(noPingInterval);
-                }
-                else
-                {
-                    this.Dispose();
                 }
             }
             finally
