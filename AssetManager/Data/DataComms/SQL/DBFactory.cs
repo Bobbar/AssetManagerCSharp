@@ -1,6 +1,7 @@
 using AssetDatabase.Data;
 using AssetManager.Security;
 using System.Collections.Generic;
+using AssetManager.Helpers;
 
 namespace AssetManager.Data
 {
@@ -10,7 +11,9 @@ namespace AssetManager.Data
         private const string mySqlCryptPass = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG";
         private static string mySqlPass;
         private const string mySqlUser = "asset_mgr_usr";
-
+        private static MySQLDatabase mySqlDBCache;
+        private static SqliteDatabase sqliteDBCache;
+        
         private static string MySqlPassword
         {
             get
@@ -38,15 +41,25 @@ namespace AssetManager.Data
 
         public static IDatabase GetMySqlDatabase()
         {
-            return new MySQLDatabase(ServerInfo.MySQLServerIP, mySqlUser, MySqlPassword, ServerInfo.CurrentDataBase.ToString());
+            if (mySqlDBCache == null)
+            {
+                mySqlDBCache = new MySQLDatabase(ServerInfo.MySQLServerIP, mySqlUser, MySqlPassword, ServerInfo.CurrentDataBase.ToString());
+            }
+
+            return mySqlDBCache;
         }
 
         public static IDatabase GetSqliteDatabase()
         {
-            return new SqliteDatabase(Paths.SQLitePath, SecurityTools.DecodePassword(sqlitePass));
+            if (sqliteDBCache == null)
+            {
+                sqliteDBCache = new SqliteDatabase(Paths.SQLitePath, SecurityTools.DecodePassword(sqlitePass));
+            }
+
+            return sqliteDBCache;
         }
     }
-    
+
     /// <summary>
     /// Wrapper for DBParameter
     /// </summary>
