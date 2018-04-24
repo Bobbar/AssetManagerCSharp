@@ -11,10 +11,9 @@ namespace AssetManager.Data
         private const string mySqlCryptPass = "N9WzUK5qv2gOgB1odwfduM13ISneU/DG";
         private static string mySqlPass;
         private const string mySqlUser = "asset_mgr_usr";
-        private static MySQLDatabase mySqlDb;
-        private static SqliteDatabase sqliteDb;
-        private static string previousDatabase;
-
+        private static MySQLDatabase mySqlDBCache;
+        private static SqliteDatabase sqliteDBCache;
+        
         private static string MySqlPassword
         {
             get
@@ -42,32 +41,22 @@ namespace AssetManager.Data
 
         public static IDatabase GetMySqlDatabase()
         {
-            if (mySqlDb == null | DatabaseChanged(ServerInfo.CurrentDataBase.ToString()))
+            if (mySqlDBCache == null)
             {
-                mySqlDb = new MySQLDatabase(ServerInfo.MySQLServerIP, mySqlUser, MySqlPassword, ServerInfo.CurrentDataBase.ToString());
+                mySqlDBCache = new MySQLDatabase(ServerInfo.MySQLServerIP, mySqlUser, MySqlPassword, ServerInfo.CurrentDataBase.ToString());
             }
 
-            return mySqlDb;
+            return mySqlDBCache;
         }
 
         public static IDatabase GetSqliteDatabase()
         {
-            if (sqliteDb == null)
+            if (sqliteDBCache == null)
             {
-                sqliteDb = new SqliteDatabase(Paths.SQLitePath, SecurityTools.DecodePassword(sqlitePass));
+                sqliteDBCache = new SqliteDatabase(Paths.SQLitePath, SecurityTools.DecodePassword(sqlitePass));
             }
 
-            return sqliteDb;
-        }
-
-        private static bool DatabaseChanged(string database)
-        {
-            if (previousDatabase != database)
-            {
-                previousDatabase = database;
-                return true;
-            }
-            return false;
+            return sqliteDBCache;
         }
     }
 
