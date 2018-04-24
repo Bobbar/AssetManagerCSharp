@@ -52,7 +52,7 @@ namespace AssetManager.Data
 
         public static IDatabase GetSqliteDatabase()
         {
-            if (sqliteDb == null | DatabaseChanged(ServerInfo.CurrentDataBase.ToString()))
+            if (sqliteDb == null)
             {
                 sqliteDb = new SqliteDatabase(Paths.SQLitePath, SecurityTools.DecodePassword(sqlitePass));
             }

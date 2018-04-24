@@ -311,6 +311,11 @@
             </summary>
             <param name="destination">The stream to write the content of this stream to</param>
         </member>
+        <member name="M:AssetManager.Data.DBFactory.Reset">
+            <summary>
+            Reset cached DB instances.
+            </summary>
+        </member>
         <member name="T:AssetManager.Data.ParamCollection">
             <summary>
             Wrapper for DBParameter
