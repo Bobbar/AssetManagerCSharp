@@ -791,7 +791,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (StatusStrip.InvokeRequired)
             {
-                StatusStrip.BeginInvoke(new Action(() => { StatusPrompt(text, color); }));
+                var del = new Action(() => StatusPrompt(text, color));
+                StatusStrip.BeginInvoke(del);
             }
             else
             {

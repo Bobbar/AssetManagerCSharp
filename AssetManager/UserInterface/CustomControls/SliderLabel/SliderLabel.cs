@@ -112,7 +112,6 @@ namespace AssetManager.UserInterface.CustomControls
             NewMessageDisplayed?.Invoke(this, new MessageEventArgs(message));
         }
 
-
         /// <summary>
         /// Primary text renderer.
         /// </summary>
@@ -185,7 +184,6 @@ namespace AssetManager.UserInterface.CustomControls
         {
             QueueMessage(text, color, defaultSlideInDirection, defaultSlideOutDirection, defaultDisplayTime);
         }
-              
 
         /// <summary>
         /// Adds new message to queue.
@@ -402,8 +400,6 @@ namespace AssetManager.UserInterface.CustomControls
             DrawText(e.Graphics);
         }
 
-        private delegate void UpdateTextDelegate();
-
         /// <summary>
         /// Timer tick event for animation.
         /// </summary>
@@ -415,8 +411,8 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (!this.Disposing && !this.IsDisposed)
                 {
-                    UpdateTextDelegate d = new UpdateTextDelegate(UpdateTextPosition);
-                    this.BeginInvoke(d);
+                    var del = new Action(() => UpdateTextPosition());
+                    this.BeginInvoke(del);
                 }
                 else
                 {
@@ -501,7 +497,6 @@ namespace AssetManager.UserInterface.CustomControls
             }
 
             if (currentMessage.AnimationComplete) ProcessNextState();
-
         }
 
         private async void ProcessNextState()
@@ -576,8 +571,6 @@ namespace AssetManager.UserInterface.CustomControls
         #endregion Methods
 
         #region Structs
-
-
 
         #endregion Structs
     }

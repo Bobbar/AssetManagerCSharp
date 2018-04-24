@@ -29,8 +29,6 @@ namespace AssetManager.Tools.Deployment
         private Task WatchdogTask;
         private CancellationTokenSource WatchdogCancelTokenSource;
 
-        private delegate void RTBLogDelegate(string message);
-
         public PowerShellWrapper PowerShellWrap
         {
             get
@@ -89,7 +87,7 @@ namespace AssetManager.Tools.Deployment
                 logView.Text = value + " - " + defaultTitle;
             }
         }
-        
+
         private void InitLogWindow()
         {
             logView = new ExtendedForm(parentForm);
@@ -149,8 +147,8 @@ namespace AssetManager.Tools.Deployment
             if (!cancelOperation) ActivityTick();
             if (RTBLog.InvokeRequired)
             {
-                RTBLogDelegate d = new RTBLogDelegate(LogMessage);
-                RTBLog.BeginInvoke(d, message);
+                var del = new Action(() => LogMessage(message));
+                RTBLog.BeginInvoke(del);
             }
             else
             {

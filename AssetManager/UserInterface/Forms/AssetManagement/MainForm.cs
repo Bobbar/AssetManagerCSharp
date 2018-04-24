@@ -4,7 +4,6 @@ using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.Security;
-using AssetManager.Tools;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AdminTools;
 using System;
@@ -47,16 +46,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         #endregion "Fields"
-
-        #region "Delegates"
-
-        private delegate void ConnectStatusVoidDelegate(string text, Color foreColor, Color backColor, string toolTipText);
-
-        private delegate void StatusVoidDelegate(string text, int timeOut = 0);
-
-        private delegate void ServerTimeVoidDelegate(string serverTime);
-
-        #endregion "Delegates"
 
         #region "Methods"
 
@@ -390,13 +379,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (StatusStrip1.InvokeRequired)
             {
-                ConnectStatusVoidDelegate d = new ConnectStatusVoidDelegate(ConnectStatus);
-                StatusStrip1.BeginInvoke(d, new object[] {
-                text,
-                foreColor,
-                backColor,
-                toolTipText
-            });
+                var del = new Action(() => ConnectStatus(text, foreColor, backColor, toolTipText));
+                StatusStrip1.BeginInvoke(del);
             }
             else
             {
@@ -637,12 +621,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             new UserManagerForm(this);
         }
 
-        private void SetStatusBar(string text, int timeOut = 0)
+        private void SetStatusBar(string text)
         {
             if (StatusStrip1.InvokeRequired)
             {
-                StatusVoidDelegate d = new StatusVoidDelegate(SetStatusBar);
-                StatusStrip1.BeginInvoke(d, new object[] { text, timeOut });
+                var del = new Action(() => SetStatusBar(text));
+                StatusStrip1.BeginInvoke(del);
             }
             else
             {
@@ -655,8 +639,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (StatusStrip1.InvokeRequired)
             {
-                ServerTimeVoidDelegate d = new ServerTimeVoidDelegate(SetServerTime);
-                StatusStrip1.BeginInvoke(d, new object[] { serverTime });
+                var del = new Action(() => SetServerTime(serverTime));
+                StatusStrip1.BeginInvoke(del);
             }
             else
             {
