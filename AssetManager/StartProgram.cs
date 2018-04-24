@@ -4,6 +4,7 @@ using AssetManager.Helpers;
 using AssetManager.Security;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AssetManager
@@ -16,7 +17,7 @@ namespace AssetManager
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        public static void Main()
+        public static void Main() 
         {
             bool connectionSuccessful = false;
             bool cacheAvailable = false;
@@ -45,7 +46,12 @@ namespace AssetManager
                 if (connectionSuccessful && !cacheAvailable)
                 {
                     Status("Building Cache DB...");
-                    DBCacheFunctions.RefreshLocalDBCache();
+
+                    Task.Run(() =>
+                    {
+                        DBCacheFunctions.RefreshLocalDBCache();
+                    }).Wait();
+
                 }
 
                 // No DB connection and cache not ready. Don't run.
