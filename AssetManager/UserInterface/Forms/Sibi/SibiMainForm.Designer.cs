@@ -278,6 +278,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.SibiResultGrid.ShowEditingIcon = false;
             this.SibiResultGrid.Size = new System.Drawing.Size(1158, 462);
             this.SibiResultGrid.TabIndex = 18;
+            this.SibiResultGrid.TabStop = false;
             this.SibiResultGrid.VirtualMode = true;
             this.SibiResultGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellDoubleClick);
             this.SibiResultGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellEnter);
@@ -329,6 +330,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sibi Acquisition Manager - Main";
+            this.Shown += new System.EventHandler(this.SibiMainForm_Shown);
             this.Panel1.ResumeLayout(false);
             this.GroupBox2.ResumeLayout(false);
             this.GroupBox2.PerformLayout();

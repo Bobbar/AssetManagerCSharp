@@ -10,7 +10,6 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -136,8 +135,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             catch (Exception ex)
             {
-                //InvalidCastException is expected when the last LastCmd was populated while in cached DB mode and now cached mode is currently false.
-                //ShowAll will start a new connection and populate LastCmd with a correctly matching DBCommand. See DBFactory.GetCommand()
+                // InvalidCastException is expected when the last comand was populated while in cached DB mode and now cached mode is currently false.
+                // Make a fresh call to create a new command instance.
                 if (ex is InvalidCastException)
                 {
                     ShowAll();
@@ -195,10 +194,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 ToolStrip1.BackColor = Colors.SibiToolBarColor;
                 windowList.InsertWindowList(ToolStrip1);
                 SetDisplayYears();
+                ShowAll("All");
                 this.Show();
                 this.Activate();
-                ShowAll("All");
-            }
+              }
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
@@ -307,7 +306,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     SibiResultGrid.FastAutoSizeColumns();
                     SibiResultGrid.ClearSelection();
                     SibiResultGrid.ResumeLayout();
-                    gridFilling = false;
+                    if (this.Visible) gridFilling = false;
                 }
             }
             catch (Exception ex)
@@ -472,7 +471,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void ResultGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (!gridFilling)
+            if (!gridFilling && this.Visible)
             {
                 StyleFunctions.HighlightRow(SibiResultGrid, GridTheme, e.RowIndex);
             }
@@ -486,6 +485,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void SibiResultGrid_Sorted(object sender, EventArgs e)
         {
+            SetStatusCellColors();
+        }
+
+        private void SibiMainForm_Shown(object sender, EventArgs e)
+        {
+            gridFilling = false;
             SetStatusCellColors();
         }
 
