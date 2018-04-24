@@ -6,7 +6,7 @@ using System.Data.SQLite;
 
 namespace AssetDatabase.Data
 {
-    public class SqliteDatabase : IDataBase
+    public class SqliteDatabase : IDatabase
     {
         #region Fields
 

@@ -6,7 +6,7 @@ using System.Data.Common;
 
 namespace AssetDatabase.Data
 {
-    public class MySQLDatabase : IDataBase
+    public class MySQLDatabase : IDatabase
     {
          #region Fields
 

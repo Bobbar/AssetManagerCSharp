@@ -24,7 +24,7 @@ namespace AssetManager.Data
             }
         }
 
-        public static IDataBase GetDatabase()
+        public static IDatabase GetDatabase()
         {
             if (GlobalSwitches.CachedMode)
             {
@@ -36,12 +36,12 @@ namespace AssetManager.Data
             }
         }
 
-        public static IDataBase GetMySqlDatabase()
+        public static IDatabase GetMySqlDatabase()
         {
             return new MySQLDatabase(ServerInfo.MySQLServerIP, mySqlUser, MySqlPassword, ServerInfo.CurrentDataBase.ToString());
         }
 
-        public static IDataBase GetSqliteDatabase()
+        public static IDatabase GetSqliteDatabase()
         {
             return new SqliteDatabase(Paths.SQLitePath, SecurityTools.DecodePassword(sqlitePass));
         }

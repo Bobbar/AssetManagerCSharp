@@ -4,7 +4,7 @@ using System.Data.Common;
 namespace AssetDatabase.Data
 {
 
-    public interface IDataBase
+    public interface IDatabase
     {
 
         DbConnection NewConnection();

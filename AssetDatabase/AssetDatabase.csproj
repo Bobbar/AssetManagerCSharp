@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\DataInterface.cs" />
+    <Compile Include="Data\IDatabase.cs" />
     <Compile Include="Data\DBParameter.cs" />
     <Compile Include="Data\MySQL\MySQLComms.cs" />
     <Compile Include="Data\NoPingException.cs" />
