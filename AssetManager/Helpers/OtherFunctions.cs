@@ -8,6 +8,7 @@ namespace AssetManager.Helpers
 {
     internal static class OtherFunctions
     {
+        private static RichTextBox rtfBox = new RichTextBox();
         public static Stopwatch stpw = new Stopwatch();
 
         private static int intTimerHits = 0;
@@ -101,37 +102,27 @@ namespace AssetManager.Helpers
             return true;
         }
 
-        public delegate void SetWaitCursorVoidDelegate(bool waiting, Form parentForm = null);
-
-        public static void SetWaitCursor(bool waiting, Form parentForm = null)
+        public static void SetWaitCursor(bool waiting, Form parentForm)
         {
-            if (parentForm == null)
+            if (parentForm.InvokeRequired)
             {
-                Application.UseWaitCursor = waiting;
+                var del = new Action(() => SetWaitCursor(waiting, parentForm));
+                parentForm.BeginInvoke(del);
             }
             else
             {
-                if (parentForm.InvokeRequired)
+                if (waiting)
                 {
-                    SetWaitCursorVoidDelegate d = new SetWaitCursorVoidDelegate(SetWaitCursor);
-                    parentForm.BeginInvoke(d, new object[] { waiting, parentForm });
+                    parentForm.UseWaitCursor = true;
+                    Cursor.Current = Cursors.WaitCursor;
                 }
                 else
                 {
-                    if (waiting)
-                    {
-                        parentForm.UseWaitCursor = true;
-                    }
-                    else
-                    {
-                        parentForm.UseWaitCursor = false;
-                    }
-                    parentForm.Update();
+                    parentForm.UseWaitCursor = false;
+                    Cursor.Current = Cursors.Default;
                 }
             }
         }
-
-        private static RichTextBox rtfBox = new RichTextBox();
 
         public static string RTFToPlainText(string rtfText)
         {
