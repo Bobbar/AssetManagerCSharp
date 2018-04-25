@@ -64,17 +64,17 @@ namespace AssetManager.Helpers
             }
         }
 
-        public static string NotePreview(string Note, int CharLimit = 50)
+        public static string NotePreview(string text, int maxChars = 50)
         {
-            if (!string.IsNullOrEmpty(Note))
+            if (!string.IsNullOrEmpty(text))
             {
-                if (Note.Length > CharLimit)
+                if (text.Length > maxChars)
                 {
-                    return Note.Substring(0, CharLimit) + "...";
+                    return text.Substring(0, maxChars) + "...";
                 }
                 else
                 {
-                    return Note;
+                    return text;
                 }
             }
             else
@@ -83,12 +83,12 @@ namespace AssetManager.Helpers
             }
         }
 
-        public static DialogResult Message(string Prompt, MessageBoxButtons button = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.Information, string Title = null, Form ParentFrm = null)
+        public static DialogResult Message(string prompt, MessageBoxButtons button = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.Information, string title = null, Form parentForm = null)
         {
-            SetWaitCursor(false, ParentFrm);
-            using (var newMessage = new AdvancedDialog(ParentFrm))
+            SetWaitCursor(false, parentForm);
+            using (var newMessage = new AdvancedDialog(parentForm))
             {
-                return newMessage.DialogMessage(Prompt, button, icon, Title, ParentFrm);
+                return newMessage.DialogMessage(prompt, button, icon, title, parentForm);
             }
         }
 

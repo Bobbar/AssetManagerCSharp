@@ -35,18 +35,17 @@ namespace AssetManager.Data
             {"10.17.80.0", "Admin - Wifi"},
             {"10.17.81.0", "OC - Wifi"},
             {"10.17.83.0", "FRS - Wifi"},
-            {"10.17.84.0", "PRO - Wifi"}
+            {"10.17.84.0", "PRO - Wifi"},
+            {"10.11.80.0", "VPN-DDAD"}
         };
 
         public static string LocationOfIP(string ip)
         {
-
             try
             {
                 string subnet = ip.Substring(0, 8) + ".0";
                 if (SubnetLocations.ContainsKey(subnet))
                 {
-
                     return SubnetLocations[subnet];
                 }
                 else
