@@ -1468,6 +1468,22 @@
             "ftp://  strServerIP  /attachments/  CurrentDB  /"
             </summary>
         </member>
+        <member name="M:AssetManager.UserInterface.Forms.AttachmentsForm.CopyAttachement(System.Windows.Forms.IDataObject,System.String)">
+            <summary>
+            Copies drag-drop file object to a temp path and returns the full path.
+            </summary>
+            <param name="dataObject">The drag-drop data object.</param>
+            <param name="dataFormat">Format of the data to be retrieved from the object.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.AttachmentsForm.GetAttachFileName(System.Windows.Forms.IDataObject,System.String)">
+            <summary>
+            Returns the file name from the specified data object of the specified data format.
+            </summary>
+            <param name="attachDataObject"></param>
+            <param name="dataFormat"></param>
+            <returns></returns>
+        </member>
         <member name="M:AssetManager.UserInterface.Forms.AttachmentsForm.GetSelectQuery">
             <summary>
             Returns a query for the currently selected folder, or all attachments if no folder selected.

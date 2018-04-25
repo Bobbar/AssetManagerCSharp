@@ -20,7 +20,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
 namespace AssetManager.UserInterface.Forms
 {
     public partial class AttachmentsForm : ExtendedForm
@@ -70,6 +69,7 @@ namespace AssetManager.UserInterface.Forms
                     return currentFolder;
                 }
             }
+
             set
             {
                 currentFolder = value;
@@ -92,9 +92,9 @@ namespace AssetManager.UserInterface.Forms
             FolderListView.DoubleBuffered(true);
             SetStatusBarText("Idle...");
             attachmentColumns = attachTable;
+
             if (!ReferenceEquals(attachDataObject, null))
             {
-
                 attachFolderGuid = attachDataObject.Guid;
 
                 if (attachDataObject is SibiRequest)
@@ -192,9 +192,9 @@ namespace AssetManager.UserInterface.Forms
             Waiting();
             try
             {
-                string strQry = "";
-                strQry = GetSelectQuery();
-                using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(strQry))
+                var query = GetSelectQuery();
+
+                using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
                 {
                     gridFilling = true;
                     AttachGrid.Populate(results, AttachGridColumns(attachmentColumns));
@@ -203,6 +203,7 @@ namespace AssetManager.UserInterface.Forms
                 AttachGrid.Columns[attachmentColumns.FileName].DefaultCellStyle.Font = new Font("Consolas", 9.75F, FontStyle.Bold);
                 OnAttachCountChanged(new EventArgs());
                 AttachGrid.ClearSelection();
+
                 if (this.Visible)
                 {
                     gridFilling = false;
@@ -250,7 +251,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 SecurityTools.CheckForAccess(SecurityGroups.ManageAttachment);
 
-                using (OpenFileDialog fd = new OpenFileDialog())
+                using (var fd = new OpenFileDialog())
                 {
                     fd.ShowHelp = true;
                     fd.Title = "Select File To Upload - " + fileSizeMBLimit.ToString() + "MB Limit";
@@ -275,6 +276,12 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
+        /// <summary>
+        /// Copies drag-drop file object to a temp path and returns the full path.
+        /// </summary>
+        /// <param name="dataObject">The drag-drop data object.</param>
+        /// <param name="dataFormat">Format of the data to be retrieved from the object.</param>
+        /// <returns></returns>
         private string[] CopyAttachement(IDataObject dataObject, string dataFormat)
         {
             string fileName = GetAttachFileName(dataObject, dataFormat);
@@ -303,25 +310,27 @@ namespace AssetManager.UserInterface.Forms
             {
                 return null;
             }
+
             transferTaskRunning = true;
             Attachment downloadAttachment = new Attachment();
+
             try
             {
                 taskCancelTokenSource = new CancellationTokenSource();
                 CancellationToken cancelToken = taskCancelTokenSource.Token;
                 SetStatusBarText("Connecting...");
-                FtpComms LocalFTPComm = new FtpComms();
+                var ftpComms = new FtpComms();
                 downloadAttachment = GetSQLAttachment(attachGuid);
-                string FtpRequestString = ftpUri + downloadAttachment.FolderGuid + "/" + attachGuid;
+                string ftpFullUri = ftpUri + downloadAttachment.FolderGuid + "/" + attachGuid;
                 //get file size
                 progress = new ProgressCounter();
-                progress.BytesToTransfer = Convert.ToInt32(LocalFTPComm.ReturnFtpResponse(FtpRequestString, WebRequestMethods.Ftp.GetFileSize).ContentLength);
+                progress.BytesToTransfer = Convert.ToInt32(ftpComms.ReturnFtpResponse(ftpFullUri, WebRequestMethods.Ftp.GetFileSize).ContentLength);
                 //setup download
                 SetStatusBarText("Downloading...");
                 TransferFeedback(true);
                 downloadAttachment.DataStream = await Task.Run(() =>
                 {
-                    using (Stream respStream = LocalFTPComm.ReturnFtpResponse(FtpRequestString, WebRequestMethods.Ftp.DownloadFile).GetResponseStream())
+                    using (var respStream = ftpComms.ReturnFtpResponse(ftpFullUri, WebRequestMethods.Ftp.DownloadFile).GetResponseStream())
                     {
                         var memStream = new MemoryTributary();
                         int bufferSize = 256000;
@@ -350,20 +359,20 @@ namespace AssetManager.UserInterface.Forms
                         return downloadAttachment;
                     }
                 }
+
                 downloadAttachment.Dispose();
                 return null;
             }
             catch (Exception ex)
             {
-                if (downloadAttachment != null)
-                {
-                    downloadAttachment.Dispose();
-                }
-                throw (ex);
+                downloadAttachment?.Dispose();
+
+                throw ex;
             }
             finally
             {
                 transferTaskRunning = false;
+
                 if (!GlobalSwitches.ProgramEnding)
                 {
                     TransferFeedback(false);
@@ -405,15 +414,21 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
+        /// <summary>
+        /// Returns the file name from the specified data object of the specified data format.
+        /// </summary>
+        /// <param name="attachDataObject"></param>
+        /// <param name="dataFormat"></param>
+        /// <returns></returns>
         private string GetAttachFileName(IDataObject attachDataObject, string dataFormat)
         {
             switch (dataFormat)
             {
                 case "RenPrivateItem":
-                    using (MemoryStream streamFileName = (MemoryStream)(attachDataObject.GetData("FileGroupDescriptor")))
+                    using (var streamFileName = (MemoryStream)(attachDataObject.GetData("FileGroupDescriptor")))
                     {
                         streamFileName.Position = 0;
-                        using (StreamReader sr = new StreamReader(streamFileName))
+                        using (var sr = new StreamReader(streamFileName))
                         {
                             string fullString = sr.ReadToEnd();
                             fullString = fullString.Replace("\0", "");
@@ -453,20 +468,20 @@ namespace AssetManager.UserInterface.Forms
 
         private List<GridColumnAttrib> AttachGridColumns(AttachmentsBaseCols attachtable)
         {
-            List<GridColumnAttrib> ColList = new List<GridColumnAttrib>();
-            ColList.Add(new GridColumnAttrib(attachtable.FileType, "", ColumnFormatType.Image));
-            ColList.Add(new GridColumnAttrib(attachtable.FileName, "Filename"));
-            ColList.Add(new GridColumnAttrib(attachtable.FileSize, "Size", ColumnFormatType.FileSize));
-            ColList.Add(new GridColumnAttrib(attachtable.Timestamp, "Date"));
-            ColList.Add(new GridColumnAttrib(attachtable.FolderName, "Folder"));
-            ColList.Add(new GridColumnAttrib(attachtable.FileGuid, "AttachGuid"));
-            ColList.Add(new GridColumnAttrib(attachtable.FileHash, "MD5"));
-            return ColList;
+            var columnList = new List<GridColumnAttrib>();
+            columnList.Add(new GridColumnAttrib(attachtable.FileType, "", ColumnFormatType.Image));
+            columnList.Add(new GridColumnAttrib(attachtable.FileName, "Filename"));
+            columnList.Add(new GridColumnAttrib(attachtable.FileSize, "Size", ColumnFormatType.FileSize));
+            columnList.Add(new GridColumnAttrib(attachtable.Timestamp, "Date"));
+            columnList.Add(new GridColumnAttrib(attachtable.FolderName, "Folder"));
+            columnList.Add(new GridColumnAttrib(attachtable.FileGuid, "AttachGuid"));
+            columnList.Add(new GridColumnAttrib(attachtable.FileHash, "MD5"));
+            return columnList;
         }
 
-        private void InsertSQLAttachment(Attachment attachment, DbTransaction transaction)
+        private int InsertSQLAttachment(Attachment attachment, DbTransaction transaction)
         {
-            ParamCollection insertParams = new ParamCollection();
+            var insertParams = new ParamCollection();
             insertParams.Add(attachment.AttachTable.FKey, attachment.FolderGuid);
             insertParams.Add(attachment.AttachTable.FileName, attachment.FileName);
             insertParams.Add(attachment.AttachTable.FileType, attachment.Extension);
@@ -475,7 +490,7 @@ namespace AssetManager.UserInterface.Forms
             insertParams.Add(attachment.AttachTable.FileHash, attachment.MD5);
             insertParams.Add(attachment.AttachTable.FolderName, attachment.FolderInfo.FolderName);
             insertParams.Add(attachment.AttachTable.FolderNameGuid, attachment.FolderInfo.FolderNameGuid);
-            DBFactory.GetDatabase().InsertFromParameters(attachment.AttachTable.TableName, insertParams.Parameters, transaction);
+            return DBFactory.GetDatabase().InsertFromParameters(attachment.AttachTable.TableName, insertParams.Parameters, transaction);
         }
 
         private async Task<bool> MakeDirectory(string folderGuid)
@@ -484,10 +499,11 @@ namespace AssetManager.UserInterface.Forms
             {
                 try
                 {
-                    FtpComms LocalFTPComm = new FtpComms();
-                    using (var MkDirResp = (FtpWebResponse)(LocalFTPComm.ReturnFtpResponse(ftpUri + folderGuid, WebRequestMethods.Ftp.MakeDirectory)))
+                    var ftpComms = new FtpComms();
+
+                    using (var makeDirResponse = (FtpWebResponse)(ftpComms.ReturnFtpResponse(ftpUri + folderGuid, WebRequestMethods.Ftp.MakeDirectory)))
                     {
-                        if (MkDirResp.StatusCode == FtpStatusCode.PathnameCreated)
+                        if (makeDirResponse.StatusCode == FtpStatusCode.PathnameCreated)
                         {
                             return true;
                         }
@@ -575,8 +591,8 @@ namespace AssetManager.UserInterface.Forms
 
         private bool OKFileSize(Attachment attachment)
         {
-            var FileSizeMB = System.Convert.ToInt32(attachment.Filesize / (float)(1024 * 1024));
-            if (FileSizeMB > fileSizeMBLimit)
+            var fileSizeMB = System.Convert.ToInt32(attachment.Filesize / (float)(1024 * 1024));
+            if (fileSizeMB > fileSizeMBLimit)
             {
                 return false;
             }
@@ -686,7 +702,6 @@ namespace AssetManager.UserInterface.Forms
                 {
                     UploadAttachments(outlookFiles, folder);
                 }
-
             }
             //Explorer data object.
             else if (dropDataObject.GetDataPresent(DataFormats.FileDrop))
@@ -821,23 +836,28 @@ namespace AssetManager.UserInterface.Forms
             {
                 return;
             }
+
             transferTaskRunning = true;
-            Attachment uploadAttachment = new Attachment();
+            Attachment uploadAttachment = null;
+
             try
             {
-                FtpComms ftpComm = new FtpComms();
+                var ftpComms = new FtpComms();
                 taskCancelTokenSource = new CancellationTokenSource();
-                CancellationToken cancelToken = taskCancelTokenSource.Token;
+                var cancelToken = taskCancelTokenSource.Token;
                 TransferFeedback(true);
-                foreach (string file in files)
+
+                foreach (var file in files)
                 {
                     uploadAttachment = new Attachment(file, attachFolderGuid, folder, attachmentColumns);
+
                     if (!OKFileSize(uploadAttachment))
                     {
                         uploadAttachment.Dispose();
-                        OtherFunctions.Message("The file is too large.   Please select a file less than " + fileSizeMBLimit.ToString() + "MB.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Size Limit Exceeded", this);
+                        OtherFunctions.Message("The file is too large. Please select a file less than " + fileSizeMBLimit.ToString() + "MB.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Size Limit Exceeded", this);
                         continue;
                     }
+
                     SetStatusBarText("Creating Directory...");
                     if (!await MakeDirectory(uploadAttachment.FolderGuid))
                     {
@@ -845,9 +865,11 @@ namespace AssetManager.UserInterface.Forms
                         OtherFunctions.Message("Error creating FTP directory.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "FTP Upload Error", this);
                         return;
                     }
+
                     var fileList = new List<string>(files);
                     SetStatusBarText("Uploading... " + (fileList.IndexOf(file) + 1).ToString() + " of " + files.Length.ToString());
                     progress = new ProgressCounter();
+
                     using (var trans = DBFactory.GetDatabase().StartTransaction())
                     using (var conn = trans.Connection)
                     {
@@ -855,35 +877,44 @@ namespace AssetManager.UserInterface.Forms
                         {
                             await Task.Run(() =>
                             {
-                                using (FileStream FileStream = (FileStream)(uploadAttachment.DataStream))
-                                using (Stream FTPStream = ftpComm.ReturnFtpRequestStream(ftpUri + uploadAttachment.FolderGuid + "/" + uploadAttachment.FileGuid, WebRequestMethods.Ftp.UploadFile))
+                                using (var fileStream = (FileStream)(uploadAttachment.DataStream))
+                                using (var ftpStream = ftpComms.ReturnFtpRequestStream(ftpUri + uploadAttachment.FolderGuid + "/" + uploadAttachment.FileGuid, WebRequestMethods.Ftp.UploadFile))
                                 {
                                     int bufferSize = 256000;
                                     byte[] buffer = new byte[bufferSize];
                                     int bytesIn = 1;
-                                    progress.BytesToTransfer = System.Convert.ToInt32(FileStream.Length);
+                                    progress.BytesToTransfer = System.Convert.ToInt32(fileStream.Length);
+
                                     while (!(bytesIn < 1 || cancelToken.IsCancellationRequested))
                                     {
-                                        bytesIn = FileStream.Read(buffer, 0, bufferSize);
+                                        bytesIn = fileStream.Read(buffer, 0, bufferSize);
                                         if (bytesIn > 0)
                                         {
-                                            FTPStream.Write(buffer, 0, bytesIn);
+                                            ftpStream.Write(buffer, 0, bytesIn);
                                             progress.BytesMoved = bytesIn;
                                         }
                                     }
                                     buffer = null;
                                 }
                             });
+
                             if (cancelToken.IsCancellationRequested)
                             {
                                 FtpFunctions.DeleteFtpAttachment(uploadAttachment.FileGuid, uploadAttachment.FolderGuid);
                             }
                             else
                             {
-                                InsertSQLAttachment(uploadAttachment, trans);
+                                var insertedRows = InsertSQLAttachment(uploadAttachment, trans);
+                                if (insertedRows > 0)
+                                {
+                                    trans.Commit();
+                                }
+                                else
+                                {
+                                    trans.Rollback();
+                                }
                             }
                             uploadAttachment.Dispose();
-                            trans.Commit();
                         }
                         catch (Exception)
                         {
@@ -900,12 +931,10 @@ namespace AssetManager.UserInterface.Forms
             finally
             {
                 transferTaskRunning = false;
+
                 if (!GlobalSwitches.ProgramEnding && !this.IsDisposed)
                 {
-                    if (uploadAttachment != null)
-                    {
-                        uploadAttachment.Dispose();
-                    }
+                    uploadAttachment?.Dispose();
                     SetStatusBarText("Idle...");
                     TransferFeedback(false);
                     ListAttachments();
@@ -984,7 +1013,7 @@ namespace AssetManager.UserInterface.Forms
                 Directory.CreateDirectory(Paths.DownloadPath);
                 using (var outputStream = File.Create(savePath))
                 {
-                    using (var memStream = (Stream)attachment.DataStream)
+                    using (var memStream = attachment.DataStream)
                     {
                         memStream.CopyTo(outputStream); //once data is verified we go ahead and copy it to disk
                     }
@@ -1311,8 +1340,10 @@ namespace AssetManager.UserInterface.Forms
         {
             e.Effect = DragDropEffects.Copy;
             isDragging = true;
-            Point p = FolderListView.PointToClient(new Point(e.X, e.Y));
-            ListViewItem dragToItem = FolderListView.GetItemAt(p.X, p.Y);
+
+            var mousePoint = FolderListView.PointToClient(new Point(e.X, e.Y));
+            var dragToItem = FolderListView.GetItemAt(mousePoint.X, mousePoint.Y);
+
             if (dragToItem != null)
             {
                 dragToItem.Selected = true;
@@ -1327,14 +1358,16 @@ namespace AssetManager.UserInterface.Forms
                 return;
             }
             //Returns the location of the mouse pointer in the ListView control.
-            Point p = FolderListView.PointToClient(new Point(e.X, e.Y));
+            var mousePoint = FolderListView.PointToClient(new Point(e.X, e.Y));
+
             //Obtain the item that is located at the specified location of the mouse pointer.
-            ListViewItem dragToItem = FolderListView.GetItemAt(p.X, p.Y);
-            if (ReferenceEquals(dragToItem, null))
+            var dragToItem = FolderListView.GetItemAt(mousePoint.X, mousePoint.Y);
+
+            if (dragToItem == null)
             {
                 return;
             }
-
+           
             if (dragToItem.Index == 0)
             {
                 ProcessFolderListDrop(e.Data, new Attachment.Folder());
@@ -1343,6 +1376,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 ProcessFolderListDrop(e.Data, new Attachment.Folder(dragToItem.Text, (string)dragToItem.Tag));
             }
+
             isDragging = false;
         }
 
@@ -1395,14 +1429,14 @@ namespace AssetManager.UserInterface.Forms
 
         private void AttachGrid_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
         {
-            DataGridView grid = (DataGridView)sender;
+            var grid = (DataGridView)sender;
             if (grid != null)
             {
-                Form f = grid.FindForm();
-                if (((Control.MousePosition.X) < f.DesktopBounds.Left) ||
-                        ((Control.MousePosition.X) > f.DesktopBounds.Right) ||
-                        ((Control.MousePosition.Y) < f.DesktopBounds.Top) ||
-                        ((Control.MousePosition.Y) > f.DesktopBounds.Bottom))
+                var form = grid.FindForm();
+                if (((MousePosition.X) < form.DesktopBounds.Left) ||
+                   ((MousePosition.X) > form.DesktopBounds.Right) ||
+                   ((MousePosition.Y) < form.DesktopBounds.Top) ||
+                   ((MousePosition.Y) > form.DesktopBounds.Bottom))
                 {
                     AddAttachmentFileToDragDropObject(SelectedAttachmentGuid());
                 }
