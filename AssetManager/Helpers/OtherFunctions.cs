@@ -104,6 +104,12 @@ namespace AssetManager.Helpers
 
         public static void SetWaitCursor(bool waiting, Form parentForm)
         {
+            if (parentForm == null)
+            {
+                Application.UseWaitCursor = waiting;
+                return;
+            }
+            
             if (parentForm.InvokeRequired)
             {
                 var del = new Action(() => SetWaitCursor(waiting, parentForm));
