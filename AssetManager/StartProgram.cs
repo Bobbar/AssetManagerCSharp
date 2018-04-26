@@ -17,17 +17,18 @@ namespace AssetManager
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        public static void Main() 
+        public static void Main()
         {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.ThreadException += MyApplication_UnhandledException;
+
             bool connectionSuccessful = false;
             bool cacheAvailable = false;
 
             try
             {
                 NetworkInfo.LocalDomainUser = Environment.UserName;
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.ThreadException += MyApplication_UnhandledException;
 
                 ChildFormControl.SplashScreenInstance().Show();
 

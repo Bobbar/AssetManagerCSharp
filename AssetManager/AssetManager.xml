@@ -89,9 +89,9 @@
             Creates a new instance from a file path.
             </summary>
             <param name="filePath">Full path of the file.</param>
-            <param name="folderGuid">Guid of the folder to be associated with this instance.</param>
-            <param name="selectedFolder"></param>
-            <param name="columns"></param>
+            <param name="objectGuid">Guid of the DB object to be associated with this attachment. ie. Device Guid or SibiRequest Guid.</param>
+            <param name="folder">The folder instance to be associated with this attachment.</param>
+            <param name="columns"><see cref="T:AssetManager.Data.AttachmentsBaseCols"/> instance which contains the field column names to be mapped.</param>
         </member>
         <member name="M:AssetManager.Data.Classes.Attachment.VerifyData">
             <summary>
