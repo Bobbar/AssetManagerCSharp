@@ -1,64 +1,59 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetManager.Tools
 {
     public class ProgressCounter
     {
-
         #region "Fields"
 
-        private int _currentTick;
-        private int _progBytesMoved;
-        private int _progTotalBytes;
-        private int _speedBytesMoved;
-        private double _speedThroughput;
+        private long startTick;
+        private long currentTick;
+        private long progBytesMoved;
+        private long progTotalBytes;
+        private long speedBytesMoved;
+        private double speedThroughput;
 
-        private int _startTick;
-        #endregion
+        #endregion "Fields"
 
         #region "Constructors"
 
         public ProgressCounter()
         {
-            _progBytesMoved = 0;
-            _progTotalBytes = 0;
-            _speedBytesMoved = 0;
-            _currentTick = 0;
-            _startTick = 0;
-            _speedThroughput = 0;
+            progBytesMoved = 0;
+            progTotalBytes = 0;
+            speedBytesMoved = 0;
+            currentTick = 0;
+            startTick = 0;
+            speedThroughput = 0;
         }
 
-        #endregion
+        #endregion "Constructors"
 
         #region "Properties"
 
-        public int BytesMoved
+        public long BytesMoved
         {
-            get { return _progBytesMoved; }
+            get { return progBytesMoved; }
             set
             {
-                _speedBytesMoved += value;
-                _progBytesMoved += value;
+                speedBytesMoved += value;
+                progBytesMoved += value;
             }
         }
 
-        public int BytesToTransfer
+        public long BytesToTransfer
         {
-            get { return _progTotalBytes; }
-            set { _progTotalBytes = value; }
+            get { return progTotalBytes; }
+            set { progTotalBytes = value; }
         }
 
         public int Percent
         {
             get
             {
-                if (_progTotalBytes > 0)
+                if (progTotalBytes > 0)
                 {
-                    return (int)Math.Round((((float)_progBytesMoved / (float)_progTotalBytes) * 100), 0);
+                    return (int)Math.Round(((progBytesMoved / (float)progTotalBytes) * 100), 0);
                 }
                 else
                 {
@@ -69,36 +64,33 @@ namespace AssetManager.Tools
 
         public double Throughput
         {
-            get { return _speedThroughput; }
+            get { return speedThroughput; }
         }
 
-        #endregion
+        #endregion "Properties"
 
         #region "Methods"
 
         public void ResetProgress()
         {
-            _progBytesMoved = 0;
+            progBytesMoved = 0;
         }
 
         public void Tick()
         {
-            _currentTick = Environment.TickCount;
-            if (_startTick > 0)
+            currentTick = DateTime.Now.Ticks;
+
+            if (startTick > 0 & speedBytesMoved > 0)
             {
-                if (_speedBytesMoved > 0)
-                {
-                    double elapTime = _currentTick - _startTick;
-                    _speedThroughput = Math.Round((_speedBytesMoved / elapTime) / 1000, 2);
-                }
+                double elapTimeMs = (currentTick - startTick) / 10000;
+                speedThroughput = Math.Round((speedBytesMoved / elapTimeMs) / 1000, 2);
             }
             else
             {
-                _startTick = _currentTick;
+                startTick = currentTick;
             }
         }
 
-        #endregion
-
+        #endregion "Methods"
     }
 }
