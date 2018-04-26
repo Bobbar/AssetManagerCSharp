@@ -1,8 +1,7 @@
+using AssetManager.Security;
 using System;
 using System.Data;
 using System.IO;
-using AssetManager.Data;
-using AssetManager.Security;
 
 namespace AssetManager.Data.Classes
 {
@@ -10,7 +9,7 @@ namespace AssetManager.Data.Classes
     {
         private FileInfo _fileInfo;
         private string _fileName;
-        private int _fileSize;
+        private long _fileSize;
         private string _extention;
         private Folder _folder;
         private string _folderGuid;
@@ -18,7 +17,6 @@ namespace AssetManager.Data.Classes
         private string _computedMD5;
         private string _fileGuid;
         private AttachmentsBaseCols _attachTable;
-
         private Stream _dataStream;
 
         public Attachment()
@@ -36,55 +34,20 @@ namespace AssetManager.Data.Classes
             _dataStream = null;
         }
 
-        /// <summary>
-        /// Create new Attachment from a file path.
-        /// </summary>
-        /// <param name="newFile">Full path to file.</param>
-        /// <param name="attachTable">The table that will be assigned to this instance.</param>
-        public Attachment(string newFile, AttachmentsBaseCols attachTable)
-        {
-            _fileInfo = new FileInfo(newFile);
-            _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
-            _fileGuid = Guid.NewGuid().ToString();
-            _MD5 = null;
-            _computedMD5 = null;
-            _fileSize = Convert.ToInt32(_fileInfo.Length);
-            _extention = _fileInfo.Extension;
-            _folder = new Folder();
-            _folderGuid = string.Empty;
-            _attachTable = attachTable;
-            _dataStream = _fileInfo.OpenRead();
-        }
-
-        public Attachment(string newFile, string folderGuid, AttachmentsBaseCols attachTable)
-        {
-            _fileInfo = new FileInfo(newFile);
-            _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
-            _fileGuid = Guid.NewGuid().ToString();
-            _MD5 = null;
-            _computedMD5 = null;
-            _fileSize = Convert.ToInt32(_fileInfo.Length);
-            _extention = _fileInfo.Extension;
-            _folder = new Folder();
-            _folderGuid = folderGuid;
-            _attachTable = attachTable;
-            _dataStream = _fileInfo.OpenRead();
-        }
-
         public Attachment(DataTable attachInfoTable, AttachmentsBaseCols attachTable)
         {
-            DataRow TableRow = attachInfoTable.Rows[0];
+            DataRow row = attachInfoTable.Rows[0];
             _fileInfo = null;
             _dataStream = null;
             _attachTable = attachTable;
-            _fileName = TableRow[attachTable.FileName].ToString();
-            _fileGuid = TableRow[attachTable.FileGuid].ToString();
-            _MD5 = TableRow[attachTable.FileHash].ToString();
+            _fileName = row[attachTable.FileName].ToString();
+            _fileGuid = row[attachTable.FileGuid].ToString();
+            _MD5 = row[attachTable.FileHash].ToString();
             _computedMD5 = null;
-            _fileSize = Convert.ToInt32(TableRow[attachTable.FileSize]);
-            _extention = TableRow[attachTable.FileType].ToString();
-            _folder = new Folder(TableRow[attachTable.FolderName].ToString(), TableRow[attachTable.FolderNameGuid].ToString());
-            _folderGuid = TableRow[attachTable.FKey].ToString();
+            _fileSize = Convert.ToInt64(row[attachTable.FileSize]);
+            _extention = row[attachTable.FileType].ToString();
+            _folder = new Folder(row[attachTable.FolderName].ToString(), row[attachTable.FolderNameGuid].ToString());
+            _folderGuid = row[attachTable.FKey].ToString();
         }
 
         public Attachment(string newFile, string folderGuid, Folder selectedFolder, AttachmentsBaseCols attachTable)
@@ -94,33 +57,12 @@ namespace AssetManager.Data.Classes
             _fileGuid = Guid.NewGuid().ToString();
             _MD5 = null;
             _computedMD5 = null;
-            _fileSize = Convert.ToInt32(_fileInfo.Length);
+            _fileSize = _fileInfo.Length;
             _extention = _fileInfo.Extension;
             _folder = selectedFolder;
             _folderGuid = folderGuid;
             _attachTable = attachTable;
             _dataStream = _fileInfo.OpenRead();
-        }
-
-        public Attachment(DataTable attachInfoTable, Folder selectedFolder, AttachmentsBaseCols attachTable)
-        {
-            DataRow TableRow = attachInfoTable.Rows[0];
-            _fileInfo = null;
-            _dataStream = null;
-            _attachTable = attachTable;
-            _fileName = TableRow[attachTable.FileName].ToString();
-            _fileGuid = TableRow[attachTable.FileGuid].ToString();
-            _MD5 = TableRow[attachTable.FileHash].ToString();
-            _computedMD5 = null;
-            _fileSize = Convert.ToInt32(TableRow[attachTable.FileSize]);
-            _extention = TableRow[attachTable.FileType].ToString();
-            _folder = selectedFolder;
-            _folderGuid = TableRow[attachTable.FKey].ToString();
-        }
-
-        public FileInfo FileInfo
-        {
-            get { return _fileInfo; }
         }
 
         public string FileName
@@ -246,7 +188,7 @@ namespace AssetManager.Data.Classes
         {
             if (this.DataStream != null)
             {
-                 _computedMD5 = SecurityTools.GetMD5OfStream(this.DataStream);
+                _computedMD5 = SecurityTools.GetMD5OfStream(this.DataStream);
                 if (_computedMD5 == this.MD5)
                 {
                     return true;
@@ -303,7 +245,6 @@ namespace AssetManager.Data.Classes
                 this.folderName = folderName;
                 this.folderGuid = folderNameGuid;
             }
-
         }
 
         #region "IDisposable Support"
@@ -318,7 +259,7 @@ namespace AssetManager.Data.Classes
             {
                 if (disposing)
                 {
-                     if (_dataStream != null)
+                    if (_dataStream != null)
                     {
                         _dataStream.Dispose();
                         _dataStream = null;
@@ -328,7 +269,7 @@ namespace AssetManager.Data.Classes
             }
             disposedValue = true;
         }
-               
+
         public void Dispose()
         {
             Dispose(true);
