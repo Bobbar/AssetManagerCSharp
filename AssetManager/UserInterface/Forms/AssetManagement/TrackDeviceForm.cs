@@ -120,50 +120,48 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void CheckOut()
         {
             using (var trans = DBFactory.GetDatabase().StartTransaction())
+            using (var conn = trans.Connection)
             {
-                using (var conn = trans.Connection)
+                try
                 {
-                    try
+                    if (!GetCheckData())
                     {
-                        if (!GetCheckData())
-                        {
-                            return;
-                        }
-                        OtherFunctions.SetWaitCursor(true, this);
-                        int rows = 0;
-                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceGuid, currentTrackingDevice.Guid, trans);
-
-                        ParamCollection checkParams = new ParamCollection();
-                        checkParams.Add(TrackablesCols.CheckType, CheckType.Checkout);
-                        checkParams.Add(TrackablesCols.CheckoutTime, checkData.CheckoutTime);
-                        checkParams.Add(TrackablesCols.DueBackDate, checkData.DueBackTime);
-                        checkParams.Add(TrackablesCols.CheckoutUser, checkData.CheckoutUser);
-                        checkParams.Add(TrackablesCols.UseLocation, checkData.UseLocation);
-                        checkParams.Add(TrackablesCols.Notes, checkData.UseReason);
-                        checkParams.Add(TrackablesCols.DeviceGuid, checkData.Guid);
-                        rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
-
-                        if (rows == 2)
-                        {
-                            trans.Commit();
-                            OtherFunctions.Message("Device Checked Out!", MessageBoxButtons.OK, MessageBoxIcon.Information, "Success", this);
-                        }
-                        else
-                        {
-                            trans.Rollback();
-                            OtherFunctions.Message("Unsuccessful! The number of affected rows was not expected.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Unexpected Result", this);
-                        }
-                        ParentForm.RefreshData();
+                        return;
                     }
-                    catch (Exception ex)
+                    OtherFunctions.SetWaitCursor(true, this);
+                    int rows = 0;
+                    rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceGuid, currentTrackingDevice.Guid, trans);
+
+                    ParamCollection checkParams = new ParamCollection();
+                    checkParams.Add(TrackablesCols.CheckType, CheckType.Checkout);
+                    checkParams.Add(TrackablesCols.CheckoutTime, checkData.CheckoutTime);
+                    checkParams.Add(TrackablesCols.DueBackDate, checkData.DueBackTime);
+                    checkParams.Add(TrackablesCols.CheckoutUser, checkData.CheckoutUser);
+                    checkParams.Add(TrackablesCols.UseLocation, checkData.UseLocation);
+                    checkParams.Add(TrackablesCols.Notes, checkData.UseReason);
+                    checkParams.Add(TrackablesCols.DeviceGuid, checkData.Guid);
+                    rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
+
+                    if (rows == 2)
+                    {
+                        trans.Commit();
+                        OtherFunctions.Message("Device Checked Out!", MessageBoxButtons.OK, MessageBoxIcon.Information, "Success", this);
+                    }
+                    else
                     {
                         trans.Rollback();
-                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                        OtherFunctions.Message("Unsuccessful! The number of affected rows was not expected.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Unexpected Result", this);
                     }
-                    finally
-                    {
-                        this.Dispose();
-                    }
+                    ParentForm.RefreshData();
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                }
+                finally
+                {
+                    this.Dispose();
                 }
             }
         }
@@ -171,53 +169,51 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void CheckIn()
         {
             using (var trans = DBFactory.GetDatabase().StartTransaction())
+            using (var conn = trans.Connection)
             {
-                using (var conn = trans.Connection)
+                try
                 {
-                    try
+                    if (!GetCheckData())
                     {
-                        if (!GetCheckData())
-                        {
-                            return;
-                        }
-                        OtherFunctions.SetWaitCursor(true, this);
-                        int rows = 0;
-                        rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceGuid, currentTrackingDevice.Guid, trans);
-
-                        ParamCollection checkParams = new ParamCollection();
-
-                        checkParams.Add(TrackablesCols.CheckType, CheckType.Checkin);
-                        checkParams.Add(TrackablesCols.CheckoutTime, checkData.CheckoutTime);
-                        checkParams.Add(TrackablesCols.DueBackDate, checkData.DueBackTime);
-                        checkParams.Add(TrackablesCols.CheckinTime, checkData.CheckinTime);
-                        checkParams.Add(TrackablesCols.CheckoutUser, checkData.CheckoutUser);
-                        checkParams.Add(TrackablesCols.CheckinUser, checkData.CheckinUser);
-                        checkParams.Add(TrackablesCols.UseLocation, checkData.UseLocation);
-                        checkParams.Add(TrackablesCols.Notes, checkData.CheckinNotes);
-                        checkParams.Add(TrackablesCols.DeviceGuid, checkData.Guid);
-                        rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
-
-                        if (rows == 2)
-                        {
-                            trans.Commit();
-                            OtherFunctions.Message("Device Checked In!", MessageBoxButtons.OK, MessageBoxIcon.Information, "Success", this);
-                        }
-                        else
-                        {
-                            trans.Rollback();
-                            OtherFunctions.Message("Unsuccessful! The number of affected rows was not what was expected.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Unexpected Result", this);
-                        }
-                        ParentForm.RefreshData();
+                        return;
                     }
-                    catch (Exception ex)
+                    OtherFunctions.SetWaitCursor(true, this);
+                    int rows = 0;
+                    rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceGuid, currentTrackingDevice.Guid, trans);
+
+                    ParamCollection checkParams = new ParamCollection();
+
+                    checkParams.Add(TrackablesCols.CheckType, CheckType.Checkin);
+                    checkParams.Add(TrackablesCols.CheckoutTime, checkData.CheckoutTime);
+                    checkParams.Add(TrackablesCols.DueBackDate, checkData.DueBackTime);
+                    checkParams.Add(TrackablesCols.CheckinTime, checkData.CheckinTime);
+                    checkParams.Add(TrackablesCols.CheckoutUser, checkData.CheckoutUser);
+                    checkParams.Add(TrackablesCols.CheckinUser, checkData.CheckinUser);
+                    checkParams.Add(TrackablesCols.UseLocation, checkData.UseLocation);
+                    checkParams.Add(TrackablesCols.Notes, checkData.CheckinNotes);
+                    checkParams.Add(TrackablesCols.DeviceGuid, checkData.Guid);
+                    rows += DBFactory.GetDatabase().InsertFromParameters(TrackablesCols.TableName, checkParams.Parameters, trans);
+
+                    if (rows == 2)
+                    {
+                        trans.Commit();
+                        OtherFunctions.Message("Device Checked In!", MessageBoxButtons.OK, MessageBoxIcon.Information, "Success", this);
+                    }
+                    else
                     {
                         trans.Rollback();
-                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                        OtherFunctions.Message("Unsuccessful! The number of affected rows was not what was expected.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Unexpected Result", this);
                     }
-                    finally
-                    {
-                        this.Dispose();
-                    }
+                    ParentForm.RefreshData();
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                }
+                finally
+                {
+                    this.Dispose();
                 }
             }
         }

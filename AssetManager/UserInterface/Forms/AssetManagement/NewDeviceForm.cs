@@ -177,36 +177,34 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private bool AddNewDevice()
         {
             using (var trans = DBFactory.GetDatabase().StartTransaction())
+            using (var conn = trans.Connection)
             {
-                using (var conn = trans.Connection)
+                try
                 {
-                    try
+                    newGuid = Guid.NewGuid().ToString();
+                    int rows = 0;
+                    string DeviceInsertQry = "SELECT * FROM " + DevicesCols.TableName + " LIMIT 0";
+                    string HistoryInsertQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " LIMIT 0";
+
+                    rows += DBFactory.GetDatabase().UpdateTable(DeviceInsertQry, DeviceInsertTable(DeviceInsertQry), trans);
+                    rows += DBFactory.GetDatabase().UpdateTable(HistoryInsertQry, HistoryInsertTable(HistoryInsertQry), trans);
+
+                    if (rows == 2)
                     {
-                        newGuid = Guid.NewGuid().ToString();
-                        int rows = 0;
-                        string DeviceInsertQry = "SELECT * FROM " + DevicesCols.TableName + " LIMIT 0";
-                        string HistoryInsertQry = "SELECT * FROM " + HistoricalDevicesCols.TableName + " LIMIT 0";
-
-                        rows += DBFactory.GetDatabase().UpdateTable(DeviceInsertQry, DeviceInsertTable(DeviceInsertQry), trans);
-                        rows += DBFactory.GetDatabase().UpdateTable(HistoryInsertQry, HistoryInsertTable(HistoryInsertQry), trans);
-
-                        if (rows == 2)
-                        {
-                            trans.Commit();
-                            return true;
-                        }
-                        else
-                        {
-                            trans.Rollback();
-                            return false;
-                        }
+                        trans.Commit();
+                        return true;
                     }
-                    catch (Exception ex)
+                    else
                     {
                         trans.Rollback();
-                        ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                         return false;
                     }
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                    return false;
                 }
             }
         }

@@ -262,13 +262,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Classes.Attachment.#ctor(System.String,AssetManager.Data.AttachmentsBaseCols)">
-            <summary>
-            Create new Attachment from a file path.
-            </summary>
-            <param name="newFile">Full path to file.</param>
-            <param name="attachTable">The table that will be assigned to this instance.</param>
-        </member>
         <member name="T:AssetManager.Data.Classes.MemoryTributary">
             <summary>
             Credit to: https://www.codeproject.com/Articles/348590/A-replacement-for-MemoryStream

@@ -117,6 +117,7 @@ namespace AssetManager.Data.Functions
                 }
 
                 using (var trans = DBFactory.GetSqliteDatabase().StartTransaction())
+                using (var conn = trans.Connection)
                 {
                     foreach (var table in TableList())
                     {
@@ -141,6 +142,7 @@ namespace AssetManager.Data.Functions
             string query = "SELECT * FROM sqlite_master WHERE type='table'";
 
             using (var trans = DBFactory.GetSqliteDatabase().StartTransaction())
+            using (var conn = trans.Connection)
             using (var results = DBFactory.GetSqliteDatabase().DataTableFromQueryString(query))
             {
                 try

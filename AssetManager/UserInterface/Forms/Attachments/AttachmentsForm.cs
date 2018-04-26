@@ -550,7 +550,9 @@ namespace AssetManager.UserInterface.Forms
                 RightClickMenu.Close();
 
                 int rows = 0;
+
                 using (var trans = DBFactory.GetDatabase().StartTransaction())
+                using (var conn = trans.Connection)
                 {
                     rows += DBFactory.GetDatabase().UpdateValue(attachmentColumns.TableName, attachmentColumns.FolderNameGuid, folder.FolderNameGuid, attachmentColumns.FileGuid, attachGuid, trans);
                     rows += DBFactory.GetDatabase().UpdateValue(attachmentColumns.TableName, attachmentColumns.FolderName, folder.FolderName, attachmentColumns.FileGuid, attachGuid, trans);
@@ -904,6 +906,7 @@ namespace AssetManager.UserInterface.Forms
                             }
                             else
                             {
+
                                 var insertedRows = InsertSQLAttachment(uploadAttachment, trans);
                                 if (insertedRows > 0)
                                 {
@@ -913,6 +916,7 @@ namespace AssetManager.UserInterface.Forms
                                 {
                                     trans.Rollback();
                                 }
+
                             }
                             uploadAttachment.Dispose();
                         }
@@ -1367,7 +1371,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 return;
             }
-           
+
             if (dragToItem.Index == 0)
             {
                 ProcessFolderListDrop(e.Data, new Attachment.Folder());

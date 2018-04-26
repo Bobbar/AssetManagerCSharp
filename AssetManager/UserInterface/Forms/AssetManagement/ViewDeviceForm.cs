@@ -856,6 +856,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             int affectedRows = 0;
             string selectQuery = Queries.SelectDeviceByGuid(currentViewDevice.Guid);
             string insertQuery = Queries.SelectEmptyHistoricalTable;
+
             using (var trans = DBFactory.GetDatabase().StartTransaction())
             using (var conn = trans.Connection)
             {
