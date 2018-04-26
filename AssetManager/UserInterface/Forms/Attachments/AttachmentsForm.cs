@@ -735,9 +735,9 @@ namespace AssetManager.UserInterface.Forms
             AttachCountChanged(this, e);
         }
 
-        private void UpdateDbAttachementName(string AttachGuid, string NewFileName)
+        private void UpdateDbAttachementName(string attachGuid, string fileName)
         {
-            AssetManagerFunctions.UpdateSqlValue(attachmentColumns.TableName, attachmentColumns.FileName, NewFileName, attachmentColumns.FileGuid, AttachGuid);
+            AssetManagerFunctions.UpdateSqlValue(attachmentColumns.TableName, attachmentColumns.FileName, fileName, attachmentColumns.FileGuid, attachGuid);
         }
 
         private void BeginRenameAttachment()
