@@ -164,19 +164,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\PDFFormFilling.cs" />
+    <Compile Include="Data\Classes\Attachment\Folder.cs" />
     <Compile Include="Data\Functions\DatabaseHelperFunctions\LevenshteinSearch.cs" />
     <Compile Include="Data\Functions\DBControls\DBControlInfo.cs" />
     <Compile Include="Data\Functions\DBControls\DBRemappingInfo.cs" />
     <Compile Include="Data\Functions\DBControls\ParseType.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedResourceManager.cs" />
     <Compile Include="Data\Databases.cs" />
-    <Compile Include="Data\DataClasses\DataClassMapping\ColumnNameAttribute.cs" />
-    <Compile Include="Data\DataClasses\DataClassMapping\DataMapObject.cs" />
-    <Compile Include="Data\DataClasses\DataStructures.cs" />
-    <Compile Include="Data\DataClasses\MappableObjects\AccessGroup.cs" />
-    <Compile Include="Data\DataClasses\MappableObjects\Device.cs" />
-    <Compile Include="Data\DataClasses\MappableObjects\SibiRequest.cs" />
-    <Compile Include="Data\DataClasses\MappableObjects\TrackingEntry.cs" />
+    <Compile Include="Data\Classes\DataClassMapping\ColumnNameAttribute.cs" />
+    <Compile Include="Data\Classes\DataClassMapping\DataMapObject.cs" />
+    <Compile Include="Data\Classes\DataStructures.cs" />
+    <Compile Include="Data\Classes\MappableObjects\AccessGroup.cs" />
+    <Compile Include="Data\Classes\MappableObjects\Device.cs" />
+    <Compile Include="Data\Classes\MappableObjects\SibiRequest.cs" />
+    <Compile Include="Data\Classes\MappableObjects\TrackingEntry.cs" />
     <Compile Include="Data\DataComms\SQL\DBFactory.cs" />
     <Compile Include="Data\DataComms\FTP\FTPComms.cs" />
     <Compile Include="Data\DataComms\ServerInfo.cs" />
@@ -358,14 +359,14 @@
     <Compile Include="UserInterface\Forms\AssetManagement\ViewTrackingForm.Designer.cs">
       <DependentUpon>ViewTrackingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Data\DataClasses\AttachmentObject.cs" />
+    <Compile Include="Data\Classes\Attachment\Attachment.cs" />
     <Compile Include="UserInterface\Forms\Attachments\AttachmentsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Attachments\AttachmentsForm.Designer.cs">
       <DependentUpon>AttachmentsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Data\DataClasses\MemoryTributary.cs" />
+    <Compile Include="Data\Classes\MemoryTributary.cs" />
     <Compile Include="UserInterface\Forms\GetCredentialsForm.cs">
       <SubType>Form</SubType>
     </Compile>

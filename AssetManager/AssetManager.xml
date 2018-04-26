@@ -4,6 +4,121 @@
         <name>AssetManager</name>
     </assembly>
     <members>
+        <member name="T:AssetManager.Data.Classes.Folder">
+            <summary>
+            Attachment folder object.
+            </summary>
+        </member>
+        <member name="T:AssetManager.Data.Classes.MappableObject">
+            <summary>
+            Data mapper for classes tagged with <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/>
+            </summary>
+        </member>
+        <member name="P:AssetManager.Data.Classes.MappableObject.PopulatingTable">
+            <summary>
+            DataTable that was used to populate this object.
+            </summary>
+        </member>
+        <member name="P:AssetManager.Data.Classes.MappableObject.TableName">
+            <summary>
+            Database Tablename for implementing object.
+            </summary>
+        </member>
+        <member name="M:AssetManager.Data.Classes.MappableObject.MapProperty(System.Object,System.Data.DataRow)">
+            <summary>
+            Uses reflection to recursively populate/map class properties that are marked with a <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/>.
+            </summary>
+            <param name="obj">Object to be populated.</param>
+            <param name="row">DataRow with columns matching the <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/> in the objects properties.</param>
+        </member>
+        <member name="T:AssetManager.Data.Classes.DbAttributes">
+            <summary>
+            Wrapper for storing and accessing a collection of <see cref="T:AssetManager.Data.Classes.DbAttribute"/>.
+            </summary>
+        </member>
+        <member name="M:AssetManager.Data.Classes.DbAttributes.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:AssetManager.Data.Classes.DbAttributes"/> class.
+            </summary>
+        </member>
+        <member name="P:AssetManager.Data.Classes.DbAttributes.Item(System.String)">
+            <summary>
+            Gets the <see cref="T:AssetManager.Data.Classes.DbAttribute"/> from the collection with the specified code value.
+            </summary>
+            <param name="codeValue">The <see cref="P:AssetManager.Data.Classes.DbAttribute.Code"/> of the attribute to return.</param>
+            <returns>The <see cref="T:AssetManager.Data.Classes.DbAttribute"/> in the collection with the specified <see cref="P:AssetManager.Data.Classes.DbAttribute.Code"/>; otherwise will throw <see cref="T:System.Collections.Generic.KeyNotFoundException"/> if the <see cref="P:AssetManager.Data.Classes.DbAttribute.Code"/> is not found.</returns>
+        </member>
+        <member name="M:AssetManager.Data.Classes.DbAttributes.Add(System.String,System.String,System.Int32)">
+            <summary>
+            Creates and adds a new <see cref="T:AssetManager.Data.Classes.DbAttribute"/> to the collection.
+            </summary>
+            <param name="displayValue">The human friendly display value for the attribute.</param>
+            <param name="code">The non-friendly value stored in the database.</param>
+            <param name="id">The unique database index ID for the attribute.</param>
+        </member>
+        <member name="M:AssetManager.Data.Classes.DbAttributes.Add(System.String,System.String,System.Int32,System.Drawing.Color)">
+            <summary>
+            Creates and adds a new <see cref="T:AssetManager.Data.Classes.DbAttribute"/> to the collection.
+            </summary>
+            <param name="displayValue">The human friendly display value for the attribute.</param>
+            <param name="code">The non-friendly value stored in the database.</param>
+            <param name="id">The unique database index ID for the attribute.</param>
+            <param name="color">The hex color value associated with this attribute.</param>
+        </member>
+        <member name="M:AssetManager.Data.Classes.DbAttributes.Add(AssetManager.Data.Classes.DbAttribute)">
+            <summary>
+            Creates and adds a new <see cref="T:AssetManager.Data.Classes.DbAttribute"/> to the collection.
+            </summary>
+            <param name="attribute">The new <see cref="T:AssetManager.Data.Classes.DbAttribute"/> object to be added to the collection.</param>
+        </member>
+        <member name="M:AssetManager.Data.Classes.DbAttributes.GetArray">
+            <summary>
+            Returns an array of <see cref="T:AssetManager.Data.Classes.DbAttribute"/> from the collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:AssetManager.Data.Classes.MemoryTributary">
+            <summary>
+            Credit to: https://www.codeproject.com/Articles/348590/A-replacement-for-MemoryStream
+            MemoryTributary is a re-implementation of MemoryStream that uses a dynamic list of byte arrays as a backing store, instead of a single byte array, the allocation
+            of which will fail for relatively small streams as it requires contiguous memory.
+            </summary>
+        </member>
+        <member name="P:AssetManager.Data.Classes.MemoryTributary.block">
+            <summary>
+            The block of memory currently addressed by Position
+            </summary>
+        </member>
+        <member name="P:AssetManager.Data.Classes.MemoryTributary.blockId">
+            <summary>
+            The id of the block currently addressed by Position
+            </summary>
+        </member>
+        <member name="P:AssetManager.Data.Classes.MemoryTributary.blockOffset">
+            <summary>
+            The offset of the byte currently addressed by Position, into the block that contains it
+            </summary>
+        </member>
+        <member name="M:AssetManager.Data.Classes.MemoryTributary.ToArray">
+            <summary>
+            Returns the entire content of the stream as a byte array. This is not safe because the call to new byte[] may 
+            fail if the stream is large enough. Where possible use methods which operate on streams directly instead.
+            </summary>
+            <returns>A byte[] containing the current data in the stream</returns>
+        </member>
+        <member name="M:AssetManager.Data.Classes.MemoryTributary.ReadFrom(System.IO.Stream,System.Int64)">
+            <summary>
+            Reads length bytes from source into the this instance at the current position.
+            </summary>
+            <param name="source">The stream containing the data to copy</param>
+            <param name="length">The number of bytes to copy</param>
+        </member>
+        <member name="M:AssetManager.Data.Classes.MemoryTributary.WriteTo(System.IO.Stream)">
+            <summary>
+            Writes the entire stream into destination, regardless of Position, which remains unchanged.
+            </summary>
+            <param name="destination">The stream to write the content of this stream to</param>
+        </member>
         <member name="T:AssetManager.Data.Functions.LevenshteinSearch">
             <summary>
             Contains functions for performing accurate employee name searches using a fast Levenshtein algorithm.
@@ -193,116 +308,6 @@
             Modifies a DataRow with data parsed from controls collected by <see cref="M:AssetManager.Data.Functions.DBControlParser.GetDBControlValue(System.Windows.Forms.Control)"/>
             </summary>
             <param name="row">DataRow to be modified.</param>
-        </member>
-        <member name="T:AssetManager.Data.Classes.MappableObject">
-            <summary>
-            Data mapper for classes tagged with <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/>
-            </summary>
-        </member>
-        <member name="P:AssetManager.Data.Classes.MappableObject.PopulatingTable">
-            <summary>
-            DataTable that was used to populate this object.
-            </summary>
-        </member>
-        <member name="P:AssetManager.Data.Classes.MappableObject.TableName">
-            <summary>
-            Database Tablename for implementing object.
-            </summary>
-        </member>
-        <member name="M:AssetManager.Data.Classes.MappableObject.MapProperty(System.Object,System.Data.DataRow)">
-            <summary>
-            Uses reflection to recursively populate/map class properties that are marked with a <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/>.
-            </summary>
-            <param name="obj">Object to be populated.</param>
-            <param name="row">DataRow with columns matching the <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/> in the objects properties.</param>
-        </member>
-        <member name="T:AssetManager.Data.Classes.DbAttributes">
-            <summary>
-            Wrapper for storing and accessing a collection of <see cref="T:AssetManager.Data.Classes.DbAttribute"/>.
-            </summary>
-        </member>
-        <member name="M:AssetManager.Data.Classes.DbAttributes.#ctor">
-            <summary>
-            Creates a new instance of the <see cref="T:AssetManager.Data.Classes.DbAttributes"/> class.
-            </summary>
-        </member>
-        <member name="P:AssetManager.Data.Classes.DbAttributes.Item(System.String)">
-            <summary>
-            Gets the <see cref="T:AssetManager.Data.Classes.DbAttribute"/> from the collection with the specified code value.
-            </summary>
-            <param name="codeValue">The <see cref="P:AssetManager.Data.Classes.DbAttribute.Code"/> of the attribute to return.</param>
-            <returns>The <see cref="T:AssetManager.Data.Classes.DbAttribute"/> in the collection with the specified <see cref="P:AssetManager.Data.Classes.DbAttribute.Code"/>; otherwise will throw <see cref="T:System.Collections.Generic.KeyNotFoundException"/> if the <see cref="P:AssetManager.Data.Classes.DbAttribute.Code"/> is not found.</returns>
-        </member>
-        <member name="M:AssetManager.Data.Classes.DbAttributes.Add(System.String,System.String,System.Int32)">
-            <summary>
-            Creates and adds a new <see cref="T:AssetManager.Data.Classes.DbAttribute"/> to the collection.
-            </summary>
-            <param name="displayValue">The human friendly display value for the attribute.</param>
-            <param name="code">The non-friendly value stored in the database.</param>
-            <param name="id">The unique database index ID for the attribute.</param>
-        </member>
-        <member name="M:AssetManager.Data.Classes.DbAttributes.Add(System.String,System.String,System.Int32,System.Drawing.Color)">
-            <summary>
-            Creates and adds a new <see cref="T:AssetManager.Data.Classes.DbAttribute"/> to the collection.
-            </summary>
-            <param name="displayValue">The human friendly display value for the attribute.</param>
-            <param name="code">The non-friendly value stored in the database.</param>
-            <param name="id">The unique database index ID for the attribute.</param>
-            <param name="color">The hex color value associated with this attribute.</param>
-        </member>
-        <member name="M:AssetManager.Data.Classes.DbAttributes.Add(AssetManager.Data.Classes.DbAttribute)">
-            <summary>
-            Creates and adds a new <see cref="T:AssetManager.Data.Classes.DbAttribute"/> to the collection.
-            </summary>
-            <param name="attribute">The new <see cref="T:AssetManager.Data.Classes.DbAttribute"/> object to be added to the collection.</param>
-        </member>
-        <member name="M:AssetManager.Data.Classes.DbAttributes.GetArray">
-            <summary>
-            Returns an array of <see cref="T:AssetManager.Data.Classes.DbAttribute"/> from the collection.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:AssetManager.Data.Classes.MemoryTributary">
-            <summary>
-            Credit to: https://www.codeproject.com/Articles/348590/A-replacement-for-MemoryStream
-            MemoryTributary is a re-implementation of MemoryStream that uses a dynamic list of byte arrays as a backing store, instead of a single byte array, the allocation
-            of which will fail for relatively small streams as it requires contiguous memory.
-            </summary>
-        </member>
-        <member name="P:AssetManager.Data.Classes.MemoryTributary.block">
-            <summary>
-            The block of memory currently addressed by Position
-            </summary>
-        </member>
-        <member name="P:AssetManager.Data.Classes.MemoryTributary.blockId">
-            <summary>
-            The id of the block currently addressed by Position
-            </summary>
-        </member>
-        <member name="P:AssetManager.Data.Classes.MemoryTributary.blockOffset">
-            <summary>
-            The offset of the byte currently addressed by Position, into the block that contains it
-            </summary>
-        </member>
-        <member name="M:AssetManager.Data.Classes.MemoryTributary.ToArray">
-            <summary>
-            Returns the entire content of the stream as a byte array. This is not safe because the call to new byte[] may 
-            fail if the stream is large enough. Where possible use methods which operate on streams directly instead.
-            </summary>
-            <returns>A byte[] containing the current data in the stream</returns>
-        </member>
-        <member name="M:AssetManager.Data.Classes.MemoryTributary.ReadFrom(System.IO.Stream,System.Int64)">
-            <summary>
-            Reads length bytes from source into the this instance at the current position.
-            </summary>
-            <param name="source">The stream containing the data to copy</param>
-            <param name="length">The number of bytes to copy</param>
-        </member>
-        <member name="M:AssetManager.Data.Classes.MemoryTributary.WriteTo(System.IO.Stream)">
-            <summary>
-            Writes the entire stream into destination, regardless of Position, which remains unchanged.
-            </summary>
-            <param name="destination">The stream to write the content of this stream to</param>
         </member>
         <member name="T:AssetManager.Data.ParamCollection">
             <summary>

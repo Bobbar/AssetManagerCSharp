@@ -44,10 +44,10 @@ namespace AssetManager.UserInterface.Forms
 
         private Point mouseStartPos;
         private ProgressCounter progress = new ProgressCounter();
-        private Attachment.Folder previousFolder = new Attachment.Folder();
-        private Attachment.Folder currentFolder = new Attachment.Folder();
+        private Folder previousFolder = new Folder();
+        private Folder currentFolder = new Folder();
 
-        private Attachment.Folder CurrentSelectedFolder
+        private Folder CurrentSelectedFolder
         {
             get
             {
@@ -55,7 +55,7 @@ namespace AssetManager.UserInterface.Forms
                 {
                     if (FolderListView.SelectedItems[0].Index == 0)
                     {
-                        currentFolder = new Attachment.Folder();
+                        currentFolder = new Folder();
                     }
                     else
                     {
@@ -135,7 +135,7 @@ namespace AssetManager.UserInterface.Forms
 
         #region Methods
 
-        private void SetActiveFolder(Attachment.Folder folder)
+        private void SetActiveFolder(Folder folder)
         {
             if (folder.FolderNameGuid == "")
             {
@@ -537,7 +537,7 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void MoveAttachToFolder(string attachGuid, Attachment.Folder folder, bool isNew = false)
+        private void MoveAttachToFolder(string attachGuid, Folder folder, bool isNew = false)
         {
             SecurityTools.CheckForAccess(SecurityGroups.ManageAttachment);
 
@@ -653,7 +653,7 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void ProcessFolderListDrop(IDataObject dropDataObject, Attachment.Folder folder)
+        private void ProcessFolderListDrop(IDataObject dropDataObject, Folder folder)
         {
             try
             {
@@ -691,7 +691,7 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void ProcessFileDrop(IDataObject dropDataObject, Attachment.Folder folder)
+        private void ProcessFileDrop(IDataObject dropDataObject, Folder folder)
         {
             //Outlook data object.
             if (dropDataObject.GetDataPresent("RenPrivateItem"))
@@ -829,7 +829,7 @@ namespace AssetManager.UserInterface.Forms
             UploadAttachments(files, CurrentSelectedFolder);
         }
 
-        private async void UploadAttachments(string[] files, Attachment.Folder folder)
+        private async void UploadAttachments(string[] files, Folder folder)
         {
             if (transferTaskRunning)
             {
@@ -1370,11 +1370,11 @@ namespace AssetManager.UserInterface.Forms
 
             if (dragToItem.Index == 0)
             {
-                ProcessFolderListDrop(e.Data, new Attachment.Folder());
+                ProcessFolderListDrop(e.Data, new Folder());
             }
             else
             {
-                ProcessFolderListDrop(e.Data, new Attachment.Folder(dragToItem.Text, (string)dragToItem.Tag));
+                ProcessFolderListDrop(e.Data, new Folder(dragToItem.Text, (string)dragToItem.Tag));
             }
 
             isDragging = false;
@@ -1414,7 +1414,7 @@ namespace AssetManager.UserInterface.Forms
 
             if (!FolderNameExists(newFolderName))
             {
-                MoveAttachToFolder(SelectedAttachmentGuid(), new Attachment.Folder(newFolderName), true);
+                MoveAttachToFolder(SelectedAttachmentGuid(), new Folder(newFolderName), true);
             }
             else
             {
