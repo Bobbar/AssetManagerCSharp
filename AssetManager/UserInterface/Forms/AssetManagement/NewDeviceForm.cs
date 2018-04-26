@@ -79,7 +79,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             PurchaseDatePicker.Value = POPurchaseDate;
         }
 
-        void ILiveBox.LoadDevice(string deviceGuid)
+        void ILiveBox.ViewDevice(string deviceGuid)
         {
             LoadDevice(deviceGuid);
         }

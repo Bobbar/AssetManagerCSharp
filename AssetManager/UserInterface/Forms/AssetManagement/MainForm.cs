@@ -183,8 +183,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         [SuppressMessage("Microsoft.Design", "CA1806")]
-        public void LoadDevice(string deviceGuid)
+        public void ViewDevice(string deviceGuid)
         {
+            if (string.IsNullOrEmpty(deviceGuid)) return;
+
             try
             {
                 if (!ChildFormControl.FormIsOpenByGuid(typeof(ViewDeviceForm), deviceGuid))
@@ -213,7 +215,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         /// <summary>
         /// Loads and displays devices for all currently selected rows.
         /// </summary>
-        private void LoadSelectedDevices()
+        private void ViewSelectedDevices()
         {
             var uniqueRows = new HashSet<int>();
             foreach (DataGridViewCell cell in ResultGrid.SelectedCells)
@@ -228,7 +230,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
                 if (!string.IsNullOrEmpty(guid))
                 {
-                    LoadDevice(guid);
+                    ViewDevice(guid);
                 }
                 // Delay for just a moment to keep the UI somewhat alive.
                 Task.Delay(20).Wait();
@@ -836,7 +838,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (e.KeyCode == Keys.Enter)
             {
-                LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid));
+                ViewDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid));
                 e.SuppressKeyPress = true;
             }
         }
@@ -884,14 +886,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             if (e.KeyCode == Keys.Return)
             {
-                LoadDevice(GuidTextBox.Text.Trim());
+                ViewDevice(GuidTextBox.Text.Trim());
                 GuidTextBox.Clear();
             }
         }
 
         private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadSelectedDevices();
+            ViewSelectedDevices();
         }
 
         private void ReEnterLACredentialsMenuItem_Click(object sender, EventArgs e)
@@ -944,7 +946,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ResultGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            LoadDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid));
+            ViewDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid));
         }
 
         public override bool OkToClose()

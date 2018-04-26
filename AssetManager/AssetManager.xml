@@ -1439,7 +1439,7 @@
             Builds a query from the populated search controls.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.AssetManagement.MainForm.LoadSelectedDevices">
+        <member name="M:AssetManager.UserInterface.Forms.AssetManagement.MainForm.ViewSelectedDevices">
             <summary>
             Loads and displays devices for all currently selected rows.
             </summary>

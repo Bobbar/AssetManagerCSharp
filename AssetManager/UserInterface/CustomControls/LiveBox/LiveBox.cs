@@ -265,7 +265,7 @@ namespace AssetManager.UserInterface.CustomControls
 
                         case LiveBoxSelectAction.LoadDevice:
                             currentLiveBoxConfig.TargetTextBox.Text = "";
-                            liveboxForm.LoadDevice(selectedValue);
+                            liveboxForm.ViewDevice(selectedValue);
                             break;
 
                         case LiveBoxSelectAction.SelectValue:
