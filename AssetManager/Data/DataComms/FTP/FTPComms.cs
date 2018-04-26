@@ -5,21 +5,21 @@ using AssetManager.Security;
 namespace AssetManager.Data.Communications
 {
 
-    public class FtpComms
+    public static class FtpComms
     {
 
         #region "Fields"
 
-        private const string ftpPass = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ=";
-        private const string ftpUser = "asset_manager";
-        private NetworkCredential ftpCreds = new NetworkCredential(ftpUser, SecurityTools.DecodePassword(ftpPass));
+        private static readonly string ftpPass = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ=";
+        private static readonly string ftpUser = "asset_manager";
+        private static NetworkCredential ftpCreds = new NetworkCredential(ftpUser, SecurityTools.DecodePassword(ftpPass));
 
-        private int intSocketTimeout = 5000;
+        private static int intSocketTimeout = 5000;
         #endregion
 
         #region "Methods"
 
-        public Stream ReturnFtpRequestStream(string uri, string method)
+        public static Stream ReturnFtpRequestStream(string uri, string method)
         {
             var request = (FtpWebRequest)FtpWebRequest.Create(uri);
             request.Proxy = new WebProxy();
@@ -31,7 +31,7 @@ namespace AssetManager.Data.Communications
             return request.GetRequestStream();
         }
 
-        public WebResponse ReturnFtpResponse(string uri, string method)
+        public static WebResponse ReturnFtpResponse(string uri, string method)
         {
             var request = (FtpWebRequest)FtpWebRequest.Create(uri);
             request.Proxy = new WebProxy();

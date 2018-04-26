@@ -319,18 +319,17 @@ namespace AssetManager.UserInterface.Forms
                 taskCancelTokenSource = new CancellationTokenSource();
                 CancellationToken cancelToken = taskCancelTokenSource.Token;
                 SetStatusBarText("Connecting...");
-                var ftpComms = new FtpComms();
                 downloadAttachment = GetSQLAttachment(attachGuid);
                 string ftpFullUri = ftpUri + downloadAttachment.FolderGuid + "/" + attachGuid;
                 //get file size
                 progress = new ProgressCounter();
-                progress.BytesToTransfer = Convert.ToInt32(ftpComms.ReturnFtpResponse(ftpFullUri, WebRequestMethods.Ftp.GetFileSize).ContentLength);
+                progress.BytesToTransfer = Convert.ToInt32(FtpComms.ReturnFtpResponse(ftpFullUri, WebRequestMethods.Ftp.GetFileSize).ContentLength);
                 //setup download
                 SetStatusBarText("Downloading...");
                 TransferFeedback(true);
                 downloadAttachment.DataStream = await Task.Run(() =>
                 {
-                    using (var respStream = ftpComms.ReturnFtpResponse(ftpFullUri, WebRequestMethods.Ftp.DownloadFile).GetResponseStream())
+                    using (var respStream = FtpComms.ReturnFtpResponse(ftpFullUri, WebRequestMethods.Ftp.DownloadFile).GetResponseStream())
                     {
                         var memStream = new MemoryTributary();
                         int bufferSize = 256000;
@@ -499,9 +498,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 try
                 {
-                    var ftpComms = new FtpComms();
-
-                    using (var makeDirResponse = (FtpWebResponse)(ftpComms.ReturnFtpResponse(ftpUri + folderGuid, WebRequestMethods.Ftp.MakeDirectory)))
+                    using (var makeDirResponse = (FtpWebResponse)(FtpComms.ReturnFtpResponse(ftpUri + folderGuid, WebRequestMethods.Ftp.MakeDirectory)))
                     {
                         if (makeDirResponse.StatusCode == FtpStatusCode.PathnameCreated)
                         {
@@ -844,7 +841,6 @@ namespace AssetManager.UserInterface.Forms
 
             try
             {
-                var ftpComms = new FtpComms();
                 taskCancelTokenSource = new CancellationTokenSource();
                 var cancelToken = taskCancelTokenSource.Token;
                 TransferFeedback(true);
@@ -880,7 +876,7 @@ namespace AssetManager.UserInterface.Forms
                             await Task.Run(() =>
                             {
                                 using (var fileStream = (FileStream)(uploadAttachment.DataStream))
-                                using (var ftpStream = ftpComms.ReturnFtpRequestStream(ftpUri + uploadAttachment.FolderGuid + "/" + uploadAttachment.FileGuid, WebRequestMethods.Ftp.UploadFile))
+                                using (var ftpStream = FtpComms.ReturnFtpRequestStream(ftpUri + uploadAttachment.FolderGuid + "/" + uploadAttachment.FileGuid, WebRequestMethods.Ftp.UploadFile))
                                 {
                                     int bufferSize = 256000;
                                     byte[] buffer = new byte[bufferSize];

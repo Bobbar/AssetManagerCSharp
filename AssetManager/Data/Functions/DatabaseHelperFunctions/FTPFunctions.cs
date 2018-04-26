@@ -12,19 +12,13 @@ namespace AssetManager.Data.Functions
 {
     public static class FtpFunctions
     {
-        #region Fields
-
-        private static FtpComms ftpComms = new FtpComms();
-
-        #endregion Fields
-
         #region Methods
 
         public static bool DeleteFtpAttachment(string fileGuid, string fKey)
         {
             try
             {
-                using (var resp = (FtpWebResponse)(ftpComms.ReturnFtpResponse("ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/" + fKey + "/" + fileGuid, WebRequestMethods.Ftp.DeleteFile)))
+                using (var resp = (FtpWebResponse)(FtpComms.ReturnFtpResponse("ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/" + fKey + "/" + fileGuid, WebRequestMethods.Ftp.DeleteFile)))
                 {
                     if (resp.StatusCode == FtpStatusCode.FileActionOK)
                     {
@@ -57,7 +51,7 @@ namespace AssetManager.Data.Functions
                 }
                 if (files.Count == i) // if successful deletions = total # of files, delete the directory
                 {
-                    using (var deleteResp = (FtpWebResponse)(ftpComms.ReturnFtpResponse("ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/" + folderGuid, WebRequestMethods.Ftp.RemoveDirectory)))
+                    using (var deleteResp = (FtpWebResponse)(FtpComms.ReturnFtpResponse("ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/" + folderGuid, WebRequestMethods.Ftp.RemoveDirectory)))
                     {
                         if (deleteResp.StatusCode == FtpStatusCode.FileActionOK)
                         {
@@ -78,7 +72,7 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                using (var resp = (FtpWebResponse)(ftpComms.ReturnFtpResponse("ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/" + itemGuid + "/", WebRequestMethods.Ftp.ListDirectory)))
+                using (var resp = (FtpWebResponse)(FtpComms.ReturnFtpResponse("ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/" + itemGuid + "/", WebRequestMethods.Ftp.ListDirectory)))
                 {
                     if (resp.StatusCode == FtpStatusCode.OpeningData)
                     {
@@ -365,7 +359,7 @@ Missing Files: " + MissingSQLFiles.Count;
         {
             try
             {
-                using (var resp = (FtpWebResponse)(ftpComms.ReturnFtpResponse(uri, WebRequestMethods.Ftp.ListDirectory)))
+                using (var resp = (FtpWebResponse)(FtpComms.ReturnFtpResponse(uri, WebRequestMethods.Ftp.ListDirectory)))
                 {
                     System.IO.Stream responseStream = resp.GetResponseStream();
                     using (StreamReader reader = new StreamReader(responseStream))
