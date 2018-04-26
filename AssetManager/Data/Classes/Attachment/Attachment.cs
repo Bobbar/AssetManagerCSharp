@@ -7,75 +7,86 @@ namespace AssetManager.Data.Classes
 {
     public class Attachment : IDisposable
     {
-        private FileInfo _fileInfo;
-        private string _fileName;
-        private long _fileSize;
-        private string _extention;
-        private Folder _folder;
-        private string _folderGuid;
-        private string _MD5;
-        private string _computedMD5;
-        private string _fileGuid;
-        private AttachmentsBaseCols _attachTable;
-        private Stream _dataStream;
+        private FileInfo fileInfo;
+        private string fileName;
+        private long fileSize;
+        private string extention;
+        private Folder folder;
+        private string objectGuid;
+        private string fileMD5;
+        private string streamMD5;
+        private string fileGuid;
+        private AttachmentsBaseCols attachColumns;
+        private Stream dataStream;
 
         public Attachment()
         {
-            _fileInfo = null;
-            _fileName = null;
-            _fileSize = 0;
-            _extention = null;
-            _folder = new Folder();
-            _folderGuid = null;
-            _MD5 = null;
-            _computedMD5 = null;
-            _fileGuid = null;
-            _attachTable = null;
-            _dataStream = null;
+            fileInfo = null;
+            fileName = null;
+            fileSize = 0;
+            extention = null;
+            folder = new Folder();
+            objectGuid = null;
+            fileMD5 = null;
+            streamMD5 = null;
+            fileGuid = null;
+            attachColumns = null;
+            dataStream = null;
         }
 
-        public Attachment(DataTable attachInfoTable, AttachmentsBaseCols attachTable)
+        /// <summary>
+        /// Creates a new instance from a <see cref="DataRow"/>.
+        /// </summary>
+        /// <param name="attachRow"><see cref="DataRow"/> which contains the fields to be mapped to this instance.</param>
+        /// <param name="columns"><see cref="AttachmentsBaseCols"/> instance which contains the field column names to be mapped.</param>
+        public Attachment(DataRow attachRow, AttachmentsBaseCols columns)
         {
-            DataRow row = attachInfoTable.Rows[0];
-            _fileInfo = null;
-            _dataStream = null;
-            _attachTable = attachTable;
-            _fileName = row[attachTable.FileName].ToString();
-            _fileGuid = row[attachTable.FileGuid].ToString();
-            _MD5 = row[attachTable.FileHash].ToString();
-            _computedMD5 = null;
-            _fileSize = Convert.ToInt64(row[attachTable.FileSize]);
-            _extention = row[attachTable.FileType].ToString();
-            _folder = new Folder(row[attachTable.FolderName].ToString(), row[attachTable.FolderNameGuid].ToString());
-            _folderGuid = row[attachTable.FKey].ToString();
+            fileInfo = null;
+            dataStream = null;
+            attachColumns = columns;
+            fileName = attachRow[columns.FileName].ToString();
+            fileGuid = attachRow[columns.FileGuid].ToString();
+            fileMD5 = attachRow[columns.FileHash].ToString();
+            streamMD5 = null;
+            fileSize = Convert.ToInt64(attachRow[columns.FileSize]);
+            extention = attachRow[columns.FileType].ToString();
+            folder = new Folder(attachRow[columns.FolderName].ToString(), attachRow[columns.FolderNameGuid].ToString());
+            objectGuid = attachRow[columns.FKey].ToString();
         }
 
-        public Attachment(string newFile, string folderGuid, Folder selectedFolder, AttachmentsBaseCols attachTable)
+        /// <summary>
+        /// Creates a new instance from a file path.
+        /// </summary>
+        /// <param name="filePath">Full path of the file.</param>
+        /// <param name="objectGuid">Guid of the DB object to be associated with this attachment. ie. Device Guid or SibiRequest Guid.</param>
+        /// <param name="folder">The folder instance to be associated with this attachment.</param>
+        /// <param name="columns"><see cref="AttachmentsBaseCols"/> instance which contains the field column names to be mapped.</param>
+        public Attachment(string filePath, string objectGuid, Folder folder, AttachmentsBaseCols columns)
         {
-            _fileInfo = new FileInfo(newFile);
-            _fileName = Path.GetFileNameWithoutExtension(_fileInfo.Name);
-            _fileGuid = Guid.NewGuid().ToString();
-            _MD5 = null;
-            _computedMD5 = null;
-            _fileSize = _fileInfo.Length;
-            _extention = _fileInfo.Extension;
-            _folder = selectedFolder;
-            _folderGuid = folderGuid;
-            _attachTable = attachTable;
-            _dataStream = _fileInfo.OpenRead();
+            fileInfo = new FileInfo(filePath);
+            fileName = Path.GetFileNameWithoutExtension(fileInfo.Name);
+            fileGuid = Guid.NewGuid().ToString();
+            fileMD5 = null;
+            streamMD5 = null;
+            fileSize = fileInfo.Length;
+            extention = fileInfo.Extension;
+            this.folder = folder;
+            this.objectGuid = objectGuid;
+            attachColumns = columns;
+            dataStream = fileInfo.OpenRead();
         }
 
         public string FileName
         {
             get
             {
-                if (_fileInfo != null)
+                if (fileInfo != null)
                 {
-                    return Path.GetFileNameWithoutExtension(_fileInfo.Name);
+                    return Path.GetFileNameWithoutExtension(fileInfo.Name);
                 }
                 else
                 {
-                    return _fileName;
+                    return fileName;
                 }
             }
         }
@@ -84,13 +95,13 @@ namespace AssetManager.Data.Classes
         {
             get
             {
-                if (_fileInfo != null)
+                if (fileInfo != null)
                 {
-                    return _fileInfo.Name;
+                    return fileInfo.Name;
                 }
                 else
                 {
-                    return _fileName + Extension;
+                    return fileName + Extension;
                 }
             }
         }
@@ -99,13 +110,13 @@ namespace AssetManager.Data.Classes
         {
             get
             {
-                if (_fileInfo != null)
+                if (fileInfo != null)
                 {
-                    return _fileInfo.Extension;
+                    return fileInfo.Extension;
                 }
                 else
                 {
-                    return _extention;
+                    return extention;
                 }
             }
         }
@@ -114,82 +125,86 @@ namespace AssetManager.Data.Classes
         {
             get
             {
-                if (_fileInfo != null)
+                if (fileInfo != null)
                 {
-                    return _fileInfo.Length;
+                    return fileInfo.Length;
                 }
                 else
                 {
-                    return _fileSize;
+                    return fileSize;
                 }
             }
         }
 
         public string FileGuid
         {
-            get { return _fileGuid; }
+            get { return fileGuid; }
         }
 
-        public string MD5
+        public string FileMD5
         {
             get
             {
-                if (_MD5 != null)
+                if (fileMD5 != null)
                 {
-                    return _MD5;
+                    return fileMD5;
                 }
                 else
                 {
-                    _MD5 = GetHash(_fileInfo);
-                    return _MD5;
+                    fileMD5 = FileHash(fileInfo);
+                    return fileMD5;
                 }
             }
         }
 
-        public string ComputedMD5
+        public string StreamMD5
         {
             get
             {
-                return _computedMD5;
+                return streamMD5;
             }
         }
 
         public Folder FolderInfo
         {
-            get { return _folder; }
+            get { return folder; }
         }
 
-        public string FolderGuid
+        public string ObjectGuid
         {
-            get { return _folderGuid; }
+            get { return objectGuid; }
         }
 
         public Stream DataStream
         {
-            get { return _dataStream; }
-            set { _dataStream = value; }
+            get { return dataStream; }
+            set { dataStream = value; }
         }
 
-        public AttachmentsBaseCols AttachTable
+        public AttachmentsBaseCols AttachColumns
         {
-            get { return _attachTable; }
-            set { _attachTable = value; }
+            get { return attachColumns; }
+            set { attachColumns = value; }
         }
 
-        private string GetHash(FileInfo Fileinfo)
+        private string FileHash(FileInfo file)
         {
-            using (FileStream hashStream = Fileinfo.OpenRead())
+            using (FileStream fileStream = file.OpenRead())
             {
-                return SecurityTools.GetMD5OfStream(hashStream);
+                return SecurityTools.GetMD5OfStream(fileStream);
             }
         }
 
-        public bool VerifyAttachment()
+        /// <summary>
+        /// Returns true if the <see cref="FileMD5"/> matches the computed MD5 of the current <see cref="DataStream"/>.
+        /// </summary>
+        /// <returns></returns>
+        public bool VerifyData()
         {
-            if (this.DataStream != null)
+            if (dataStream != null)
             {
-                _computedMD5 = SecurityTools.GetMD5OfStream(this.DataStream);
-                if (_computedMD5 == this.MD5)
+                streamMD5 = SecurityTools.GetMD5OfStream(dataStream);
+                if (streamMD5 == fileMD5)
                 {
                     return true;
                 }
@@ -209,12 +224,9 @@ namespace AssetManager.Data.Classes
             {
                 if (disposing)
                 {
-                    if (_dataStream != null)
-                    {
-                        _dataStream.Dispose();
-                        _dataStream = null;
-                    }
-                    _fileInfo = null;
+                    dataStream?.Dispose();
+                    dataStream = null;
+                    fileInfo = null;
                 }
             }
             disposedValue = true;

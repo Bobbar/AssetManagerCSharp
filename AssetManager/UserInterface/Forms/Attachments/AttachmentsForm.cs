@@ -320,7 +320,7 @@ namespace AssetManager.UserInterface.Forms
                 CancellationToken cancelToken = taskCancelTokenSource.Token;
                 SetStatusBarText("Connecting...");
                 downloadAttachment = GetSQLAttachment(attachGuid);
-                string ftpFullUri = ftpUri + downloadAttachment.FolderGuid + "/" + attachGuid;
+                string ftpFullUri = ftpUri + downloadAttachment.ObjectGuid + "/" + attachGuid;
                 //get file size
                 progress = new ProgressCounter();
                 progress.BytesToTransfer = Convert.ToInt32(FtpComms.ReturnFtpResponse(ftpFullUri, WebRequestMethods.Ftp.GetFileSize).ContentLength);
@@ -462,7 +462,18 @@ namespace AssetManager.UserInterface.Forms
         private Attachment GetSQLAttachment(string attachGuid)
         {
             string query = "SELECT * FROM " + attachmentColumns.TableName + " WHERE " + attachmentColumns.FileGuid + "='" + attachGuid + "' LIMIT 1";
-            return new Attachment(DBFactory.GetDatabase().DataTableFromQueryString(query), attachmentColumns);
+
+            using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
+            {
+                if (results.Rows.Count > 0)
+                {
+                    return new Attachment(results.Rows[0], attachmentColumns);
+                }
+                else
+                {
+                    throw new Exception("Error while retrieving Attachment info from database. No rows were returned.");
+                }
+            }
         }
 
         private List<GridColumnAttrib> AttachGridColumns(AttachmentsBaseCols attachtable)
@@ -481,15 +492,15 @@ namespace AssetManager.UserInterface.Forms
         private int InsertSQLAttachment(Attachment attachment, DbTransaction transaction)
         {
             var insertParams = new ParamCollection();
-            insertParams.Add(attachment.AttachTable.FKey, attachment.FolderGuid);
-            insertParams.Add(attachment.AttachTable.FileName, attachment.FileName);
-            insertParams.Add(attachment.AttachTable.FileType, attachment.Extension);
-            insertParams.Add(attachment.AttachTable.FileSize, attachment.Filesize);
-            insertParams.Add(attachment.AttachTable.FileGuid, attachment.FileGuid);
-            insertParams.Add(attachment.AttachTable.FileHash, attachment.MD5);
-            insertParams.Add(attachment.AttachTable.FolderName, attachment.FolderInfo.FolderName);
-            insertParams.Add(attachment.AttachTable.FolderNameGuid, attachment.FolderInfo.FolderNameGuid);
-            return DBFactory.GetDatabase().InsertFromParameters(attachment.AttachTable.TableName, insertParams.Parameters, transaction);
+            insertParams.Add(attachment.AttachColumns.FKey, attachment.ObjectGuid);
+            insertParams.Add(attachment.AttachColumns.FileName, attachment.FileName);
+            insertParams.Add(attachment.AttachColumns.FileType, attachment.Extension);
+            insertParams.Add(attachment.AttachColumns.FileSize, attachment.Filesize);
+            insertParams.Add(attachment.AttachColumns.FileGuid, attachment.FileGuid);
+            insertParams.Add(attachment.AttachColumns.FileHash, attachment.FileMD5);
+            insertParams.Add(attachment.AttachColumns.FolderName, attachment.FolderInfo.FolderName);
+            insertParams.Add(attachment.AttachColumns.FolderNameGuid, attachment.FolderInfo.FolderNameGuid);
+            return DBFactory.GetDatabase().InsertFromParameters(attachment.AttachColumns.TableName, insertParams.Parameters, transaction);
         }
 
         private async Task<bool> MakeDirectory(string folderGuid)
@@ -857,7 +868,7 @@ namespace AssetManager.UserInterface.Forms
                     }
 
                     SetStatusBarText("Creating Directory...");
-                    if (!await MakeDirectory(uploadAttachment.FolderGuid))
+                    if (!await MakeDirectory(uploadAttachment.ObjectGuid))
                     {
                         uploadAttachment.Dispose();
                         OtherFunctions.Message("Error creating FTP directory.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "FTP Upload Error", this);
@@ -876,7 +887,7 @@ namespace AssetManager.UserInterface.Forms
                             await Task.Run(() =>
                             {
                                 using (var fileStream = (FileStream)(uploadAttachment.DataStream))
-                                using (var ftpStream = FtpComms.ReturnFtpRequestStream(ftpUri + uploadAttachment.FolderGuid + "/" + uploadAttachment.FileGuid, WebRequestMethods.Ftp.UploadFile))
+                                using (var ftpStream = FtpComms.ReturnFtpRequestStream(ftpUri + uploadAttachment.ObjectGuid + "/" + uploadAttachment.FileGuid, WebRequestMethods.Ftp.UploadFile))
                                 {
                                     int bufferSize = 256000;
                                     byte[] buffer = new byte[bufferSize];
@@ -898,7 +909,7 @@ namespace AssetManager.UserInterface.Forms
 
                             if (cancelToken.IsCancellationRequested)
                             {
-                                FtpFunctions.DeleteFtpAttachment(uploadAttachment.FileGuid, uploadAttachment.FolderGuid);
+                                FtpFunctions.DeleteFtpAttachment(uploadAttachment.FileGuid, uploadAttachment.ObjectGuid);
                             }
                             else
                             {
@@ -1035,14 +1046,14 @@ namespace AssetManager.UserInterface.Forms
         private bool VerifyAttachment(Attachment attachment)
         {
             SetStatusBarText("Verifying data...");
-            if (attachment.VerifyAttachment())
+            if (attachment.VerifyData())
             {
                 return true;
             }
             else
             {
                 //something is very wrong
-                Logging.Logger("FILE VERIFICATION FAILURE: FolderGuid:" + attachment.FolderGuid + "  FileGuid: " + attachment.FileGuid + " | Expected hash:" + attachment.MD5 + " Result hash:" + attachment.ComputedMD5);
+                Logging.Logger("FILE VERIFICATION FAILURE: FolderGuid:" + attachment.ObjectGuid + "  FileGuid: " + attachment.FileGuid + " | Expected hash:" + attachment.FileMD5 + " Result hash:" + attachment.StreamMD5);
                 OtherFunctions.Message("File verification failed! The file on the database is corrupt or there was a problem reading the data.    Please contact IT about this.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Hash Value Mismatch", this);
                 attachment.Dispose();
                 OtherFunctions.PurgeTempDir();

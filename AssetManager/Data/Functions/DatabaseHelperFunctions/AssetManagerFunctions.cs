@@ -154,10 +154,10 @@ namespace AssetManager.Data.Functions
             try
             {
                 //Delete FTP Attachment
-                if (FtpFunctions.DeleteFtpAttachment(attachment.FileGuid, attachment.FolderGuid))
+                if (FtpFunctions.DeleteFtpAttachment(attachment.FileGuid, attachment.ObjectGuid))
                 {
                     //delete SQL entry
-                    var deleteQuery = "DELETE FROM " + attachment.AttachTable.TableName + " WHERE " + attachment.AttachTable.FileGuid + "='" + attachment.FileGuid + "'";
+                    var deleteQuery = "DELETE FROM " + attachment.AttachColumns.TableName + " WHERE " + attachment.AttachColumns.FileGuid + "='" + attachment.FileGuid + "'";
                     return DBFactory.GetDatabase().ExecuteNonQuery(deleteQuery);
                 }
                 return -1;
