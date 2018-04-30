@@ -21,6 +21,7 @@ namespace AdvancedDialog
         public Dialog(Form parentForm, bool maximized = false)
         {
             InitializeComponent();
+
             startFullSize = maximized;
 
             if (parentForm != null)
@@ -209,6 +210,8 @@ namespace AdvancedDialog
 
         private void Dialog_Load(object sender, EventArgs e)
         {
+            SetLayout(this, true);
+
             LoadControls();
 
             if (!isMessageBox)
@@ -219,9 +222,28 @@ namespace AdvancedDialog
             }
 
             if (startFullSize) MaximizeForm();
-            ControlsMainPanel.Refresh();
-            MasterPanel.Refresh();
-            this.Update();
+
+            SetLayout(this, false);
+        }
+
+        private void SetLayout(Control control, bool suspend)
+        {
+            foreach (Control ctl in control.Controls)
+            {
+                if (suspend)
+                {
+                    ctl.SuspendLayout();
+                }
+                else
+                {
+                    ctl.ResumeLayout();
+                }
+
+                if (control.HasChildren)
+                {
+                    SetLayout(ctl, suspend);
+                }
+            }
         }
 
         private void Dialog_ResizeBegin(object sender, EventArgs e)
@@ -422,7 +444,6 @@ namespace AdvancedDialog
                 base.Dispose(disposing);
             }
         }
-
 
         #endregion Methods
     }
