@@ -132,16 +132,16 @@ namespace AdvancedDialog
             this.IconPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.IconPanel.Controls.Add(this.IconBox);
-            this.IconPanel.Location = new System.Drawing.Point(345, 3);
+            this.IconPanel.Location = new System.Drawing.Point(347, 3);
             this.IconPanel.Name = "IconPanel";
-            this.IconPanel.Size = new System.Drawing.Size(100, 90);
+            this.IconPanel.Size = new System.Drawing.Size(100, 92);
             this.IconPanel.TabIndex = 6;
             // 
             // IconBox
             // 
             this.IconBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.IconBox.BackColor = System.Drawing.SystemColors.Control;
-            this.IconBox.Location = new System.Drawing.Point(17, 10);
+            this.IconBox.Location = new System.Drawing.Point(17, 11);
             this.IconBox.MinimumSize = new System.Drawing.Size(65, 65);
             this.IconBox.Name = "IconBox";
             this.IconBox.Size = new System.Drawing.Size(70, 70);
@@ -175,10 +175,10 @@ namespace AdvancedDialog
             this.MasterPanel.Controls.Add(this.ButtonsPanel);
             this.MasterPanel.Controls.Add(this.ControlsMainPanel);
             this.MasterPanel.Controls.Add(this.IconPanel);
-            this.MasterPanel.Location = new System.Drawing.Point(9, 8);
+            this.MasterPanel.Location = new System.Drawing.Point(6, 8);
             this.MasterPanel.MinimumSize = new System.Drawing.Size(444, 135);
             this.MasterPanel.Name = "MasterPanel";
-            this.MasterPanel.Size = new System.Drawing.Size(444, 137);
+            this.MasterPanel.Size = new System.Drawing.Size(446, 139);
             this.MasterPanel.TabIndex = 8;
             // 
             // ButtonsPanel
@@ -189,7 +189,7 @@ namespace AdvancedDialog
             this.ButtonsPanel.Controls.Add(this.YesNoPanel);
             this.ButtonsPanel.Controls.Add(this.OkCancelPanel);
             this.ButtonsPanel.Cursor = System.Windows.Forms.Cursors.Default;
-            this.ButtonsPanel.Location = new System.Drawing.Point(111, 96);
+            this.ButtonsPanel.Location = new System.Drawing.Point(113, 98);
             this.ButtonsPanel.Name = "ButtonsPanel";
             this.ButtonsPanel.Size = new System.Drawing.Size(330, 38);
             this.ButtonsPanel.TabIndex = 9;
@@ -212,7 +212,6 @@ namespace AdvancedDialog
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Dialog Prompt";
             this.Load += new System.EventHandler(this.Dialog_Load);
-            this.ResizeBegin += new System.EventHandler(this.Dialog_ResizeBegin);
             this.OkCancelPanel.ResumeLayout(false);
             this.YesNoPanel.ResumeLayout(false);
             this.IconPanel.ResumeLayout(false);

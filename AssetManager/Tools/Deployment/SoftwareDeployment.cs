@@ -77,7 +77,9 @@ namespace AssetManager.Tools.Deployment
             using (var newDialog = new Dialog(parentForm))
             {
                 newDialog.Text = "Select Installs";
-                newDialog.Height = 800;
+                newDialog.AutoSize = false;
+                newDialog.Height = 400;
+                newDialog.Width = 300;
 
                 var selectListBox = new CheckedListBox();
                 selectListBox.CheckOnClick = true;

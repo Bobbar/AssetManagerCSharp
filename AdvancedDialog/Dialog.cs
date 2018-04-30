@@ -166,7 +166,7 @@ namespace AdvancedDialog
                     }
                     else if (control is TextBox || control is RichTextBox)
                     {
-                        control.Text = (string)value;
+                        control.Text = value.ToString();
                         return;
                     }
                     else if (control is CheckBox)
@@ -210,20 +210,76 @@ namespace AdvancedDialog
 
         private void Dialog_Load(object sender, EventArgs e)
         {
+            // Suspend layout.
             SetLayout(this, true);
 
+            // Create and add controls.
             LoadControls();
+
+            // Set the window size to max size if specified.
+            if (startFullSize) MaximizeForm();
+
+            // Resume layout.
+            SetLayout(this, false);
+
+            // Disable autosize on the controls panel.
+            ControlsMainPanel.AutoSize = false;
 
             if (!isMessageBox)
             {
+                // Hide the icon on non-message box dialogs.
                 IconPanel.Visible = false;
+
+                if (this.AutoSize)
+                {
+                    // Perform autosize, then disable autosizing.
+                    SetSize();
+                }
+                else
+                {
+                    // Just disable autosize and use specified sizes.
+                    MasterPanel.AutoSize = false;
+                    this.AutoSize = false;
+                }
+
+                // Set the controls panel width to match its parent.
                 ControlsMainPanel.Width = MasterPanel.Width;
-                ControlsMainPanel.Height = MasterPanel.Height - ButtonsPanel.Height - 10;
+            }
+            else
+            {
+                // Perform autosize, then disable autosizing.
+                SetSize();
+
+                // Set the controls panel width to fit next to the icon panel.
+                ControlsMainPanel.Width = MasterPanel.Width - IconPanel.Width;
             }
 
-            if (startFullSize) MaximizeForm();
+            // Set the controls panel height to fit above the buttons panel.
+            ControlsMainPanel.Height = MasterPanel.Height - ButtonsPanel.Height - 10;
+        }
 
-            SetLayout(this, false);
+        /// <summary>
+        /// Refreshes layout and records the resulting size from autosize. Then disables autosize and sets the size back to the previous size.
+        /// </summary>
+        private void SetSize()
+        {
+            // Since disabling autosize will cause the controls
+            // to revert to a different size, we need to record
+            // the size before disabling and re-set it afterwards.
+
+            // Refresh and force a layout event.
+            this.Refresh();
+            this.PerformLayout();
+
+            // Record the resulting size.
+            var size = this.Size;
+
+            // Disable autosize.
+            MasterPanel.AutoSize = false;
+            this.AutoSize = false;
+
+            // Re-set the size.
+            this.Size = size;
         }
 
         private void SetLayout(Control control, bool suspend)
@@ -244,13 +300,6 @@ namespace AdvancedDialog
                     SetLayout(ctl, suspend);
                 }
             }
-        }
-
-        private void Dialog_ResizeBegin(object sender, EventArgs e)
-        {
-            ControlsMainPanel.AutoSize = false;
-            MasterPanel.AutoSize = false;
-            this.AutoSize = false;
         }
 
         private void DisposeControls()
