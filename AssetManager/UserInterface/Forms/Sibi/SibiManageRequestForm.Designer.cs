@@ -194,12 +194,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.CreateDateTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.CreateDateTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.CreateDateTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CreateDateTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CreateDateTextBox.ForeColor = System.Drawing.Color.Black;
-            this.CreateDateTextBox.Location = new System.Drawing.Point(397, 63);
+            this.CreateDateTextBox.Location = new System.Drawing.Point(387, 63);
             this.CreateDateTextBox.Name = "CreateDateTextBox";
             this.CreateDateTextBox.ReadOnly = true;
-            this.CreateDateTextBox.Size = new System.Drawing.Size(137, 21);
+            this.CreateDateTextBox.Size = new System.Drawing.Size(154, 22);
             this.CreateDateTextBox.TabIndex = 23;
             this.ToolTip.SetToolTip(this.CreateDateTextBox, "Create Date");
             this.CreateDateTextBox.WordWrap = false;
@@ -208,12 +208,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.ModifyDateTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.ModifyDateTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ModifyDateTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ModifyDateTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ModifyDateTextBox.ForeColor = System.Drawing.Color.Black;
-            this.ModifyDateTextBox.Location = new System.Drawing.Point(397, 103);
+            this.ModifyDateTextBox.Location = new System.Drawing.Point(387, 103);
             this.ModifyDateTextBox.Name = "ModifyDateTextBox";
             this.ModifyDateTextBox.ReadOnly = true;
-            this.ModifyDateTextBox.Size = new System.Drawing.Size(137, 21);
+            this.ModifyDateTextBox.Size = new System.Drawing.Size(154, 22);
             this.ModifyDateTextBox.TabIndex = 25;
             this.ModifyDateTextBox.WordWrap = false;
             // 
@@ -221,12 +221,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.ModifyByTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.ModifyByTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ModifyByTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ModifyByTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ModifyByTextBox.ForeColor = System.Drawing.Color.Black;
-            this.ModifyByTextBox.Location = new System.Drawing.Point(397, 143);
+            this.ModifyByTextBox.Location = new System.Drawing.Point(387, 143);
             this.ModifyByTextBox.Name = "ModifyByTextBox";
             this.ModifyByTextBox.ReadOnly = true;
-            this.ModifyByTextBox.Size = new System.Drawing.Size(137, 21);
+            this.ModifyByTextBox.Size = new System.Drawing.Size(154, 22);
             this.ModifyByTextBox.TabIndex = 27;
             this.ModifyByTextBox.WordWrap = false;
             // 
@@ -309,30 +309,30 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(394, 127);
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(384, 125);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(74, 15);
+            this.label12.Size = new System.Drawing.Size(86, 15);
             this.label12.TabIndex = 28;
             this.label12.Text = "Modified By:";
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(394, 87);
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(384, 85);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(58, 15);
+            this.label11.Size = new System.Drawing.Size(67, 15);
             this.label11.TabIndex = 26;
             this.label11.Text = "Modified:";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(394, 47);
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(384, 45);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(75, 15);
+            this.label10.Size = new System.Drawing.Size(87, 15);
             this.label10.TabIndex = 24;
             this.label10.Text = "Create Date:";
             // 
@@ -340,7 +340,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.Label8.AutoSize = true;
             this.Label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label8.Location = new System.Drawing.Point(470, 11);
+            this.Label8.Location = new System.Drawing.Point(477, 9);
             this.Label8.Name = "Label8";
             this.Label8.Size = new System.Drawing.Size(66, 15);
             this.Label8.TabIndex = 16;
@@ -351,16 +351,17 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.RequestNumTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.RequestNumTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RequestNumTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RequestNumTextBox.Location = new System.Drawing.Point(473, 27);
+            this.RequestNumTextBox.Location = new System.Drawing.Point(477, 27);
             this.RequestNumTextBox.Name = "RequestNumTextBox";
             this.RequestNumTextBox.ReadOnly = true;
-            this.RequestNumTextBox.Size = new System.Drawing.Size(61, 23);
+            this.RequestNumTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.RequestNumTextBox.Size = new System.Drawing.Size(64, 23);
             this.RequestNumTextBox.TabIndex = 15;
             this.RequestNumTextBox.TabStop = false;
             // 
             // StatusComboBox
             // 
-            this.StatusComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StatusComboBox.FormattingEnabled = true;
             this.StatusComboBox.Location = new System.Drawing.Point(10, 225);
             this.StatusComboBox.Margin = new System.Windows.Forms.Padding(2);
@@ -371,11 +372,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Label7
             // 
             this.Label7.AutoSize = true;
-            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label7.Location = new System.Drawing.Point(7, 206);
             this.Label7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
             this.Label7.Name = "Label7";
-            this.Label7.Size = new System.Drawing.Size(44, 15);
+            this.Label7.Size = new System.Drawing.Size(51, 15);
             this.Label7.TabIndex = 13;
             this.Label7.Text = "Status:";
             // 
@@ -421,20 +422,20 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Label9
             // 
             this.Label9.AutoSize = true;
-            this.Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label9.Location = new System.Drawing.Point(14, 128);
             this.Label9.Name = "Label9";
-            this.Label9.Size = new System.Drawing.Size(36, 15);
+            this.Label9.Size = new System.Drawing.Size(41, 15);
             this.Label9.TabIndex = 9;
             this.Label9.Text = "RT #:";
             // 
             // Label6
             // 
             this.Label6.AutoSize = true;
-            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label6.Location = new System.Drawing.Point(14, 74);
             this.Label6.Name = "Label6";
-            this.Label6.Size = new System.Drawing.Size(82, 15);
+            this.Label6.Size = new System.Drawing.Size(96, 15);
             this.Label6.TabIndex = 7;
             this.Label6.Text = "Requisition #:";
             // 
@@ -451,10 +452,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label5.Location = new System.Drawing.Point(14, 21);
             this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(37, 15);
+            this.Label5.Size = new System.Drawing.Size(42, 15);
             this.Label5.TabIndex = 5;
             this.Label5.Text = "PO #:";
             // 
@@ -471,7 +472,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             // TypeComboBox
             // 
-            this.TypeComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TypeComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TypeComboBox.FormattingEnabled = true;
             this.TypeComboBox.Location = new System.Drawing.Point(10, 133);
             this.TypeComboBox.Margin = new System.Windows.Forms.Padding(2);
@@ -482,74 +483,74 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Label4
             // 
             this.Label4.AutoSize = true;
-            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label4.Location = new System.Drawing.Point(7, 114);
             this.Label4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
             this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(36, 15);
+            this.Label4.Size = new System.Drawing.Size(41, 15);
             this.Label4.TabIndex = 8;
             this.Label4.Text = "Type:";
             // 
             // NeedByDatePicker
             // 
             this.NeedByDatePicker.CustomFormat = "MM/dd/yyyy";
-            this.NeedByDatePicker.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NeedByDatePicker.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NeedByDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.NeedByDatePicker.Location = new System.Drawing.Point(10, 180);
             this.NeedByDatePicker.Margin = new System.Windows.Forms.Padding(2);
             this.NeedByDatePicker.Name = "NeedByDatePicker";
-            this.NeedByDatePicker.Size = new System.Drawing.Size(164, 21);
+            this.NeedByDatePicker.Size = new System.Drawing.Size(164, 23);
             this.NeedByDatePicker.TabIndex = 3;
             // 
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label3.Location = new System.Drawing.Point(7, 161);
             this.Label3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
             this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(56, 15);
+            this.Label3.Size = new System.Drawing.Size(64, 15);
             this.Label3.TabIndex = 5;
             this.Label3.Text = "Need By:";
             // 
             // Label2
             // 
             this.Label2.AutoSize = true;
-            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label2.Location = new System.Drawing.Point(7, 69);
             this.Label2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
             this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(85, 15);
+            this.Label2.Size = new System.Drawing.Size(98, 15);
             this.Label2.TabIndex = 3;
             this.Label2.Text = "Request User:";
             // 
             // RequestUserTextBox
             // 
-            this.RequestUserTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RequestUserTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RequestUserTextBox.Location = new System.Drawing.Point(10, 88);
             this.RequestUserTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.RequestUserTextBox.Name = "RequestUserTextBox";
-            this.RequestUserTextBox.Size = new System.Drawing.Size(164, 21);
+            this.RequestUserTextBox.Size = new System.Drawing.Size(164, 23);
             this.RequestUserTextBox.TabIndex = 1;
             // 
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label1.Location = new System.Drawing.Point(7, 25);
             this.Label1.Margin = new System.Windows.Forms.Padding(2);
             this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(121, 15);
+            this.Label1.Size = new System.Drawing.Size(141, 15);
             this.Label1.TabIndex = 1;
             this.Label1.Text = "Request Description:";
             // 
             // DescriptionTextBox
             // 
-            this.DescriptionTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DescriptionTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DescriptionTextBox.Location = new System.Drawing.Point(10, 43);
             this.DescriptionTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.DescriptionTextBox.Name = "DescriptionTextBox";
-            this.DescriptionTextBox.Size = new System.Drawing.Size(356, 21);
+            this.DescriptionTextBox.Size = new System.Drawing.Size(356, 23);
             this.DescriptionTextBox.TabIndex = 0;
             this.DescriptionTextBox.Tag = "";
             // 
