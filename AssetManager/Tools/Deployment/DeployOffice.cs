@@ -3,7 +3,7 @@ using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AdminTools;
-using MyDialogLib;
+using AdvancedDialog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -76,7 +76,7 @@ namespace AssetManager.Tools.Deployment
             fileCombo.DataSource = configFiles;
             fileCombo.Width = 250;
 
-            using (AdvancedDialog selectDialog = new AdvancedDialog(parentForm))
+            using (var selectDialog = new Dialog(parentForm))
             {
                 selectDialog.Text = "Choose Install Configuration File";
                 selectDialog.AddCustomControl("fileCombo", "Config Files:", fileCombo);

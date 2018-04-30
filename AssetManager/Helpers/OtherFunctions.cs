@@ -1,4 +1,4 @@
-using MyDialogLib;
+using AdvancedDialog;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -86,7 +86,7 @@ namespace AssetManager.Helpers
         public static DialogResult Message(string prompt, MessageBoxButtons button = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.Information, string title = null, Form parentForm = null)
         {
             SetWaitCursor(false, parentForm);
-            using (var newMessage = new AdvancedDialog(parentForm))
+            using (var newMessage = new Dialog(parentForm))
             {
                 return newMessage.DialogMessage(prompt, button, icon, title, parentForm);
             }

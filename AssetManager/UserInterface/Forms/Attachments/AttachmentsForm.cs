@@ -6,7 +6,7 @@ using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.Tools;
 using AssetManager.UserInterface.CustomControls;
-using MyDialogLib;
+using AdvancedDialog;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -1409,7 +1409,7 @@ namespace AssetManager.UserInterface.Forms
             SecurityTools.CheckForAccess(SecurityGroups.ManageAttachment);
 
             string newFolderName;
-            using (AdvancedDialog FolderDialog = new AdvancedDialog(this))
+            using (var FolderDialog = new Dialog(this))
             {
                 FolderDialog.AddTextBox("FolderName", "Enter folder name:");
                 FolderDialog.ShowDialog();

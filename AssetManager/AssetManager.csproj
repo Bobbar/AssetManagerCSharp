@@ -596,6 +596,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AdvancedDialog\AdvancedDialog.csproj">
+      <Project>{0a2876ae-8a3f-478a-be33-a9a0f1ca44c9}</Project>
+      <Name>AdvancedDialog</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AssetDatabase\AssetDatabase.csproj">
       <Project>{32bcf1fc-0f86-4fac-8d01-05f84fa0d736}</Project>
       <Name>AssetDatabase</Name>
@@ -603,10 +607,6 @@
     <ProjectReference Include="..\GKUpdaterLibC\RemoteFileTransferTool.csproj">
       <Project>{7dfb8c7f-38ba-49fd-be57-9f96e786d35b}</Project>
       <Name>RemoteFileTransferTool</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MyDialog\AdvancedDialogLib.vbproj">
-      <Project>{5a65f4bf-4b06-44e4-ae55-5935e03955f6}</Project>
-      <Name>AdvancedDialogLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\PingVisualizer\PingVisualizer.csproj">
       <Project>{d6059de1-47c1-471b-bb28-88b9b655ceb0}</Project>

@@ -3,7 +3,7 @@ using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
 using iTextSharp.text.pdf;
-using MyDialogLib;
+using AdvancedDialog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,7 +17,7 @@ namespace AssetManager.Business
     {
         private ExtendedForm parentForm;
         private Device currentDevice;
-        private AdvancedDialog currentDialog;
+        private Dialog currentDialog;
         private string unitPriceTxtName = "txtUnitPrice";
 
         public PdfFormFilling(ExtendedForm parentForm, Device device, PdfFormType pdfType)
@@ -42,7 +42,7 @@ namespace AssetManager.Business
 
         private string GetUnitPrice()
         {
-            using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
+            using (var newDialog = new Dialog(parentForm))
             {
                 currentDialog = newDialog;
                 newDialog.Text = "Input Unit Price";
@@ -159,7 +159,7 @@ namespace AssetManager.Business
         private AcroFields DisposalFormFields(Device device, PdfStamper pdfStamper)
         {
             AcroFields tmpFields = pdfStamper.AcroFields;
-            using (AdvancedDialog newDialog = new AdvancedDialog(parentForm, true))
+            using (var newDialog = new Dialog(parentForm, true))
             {
                 newDialog.Text = "Additional Input Required";
 
@@ -289,7 +289,7 @@ namespace AssetManager.Business
         private AcroFields TransferFormFields(Device device, PdfStamper pdfStamper)
         {
             AcroFields tmpFields = pdfStamper.AcroFields;
-            using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
+            using (var newDialog = new Dialog(parentForm))
             {
                 newDialog.Text = "Additional Input Required";
 

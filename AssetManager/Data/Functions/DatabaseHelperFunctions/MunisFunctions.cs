@@ -4,7 +4,7 @@ using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms;
 using AssetManager.UserInterface.Forms.AssetManagement;
-using MyDialogLib;
+using AdvancedDialog;
 using System;
 using System.Data;
 using System.Threading.Tasks;
@@ -242,7 +242,7 @@ namespace AssetManager.Data.Functions
             try
             {
                 Device device = new Device();
-                using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
+                using (var newDialog = new Dialog(parentForm))
                 {
                     newDialog.Text = "Asset Search";
                     newDialog.AddTextBox("AssetNumber", "Asset:");
@@ -266,7 +266,7 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
+                using (var newDialog = new Dialog(parentForm))
                 {
                     newDialog.Text = "Employee Search";
                     newDialog.AddTextBox("Name", "First or Last Name:");
@@ -292,7 +292,7 @@ namespace AssetManager.Data.Functions
             try
             {
                 string po = "";
-                using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
+                using (var newDialog = new Dialog(parentForm))
                 {
                     newDialog.Text = "PO Search";
                     newDialog.AddTextBox("PO", "PO #:");
@@ -316,7 +316,7 @@ namespace AssetManager.Data.Functions
             {
                 string reqNumber = "";
                 string fy = "";
-                using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
+                using (var newDialog = new Dialog(parentForm))
                 {
                     newDialog.Text = "Req Search";
                     newDialog.AddTextBox("ReqNum", "Requisition #:");
@@ -352,7 +352,7 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                using (AdvancedDialog newDialog = new AdvancedDialog(parentForm))
+                using (var newDialog = new Dialog(parentForm))
                 {
                     string org = "";
                     string obj = "";

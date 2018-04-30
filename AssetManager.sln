@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PingVisualizer", "PingVisua
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteFileTransferTool", "GKUpdaterLibC\RemoteFileTransferTool.csproj", "{7DFB8C7F-38BA-49FD-BE57-9F96E786D35B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedDialog", "AdvancedDialog\AdvancedDialog.csproj", "{0A2876AE-8A3F-478A-BE33-A9A0F1CA44C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,14 @@ Global
 		{7DFB8C7F-38BA-49FD-BE57-9F96E786D35B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7DFB8C7F-38BA-49FD-BE57-9F96E786D35B}.Release|x86.ActiveCfg = Release|Any CPU
 		{7DFB8C7F-38BA-49FD-BE57-9F96E786D35B}.Release|x86.Build.0 = Release|Any CPU
+		{0A2876AE-8A3F-478A-BE33-A9A0F1CA44C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A2876AE-8A3F-478A-BE33-A9A0F1CA44C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A2876AE-8A3F-478A-BE33-A9A0F1CA44C9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0A2876AE-8A3F-478A-BE33-A9A0F1CA44C9}.Debug|x86.Build.0 = Debug|Any CPU
+		{0A2876AE-8A3F-478A-BE33-A9A0F1CA44C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A2876AE-8A3F-478A-BE33-A9A0F1CA44C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A2876AE-8A3F-478A-BE33-A9A0F1CA44C9}.Release|x86.ActiveCfg = Release|Any CPU
+		{0A2876AE-8A3F-478A-BE33-A9A0F1CA44C9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +81,7 @@ Global
 		{5A65F4BF-4B06-44E4-AE55-5935E03955F6} = {D7EFCEAD-2468-46A3-9381-64D12F18406B}
 		{D6059DE1-47C1-471B-BB28-88B9B655CEB0} = {D7EFCEAD-2468-46A3-9381-64D12F18406B}
 		{7DFB8C7F-38BA-49FD-BE57-9F96E786D35B} = {D7EFCEAD-2468-46A3-9381-64D12F18406B}
+		{0A2876AE-8A3F-478A-BE33-A9A0F1CA44C9} = {D7EFCEAD-2468-46A3-9381-64D12F18406B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78C10474-D84F-462F-958B-9F031FAFE86A}

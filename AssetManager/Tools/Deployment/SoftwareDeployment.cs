@@ -2,7 +2,7 @@
 using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.UserInterface.CustomControls;
-using MyDialogLib;
+using AdvancedDialog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,7 +74,7 @@ namespace AssetManager.Tools.Deployment
         /// <param name="targetDevice"></param>
         private void ChooseDeployments(Device targetDevice)
         {
-            using (var newDialog = new AdvancedDialog(parentForm))
+            using (var newDialog = new Dialog(parentForm))
             {
                 newDialog.Text = "Select Installs";
                 newDialog.Height = 800;

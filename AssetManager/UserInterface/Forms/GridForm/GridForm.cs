@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
-using MyDialogLib;
+using AdvancedDialog;
 
 namespace AssetManager.UserInterface.Forms
 {
@@ -210,7 +210,7 @@ namespace AssetManager.UserInterface.Forms
         /// </summary>
         private void ReLabelGridForm()
         {
-            using (var renameDialog = new AdvancedDialog(this))
+            using (var renameDialog = new Dialog(this))
             using (var nameTextBox = new TextBox())
             {
                 nameTextBox.Visible = true;
