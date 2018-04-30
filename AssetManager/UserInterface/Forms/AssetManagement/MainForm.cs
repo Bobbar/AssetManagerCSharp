@@ -503,6 +503,21 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
+        public override bool OkToClose()
+        {
+            if (currentTransaction != null)
+            {
+                OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Close");
+                return false;
+            }
+
+            if (!OtherFunctions.OKToEnd())
+            {
+                return false;
+            }
+            return true;
+        }
+
         private void RefreshCombos()
         {
             EquipTypeComboBox.FillComboBox(Attributes.DeviceAttributes.EquipType);
@@ -947,21 +962,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void ResultGrid_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             ViewDevice(ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid));
-        }
-
-        public override bool OkToClose()
-        {
-            if (currentTransaction != null)
-            {
-                OtherFunctions.Message("There is currently an active transaction. Please commit or rollback before closing.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Close");
-                return false;
-            }
-
-            if (!OtherFunctions.OKToEnd())
-            {
-                return false;
-            }
-            return true;
         }
 
         #endregion "Control Event Methods"

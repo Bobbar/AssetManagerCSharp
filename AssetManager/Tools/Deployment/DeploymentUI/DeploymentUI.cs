@@ -24,10 +24,10 @@ namespace AssetManager.Tools.Deployment
         private ExtendedForm parentForm;
         private PowerShellWrapper powerShellWrapper;
         private PSExecWrapper pSExecWrapper;
-        private RichTextBox RTBLog;
+        private RichTextBox logTextBox;
         private int timeoutSeconds = 120;
-        private Task WatchdogTask;
-        private CancellationTokenSource WatchdogCancelTokenSource;
+        private Task watchdogTask;
+        private CancellationTokenSource watchdogCancelTokenSource;
 
         public PowerShellWrapper PowerShellWrap
         {
@@ -57,8 +57,8 @@ namespace AssetManager.Tools.Deployment
         {
             this.parentForm = parentForm;
 
-            WatchdogCancelTokenSource = new CancellationTokenSource();
-            WatchdogTask = new Task(() => Watchdog(WatchdogCancelTokenSource.Token), WatchdogCancelTokenSource.Token);
+            watchdogCancelTokenSource = new CancellationTokenSource();
+            watchdogTask = new Task(() => Watchdog(watchdogCancelTokenSource.Token), watchdogCancelTokenSource.Token);
 
             InitLogWindow();
         }
@@ -98,16 +98,16 @@ namespace AssetManager.Tools.Deployment
             logView.MinimumSize = new System.Drawing.Size(400, 200);
             logView.Owner = parentForm;
             logView.StartPosition = FormStartPosition.CenterScreen;
-            RTBLog = new RichTextBox();
-            RTBLog.Dock = DockStyle.Fill;
-            RTBLog.Font = StyleFunctions.DefaultGridFont;
-            RTBLog.WordWrap = false;
-            RTBLog.ReadOnly = true;
-            RTBLog.ScrollBars = RichTextBoxScrollBars.Both;
-            logView.Controls.Add(RTBLog);
+            logTextBox = new RichTextBox();
+            logTextBox.Dock = DockStyle.Fill;
+            logTextBox.Font = StyleFunctions.DefaultGridFont;
+            logTextBox.WordWrap = false;
+            logTextBox.ReadOnly = true;
+            logTextBox.ScrollBars = RichTextBoxScrollBars.Both;
+            logView.Controls.Add(logTextBox);
             logView.Show();
 
-            WatchdogTask.Start();
+            watchdogTask.Start();
         }
 
         public async Task SimplePSExecCommand(Device targetDevice, string command, string title)
@@ -145,16 +145,16 @@ namespace AssetManager.Tools.Deployment
         public void LogMessage(string message)
         {
             if (!cancelOperation) ActivityTick();
-            if (RTBLog.InvokeRequired)
+            if (logTextBox.InvokeRequired)
             {
                 var del = new Action(() => LogMessage(message));
-                RTBLog.BeginInvoke(del);
+                logTextBox.BeginInvoke(del);
             }
             else
             {
-                RTBLog.AppendText(DateTime.Now.ToString() + ": " + message + "\r\n");
-                RTBLog.SelectionStart = RTBLog.Text.Length;
-                RTBLog.ScrollToCaret();
+                logTextBox.AppendText(DateTime.Now.ToString() + ": " + message + "\r\n");
+                logTextBox.SelectionStart = logTextBox.Text.Length;
+                logTextBox.ScrollToCaret();
             }
         }
 
@@ -191,6 +191,7 @@ namespace AssetManager.Tools.Deployment
             else
             {
                 e.Cancel = false;
+                this.Dispose();
             }
         }
 
@@ -217,7 +218,7 @@ namespace AssetManager.Tools.Deployment
         {
             PrintElapsedTime();
             finished = true;
-            WatchdogCancelTokenSource.Cancel();
+            watchdogCancelTokenSource.Cancel();
         }
 
         private void StopRemoteProcesses()
@@ -343,9 +344,9 @@ namespace AssetManager.Tools.Deployment
                 if (disposing)
                 {
                     logView.Dispose();
-                    RTBLog.Dispose();
-                    WatchdogCancelTokenSource.Dispose();
-                    WatchdogTask.Dispose();
+                    logTextBox.Dispose();
+                    watchdogCancelTokenSource.Dispose();
+                    watchdogTask.Dispose();
                 }
 
                 disposedValue = true;
