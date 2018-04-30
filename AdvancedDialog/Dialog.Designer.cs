@@ -4,209 +4,205 @@ namespace AdvancedDialog
 {
     partial class Dialog : Form
     {
-       
-      
         private System.ComponentModel.IContainer components = null;
-
 
         private void InitializeComponent()
         {
-            this.tblOkCancel = new System.Windows.Forms.TableLayoutPanel();
-            this.OK_Button = new System.Windows.Forms.Button();
-            this.Cancel_Button = new System.Windows.Forms.Button();
-            this.pnlControls = new System.Windows.Forms.FlowLayoutPanel();
-            this.tblYesNo = new System.Windows.Forms.TableLayoutPanel();
-            this.Yes_Button = new System.Windows.Forms.Button();
-            this.No_Button = new System.Windows.Forms.Button();
-            this.pnlIcon = new System.Windows.Forms.Panel();
-            this.pbIcon = new System.Windows.Forms.PictureBox();
-            this.pnlControls_Main = new System.Windows.Forms.Panel();
-            this.pnlMaster = new System.Windows.Forms.Panel();
-            this.pnlButtons = new System.Windows.Forms.Panel();
-            this.tblOkCancel.SuspendLayout();
-            this.tblYesNo.SuspendLayout();
-            this.pnlIcon.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbIcon)).BeginInit();
-            this.pnlControls_Main.SuspendLayout();
-            this.pnlMaster.SuspendLayout();
-            this.pnlButtons.SuspendLayout();
+            this.OkCancelPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.OKButton = new System.Windows.Forms.Button();
+            this.CancelButtonUI = new System.Windows.Forms.Button();
+            this.ControlsPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.YesNoPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.YesButton = new System.Windows.Forms.Button();
+            this.NoButton = new System.Windows.Forms.Button();
+            this.IconPanel = new System.Windows.Forms.Panel();
+            this.IconBox = new System.Windows.Forms.PictureBox();
+            this.ControlsMainPanel = new System.Windows.Forms.Panel();
+            this.MasterPanel = new System.Windows.Forms.Panel();
+            this.ButtonsPanel = new System.Windows.Forms.Panel();
+            this.OkCancelPanel.SuspendLayout();
+            this.YesNoPanel.SuspendLayout();
+            this.IconPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.IconBox)).BeginInit();
+            this.ControlsMainPanel.SuspendLayout();
+            this.MasterPanel.SuspendLayout();
+            this.ButtonsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tblOkCancel
+            // OkCancelPanel
             // 
-            this.tblOkCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.tblOkCancel.AutoSize = true;
-            this.tblOkCancel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tblOkCancel.ColumnCount = 2;
-            this.tblOkCancel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tblOkCancel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tblOkCancel.Controls.Add(this.OK_Button, 0, 0);
-            this.tblOkCancel.Controls.Add(this.Cancel_Button, 1, 0);
-            this.tblOkCancel.Location = new System.Drawing.Point(165, 6);
-            this.tblOkCancel.Name = "tblOkCancel";
-            this.tblOkCancel.RowCount = 1;
-            this.tblOkCancel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblOkCancel.Size = new System.Drawing.Size(162, 29);
-            this.tblOkCancel.TabIndex = 0;
+            this.OkCancelPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.OkCancelPanel.AutoSize = true;
+            this.OkCancelPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.OkCancelPanel.ColumnCount = 2;
+            this.OkCancelPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.OkCancelPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.OkCancelPanel.Controls.Add(this.OKButton, 0, 0);
+            this.OkCancelPanel.Controls.Add(this.CancelButtonUI, 1, 0);
+            this.OkCancelPanel.Location = new System.Drawing.Point(165, 6);
+            this.OkCancelPanel.Name = "OkCancelPanel";
+            this.OkCancelPanel.RowCount = 1;
+            this.OkCancelPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.OkCancelPanel.Size = new System.Drawing.Size(162, 29);
+            this.OkCancelPanel.TabIndex = 0;
             // 
-            // OK_Button
+            // OKButton
             // 
-            this.OK_Button.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.OK_Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OK_Button.Location = new System.Drawing.Point(3, 3);
-            this.OK_Button.Name = "OK_Button";
-            this.OK_Button.Size = new System.Drawing.Size(75, 23);
-            this.OK_Button.TabIndex = 0;
-            this.OK_Button.Text = "&OK";
-            this.OK_Button.Click += new System.EventHandler(this.OK_Button_Click);
+            this.OKButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.OKButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OKButton.Location = new System.Drawing.Point(3, 3);
+            this.OKButton.Name = "OKButton";
+            this.OKButton.Size = new System.Drawing.Size(75, 23);
+            this.OKButton.TabIndex = 0;
+            this.OKButton.Text = "&OK";
+            this.OKButton.Click += new System.EventHandler(this.OKButton_Click);
             // 
-            // Cancel_Button
+            // CancelButtonUI
             // 
-            this.Cancel_Button.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.No;
-            this.Cancel_Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Cancel_Button.Location = new System.Drawing.Point(84, 3);
-            this.Cancel_Button.Name = "Cancel_Button";
-            this.Cancel_Button.Size = new System.Drawing.Size(75, 23);
-            this.Cancel_Button.TabIndex = 1;
-            this.Cancel_Button.Text = "&Cancel";
-            this.Cancel_Button.Click += new System.EventHandler(this.Cancel_Button_Click);
+            this.CancelButtonUI.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.CancelButtonUI.DialogResult = System.Windows.Forms.DialogResult.No;
+            this.CancelButtonUI.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CancelButtonUI.Location = new System.Drawing.Point(84, 3);
+            this.CancelButtonUI.Name = "CancelButtonUI";
+            this.CancelButtonUI.Size = new System.Drawing.Size(75, 23);
+            this.CancelButtonUI.TabIndex = 1;
+            this.CancelButtonUI.Text = "&Cancel";
+            this.CancelButtonUI.Click += new System.EventHandler(this.CancelButtonUI_Click);
             // 
-            // pnlControls
+            // ControlsPanel
             // 
-            this.pnlControls.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.ControlsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlControls.AutoScroll = true;
-            this.pnlControls.AutoSize = true;
-            this.pnlControls.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlControls.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.pnlControls.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pnlControls.ForeColor = System.Drawing.Color.Black;
-            this.pnlControls.Location = new System.Drawing.Point(3, 3);
-            this.pnlControls.Name = "pnlControls";
-            this.pnlControls.Padding = new System.Windows.Forms.Padding(10, 10, 10, 0);
-            this.pnlControls.Size = new System.Drawing.Size(336, 83);
-            this.pnlControls.TabIndex = 3;
+            this.ControlsPanel.AutoScroll = true;
+            this.ControlsPanel.AutoSize = true;
+            this.ControlsPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.ControlsPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.ControlsPanel.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ControlsPanel.ForeColor = System.Drawing.Color.Black;
+            this.ControlsPanel.Location = new System.Drawing.Point(3, 3);
+            this.ControlsPanel.Name = "ControlsPanel";
+            this.ControlsPanel.Padding = new System.Windows.Forms.Padding(10, 10, 10, 0);
+            this.ControlsPanel.Size = new System.Drawing.Size(336, 83);
+            this.ControlsPanel.TabIndex = 3;
             // 
-            // tblYesNo
+            // YesNoPanel
             // 
-            this.tblYesNo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.tblYesNo.AutoSize = true;
-            this.tblYesNo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tblYesNo.ColumnCount = 2;
-            this.tblYesNo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tblYesNo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tblYesNo.Controls.Add(this.Yes_Button, 0, 0);
-            this.tblYesNo.Controls.Add(this.No_Button, 1, 0);
-            this.tblYesNo.Location = new System.Drawing.Point(3, 6);
-            this.tblYesNo.Name = "tblYesNo";
-            this.tblYesNo.RowCount = 1;
-            this.tblYesNo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblYesNo.Size = new System.Drawing.Size(162, 29);
-            this.tblYesNo.TabIndex = 4;
-            this.tblYesNo.Visible = false;
+            this.YesNoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.YesNoPanel.AutoSize = true;
+            this.YesNoPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.YesNoPanel.ColumnCount = 2;
+            this.YesNoPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.YesNoPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.YesNoPanel.Controls.Add(this.YesButton, 0, 0);
+            this.YesNoPanel.Controls.Add(this.NoButton, 1, 0);
+            this.YesNoPanel.Location = new System.Drawing.Point(3, 6);
+            this.YesNoPanel.Name = "YesNoPanel";
+            this.YesNoPanel.RowCount = 1;
+            this.YesNoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.YesNoPanel.Size = new System.Drawing.Size(162, 29);
+            this.YesNoPanel.TabIndex = 4;
+            this.YesNoPanel.Visible = false;
             // 
-            // Yes_Button
+            // YesButton
             // 
-            this.Yes_Button.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Yes_Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Yes_Button.Location = new System.Drawing.Point(3, 3);
-            this.Yes_Button.Name = "Yes_Button";
-            this.Yes_Button.Size = new System.Drawing.Size(75, 23);
-            this.Yes_Button.TabIndex = 0;
-            this.Yes_Button.Text = "&Yes";
-            this.Yes_Button.Click += new System.EventHandler(this.Yes_Button_Click);
+            this.YesButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.YesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.YesButton.Location = new System.Drawing.Point(3, 3);
+            this.YesButton.Name = "YesButton";
+            this.YesButton.Size = new System.Drawing.Size(75, 23);
+            this.YesButton.TabIndex = 0;
+            this.YesButton.Text = "&Yes";
+            this.YesButton.Click += new System.EventHandler(this.YesButton_Click);
             // 
-            // No_Button
+            // NoButton
             // 
-            this.No_Button.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.No_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.No_Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.No_Button.Location = new System.Drawing.Point(84, 3);
-            this.No_Button.Name = "No_Button";
-            this.No_Button.Size = new System.Drawing.Size(75, 23);
-            this.No_Button.TabIndex = 1;
-            this.No_Button.Text = "&No";
-            this.No_Button.Click += new System.EventHandler(this.No_Button_Click);
+            this.NoButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.NoButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.NoButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NoButton.Location = new System.Drawing.Point(84, 3);
+            this.NoButton.Name = "NoButton";
+            this.NoButton.Size = new System.Drawing.Size(75, 23);
+            this.NoButton.TabIndex = 1;
+            this.NoButton.Text = "&No";
+            this.NoButton.Click += new System.EventHandler(this.NoButton_Click);
             // 
-            // pnlIcon
+            // IconPanel
             // 
-            this.pnlIcon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.IconPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlIcon.Controls.Add(this.pbIcon);
-            this.pnlIcon.Location = new System.Drawing.Point(345, 3);
-            this.pnlIcon.Name = "pnlIcon";
-            this.pnlIcon.Size = new System.Drawing.Size(100, 90);
-            this.pnlIcon.TabIndex = 6;
+            this.IconPanel.Controls.Add(this.IconBox);
+            this.IconPanel.Location = new System.Drawing.Point(345, 3);
+            this.IconPanel.Name = "IconPanel";
+            this.IconPanel.Size = new System.Drawing.Size(100, 90);
+            this.IconPanel.TabIndex = 6;
             // 
-            // pbIcon
+            // IconBox
             // 
-            this.pbIcon.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pbIcon.BackColor = System.Drawing.SystemColors.Control;
-            this.pbIcon.Location = new System.Drawing.Point(17, 10);
-            this.pbIcon.MinimumSize = new System.Drawing.Size(65, 65);
-            this.pbIcon.Name = "pbIcon";
-            this.pbIcon.Size = new System.Drawing.Size(70, 70);
-            this.pbIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbIcon.TabIndex = 4;
-            this.pbIcon.TabStop = false;
+            this.IconBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.IconBox.BackColor = System.Drawing.SystemColors.Control;
+            this.IconBox.Location = new System.Drawing.Point(17, 10);
+            this.IconBox.MinimumSize = new System.Drawing.Size(65, 65);
+            this.IconBox.Name = "IconBox";
+            this.IconBox.Size = new System.Drawing.Size(70, 70);
+            this.IconBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.IconBox.TabIndex = 4;
+            this.IconBox.TabStop = false;
             // 
-            // pnlControls_Main
+            // ControlsMainPanel
             // 
-            this.pnlControls_Main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.ControlsMainPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlControls_Main.AutoSize = true;
-            this.pnlControls_Main.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.pnlControls_Main.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlControls_Main.Controls.Add(this.pnlControls);
-            this.pnlControls_Main.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pnlControls_Main.Location = new System.Drawing.Point(3, 4);
-            this.pnlControls_Main.MinimumSize = new System.Drawing.Size(330, 90);
-            this.pnlControls_Main.Name = "pnlControls_Main";
-            this.pnlControls_Main.Size = new System.Drawing.Size(340, 90);
-            this.pnlControls_Main.TabIndex = 7;
+            this.ControlsMainPanel.AutoSize = true;
+            this.ControlsMainPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ControlsMainPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.ControlsMainPanel.Controls.Add(this.ControlsPanel);
+            this.ControlsMainPanel.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ControlsMainPanel.Location = new System.Drawing.Point(3, 4);
+            this.ControlsMainPanel.MinimumSize = new System.Drawing.Size(330, 90);
+            this.ControlsMainPanel.Name = "ControlsMainPanel";
+            this.ControlsMainPanel.Size = new System.Drawing.Size(340, 90);
+            this.ControlsMainPanel.TabIndex = 7;
             // 
-            // pnlMaster
+            // MasterPanel
             // 
-            this.pnlMaster.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.MasterPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlMaster.AutoSize = true;
-            this.pnlMaster.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.pnlMaster.Controls.Add(this.pnlButtons);
-            this.pnlMaster.Controls.Add(this.pnlControls_Main);
-            this.pnlMaster.Controls.Add(this.pnlIcon);
-            this.pnlMaster.Location = new System.Drawing.Point(9, 8);
-            this.pnlMaster.MinimumSize = new System.Drawing.Size(444, 135);
-            this.pnlMaster.Name = "pnlMaster";
-            this.pnlMaster.Size = new System.Drawing.Size(444, 137);
-            this.pnlMaster.TabIndex = 8;
+            this.MasterPanel.AutoSize = true;
+            this.MasterPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.MasterPanel.Controls.Add(this.ButtonsPanel);
+            this.MasterPanel.Controls.Add(this.ControlsMainPanel);
+            this.MasterPanel.Controls.Add(this.IconPanel);
+            this.MasterPanel.Location = new System.Drawing.Point(9, 8);
+            this.MasterPanel.MinimumSize = new System.Drawing.Size(444, 135);
+            this.MasterPanel.Name = "MasterPanel";
+            this.MasterPanel.Size = new System.Drawing.Size(444, 137);
+            this.MasterPanel.TabIndex = 8;
             // 
-            // pnlButtons
+            // ButtonsPanel
             // 
-            this.pnlButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlButtons.AutoSize = true;
-            this.pnlButtons.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.pnlButtons.Controls.Add(this.tblYesNo);
-            this.pnlButtons.Controls.Add(this.tblOkCancel);
-            this.pnlButtons.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pnlButtons.Location = new System.Drawing.Point(111, 96);
-            this.pnlButtons.Name = "pnlButtons";
-            this.pnlButtons.Size = new System.Drawing.Size(330, 38);
-            this.pnlButtons.TabIndex = 9;
+            this.ButtonsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonsPanel.AutoSize = true;
+            this.ButtonsPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ButtonsPanel.Controls.Add(this.YesNoPanel);
+            this.ButtonsPanel.Controls.Add(this.OkCancelPanel);
+            this.ButtonsPanel.Cursor = System.Windows.Forms.Cursors.Default;
+            this.ButtonsPanel.Location = new System.Drawing.Point(111, 96);
+            this.ButtonsPanel.Name = "ButtonsPanel";
+            this.ButtonsPanel.Size = new System.Drawing.Size(330, 38);
+            this.ButtonsPanel.TabIndex = 9;
             // 
             // Dialog
             // 
-            this.AcceptButton = this.OK_Button;
+            this.AcceptButton = this.OKButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.CancelButton = this.Cancel_Button;
             this.ClientSize = new System.Drawing.Size(461, 151);
-            this.Controls.Add(this.pnlMaster);
+            this.Controls.Add(this.MasterPanel);
             this.DoubleBuffered = true;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1068, 678);
@@ -214,35 +210,36 @@ namespace AdvancedDialog
             this.MinimumSize = new System.Drawing.Size(477, 190);
             this.Name = "Dialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Dialog Prompt";
             this.Load += new System.EventHandler(this.Dialog_Load);
             this.ResizeBegin += new System.EventHandler(this.Dialog_ResizeBegin);
-            this.tblOkCancel.ResumeLayout(false);
-            this.tblYesNo.ResumeLayout(false);
-            this.pnlIcon.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbIcon)).EndInit();
-            this.pnlControls_Main.ResumeLayout(false);
-            this.pnlControls_Main.PerformLayout();
-            this.pnlMaster.ResumeLayout(false);
-            this.pnlMaster.PerformLayout();
-            this.pnlButtons.ResumeLayout(false);
-            this.pnlButtons.PerformLayout();
+            this.OkCancelPanel.ResumeLayout(false);
+            this.YesNoPanel.ResumeLayout(false);
+            this.IconPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.IconBox)).EndInit();
+            this.ControlsMainPanel.ResumeLayout(false);
+            this.ControlsMainPanel.PerformLayout();
+            this.MasterPanel.ResumeLayout(false);
+            this.MasterPanel.PerformLayout();
+            this.ButtonsPanel.ResumeLayout(false);
+            this.ButtonsPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
 
-        internal System.Windows.Forms.TableLayoutPanel tblOkCancel; /* TODO ERROR didn't convert: WithEvents */
-        internal System.Windows.Forms.Button OK_Button; /* TODO ERROR didn't convert: WithEvents */
-        internal System.Windows.Forms.Button Cancel_Button; /* TODO ERROR didn't convert: WithEvents */
-        internal FlowLayoutPanel pnlControls; /* TODO ERROR didn't convert: WithEvents */
-        internal TableLayoutPanel tblYesNo; /* TODO ERROR didn't convert: WithEvents */
-        internal Button Yes_Button; /* TODO ERROR didn't convert: WithEvents */
-        internal Button No_Button; /* TODO ERROR didn't convert: WithEvents */
-        internal PictureBox pbIcon; /* TODO ERROR didn't convert: WithEvents */
-        internal Panel pnlIcon; /* TODO ERROR didn't convert: WithEvents */
-        internal Panel pnlControls_Main; /* TODO ERROR didn't convert: WithEvents */
-        internal Panel pnlMaster; /* TODO ERROR didn't convert: WithEvents */
-        internal Panel pnlButtons; /* TODO ERROR didn't convert: WithEvents */
+        internal System.Windows.Forms.TableLayoutPanel OkCancelPanel;
+        internal System.Windows.Forms.Button OKButton;
+        internal System.Windows.Forms.Button CancelButtonUI;
+        internal FlowLayoutPanel ControlsPanel;
+        internal TableLayoutPanel YesNoPanel;
+        internal Button YesButton;
+        internal Button NoButton;
+        internal PictureBox IconBox;
+        internal Panel IconPanel;
+        internal Panel ControlsMainPanel;
+        internal Panel MasterPanel;
+        internal Panel ButtonsPanel;
     }
 }

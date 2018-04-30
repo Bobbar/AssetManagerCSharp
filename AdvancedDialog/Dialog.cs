@@ -8,9 +8,15 @@ namespace AdvancedDialog
 {
     public partial class Dialog : Form
     {
-        private bool isMessageBox = false;
+        #region Fields
+
         private List<Control> customControls = new List<Control>();
+        private bool isMessageBox = false;
         private bool startFullSize = false;
+
+        #endregion Fields
+
+        #region Constructors
 
         public Dialog(Form parentForm, bool maximized = false)
         {
@@ -26,6 +32,10 @@ namespace AdvancedDialog
                 this.Icon = Properties.Resources.inventory_icon_orange;
             }
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         public void AddButton(string name, string text, Action clickAction)
         {
@@ -80,22 +90,6 @@ namespace AdvancedDialog
             AddControl(textbox);
         }
 
-        private void AddControl(Control control)
-        {
-            customControls.Add(control);
-        }
-
-        private FlowLayoutPanel ControlPanel()
-        {
-            var panel = new FlowLayoutPanel();
-            panel.AutoSize = true;
-            panel.WrapContents = false;
-            panel.FlowDirection = FlowDirection.TopDown;
-            panel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            panel.Padding = new Padding(0, 0, 10, 10);
-            return panel;
-        }
-
         public DialogResult DialogMessage(string prompt, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.Information, string title = null, Form parentForm = null)
         {
             try
@@ -129,49 +123,6 @@ namespace AdvancedDialog
             finally
             {
                 this.Dispose();
-            }
-        }
-
-        private void SetButtonsAndIcons(MessageBoxButtons buttons, MessageBoxIcon icon)
-        {
-            switch (buttons)
-            {
-                case MessageBoxButtons.OK:
-                    tblOkCancel.Visible = true;
-                    Cancel_Button.Visible = false;
-                    break;
-
-                case MessageBoxButtons.OKCancel:
-                    tblOkCancel.Visible = true;
-                    break;
-
-                case MessageBoxButtons.YesNo:
-                    tblOkCancel.Visible = false;
-                    tblYesNo.Visible = true;
-                    break;
-
-                default:
-                    SetButtonsAndIcons(MessageBoxButtons.OK, icon);
-                    break;
-            }
-
-            switch (icon)
-            {
-                case MessageBoxIcon.Stop:
-                    pbIcon.Image = Properties.Resources.CriticalErrorIcon;
-                    break;
-
-                case MessageBoxIcon.Question:
-                    pbIcon.Image = Properties.Resources.QuestionIcon;
-                    break;
-
-                case MessageBoxIcon.Exclamation:
-                    pbIcon.Image = Properties.Resources.ExclamationIcon;
-                    break;
-
-                case MessageBoxIcon.Information:
-                    pbIcon.Image = Properties.Resources.InformationIcon;
-                    break;
             }
         }
 
@@ -228,175 +179,6 @@ namespace AdvancedDialog
             throw new Exception("A control with that name was not found.");
         }
 
-        private Label NewControlLabel(string text)
-        {
-            var label = new Label();
-            label.AutoSize = true;
-            label.Padding = new Padding(0, 10, 5, 0);
-            label.Text = text;
-            return label;
-        }
-
-        private void ButtonClick(object sender, EventArgs e)
-        {
-            var clickedButton = (Button)sender;
-            var clickAction = (Action)clickedButton.Tag;
-            clickAction();
-        }
-
-        private void LoadControls()
-        {
-            pnlControls.SuspendLayout();
-            foreach (var control in customControls)
-            {
-                if (control is ComboBox)
-                {
-                    var combo = (ComboBox)control;
-                    var panel = ControlPanel();
-                    combo.Size = combo.PreferredSize;
-                    combo.Padding = new Padding(5, 5, 5, 10);
-                    panel.Controls.Add(NewControlLabel(combo.Tag.ToString()));
-                    panel.Controls.Add(combo);
-                    pnlControls.Controls.Add(panel);
-                }
-                else if (control is TextBox)
-                {
-                    var textBox = (TextBox)control;
-                    var panel = ControlPanel();
-
-                    if (textBox.Name.Contains("pass"))
-                    {
-                        textBox.UseSystemPasswordChar = true;
-                    }
-                    panel.Controls.Add(NewControlLabel(textBox.Tag.ToString()));
-                    textBox.Width = 150;
-                    panel.Controls.Add(textBox);
-                    pnlControls.Controls.Add(panel);
-                }
-                else if (control is CheckBox)
-                {
-                    var checkBox = (CheckBox)control;
-                    checkBox.AutoSize = true;
-                    checkBox.Text = checkBox.Tag.ToString();
-                    pnlControls.Controls.Add(checkBox);
-                }
-                else if (control is Label)
-                {
-                    var label = (Label)control;
-                    label.AutoSize = true;
-                    label.Padding = new Padding(5, 5, 5, 10);
-                    pnlControls.Controls.Add(label);
-                }
-                else if (control is RichTextBox)
-                {
-                    var rtb = (RichTextBox)control;
-                    var panel = ControlPanel();
-
-                    if (isMessageBox)
-                    {
-                        pnlControls.Visible = false;
-                        rtb.ReadOnly = true;
-                        rtb.Margin = new Padding(5, 10, 5, 0);
-                        rtb.BackColor = pnlControls_Main.BackColor;
-                        rtb.Dock = DockStyle.Fill;
-                        rtb.TabStop = false;
-                        rtb.LinkClicked += ClickedLink;
-                        pnlControls_Main.Controls.Add(rtb);
-                    }
-                    else
-                    {
-                        rtb.Width = 150;
-                        rtb.Height = 80;
-                        if (rtb.Tag != null) panel.Controls.Add(NewControlLabel(rtb.Tag.ToString()));
-                        panel.Controls.Add(rtb);
-                        pnlControls.Controls.Add(panel);
-                    }
-                }
-                else if (control is Button)
-                {
-                    var button = (Button)control;
-                    button.AutoSize = true;
-                    button.Click += ButtonClick;
-                    pnlControls.Controls.Add(button);
-                }
-                else
-                {
-                    var panel = ControlPanel();
-                    panel.Controls.Add(NewControlLabel(control.Tag.ToString()));
-                    panel.Controls.Add(control);
-                    pnlControls.Controls.Add(panel);
-                }
-            }
-            pnlControls.ResumeLayout();
-        }
-
-        private void DisposeControls()
-        {
-            customControls.ForEach((c) => { c.Dispose(); });
-            customControls.Clear();
-        }
-
-        private void MaximizeForm()
-        {
-            pnlControls_Main.AutoSize = false;
-            pnlMaster.AutoSize = false;
-            this.AutoSize = false;
-            this.Size = this.MaximumSize;
-        }
-
-        private void ClickedLink(object sender, LinkClickedEventArgs e)
-        {
-            Process.Start(new Uri(e.LinkText).AbsolutePath);
-        }
-
-        private void Dialog_Load(object sender, EventArgs e)
-        {
-            LoadControls();
-
-            if (!isMessageBox)
-            {
-                pnlIcon.Visible = false;
-                pnlControls_Main.Width = pnlMaster.Width;
-                pnlControls_Main.Height = pnlMaster.Height - pnlButtons.Height - 10;
-            }
-
-            if (startFullSize) MaximizeForm();
-            pnlControls_Main.Refresh();
-            pnlMaster.Refresh();
-            this.Update();
-        }
-
-        private void Dialog_ResizeBegin(object sender, EventArgs e)
-        {
-            pnlControls_Main.AutoSize = false;
-            pnlMaster.AutoSize = false;
-            this.AutoSize = false;
-        }
-
-        private void Cancel_Button_Click(object sender, System.EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-            this.Dispose();
-        }
-
-        private void No_Button_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.No;
-            this.Close();
-        }
-
-        private void OK_Button_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.OK;
-            this.Close();
-        }
-
-        private void Yes_Button_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Yes;
-            this.Close();
-        }
-
         protected override void Dispose(bool disposing)
         {
             try
@@ -411,5 +193,236 @@ namespace AdvancedDialog
                 base.Dispose(disposing);
             }
         }
+
+        private void AddControl(Control control)
+        {
+            customControls.Add(control);
+        }
+
+        private void ButtonClick(object sender, EventArgs e)
+        {
+            var clickedButton = (Button)sender;
+            var clickAction = (Action)clickedButton.Tag;
+            clickAction();
+        }
+
+        private void ClickedLink(object sender, LinkClickedEventArgs e)
+        {
+            Process.Start(new Uri(e.LinkText).AbsolutePath);
+        }
+
+        private FlowLayoutPanel ControlPanel()
+        {
+            var panel = new FlowLayoutPanel();
+            panel.AutoSize = true;
+            panel.WrapContents = false;
+            panel.FlowDirection = FlowDirection.TopDown;
+            panel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panel.Padding = new Padding(0, 0, 10, 10);
+            return panel;
+        }
+
+        private void Dialog_Load(object sender, EventArgs e)
+        {
+            LoadControls();
+
+            if (!isMessageBox)
+            {
+                IconPanel.Visible = false;
+                ControlsMainPanel.Width = MasterPanel.Width;
+                ControlsMainPanel.Height = MasterPanel.Height - ButtonsPanel.Height - 10;
+            }
+
+            if (startFullSize) MaximizeForm();
+            ControlsMainPanel.Refresh();
+            MasterPanel.Refresh();
+            this.Update();
+        }
+
+        private void Dialog_ResizeBegin(object sender, EventArgs e)
+        {
+            ControlsMainPanel.AutoSize = false;
+            MasterPanel.AutoSize = false;
+            this.AutoSize = false;
+        }
+
+        private void DisposeControls()
+        {
+            customControls.ForEach((c) => { c.Dispose(); });
+            customControls.Clear();
+        }
+
+        private void LoadControls()
+        {
+            ControlsPanel.SuspendLayout();
+            foreach (var control in customControls)
+            {
+                if (control is ComboBox)
+                {
+                    var combo = (ComboBox)control;
+                    var panel = ControlPanel();
+                    combo.Size = combo.PreferredSize;
+                    combo.Padding = new Padding(5, 5, 5, 10);
+                    panel.Controls.Add(NewControlLabel(combo.Tag.ToString()));
+                    panel.Controls.Add(combo);
+                    ControlsPanel.Controls.Add(panel);
+                }
+                else if (control is TextBox)
+                {
+                    var textBox = (TextBox)control;
+                    var panel = ControlPanel();
+
+                    if (textBox.Name.Contains("pass"))
+                    {
+                        textBox.UseSystemPasswordChar = true;
+                    }
+
+                    panel.Controls.Add(NewControlLabel(textBox.Tag.ToString()));
+                    textBox.Width = 150;
+                    panel.Controls.Add(textBox);
+                    ControlsPanel.Controls.Add(panel);
+                }
+                else if (control is CheckBox)
+                {
+                    var checkBox = (CheckBox)control;
+                    checkBox.AutoSize = true;
+                    checkBox.Text = checkBox.Tag.ToString();
+                    ControlsPanel.Controls.Add(checkBox);
+                }
+                else if (control is Label)
+                {
+                    var label = (Label)control;
+                    label.AutoSize = true;
+                    label.Padding = new Padding(5, 5, 5, 10);
+                    ControlsPanel.Controls.Add(label);
+                }
+                else if (control is RichTextBox)
+                {
+                    var rtb = (RichTextBox)control;
+                    var panel = ControlPanel();
+
+                    if (isMessageBox)
+                    {
+                        ControlsPanel.Visible = false;
+                        rtb.ReadOnly = true;
+                        rtb.Margin = new Padding(5, 10, 5, 0);
+                        rtb.BackColor = ControlsMainPanel.BackColor;
+                        rtb.Dock = DockStyle.Fill;
+                        rtb.TabStop = false;
+                        rtb.LinkClicked += ClickedLink;
+                        ControlsMainPanel.Controls.Add(rtb);
+                    }
+                    else
+                    {
+                        rtb.Width = 150;
+                        rtb.Height = 80;
+                        if (rtb.Tag != null) panel.Controls.Add(NewControlLabel(rtb.Tag.ToString()));
+                        panel.Controls.Add(rtb);
+                        ControlsPanel.Controls.Add(panel);
+                    }
+                }
+                else if (control is Button)
+                {
+                    var button = (Button)control;
+                    button.AutoSize = true;
+                    button.Click += ButtonClick;
+                    ControlsPanel.Controls.Add(button);
+                }
+                else
+                {
+                    var panel = ControlPanel();
+                    panel.Controls.Add(NewControlLabel(control.Tag.ToString()));
+                    panel.Controls.Add(control);
+                    ControlsPanel.Controls.Add(panel);
+                }
+            }
+            ControlsPanel.ResumeLayout();
+        }
+
+        private void MaximizeForm()
+        {
+            ControlsMainPanel.AutoSize = false;
+            MasterPanel.AutoSize = false;
+            this.AutoSize = false;
+            this.Size = this.MaximumSize;
+        }
+
+        private Label NewControlLabel(string text)
+        {
+            var label = new Label();
+            label.AutoSize = true;
+            label.Padding = new Padding(0, 10, 5, 0);
+            label.Text = text;
+            return label;
+        }
+
+        private void CancelButtonUI_Click(object sender, System.EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Dispose();
+        }
+
+        private void YesButton_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Yes;
+            this.Close();
+        }
+
+        private void NoButton_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.No;
+            this.Close();
+        }
+
+        private void OKButton_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void SetButtonsAndIcons(MessageBoxButtons buttons, MessageBoxIcon icon)
+        {
+            switch (buttons)
+            {
+                case MessageBoxButtons.OK:
+                    OkCancelPanel.Visible = true;
+                    CancelButtonUI.Visible = false;
+                    break;
+
+                case MessageBoxButtons.OKCancel:
+                    OkCancelPanel.Visible = true;
+                    break;
+
+                case MessageBoxButtons.YesNo:
+                    OkCancelPanel.Visible = false;
+                    YesNoPanel.Visible = true;
+                    break;
+
+                default:
+                    SetButtonsAndIcons(MessageBoxButtons.OK, icon);
+                    break;
+            }
+
+            switch (icon)
+            {
+                case MessageBoxIcon.Stop:
+                    IconBox.Image = Properties.Resources.CriticalErrorIcon;
+                    break;
+
+                case MessageBoxIcon.Question:
+                    IconBox.Image = Properties.Resources.QuestionIcon;
+                    break;
+
+                case MessageBoxIcon.Exclamation:
+                    IconBox.Image = Properties.Resources.ExclamationIcon;
+                    break;
+
+                case MessageBoxIcon.Information:
+                    IconBox.Image = Properties.Resources.InformationIcon;
+                    break;
+            }
+        }
+
+        #endregion Methods
     }
 }
