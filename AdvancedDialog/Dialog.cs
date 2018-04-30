@@ -179,21 +179,6 @@ namespace AdvancedDialog
             throw new Exception("A control with that name was not found.");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing && components != null)
-                    components.Dispose();
-
-                DisposeControls();
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
-
         private void AddControl(Control control)
         {
             customControls.Add(control);
@@ -359,7 +344,7 @@ namespace AdvancedDialog
         private void CancelButtonUI_Click(object sender, System.EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
-            this.Dispose();
+            this.Close();
         }
 
         private void YesButton_Click(object sender, EventArgs e)
@@ -422,6 +407,22 @@ namespace AdvancedDialog
                     break;
             }
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing && components != null)
+                    components.Dispose();
+
+                DisposeControls();
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
+
 
         #endregion Methods
     }
