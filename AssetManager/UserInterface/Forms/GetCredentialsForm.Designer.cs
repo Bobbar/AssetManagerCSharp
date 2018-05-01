@@ -24,8 +24,8 @@ namespace AssetManager.UserInterface.Forms
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.Controls.Add(this.CredDescriptionLabel);
             this.GroupBox1.Controls.Add(this.AcceptCredsButton);
@@ -33,7 +33,7 @@ namespace AssetManager.UserInterface.Forms
             this.GroupBox1.Controls.Add(this.Label1);
             this.GroupBox1.Controls.Add(this.PasswordTextBox);
             this.GroupBox1.Controls.Add(this.UsernameTextBox);
-            this.GroupBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            this.GroupBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox1.Location = new System.Drawing.Point(7, 9);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(279, 224);
@@ -43,7 +43,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // CredDescriptionLabel
             // 
-            this.CredDescriptionLabel.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            this.CredDescriptionLabel.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CredDescriptionLabel.ForeColor = System.Drawing.Color.Gray;
             this.CredDescriptionLabel.Location = new System.Drawing.Point(2, 19);
             this.CredDescriptionLabel.Name = "CredDescriptionLabel";
@@ -51,10 +51,10 @@ namespace AssetManager.UserInterface.Forms
             this.CredDescriptionLabel.TabIndex = 5;
             this.CredDescriptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // cmdAccept
+            // AcceptCredsButton
             // 
             this.AcceptCredsButton.Location = new System.Drawing.Point(36, 161);
-            this.AcceptCredsButton.Name = "cmdAccept";
+            this.AcceptCredsButton.Name = "AcceptCredsButton";
             this.AcceptCredsButton.Size = new System.Drawing.Size(199, 36);
             this.AcceptCredsButton.TabIndex = 4;
             this.AcceptCredsButton.Text = "Accept";
@@ -81,10 +81,10 @@ namespace AssetManager.UserInterface.Forms
             this.Label1.Text = "Username";
             this.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // txtPassword
+            // PasswordTextBox
             // 
             this.PasswordTextBox.Location = new System.Drawing.Point(35, 117);
-            this.PasswordTextBox.Name = "txtPassword";
+            this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.Size = new System.Drawing.Size(200, 23);
             this.PasswordTextBox.TabIndex = 1;
             this.PasswordTextBox.UseSystemPasswordChar = true;
@@ -92,10 +92,10 @@ namespace AssetManager.UserInterface.Forms
             this.PasswordTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PasswordTextBox_KeyPress);
             this.PasswordTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PasswordTextBox_KeyUp);
             // 
-            // txtUsername
+            // UsernameTextBox
             // 
             this.UsernameTextBox.Location = new System.Drawing.Point(35, 62);
-            this.UsernameTextBox.Name = "txtUsername";
+            this.UsernameTextBox.Name = "UsernameTextBox";
             this.UsernameTextBox.Size = new System.Drawing.Size(200, 23);
             this.UsernameTextBox.TabIndex = 0;
             // 
@@ -109,7 +109,7 @@ namespace AssetManager.UserInterface.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "GetCredentialsForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "LA Credentials";
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();

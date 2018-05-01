@@ -243,8 +243,8 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (this.StartPosition == FormStartPosition.CenterParent & parentForm != null)
             {
-                var newX = parentForm.Location.X + this.Width / 2;
-                var newY = parentForm.Location.Y + this.Height / 2;
+                var newX = parentForm.Location.X + ((parentForm.Width / 2) - this.Width / 2);
+                var newY = parentForm.Location.Y + ((parentForm.Height / 2) - this.Height / 2);
 
                 this.Location = new System.Drawing.Point(newX, newY);
             }

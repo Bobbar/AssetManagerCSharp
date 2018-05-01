@@ -177,7 +177,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.MinimumSize = new System.Drawing.Size(391, 441);
             this.Name = "MunisUserForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Employee Search";
             this.Load += new System.EventHandler(this.MunisUser_Load);
             this.Shown += new System.EventHandler(this.MunisUserForm_Shown);

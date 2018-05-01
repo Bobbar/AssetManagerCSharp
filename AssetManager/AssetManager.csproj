@@ -509,6 +509,9 @@
     <EmbeddedResource Include="UserInterface\Forms\Gatekeeper\PackFileForm.resx">
       <DependentUpon>PackFileForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\GetCredentialsForm.resx">
+      <DependentUpon>GetCredentialsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GridForm\GridForm.resx">
       <DependentUpon>GridForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -558,7 +558,7 @@ using System.Windows.Forms;namespace AssetManager.UserInterface.Forms.AssetManag
             this.MinimumSize = new System.Drawing.Size(848, 385);
             this.Name = "ViewHistoryForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "View Entry";
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();

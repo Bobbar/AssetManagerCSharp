@@ -34,7 +34,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         private void InitializeComponent()
         {
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
-            this.TableTree = new CorrectedTreeView();
+            this.TableTree = new AssetManager.UserInterface.CustomControls.CorrectedTreeView();
             this.SearchButton = new System.Windows.Forms.Button();
             this.Label2 = new System.Windows.Forms.Label();
             this.SearchStringTextBox = new System.Windows.Forms.TextBox();
@@ -44,8 +44,8 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.GroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.Controls.Add(this.TableTree);
             this.GroupBox1.Controls.Add(this.SearchButton);
@@ -109,11 +109,11 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(695, 441);
             this.Controls.Add(this.GroupBox1);
-            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "AdvancedSearchForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Advanced Search";
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();

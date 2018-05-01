@@ -97,7 +97,7 @@ namespace AssetManager.Tools.Deployment
             logView.Height = 700;
             logView.MinimumSize = new System.Drawing.Size(400, 200);
             logView.Owner = parentForm;
-            logView.StartPosition = FormStartPosition.CenterScreen;
+            logView.StartPosition = FormStartPosition.CenterParent;
             logTextBox = new RichTextBox();
             logTextBox.Dock = DockStyle.Fill;
             logTextBox.Font = StyleFunctions.DefaultGridFont;

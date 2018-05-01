@@ -113,7 +113,7 @@ namespace AssetManager.UserInterface.Forms
             this.MinimumSize = new System.Drawing.Size(439, 282);
             this.Name = "GridForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "GridForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GridForm_FormClosing);
             this.Load += new System.EventHandler(this.GridForm_Load);

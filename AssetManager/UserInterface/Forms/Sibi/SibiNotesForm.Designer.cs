@@ -63,7 +63,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.MinimumSize = new System.Drawing.Size(253, 160);
             this.Name = "SibiNotesForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Sibi Note";
             this.ResumeLayout(false);
 

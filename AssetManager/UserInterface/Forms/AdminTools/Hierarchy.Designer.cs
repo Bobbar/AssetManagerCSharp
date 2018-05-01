@@ -84,7 +84,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(235, 18);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(282, 18);
             this.toolStripStatusLabel1.Spring = true;
             // 
             // ShowDevicesDropDown
@@ -122,7 +122,7 @@
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(334, 296);
             this.Name = "Hierarchy";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Hierarchy";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
