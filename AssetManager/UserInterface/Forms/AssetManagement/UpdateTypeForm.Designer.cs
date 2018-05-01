@@ -63,7 +63,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // CancelUpdateButton
             // 
-            this.CancelUpdateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.CancelUpdateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.CancelUpdateButton.Location = new System.Drawing.Point(9, 254);
             this.CancelUpdateButton.Name = "CancelUpdateButton";
             this.CancelUpdateButton.Size = new System.Drawing.Size(66, 32);
@@ -86,7 +86,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // SubmitButton
             // 
-            this.SubmitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.SubmitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.SubmitButton.Enabled = false;
             this.SubmitButton.Location = new System.Drawing.Point(291, 254);
             this.SubmitButton.Name = "SubmitButton";
