@@ -311,13 +311,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 {
                     string dateStamp = results.Rows[0][HistoricalDevicesCols.ActionDateTime].ToString();
                     string actionType = Attributes.DeviceAttributes.ChangeType[results.Rows[0][HistoricalDevicesCols.ChangeType].ToString()].DisplayValue;
-                    var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + dateStamp + " - " + actionType + " - " + entryGuid, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "Are you sure?", this);
+                    var blah = OtherFunctions.Message("Are you sure you want to delete this entry?  This cannot be undone!" + "\r\n" + "\r\n" + "Entry info: " + dateStamp + " - " + actionType + " - " + entryGuid, MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", this);
                     if (blah == DialogResult.Yes)
                     {
                         int affectedRows = DBFactory.GetDatabase().ExecuteNonQuery(Queries.DeleteHistoricalEntryByGuid(entryGuid));
                         if (affectedRows > 0)
                         {
-                            StatusPrompt("Entry deleted successfully.");
+                            StatusPrompt("Entry deleted!", Color.Green);
                             RefreshData();
                         }
                     }
@@ -869,7 +869,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         trans.Commit();
                         RefreshData();
-                        StatusPrompt("Update successful!");
+                        StatusPrompt("Update successful!", Color.Green);
                     }
                     else
                     {

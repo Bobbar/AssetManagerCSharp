@@ -239,6 +239,17 @@ namespace AssetManager.UserInterface.CustomControls
             OnRefreshWindowList(new EventArgs());
         }
 
+        private void CenterOnParent()
+        {
+            if (this.StartPosition == FormStartPosition.CenterParent & parentForm != null)
+            {
+                var newX = parentForm.Location.X + this.Width / 2;
+                var newY = parentForm.Location.Y + this.Height / 2;
+
+                this.Location = new System.Drawing.Point(newX, newY);
+            }
+        }
+
         private void ExtendedForm_Disposed(object sender, System.EventArgs e)
         {
             if (!IsDisposed)
@@ -262,6 +273,7 @@ namespace AssetManager.UserInterface.CustomControls
         private void ExtendedForm_Load(object sender, EventArgs e)
         {
             parentForm?.AddChild(this);
+            CenterOnParent();
         }
 
         private void ExtendedForm_Resize(object sender, EventArgs e)

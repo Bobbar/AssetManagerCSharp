@@ -605,7 +605,7 @@ namespace AssetManager.UserInterface.Forms
             this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(833, 370);
             this.Name = "AttachmentsForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Attachments";
             this.Load += new System.EventHandler(this.AttachmentsForm_Load);
             this.Shown += new System.EventHandler(this.AttachmentsForm_Shown);
