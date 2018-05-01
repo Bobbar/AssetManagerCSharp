@@ -25,7 +25,6 @@ namespace PingVisualizer
         private Bitmap downsampleImage;
         private Size downsampleImageSize;
 
-
         private Ping ping = new Ping();
         private List<PingInfo> pingReplies = new List<PingInfo>();
         private bool pingRunning = false;
@@ -45,6 +44,7 @@ namespace PingVisualizer
         private Font pingInfoFont;
         private Brush mouseOverTextBrush = new SolidBrush(Color.FromArgb(240, Color.White));
         private Brush mouseOverBarBrush = new SolidBrush(Color.FromArgb(128, Color.Navy));
+        private MouseOverInfo mouseOverInfo = null;
         private Point mouseLocation;
         private bool mouseIsScrolling = false;
 
@@ -209,9 +209,11 @@ namespace PingVisualizer
             // 0.5 = middle of the image, 1 = all the way to the right.
             float scaleWidthFraction = 0.55f;
 
-            if (CurrentDisplayResults().Count > 0)
+            var currentResults = CurrentDisplayResults();
+
+            if (currentResults.Count > 0)
             {
-                long maxPing = CurrentDisplayResults().OrderByDescending(p => p.RoundTripTime).FirstOrDefault().RoundTripTime;
+                long maxPing = currentResults.OrderByDescending(result => result.RoundTripTime).FirstOrDefault().RoundTripTime;
                 if (maxPing <= 0) maxPing = 1;
                 float newScale = ((upscaledImageSize.Width * scaleWidthFraction) / maxPing);
                 if (newScale > maxViewScale) newScale = maxViewScale;
@@ -423,13 +425,38 @@ namespace PingVisualizer
                 if ((moves >= 3))
                 {
                     moves = 0;
-                    Render();
-                }
 
+                    // We don't want to render after every single mouse movement, so we make
+                    // sure we only render if the mouse is actually over a bar. Then when
+                    // the mouse leaves a bar, we render once to reset any highlighted bars.
+
+                    // GetMouseOverInfo returns null when the mouse is not over a bar.
+                    // Get the mouse over info.
+                    var newMouseOverInfo = GetMouseOverInfo();
+
+                    // If the mouse is over a bar, set the class member and render.
+                    if (newMouseOverInfo != null)
+                    {
+                        mouseOverInfo = newMouseOverInfo;
+                        Render();
+                    }
+                    else
+                    {
+                        // If the mouse is not over a bar, and the class member is not null,
+                        // null the member and render once. Future calls will not render unless
+                        // the mouse is again over a bar.
+
+                        if (mouseOverInfo != null)
+                        {
+                            mouseOverInfo = null;
+                            Render();
+                        }
+                    }
+                }
             }
         }
 
-        private MouseOverInfo GetMouseOverPingBar()
+        private MouseOverInfo GetMouseOverInfo()
         {
             var mScalePoint = new PointF(mouseLocation.X * imageUpscaleMulti, mouseLocation.Y * imageUpscaleMulti);
 
@@ -476,9 +503,6 @@ namespace PingVisualizer
 
                     // This call will draw with updated ping bars, otherwise we're just redrawing the existing ones for scale changes an whatnot.
                     if (refreshPingBars) RefreshPingBars();
-
-                    // Refresh the scaling.
-                    SetScale();
 
                     // Change the background to indicate scrolling is active.
                     if (!mouseIsScrolling)
@@ -587,13 +611,11 @@ namespace PingVisualizer
 
             if (mouseIsScrolling)
             {
-                var mouseOverBar = GetMouseOverPingBar();
-
-                if (mouseOverBar != null)
+                if (mouseOverInfo != null)
                 {
-                    string overInfoText = GetReplyStatusText(mouseOverBar.PingReply);
+                    string overInfoText = GetReplyStatusText(mouseOverInfo.PingReply);
                     SizeF textSize = gfx.MeasureString(overInfoText, mousePingInfoFont);
-                    gfx.DrawString(overInfoText, mousePingInfoFont, mouseOverTextBrush, new PointF(mouseOverBar.MouseLoc.X + (textSize.Width * 0.5f), mouseOverBar.MouseLoc.Y - (textSize.Height * 0.5f)));
+                    gfx.DrawString(overInfoText, mousePingInfoFont, mouseOverTextBrush, new PointF(mouseOverInfo.MouseLoc.X + (textSize.Width * 0.5f), mouseOverInfo.MouseLoc.Y - (textSize.Height * 0.5f)));
                 }
             }
             else
@@ -673,6 +695,8 @@ namespace PingVisualizer
         private void RefreshPingBars()
         {
             DisposeBarList(currentBarList);
+
+            SetScale();
 
             float currentYPos = barTopPadding;
             float barHeight = (upscaledImageSize.Height - barBottomPadding - barTopPadding - (barGap * maxBars)) / maxBars;
