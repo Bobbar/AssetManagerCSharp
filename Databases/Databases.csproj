@@ -7,8 +7,8 @@
     <ProjectGuid>{32BCF1FC-0F86-4FAC-8D01-05F84FA0D736}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AssetDatabase</RootNamespace>
-    <AssemblyName>AssetDatabase</AssemblyName>
+    <RootNamespace>Databases</RootNamespace>
+    <AssemblyName>Databases</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

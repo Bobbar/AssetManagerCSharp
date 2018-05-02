@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support Libraries", "Suppor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetManager", "AssetManager\AssetManager.csproj", "{205C062A-ECE5-4E01-9842-2FBD9F98FB10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Databases", "AssetDatabase\Databases.csproj", "{32BCF1FC-0F86-4FAC-8D01-05F84FA0D736}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Databases", "Databases\Databases.csproj", "{32BCF1FC-0F86-4FAC-8D01-05F84FA0D736}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PingVisualizer", "PingVisualizer\PingVisualizer.csproj", "{D6059DE1-47C1-471B-BB28-88B9B655CEB0}"
 EndProject
