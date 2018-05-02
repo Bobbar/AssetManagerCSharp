@@ -8,14 +8,13 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 
-namespace RemoteFileTransferTool
+namespace WNetConnection
 {
     /// <summary>
     /// Credit to: http://stackoverflow.com/questions/295538/how-to-provide-user-name-and-password-when-connecting-to-a-network-share
     /// </summary>
     public class NetworkConnection : IDisposable
     {
-
         private string _networkName;
 
         public NetworkConnection(string networkName, NetworkCredential credentials)
@@ -40,18 +39,6 @@ namespace RemoteFileTransferTool
             }
         }
 
-        //protected override void Finalize()
-        //{
-        //    try
-        //    {
-        //        Dispose(false);
-        //    }
-        //    finally
-        //    {
-        //        base.Finalize();
-        //    }
-        //}
-
         public void Dispose()
         {
             Dispose(true);
@@ -71,7 +58,7 @@ namespace RemoteFileTransferTool
         [SuppressMessage("Microsoft.Design", "CA1060")]
         [DllImport("mpr.dll", CharSet = CharSet.Unicode)]
         private static extern int WNetCancelConnection2(string name, int flags, bool force);
-      
+
 
     }
 

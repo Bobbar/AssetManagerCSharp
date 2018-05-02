@@ -1,7 +1,5 @@
 ﻿using AssetManager.Data;
-using AssetManager.Data.Functions;
 using AssetManager.Data.Classes;
-using AssetManager.Data.Communications;
 using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.Tools.Deployment;
@@ -9,11 +7,12 @@ using PingVisualizer;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
+using WNetConnection;
 
 namespace AssetManager.UserInterface.CustomControls
 {

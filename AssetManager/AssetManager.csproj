@@ -184,7 +184,6 @@
     <Compile Include="Data\DataColumns.cs" />
     <Compile Include="Data\DataComms\SQL\Queries.cs" />
     <Compile Include="Data\DataComms\Munis\MunisComms.cs" />
-    <Compile Include="Data\DataComms\NetDriveMapper\NetworkConnection.cs" />
     <Compile Include="Data\Functions\ClientSideFunctions\AttribIndexFunctions.cs" />
     <Compile Include="Data\DataConsistency.cs" />
     <Compile Include="Data\Functions\ConnectionWatchdog.cs" />
@@ -230,7 +229,6 @@
     <Compile Include="Tools\Deployment\DeployOffice.cs" />
     <Compile Include="Tools\TaskBarNotify.cs" />
     <Compile Include="Tools\PowerShellWrapper.cs" />
-    <Compile Include="Tools\ProgressCounter.cs" />
     <Compile Include="Tools\PsExec\PsExecWrapper.cs" />
     <Compile Include="Tools\Deployment\DeploymentUI\DeploymentUI.cs" />
     <Compile Include="Tools\Deployment\DeployTeamViewer.cs" />
@@ -603,17 +601,25 @@
       <Project>{0a2876ae-8a3f-478a-be33-a9a0f1ca44c9}</Project>
       <Name>AdvancedDialog</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AssetDatabase\AssetDatabase.csproj">
+    <ProjectReference Include="..\AssetDatabase\Databases.csproj">
       <Project>{32bcf1fc-0f86-4fac-8d01-05f84fa0d736}</Project>
-      <Name>AssetDatabase</Name>
+      <Name>Databases</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKUpdaterLibC\RemoteFileTransferTool.csproj">
+    <ProjectReference Include="..\RemoteFileTransferTool\RemoteFileTransferTool.csproj">
       <Project>{7dfb8c7f-38ba-49fd-be57-9f96e786d35b}</Project>
       <Name>RemoteFileTransferTool</Name>
     </ProjectReference>
     <ProjectReference Include="..\PingVisualizer\PingVisualizer.csproj">
       <Project>{d6059de1-47c1-471b-bb28-88b9b655ceb0}</Project>
       <Name>PingVisualizer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleProgressCounter\SimpleProgressCounter.csproj">
+      <Project>{bf6f4af9-3b04-4eae-bdcc-bc528f014e8a}</Project>
+      <Name>SimpleProgressCounter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WNetConnection\WNetConnection.csproj">
+      <Project>{d0cd2439-5632-496b-b4a0-b9a2a9829214}</Project>
+      <Name>WNetConnection</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

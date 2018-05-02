@@ -13,6 +13,7 @@ namespace AdvancedDialog
         private List<Control> customControls = new List<Control>();
         private bool isMessageBox = false;
         private bool startFullSize = false;
+        private Form parentForm = null;
 
         #endregion Fields
 
@@ -26,6 +27,7 @@ namespace AdvancedDialog
 
             if (parentForm != null)
             {
+                this.parentForm = parentForm;
                 this.Icon = parentForm.Icon;
             }
             else
@@ -256,6 +258,9 @@ namespace AdvancedDialog
 
             // Set the controls panel height to fit above the buttons panel.
             ControlsMainPanel.Height = MasterPanel.Height - ButtonsPanel.Height - 10;
+
+            // Center to parent form.
+            CenterToParentForm();
         }
 
         /// <summary>
@@ -298,6 +303,33 @@ namespace AdvancedDialog
                 if (control.HasChildren)
                 {
                     SetLayout(ctl, suspend);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Centers this instance to its parent form if that location is does not clip the active screen. Otherwise, will center to screen.
+        /// </summary>
+        private void CenterToParentForm()
+        {
+            if (parentForm != null)
+            {
+                var newX = parentForm.Location.X + ((parentForm.Width / 2) - this.Width / 2);
+                var newY = parentForm.Location.Y + ((parentForm.Height / 2) - this.Height / 2);
+                var newRect = new Rectangle(newX, newY, this.Width, this.Height);
+                // The work area containing the parent form.
+                var workArea = Screen.GetWorkingArea(parentForm);//.Location);
+
+                // Make sure the new location is not off screen.
+                if (workArea.Contains(newRect))
+                {
+                    // Center to parent form.
+                    this.Location = new Point(newX, newY);
+                }
+                else
+                {
+                    // Center to screen.
+                    this.CenterToScreen();
                 }
             }
         }

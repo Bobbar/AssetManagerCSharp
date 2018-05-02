@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleProgressCounter;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Windows.Forms;
+using WNetConnection;
 
 namespace RemoteFileTransferTool
 {

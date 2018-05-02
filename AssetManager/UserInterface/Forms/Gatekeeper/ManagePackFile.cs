@@ -1,9 +1,8 @@
 ﻿using AssetManager.Helpers;
 using AssetManager.Security;
-using AssetManager.Tools;
+using SimpleProgressCounter;
 using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace AssetManager.UserInterface.Forms.Gatekeeper

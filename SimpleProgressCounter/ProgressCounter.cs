@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssetManager.Tools
+namespace SimpleProgressCounter
 {
     public class ProgressCounter
     {

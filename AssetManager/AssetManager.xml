@@ -537,11 +537,6 @@
             <param name="parameters"></param>
             <returns></returns>
         </member>
-        <member name="T:AssetManager.Data.Communications.NetworkConnection">
-            <summary>
-            Credit to: http://stackoverflow.com/questions/295538/how-to-provide-user-name-and-password-when-connecting-to-a-network-share
-            </summary>
-        </member>
         <member name="M:AssetManager.Data.DataConsistency.NoNull(System.Object)">
             <summary>
              Returns a <see cref="F:System.String.Empty"/> if the value is a <see cref="T:System.DBNull"/>.

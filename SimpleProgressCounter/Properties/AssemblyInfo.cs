@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GKUpdaterLibC")]
+[assembly: AssemblyTitle("SimpleProgressCounter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GKUpdaterLibC")]
+[assembly: AssemblyProduct("SimpleProgressCounter")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7dfb8c7f-38ba-49fd-be57-9f96e786d35b")]
+[assembly: Guid("bf6f4af9-3b04-4eae-bdcc-bc528f014e8a")]
 
 // Version information for an assembly consists of the following four values:
 //
