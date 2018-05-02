@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -245,8 +246,21 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 var newX = parentForm.Location.X + ((parentForm.Width / 2) - this.Width / 2);
                 var newY = parentForm.Location.Y + ((parentForm.Height / 2) - this.Height / 2);
+                var newRect = new Rectangle(newX, newY, this.Width, this.Height);
+                var workArea = Screen.GetWorkingArea(this);
 
-                this.Location = new System.Drawing.Point(newX, newY);
+                // Make sure the new location is not off screen.
+                if (workArea.Contains(newRect))
+                {
+                    this.Location = new Point(newX, newY);
+                }
+                else
+                {
+                    // Center on screen.
+                    newX = ((workArea.Width / 2) - this.Width / 2);
+                    newY = ((workArea.Height / 2) - this.Height / 2);
+                    this.Location = new Point(newX, newY);
+                }
             }
         }
 
