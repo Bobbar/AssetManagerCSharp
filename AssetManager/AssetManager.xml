@@ -1113,6 +1113,11 @@
             Override and add code to refresh data from the database.
             </summary>
         </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.CenterToParentForm">
+            <summary>
+            Centers this instance to its parent form if that location is does not clip the active screen. Otherwise, will center to screen.
+            </summary>
+        </member>
         <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.GetChildFormCount(AssetManager.UserInterface.CustomControls.IWindowList)">
             <summary>
             Recursively counts the number of child forms within the parent/child tree.

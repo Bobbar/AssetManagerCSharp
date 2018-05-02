@@ -240,26 +240,29 @@ namespace AssetManager.UserInterface.CustomControls
             OnRefreshWindowList(new EventArgs());
         }
 
-        private void CenterOnParent()
+        /// <summary>
+        /// Centers this instance to its parent form if that location is does not clip the active screen. Otherwise, will center to screen.
+        /// </summary>
+        private void CenterToParentForm()
         {
             if (this.StartPosition == FormStartPosition.CenterParent & parentForm != null)
             {
                 var newX = parentForm.Location.X + ((parentForm.Width / 2) - this.Width / 2);
                 var newY = parentForm.Location.Y + ((parentForm.Height / 2) - this.Height / 2);
                 var newRect = new Rectangle(newX, newY, this.Width, this.Height);
-                var workArea = Screen.GetWorkingArea(this);
+                // The work area containing the parent form.
+                var workArea = Screen.GetWorkingArea(parentForm);//.Location);
 
                 // Make sure the new location is not off screen.
                 if (workArea.Contains(newRect))
                 {
+                    // Center to parent form.
                     this.Location = new Point(newX, newY);
                 }
                 else
                 {
-                    // Center on screen.
-                    newX = ((workArea.Width / 2) - this.Width / 2);
-                    newY = ((workArea.Height / 2) - this.Height / 2);
-                    this.Location = new Point(newX, newY);
+                    // Center to screen.
+                    this.CenterToScreen();
                 }
             }
         }
@@ -287,7 +290,7 @@ namespace AssetManager.UserInterface.CustomControls
         private void ExtendedForm_Load(object sender, EventArgs e)
         {
             parentForm?.AddChild(this);
-            CenterOnParent();
+            CenterToParentForm();
         }
 
         private void ExtendedForm_Resize(object sender, EventArgs e)
