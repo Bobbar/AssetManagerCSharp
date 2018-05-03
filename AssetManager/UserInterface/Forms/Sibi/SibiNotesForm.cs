@@ -74,6 +74,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void CloseButton_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Abort;
+            this.Close();
         }
 
         private void NotesTextBox_LinkClicked(object sender, LinkClickedEventArgs e)
