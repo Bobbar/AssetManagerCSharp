@@ -182,10 +182,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // RTNumberTextBox
             // 
             this.RTNumberTextBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.RTNumberTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RTNumberTextBox.Location = new System.Drawing.Point(17, 144);
+            this.RTNumberTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RTNumberTextBox.Location = new System.Drawing.Point(17, 152);
             this.RTNumberTextBox.Name = "RTNumberTextBox";
-            this.RTNumberTextBox.Size = new System.Drawing.Size(137, 22);
+            this.RTNumberTextBox.Size = new System.Drawing.Size(137, 23);
             this.RTNumberTextBox.TabIndex = 7;
             this.ToolTip.SetToolTip(this.RTNumberTextBox, "Click to open RT Ticket.");
             this.RTNumberTextBox.Click += new System.EventHandler(this.RTNumberTextBox_Click);
@@ -196,11 +196,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.CreateDateTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.CreateDateTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CreateDateTextBox.ForeColor = System.Drawing.Color.Black;
-            this.CreateDateTextBox.Location = new System.Drawing.Point(387, 63);
+            this.CreateDateTextBox.Location = new System.Drawing.Point(581, 97);
             this.CreateDateTextBox.Name = "CreateDateTextBox";
             this.CreateDateTextBox.ReadOnly = true;
             this.CreateDateTextBox.Size = new System.Drawing.Size(154, 22);
             this.CreateDateTextBox.TabIndex = 23;
+            this.CreateDateTextBox.TabStop = false;
+            this.CreateDateTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ToolTip.SetToolTip(this.CreateDateTextBox, "Create Date");
             this.CreateDateTextBox.WordWrap = false;
             // 
@@ -210,11 +212,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ModifyDateTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ModifyDateTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ModifyDateTextBox.ForeColor = System.Drawing.Color.Black;
-            this.ModifyDateTextBox.Location = new System.Drawing.Point(387, 103);
+            this.ModifyDateTextBox.Location = new System.Drawing.Point(581, 137);
             this.ModifyDateTextBox.Name = "ModifyDateTextBox";
             this.ModifyDateTextBox.ReadOnly = true;
             this.ModifyDateTextBox.Size = new System.Drawing.Size(154, 22);
             this.ModifyDateTextBox.TabIndex = 25;
+            this.ModifyDateTextBox.TabStop = false;
+            this.ModifyDateTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ModifyDateTextBox.WordWrap = false;
             // 
             // ModifyByTextBox
@@ -223,11 +227,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ModifyByTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ModifyByTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ModifyByTextBox.ForeColor = System.Drawing.Color.Black;
-            this.ModifyByTextBox.Location = new System.Drawing.Point(387, 143);
+            this.ModifyByTextBox.Location = new System.Drawing.Point(581, 177);
             this.ModifyByTextBox.Name = "ModifyByTextBox";
             this.ModifyByTextBox.ReadOnly = true;
             this.ModifyByTextBox.Size = new System.Drawing.Size(154, 22);
             this.ModifyByTextBox.TabIndex = 27;
+            this.ModifyByTextBox.TabStop = false;
+            this.ModifyByTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ModifyByTextBox.WordWrap = false;
             // 
             // PopupMenuNotes
@@ -273,7 +279,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.RequestPanel.Controls.Add(this.GroupBox3);
             this.RequestPanel.Location = new System.Drawing.Point(8, 40);
             this.RequestPanel.Name = "RequestPanel";
-            this.RequestPanel.Size = new System.Drawing.Size(1094, 277);
+            this.RequestPanel.Size = new System.Drawing.Size(1250, 277);
             this.RequestPanel.TabIndex = 5;
             // 
             // GroupBox1
@@ -301,7 +307,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox1.Location = new System.Drawing.Point(5, 4);
             this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(549, 264);
+            this.GroupBox1.Size = new System.Drawing.Size(747, 264);
             this.GroupBox1.TabIndex = 0;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Request Info";
@@ -309,30 +315,30 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(384, 125);
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(578, 159);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(86, 15);
+            this.label12.Size = new System.Drawing.Size(74, 15);
             this.label12.TabIndex = 28;
             this.label12.Text = "Modified By:";
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(384, 85);
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(578, 119);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(67, 15);
+            this.label11.Size = new System.Drawing.Size(58, 15);
             this.label11.TabIndex = 26;
             this.label11.Text = "Modified:";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(384, 45);
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(578, 79);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(87, 15);
+            this.label10.Size = new System.Drawing.Size(75, 15);
             this.label10.TabIndex = 24;
             this.label10.Text = "Create Date:";
             // 
@@ -340,7 +346,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.Label8.AutoSize = true;
             this.Label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label8.Location = new System.Drawing.Point(477, 9);
+            this.Label8.Location = new System.Drawing.Point(671, 18);
             this.Label8.Name = "Label8";
             this.Label8.Size = new System.Drawing.Size(66, 15);
             this.Label8.TabIndex = 16;
@@ -350,33 +356,34 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.RequestNumTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.RequestNumTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RequestNumTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RequestNumTextBox.Location = new System.Drawing.Point(477, 27);
+            this.RequestNumTextBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RequestNumTextBox.Location = new System.Drawing.Point(671, 36);
             this.RequestNumTextBox.Name = "RequestNumTextBox";
             this.RequestNumTextBox.ReadOnly = true;
             this.RequestNumTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.RequestNumTextBox.Size = new System.Drawing.Size(64, 23);
+            this.RequestNumTextBox.Size = new System.Drawing.Size(64, 25);
             this.RequestNumTextBox.TabIndex = 15;
             this.RequestNumTextBox.TabStop = false;
+            this.RequestNumTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // StatusComboBox
             // 
-            this.StatusComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StatusComboBox.FormattingEnabled = true;
-            this.StatusComboBox.Location = new System.Drawing.Point(10, 225);
+            this.StatusComboBox.Location = new System.Drawing.Point(20, 225);
             this.StatusComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.StatusComboBox.Name = "StatusComboBox";
             this.StatusComboBox.Size = new System.Drawing.Size(164, 23);
-            this.StatusComboBox.TabIndex = 3;
+            this.StatusComboBox.TabIndex = 4;
             // 
             // Label7
             // 
             this.Label7.AutoSize = true;
-            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label7.Location = new System.Drawing.Point(7, 206);
+            this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label7.Location = new System.Drawing.Point(17, 206);
             this.Label7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
             this.Label7.Name = "Label7";
-            this.Label7.Size = new System.Drawing.Size(51, 15);
+            this.Label7.Size = new System.Drawing.Size(44, 15);
             this.Label7.TabIndex = 13;
             this.Label7.Text = "Status:";
             // 
@@ -390,9 +397,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox2.Controls.Add(this.ReqNumberTextBox);
             this.GroupBox2.Controls.Add(this.Label5);
             this.GroupBox2.Controls.Add(this.POTextBox);
-            this.GroupBox2.Location = new System.Drawing.Point(195, 80);
+            this.GroupBox2.Location = new System.Drawing.Point(394, 43);
             this.GroupBox2.Name = "GroupBox2";
-            this.GroupBox2.Size = new System.Drawing.Size(171, 175);
+            this.GroupBox2.Size = new System.Drawing.Size(171, 193);
             this.GroupBox2.TabIndex = 11;
             this.GroupBox2.TabStop = false;
             this.GroupBox2.Text = "Add\'l Info (Click to View)";
@@ -402,7 +409,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ReqStatusLabel.AutoSize = true;
             this.ReqStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ReqStatusLabel.ForeColor = System.Drawing.Color.DimGray;
-            this.ReqStatusLabel.Location = new System.Drawing.Point(16, 112);
+            this.ReqStatusLabel.Location = new System.Drawing.Point(15, 120);
             this.ReqStatusLabel.Name = "ReqStatusLabel";
             this.ReqStatusLabel.Size = new System.Drawing.Size(61, 12);
             this.ReqStatusLabel.TabIndex = 11;
@@ -413,7 +420,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.POStatusLabel.AutoSize = true;
             this.POStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.POStatusLabel.ForeColor = System.Drawing.Color.DimGray;
-            this.POStatusLabel.Location = new System.Drawing.Point(16, 59);
+            this.POStatusLabel.Location = new System.Drawing.Point(16, 63);
             this.POStatusLabel.Name = "POStatusLabel";
             this.POStatusLabel.Size = new System.Drawing.Size(61, 12);
             this.POStatusLabel.TabIndex = 10;
@@ -422,59 +429,59 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Label9
             // 
             this.Label9.AutoSize = true;
-            this.Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label9.Location = new System.Drawing.Point(14, 128);
+            this.Label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label9.Location = new System.Drawing.Point(14, 136);
             this.Label9.Name = "Label9";
-            this.Label9.Size = new System.Drawing.Size(41, 15);
+            this.Label9.Size = new System.Drawing.Size(36, 15);
             this.Label9.TabIndex = 9;
             this.Label9.Text = "RT #:";
             // 
             // Label6
             // 
             this.Label6.AutoSize = true;
-            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label6.Location = new System.Drawing.Point(14, 74);
+            this.Label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label6.Location = new System.Drawing.Point(14, 78);
             this.Label6.Name = "Label6";
-            this.Label6.Size = new System.Drawing.Size(96, 15);
+            this.Label6.Size = new System.Drawing.Size(82, 15);
             this.Label6.TabIndex = 7;
             this.Label6.Text = "Requisition #:";
             // 
             // ReqNumberTextBox
             // 
             this.ReqNumberTextBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ReqNumberTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ReqNumberTextBox.Location = new System.Drawing.Point(17, 90);
+            this.ReqNumberTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReqNumberTextBox.Location = new System.Drawing.Point(17, 94);
             this.ReqNumberTextBox.Name = "ReqNumberTextBox";
-            this.ReqNumberTextBox.Size = new System.Drawing.Size(137, 22);
+            this.ReqNumberTextBox.Size = new System.Drawing.Size(137, 23);
             this.ReqNumberTextBox.TabIndex = 6;
             this.ReqNumberTextBox.Click += new System.EventHandler(this.ReqNumberTextBox_Click);
             // 
             // Label5
             // 
             this.Label5.AutoSize = true;
-            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label5.Location = new System.Drawing.Point(14, 21);
             this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(42, 15);
+            this.Label5.Size = new System.Drawing.Size(37, 15);
             this.Label5.TabIndex = 5;
             this.Label5.Text = "PO #:";
             // 
             // POTextBox
             // 
             this.POTextBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.POTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.POTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.POTextBox.ForeColor = System.Drawing.SystemColors.WindowText;
             this.POTextBox.Location = new System.Drawing.Point(17, 37);
             this.POTextBox.Name = "POTextBox";
-            this.POTextBox.Size = new System.Drawing.Size(137, 22);
+            this.POTextBox.Size = new System.Drawing.Size(137, 23);
             this.POTextBox.TabIndex = 5;
             this.POTextBox.Click += new System.EventHandler(this.POTextBox_Click);
             // 
             // TypeComboBox
             // 
-            this.TypeComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TypeComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TypeComboBox.FormattingEnabled = true;
-            this.TypeComboBox.Location = new System.Drawing.Point(10, 133);
+            this.TypeComboBox.Location = new System.Drawing.Point(20, 133);
             this.TypeComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.TypeComboBox.Name = "TypeComboBox";
             this.TypeComboBox.Size = new System.Drawing.Size(164, 23);
@@ -483,20 +490,20 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Label4
             // 
             this.Label4.AutoSize = true;
-            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label4.Location = new System.Drawing.Point(7, 114);
+            this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label4.Location = new System.Drawing.Point(17, 114);
             this.Label4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
             this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(41, 15);
+            this.Label4.Size = new System.Drawing.Size(36, 15);
             this.Label4.TabIndex = 8;
             this.Label4.Text = "Type:";
             // 
             // NeedByDatePicker
             // 
             this.NeedByDatePicker.CustomFormat = "MM/dd/yyyy";
-            this.NeedByDatePicker.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NeedByDatePicker.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NeedByDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.NeedByDatePicker.Location = new System.Drawing.Point(10, 180);
+            this.NeedByDatePicker.Location = new System.Drawing.Point(20, 180);
             this.NeedByDatePicker.Margin = new System.Windows.Forms.Padding(2);
             this.NeedByDatePicker.Name = "NeedByDatePicker";
             this.NeedByDatePicker.Size = new System.Drawing.Size(164, 23);
@@ -505,29 +512,29 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Label3
             // 
             this.Label3.AutoSize = true;
-            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label3.Location = new System.Drawing.Point(7, 161);
+            this.Label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label3.Location = new System.Drawing.Point(17, 161);
             this.Label3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
             this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(64, 15);
+            this.Label3.Size = new System.Drawing.Size(56, 15);
             this.Label3.TabIndex = 5;
             this.Label3.Text = "Need By:";
             // 
             // Label2
             // 
             this.Label2.AutoSize = true;
-            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label2.Location = new System.Drawing.Point(7, 69);
+            this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label2.Location = new System.Drawing.Point(17, 69);
             this.Label2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 2);
             this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(98, 15);
+            this.Label2.Size = new System.Drawing.Size(85, 15);
             this.Label2.TabIndex = 3;
             this.Label2.Text = "Request User:";
             // 
             // RequestUserTextBox
             // 
-            this.RequestUserTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RequestUserTextBox.Location = new System.Drawing.Point(10, 88);
+            this.RequestUserTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RequestUserTextBox.Location = new System.Drawing.Point(20, 88);
             this.RequestUserTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.RequestUserTextBox.Name = "RequestUserTextBox";
             this.RequestUserTextBox.Size = new System.Drawing.Size(164, 23);
@@ -536,18 +543,18 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label1.Location = new System.Drawing.Point(7, 25);
+            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Location = new System.Drawing.Point(17, 25);
             this.Label1.Margin = new System.Windows.Forms.Padding(2);
             this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(141, 15);
+            this.Label1.Size = new System.Drawing.Size(121, 15);
             this.Label1.TabIndex = 1;
             this.Label1.Text = "Request Description:";
             // 
             // DescriptionTextBox
             // 
-            this.DescriptionTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DescriptionTextBox.Location = new System.Drawing.Point(10, 43);
+            this.DescriptionTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DescriptionTextBox.Location = new System.Drawing.Point(20, 43);
             this.DescriptionTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.DescriptionTextBox.Name = "DescriptionTextBox";
             this.DescriptionTextBox.Size = new System.Drawing.Size(356, 23);
@@ -560,7 +567,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ButtonPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ButtonPanel.Controls.Add(this.EditButtonsPanel);
             this.ButtonPanel.Controls.Add(this.CreatePanel);
-            this.ButtonPanel.Location = new System.Drawing.Point(387, 170);
+            this.ButtonPanel.Location = new System.Drawing.Point(222, 131);
             this.ButtonPanel.Name = "ButtonPanel";
             this.ButtonPanel.Size = new System.Drawing.Size(147, 85);
             this.ButtonPanel.TabIndex = 22;
@@ -582,7 +589,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.AcceptChangesButton.Location = new System.Drawing.Point(9, 3);
             this.AcceptChangesButton.Name = "AcceptChangesButton";
             this.AcceptChangesButton.Size = new System.Drawing.Size(119, 41);
-            this.AcceptChangesButton.TabIndex = 18;
+            this.AcceptChangesButton.TabIndex = 8;
             this.AcceptChangesButton.Text = "Accept Changes";
             this.AcceptChangesButton.UseVisualStyleBackColor = false;
             this.AcceptChangesButton.Click += new System.EventHandler(this.AcceptChangesButton_Click);
@@ -594,7 +601,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.DiscardChangesButton.Location = new System.Drawing.Point(9, 50);
             this.DiscardChangesButton.Name = "DiscardChangesButton";
             this.DiscardChangesButton.Size = new System.Drawing.Size(119, 24);
-            this.DiscardChangesButton.TabIndex = 19;
+            this.DiscardChangesButton.TabIndex = 9;
             this.DiscardChangesButton.Text = "Discard Changes";
             this.DiscardChangesButton.UseVisualStyleBackColor = false;
             this.DiscardChangesButton.Click += new System.EventHandler(this.DiscardChangesButton_Click);
@@ -614,7 +621,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.CreateNewButton.Location = new System.Drawing.Point(9, 8);
             this.CreateNewButton.Name = "CreateNewButton";
             this.CreateNewButton.Size = new System.Drawing.Size(119, 41);
-            this.CreateNewButton.TabIndex = 8;
+            this.CreateNewButton.TabIndex = 10;
             this.CreateNewButton.Text = "Create Request";
             this.CreateNewButton.UseVisualStyleBackColor = true;
             this.CreateNewButton.Click += new System.EventHandler(this.CreateNewButton_Click);
@@ -624,9 +631,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox3.Controls.Add(this.Panel2);
-            this.GroupBox3.Location = new System.Drawing.Point(560, 4);
+            this.GroupBox3.Location = new System.Drawing.Point(758, 4);
             this.GroupBox3.Name = "GroupBox3";
-            this.GroupBox3.Size = new System.Drawing.Size(531, 264);
+            this.GroupBox3.Size = new System.Drawing.Size(489, 264);
             this.GroupBox3.TabIndex = 4;
             this.GroupBox3.TabStop = false;
             this.GroupBox3.Text = "Notes";
@@ -638,7 +645,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Panel2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Panel2.Location = new System.Drawing.Point(3, 16);
             this.Panel2.Name = "Panel2";
-            this.Panel2.Size = new System.Drawing.Size(525, 245);
+            this.Panel2.Size = new System.Drawing.Size(483, 245);
             this.Panel2.TabIndex = 0;
             // 
             // NotesGrid
@@ -680,7 +687,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.NotesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.NotesGrid.ShowCellErrors = false;
             this.NotesGrid.ShowCellToolTips = false;
-            this.NotesGrid.Size = new System.Drawing.Size(519, 239);
+            this.NotesGrid.Size = new System.Drawing.Size(477, 239);
             this.NotesGrid.TabIndex = 19;
             this.NotesGrid.VirtualMode = true;
             this.NotesGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.NotesGrid_CellDoubleClick);
@@ -694,7 +701,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ItemsPanel.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ItemsPanel.Location = new System.Drawing.Point(8, 314);
             this.ItemsPanel.Name = "ItemsPanel";
-            this.ItemsPanel.Size = new System.Drawing.Size(1094, 384);
+            this.ItemsPanel.Size = new System.Drawing.Size(1250, 384);
             this.ItemsPanel.TabIndex = 1;
             // 
             // GroupBox4
@@ -706,7 +713,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.GroupBox4.Controls.Add(this.AllowDragCheckBox);
             this.GroupBox4.Location = new System.Drawing.Point(5, 0);
             this.GroupBox4.Name = "GroupBox4";
-            this.GroupBox4.Size = new System.Drawing.Size(1086, 381);
+            this.GroupBox4.Size = new System.Drawing.Size(1242, 381);
             this.GroupBox4.TabIndex = 21;
             this.GroupBox4.TabStop = false;
             this.GroupBox4.Text = "Items";
@@ -746,8 +753,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.RequestItemsGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.RequestItemsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.RequestItemsGrid.ShowCellToolTips = false;
-            this.RequestItemsGrid.Size = new System.Drawing.Size(1074, 343);
-            this.RequestItemsGrid.TabIndex = 18;
+            this.RequestItemsGrid.Size = new System.Drawing.Size(1230, 343);
+            this.RequestItemsGrid.TabIndex = 11;
             this.RequestItemsGrid.VirtualMode = true;
             this.RequestItemsGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellEnter);
             this.RequestItemsGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.RequestItemsGrid_CellLeave);
@@ -767,7 +774,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.AllowDragCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.AllowDragCheckBox.AutoSize = true;
-            this.AllowDragCheckBox.Location = new System.Drawing.Point(984, 13);
+            this.AllowDragCheckBox.Location = new System.Drawing.Point(1140, 13);
             this.AllowDragCheckBox.Name = "AllowDragCheckBox";
             this.AllowDragCheckBox.Size = new System.Drawing.Size(96, 19);
             this.AllowDragCheckBox.TabIndex = 20;
@@ -793,7 +800,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.ToolStrip.Location = new System.Drawing.Point(0, 0);
             this.ToolStrip.Name = "ToolStrip";
             this.ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.ToolStrip.Size = new System.Drawing.Size(1112, 37);
+            this.ToolStrip.Size = new System.Drawing.Size(1268, 37);
             this.ToolStrip.TabIndex = 6;
             this.ToolStrip.Text = "ToolStrip1";
             // 
@@ -873,7 +880,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.StatusStrip1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StatusStrip1.Location = new System.Drawing.Point(0, 701);
             this.StatusStrip1.Name = "StatusStrip1";
-            this.StatusStrip1.Size = new System.Drawing.Size(1112, 22);
+            this.StatusStrip1.Size = new System.Drawing.Size(1268, 22);
             this.StatusStrip1.TabIndex = 7;
             this.StatusStrip1.Text = "StatusStrip1";
             // 
@@ -882,7 +889,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
-            this.ClientSize = new System.Drawing.Size(1112, 723);
+            this.ClientSize = new System.Drawing.Size(1268, 723);
             this.Controls.Add(this.ToolStrip);
             this.Controls.Add(this.ItemsPanel);
             this.Controls.Add(this.RequestPanel);
