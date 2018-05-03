@@ -72,7 +72,7 @@ namespace AssetManager.UserInterface.CustomControls
             if (!liveBoxSelected)
             {
                 var config = GetSenderConfig(sender);
-                if (!config.TargetTextBox.ReadOnly)
+                if (!config.TargetTextBox.ReadOnly && config.TargetTextBox.Enabled)
                 {
                     StartLiveSearch(config);
                 }

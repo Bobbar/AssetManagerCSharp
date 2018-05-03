@@ -248,6 +248,22 @@ namespace AssetManager.Data.Functions
             }
         }
 
+        public void DisableFields()
+        {
+            foreach (var ctl in GetDBControls(parentForm))
+            {
+                ctl.Enabled = false;
+            }
+        }
+
+        public void EnableFields()
+        {
+            foreach (var ctl in GetDBControls(parentForm))
+            {
+                ctl.Enabled = true;
+            }
+        }
+
         /// <summary>
         /// Recursively collects list of controls initiated with <see cref="DBControlInfo"/> tags within Parent control.
         /// </summary>

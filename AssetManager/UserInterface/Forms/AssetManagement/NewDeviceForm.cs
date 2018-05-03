@@ -69,6 +69,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DateTime POPurchaseDate = default(DateTime);
             using (var results = DBFactory.GetDatabase().DataTableFromQueryString(itemQuery))
             {
+                controlParser.DisableFields();
                 controlParser.FillDBFields(results, ImportColumnRemaps());
                 MunisUser = LevenshteinSearch.SmartEmployeeSearch(results.Rows[0][SibiRequestItemsCols.User].ToString().ToUpper());
                 POPurchaseDate = MunisFunctions.GetPODate(results.Rows[0][SibiRequestCols.PO].ToString());
@@ -77,6 +78,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             CurrentUserTextBox.Text = MunisUser.Name;
             CheckFields();
             PurchaseDatePicker.Value = POPurchaseDate;
+            controlParser.EnableFields();
         }
 
         void ILiveBox.ViewDevice(string deviceGuid)
