@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
+using AssetManager.Tools;
 namespace AssetManager.Properties {
     using System;
     
@@ -36,7 +36,7 @@ namespace AssetManager.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        internal static CachedResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     CachedResourceManager temp = new CachedResourceManager("AssetManager.Properties.Resources", typeof(Resources).Assembly);
@@ -233,9 +233,9 @@ namespace AssetManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap DetailsIcon {
+        internal static System.Drawing.Bitmap DownloadIcon {
             get {
-                object obj = ResourceManager.GetObject("DetailsIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("DownloadIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -373,6 +373,16 @@ namespace AssetManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap NewFolderIcon {
+            get {
+                object obj = ResourceManager.GetObject("NewFolderIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap O365SquareLogo {
             get {
                 object obj = ResourceManager.GetObject("O365SquareLogo", resourceCulture);
@@ -463,9 +473,29 @@ namespace AssetManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SaveIcon {
+            get {
+                object obj = ResourceManager.GetObject("SaveIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SearchIcon {
             get {
                 object obj = ResourceManager.GetObject("SearchIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SendToIcon2 {
+            get {
+                object obj = ResourceManager.GetObject("SendToIcon2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -537,6 +567,16 @@ namespace AssetManager.Properties {
             get {
                 object obj = ResourceManager.GetObject("UpdateChrome", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ViewIcon3 {
+            get {
+                object obj = ResourceManager.GetObject("ViewIcon3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

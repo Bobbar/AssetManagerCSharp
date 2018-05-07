@@ -799,7 +799,7 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:AssetManager.Properties.Resources.DetailsIcon">
+        <member name="P:AssetManager.Properties.Resources.DownloadIcon">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
@@ -869,6 +869,11 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:AssetManager.Properties.Resources.NewFolderIcon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:AssetManager.Properties.Resources.O365SquareLogo">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -914,7 +919,17 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:AssetManager.Properties.Resources.SaveIcon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:AssetManager.Properties.Resources.SearchIcon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:AssetManager.Properties.Resources.SendToIcon2">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
@@ -952,6 +967,11 @@
         <member name="P:AssetManager.Properties.Resources.UpdateChrome">
             <summary>
               Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="P:AssetManager.Properties.Resources.ViewIcon3">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
         <member name="M:AssetManager.Security.SecurityTools.CanAccess(System.String)">

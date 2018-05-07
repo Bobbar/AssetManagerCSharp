@@ -188,7 +188,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // ViewToolStripMenuItem
             // 
             this.ViewToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ViewToolStripMenuItem.Image = global::AssetManager.Properties.Resources.DetailsIcon;
+            this.ViewToolStripMenuItem.Image = global::AssetManager.Properties.Resources.ViewIcon3;
             this.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem";
             this.ViewToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.ViewToolStripMenuItem.Text = "View";
@@ -204,7 +204,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             // SendToGridFormMenuItem
             // 
-            this.SendToGridFormMenuItem.Image = global::AssetManager.Properties.Resources.TransferArrowsIcon;
+            this.SendToGridFormMenuItem.Image = global::AssetManager.Properties.Resources.SendToIcon2;
             this.SendToGridFormMenuItem.Name = "SendToGridFormMenuItem";
             this.SendToGridFormMenuItem.Size = new System.Drawing.Size(179, 22);
             this.SendToGridFormMenuItem.Text = "Send to Grid Form";

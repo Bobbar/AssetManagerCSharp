@@ -175,9 +175,6 @@
   <data name="Exh_K_03_Asset_Transfer_Form" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Exh_K-03_Asset_Transfer_Form.pdf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="DetailsIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\View_Details.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="EditIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Edit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -261,5 +258,20 @@
   </data>
   <data name="PsExecIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PsExecIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DownloadIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DownloadIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NewFolderIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NewFolderIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SaveIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SaveIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SendToIcon2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SendToIcon2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ViewIcon3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ViewIcon3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

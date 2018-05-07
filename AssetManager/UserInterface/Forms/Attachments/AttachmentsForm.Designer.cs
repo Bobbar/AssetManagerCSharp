@@ -93,59 +93,64 @@ namespace AssetManager.UserInterface.Forms
             this.RightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.OpenTool,
             this.SaveToMenuItem,
-            this.CopyTextTool,
-            this.NewFolderMenuItem,
             this.RenameStripMenuItem,
+            this.NewFolderMenuItem,
+            this.CopyTextTool,
             this.ToolStripSeparator1,
             this.DeleteAttachmentToolItem});
             this.RightClickMenu.Name = "RightClickMenu";
-            this.RightClickMenu.Size = new System.Drawing.Size(178, 142);
+            this.RightClickMenu.Size = new System.Drawing.Size(174, 142);
             // 
             // OpenTool
             // 
+            this.OpenTool.Image = global::AssetManager.Properties.Resources.DownloadIcon;
             this.OpenTool.Name = "OpenTool";
-            this.OpenTool.Size = new System.Drawing.Size(177, 22);
+            this.OpenTool.Size = new System.Drawing.Size(173, 22);
             this.OpenTool.Text = "Open";
             this.OpenTool.Click += new System.EventHandler(this.OpenTool_Click);
             // 
             // SaveToMenuItem
             // 
+            this.SaveToMenuItem.Image = global::AssetManager.Properties.Resources.SaveIcon;
             this.SaveToMenuItem.Name = "SaveToMenuItem";
-            this.SaveToMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.SaveToMenuItem.Size = new System.Drawing.Size(173, 22);
             this.SaveToMenuItem.Text = "Save To";
             this.SaveToMenuItem.Click += new System.EventHandler(this.SaveToMenuItem_Click);
             // 
             // CopyTextTool
             // 
+            this.CopyTextTool.Image = global::AssetManager.Properties.Resources.CopyIcon;
             this.CopyTextTool.Name = "CopyTextTool";
-            this.CopyTextTool.Size = new System.Drawing.Size(177, 22);
+            this.CopyTextTool.Size = new System.Drawing.Size(173, 22);
             this.CopyTextTool.Text = "Copy Text";
             this.CopyTextTool.Click += new System.EventHandler(this.CopyTextTool_Click);
             // 
             // NewFolderMenuItem
             // 
+            this.NewFolderMenuItem.Image = global::AssetManager.Properties.Resources.NewFolderIcon;
             this.NewFolderMenuItem.Name = "NewFolderMenuItem";
-            this.NewFolderMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.NewFolderMenuItem.Text = "Move to new folder";
+            this.NewFolderMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.NewFolderMenuItem.Text = "New Folder";
             this.NewFolderMenuItem.Click += new System.EventHandler(this.NewFolderMenuItem_Click);
             // 
             // RenameStripMenuItem
             // 
+            this.RenameStripMenuItem.Image = global::AssetManager.Properties.Resources.EditIcon;
             this.RenameStripMenuItem.Name = "RenameStripMenuItem";
-            this.RenameStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.RenameStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.RenameStripMenuItem.Text = "Rename";
             this.RenameStripMenuItem.Click += new System.EventHandler(this.RenameStripMenuItem_Click);
             // 
             // ToolStripSeparator1
             // 
             this.ToolStripSeparator1.Name = "ToolStripSeparator1";
-            this.ToolStripSeparator1.Size = new System.Drawing.Size(174, 6);
+            this.ToolStripSeparator1.Size = new System.Drawing.Size(170, 6);
             // 
             // DeleteAttachmentToolItem
             // 
             this.DeleteAttachmentToolItem.Image = global::AssetManager.Properties.Resources.DeleteRedIcon;
             this.DeleteAttachmentToolItem.Name = "DeleteAttachmentToolItem";
-            this.DeleteAttachmentToolItem.Size = new System.Drawing.Size(177, 22);
+            this.DeleteAttachmentToolItem.Size = new System.Drawing.Size(173, 22);
             this.DeleteAttachmentToolItem.Text = "Delete Attachment";
             this.DeleteAttachmentToolItem.Click += new System.EventHandler(this.DeleteAttachmentToolItem_Click);
             // 

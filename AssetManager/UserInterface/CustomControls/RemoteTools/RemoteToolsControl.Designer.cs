@@ -16,35 +16,34 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RemoteToolsControl));
             this.ToolsGroupBox = new System.Windows.Forms.GroupBox();
             this.ShowIPButton = new System.Windows.Forms.Button();
             this.ToolsLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.RestartDeviceButton = new System.Windows.Forms.PictureBox();
             this.BrowseFilesButton = new System.Windows.Forms.Button();
             this.StartRDPButton = new System.Windows.Forms.Button();
             this.EventViewerButton = new System.Windows.Forms.Button();
             this.PowerShellButton = new System.Windows.Forms.Button();
+            this.PSExecButton = new System.Windows.Forms.Button();
             this.GKUpdateButton = new System.Windows.Forms.Button();
             this.DeployTVButton = new System.Windows.Forms.Button();
             this.UpdateChromeButton = new System.Windows.Forms.Button();
             this.DeployOfficeButton = new System.Windows.Forms.Button();
             this.NewDeployButton = new System.Windows.Forms.Button();
-            this.PSExecButton = new System.Windows.Forms.Button();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.ToolsGroupBox.SuspendLayout();
             this.ToolsLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).BeginInit();
             this.SuspendLayout();
             // 
-            // groupBox
+            // ToolsGroupBox
             // 
             this.ToolsGroupBox.Controls.Add(this.ShowIPButton);
             this.ToolsGroupBox.Controls.Add(this.ToolsLayoutPanel);
             this.ToolsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ToolsGroupBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ToolsGroupBox.Location = new System.Drawing.Point(0, 0);
-            this.ToolsGroupBox.Name = "groupBox";
+            this.ToolsGroupBox.Name = "ToolsGroupBox";
             this.ToolsGroupBox.Size = new System.Drawing.Size(421, 108);
             this.ToolsGroupBox.TabIndex = 0;
             this.ToolsGroupBox.TabStop = false;
@@ -66,7 +65,7 @@
             this.ShowIPButton.UseVisualStyleBackColor = false;
             this.ShowIPButton.Click += new System.EventHandler(this.ShowIPButton_Click);
             // 
-            // FlowLayoutPanel1
+            // ToolsLayoutPanel
             // 
             this.ToolsLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.ToolsLayoutPanel.AutoScroll = true;
@@ -83,7 +82,7 @@
             this.ToolsLayoutPanel.Controls.Add(this.NewDeployButton);
             this.ToolsLayoutPanel.Location = new System.Drawing.Point(5, 14);
             this.ToolsLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
-            this.ToolsLayoutPanel.Name = "FlowLayoutPanel1";
+            this.ToolsLayoutPanel.Name = "ToolsLayoutPanel";
             this.ToolsLayoutPanel.Size = new System.Drawing.Size(320, 86);
             this.ToolsLayoutPanel.TabIndex = 58;
             // 
@@ -157,6 +156,20 @@
             this.PowerShellButton.UseVisualStyleBackColor = true;
             this.PowerShellButton.Click += new System.EventHandler(this.PowerShellButton_Click);
             // 
+            // PSExecButton
+            // 
+            this.PSExecButton.BackgroundImage = global::AssetManager.Properties.Resources.PsExecIcon;
+            this.PSExecButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PSExecButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.PSExecButton.Location = new System.Drawing.Point(236, 1);
+            this.PSExecButton.Margin = new System.Windows.Forms.Padding(1);
+            this.PSExecButton.Name = "PSExecButton";
+            this.PSExecButton.Size = new System.Drawing.Size(45, 45);
+            this.PSExecButton.TabIndex = 63;
+            this.toolTip.SetToolTip(this.PSExecButton, "Execute PSExec Commands");
+            this.PSExecButton.UseVisualStyleBackColor = true;
+            this.PSExecButton.Click += new System.EventHandler(this.PSExecButton_Click);
+            // 
             // GKUpdateButton
             // 
             this.GKUpdateButton.BackgroundImage = global::AssetManager.Properties.Resources.GK__UpdateIcon;
@@ -225,20 +238,6 @@
             this.toolTip.SetToolTip(this.NewDeployButton, "Software Deployments");
             this.NewDeployButton.UseVisualStyleBackColor = true;
             this.NewDeployButton.Click += new System.EventHandler(this.NewDeployButton_Click);
-            // 
-            // PSExecButton
-            // 
-            this.PSExecButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PSExecButton.BackgroundImage")));
-            this.PSExecButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.PSExecButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.PSExecButton.Location = new System.Drawing.Point(236, 1);
-            this.PSExecButton.Margin = new System.Windows.Forms.Padding(1);
-            this.PSExecButton.Name = "PSExecButton";
-            this.PSExecButton.Size = new System.Drawing.Size(45, 45);
-            this.PSExecButton.TabIndex = 63;
-            this.toolTip.SetToolTip(this.PSExecButton, "Execute PSExec Commands");
-            this.PSExecButton.UseVisualStyleBackColor = true;
-            this.PSExecButton.Click += new System.EventHandler(this.PSExecButton_Click);
             // 
             // RemoteToolsControl
             // 

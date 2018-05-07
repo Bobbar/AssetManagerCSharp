@@ -83,7 +83,7 @@ namespace AssetManager.UserInterface.Forms
             this.CopySelectedToolStripMenuItem,
             this.SendToNewGridForm});
             this.PopUpMenu.Name = "PopUpMenu";
-            this.PopUpMenu.Size = new System.Drawing.Size(167, 48);
+            this.PopUpMenu.Size = new System.Drawing.Size(167, 70);
             // 
             // CopySelectedToolStripMenuItem
             // 
@@ -95,7 +95,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             // SendToNewGridForm
             // 
-            this.SendToNewGridForm.Image = global::AssetManager.Properties.Resources.TransferArrowsIcon;
+            this.SendToNewGridForm.Image = global::AssetManager.Properties.Resources.SendToIcon2;
             this.SendToNewGridForm.Name = "SendToNewGridForm";
             this.SendToNewGridForm.Size = new System.Drawing.Size(166, 22);
             this.SendToNewGridForm.Text = "Send to New Grid";

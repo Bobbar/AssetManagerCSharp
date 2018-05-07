@@ -539,29 +539,18 @@
     <None Include="Resources\Add.png" />
     <None Include="Resources\AdminIcon.png" />
     <None Include="Resources\application_cascade-512.png" />
-    <None Include="Resources\cancel.png" />
     <None Include="Resources\check-out.png" />
     <None Include="Resources\CheckedBoxIcon.png" />
     <None Include="Resources\checked_checkbox-green.png" />
     <None Include="Resources\checked_checkbox-red.png" />
     <None Include="Resources\CheckForTVRegistryValue.ps1" />
-    <None Include="Resources\check_alt-128.png" />
     <None Include="Resources\ChromeIcon.png" />
     <None Include="Resources\clip-512.png" />
     <None Include="Resources\close-delete-cancel-del-ui-round-512.png" />
     <None Include="Resources\copy-icon.png" />
-    <None Include="Resources\critical_funny.png" />
-    <None Include="Resources\critical_funny_crop.png" />
-    <None Include="Resources\critical_funny_crop_2.png" />
     <None Include="Resources\delete-icon-red.png" />
     <None Include="Resources\delete-icon.png" />
     <None Include="Resources\Edit.png" />
-    <None Include="Resources\err_critical.png" />
-    <None Include="Resources\err_exclamation.png" />
-    <None Include="Resources\err_information.png" />
-    <None Include="Resources\err_information_crop.png" />
-    <None Include="Resources\err_question.png" />
-    <None Include="Resources\exclamation.png" />
     <None Include="Resources\Find.png" />
     <None Include="Resources\FolderIcon.png" />
     <None Include="Resources\Form2-512.png" />
@@ -574,17 +563,14 @@
     <None Include="Resources\inv_box_large.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Resources\MoneyCircle2Icon.png" />
-    <None Include="Resources\note-icon-27942.png" />
     <None Include="Resources\PauseIcon.png" />
     <None Include="Resources\PlayIcon.png" />
-    <None Include="Resources\presentation-512.png" />
     <None Include="Resources\RDPIcon.png" />
     <None Include="Resources\refresh.png" />
     <None Include="Resources\TeamViewerIcon.png" />
     <None Include="Resources\Title_Text_Orange.png" />
     <None Include="Resources\trash-512.png" />
     <None Include="Resources\UpdateChrome.ps1" />
-    <None Include="Resources\View_Details.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
@@ -657,13 +643,19 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Image1.bmp" />
     <None Include="Resources\fieldErrorIcon.Icon.ico" />
     <None Include="Resources\EventIcon.png" />
     <None Include="Resources\O365SquareLogo.png" />
     <None Include="Resources\DeployIcon.png" />
     <None Include="Resources\PowerShellIcon2.png" />
     <None Include="Resources\PsExecIcon.png" />
+    <None Include="Resources\ViewIcon2.png" />
+    <None Include="Resources\ViewIcon3.png" />
+    <None Include="Resources\SentToIcon.png" />
+    <None Include="Resources\SendToIcon2.png" />
+    <None Include="Resources\DownloadIcon.png" />
+    <None Include="Resources\SaveIcon.png" />
+    <None Include="Resources\NewFolderIcon.png" />
     <Content Include="Tools\PsExec\PsExec.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
