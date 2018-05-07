@@ -188,6 +188,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void EventViewer()
         {
+            CheckRemoteAccess();
+
             if (SecurityTools.VerifyAdminCreds())
             {
                 using (var p = new Process())
@@ -210,6 +212,8 @@ namespace AssetManager.UserInterface.CustomControls
         {
             try
             {
+                CheckRemoteAccess();
+
                 if (SecurityTools.VerifyAdminCreds())
                 {
                     string fullPath = "\\\\" + this.device.HostName + "\\c$";
@@ -237,7 +241,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void DeployTeamViewer(Device targetDevice)
         {
-            SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
+            CheckRemoteAccess();
 
             if (OtherFunctions.Message("Deploy TeamViewer to this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
@@ -268,7 +272,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void DeployOffice(Device targetDevice)
         {
-            SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
+            CheckRemoteAccess();
 
             if (OtherFunctions.Message("Deploy Office 365 to this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
@@ -299,7 +303,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void NewSoftwareDeployment(Device targetDevice)
         {
-            SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
+            CheckRemoteAccess();
 
             if (OtherFunctions.Message("Start new software deployment?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
@@ -338,6 +342,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void QueueGKUpdate()
         {
+            CheckRemoteAccess();
+
             if (SecurityTools.VerifyAdminCreds())
             {
                 var gkInstance = Helpers.ChildFormControl.GKUpdaterInstance();
@@ -351,6 +357,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void RestartDevice()
         {
+            CheckRemoteAccess();
+
             var blah = OtherFunctions.Message("Click 'Yes' to reboot this Device.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm);
             if (blah == DialogResult.Yes)
             {
@@ -411,6 +419,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void StartPowerShellSession(Device targetDevice)
         {
+            CheckRemoteAccess();
+
             if (SecurityTools.VerifyAdminCreds())
             {
                 using (var p = new Process())
@@ -436,6 +446,8 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void StartPsExecWindow(Device targetDevice)
         {
+            CheckRemoteAccess();
+
             if (SecurityTools.VerifyAdminCreds())
             {
                 new PSExecCommandForm(hostForm, targetDevice);
@@ -457,7 +469,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void UpdateChrome(Device targetDevice)
         {
-            SecurityTools.CheckForAccess(SecurityGroups.IsAdmin);
+            CheckRemoteAccess();
 
             if (OtherFunctions.Message("Update/Install Chrome on this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
             {
@@ -484,6 +496,11 @@ namespace AssetManager.UserInterface.CustomControls
                 OnStatusPrompt("Error while installing Chrome!", failColor);
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
+        }
+
+        private void CheckRemoteAccess()
+        {
+            SecurityTools.CheckForAccess(SecurityGroups.RemoteAccess);
         }
 
         #endregion Methods

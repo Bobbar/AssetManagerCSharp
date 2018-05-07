@@ -16,5 +16,6 @@
         public const string IsAdmin = "admin";
         public const string AdvancedSearch = "advanced_search";
         public const string CanStartTransaction = "start_transaction";
+        public const string RemoteAccess = "remote_access";
     }
 }
