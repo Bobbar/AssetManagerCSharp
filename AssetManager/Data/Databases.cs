@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AssetManager.Data
 {
-    public enum Database
+    public enum DatabaseName
     {
         test_db,
         asset_manager,

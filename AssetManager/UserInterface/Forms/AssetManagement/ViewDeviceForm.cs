@@ -714,7 +714,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 if (!string.IsNullOrEmpty(currentViewDevice.HostName))
                 {
-                    if (ServerInfo.CurrentDataBase == Database.vintondd)
+                    if (ServerInfo.CurrentDataBase == DatabaseName.vintondd)
                     {
                         if (!SecurityTools.VerifyAdminCreds("Credentials for Vinton AD"))
                         {

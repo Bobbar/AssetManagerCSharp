@@ -465,7 +465,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void InitDBCombo()
         {
-            foreach (var item in Enum.GetValues(typeof(Database)))
+            foreach (var item in Enum.GetValues(typeof(DatabaseName)))
             {
                 DatabaseToolCombo.Items.Add(item.ToString());
             }
@@ -680,7 +680,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void ChangeDatabase(Database database)
+        private void ChangeDatabase(DatabaseName database)
         {
             try
             {
@@ -730,15 +730,15 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             switch (ServerInfo.CurrentDataBase)
             {
-                case Database.asset_manager:
+                case DatabaseName.asset_manager:
                     this.Text = "Asset Manager - Main";
                     break;
 
-                case Database.test_db:
+                case DatabaseName.test_db:
                     this.Text = "Asset Manager - Main - ****TEST DATABASE****";
                     break;
 
-                case Database.vintondd:
+                case DatabaseName.vintondd:
                     this.Text = "Asset Manager - Main - Vinton DD";
                     break;
             }
@@ -746,7 +746,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ShowTestDBWarning()
         {
-            if (ServerInfo.CurrentDataBase == Database.test_db)
+            if (ServerInfo.CurrentDataBase == DatabaseName.test_db)
             {
                 // OtherFunctions.Message("TEST DATABASE IN USE", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "WARNING");//, this);
                 this.BackColor = Color.DarkRed;
@@ -926,7 +926,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void DatabaseToolCombo_DropDownClosed(object sender, EventArgs e)
         {
-            ChangeDatabase((Database)DatabaseToolCombo.SelectedIndex);
+            ChangeDatabase((DatabaseName)DatabaseToolCombo.SelectedIndex);
         }
 
         private void MainForm_Load(object sender, EventArgs e)

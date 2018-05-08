@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 
-namespace AssetDatabase.Data
+namespace Database.Data
 {
     public class SqliteDatabase : IDatabase
     {

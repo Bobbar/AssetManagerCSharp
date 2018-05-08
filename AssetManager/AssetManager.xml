@@ -529,9 +529,9 @@
             SELECT apitoken FROM teamviewer_info
             </summary>
         </member>
-        <member name="M:AssetManager.Data.Communications.MunisComms.GetSqlCommandFromParams(System.String,System.Collections.Generic.List{AssetDatabase.Data.DBQueryParameter})">
+        <member name="M:AssetManager.Data.Communications.MunisComms.GetSqlCommandFromParams(System.String,System.Collections.Generic.List{Database.Data.DBQueryParameter})">
             <summary>
-            Takes a partial query string without the WHERE operator, and a list of <see cref="T:AssetDatabase.Data.DBQueryParameter"/> and returns a parameterized <see cref="T:System.Data.SqlClient.SqlCommand"/>.
+            Takes a partial query string without the WHERE operator, and a list of <see cref="T:Database.Data.DBQueryParameter"/> and returns a parameterized <see cref="T:System.Data.SqlClient.SqlCommand"/>.
             </summary>
             <param name="partialQuery"></param>
             <param name="parameters"></param>

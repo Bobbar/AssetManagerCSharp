@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 
-namespace AssetDatabase.Data
+namespace Database.Data
 {
     public class MySQLDatabase : IDatabase
     {

@@ -1,5 +1,5 @@
 using System;
-namespace AssetDatabase.Data
+namespace Database.Data
 {
     public class NoPingException : Exception
 	{

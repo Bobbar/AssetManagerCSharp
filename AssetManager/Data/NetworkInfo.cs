@@ -17,11 +17,11 @@ namespace AssetManager.Data
             get { return _currentDomain; }
         }
 
-        private static Dictionary<Database, string> DomainNames = new Dictionary<Database, string>
+        private static Dictionary<DatabaseName, string> DomainNames = new Dictionary<DatabaseName, string>
         {
-            {Database.test_db, "core.co.fairfield.oh.us"},
-            {Database.asset_manager, "core.co.fairfield.oh.us"},
-            {Database.vintondd, "vinton.local"}
+            {DatabaseName.test_db, "core.co.fairfield.oh.us"},
+            {DatabaseName.asset_manager, "core.co.fairfield.oh.us"},
+            {DatabaseName.vintondd, "vinton.local"}
         };
 
         private static Dictionary<string, string> SubnetLocations = new Dictionary<string, string>
@@ -59,11 +59,11 @@ namespace AssetManager.Data
             }
         }
 
-        public static string SetCurrentDomain(Database database)
+        public static string SetCurrentDomain(DatabaseName database)
         {
             _currentDomain = DomainNames[database];
             SecurityTools.ClearAdminCreds();
-            if (database == Database.vintondd)
+            if (database == DatabaseName.vintondd)
             {
                 SecurityTools.VerifyAdminCreds("Credentials for Vinton AD");
             }
