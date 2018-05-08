@@ -649,7 +649,9 @@
     <None Include="Resources\DeployIcon.png" />
     <None Include="Resources\PowerShellIcon2.png" />
     <None Include="Resources\PsExecIcon.png" />
+    <None Include="Resources\ViewIcon2.png" />
     <None Include="Resources\ViewIcon3.png" />
+    <None Include="Resources\SentToIcon.png" />
     <None Include="Resources\SendToIcon2.png" />
     <None Include="Resources\DownloadIcon.png" />
     <None Include="Resources\SaveIcon.png" />
