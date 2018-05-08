@@ -12,10 +12,18 @@ namespace AssetManager.Helpers
     {
         public static void PopulateGrid(DataGridView grid, DataTable data, List<GridColumnAttrib> columns, bool forceRawData)
         {
-            SetupGrid(grid, columns);
-            using (data)
+            if (data.Rows.Count > 0)
             {
-                grid.DataSource = BuildDataSource(data, columns, forceRawData);
+                SetupGrid(grid, columns);
+                using (data)
+                {
+                    grid.DataSource = BuildDataSource(data, columns, forceRawData);
+                }
+            }
+            else
+            {
+                grid.DataSource = null;
+                grid.Columns.Clear();
             }
         }
 
