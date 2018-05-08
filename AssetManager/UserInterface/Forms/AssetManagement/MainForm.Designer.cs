@@ -183,7 +183,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolStripSeparator3,
             this.CopySelectedMenuItem});
             this.ContextMenuStrip1.Name = "ContextMenuStrip1";
-            this.ContextMenuStrip1.Size = new System.Drawing.Size(180, 98);
+            this.ContextMenuStrip1.Size = new System.Drawing.Size(180, 120);
             // 
             // ViewToolStripMenuItem
             // 
@@ -191,7 +191,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ViewToolStripMenuItem.Image = global::AssetManager.Properties.Resources.ViewIcon3;
             this.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem";
             this.ViewToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.ViewToolStripMenuItem.Text = "View";
+            this.ViewToolStripMenuItem.Text = "View Device";
             this.ViewToolStripMenuItem.Click += new System.EventHandler(this.ViewToolStripMenuItem_Click);
             // 
             // AddGKUpdateMenuItem

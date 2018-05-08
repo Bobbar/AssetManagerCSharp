@@ -14,6 +14,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Panel1 = new System.Windows.Forms.Panel();
@@ -35,6 +36,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.Label2 = new System.Windows.Forms.Label();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.SibiResultGrid = new System.Windows.Forms.DataGridView();
+            this.RightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ViewRequestMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStrip1 = new AssetManager.UserInterface.CustomControls.OneClickToolStrip();
             this.NewRequestButton = new System.Windows.Forms.ToolStripButton();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -43,6 +46,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.groupBox3.SuspendLayout();
             this.GroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SibiResultGrid)).BeginInit();
+            this.RightClickMenu.SuspendLayout();
             this.ToolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -248,6 +252,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.SibiResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.SibiResultGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.SibiResultGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SibiResultGrid.ContextMenuStrip = this.RightClickMenu;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -280,10 +285,27 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.SibiResultGrid.TabIndex = 18;
             this.SibiResultGrid.TabStop = false;
             this.SibiResultGrid.VirtualMode = true;
-            this.SibiResultGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellDoubleClick);
-            this.SibiResultGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellEnter);
-            this.SibiResultGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.ResultGrid_CellLeave);
+            this.SibiResultGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SibiResultGrid_CellDoubleClick);
+            this.SibiResultGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.SibiResultGrid_CellEnter);
+            this.SibiResultGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.SibiResultGrid_CellLeave);
+            this.SibiResultGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SibiResultGrid_CellMouseDown);
             this.SibiResultGrid.Sorted += new System.EventHandler(this.SibiResultGrid_Sorted);
+            // 
+            // RightClickMenu
+            // 
+            this.RightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ViewRequestMenuItem});
+            this.RightClickMenu.Name = "RightClickMenu";
+            this.RightClickMenu.Size = new System.Drawing.Size(153, 48);
+            // 
+            // ViewRequestMenuItem
+            // 
+            this.ViewRequestMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ViewRequestMenuItem.Image = global::AssetManager.Properties.Resources.ViewIcon3;
+            this.ViewRequestMenuItem.Name = "ViewRequestMenuItem";
+            this.ViewRequestMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.ViewRequestMenuItem.Text = "View Request";
+            this.ViewRequestMenuItem.Click += new System.EventHandler(this.ViewRequestMenuItem_Click);
             // 
             // ToolStrip1
             // 
@@ -338,6 +360,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.groupBox3.PerformLayout();
             this.GroupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SibiResultGrid)).EndInit();
+            this.RightClickMenu.ResumeLayout(false);
             this.ToolStrip1.ResumeLayout(false);
             this.ToolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -365,5 +388,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private GroupBox groupBox3;
         private Button ItemSearchButton;
         private SliderLabel searchSlider;
+        private ContextMenuStrip RightClickMenu;
+        private ToolStripMenuItem ViewRequestMenuItem;
     }
 }

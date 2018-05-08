@@ -197,7 +197,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 ShowAll("All");
                 this.Show();
                 this.Activate();
-              }
+            }
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
@@ -268,6 +268,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 OtherFunctions.SetWaitCursor(false, this);
             }
+        }
+
+        private void OpenSelectedRequest()
+        {
+            if (SibiResultGrid.CurrentRow.Index > -1) OpenRequest(SibiResultGrid.CurrentRowStringValue(SibiRequestCols.Guid));
         }
 
         private void ResetView()
@@ -464,12 +469,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
             ResetView();
         }
 
-        private void ResultGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void SibiResultGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (SibiResultGrid.CurrentRow.Index > -1) OpenRequest(SibiResultGrid.CurrentRowStringValue(SibiRequestCols.Guid));
+            OpenSelectedRequest();
         }
 
-        private void ResultGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
+        private void SibiResultGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
             if (!gridFilling && this.Visible)
             {
@@ -477,10 +482,22 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
         }
 
-        private void ResultGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
+        private void SibiResultGrid_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
             StyleFunctions.LeaveRow(SibiResultGrid, e.RowIndex);
             SetStatusCellColors();
+        }
+
+        private void SibiResultGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.ColumnIndex >= 0 & e.RowIndex >= 0)
+            {
+                if (e.Button == MouseButtons.Right & !SibiResultGrid[e.ColumnIndex, e.RowIndex].Selected)
+                {
+                    SibiResultGrid.Rows[e.RowIndex].Selected = true;
+                    SibiResultGrid.CurrentCell = SibiResultGrid[e.ColumnIndex, e.RowIndex];
+                }
+            }
         }
 
         private void SibiResultGrid_Sorted(object sender, EventArgs e)
@@ -492,6 +509,11 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             gridFilling = false;
             SetStatusCellColors();
+        }
+
+        private void ViewRequestMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenSelectedRequest();
         }
 
         #endregion Control Events
