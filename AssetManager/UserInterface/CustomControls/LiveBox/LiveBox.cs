@@ -126,6 +126,7 @@ namespace AssetManager.UserInterface.CustomControls
                 if (results.Rows.Count > 0)
                 {
                     liveListBox.SuspendLayout();
+                    liveListBox.DataSource = null;
                     liveListBox.ValueMember = currentLiveBoxConfig.ValueMember;
                     liveListBox.DisplayMember = currentLiveBoxConfig.DisplayMember;
                     liveListBox.DataSource = results;
