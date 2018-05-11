@@ -20,6 +20,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         public GKUpdaterForm(ExtendedForm parentForm) : base(parentForm)
         {
             InitializeComponent();
+            this.DisableDoubleBuffering();
             MaxUpdates.Value = concurrentUpdates;
             ProgressControlsTable.DoubleBuffered(true);
         }
