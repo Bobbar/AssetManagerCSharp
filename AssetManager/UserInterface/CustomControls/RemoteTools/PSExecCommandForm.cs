@@ -3,6 +3,7 @@ using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 using AssetManager.Tools;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -15,6 +16,8 @@ namespace AssetManager.UserInterface.CustomControls
     {
         private Device targetDevice;
         private PSExecWrapper pSExecWrapper;
+        private List<string> previousCommands = new List<string>();
+        private int currentCommandIdx = 0;
 
         public PSExecCommandForm(ExtendedForm parentForm, Device device) : base(parentForm)
         {
@@ -78,14 +81,11 @@ namespace AssetManager.UserInterface.CustomControls
             string prefix = PrefixComboBox.SelectedItem?.ToString().Trim();
             string finalCommand;
 
+            // Save the command for later convenience.
+            SaveCommand(command);
+
             // Clear the command control.
             CommandBox.Text = string.Empty;
-
-            // Add new unique commands to the combo items for later convenience.
-            if (!CommandBox.Items.Contains(command) && !string.IsNullOrEmpty(command))
-            {
-                CommandBox.Items.Add(command);
-            }
 
             // Add prefix to the final command if one is selected.
             if (!string.IsNullOrEmpty(prefix))
@@ -100,25 +100,77 @@ namespace AssetManager.UserInterface.CustomControls
             return finalCommand;
         }
 
+        private void SaveCommand(string command)
+        {
+            if (!string.IsNullOrEmpty(command))
+            {
+                if (previousCommands.Count == 0 || command != previousCommands[currentCommandIdx])
+                {
+                    previousCommands.Add(command);
+                    currentCommandIdx = previousCommands.Count - 1;
+                    CommandBox.DataSource = null;
+                    CommandBox.DataSource = previousCommands;
+                }
+            }
+        }
+
+        private void NextCommand()
+        {
+            if (previousCommands.Count != 0)
+            {
+                if (string.IsNullOrEmpty(CommandBox.Text.Trim()))
+                {
+                    SetCurrentCommand(previousCommands[currentCommandIdx]);
+                }
+                else
+                {
+                    if (currentCommandIdx + 1 <= previousCommands.Count - 1)
+                    {
+                        currentCommandIdx++;
+                        SetCurrentCommand(previousCommands[currentCommandIdx]);
+                    }
+                    else
+                    {
+                        SetCurrentCommand(previousCommands[currentCommandIdx]);
+                    }
+                }
+            }
+        }
+
+        private void PrevCommand()
+        {
+            if (previousCommands.Count != 0)
+            {
+                if (string.IsNullOrEmpty(CommandBox.Text.Trim()))
+                {
+                    SetCurrentCommand(previousCommands[currentCommandIdx]);
+                }
+                else
+                {
+                    if (currentCommandIdx - 1 >= 0)
+                    {
+                        currentCommandIdx--;
+                        SetCurrentCommand(previousCommands[currentCommandIdx]);
+                    }
+                    else
+                    {
+                        SetCurrentCommand(previousCommands[currentCommandIdx]);
+                    }
+                }
+            }
+        }
+
+        private void SetCurrentCommand(string command)
+        {
+            CommandBox.Text = command;
+            CommandBox.Select(CommandBox.Text.Length, 0);
+        }
+
         private void StopProcess()
         {
             StatusMessage("Stopping process...");
             pSExecWrapper.StopProcess();
             StatusMessage("Idle");
-        }
-
-        private void PSExecWrapper_OutputReceived(object sender, EventArgs e)
-        {
-            var args = (DataReceivedEventArgs)e;
-            var dataString = DataConsistency.CleanDBValue(args.Data).ToString();
-            LogMessage(dataString);
-        }
-
-        private void PSExecWrapper_ErrorReceived(object sender, EventArgs e)
-        {
-            var args = (DataReceivedEventArgs)e;
-            var dataString = DataConsistency.CleanDBValue(args.Data).ToString();
-            LogMessage(dataString);
         }
 
         private void StatusMessage(string text)
@@ -165,6 +217,20 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
+        private void PSExecWrapper_OutputReceived(object sender, EventArgs e)
+        {
+            var args = (DataReceivedEventArgs)e;
+            var dataString = DataConsistency.CleanDBValue(args.Data).ToString();
+            LogMessage(dataString);
+        }
+
+        private void PSExecWrapper_ErrorReceived(object sender, EventArgs e)
+        {
+            var args = (DataReceivedEventArgs)e;
+            var dataString = DataConsistency.CleanDBValue(args.Data).ToString();
+            LogMessage(dataString);
+        }
+
         private void ExecuteButton_Click(object sender, EventArgs e)
         {
             ExecuteCommand();
@@ -201,16 +267,29 @@ namespace AssetManager.UserInterface.CustomControls
                 {
                     ExecuteCommand();
                 }
+                else if (e.KeyCode == Keys.Up)
+                {
+                    e.Handled = true;
+
+                    PrevCommand();
+                }
+                else if (e.KeyCode == Keys.Down)
+                {
+                    e.Handled = true;
+
+                    NextCommand();
+                }
             }
         }
 
-        private void CommandBox_KeyUp(object sender, KeyEventArgs e)
+        private void CommandBox_DropDownClosed(object sender, EventArgs e)
         {
-            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
-            {
-                CommandBox.SelectionStart = CommandBox.Text.Length;
-                CommandBox.SelectionLength = 0;
-            }
+            this.BeginInvoke(new Action(() => { CommandBox.Select(CommandBox.Text.Length, 0); }));
+        }
+
+        private void CommandBox_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            currentCommandIdx = CommandBox.SelectedIndex;
         }
     }
 }
