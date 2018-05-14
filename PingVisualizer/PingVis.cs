@@ -422,7 +422,7 @@ namespace PingVisualizer
                 // Limit the rate of Render calls.
                 // This event can fire very rapidly which can flood the Renderer
                 // preventing other calls from getting past the frame rate limiter.
-                if ((moves >= 3))
+                if ((moves >= 2))
                 {
                     moves = 0;
 
