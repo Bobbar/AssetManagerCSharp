@@ -19,7 +19,6 @@
             this.ToolsGroupBox = new System.Windows.Forms.GroupBox();
             this.ShowIPButton = new System.Windows.Forms.Button();
             this.ToolsLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.RestartDeviceButton = new System.Windows.Forms.PictureBox();
             this.BrowseFilesButton = new System.Windows.Forms.Button();
             this.StartRDPButton = new System.Windows.Forms.Button();
@@ -31,6 +30,7 @@
             this.UpdateChromeButton = new System.Windows.Forms.Button();
             this.DeployOfficeButton = new System.Windows.Forms.Button();
             this.NewDeployButton = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.ToolsGroupBox.SuspendLayout();
             this.ToolsLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).BeginInit();
@@ -44,7 +44,7 @@
             this.ToolsGroupBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ToolsGroupBox.Location = new System.Drawing.Point(0, 0);
             this.ToolsGroupBox.Name = "ToolsGroupBox";
-            this.ToolsGroupBox.Size = new System.Drawing.Size(421, 108);
+            this.ToolsGroupBox.Size = new System.Drawing.Size(421, 117);
             this.ToolsGroupBox.TabIndex = 0;
             this.ToolsGroupBox.TabStop = false;
             this.ToolsGroupBox.Text = "Remote Tools";
@@ -57,9 +57,9 @@
             this.ShowIPButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.ShowIPButton.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ShowIPButton.ForeColor = System.Drawing.Color.White;
-            this.ShowIPButton.Location = new System.Drawing.Point(329, 10);
+            this.ShowIPButton.Location = new System.Drawing.Point(313, 9);
             this.ShowIPButton.Name = "ShowIPButton";
-            this.ShowIPButton.Size = new System.Drawing.Size(90, 90);
+            this.ShowIPButton.Size = new System.Drawing.Size(105, 105);
             this.ShowIPButton.TabIndex = 59;
             this.ShowIPButton.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.ShowIPButton.UseVisualStyleBackColor = false;
@@ -67,7 +67,8 @@
             // 
             // ToolsLayoutPanel
             // 
-            this.ToolsLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.ToolsLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ToolsLayoutPanel.AutoScroll = true;
             this.ToolsLayoutPanel.Controls.Add(this.RestartDeviceButton);
             this.ToolsLayoutPanel.Controls.Add(this.BrowseFilesButton);
@@ -80,10 +81,10 @@
             this.ToolsLayoutPanel.Controls.Add(this.UpdateChromeButton);
             this.ToolsLayoutPanel.Controls.Add(this.DeployOfficeButton);
             this.ToolsLayoutPanel.Controls.Add(this.NewDeployButton);
-            this.ToolsLayoutPanel.Location = new System.Drawing.Point(5, 14);
+            this.ToolsLayoutPanel.Location = new System.Drawing.Point(8, 15);
             this.ToolsLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             this.ToolsLayoutPanel.Name = "ToolsLayoutPanel";
-            this.ToolsLayoutPanel.Size = new System.Drawing.Size(320, 86);
+            this.ToolsLayoutPanel.Size = new System.Drawing.Size(298, 95);
             this.ToolsLayoutPanel.TabIndex = 58;
             // 
             // RestartDeviceButton
@@ -247,7 +248,7 @@
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "RemoteToolsControl";
-            this.Size = new System.Drawing.Size(421, 108);
+            this.Size = new System.Drawing.Size(421, 117);
             this.Load += new System.EventHandler(this.RemoteToolsControl_Load);
             this.VisibleChanged += new System.EventHandler(this.RemoteToolsControl_VisibleChanged);
             this.ToolsGroupBox.ResumeLayout(false);

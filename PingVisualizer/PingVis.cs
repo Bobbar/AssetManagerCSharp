@@ -60,7 +60,7 @@ namespace PingVisualizer
 
         private const int maxViewScale = 15;
         private const float barGap = 0;
-        private const int maxBars = 10;
+        private const int maxBars = 15;
         private const int minBarLength = 1;
         private const float barTopPadding = 0;
         private const float barBottomPadding = 6;

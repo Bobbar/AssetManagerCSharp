@@ -584,9 +584,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.TrackingBox.BackColor = System.Drawing.SystemColors.Control;
             this.TrackingBox.Controls.Add(this.Panel3);
             this.TrackingBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TrackingBox.Location = new System.Drawing.Point(3, 116);
+            this.TrackingBox.Location = new System.Drawing.Point(3, 133);
             this.TrackingBox.Name = "TrackingBox";
-            this.TrackingBox.Size = new System.Drawing.Size(421, 165);
+            this.TrackingBox.Size = new System.Drawing.Size(421, 148);
             this.TrackingBox.TabIndex = 41;
             this.TrackingBox.TabStop = false;
             this.TrackingBox.Text = "Tracking Info";
@@ -609,7 +609,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Panel3.Location = new System.Drawing.Point(3, 18);
             this.Panel3.Name = "Panel3";
             this.Panel3.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
-            this.Panel3.Size = new System.Drawing.Size(415, 144);
+            this.Panel3.Size = new System.Drawing.Size(415, 127);
             this.Panel3.TabIndex = 58;
             // 
             // TrackingLocationTextBox
@@ -617,7 +617,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.TrackingLocationTextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.TrackingLocationTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.TrackingLocationTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TrackingLocationTextBox.Location = new System.Drawing.Point(224, 19);
+            this.TrackingLocationTextBox.Location = new System.Drawing.Point(248, 83);
             this.TrackingLocationTextBox.Name = "TrackingLocationTextBox";
             this.TrackingLocationTextBox.ReadOnly = true;
             this.TrackingLocationTextBox.Size = new System.Drawing.Size(134, 22);
@@ -629,7 +629,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label16.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.Label16.AutoSize = true;
             this.Label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label16.Location = new System.Drawing.Point(221, 0);
+            this.Label16.Location = new System.Drawing.Point(245, 64);
             this.Label16.Name = "Label16";
             this.Label16.Size = new System.Drawing.Size(62, 16);
             this.Label16.TabIndex = 56;
@@ -640,7 +640,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.DueBackTextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.DueBackTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.DueBackTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DueBackTextBox.Location = new System.Drawing.Point(142, 108);
+            this.DueBackTextBox.Location = new System.Drawing.Point(248, 37);
             this.DueBackTextBox.Name = "DueBackTextBox";
             this.DueBackTextBox.ReadOnly = true;
             this.DueBackTextBox.Size = new System.Drawing.Size(134, 22);
@@ -652,7 +652,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.DueBackLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.DueBackLabel.AutoSize = true;
             this.DueBackLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DueBackLabel.Location = new System.Drawing.Point(139, 89);
+            this.DueBackLabel.Location = new System.Drawing.Point(245, 18);
             this.DueBackLabel.Name = "DueBackLabel";
             this.DueBackLabel.Size = new System.Drawing.Size(70, 16);
             this.DueBackLabel.TabIndex = 54;
@@ -663,10 +663,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.CheckUserTextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.CheckUserTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.CheckUserTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckUserTextBox.Location = new System.Drawing.Point(224, 65);
+            this.CheckUserTextBox.Location = new System.Drawing.Point(132, 37);
             this.CheckUserTextBox.Name = "CheckUserTextBox";
             this.CheckUserTextBox.ReadOnly = true;
-            this.CheckUserTextBox.Size = new System.Drawing.Size(134, 22);
+            this.CheckUserTextBox.Size = new System.Drawing.Size(110, 22);
             this.CheckUserTextBox.TabIndex = 53;
             this.CheckUserTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -675,7 +675,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.CheckUserLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.CheckUserLabel.AutoSize = true;
             this.CheckUserLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckUserLabel.Location = new System.Drawing.Point(221, 46);
+            this.CheckUserLabel.Location = new System.Drawing.Point(129, 18);
             this.CheckUserLabel.Name = "CheckUserLabel";
             this.CheckUserLabel.Size = new System.Drawing.Size(101, 16);
             this.CheckUserLabel.TabIndex = 52;
@@ -686,10 +686,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.CheckTimeTextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.CheckTimeTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.CheckTimeTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckTimeTextBox.Location = new System.Drawing.Point(74, 65);
+            this.CheckTimeTextBox.Location = new System.Drawing.Point(26, 83);
             this.CheckTimeTextBox.Name = "CheckTimeTextBox";
             this.CheckTimeTextBox.ReadOnly = true;
-            this.CheckTimeTextBox.Size = new System.Drawing.Size(134, 22);
+            this.CheckTimeTextBox.Size = new System.Drawing.Size(216, 22);
             this.CheckTimeTextBox.TabIndex = 51;
             this.CheckTimeTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -698,7 +698,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.CheckTimeLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.CheckTimeLabel.AutoSize = true;
             this.CheckTimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckTimeLabel.Location = new System.Drawing.Point(71, 46);
+            this.CheckTimeLabel.Location = new System.Drawing.Point(23, 64);
             this.CheckTimeLabel.Name = "CheckTimeLabel";
             this.CheckTimeLabel.Size = new System.Drawing.Size(103, 16);
             this.CheckTimeLabel.TabIndex = 50;
@@ -709,10 +709,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.TrackingStatusTextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.TrackingStatusTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.TrackingStatusTextBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TrackingStatusTextBox.Location = new System.Drawing.Point(74, 19);
+            this.TrackingStatusTextBox.Location = new System.Drawing.Point(26, 37);
             this.TrackingStatusTextBox.Name = "TrackingStatusTextBox";
             this.TrackingStatusTextBox.ReadOnly = true;
-            this.TrackingStatusTextBox.Size = new System.Drawing.Size(134, 22);
+            this.TrackingStatusTextBox.Size = new System.Drawing.Size(100, 22);
             this.TrackingStatusTextBox.TabIndex = 49;
             this.TrackingStatusTextBox.Text = "STATUS";
             this.TrackingStatusTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -722,7 +722,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.Label11.AutoSize = true;
             this.Label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label11.Location = new System.Drawing.Point(71, 0);
+            this.Label11.Location = new System.Drawing.Point(23, 18);
             this.Label11.Name = "Label11";
             this.Label11.Size = new System.Drawing.Size(48, 16);
             this.Label11.TabIndex = 48;
@@ -1063,7 +1063,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.RemoteToolsControl.Location = new System.Drawing.Point(3, 7);
             this.RemoteToolsControl.MaxFailedUntilNotify = 5;
             this.RemoteToolsControl.Name = "RemoteToolsControl";
-            this.RemoteToolsControl.Size = new System.Drawing.Size(422, 103);
+            this.RemoteToolsControl.Size = new System.Drawing.Size(422, 118);
             this.RemoteToolsControl.TabIndex = 42;
             this.RemoteToolsControl.Visible = false;
             this.RemoteToolsControl.HostBackOnline += new System.EventHandler(this.RemoteToolsControl_HostBackOnline);
