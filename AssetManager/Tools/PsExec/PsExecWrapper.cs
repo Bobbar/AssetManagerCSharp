@@ -2,8 +2,9 @@
 using AssetManager.Security;
 using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AssetManager.Tools
 {
@@ -127,9 +128,16 @@ namespace AssetManager.Tools
                     if (!currentProcess.HasExited)
                     {
                         currentProcess.Kill();
+
+                        // Wait for process to exit.
+                        while (!currentProcess.HasExited)
+                        {
+                            Thread.Sleep(100);
+                        }
+
                         currentProcess.Close();
+                        currentProcess = null;
                     }
-                    currentProcess = null;
                 }
                 catch (InvalidOperationException ioe)
                 {

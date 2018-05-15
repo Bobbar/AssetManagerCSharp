@@ -5,6 +5,7 @@ using AssetManager.Tools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.CustomControls
@@ -39,7 +40,7 @@ namespace AssetManager.UserInterface.CustomControls
             var command = GetCommand();
             bool runAsAdmin = RunAsAdminCheckBox.Checked;
 
-            LogMessage("Command: " + command);
+            LogMessage("----> Command: " + command, Color.DarkGreen);
 
             try
             {
@@ -56,13 +57,13 @@ namespace AssetManager.UserInterface.CustomControls
                 }
                 else
                 {
-                    LogMessage("Error: " + ioe.Message);
+                    LogMessage("Error: " + ioe.Message, Color.Red);
                 }
             }
             catch (Exception ex)
             {
                 // Log all other errors.
-                LogMessage("Error: " + ex.Message);
+                LogMessage("Error: " + ex.Message, Color.Red);
             }
             finally
             {
@@ -76,10 +77,8 @@ namespace AssetManager.UserInterface.CustomControls
         /// <returns></returns>
         private string GetCommand()
         {
-            // Collect the command and command prefix.
+            // Trim the command text.
             string command = CommandBox.Text.Trim();
-            string prefix = PrefixComboBox.SelectedItem?.ToString().Trim();
-            string finalCommand;
 
             // Save the command for later convenience.
             SaveCommand(command);
@@ -87,17 +86,7 @@ namespace AssetManager.UserInterface.CustomControls
             // Clear the command control.
             CommandBox.Text = string.Empty;
 
-            // Add prefix to the final command if one is selected.
-            if (!string.IsNullOrEmpty(prefix))
-            {
-                finalCommand = prefix + " " + command;
-            }
-            else
-            {
-                finalCommand = command;
-            }
-
-            return finalCommand;
+            return command;
         }
 
         private void SaveCommand(string command)
@@ -217,6 +206,29 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
+        private void LogMessage(string text, Color color)
+        {
+            if (!LogTextBox.IsDisposed)
+            {
+                if (LogTextBox.InvokeRequired)
+                {
+                    Action d = new Action(() => LogMessage(text, color));
+                    LogTextBox.BeginInvoke(d);
+                }
+                else
+                {
+                    // Apply color and apped text.
+                    LogTextBox.SelectionStart = LogTextBox.TextLength;
+                    LogTextBox.SelectionLength = 0;
+                    LogTextBox.SelectionColor = color;
+                    LogTextBox.AppendText(text + "\r\n");
+                    LogTextBox.SelectionColor = LogTextBox.ForeColor;
+                    LogTextBox.SelectionStart = LogTextBox.Text.Length;
+                    LogTextBox.ScrollToCaret();
+                }
+            }
+        }
+
         private void PSExecWrapper_OutputReceived(object sender, EventArgs e)
         {
             var args = (DataReceivedEventArgs)e;
@@ -228,7 +240,15 @@ namespace AssetManager.UserInterface.CustomControls
         {
             var args = (DataReceivedEventArgs)e;
             var dataString = DataConsistency.CleanDBValue(args.Data).ToString();
-            LogMessage(dataString);
+
+            // Filter out some of the PSExec messages.
+            if (!string.IsNullOrEmpty(dataString))
+            {
+                if (!dataString.ToUpper().Contains("CONNECTING") && !dataString.ToUpper().Contains("STARTING"))
+                {
+                    LogMessage(dataString, Color.Red);
+                }
+            }
         }
 
         private void ExecuteButton_Click(object sender, EventArgs e)
@@ -290,6 +310,15 @@ namespace AssetManager.UserInterface.CustomControls
         private void CommandBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
             currentCommandIdx = CommandBox.SelectedIndex;
+        }
+
+        private void QuickCommandComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(QuickCommandComboBox.Text.Trim()))
+            {
+                SetCurrentCommand(QuickCommandComboBox.Text.Trim());
+                QuickCommandComboBox.SelectedIndex = 0;
+            }
         }
     }
 }

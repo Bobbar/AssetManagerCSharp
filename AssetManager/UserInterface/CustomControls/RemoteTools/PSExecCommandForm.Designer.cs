@@ -32,7 +32,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ExecuteButton = new System.Windows.Forms.Button();
-            this.PrefixComboBox = new System.Windows.Forms.ComboBox();
+            this.QuickCommandComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.RunAsAdminCheckBox = new System.Windows.Forms.CheckBox();
@@ -85,20 +85,24 @@
             this.ExecuteButton.UseVisualStyleBackColor = true;
             this.ExecuteButton.Click += new System.EventHandler(this.ExecuteButton_Click);
             // 
-            // PrefixComboBox
+            // QuickCommandComboBox
             // 
-            this.PrefixComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.PrefixComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PrefixComboBox.FormattingEnabled = true;
-            this.PrefixComboBox.Items.AddRange(new object[] {
+            this.QuickCommandComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.QuickCommandComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.QuickCommandComboBox.FormattingEnabled = true;
+            this.QuickCommandComboBox.Items.AddRange(new object[] {
             "",
-            "cmd /c",
-            "msiexec.exe /i"});
-            this.PrefixComboBox.Location = new System.Drawing.Point(12, 433);
-            this.PrefixComboBox.Name = "PrefixComboBox";
-            this.PrefixComboBox.Size = new System.Drawing.Size(114, 23);
-            this.PrefixComboBox.TabIndex = 5;
-            this.PrefixComboBox.TabStop = false;
+            "tasklist",
+            "taskkill /f /im",
+            "query user",
+            "ipconfig /all",
+            "tracert"});
+            this.QuickCommandComboBox.Location = new System.Drawing.Point(12, 433);
+            this.QuickCommandComboBox.Name = "QuickCommandComboBox";
+            this.QuickCommandComboBox.Size = new System.Drawing.Size(114, 23);
+            this.QuickCommandComboBox.TabIndex = 5;
+            this.QuickCommandComboBox.TabStop = false;
+            this.QuickCommandComboBox.SelectedIndexChanged += new System.EventHandler(this.QuickCommandComboBox_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -106,9 +110,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(9, 417);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(81, 13);
+            this.label1.Size = new System.Drawing.Size(85, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Prefix (Optional)";
+            this.label1.Text = "Quick Command";
             // 
             // label2
             // 
@@ -168,7 +172,7 @@
             this.Controls.Add(this.LogTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.PrefixComboBox);
+            this.Controls.Add(this.QuickCommandComboBox);
             this.Controls.Add(this.ExecuteButton);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.RunAsAdminCheckBox);
@@ -188,7 +192,7 @@
         private System.Windows.Forms.RichTextBox LogTextBox;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.Button ExecuteButton;
-        private System.Windows.Forms.ComboBox PrefixComboBox;
+        private System.Windows.Forms.ComboBox QuickCommandComboBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
