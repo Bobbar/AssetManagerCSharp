@@ -48,9 +48,9 @@
   <ItemGroup>
     <Compile Include="Data\IDatabase.cs" />
     <Compile Include="Data\DBParameter.cs" />
-    <Compile Include="Data\MySQL\MySQLComms.cs" />
+    <Compile Include="Data\MySQL\MySqlDatabase.cs" />
     <Compile Include="Data\NoPingException.cs" />
-    <Compile Include="Data\SQLite\SQLiteComms.cs" />
+    <Compile Include="Data\SQLite\SqliteDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

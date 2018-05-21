@@ -113,18 +113,29 @@ namespace Database.Data
         {
             if (transaction != null)
             {
-                throw (new NotImplementedException());
+                var conn = (SQLiteConnection)transaction.Connection;
+                using (DbDataAdapter da = new SQLiteDataAdapter())
+                using (DataTable results = new DataTable())
+                {
+                    command.Connection = conn;
+                    da.SelectCommand = command;
+                    da.Fill(results);
+                    command.Dispose();
+                    return results;
+                }
             }
-            using (DbDataAdapter da = new SQLiteDataAdapter())
-            using (DataTable results = new DataTable())
-            using (var conn = NewConnection())
-
+            else
             {
-                command.Connection = conn;
-                da.SelectCommand = command;
-                da.Fill(results);
-                command.Dispose();
-                return results;
+                using (DbDataAdapter da = new SQLiteDataAdapter())
+                using (DataTable results = new DataTable())
+                using (var conn = NewConnection())
+                {
+                    command.Connection = conn;
+                    da.SelectCommand = command;
+                    da.Fill(results);
+                    command.Dispose();
+                    return results;
+                }
             }
         }
 

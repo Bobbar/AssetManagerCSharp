@@ -6,7 +6,7 @@ using System.Data.Common;
 
 namespace Database.Data
 {
-    public class MySQLDatabase : IDatabase
+    public class MySqlDatabase : IDatabase
     {
          #region Fields
 
@@ -33,7 +33,7 @@ namespace Database.Data
 
         #region Constructors
 
-        public MySQLDatabase(string serverIp, string user, string password, string database)
+        public MySqlDatabase(string serverIp, string user, string password, string database)
         {
             this.serverIp = serverIp;
             dbUser = user;

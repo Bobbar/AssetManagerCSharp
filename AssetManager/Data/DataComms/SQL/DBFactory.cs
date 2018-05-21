@@ -38,7 +38,7 @@ namespace AssetManager.Data
 
         public static IDatabase GetMySqlDatabase()
         {
-            return new MySQLDatabase(ServerInfo.MySQLServerIP, mySqlUser, MySqlPassword, ServerInfo.CurrentDataBase.ToString());
+            return new MySqlDatabase(ServerInfo.MySQLServerIP, mySqlUser, MySqlPassword, ServerInfo.CurrentDataBase.ToString());
         }
 
         public static IDatabase GetSqliteDatabase()
