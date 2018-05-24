@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,6 +15,10 @@ namespace PingVisualizer
 {
     public class PingVis : IDisposable
     {
+        private ManualResetEvent renderEvent = new ManualResetEvent(false);
+        private ManualResetEvent disposeEvent = new ManualResetEvent(false);
+        private Thread renderThread;
+
         private Graphics upscaledGraphics;
         private Bitmap upscaledImage;
         private int imageUpscaleMulti = 5;
@@ -105,6 +110,10 @@ namespace PingVisualizer
             InitGraphics();
             InitScaleTimer();
             InitPing();
+
+            // Start the rendering loop on a new thread.
+            renderThread = new Thread(RenderLoop);
+            renderThread.Start();
         }
 
         private void InitGraphics()
@@ -485,29 +494,55 @@ namespace PingVisualizer
                 return;
             }
 
-            // This call will draw with updated ping bars, otherwise we're just redrawing the existing ones for scale changes an whatnot.
-            if (refreshPingBars) RefreshPingBars();
-
-            // Change the background to indicate scrolling is active.
-            if (!mouseIsScrolling)
+            // Only render if we are not currently in the middle of a render cycle.
+            if (!renderEvent.WaitOne(0))
             {
-                upscaledGraphics.Clear(Color.Black);
+                // This call will draw with updated ping bars, otherwise we're just redrawing the existing ones for scale changes an whatnot.
+                if (refreshPingBars) RefreshPingBars();
+
+                // Set the render event to trigger a new rendering.
+                renderEvent.Set();
             }
-            else
+        }
+
+        private void RenderLoop()
+        {
+            while (true)
             {
-                upscaledGraphics.Clear(Color.FromArgb(48, 53, 61));
+                // Block until a render event is triggered.
+                renderEvent.WaitOne(Timeout.Infinite);
+
+                // Check for diposal event and break from loop if needed.
+                if (disposeEvent.WaitOne(0))
+                    break;
+
+                // Perform the drawing methods.
+                // Change the background to indicate scrolling is active.
+                if (!mouseIsScrolling)
+                {
+                    upscaledGraphics.Clear(Color.Black);
+                }
+                else
+                {
+                    upscaledGraphics.Clear(Color.FromArgb(48, 53, 61));
+                }
+
+                // Draw all the elements from back to front.
+                DrawScaleLines(upscaledGraphics);
+                DrawPingBars(upscaledGraphics, currentBarList);
+                DrawPingText(upscaledGraphics);
+                DrawScrollBar(upscaledGraphics);
+                TrimPingList();
+
+                // Resample the image to the original size.
+                DownsampleImage();
+
+                // Set the target control image.
+                SetControlImage(targetControl, downsampleImage);
+
+                // Reset the render event to wait until another render is triggered.
+                renderEvent.Reset();
             }
-
-            // Draw all the elements from back to front.
-            DrawScaleLines(upscaledGraphics);
-            DrawPingBars(upscaledGraphics, currentBarList);
-            DrawPingText(upscaledGraphics);
-            DrawScrollBar(upscaledGraphics);
-            TrimPingList();
-
-            // Resample the image to the original size then set it to the target control.
-            DownsampleImage();
-            SetControlImage(targetControl, downsampleImage);
         }
 
         private void DrawScaleLines(Graphics gfx)
@@ -739,25 +774,33 @@ namespace PingVisualizer
 
         private void SetControlImage(Control targetControl, Bitmap image)
         {
-            if (!(targetControl is Form))
+            if (targetControl.InvokeRequired)
             {
-                if (targetControl is Button)
-                {
-                    var but = (Button)targetControl;
-                    but.Image = image;
-                    but.Invalidate();
-                }
-                else if (targetControl is PictureBox)
-                {
-                    var pic = (PictureBox)targetControl;
-                    pic.Image = image;
-                    pic.Refresh();
-                }
+                var del = new SetControlImageDelegate(SetControlImage);
+                targetControl.BeginInvoke(del, new object[] { targetControl, image });
             }
             else
             {
-                targetControl.BackgroundImage = image;
-                targetControl.Invalidate();
+                if (!(targetControl is Form))
+                {
+                    if (targetControl is Button)
+                    {
+                        var but = (Button)targetControl;
+                        but.Image = image;
+                        but.Invalidate();
+                    }
+                    else if (targetControl is PictureBox)
+                    {
+                        var pic = (PictureBox)targetControl;
+                        pic.Image = image;
+                        pic.Refresh();
+                    }
+                }
+                else
+                {
+                    targetControl.BackgroundImage = image;
+                    targetControl.Invalidate();
+                }
             }
         }
 
@@ -901,7 +944,7 @@ namespace PingVisualizer
 
         #region IDisposable Support
 
-        private bool disposedValue = false; // To detect redundant calls
+        private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
         {
@@ -909,6 +952,9 @@ namespace PingVisualizer
             {
                 if (disposing)
                 {
+                    disposeEvent.Set();
+                    renderEvent.Set();
+
                     pingTimer.Stop();
                     pingTimer.Dispose();
                     pingTimer = null;
@@ -930,6 +976,7 @@ namespace PingVisualizer
 
                     downsampleImage.Dispose();
                     downsampleGraphics.Dispose();
+
                     if (currentBarList == null)
                     {
                         DisposeBarList(currentBarList);
