@@ -86,6 +86,7 @@ namespace AssetManager.UserInterface.CustomControls
             InitializeComponent();
             ToolsLayoutPanel.DoubleBuffered(true);
             ToolsGroupBox.DoubleBuffered(true);
+            InitPingVis();
         }
 
         #endregion Constructors
@@ -133,7 +134,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void PingVis_NewPingResult(object sender, PingVis.PingEventArgs e)
         {
-            InitPingVis();
+            //InitPingVis();
             SetupNetTools(e.PingReply);
         }
 

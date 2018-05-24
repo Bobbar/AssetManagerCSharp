@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -28,14 +26,14 @@ namespace PingVisualizer
         private Ping ping = new Ping();
         private List<PingInfo> pingReplies = new List<PingInfo>();
         private bool pingRunning = false;
-        private System.Threading.Timer pingTimer;
+        private System.Timers.Timer pingTimer;
 
         private string hostname;
         private Control targetControl;
 
         private float targetViewScale;
         private float currentViewScale;
-        private System.Threading.Timer scaleEaseTimer;
+        private System.Timers.Timer scaleEaseTimer;
         private int scaleEaseTimerInterval;
 
         private float infoFontSize;
@@ -77,7 +75,7 @@ namespace PingVisualizer
 
         public void OnNewPingResult(PingInfo pingReply)
         {
-            RaiseEventOnUIThread(NewPingResult, new object[] { this, new PingEventArgs(pingReply) });
+            NewPingResult?.Invoke(this, new PingEventArgs(pingReply));
         }
 
         public PingInfo CurrentResult
@@ -117,6 +115,8 @@ namespace PingVisualizer
             upscaledImage = new Bitmap(upscaledImageSize.Width, upscaledImageSize.Height, PixelFormat.Format32bppPArgb);
             upscaledGraphics = Graphics.FromImage(upscaledImage);
             upscaledGraphics.SmoothingMode = SmoothingMode.None;
+            upscaledGraphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            upscaledGraphics.TextContrast = 0;
 
             downsampleImage = new Bitmap(downsampleImageSize.Width, downsampleImageSize.Height, PixelFormat.Format32bppPArgb);
             downsampleImage.SetResolution(upscaledImage.HorizontalResolution, upscaledImage.VerticalResolution);
@@ -157,28 +157,15 @@ namespace PingVisualizer
         {
             if (pingTimer == null)
             {
-                pingTimer = new System.Threading.Timer(new System.Threading.TimerCallback(PingTimer_Tick));
+                pingTimer = new System.Timers.Timer();
             }
-
-            pingTimer.Change(500, currentPingInterval);
+            pingTimer.Elapsed += PingTimer_Elapsed;
+            pingTimer.SynchronizingObject = targetControl;
+            pingTimer.Interval = currentPingInterval;
+            pingTimer.Start();
         }
 
-        private void InitScaleTimer()
-        {
-            scaleEaseTimerInterval = 1000 / maxDrawRateFPS;
-            scaleEaseTimer = new System.Threading.Timer(new System.Threading.TimerCallback(ScaleTimer_Tick));
-            scaleEaseTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-        }
-
-        private void ScaleTimer_Tick(object timer)
-        {
-            if (!this.disposedValue)
-            {
-                EaseScaleChange();
-            }
-        }
-
-        private void PingTimer_Tick(object timer)
+        private void PingTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (!this.disposedValue)
             {
@@ -186,19 +173,20 @@ namespace PingVisualizer
             }
         }
 
-        private void RaiseEventOnUIThread(Delegate theEvent, object[] args)
+        private void InitScaleTimer()
         {
-            foreach (Delegate d in theEvent.GetInvocationList())
+            scaleEaseTimerInterval = 1000 / maxDrawRateFPS;
+            scaleEaseTimer = new System.Timers.Timer();
+            scaleEaseTimer.Elapsed += ScaleEaseTimer_Elapsed;
+            scaleEaseTimer.SynchronizingObject = targetControl;
+            scaleEaseTimer.Interval = scaleEaseTimerInterval;
+        }
+
+        private void ScaleEaseTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (!this.disposedValue)
             {
-                ISynchronizeInvoke syncer = d.Target as ISynchronizeInvoke;
-                if (syncer == null)
-                {
-                    d.DynamicInvoke(args);
-                }
-                else
-                {
-                    syncer.BeginInvoke(d, args);
-                }
+                EaseScaleChange();
             }
         }
 
@@ -228,7 +216,8 @@ namespace PingVisualizer
                     }
                     else
                     {
-                        scaleEaseTimer.Change(1, scaleEaseTimerInterval);
+                        scaleEaseTimer.Interval = scaleEaseTimerInterval;
+                        scaleEaseTimer.Start();
                     }
                 }
             }
@@ -253,25 +242,25 @@ namespace PingVisualizer
                         // Simple easing calulation.
                         if (currentViewScale > targetViewScale)
                         {
-                            currentViewScale -= (diffAbs / 6f);
+                            currentViewScale -= (diffAbs / 7f);
                         }
                         else if (currentViewScale < targetViewScale)
                         {
-                            currentViewScale += (diffAbs / 6f);
+                            currentViewScale += (diffAbs / 7f);
                         }
                     }
                     else
                     {
                         // Set to final scale and stop timer.
                         currentViewScale = targetViewScale;
-                        scaleEaseTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        scaleEaseTimer.Stop();
                     }
                     Render();
                 }
                 else
                 {
                     currentViewScale = targetViewScale;
-                    scaleEaseTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                    scaleEaseTimer.Stop();
                 }
             }
         }
@@ -367,7 +356,7 @@ namespace PingVisualizer
                 currentPingInterval = interval;
             }
 
-            if (!this.disposedValue) pingTimer.Change(currentPingInterval, 0);
+            if (!this.disposedValue) pingTimer.Interval = currentPingInterval;
         }
 
         private void ControlMouseLeave(object sender, EventArgs e)
@@ -482,54 +471,43 @@ namespace PingVisualizer
 
         private void Render(bool forceDraw = false, bool refreshPingBars = false)
         {
-            // Lock to keep drawing on one thread at a time.
-            if (System.Threading.Monitor.TryEnter(drawThreadLockObject))
+            if (pingReplies.Count < 1) return;
+
+            // Do not render if the parent form is minimized, just to reduce wasted cycles.
+            if (targetControl != null & targetControl.FindForm() != null)
             {
-                try
-                {
-                    if (pingReplies.Count < 1) return;
-
-                    // Do not render if the parent form is minimized, just to reduce wasted cycles.
-                    if (targetControl != null & targetControl.FindForm() != null)
-                    {
-                        if (targetControl.FindForm().WindowState == FormWindowState.Minimized) return;
-                    }
-
-                    // Framerate limiter with override.
-                    if (!forceDraw && !CanDraw(DateTime.Now.Ticks))
-                    {
-                        return;
-                    }
-
-                    // This call will draw with updated ping bars, otherwise we're just redrawing the existing ones for scale changes an whatnot.
-                    if (refreshPingBars) RefreshPingBars();
-
-                    // Change the background to indicate scrolling is active.
-                    if (!mouseIsScrolling)
-                    {
-                        upscaledGraphics.Clear(Color.Black);
-                    }
-                    else
-                    {
-                        upscaledGraphics.Clear(Color.FromArgb(48, 53, 61));
-                    }
-
-                    // Draw all the elements from back to front.
-                    DrawScaleLines(upscaledGraphics);
-                    DrawPingBars(upscaledGraphics, currentBarList);
-                    DrawPingText(upscaledGraphics);
-                    DrawScrollBar(upscaledGraphics);
-                    TrimPingList();
-
-                    // Resample the image to the original size then set it to the target control.
-                    DownsampleImage();
-                    SetControlImage(targetControl, downsampleImage);
-                }
-                finally
-                {
-                    System.Threading.Monitor.Exit(drawThreadLockObject);
-                }
+                if (targetControl.FindForm().WindowState == FormWindowState.Minimized) return;
             }
+
+            // Framerate limiter with override.
+            if (!forceDraw && !CanDraw(DateTime.Now.Ticks))
+            {
+                return;
+            }
+
+            // This call will draw with updated ping bars, otherwise we're just redrawing the existing ones for scale changes an whatnot.
+            if (refreshPingBars) RefreshPingBars();
+
+            // Change the background to indicate scrolling is active.
+            if (!mouseIsScrolling)
+            {
+                upscaledGraphics.Clear(Color.Black);
+            }
+            else
+            {
+                upscaledGraphics.Clear(Color.FromArgb(48, 53, 61));
+            }
+
+            // Draw all the elements from back to front.
+            DrawScaleLines(upscaledGraphics);
+            DrawPingBars(upscaledGraphics, currentBarList);
+            DrawPingText(upscaledGraphics);
+            DrawScrollBar(upscaledGraphics);
+            TrimPingList();
+
+            // Resample the image to the original size then set it to the target control.
+            DownsampleImage();
+            SetControlImage(targetControl, downsampleImage);
         }
 
         private void DrawScaleLines(Graphics gfx)
@@ -606,9 +584,6 @@ namespace PingVisualizer
 
         private void DrawPingText(Graphics gfx)
         {
-            gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            gfx.TextContrast = 0;
-
             if (mouseIsScrolling)
             {
                 if (mouseOverInfo != null)
@@ -764,62 +739,25 @@ namespace PingVisualizer
 
         private void SetControlImage(Control targetControl, Bitmap image)
         {
-            try
+            if (!(targetControl is Form))
             {
-                if (targetControl.InvokeRequired)
+                if (targetControl is Button)
                 {
-                    var del = new SetControlImageDelegate(SetControlImage);
-                    targetControl.BeginInvoke(del, new object[] { targetControl, image });
+                    var but = (Button)targetControl;
+                    but.Image = image;
+                    but.Invalidate();
                 }
-                else
+                else if (targetControl is PictureBox)
                 {
-                    if (!(targetControl is Form))
-                    {
-                        if (targetControl is Button)
-                        {
-                            var but = (Button)targetControl;
-                            but.Image = image;
-                            but.Invalidate();
-                        }
-                        else if (targetControl is PictureBox)
-                        {
-                            var pic = (PictureBox)targetControl;
-                            pic.Image = image;
-                            pic.Refresh();
-                        }
-                    }
-                    else
-                    {
-                        targetControl.BackgroundImage = image;
-                        targetControl.Invalidate();
-                    }
+                    var pic = (PictureBox)targetControl;
+                    pic.Image = image;
+                    pic.Refresh();
                 }
             }
-            catch (ObjectDisposedException)
+            else
             {
-                // Remaining timer cycles tend to catch the control after it's been disposed. So ignore these errors.
-            }
-        }
-
-        private void WaitUntilTimersCompleted()
-        {
-            var myTimers = new List<System.Threading.Timer>();
-            myTimers.Add(pingTimer);
-            myTimers.Add(scaleEaseTimer);
-
-            List<WaitHandle> waitHnd = new List<WaitHandle>();
-            foreach (var timer in myTimers)
-            {
-                WaitHandle h = new AutoResetEvent(false);
-                if (timer.Dispose(h))
-                {
-                    waitHnd.Add(h);
-                }
-            }
-
-            foreach (var w in waitHnd)
-            {
-                w.WaitOne(50);
+                targetControl.BackgroundImage = image;
+                targetControl.Invalidate();
             }
         }
 
@@ -971,12 +909,11 @@ namespace PingVisualizer
             {
                 if (disposing)
                 {
-                    // Wait for timers to complete current intervals.
-                    WaitUntilTimersCompleted();
-
+                    pingTimer.Stop();
                     pingTimer.Dispose();
                     pingTimer = null;
 
+                    scaleEaseTimer.Stop();
                     scaleEaseTimer.Dispose();
                     scaleEaseTimer = null;
 
@@ -998,30 +935,15 @@ namespace PingVisualizer
                         DisposeBarList(currentBarList);
                         currentBarList = null;
                     }
-
-                    // TODO: dispose managed state (managed objects).
                 }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
 
                 disposedValue = true;
             }
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~PingVis() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
         }
 
         #endregion IDisposable Support
