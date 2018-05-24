@@ -174,6 +174,18 @@ namespace AssetManager.UserInterface.CustomControls
                     DisposeDropDownItem(item);
                 }
             }
+            else if (e.Button == MouseButtons.Middle)
+            {
+                if (!frm.IsDisposed)
+                {
+                    frm.WindowState = FormWindowState.Minimized;
+                    parentForm.Focus();
+                }
+                else
+                {
+                    DisposeDropDownItem(item);
+                }
+            }
         }
 
         private OnlineStatusMenuItem NewMenuItem(ExtendedForm frm)
@@ -189,7 +201,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 newitem.SetOnlineStatusInterface((IOnlineStatus)frm);
             }
-            newitem.ToolTipText = "Right-Click to close.";
+            newitem.ToolTipText = "Right-Click to close. Middle-Click to minimize.";
             newitem.MouseUp += ItemClicked;
             return newitem;
         }
