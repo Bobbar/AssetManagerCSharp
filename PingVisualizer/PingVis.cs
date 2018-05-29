@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace PingVisualizer
 {
@@ -80,7 +81,7 @@ namespace PingVisualizer
 
         public void OnNewPingResult(PingInfo pingReply)
         {
-            NewPingResult?.Invoke(this, new PingEventArgs(pingReply));
+            RaiseEventOnUIThread(NewPingResult, new object[] { this, new PingEventArgs(pingReply) });
         }
 
         public PingInfo CurrentResult
@@ -96,11 +97,6 @@ namespace PingVisualizer
                     return null;
                 }
             }
-        }
-
-        public void ClearResults()
-        {
-            pingReplies.Clear();
         }
 
         public PingVis(Control targetControl, string hostName)
@@ -169,7 +165,6 @@ namespace PingVisualizer
                 pingTimer = new System.Timers.Timer();
             }
             pingTimer.Elapsed += PingTimer_Elapsed;
-            pingTimer.SynchronizingObject = targetControl;
             pingTimer.Interval = currentPingInterval;
             pingTimer.Start();
         }
@@ -187,7 +182,6 @@ namespace PingVisualizer
             scaleEaseTimerInterval = 1000 / maxDrawRateFPS;
             scaleEaseTimer = new System.Timers.Timer();
             scaleEaseTimer.Elapsed += ScaleEaseTimer_Elapsed;
-            scaleEaseTimer.SynchronizingObject = targetControl;
             scaleEaseTimer.Interval = scaleEaseTimerInterval;
         }
 
@@ -197,6 +191,27 @@ namespace PingVisualizer
             {
                 EaseScaleChange();
             }
+        }
+
+        private void RaiseEventOnUIThread(Delegate theEvent, object[] args)
+        {
+            foreach (Delegate d in theEvent.GetInvocationList())
+            {
+                ISynchronizeInvoke syncer = d.Target as ISynchronizeInvoke;
+                if (syncer == null)
+                {
+                    d.DynamicInvoke(args);
+                }
+                else
+                {
+                    syncer.BeginInvoke(d, args);
+                }
+            }
+        }
+
+        public void ClearResults()
+        {
+            pingReplies.Clear();
         }
 
         private void SetScale()
@@ -507,41 +522,50 @@ namespace PingVisualizer
 
         private void RenderLoop()
         {
-            while (true)
+            try
             {
-                // Block until a render event is triggered.
-                renderEvent.WaitOne(Timeout.Infinite);
-
-                // Check for diposal event and break from loop if needed.
-                if (disposeEvent.WaitOne(0))
-                    break;
-
-                // Perform the drawing methods.
-                // Change the background to indicate scrolling is active.
-                if (!mouseIsScrolling)
+                while (true)
                 {
-                    upscaledGraphics.Clear(Color.Black);
+                    // Block until a render event is triggered.
+                    renderEvent.WaitOne(Timeout.Infinite);
+
+                    // Check for diposal event and break from loop if needed.
+                    if (disposeEvent.WaitOne(0))
+                        break;
+
+                    // Perform the drawing methods.
+                    // Change the background to indicate scrolling is active.
+                    if (!mouseIsScrolling)
+                    {
+                        upscaledGraphics.Clear(Color.Black);
+                    }
+                    else
+                    {
+                        upscaledGraphics.Clear(Color.FromArgb(48, 53, 61));
+                    }
+
+                    // Draw all the elements from back to front.
+                    DrawScaleLines(upscaledGraphics);
+                    DrawPingBars(upscaledGraphics, currentBarList);
+                    DrawPingText(upscaledGraphics);
+                    DrawScrollBar(upscaledGraphics);
+                    TrimPingList();
+
+                    // Resample the image to the original size.
+                    DownsampleImage();
+
+                    // Set the target control image.
+                    SetControlImage(targetControl, downsampleImage);
+
+                    // Reset the render event, if not disposing, to wait until another render is triggered.
+                    if (!disposeEvent.WaitOne(0))
+                        renderEvent.Reset();
                 }
-                else
-                {
-                    upscaledGraphics.Clear(Color.FromArgb(48, 53, 61));
-                }
 
-                // Draw all the elements from back to front.
-                DrawScaleLines(upscaledGraphics);
-                DrawPingBars(upscaledGraphics, currentBarList);
-                DrawPingText(upscaledGraphics);
-                DrawScrollBar(upscaledGraphics);
-                TrimPingList();
-
-                // Resample the image to the original size.
-                DownsampleImage();
-
-                // Set the target control image.
-                SetControlImage(targetControl, downsampleImage);
-
-                // Reset the render event to wait until another render is triggered.
-                renderEvent.Reset();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -952,9 +976,6 @@ namespace PingVisualizer
             {
                 if (disposing)
                 {
-                    disposeEvent.Set();
-                    renderEvent.Set();
-
                     pingTimer.Stop();
                     pingTimer.Dispose();
                     pingTimer = null;
@@ -962,6 +983,9 @@ namespace PingVisualizer
                     scaleEaseTimer.Stop();
                     scaleEaseTimer.Dispose();
                     scaleEaseTimer = null;
+
+                    disposeEvent.Set();
+                    renderEvent.Set();
 
                     targetControl.MouseWheel -= ControlMouseWheel;
                     targetControl.MouseLeave -= ControlMouseLeave;
