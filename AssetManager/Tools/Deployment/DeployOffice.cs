@@ -49,7 +49,7 @@ namespace AssetManager.Tools.Deployment
             fullDeployTempDir = "C:" + deployTempDirectory;
             removeOfficeScriptPath = fullDeployTempDir + deploy.GetString("office_remove_script_dir");
         }
-        
+
         private List<string> GetConfigFiles()
         {
             var files = Directory.GetFiles(deployFilesDirectory, "*.xml", SearchOption.TopDirectoryOnly);
@@ -188,6 +188,18 @@ namespace AssetManager.Tools.Deployment
         private async Task<PowerShell> GetRemoveOfficeSession(Device targetDevice)
         {
             var session = await deploy.PowerShellWrap.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
+
+            // Remove Office 365 Hub.
+            var removeHubCommand = new Command(deploy.GetString("remove_office_hub"), true, true);
+            removeHubCommand.Parameters.Add("Wait");
+            removeHubCommand.Parameters.Add("NoNewWindow");
+            session.Commands.AddCommand(removeHubCommand);
+
+            // Remove Office Desktop Apps.
+            var removeDesktopAppsCommand = new Command(deploy.GetString("remove_office_desktop"), true, true);
+            removeDesktopAppsCommand.Parameters.Add("Wait");
+            removeDesktopAppsCommand.Parameters.Add("NoNewWindow");
+            session.Commands.AddCommand(removeDesktopAppsCommand);
 
             // Change directory to script location.
             var setLocationCommand = new Command("Set-Location");
