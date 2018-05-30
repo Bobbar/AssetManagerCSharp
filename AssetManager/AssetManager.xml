@@ -1430,7 +1430,7 @@
             Timer that updates the rtbLog control with chunks of data from the log buffer.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.ShowDevices">
+        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.ShowAllDevices">
             <summary>
             Collect and display a table containing all the devices associated with the current employee tree.
             </summary>

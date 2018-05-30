@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Hierarchy));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -36,8 +37,11 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ShowDevicesDropDown = new System.Windows.Forms.ToolStripDropDownButton();
             this.HierarchyTree = new AssetManager.UserInterface.CustomControls.CorrectedTreeView();
+            this.RightClickContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ViewDevicesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.RightClickContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -84,7 +88,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(282, 18);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(216, 18);
             this.toolStripStatusLabel1.Spring = true;
             // 
             // ShowDevicesDropDown
@@ -95,8 +99,8 @@
             this.ShowDevicesDropDown.Image = ((System.Drawing.Image)(resources.GetObject("ShowDevicesDropDown.Image")));
             this.ShowDevicesDropDown.Name = "ShowDevicesDropDown";
             this.ShowDevicesDropDown.ShowDropDownArrow = false;
-            this.ShowDevicesDropDown.Size = new System.Drawing.Size(94, 21);
-            this.ShowDevicesDropDown.Text = "Show Devices";
+            this.ShowDevicesDropDown.Size = new System.Drawing.Size(113, 21);
+            this.ShowDevicesDropDown.Text = "Show All Devices";
             this.ShowDevicesDropDown.Click += new System.EventHandler(this.ShowDevicesDropDown_Click);
             // 
             // HierarchyTree
@@ -105,6 +109,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.HierarchyTree.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.HierarchyTree.ContextMenuStrip = this.RightClickContextMenu;
             this.HierarchyTree.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.HierarchyTree.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.HierarchyTree.LineColor = System.Drawing.Color.DarkGray;
@@ -112,6 +117,22 @@
             this.HierarchyTree.Name = "HierarchyTree";
             this.HierarchyTree.Size = new System.Drawing.Size(387, 431);
             this.HierarchyTree.TabIndex = 0;
+            this.HierarchyTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.HierarchyTree_NodeMouseClick);
+            // 
+            // RightClickContextMenu
+            // 
+            this.RightClickContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ViewDevicesMenuItem});
+            this.RightClickContextMenu.Name = "RightClickContextMenu";
+            this.RightClickContextMenu.Size = new System.Drawing.Size(143, 26);
+            // 
+            // ViewDevicesMenuItem
+            // 
+            this.ViewDevicesMenuItem.Image = global::AssetManager.Properties.Resources.ViewIcon3;
+            this.ViewDevicesMenuItem.Name = "ViewDevicesMenuItem";
+            this.ViewDevicesMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.ViewDevicesMenuItem.Text = "View Devices";
+            this.ViewDevicesMenuItem.Click += new System.EventHandler(this.ViewDevicesMenuItem_Click);
             // 
             // Hierarchy
             // 
@@ -128,6 +149,7 @@
             this.groupBox1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.RightClickContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -141,5 +163,7 @@
         private System.Windows.Forms.ToolStripStatusLabel workingSpinner;
         private System.Windows.Forms.ToolStripDropDownButton ShowDevicesDropDown;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ContextMenuStrip RightClickContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem ViewDevicesMenuItem;
     }
 }

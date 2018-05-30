@@ -54,6 +54,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                     currentTree = empTree;
                     // Build node tree from the employee tree.
                     var nodeTree = new TreeNode(empTree.Employee.Name);
+                    nodeTree.Tag = empTree.Employee.Number;
                     BuildTree(empTree, nodeTree);
                     // Set the tree view control to the node tree.
                     HierarchyTree.Nodes.Add(nodeTree);
@@ -78,7 +79,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         /// <summary>
         /// Collect and display a table containing all the devices associated with the current employee tree.
         /// </summary>
-        private async void ShowDevices()
+        private async void ShowAllDevices()
         {
             Waiting();
 
@@ -96,6 +97,27 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         }
 
         /// <summary>
+        /// Display a table containing the devices associated with the specified employee.
+        /// </summary>
+        /// <param name="employee"></param>
+        private void ShowDevicesByEmployee(Employee employee)
+        {
+            Waiting();
+
+            var results = DBFactory.GetMySqlDatabase().DataTableFromQueryString(Queries.SelectDevicesByEmpNum(employee.Number));
+
+            DoneWaiting();
+
+            if (results.Rows.Count > 0)
+            {
+                var newGridView = new GridForm(ParentForm);
+                newGridView.Text = "Devices For " + employee.Name;
+                newGridView.AddGrid("devices", employee.Name + "'s Devices", DoubleClickAction.ViewDevice, results);
+                newGridView.Show();
+            }
+        }
+
+        /// <summary>
         /// Recursively collects a table of all devices associated with the employees in the specified tree.
         /// </summary>
         /// <param name="tree"></param>
@@ -107,7 +129,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                 table = new DataTable("devices");
             }
 
-            string query = "SELECT * FROM " + DevicesCols.TableName + " WHERE " + DevicesCols.MunisEmpNum + " = '" + tree.Employee.Number + "'";
+            string query = Queries.SelectDevicesByEmpNum(tree.Employee.Number);
 
             using (var results = DBFactory.GetDatabase().DataTableFromQueryString(query))
             {
@@ -164,12 +186,14 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             if (parentNode == null)
             {
                 parentNode = new TreeNode(tree.Employee.Name);
+                parentNode.Tag = tree.Employee.Number;
             }
 
             foreach (var sub in tree.Subordinates)
             {
                 // Add child nodes to parent node.
                 var childNode = new TreeNode(sub.Employee.Name);
+                childNode.Tag = sub.Employee.Number;
                 parentNode.Nodes.Add(childNode);
 
                 // If sub tree has subordinates, resurse with them.
@@ -231,7 +255,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
 
         private void ShowDevicesDropDown_Click(object sender, EventArgs e)
         {
-            ShowDevices();
+            ShowAllDevices();
         }
 
         /// <summary>
@@ -280,6 +304,17 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                 Number = number;
                 SupervisorId = supervisorId;
             }
+        }
+
+        private void ViewDevicesMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowDevicesByEmployee(new Employee(HierarchyTree.SelectedNode.Text, HierarchyTree.SelectedNode.Tag.ToString()));
+        }
+
+        private void HierarchyTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            // Console.WriteLine(e.Node.Text + " - " + e.Node.Tag.ToString());
+            HierarchyTree.SelectedNode = e.Node;
         }
     }
 }
