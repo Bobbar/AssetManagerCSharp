@@ -102,7 +102,7 @@ namespace AssetManager.Helpers
             return true;
         }
 
-        public static void SetWaitCursor(bool waiting, Form parentForm)
+        private static void SetWaitCursor(bool waiting, Form parentForm)
         {
             if (parentForm == null)
             {

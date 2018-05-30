@@ -128,7 +128,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         return;
                     }
-                    OtherFunctions.SetWaitCursor(true, this);
+
+                    Waiting();
+
                     int rows = 0;
                     rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 1, DevicesCols.DeviceGuid, currentTrackingDevice.Guid, trans);
 
@@ -177,7 +179,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     {
                         return;
                     }
-                    OtherFunctions.SetWaitCursor(true, this);
+
+                    Waiting();
+
                     int rows = 0;
                     rows += DBFactory.GetDatabase().UpdateValue(DevicesCols.TableName, DevicesCols.CheckedOut, 0, DevicesCols.DeviceGuid, currentTrackingDevice.Guid, trans);
 

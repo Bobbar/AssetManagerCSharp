@@ -73,7 +73,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, ParentForm);
+                ParentForm.Waiting();
 
                 var searchString = SearchStringTextBox.Text.Trim();
                 var selectedTables = GetSelectedTables();
@@ -100,7 +100,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, ParentForm);
+                ParentForm.DoneWaiting();
             }
         }
 

@@ -61,9 +61,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ViewEntry(string entryGuid)
         {
-            OtherFunctions.SetWaitCursor(true, this);
             try
             {
+                Waiting();
+
                 using (var results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectHistoricalDeviceEntry(entryGuid)))
                 {
                     HighlightChangedFields(results);
@@ -78,7 +79,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, this);
+                DoneWaiting();
             }
         }
 

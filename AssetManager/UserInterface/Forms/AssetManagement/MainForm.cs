@@ -401,9 +401,17 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             RecordsCountLabel.Text = "Records: " + count;
         }
 
-        private void DoneWaiting()
+        public override void Waiting(string message = "Processing...")
         {
-            OtherFunctions.SetWaitCursor(false, this);
+            base.Waiting();
+
+            SetStatusBar(message);
+        }
+
+        public override void DoneWaiting()
+        {
+            base.DoneWaiting();
+
             StripSpinner.Visible = false;
             SetStatusBar("Idle...");
         }
@@ -609,9 +617,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 if (!queryRunning)
                 {
-                    OtherFunctions.SetWaitCursor(true, this);
+                    Waiting("Background query running...");
                     StripSpinner.Visible = true;
-                    SetStatusBar("Background query running...");
                     queryRunning = true;
                     var Results = await Task.Run(() =>
                     {
@@ -759,11 +766,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void Waiting()
-        {
-            OtherFunctions.SetWaitCursor(true, this);
-            SetStatusBar("Processing...");
-        }
+       
 
         #region "Control Event Methods"
 

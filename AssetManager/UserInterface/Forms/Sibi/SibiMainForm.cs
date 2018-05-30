@@ -254,19 +254,19 @@ namespace AssetManager.UserInterface.Forms.Sibi
         }
 
         [SuppressMessage("Microsoft.Design", "CA1806")]
-        private void OpenRequest(string strGuid)
+        private void OpenRequest(string requestGuid)
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, this);
-                if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(SibiManageRequestForm), strGuid))
+                Waiting();
+                if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(SibiManageRequestForm), requestGuid))
                 {
-                    new SibiManageRequestForm(this, strGuid);
+                    new SibiManageRequestForm(this, requestGuid);
                 }
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, this);
+                DoneWaiting();
             }
         }
 
@@ -279,7 +279,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, this);
+                Waiting();
                 searchSlider.Clear();
                 ClearAll(this);
                 SetDisplayYears();
@@ -291,7 +291,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, this);
+                DoneWaiting();
             }
         }
 
@@ -435,12 +435,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, this);
+                Waiting();
                 new SibiManageRequestForm(this);
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, this);
+                DoneWaiting();
             }
         }
 

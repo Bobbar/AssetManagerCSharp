@@ -29,7 +29,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, this);
+                Waiting();
                 foreach (var device in devices)
                 {
                     if (!Exists(device))
@@ -55,7 +55,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, this);
+                DoneWaiting();
             }
         }
 

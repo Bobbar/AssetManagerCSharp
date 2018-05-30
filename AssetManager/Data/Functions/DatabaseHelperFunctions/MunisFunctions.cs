@@ -328,7 +328,8 @@ namespace AssetManager.Data.Functions
                         fy = newDialog.GetControlValue("FY").ToString();
                         if (DataConsistency.IsValidYear(fy))
                         {
-                            OtherFunctions.SetWaitCursor(true, parentForm);
+                            parentForm.Waiting();
+
                             var blah = await NewMunisReqSearch(reqNumber, fy, parentForm);
                         }
                         else
@@ -344,7 +345,7 @@ namespace AssetManager.Data.Functions
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, parentForm);
+                parentForm.DoneWaiting();
             }
         }
 
@@ -391,7 +392,7 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, parentForm);
+                parentForm.Waiting();
                 GridForm newGridForm = new GridForm(parentForm, "Org/Obj Info");
                 string glColumns = " glma_org, glma_obj, glma_desc, glma_seg5, glma_bud_yr, glma_orig_bud_cy, glma_rev_bud_cy, glma_encumb_cy, glma_memo_bal_cy, glma_rev_bud_cy-glma_encumb_cy-glma_memo_bal_cy AS 'Funds Available' ";
                 string glMasterQry = "Select TOP " + intMaxResults + " " + glColumns + "FROM glmaster";
@@ -434,7 +435,7 @@ namespace AssetManager.Data.Functions
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, parentForm);
+                parentForm.DoneWaiting();
             }
         }
 
@@ -442,7 +443,8 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, parentForm);
+                parentForm.Waiting();
+
                 string columns = "e.a_employee_number,e.a_name_last,e.a_name_first,e.a_org_primary,e.a_object_primary,e.a_location_primary,e.a_location_p_desc,e.a_location_p_short,e.e_work_location,m.a_employee_number as sup_employee_number,m.a_name_first as sup_name_first,m.a_name_last as sup_name_last";
                 string query = "SELECT TOP " + intMaxResults + " " + columns + @"
 FROM pr_employee_master e
@@ -451,13 +453,14 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
                 QueryParamCollection searchParams = new QueryParamCollection();
                 searchParams.Add("e.a_name_last", name.ToUpper(), "OR");
                 searchParams.Add("e.a_name_first", name.ToUpper(), "OR");
-                
+
                 using (var cmd = munisComms.GetSqlCommandFromParams(query, searchParams.Parameters))
                 using (var results = await munisComms.ReturnSqlTableFromCmdAsync(cmd))
                 {
                     if (HasResults(results, parentForm))
                     {
-                        OtherFunctions.SetWaitCursor(false, parentForm);
+                        parentForm.DoneWaiting();
+
                         GridForm newGridForm = new GridForm(parentForm, "MUNIS Employee Info");
                         newGridForm.AddGrid("EmpGrid", "MUNIS Info:", results);
                         newGridForm.Show();
@@ -471,7 +474,7 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, parentForm);
+                parentForm.DoneWaiting();
             }
         }
 
@@ -479,7 +482,8 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, parentForm);
+                parentForm.Waiting();
+              
                 if (po == "")
                 {
                     return;
@@ -509,7 +513,7 @@ FROM poheader";
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, parentForm);
+                parentForm.DoneWaiting();
             }
         }
 
@@ -620,7 +624,8 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, parentForm);
+                parentForm.Waiting();
+
                 DataTable reqLinesTable = new DataTable();
                 DataTable reqHeaderTable = new DataTable();
                 DataTable inventoryTable = new DataTable();
@@ -683,7 +688,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, parentForm);
+                parentForm.DoneWaiting();
             }
         }
 

@@ -401,11 +401,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void DoneWaiting()
-        {
-            OtherFunctions.SetWaitCursor(false, this);
-        }
-
         private void EnableControlsRecursive(Control control)
         {
             foreach (Control c in control.Controls)
@@ -898,11 +893,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 new AttachmentsForm(this, new DeviceAttachmentsCols(), currentViewDevice, UpdateAttachCountHandler);
             }
-        }
-
-        private void Waiting()
-        {
-            OtherFunctions.SetWaitCursor(true, this);
         }
 
         protected override void Dispose(bool disposing)

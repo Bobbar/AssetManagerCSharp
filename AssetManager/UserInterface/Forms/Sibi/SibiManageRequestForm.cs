@@ -361,10 +361,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 {
                     return;
                 }
+
                 var blah = OtherFunctions.Message("Are you absolutely sure?  This cannot be undone and will delete all data including attachments.", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, "WARNING", this);
                 if (blah == DialogResult.Yes)
                 {
-                    OtherFunctions.SetWaitCursor(true, this);
+                    Waiting();
+
                     if (AssetManagerFunctions.DeleteSibiRequest(currentRequest.Guid))
                     {
                         OtherFunctions.Message("Sibi Request deleted successfully.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Device Deleted", this);
@@ -391,7 +393,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, this);
+                DoneWaiting();
             }
         }
 
@@ -875,7 +877,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 SecurityTools.CheckForAccess(SecurityGroups.AddSibi);
 
-                OtherFunctions.SetWaitCursor(true, this);
+                Waiting();
 
                 if (isModifying)
                 {
@@ -906,7 +908,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, this);
+                DoneWaiting();
             }
         }
 
@@ -921,9 +923,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void OpenRequest(string requestGuid)
         {
-            OtherFunctions.SetWaitCursor(true, this);
             try
             {
+                Waiting();
+
                 using (DataTable requestResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestsByGuid(requestGuid)))
                 using (DataTable itemsResults = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectSibiRequestItems(GridColumnFunctions.ColumnsString(RequestItemsColumns()), requestGuid)))
                 {
@@ -951,7 +954,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, this);
+                DoneWaiting();
             }
         }
 
@@ -976,7 +979,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, this);
+                Waiting();
+
                 string itemGuid = RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemGuid);
                 string updateValue = string.Empty;
 
@@ -1009,7 +1013,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, this);
+                DoneWaiting();
             }
         }
 
@@ -1430,7 +1434,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, this);
+                Waiting();
+
                 string reqNum = ReqNumberTextBox.Text.Trim();
                 if (!isModifying && !string.IsNullOrEmpty(reqNum))
                 {
@@ -1443,7 +1448,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, this);
+                DoneWaiting();
             }
         }
 

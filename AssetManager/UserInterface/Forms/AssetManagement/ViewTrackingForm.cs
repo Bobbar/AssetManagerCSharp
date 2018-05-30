@@ -21,7 +21,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         {
             try
             {
-                OtherFunctions.SetWaitCursor(true, this);
+                Waiting();
                 using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTrackingEntryByGuid(entryGuid)))
                 {
                     foreach (DataRow r in results.Rows)
@@ -58,7 +58,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             finally
             {
-                OtherFunctions.SetWaitCursor(false, this);
+                DoneWaiting();
             }
         }
 

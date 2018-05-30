@@ -80,11 +80,11 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         /// </summary>
         private async void ShowDevices()
         {
-            OtherFunctions.SetWaitCursor(true, this);
+            Waiting();
 
             var deviceTable = await Task.Run(() => { return GetDevicesTable(currentTree); });
 
-            OtherFunctions.SetWaitCursor(false, this);
+            DoneWaiting();
 
             if (deviceTable.Rows.Count > 0)
             {

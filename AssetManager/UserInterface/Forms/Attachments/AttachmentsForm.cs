@@ -298,9 +298,9 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void DoneWaiting()
+        public override void DoneWaiting()
         {
-            OtherFunctions.SetWaitCursor(false, this);
+            base.DoneWaiting();
             SetStatusBarText("Idle...");
         }
 
@@ -1061,10 +1061,10 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void Waiting()
+        public override void Waiting(string message = "Processing...")
         {
-            OtherFunctions.SetWaitCursor(true, this);
-            SetStatusBarText("Processing...");
+            base.Waiting();
+            SetStatusBarText(message);
         }
 
         private void TransferFeedback(bool transferRunning)

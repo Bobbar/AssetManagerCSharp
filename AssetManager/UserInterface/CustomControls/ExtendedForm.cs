@@ -267,10 +267,64 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
+        public virtual void Waiting(string message = "")
+        {
+            SetWaitCursor(true);
+        }
+
+        public virtual void DoneWaiting()
+        {
+            SetWaitCursor(false);
+        }
+
+        private void SetWaitCursor(bool waiting)
+        {
+            if (this.InvokeRequired)
+            {
+                var del = new Action(() => SetWaitCursor(waiting));
+                this.BeginInvoke(del);
+            }
+            else
+            {
+                this.UseWaitCursor = waiting;
+
+                if (waiting)
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+                }
+                else
+                {
+                    Cursor.Current = Cursors.Default;
+                    ResetDataGridCursors(this);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Recursively finds <see cref="DataGridView"/> controls and sets their cursors back to default.
+        /// </summary>
+        /// <param name="parentControl"></param>
+        /// <remarks>
+        /// This is done because sometimes the cursor gets stuck on waiting, and we need to directly set it back to default.
+        /// </remarks>
+        private void ResetDataGridCursors(Control parentControl)
+        {
+            foreach (Control control in parentControl.Controls)
+            {
+                if (control is DataGridView)
+                {
+                    control.Cursor = Cursors.Default;
+                }
+
+                if (control.HasChildren) ResetDataGridCursors(control);
+            }
+        }
+
         private void ExtendedForm_Disposed(object sender, System.EventArgs e)
         {
             if (!IsDisposed)
             {
+                DoneWaiting();
                 UnSubscribeEvents();
                 CloseChildren();
                 parentForm = null;
