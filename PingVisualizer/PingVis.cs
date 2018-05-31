@@ -18,7 +18,7 @@ namespace PingVisualizer
     {
         private ManualResetEvent renderEvent = new ManualResetEvent(false);
         private ManualResetEvent disposeEvent = new ManualResetEvent(false);
-        private Thread renderThread;
+        private Task renderTask;
 
         private Graphics upscaledGraphics;
         private Bitmap upscaledImage;
@@ -107,9 +107,9 @@ namespace PingVisualizer
             InitScaleTimer();
             InitPing();
 
-            // Start the rendering loop on a new thread.
-            renderThread = new Thread(RenderLoop);
-            renderThread.Start();
+            // Start the rendering loop on a new task.
+            renderTask = new Task(RenderLoop, TaskCreationOptions.LongRunning);
+            renderTask.Start();
         }
 
         private void InitGraphics()
@@ -156,6 +156,7 @@ namespace PingVisualizer
         {
             ServicePointManager.DnsRefreshTimeout = 0;
             InitPingTimer();
+            StartPing();
         }
 
         private void InitPingTimer()
@@ -1006,6 +1007,8 @@ namespace PingVisualizer
                         DisposeBarList(currentBarList);
                         currentBarList = null;
                     }
+                    renderTask.Wait();
+                    renderTask.Dispose();
                 }
 
                 disposedValue = true;

@@ -268,6 +268,12 @@
             <param name="columnResults"></param>
             <returns></returns>
         </member>
+        <member name="M:AssetManager.Data.Functions.DBCacheFunctions.TableList">
+            <summary>
+            List of tables to be cached.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:AssetManager.Data.Functions.DBControlParser.#ctor(System.Windows.Forms.Form)">
             <summary>
             Instantiate new instance of <see cref="T:AssetManager.Data.Functions.DBControlParser"/>
@@ -1434,6 +1440,12 @@
             <summary>
             Collect and display a table containing all the devices associated with the current employee tree.
             </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.ShowDevicesByEmployee(AssetManager.UserInterface.Forms.AdminTools.Hierarchy.Employee)">
+            <summary>
+            Display a table containing the devices associated with the specified employee.
+            </summary>
+            <param name="employee"></param>
         </member>
         <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.GetDevicesTable(AssetManager.UserInterface.Forms.AdminTools.Hierarchy.EmployeeTree,System.Data.DataTable)">
             <summary>
