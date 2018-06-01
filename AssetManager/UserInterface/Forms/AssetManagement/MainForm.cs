@@ -256,7 +256,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             else
             {
-                Helpers.ChildFormControl.ActivateForm(newDevForm);
+                newDevForm.RestoreWindow();
             }
         }
 
@@ -502,7 +502,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 }
                 else
                 {
-                    Helpers.ChildFormControl.ActivateForm(sibiForm);
+                    sibiForm.RestoreWindow();
                 }
             }
             finally
@@ -766,7 +766,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-       
+
 
         #region "Control Event Methods"
 

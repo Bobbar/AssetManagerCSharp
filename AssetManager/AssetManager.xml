@@ -268,12 +268,6 @@
             <param name="columnResults"></param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Data.Functions.DBCacheFunctions.TableList">
-            <summary>
-            List of tables to be cached.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:AssetManager.Data.Functions.DBControlParser.#ctor(System.Windows.Forms.Form)">
             <summary>
             Instantiate new instance of <see cref="T:AssetManager.Data.Functions.DBControlParser"/>
@@ -1113,14 +1107,9 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.DisableDoubleBuffering">
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.RefreshData">
             <summary>
-            Disables double buffering for any future control instantiations.
-            </summary>
-        </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.SetDoubleBuffering">
-            <summary>
-            Disables double buffering if the current environment is in the designer or a terminal session.
+            Override and add code to refresh data from the database.
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.OkToClose">
@@ -1129,9 +1118,19 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.RefreshData">
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.DisableDoubleBuffering">
             <summary>
-            Override and add code to refresh data from the database.
+            Disables double buffering for any future control instantiations.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.Restore">
+            <summary>
+            Restores this form instance. Sets window state to normal and activates the form.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.SetDoubleBuffering">
+            <summary>
+            Disables double buffering if the current environment is in the designer or a terminal session.
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.CenterToParentForm">

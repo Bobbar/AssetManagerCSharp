@@ -3,8 +3,8 @@ using AssetManager.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -54,6 +54,18 @@ namespace AssetManager.UserInterface.CustomControls
         public event EventHandler<EventArgs> ChildCountChanged;
 
         public event EventHandler<EventArgs> RefreshWindowList;
+
+        private void OnWindowCountChanged(EventArgs e)
+        {
+            ChildCountChanged?.Invoke(this, e);
+            parentForm?.OnWindowCountChanged(e);
+        }
+
+        private void OnRefreshWindowList(EventArgs e)
+        {
+            RefreshWindowList?.Invoke(this, e);
+            parentForm?.OnRefreshWindowList(e);
+        }
 
         #endregion Events
 
@@ -157,12 +169,56 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region Methods
 
+        public virtual void Waiting(string message = "")
+        {
+            SetWaitCursor(true);
+        }
+
+        public virtual void DoneWaiting()
+        {
+            SetWaitCursor(false);
+        }
+
+        /// <summary>
+        /// Override and add code to refresh data from the database.
+        /// </summary>
+        public virtual void RefreshData()
+        {
+            this.Refresh();
+            this.ForceWindowListRefresh();
+        }
+
+        /// <summary>
+        /// Override and return true if the form is in a state that is ok to close. (ie. Not in the middle of editing.)
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool OkToClose()
+        {
+            if (!this.Modal && this.Owner != null)
+            {
+                this.Owner.Activate();
+                this.Owner.WindowState = FormWindowState.Normal;
+                this.Focus();
+                return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// Disables double buffering for any future control instantiations.
         /// </summary>
         public void DisableDoubleBuffering()
         {
             doubleBuffering = false;
+        }
+
+        /// <summary>
+        /// Sets window state to normal and activates the form.
+        /// </summary>
+        public void RestoreWindow()
+        {
+            this.WindowState = FormWindowState.Normal;
+            this.Activate();
         }
 
         /// <summary>
@@ -194,22 +250,6 @@ namespace AssetManager.UserInterface.CustomControls
             this.ResizeBegin -= ExtendedForm_ResizeBegin;
         }
 
-        /// <summary>
-        /// Override and return true if the form is in a state that is ok to close. (ie. Not in the middle of editing.)
-        /// </summary>
-        /// <returns></returns>
-        public virtual bool OkToClose()
-        {
-            if (!this.Modal && this.Owner != null)
-            {
-                this.Owner.Activate();
-                this.Owner.WindowState = FormWindowState.Normal;
-                this.Focus();
-                return false;
-            }
-            return true;
-        }
-
         protected override CreateParams CreateParams
         {
             // Enables double-buffering.
@@ -224,15 +264,6 @@ namespace AssetManager.UserInterface.CustomControls
 
                 return cp;
             }
-        }
-
-        /// <summary>
-        /// Override and add code to refresh data from the database.
-        /// </summary>
-        public virtual void RefreshData()
-        {
-            this.Refresh();
-            this.ForceWindowListRefresh();
         }
 
         private void ForceWindowListRefresh()
@@ -265,16 +296,6 @@ namespace AssetManager.UserInterface.CustomControls
                     this.CenterToScreen();
                 }
             }
-        }
-
-        public virtual void Waiting(string message = "")
-        {
-            SetWaitCursor(true);
-        }
-
-        public virtual void DoneWaiting()
-        {
-            SetWaitCursor(false);
         }
 
         private void SetWaitCursor(bool waiting)
@@ -318,6 +339,12 @@ namespace AssetManager.UserInterface.CustomControls
 
                 if (control.HasChildren) ResetDataGridCursors(control);
             }
+        }
+
+        private void SetTheme(ExtendedForm parent)
+        {
+            Icon = parent.Icon;
+            GridTheme = parent.GridTheme;
         }
 
         private void ExtendedForm_Disposed(object sender, System.EventArgs e)
@@ -368,24 +395,6 @@ namespace AssetManager.UserInterface.CustomControls
             previousWindowState = this.WindowState;
         }
 
-        private void OnWindowCountChanged(EventArgs e)
-        {
-            ChildCountChanged?.Invoke(this, e);
-            parentForm?.OnWindowCountChanged(e);
-        }
-
-        private void OnRefreshWindowList(EventArgs e)
-        {
-            RefreshWindowList?.Invoke(this, e);
-            parentForm?.OnRefreshWindowList(e);
-        }
-
-        private void SetTheme(ExtendedForm parent)
-        {
-            Icon = parent.Icon;
-            GridTheme = parent.GridTheme;
-        }
-
         #region Child Form Methods
 
         private void SetChildrenWindowState(FormWindowState state)
@@ -432,8 +441,7 @@ namespace AssetManager.UserInterface.CustomControls
                 {
                     if (!child.OkToClose() || !child.OkToCloseChildren())
                     {
-                        child.WindowState = FormWindowState.Normal;
-                        child.Activate();
+                        child.RestoreWindow();
                         closeAllowed = false;
                     }
                 }

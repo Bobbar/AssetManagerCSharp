@@ -11,22 +11,12 @@ namespace AssetManager.Helpers
 {
     public static class ChildFormControl
     {
-        public static void ActivateForm(ExtendedForm form)
-        {
-            if (!form.IsDisposed)
-            {
-                form.Show();
-                form.Activate();
-                form.WindowState = FormWindowState.Normal;
-            }
-        }
-
         public static bool AttachmentsIsOpen(ExtendedForm parentForm)
         {
             var attachForm = FindChildOfType(parentForm, typeof(AttachmentsForm));
             if (attachForm != null)
             {
-                ActivateForm(attachForm);
+                attachForm.RestoreWindow();
                 return true;
             }
             return false;
@@ -50,12 +40,7 @@ namespace AssetManager.Helpers
 
         public static ExtendedForm FindChildOfType(ExtendedForm parentForm, Type childType)
         {
-            var findForm = parentForm.ChildForms.Find(f => f.GetType() == childType);
-            if (findForm != null)
-            {
-                return findForm;
-            }
-            return null;
+            return parentForm.ChildForms.Find(f => f.GetType() == childType);
         }
 
         public static bool FormTypeIsOpen(Type formType)
@@ -93,7 +78,7 @@ namespace AssetManager.Helpers
             {
                 if (frm.GetType() == formType && frm.FormGuid == guid)
                 {
-                    ActivateForm(frm);
+                    frm.RestoreWindow();
                     return true;
                 }
             }

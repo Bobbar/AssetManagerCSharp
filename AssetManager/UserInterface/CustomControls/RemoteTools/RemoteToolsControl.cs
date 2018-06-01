@@ -451,7 +451,17 @@ namespace AssetManager.UserInterface.CustomControls
 
             if (SecurityTools.VerifyAdminCreds())
             {
-                new PSExecCommandForm(hostForm, targetDevice);
+
+                var currentInstance = ChildFormControl.FindChildOfType(hostForm, typeof(PSExecCommandForm));
+
+                if (currentInstance == null)
+                {
+                    new PSExecCommandForm(hostForm, targetDevice);
+                }
+                else
+                {
+                    currentInstance.RestoreWindow();
+                }
             }
         }
 
