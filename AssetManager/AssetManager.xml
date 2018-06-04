@@ -1123,9 +1123,9 @@
             Disables double buffering for any future control instantiations.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.Restore">
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.RestoreWindow">
             <summary>
-            Restores this form instance. Sets window state to normal and activates the form.
+            Sets window state to normal and activates the form.
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.SetDoubleBuffering">

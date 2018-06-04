@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -10,7 +11,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.ComponentModel;
 
 namespace PingVisualizer
 {
@@ -26,7 +26,7 @@ namespace PingVisualizer
         private Size upscaledImageSize;
 
         private Graphics downsampleGraphics;
-        private Bitmap downsampleImage;
+        private Bitmap downsampledImage;
         private Size downsampleImageSize;
 
         private Ping ping = new Ping();
@@ -48,9 +48,11 @@ namespace PingVisualizer
         private Font pingInfoFont;
         private Brush mouseOverTextBrush = new SolidBrush(Color.FromArgb(240, Color.White));
         private Brush mouseOverBarBrush = new SolidBrush(Color.FromArgb(128, Color.Navy));
+        private Color mouseScrollingBackColor = Color.FromArgb(48, 53, 61);
         private MouseOverInfo mouseOverInfo = null;
         private Point mouseLocation;
         private bool mouseIsScrolling = false;
+        private int mouseMoves = 0;
 
         private int topIndex = 0;
         private List<PingBar> currentBarList = new List<PingBar>();
@@ -73,13 +75,40 @@ namespace PingVisualizer
         private int maxDrawRateFPS = 100;
         private long lastDrawTime = 0;
 
-        private object drawThreadLockObject = new object();
-
         public event EventHandler<PingEventArgs> NewPingResult;
 
-        private delegate void SetControlImageDelegate(Control targetControl, Bitmap image);
+        private int TopIndex
+        {
+            get
+            {
+                var barCount = pingReplies.Count;
 
-        public void OnNewPingResult(PingInfo pingReply)
+                if (!mouseIsScrolling)
+                {
+                    if (barCount <= maxBars)
+                    {
+                        topIndex = 0;
+                        return topIndex;
+                    }
+                    else
+                    {
+                        topIndex = barCount - maxBars;
+                        return topIndex;
+                    }
+                }
+                else
+                {
+                    return topIndex;
+                }
+            }
+
+            set
+            {
+                topIndex = value;
+            }
+        }
+
+        protected void OnNewPingResult(PingInfo pingReply)
         {
             RaiseEventOnUIThread(NewPingResult, new object[] { this, new PingEventArgs(pingReply) });
         }
@@ -112,6 +141,11 @@ namespace PingVisualizer
             renderTask.Start();
         }
 
+        public void ClearResults()
+        {
+            pingReplies.Clear();
+        }
+
         private void InitGraphics()
         {
             upscaledImageSize = new Size(targetControl.ClientSize.Width * imageUpscaleMulti, targetControl.ClientSize.Height * imageUpscaleMulti);
@@ -123,9 +157,9 @@ namespace PingVisualizer
             upscaledGraphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             upscaledGraphics.TextContrast = 0;
 
-            downsampleImage = new Bitmap(downsampleImageSize.Width, downsampleImageSize.Height, PixelFormat.Format32bppPArgb);
-            downsampleImage.SetResolution(upscaledImage.HorizontalResolution, upscaledImage.VerticalResolution);
-            downsampleGraphics = Graphics.FromImage(downsampleImage);
+            downsampledImage = new Bitmap(downsampleImageSize.Width, downsampleImageSize.Height, PixelFormat.Format32bppPArgb);
+            downsampledImage.SetResolution(upscaledImage.HorizontalResolution, upscaledImage.VerticalResolution);
+            downsampleGraphics = Graphics.FromImage(downsampledImage);
             downsampleGraphics.CompositingMode = CompositingMode.SourceCopy;
             downsampleGraphics.CompositingQuality = CompositingQuality.HighSpeed;
             downsampleGraphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
@@ -210,11 +244,6 @@ namespace PingVisualizer
             }
         }
 
-        public void ClearResults()
-        {
-            pingReplies.Clear();
-        }
-
         private void SetScale()
         {
             // Fraction width multiplier.
@@ -227,8 +256,11 @@ namespace PingVisualizer
             if (currentResults.Count > 0)
             {
                 long maxPing = currentResults.OrderByDescending(result => result.RoundTripTime).FirstOrDefault().RoundTripTime;
+
                 if (maxPing <= 0) maxPing = 1;
+
                 float newScale = ((upscaledImageSize.Width * scaleWidthFraction) / maxPing);
+
                 if (newScale > maxViewScale) newScale = maxViewScale;
 
                 if (targetViewScale != newScale)
@@ -395,50 +427,52 @@ namespace PingVisualizer
             if (pingReplies.Count > maxBars)
             {
                 int newIdx = 0;
-                mouseIsScrolling = true;
+
                 if (e.Delta < 0) // Scroll up.
                 {
-                    newIdx = topIndex + 1;
+                    newIdx = TopIndex + 1;
+
                     //if the scroll index returns to the end (bottom) of the results, disable scrolling and return to normal display
                     if (newIdx >= pingReplies.Count - maxBars)
                     {
                         newIdx = pingReplies.Count - maxBars;
+
                         if (mouseIsScrolling)
                         {
                             mouseIsScrolling = false;
+                            Render(true, true);
                         }
                     }
                 }
                 else if (e.Delta > 0) // Scroll down.
                 {
-                    newIdx = topIndex - 1;
+                    newIdx = TopIndex - 1;
                     if (newIdx < 0) // Clamp the index to never be negative.
                     {
                         newIdx = 0;
                     }
                 }
-                if (topIndex != newIdx)
+                if (TopIndex != newIdx)
                 {
-                    topIndex = newIdx;
+                    mouseIsScrolling = true;
+                    TopIndex = newIdx;
                     Render(true, true);
                 }
             }
         }
 
-        private int moves = 0;
-
         private void ControlMouseMove(object sender, MouseEventArgs e)
         {
-            moves++;
+            mouseMoves++;
             mouseLocation = e.Location;
             if (mouseIsScrolling)
             {
                 // Limit the rate of Render calls.
                 // This event can fire very rapidly which can flood the Renderer
                 // preventing other calls from getting past the frame rate limiter.
-                if ((moves >= 2))
+                if ((mouseMoves >= 2))
                 {
-                    moves = 0;
+                    mouseMoves = 0;
 
                     // We don't want to render after every single mouse movement, so we make
                     // sure we only render if the mouse is actually over a bar. Then when
@@ -527,7 +561,7 @@ namespace PingVisualizer
             {
                 while (true)
                 {
-                    // Block until a render event is triggered.
+                    // Wait until a render event is triggered.
                     renderEvent.WaitOne(Timeout.Infinite);
 
                     // Check for diposal event and break from loop if needed.
@@ -542,35 +576,37 @@ namespace PingVisualizer
                     }
                     else
                     {
-                        upscaledGraphics.Clear(Color.FromArgb(48, 53, 61));
+                        upscaledGraphics.Clear(mouseScrollingBackColor);
                     }
 
                     // Draw all the elements from back to front.
-                    DrawScaleLines(upscaledGraphics);
-                    DrawPingBars(upscaledGraphics, currentBarList);
-                    DrawPingText(upscaledGraphics);
-                    DrawScrollBar(upscaledGraphics);
+                    DrawScaleLines();
+                    DrawPingBars();
+                    DrawPingText();
+                    DrawScrollBar();
+
+                    // Cull the ping list if it exceeds the stored result limit.
                     TrimPingList();
 
                     // Resample the image to the original size.
                     DownsampleImage();
 
                     // Set the target control image.
-                    SetControlImage(targetControl, downsampleImage);
+                    SetControlImage();
 
                     // Reset the render event, if not disposing, to wait until another render is triggered.
                     if (!disposeEvent.WaitOne(0))
                         renderEvent.Reset();
                 }
-
             }
             catch (Exception ex)
             {
+                // We want any exceptions to be silent, but log them to the console for debugging purposes.
                 Console.WriteLine(ex.ToString());
             }
         }
 
-        private void DrawScaleLines(Graphics gfx)
+        private void DrawScaleLines()
         {
             float stepSize = currentViewScale * 15;
             int numOfLines = (int)(upscaledImageSize.Width / stepSize);
@@ -581,10 +617,64 @@ namespace PingVisualizer
                 {
                     for (int a = 0; a < numOfLines; a++)
                     {
-                        gfx.DrawLine(pen, new PointF(scaleXPos, 0), new PointF(scaleXPos, upscaledImageSize.Height));
+                        upscaledGraphics.DrawLine(pen, new PointF(scaleXPos, 0), new PointF(scaleXPos, upscaledImageSize.Height));
                         scaleXPos += stepSize;
                     }
                 }
+            }
+        }
+
+        private void DrawPingBars()
+        {
+            foreach (var bar in currentBarList)
+            {
+                if (mouseIsScrolling && MouseIsOverBar(bar))
+                {
+                    upscaledGraphics.FillRectangle(mouseOverBarBrush, new RectangleF(bar.Rectangle.Location, new SizeF(bar.Length * currentViewScale, bar.Rectangle.Height)));
+                }
+                else
+                {
+                    upscaledGraphics.FillRectangle(bar.Brush, new RectangleF(bar.Rectangle.Location, new SizeF(bar.Length * currentViewScale, bar.Rectangle.Height)));
+                }
+            }
+        }
+
+        private void DrawPingText()
+        {
+            if (mouseIsScrolling)
+            {
+                if (mouseOverInfo != null)
+                {
+                    string overInfoText = GetReplyStatusText(mouseOverInfo.PingReply);
+                    SizeF textSize = upscaledGraphics.MeasureString(overInfoText, mousePingInfoFont);
+                    upscaledGraphics.DrawString(overInfoText, mousePingInfoFont, mouseOverTextBrush, new PointF(mouseOverInfo.MouseLoc.X + (textSize.Width * 0.5f), mouseOverInfo.MouseLoc.Y - (textSize.Height * 0.5f)));
+                }
+            }
+            else
+            {
+                string infoText = GetReplyStatusText(pingReplies.Last());
+                SizeF textSize = upscaledGraphics.MeasureString(infoText, pingInfoFont);
+                upscaledGraphics.DrawString(infoText, pingInfoFont, Brushes.White, new PointF((upscaledImageSize.Width - 5) - (textSize.Width), upscaledImageSize.Height - (textSize.Height + 5)));
+            }
+        }
+
+        private void DrawScrollBar()
+        {
+            if (mouseIsScrolling)
+            {
+                var scrollYPos = upscaledImageSize.Height / (pingReplies.Count / ((float)TopIndex + (maxBars / 2)));
+
+                upscaledGraphics.FillRectangle(Brushes.White, new RectangleF(upscaledImageSize.Width - (20 + imageUpscaleMulti), scrollYPos, 10 + imageUpscaleMulti, 5 + imageUpscaleMulti));
+            }
+        }
+
+        private void DownsampleImage()
+        {
+            var destRect = new Rectangle(0, 0, downsampleImageSize.Width, downsampleImageSize.Height);
+            using (var wrapMode = new ImageAttributes())
+            {
+                wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                downsampleGraphics.DrawImage(upscaledImage, destRect, 0, 0, upscaledImage.Width, upscaledImage.Height, GraphicsUnit.Pixel, wrapMode);
             }
         }
 
@@ -624,63 +714,6 @@ namespace PingVisualizer
             else
             {
                 return new SolidBrush(Color.FromArgb(newR, newG, newB));
-            }
-        }
-
-        private void DrawPingBars(Graphics gfx, List<PingBar> bars)
-        {
-            foreach (var bar in bars)
-            {
-                if (mouseIsScrolling && MouseIsOverBar(bar))
-                {
-                    gfx.FillRectangle(mouseOverBarBrush, new RectangleF(bar.Rectangle.Location, new SizeF(bar.Length * currentViewScale, bar.Rectangle.Height)));
-                }
-                else
-                {
-                    gfx.FillRectangle(bar.Brush, new RectangleF(bar.Rectangle.Location, new SizeF(bar.Length * currentViewScale, bar.Rectangle.Height)));
-                }
-            }
-        }
-
-        private void DrawPingText(Graphics gfx)
-        {
-            if (mouseIsScrolling)
-            {
-                if (mouseOverInfo != null)
-                {
-                    string overInfoText = GetReplyStatusText(mouseOverInfo.PingReply);
-                    SizeF textSize = gfx.MeasureString(overInfoText, mousePingInfoFont);
-                    gfx.DrawString(overInfoText, mousePingInfoFont, mouseOverTextBrush, new PointF(mouseOverInfo.MouseLoc.X + (textSize.Width * 0.5f), mouseOverInfo.MouseLoc.Y - (textSize.Height * 0.5f)));
-                }
-            }
-            else
-            {
-                string infoText = GetReplyStatusText(pingReplies.Last());
-                SizeF textSize = gfx.MeasureString(infoText, pingInfoFont);
-                gfx.DrawString(infoText, pingInfoFont, Brushes.White, new PointF((upscaledImageSize.Width - 5) - (textSize.Width), upscaledImageSize.Height - (textSize.Height + 5)));
-            }
-        }
-
-        private void DrawScrollBar(Graphics gfx)
-        {
-            if (mouseIsScrolling)
-            {
-                float scrollLocation = 0;
-                if (topIndex > 0)
-                {
-                    scrollLocation = (upscaledImageSize.Height / (pingReplies.Count / (float)topIndex));
-                }
-                gfx.FillRectangle(Brushes.White, new RectangleF(upscaledImageSize.Width - (20 + imageUpscaleMulti), scrollLocation, 10 + imageUpscaleMulti, 5 + imageUpscaleMulti));
-            }
-        }
-
-        private void DownsampleImage()
-        {
-            var destRect = new Rectangle(0, 0, downsampleImageSize.Width, downsampleImageSize.Height);
-            using (var wrapMode = new ImageAttributes())
-            {
-                wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                downsampleGraphics.DrawImage(upscaledImage, destRect, 0, 0, upscaledImage.Width, upscaledImage.Height, GraphicsUnit.Pixel, wrapMode);
             }
         }
 
@@ -756,27 +789,6 @@ namespace PingVisualizer
             }
         }
 
-        private int FirstDrawIndex(int barCount)
-        {
-            if (!mouseIsScrolling)
-            {
-                if (barCount <= maxBars)
-                {
-                    topIndex = 0;
-                    return topIndex;
-                }
-                else
-                {
-                    topIndex = barCount - maxBars;
-                    return topIndex;
-                }
-            }
-            else
-            {
-                return topIndex;
-            }
-        }
-
         private void TrimPingList()
         {
             if (pingReplies.Count > maxStoredResults)
@@ -789,7 +801,7 @@ namespace PingVisualizer
         {
             if (pingReplies.Count > maxBars)
             {
-                return pingReplies.GetRange(FirstDrawIndex(pingReplies.Count), maxBars);
+                return pingReplies.GetRange(TopIndex, maxBars);
             }
             else
             {
@@ -797,12 +809,12 @@ namespace PingVisualizer
             }
         }
 
-        private void SetControlImage(Control targetControl, Bitmap image)
+        private void SetControlImage()
         {
             if (targetControl.InvokeRequired)
             {
-                var del = new SetControlImageDelegate(SetControlImage);
-                targetControl.BeginInvoke(del, new object[] { targetControl, image });
+                var del = new Action(() => SetControlImage());
+                targetControl.BeginInvoke(del);
             }
             else
             {
@@ -811,19 +823,19 @@ namespace PingVisualizer
                     if (targetControl is Button)
                     {
                         var but = (Button)targetControl;
-                        but.Image = image;
+                        but.Image = downsampledImage;
                         but.Invalidate();
                     }
                     else if (targetControl is PictureBox)
                     {
                         var pic = (PictureBox)targetControl;
-                        pic.Image = image;
+                        pic.Image = downsampledImage;
                         pic.Refresh();
                     }
                 }
                 else
                 {
-                    targetControl.BackgroundImage = image;
+                    targetControl.BackgroundImage = downsampledImage;
                     targetControl.Invalidate();
                 }
             }
@@ -999,7 +1011,7 @@ namespace PingVisualizer
                     upscaledImage.Dispose();
                     upscaledGraphics.Dispose();
 
-                    downsampleImage.Dispose();
+                    downsampledImage.Dispose();
                     downsampleGraphics.Dispose();
 
                     if (currentBarList == null)
