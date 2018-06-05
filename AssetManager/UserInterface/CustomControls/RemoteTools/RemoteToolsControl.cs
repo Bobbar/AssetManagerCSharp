@@ -13,6 +13,9 @@ using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WNetConnection;
+using DeploymentAssemblies;
+using System.Reflection;
+using System.Linq;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -252,7 +255,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-                    var newTVDeploy = new DeployTeamViewer(hostForm);
+                    var newTVDeploy = new DeployTeamViewer(hostForm, targetDevice);
                     OnStatusPrompt("Deploying TeamViewer...", 0);
                     if (await newTVDeploy.DeployToDevice(targetDevice))
                     {
@@ -283,7 +286,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-                    var newOfficeDeploy = new DeployOffice(hostForm);
+                    var newOfficeDeploy = new DeployOffice(hostForm, targetDevice);
                     OnStatusPrompt("Deploying Office 365...", 0);
                     if (await newOfficeDeploy.DeployToDevice(targetDevice))
                     {
@@ -314,7 +317,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
-                    var newDeviceDeploy = new SoftwareDeployment(hostForm);
+                    var newDeviceDeploy = new SoftwareDeployment(hostForm, targetDevice);
                     OnStatusPrompt("Deploying Software...", 0);
                     if (await newDeviceDeploy.DeployToDevice(targetDevice))
                     {
@@ -480,19 +483,53 @@ namespace AssetManager.UserInterface.CustomControls
 
         private async void UpdateChrome(Device targetDevice)
         {
-            CheckRemoteAccess();
+            //CheckRemoteAccess();
 
-            if (OtherFunctions.Message("Update/Install Chrome on this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
+            //if (OtherFunctions.Message("Update/Install Chrome on this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
+            //{
+            //    return;
+            //}
+            //try
+            //{
+            //    if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
+            //    {
+            //        OnStatusPrompt("Installing Chrome...", 0);
+            //        var newChromeDeploy = new DeployChrome(hostForm, targetDevice);
+            //        if (await newChromeDeploy.DeployToDevice())
+            //        {
+            //            OnStatusPrompt("Chrome install complete!", successColor);
+            //        }
+            //        else
+            //        {
+            //            OnStatusPrompt("Error while installing Chrome!", failColor);
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    OnStatusPrompt("Error while installing Chrome!", failColor);
+            //    ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+            //}
+            if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
             {
-                return;
-            }
-            try
-            {
-                if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
+
+                //var domain = AppDomain.CreateDomain("ChromeDeploy");
+                //var path = domain.BaseDirectory + @"DeployTest.dll";
+                //var runnable = domain.CreateInstanceFromAndUnwrap(path, "DeployTest.DeployChrome") as IDeployment;
+
+                var asm = Assembly.LoadFile(@"\\core.co.fairfield.oh.us\dfs1\fcdd\files\QA\Asset Management\Asset Manager\DeploymentModules\DeployTest.dll");//@"C:\GitHub\DeployTest\DeployTest\bin\Release\DeployTest.dll");
+                var types = asm.DefinedTypes.ToArray();
+
+                var type = asm.GetType(types[0].FullName);
+                var runnable = Activator.CreateInstance(type) as IDeployment;
+
+                if (runnable != null)
                 {
-                    OnStatusPrompt("Installing Chrome...", 0);
-                    var newChromeDeploy = new DeployChrome(hostForm);
-                    if (await newChromeDeploy.DeployToDevice(targetDevice))
+                    var deploy = new DeploymentUI(hostForm, targetDevice);
+
+                    runnable.InitUI(deploy);
+
+                    if (await runnable.DeployToDevice())
                     {
                         OnStatusPrompt("Chrome install complete!", successColor);
                     }
@@ -500,13 +537,14 @@ namespace AssetManager.UserInterface.CustomControls
                     {
                         OnStatusPrompt("Error while installing Chrome!", failColor);
                     }
+
+
                 }
             }
-            catch (Exception ex)
-            {
-                OnStatusPrompt("Error while installing Chrome!", failColor);
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-            }
+
+
+
+
         }
 
         private void CheckRemoteAccess()

@@ -25,7 +25,7 @@ namespace AssetManager.UserInterface.CustomControls
             InitializeComponent();
             this.DisableDoubleBuffering();
             targetDevice = device;
-            pSExecWrapper = new PSExecWrapper();
+            pSExecWrapper = new PSExecWrapper(device.HostName);
             pSExecWrapper.ErrorReceived += PSExecWrapper_ErrorReceived;
             pSExecWrapper.OutputReceived += PSExecWrapper_OutputReceived;
             this.Text += " - " + device.CurrentUser;
@@ -46,7 +46,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 // Execute the command and catch exceptions.
                 StatusMessage("Executing command...");
-                var exitCode = await pSExecWrapper.ExecuteRemoteCommand(targetDevice, command, runAsAdmin);
+                var exitCode = await pSExecWrapper.ExecuteRemoteCommand(command, runAsAdmin);
             }
             catch (InvalidOperationException ioe)
             {

@@ -5,10 +5,12 @@ using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.Gatekeeper;
 using System;
 using System.Threading.Tasks;
+using DeploymentAssemblies;
+
 
 namespace AssetManager.UserInterface.Forms.AdminTools
 {
-    public partial class CopyFilesForm : ExtendedForm
+    public partial class CopyFilesForm : ExtendedForm, ICopyFiles
     {
         private FileTransferUI pushFilesControl;
         private bool cancel = false;

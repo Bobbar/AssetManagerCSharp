@@ -10,10 +10,14 @@ using System.Management.Automation;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AssetManager.UserInterface.Forms.AdminTools;
+using DeploymentAssemblies;
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
 
 namespace AssetManager.Tools.Deployment
 {
-    public class DeploymentUI : IDisposable
+    public class DeploymentUI : IDisposable, IDeploymentUI
     {
         private bool cancelOperation = false;
         private bool finished = false;
@@ -28,6 +32,15 @@ namespace AssetManager.Tools.Deployment
         private int timeoutSeconds = 120;
         private Task watchdogTask;
         private CancellationTokenSource watchdogCancelTokenSource;
+        private Device targetDevice;
+
+        public string TargetHostname
+        {
+            get
+            {
+                return targetDevice.HostName;
+            }
+        }
 
         public PowerShellWrapper PowerShellWrap
         {
@@ -53,8 +66,9 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
-        public DeploymentUI(ExtendedForm parentForm)
+        public DeploymentUI(ExtendedForm parentForm, Device targetDevice)
         {
+            this.targetDevice = targetDevice;
             this.parentForm = parentForm;
 
             watchdogCancelTokenSource = new CancellationTokenSource();
@@ -65,14 +79,14 @@ namespace AssetManager.Tools.Deployment
 
         public void UsePowerShell()
         {
-            powerShellWrapper = new PowerShellWrapper();
+            powerShellWrapper = new PowerShellWrapper(targetDevice.HostName);
             powerShellWrapper.InvocationStateChanged -= SessionStateChanged;
             powerShellWrapper.InvocationStateChanged += SessionStateChanged;
         }
 
         public void UsePsExec()
         {
-            pSExecWrapper = new PSExecWrapper();
+            pSExecWrapper = new PSExecWrapper(targetDevice.HostName);
             pSExecWrapper.ErrorReceived -= PsExecErrorReceived;
             pSExecWrapper.ErrorReceived += PsExecErrorReceived;
 
@@ -92,7 +106,7 @@ namespace AssetManager.Tools.Deployment
         {
             logView = new ExtendedForm(parentForm);
             logView.FormClosing += new FormClosingEventHandler(LogClosed);
-            logView.Text = defaultTitle;
+            logView.Text = targetDevice.CurrentUser + " - " + defaultTitle;
             logView.Width = 600;
             logView.Height = 700;
             logView.MinimumSize = new System.Drawing.Size(400, 200);
@@ -110,10 +124,20 @@ namespace AssetManager.Tools.Deployment
             watchdogTask.Start();
         }
 
-        public async Task SimplePSExecCommand(Device targetDevice, string command, string title)
+        public void UserPrompt(string prompt, string title)
+        {
+            OtherFunctions.Message(prompt, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, title, parentForm);
+        }
+
+        public ICopyFiles NewFilePush(string source, string destination)
+        {
+            return new CopyFilesForm(parentForm, targetDevice, source, destination);
+        }
+
+        public async Task SimplePSExecCommand(string command, string title)
         {
             LogMessage("Starting " + title);
-            var exitCode = await PSExecWrap.ExecuteRemoteCommand(targetDevice, command);
+            var exitCode = await PSExecWrap.ExecuteRemoteCommand(command);
             if (exitCode == 0)
             {
                 LogMessage(title + " complete!");
@@ -126,10 +150,10 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
-        public async Task SimplePowerShellCommand(Device targetDevice, byte[] script, string title)
+        public async Task SimplePowerShellScript(byte[] script, string title)
         {
             LogMessage("Starting " + title);
-            var success = await PowerShellWrap.ExecutePowerShellScript(targetDevice.HostName, script);
+            var success = await PowerShellWrap.ExecutePowerShellScript(script);
             if (success)
             {
                 LogMessage(title + " complete!");
@@ -140,6 +164,22 @@ namespace AssetManager.Tools.Deployment
                 OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 throw new Exception("Error occurred while executing command");
             }
+        }
+
+        public async Task<bool> SimplePowershellCommand(PowerShellCommand command)
+        {
+            var session = await PowerShellWrap.GetNewPSSession(Security.SecurityTools.AdminCreds);
+
+            var shellCommand = new Command(command.CommandText);
+
+            foreach (var cmd in command.Parameters)
+            {
+                shellCommand.Parameters.Add(cmd.Name, cmd.Value);
+            }
+
+            session.Commands.AddCommand(shellCommand);
+
+            return await PowerShellWrap.InvokePowerShellSession(session);
         }
 
         public void LogMessage(string message)
@@ -357,6 +397,9 @@ namespace AssetManager.Tools.Deployment
         {
             Dispose(true);
         }
+
+
+
 
         #endregion IDisposable Support
     }

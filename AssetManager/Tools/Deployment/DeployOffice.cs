@@ -24,10 +24,10 @@ namespace AssetManager.Tools.Deployment
 
         private DeploymentUI deploy;
 
-        public DeployOffice(ExtendedForm parentForm)
+        public DeployOffice(ExtendedForm parentForm, Device targetDevice)
         {
             this.parentForm = parentForm;
-            deploy = new DeploymentUI(parentForm);
+            deploy = new DeploymentUI(parentForm, targetDevice);
             deploy.UsePowerShell();
             deploy.UsePsExec();
             GetDirectories();
@@ -142,7 +142,7 @@ namespace AssetManager.Tools.Deployment
 
                     deploy.LogMessage("Starting Office 356 deployment...");
 
-                    var installExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetO365InstallString(configFile));
+                    var installExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(GetO365InstallString(configFile));
                     if (installExitCode == 0)
                     {
                         deploy.LogMessage("Deployment complete!");
@@ -155,7 +155,7 @@ namespace AssetManager.Tools.Deployment
                     }
 
                     deploy.LogMessage("Deleting temp files...");
-                    if (!await deploy.PowerShellWrap.InvokePowerShellCommand(targetDevice.HostName, GetDeleteDirectoryCommand()))
+                    if (!await deploy.PowerShellWrap.InvokePowerShellCommand(GetDeleteDirectoryCommand()))
                     {
                         deploy.LogMessage("Delete failed!");
                         return false;
@@ -187,7 +187,7 @@ namespace AssetManager.Tools.Deployment
 
         private async Task<PowerShell> GetRemoveOfficeSession(Device targetDevice)
         {
-            var session = await deploy.PowerShellWrap.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
+            var session = await deploy.PowerShellWrap.GetNewPSSession(SecurityTools.AdminCreds);
 
             // Remove Office 365 Hub.
             var removeHubCommand = new Command(deploy.GetString("remove_office_hub"), true, true);

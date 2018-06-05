@@ -21,10 +21,10 @@ namespace AssetManager.Tools.Deployment
 
         private DeploymentUI deploy;
 
-        public DeployTeamViewer(ExtendedForm parentForm)
+        public DeployTeamViewer(ExtendedForm parentForm, Device targetDevice)
         {
             this.parentForm = parentForm;
-            deploy = new DeploymentUI(parentForm);
+            deploy = new DeploymentUI(parentForm, targetDevice);
             deploy.UsePowerShell();
             deploy.UsePsExec();
             GetDirectories();
@@ -89,7 +89,7 @@ namespace AssetManager.Tools.Deployment
                     if (TVExists)
                     {
                         deploy.LogMessage("Uninstalling TeamViewer...");
-                        var tvReinstallExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetTVUninstallString());
+                        var tvReinstallExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(GetTVUninstallString());
                         if (tvReinstallExitCode == 0)
                         {
                             deploy.LogMessage("Uninstall complete!");
@@ -104,7 +104,7 @@ namespace AssetManager.Tools.Deployment
                     }
 
                     deploy.LogMessage("Starting TeamViewer install...");
-                    var tvExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetTVInstallString());
+                    var tvExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(GetTVInstallString());
                     if (tvExitCode == 0)
                     {
                         deploy.LogMessage("Install complete!");
@@ -124,7 +124,7 @@ namespace AssetManager.Tools.Deployment
                     }
 
                     deploy.LogMessage("Starting TeamViewer assignment...");
-                    var assignExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(targetDevice, GetTVAssignString());
+                    var assignExitCode = await deploy.PSExecWrap.ExecuteRemoteCommand(GetTVAssignString());
                     if (assignExitCode == 0)
                     {
                         deploy.LogMessage("Assignment complete!");
@@ -137,7 +137,7 @@ namespace AssetManager.Tools.Deployment
                     }
 
                     deploy.LogMessage("Deleting temp files...");
-                    if (!await deploy.PowerShellWrap.InvokePowerShellCommand(targetDevice.HostName, GetDeleteDirectoryCommand()))
+                    if (!await deploy.PowerShellWrap.InvokePowerShellCommand(GetDeleteDirectoryCommand()))
                     {
                         deploy.LogMessage("Delete failed!");
                         return false;
@@ -197,7 +197,7 @@ namespace AssetManager.Tools.Deployment
             {
                 var resultString = await Task.Run(() =>
                 {
-                    return deploy.PowerShellWrap.ExecuteRemotePSScript(targetDevice.HostName, Properties.Resources.CheckForTVRegistryValue, SecurityTools.AdminCreds);
+                    return deploy.PowerShellWrap.ExecuteRemotePSScript(Properties.Resources.CheckForTVRegistryValue, SecurityTools.AdminCreds);
                 });
                 var result = Convert.ToBoolean(resultString);
                 return result;

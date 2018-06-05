@@ -1,6 +1,7 @@
 ﻿using AssetManager.Data;
 using AssetManager.Helpers;
 using AssetManager.Security;
+using AssetManager.Data.Classes;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -17,6 +18,7 @@ namespace AssetManager.Tools
 {
     public class PowerShellWrapper
     {
+        private string targetHostname;
 
         public event EventHandler InvocationStateChanged;
 
@@ -31,21 +33,31 @@ namespace AssetManager.Tools
         private PowerShell CurrentPowerShellObject;
 
         private Pipeline CurrentPipelineObject;
+
+        public PowerShellWrapper()
+        {
+
+        }
+
+        public PowerShellWrapper(string targetHostname)
+        {
+            this.targetHostname = targetHostname;
+        }
+
         /// <summary>
         /// Execute the specified PowerShell script on the specified host.
         /// </summary>
-        /// <param name="hostName">Hostname of the remote computer.</param>
         /// <param name="scriptValue">PowerShell script as a byte array.</param>
         /// <param name="credentials">Credentials used when creating the remote runspace.</param>
         /// <returns>Returns any error messages.</returns>
-        public string ExecuteRemotePSScript(string hostName, byte[] scriptValue, NetworkCredential credentials)
+        public string ExecuteRemotePSScript(byte[] scriptValue, NetworkCredential credentials)
         {
             try
             {
                 var psCreds = new PSCredential(credentials.UserName, credentials.SecurePassword);
                 string scriptText = LoadScript(scriptValue);
                 string shellUri = "http://schemas.microsoft.com/powershell/Microsoft.PowerShell";
-                WSManConnectionInfo connInfo = new WSManConnectionInfo(false, hostName, 5985, "/wsman", shellUri, psCreds);
+                WSManConnectionInfo connInfo = new WSManConnectionInfo(false, targetHostname, 5985, "/wsman", shellUri, psCreds);
 
                 using (Runspace remoteRunSpace = RunspaceFactory.CreateRunspace(connInfo))
                 {
@@ -91,14 +103,14 @@ namespace AssetManager.Tools
             }
         }
 
-        public string InvokeRemotePSCommand(string hostName, NetworkCredential credentials, Command pScommand)
+        public string InvokeRemotePSCommand( NetworkCredential credentials, Command pScommand)
         {
             try
             {
                 var psCreds = new PSCredential(credentials.UserName, credentials.SecurePassword);
 
                 string shellUri = "http://schemas.microsoft.com/powershell/Microsoft.PowerShell";
-                WSManConnectionInfo connInfo = new WSManConnectionInfo(false, hostName, 5985, "/wsman", shellUri, psCreds);
+                WSManConnectionInfo connInfo = new WSManConnectionInfo(false, targetHostname, 5985, "/wsman", shellUri, psCreds);
 
                 using (Runspace remoteRunSpace = RunspaceFactory.CreateRunspace(connInfo))
                 {
@@ -196,14 +208,14 @@ namespace AssetManager.Tools
             }
         }
 
-        public async Task<PowerShell> GetNewPSSession(string hostName, NetworkCredential credentials)
+        public async Task<PowerShell> GetNewPSSession(NetworkCredential credentials)
         {
             var newPsSession = await Task.Run(() =>
             {
                 var psCreds = new PSCredential(credentials.UserName, credentials.SecurePassword);
                 string shellUri = "http://schemas.microsoft.com/powershell/Microsoft.PowerShell";
 
-                WSManConnectionInfo connInfo = new WSManConnectionInfo(false, hostName, 5985, "/wsman", shellUri, psCreds);
+                WSManConnectionInfo connInfo = new WSManConnectionInfo(false, targetHostname, 5985, "/wsman", shellUri, psCreds);
 
                 Runspace remoteRunSpace = RunspaceFactory.CreateRunspace(connInfo);
                 remoteRunSpace.Open();
@@ -219,9 +231,9 @@ namespace AssetManager.Tools
             return newPsSession;
         }
 
-        public async Task<bool> ExecutePowerShellScript(string hostName, byte[] scriptByte)
+        public async Task<bool> ExecutePowerShellScript(byte[] scriptByte)
         {
-            var scriptResult = await Task.Run(() => { return ExecuteRemotePSScript(hostName, scriptByte, SecurityTools.AdminCreds); });
+            var scriptResult = await Task.Run(() => { return ExecuteRemotePSScript(scriptByte, SecurityTools.AdminCreds); });
             if (!string.IsNullOrEmpty(scriptResult))
             {
                 OtherFunctions.Message(scriptResult, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error Running Script");
@@ -233,9 +245,9 @@ namespace AssetManager.Tools
             }
         }
 
-        public async Task<bool> InvokePowerShellCommand(string hostName, Command pScommand)
+        public async Task<bool> InvokePowerShellCommand(Command pScommand)
         {
-            var scriptResult = await Task.Run(() => { return InvokeRemotePSCommand(hostName, SecurityTools.AdminCreds, pScommand); });
+            var scriptResult = await Task.Run(() => { return InvokeRemotePSCommand(SecurityTools.AdminCreds, pScommand); });
             if (!string.IsNullOrEmpty(scriptResult))
             {
                 OtherFunctions.Message(scriptResult, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error Running Script");

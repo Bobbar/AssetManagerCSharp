@@ -11,6 +11,7 @@ namespace AssetManager.Tools
     public class PSExecWrapper
     {
         private Process currentProcess;
+        private string targetHostname;
 
         public Process CurrentProcess
         {
@@ -24,8 +25,9 @@ namespace AssetManager.Tools
 
         public event EventHandler OutputReceived;
 
-        public PSExecWrapper()
+        public PSExecWrapper(string targetHostname)
         {
+            this.targetHostname = targetHostname;
             StageExecutable();
         }
 
@@ -58,12 +60,12 @@ namespace AssetManager.Tools
             }
         }
 
-        public async Task<int> ExecuteRemoteCommand(Device targetDevice, string command)
+        public async Task<int> ExecuteRemoteCommand(string command)
         {
-            return await ExecuteRemoteCommand(targetDevice, command, !SecurityTools.IsAdministrator());
+            return await ExecuteRemoteCommand(command, !SecurityTools.IsAdministrator());
         }
 
-        public async Task<int> ExecuteRemoteCommand(Device targetDevice, string command, bool runAsAdmin = true)
+        public async Task<int> ExecuteRemoteCommand(string command, bool runAsAdmin = true)
         {
             int exitCode = -1;
 
@@ -95,7 +97,7 @@ namespace AssetManager.Tools
                         p.StartInfo.WorkingDirectory = Paths.PsExecTempDir;
                         p.StartInfo.FileName = Paths.PsExecTempPath;
 
-                        p.StartInfo.Arguments = "\\\\" + targetDevice.HostName + " -accepteula -nobanner -h -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
+                        p.StartInfo.Arguments = "\\\\" + targetHostname + " -accepteula -nobanner -h -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
 
                         p.OutputDataReceived += P_OutputDataReceived;
                         p.ErrorDataReceived += P_ErrorDataReceived;

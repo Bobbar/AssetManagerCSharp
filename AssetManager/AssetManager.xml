@@ -1065,11 +1065,10 @@
             Provides flashing window and taskbar support.
             </summary>
         </member>
-        <member name="M:AssetManager.Tools.PowerShellWrapper.ExecuteRemotePSScript(System.String,System.Byte[],System.Net.NetworkCredential)">
+        <member name="M:AssetManager.Tools.PowerShellWrapper.ExecuteRemotePSScript(System.Byte[],System.Net.NetworkCredential)">
             <summary>
             Execute the specified PowerShell script on the specified host.
             </summary>
-            <param name="hostName">Hostname of the remote computer.</param>
             <param name="scriptValue">PowerShell script as a byte array.</param>
             <param name="credentials">Credentials used when creating the remote runspace.</param>
             <returns>Returns any error messages.</returns>

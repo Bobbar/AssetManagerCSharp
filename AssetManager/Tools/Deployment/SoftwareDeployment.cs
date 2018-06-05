@@ -21,10 +21,10 @@ namespace AssetManager.Tools.Deployment
 
         private DeploymentUI deploy;
 
-        public SoftwareDeployment(ExtendedForm parentForm)
+        public SoftwareDeployment(ExtendedForm parentForm, Device targetDevice)
         {
             this.parentForm = parentForm;
-            deploy = new DeploymentUI(parentForm);
+            deploy = new DeploymentUI(parentForm, targetDevice);
             deploy.UsePowerShell();
             deploy.UsePsExec();
         }
@@ -193,7 +193,7 @@ namespace AssetManager.Tools.Deployment
         {
             try
             {
-                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("mvps_install"), "MVPS Hosts File Install");
+                await deploy.SimplePSExecCommand(deploy.GetString("mvps_install"), "MVPS Hosts File Install");
                 return true;
             }
             catch (Exception)
@@ -206,8 +206,8 @@ namespace AssetManager.Tools.Deployment
         {
             try
             {
-                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("gk_client"), "Gatekeeper Client Install");
-                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("gk_update"), "Gatekeeper Update Install");
+                await deploy.SimplePSExecCommand(deploy.GetString("gk_client"), "Gatekeeper Client Install");
+                await deploy.SimplePSExecCommand(deploy.GetString("gk_update"), "Gatekeeper Update Install");
 
                 deploy.LogMessage("Applying Gatekeeper Registry Fix...");
                 deploy.LogMessage("Starting remote session...");
@@ -237,7 +237,7 @@ namespace AssetManager.Tools.Deployment
         {
             try
             {
-                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("ivue_install"), "Intellivue Install");
+                await deploy.SimplePSExecCommand(deploy.GetString("ivue_install"), "Intellivue Install");
                 return true;
             }
             catch (Exception)
@@ -250,7 +250,7 @@ namespace AssetManager.Tools.Deployment
         {
             try
             {
-                await deploy.SimplePowerShellCommand(targetDevice, Properties.Resources.UpdateChrome, "Chrome Install");
+                await deploy.SimplePowerShellScript(Properties.Resources.UpdateChrome, "Chrome Install");
                 return true;
             }
             catch (Exception)
@@ -263,7 +263,7 @@ namespace AssetManager.Tools.Deployment
         {
             try
             {
-                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("carbonblack_install"), "Carbon Black Install");
+                await deploy.SimplePSExecCommand(deploy.GetString("carbonblack_install"), "Carbon Black Install");
                 return true;
             }
             catch (Exception)
@@ -289,7 +289,7 @@ namespace AssetManager.Tools.Deployment
             try
             {
                 deploy.LogMessage("Installing VPN Client... (Remember to open client and set FCBDD Profile to 'Public')");
-                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("vpn_install"), "VPN Client Install");
+                await deploy.SimplePSExecCommand(deploy.GetString("vpn_install"), "VPN Client Install");
                 return true;
             }
             catch (Exception)
@@ -303,8 +303,8 @@ namespace AssetManager.Tools.Deployment
         {
             try
             {
-                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("vcredist_install"), "Visual C++ Redist Install");
-                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("mapwingis_install"), "MapWinGIS Install");
+                await deploy.SimplePSExecCommand(deploy.GetString("vcredist_install"), "Visual C++ Redist Install");
+                await deploy.SimplePSExecCommand(deploy.GetString("mapwingis_install"), "MapWinGIS Install");
                 return true;
             }
             catch (Exception)
@@ -317,7 +317,7 @@ namespace AssetManager.Tools.Deployment
         {
             try
             {
-                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("spark_install"), "Spark Communicator Install");
+                await deploy.SimplePSExecCommand(deploy.GetString("spark_install"), "Spark Communicator Install");
                 return true;
             }
             catch (Exception)
@@ -330,7 +330,7 @@ namespace AssetManager.Tools.Deployment
         {
             try
             {
-                await deploy.SimplePSExecCommand(targetDevice, deploy.GetString("adobe_install"), "Adobe Reader Install");
+                await deploy.SimplePSExecCommand(deploy.GetString("adobe_install"), "Adobe Reader Install");
                 return true;
             }
             catch (Exception)
@@ -345,7 +345,7 @@ namespace AssetManager.Tools.Deployment
 
         private async Task<PowerShell> GetSetLocalAdminSession(Device targetDevice)
         {
-            var session = await deploy.PowerShellWrap.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
+            var session = await deploy.PowerShellWrap.GetNewPSSession(SecurityTools.AdminCreds);
             var setAdminPassCommand = new Command(deploy.GetString("set_admin_pass"), true);
             var setAdminActiveCommand = new Command(deploy.GetString("set_admin_active"), true);
 
@@ -357,7 +357,7 @@ namespace AssetManager.Tools.Deployment
 
         private async Task<PowerShell> GetGKRegFixSession(Device targetDevice)
         {
-            var session = await deploy.PowerShellWrap.GetNewPSSession(targetDevice.HostName, SecurityTools.AdminCreds);
+            var session = await deploy.PowerShellWrap.GetNewPSSession(SecurityTools.AdminCreds);
 
             var registryFixCommand = new Command("Remove-ItemProperty");
             registryFixCommand.Parameters.Add("Path", deploy.GetString("gk_regfix"));
