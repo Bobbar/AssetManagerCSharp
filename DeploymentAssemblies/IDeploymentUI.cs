@@ -21,6 +21,8 @@ namespace DeploymentAssemblies
 
         Task<bool> SimplePowershellCommand(PowerShellCommand command);
 
+        Task<bool> SimplePowershellCommand(PowerShellCommand[] command);
+
         string GetString(string name);
 
         //  void SetTitle(string title);
@@ -33,7 +35,7 @@ namespace DeploymentAssemblies
 
         void LogMessage(string message);
 
-        void UserPrompt(string prompt, string title);
+        void UserPrompt(string prompt, string title = "");
 
         ICopyFiles NewFilePush(string source, string destination);// <<
 

@@ -32,7 +32,7 @@ namespace ChromeModule
 
                 if (string.IsNullOrEmpty(deploy.TargetHostname))
                 {
-                    deploy.UserPrompt("The target device is null or does not have a hostname.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Missing Info");
+                    deploy.UserPrompt("The target device is null or does not have a hostname.", "Missing Info");
                     return false;
                 }
 

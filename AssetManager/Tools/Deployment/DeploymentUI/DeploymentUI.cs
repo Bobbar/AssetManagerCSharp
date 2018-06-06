@@ -3,17 +3,16 @@ using AssetManager.Data.Classes;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
+using AssetManager.UserInterface.Forms.AdminTools;
+using DeploymentAssemblies;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Management.Automation;
+using System.Management.Automation.Runspaces;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AssetManager.UserInterface.Forms.AdminTools;
-using DeploymentAssemblies;
-using System.Management.Automation;
-using System.Management.Automation.Runspaces;
 
 namespace AssetManager.Tools.Deployment
 {
@@ -124,7 +123,7 @@ namespace AssetManager.Tools.Deployment
             watchdogTask.Start();
         }
 
-        public void UserPrompt(string prompt, string title)
+        public void UserPrompt(string prompt, string title = "") // HERE: Refactor references for new pattern.
         {
             OtherFunctions.Message(prompt, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, title, parentForm);
         }
@@ -170,14 +169,33 @@ namespace AssetManager.Tools.Deployment
         {
             var session = await PowerShellWrap.GetNewPSSession(Security.SecurityTools.AdminCreds);
 
-            var shellCommand = new Command(command.CommandText);
+            var shellCommand = new Command(command.CommandText, command.IsScript);
 
-            foreach (var cmd in command.Parameters)
+            foreach (var param in command.Parameters)
             {
-                shellCommand.Parameters.Add(cmd.Name, cmd.Value);
+                shellCommand.Parameters.Add(param.Name, param.Value);
             }
 
             session.Commands.AddCommand(shellCommand);
+
+            return await PowerShellWrap.InvokePowerShellSession(session);
+        }
+
+        public async Task<bool> SimplePowershellCommand(PowerShellCommand[] commands)
+        {
+            var session = await PowerShellWrap.GetNewPSSession(Security.SecurityTools.AdminCreds);
+
+            foreach (var cmd in commands)
+            {
+                var shellCommand = new Command(cmd.CommandText, cmd.IsScript);
+                               
+                foreach (var param in cmd.Parameters)
+                {
+                    shellCommand.Parameters.Add(param.Name, param.Value);
+                }
+
+                session.Commands.AddCommand(shellCommand);
+            }
 
             return await PowerShellWrap.InvokePowerShellSession(session);
         }
@@ -397,9 +415,6 @@ namespace AssetManager.Tools.Deployment
         {
             Dispose(true);
         }
-
-
-
 
         #endregion IDisposable Support
     }

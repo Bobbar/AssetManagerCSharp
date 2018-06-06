@@ -517,7 +517,9 @@ namespace AssetManager.UserInterface.CustomControls
                 //var path = domain.BaseDirectory + @"DeployTest.dll";
                 //var runnable = domain.CreateInstanceFromAndUnwrap(path, "DeployTest.DeployChrome") as IDeployment;
 
-                var asm = Assembly.LoadFile(@"\\core.co.fairfield.oh.us\dfs1\fcdd\files\QA\Asset Management\Asset Manager\DeploymentModules\DeployTest.dll");//@"C:\GitHub\DeployTest\DeployTest\bin\Release\DeployTest.dll");
+                //var asm = Assembly.LoadFile(@"\\core.co.fairfield.oh.us\dfs1\fcdd\files\QA\Asset Management\Asset Manager\DeploymentModules\DeployTest.dll");//@"C:\GitHub\DeployTest\DeployTest\bin\Release\DeployTest.dll");
+                var asm = Assembly.LoadFile(@"C:\GitHub\AssetManagerCSharp\GatekeeperModule\bin\Debug\GatekeeperModule.dll");//@"C:\GitHub\DeployTest\DeployTest\bin\Release\DeployTest.dll");
+
                 var types = asm.DefinedTypes.ToArray();
 
                 var type = asm.GetType(types[0].FullName);

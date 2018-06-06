@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using DeploymentAssemblies;
+using System;
 using System.Threading.Tasks;
-using DeploymentAssemblies;
 
 namespace GatekeeperModule
 {
@@ -23,33 +20,40 @@ namespace GatekeeperModule
         {
             deploy = ui;
             deploy.UsePowerShell();
+            deploy.UsePsExec();
         }
 
         public async Task<bool> DeployToDevice()
         {
-
-            await deploy.SimplePSExecCommand(deploy.GetString("gk_client"), "Gatekeeper Client Install");
-            await deploy.SimplePSExecCommand(deploy.GetString("gk_update"), "Gatekeeper Update Install");
-
-            deploy.LogMessage("Applying Gatekeeper Registry Fix...");
-            deploy.LogMessage("Starting remote session...");
-
-            deploy.LogMessage("Invoking script...");
-
-            var regFixCommand = GetRegFixCommand();
-
-            if (await deploy.SimplePowershellCommand(regFixCommand))
+            try
             {
-                deploy.LogMessage("GK Registry fix applied!");
+                await deploy.SimplePSExecCommand(deploy.GetString("gk_client"), "Gatekeeper Client Install");
+                await deploy.SimplePSExecCommand(deploy.GetString("gk_update"), "Gatekeeper Update Install");
+
+                deploy.LogMessage("Applying Gatekeeper Registry Fix...");
+                deploy.LogMessage("Starting remote session...");
+
+                deploy.LogMessage("Invoking script...");
+
+                var regFixCommand = GetRegFixCommand();
+
+                if (await deploy.SimplePowershellCommand(regFixCommand))
+                {
+                    deploy.LogMessage("GK Registry fix applied!");
+                }
+                else
+                {
+                    deploy.LogMessage("Failed to apply GK Registry fix!");
+                    deploy.UserPrompt("Error occurred while executing command!", "Gatekeeper Deployment Error");
+                    return false;
+                }
+
+                return true;
             }
-            else
+            catch (Exception)
             {
-                deploy.LogMessage("Failed to apply GK Registry fix!");
-                deploy.UserPrompt("Error occurred while executing command!", "Gatekeeper Deployment Error");
                 return false;
             }
-
-            return false;
         }
 
         private PowerShellCommand GetRegFixCommand()
@@ -60,7 +64,5 @@ namespace GatekeeperModule
 
             return command;
         }
-
-
     }
 }

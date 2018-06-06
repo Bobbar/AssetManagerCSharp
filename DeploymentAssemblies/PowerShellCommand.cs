@@ -7,22 +7,27 @@ using System.Threading.Tasks;
 
 namespace DeploymentAssemblies
 {
-    public class PowerShellCommand
+    public sealed class PowerShellCommand
     {
         public string CommandText { get; private set; }
 
-        public ParameterCollection Parameters;
-       
+        public bool IsScript { get; private set; }
 
-        public PowerShellCommand(string command)
+        public ParameterCollection Parameters;
+
+
+        public PowerShellCommand(string command) : this(command, false) { }
+        
+        public PowerShellCommand(string command, bool isScript)
         {
             CommandText = command;
+            IsScript = isScript;
             Parameters = new ParameterCollection();
         }
-               
+
     }
 
-    public class ParameterCollection : IEnumerable<CommandParameter>
+    public sealed class ParameterCollection : IEnumerable<CommandParameter>
     {
 
         public List<CommandParameter> Parameters
@@ -59,7 +64,7 @@ namespace DeploymentAssemblies
         }
     }
 
-    public class CommandParameter
+    public sealed class CommandParameter
     {
         public string Name { get; private set; }
         public object Value { get; private set; }
