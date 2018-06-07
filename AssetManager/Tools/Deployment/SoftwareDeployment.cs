@@ -15,7 +15,7 @@ namespace AssetManager.Tools.Deployment
 {
     public class SoftwareDeployment : IDisposable
     {
-        private Queue<Func<Task<bool>>> deployments = new Queue<Func<Task<bool>>>();
+        private Queue<TaskInfo> deployments = new Queue<TaskInfo>();
 
         private ExtendedForm parentForm;
 
@@ -180,7 +180,7 @@ namespace AssetManager.Tools.Deployment
                 {
                     foreach (TaskInfo task in selectListBox.CheckedItems)
                     {
-                        deployments.Enqueue(task.TaskMethod);
+                        deployments.Enqueue(task);
                     }
                 }
             }
@@ -206,8 +206,10 @@ namespace AssetManager.Tools.Deployment
                         // Dequeue returns the next method.
                         var d = deployments.Dequeue();
 
+                        deploy.LogMessage("######    " + d.TaskName + "    ######");
+
                         // Invoke the method and return only on failures.
-                        if (!await d.Invoke())
+                        if (!await d.TaskMethod.Invoke())
                         {
                             return false;
                         }
