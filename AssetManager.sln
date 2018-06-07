@@ -23,29 +23,29 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeploymentAssemblies", "Dep
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeploymentModules", "DeploymentModules", "{2899E908-40B9-4B27-A979-13AE9DAA59C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromeModule", "DeployChrome\ChromeModule.csproj", "{39241E74-31C0-4F71-AAD1-DC11D611622D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromeModule", "DeploymentModules\source\DeployChrome\ChromeModule.csproj", "{39241E74-31C0-4F71-AAD1-DC11D611622D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVPSModule", "MVPSModule\MVPSModule.csproj", "{C384E278-F6D1-4783-B895-92CF4998D925}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVPSModule", "DeploymentModules\source\MVPSModule\MVPSModule.csproj", "{C384E278-F6D1-4783-B895-92CF4998D925}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatekeeperModule", "GatekeeperModule\GatekeeperModule.csproj", "{D2395679-81C5-486D-BD44-E9E4AA04A08A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatekeeperModule", "DeploymentModules\source\GatekeeperModule\GatekeeperModule.csproj", "{D2395679-81C5-486D-BD44-E9E4AA04A08A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnableAdminModule", "EnableAdminModule\EnableAdminModule.csproj", "{FDB823CF-B51B-4AE0-9B08-D8534E11D7B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnableAdminModule", "DeploymentModules\source\EnableAdminModule\EnableAdminModule.csproj", "{FDB823CF-B51B-4AE0-9B08-D8534E11D7B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntellivueModule", "IntellivueModule\IntellivueModule.csproj", "{9419D452-4868-4A27-B58A-DC8E20F3D92A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntellivueModule", "DeploymentModules\source\IntellivueModule\IntellivueModule.csproj", "{9419D452-4868-4A27-B58A-DC8E20F3D92A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarbonBlackModule", "CarbonBlackModule\CarbonBlackModule.csproj", "{A942DA27-F011-4972-90D4-7CCDEDA9A9E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarbonBlackModule", "DeploymentModules\source\CarbonBlackModule\CarbonBlackModule.csproj", "{A942DA27-F011-4972-90D4-7CCDEDA9A9E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeModule", "OfficeModule\OfficeModule.csproj", "{7455E036-56EE-4FF3-9773-E3CE2242F55E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeModule", "DeploymentModules\source\OfficeModule\OfficeModule.csproj", "{7455E036-56EE-4FF3-9773-E3CE2242F55E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamViewerModule", "TeamViewerModule\TeamViewerModule.csproj", "{495BF5B8-0509-448F-9415-FD3E4FBC2FF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamViewerModule", "DeploymentModules\source\TeamViewerModule\TeamViewerModule.csproj", "{495BF5B8-0509-448F-9415-FD3E4FBC2FF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPNClientModule", "VPNClientModule\VPNClientModule.csproj", "{51ED47B3-A5B5-481B-80DF-D5169F6BC8DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPNClientModule", "DeploymentModules\source\VPNClientModule\VPNClientModule.csproj", "{51ED47B3-A5B5-481B-80DF-D5169F6BC8DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWinGisModule", "MapWinGisModule\MapWinGisModule.csproj", "{869FF499-F6E1-444D-BE1B-D1973C653829}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWinGisModule", "DeploymentModules\source\MapWinGisModule\MapWinGisModule.csproj", "{869FF499-F6E1-444D-BE1B-D1973C653829}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkModule", "SparkModule\SparkModule.csproj", "{976FDBB4-22E8-4182-9E1F-31D03EA171BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkModule", "DeploymentModules\source\SparkModule\SparkModule.csproj", "{976FDBB4-22E8-4182-9E1F-31D03EA171BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdobeModule", "AdobeModule\AdobeModule.csproj", "{8A8EBF4C-C0DB-49B3-8204-CD2CFF37B737}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdobeModule", "DeploymentModules\source\AdobeModule\AdobeModule.csproj", "{8A8EBF4C-C0DB-49B3-8204-CD2CFF37B737}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

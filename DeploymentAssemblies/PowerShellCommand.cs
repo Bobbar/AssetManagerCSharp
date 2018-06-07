@@ -9,7 +9,7 @@ namespace DeploymentAssemblies
     /// <remarks>
     /// This is used because I don't want to have to reference the System.Management.Automation
     /// assembly in the abstracted deployment modules. Problems with that assembly reference
-    /// can break deployment, so the fewer references the better. It's also quite large...
+    /// can break the main application deployment/publishing, so the fewer references the better. It's also quite large...
     /// </remarks>
     public sealed class PowerShellCommand
     {
