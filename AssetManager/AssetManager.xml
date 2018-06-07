@@ -759,17 +759,7 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:AssetManager.Properties.Resources.CheckForTVRegistryValue">
-            <summary>
-              Looks up a localized resource of type System.Byte[].
-            </summary>
-        </member>
         <member name="P:AssetManager.Properties.Resources.CheckOutIcon">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:AssetManager.Properties.Resources.ChromeIcon">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
@@ -874,11 +864,6 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:AssetManager.Properties.Resources.O365SquareLogo">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
         <member name="P:AssetManager.Properties.Resources.PaperClipIcon">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -944,11 +929,6 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:AssetManager.Properties.Resources.TeamViewerIcon">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
         <member name="P:AssetManager.Properties.Resources.Title_Text_Orange">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -962,11 +942,6 @@
         <member name="P:AssetManager.Properties.Resources.TrashIcon">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:AssetManager.Properties.Resources.UpdateChrome">
-            <summary>
-              Looks up a localized resource of type System.Byte[].
             </summary>
         </member>
         <member name="P:AssetManager.Properties.Resources.ViewIcon3">

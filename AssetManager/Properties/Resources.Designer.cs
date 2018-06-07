@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using AssetManager.Tools;
+
 namespace AssetManager.Properties {
     using System;
     
@@ -151,31 +151,11 @@ namespace AssetManager.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] CheckForTVRegistryValue {
-            get {
-                object obj = ResourceManager.GetObject("CheckForTVRegistryValue", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap CheckOutIcon {
             get {
                 object obj = ResourceManager.GetObject("CheckOutIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap ChromeIcon {
-            get {
-                object obj = ResourceManager.GetObject("ChromeIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -383,16 +363,6 @@ namespace AssetManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap O365SquareLogo {
-            get {
-                object obj = ResourceManager.GetObject("O365SquareLogo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap PaperClipIcon {
             get {
                 object obj = ResourceManager.GetObject("PaperClipIcon", resourceCulture);
@@ -523,16 +493,6 @@ namespace AssetManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap TeamViewerIcon {
-            get {
-                object obj = ResourceManager.GetObject("TeamViewerIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Title_Text_Orange {
             get {
                 object obj = ResourceManager.GetObject("Title_Text_Orange", resourceCulture);
@@ -557,16 +517,6 @@ namespace AssetManager.Properties {
             get {
                 object obj = ResourceManager.GetObject("TrashIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] UpdateChrome {
-            get {
-                object obj = ResourceManager.GetObject("UpdateChrome", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
