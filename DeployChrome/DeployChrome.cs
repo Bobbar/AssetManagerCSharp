@@ -13,11 +13,9 @@ namespace ChromeModule
         {
             get
             {
-                return "Chrome Install";
+                return "Google Chrome";
             }
         }
-
-        public DeployChrome() { }
 
         public void InitUI(DeploymentAssemblies.IDeploymentUI ui)
         {
@@ -36,10 +34,6 @@ namespace ChromeModule
                     return false;
                 }
 
-                deploy.StartTimer();
-
-                deploy.LogMessage("Starting Chrome deployment to: " + deploy.TargetHostname);
-
                 await deploy.SimplePowerShellScript(Resources.UpdateChrome, "Chrome Install");
 
                 deploy.LogMessage("Chrome Deployment Complete.");
@@ -51,11 +45,6 @@ namespace ChromeModule
             {
                 deploy.LogMessage("Deployment failed!");
                 return false;
-            }
-            finally
-            {
-                deploy.DoneOrError();
-             
             }
 
         }

@@ -15,12 +15,8 @@ namespace CarbonBlackModule
         {
             get
             {
-                return "Install Carbon Black";
+                return "Carbon Black";
             }
-        }
-
-        public DeployCarbonBlack()
-        {
         }
 
         public void InitUI(IDeploymentUI ui)

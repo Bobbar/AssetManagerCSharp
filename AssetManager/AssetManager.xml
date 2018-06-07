@@ -1047,12 +1047,10 @@
             Container for holding deployment methods and a descriptive name.
             </summary>
         </member>
-        <member name="M:AssetManager.Tools.Deployment.SoftwareDeployment.DeploymentTasks(AssetManager.Data.Classes.Device)">
+        <member name="M:AssetManager.Tools.Deployment.SoftwareDeployment.VerifyModules">
             <summary>
-            List of available deployment methods.
+            Syncs the local module store with the remote store if possible.
             </summary>
-            <param name="targetDevice"></param>
-            <returns></returns>
         </member>
         <member name="M:AssetManager.Tools.Deployment.SoftwareDeployment.ChooseDeployments(AssetManager.Data.Classes.Device)">
             <summary>

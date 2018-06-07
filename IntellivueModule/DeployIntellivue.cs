@@ -12,12 +12,8 @@ namespace IntellivueModule
         {
             get
             {
-                return "Install Intellivue";
+                return "Intellivue";
             }
-        }
-
-        public DeployIntellivue()
-        {
         }
 
         public void InitUI(IDeploymentUI ui)

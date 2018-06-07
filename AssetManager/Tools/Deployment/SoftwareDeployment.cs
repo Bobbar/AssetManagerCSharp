@@ -1,13 +1,13 @@
-﻿using AssetManager.Data.Classes;
+﻿using AdvancedDialog;
+using AssetManager.Data.Classes;
 using AssetManager.Helpers;
-using AssetManager.Security;
 using AssetManager.UserInterface.CustomControls;
-using AdvancedDialog;
+using DeploymentAssemblies;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Management.Automation;
-using System.Management.Automation.Runspaces;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -44,35 +44,106 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
-        /// <summary>
-        /// List of available deployment methods.
-        /// </summary>
-        /// <param name="targetDevice"></param>
-        /// <returns></returns>
-        private List<TaskInfo> DeploymentTasks(Device targetDevice)
+        private async Task<List<TaskInfo>> GetModules()
         {
-            var depList = new List<TaskInfo>();
-            depList.Add(new TaskInfo(() => EnableAdmin(targetDevice), "Enable Local Admin"));
-            depList.Add(new TaskInfo(() => InstallMVPS(targetDevice), "MVPS Hosts File"));
-            depList.Add(new TaskInfo(() => InstallMapWinGIS(targetDevice), "MapWinGIS"));
-            depList.Add(new TaskInfo(() => InstallIntellivue(targetDevice), "Intellivue"));
-            depList.Add(new TaskInfo(() => InstallGatekeeper(targetDevice), "Gatekeeper"));
-            depList.Add(new TaskInfo(() => InstallChrome(targetDevice), "Chrome"));
-            depList.Add(new TaskInfo(() => InstallTeamViewer(targetDevice), "Team Viewer"));
-            depList.Add(new TaskInfo(() => InstallSpark(targetDevice), "Spark Communicator"));
-            depList.Add(new TaskInfo(() => InstallAdobe(targetDevice), "Adobe Reader"));
-            depList.Add(new TaskInfo(() => InstallOffice(targetDevice), "Office 365"));
-            depList.Add(new TaskInfo(() => InstallCarbonBlack(targetDevice), "Carbon Black"));
-            depList.Add(new TaskInfo(() => InstallVPNClient(targetDevice), "Shrewsoft VPN"));
+            int modCount = 0;
+            long startTime = DateTime.Now.Ticks;
+            var taskList = new List<TaskInfo>();
+            var interfaceName = nameof(IDeployment);
 
-            return depList;
+            deploy.LogMessage("Loading deployment modules...");
+
+            await Task.Run(() =>
+             {
+                 VerifyModules();
+
+                 var files = Directory.GetFiles(Paths.LocalModulesStore, "*.dll");
+
+                 foreach (var file in files)
+                 {
+                     var fileInfo = new FileInfo(file);
+                     var asm = Assembly.Load(File.ReadAllBytes(fileInfo.FullName));
+                     var types = asm.DefinedTypes.ToArray();
+                     var firstType = asm.GetType(types[0].FullName);
+                     var typeInterface = firstType.GetInterface(interfaceName);
+
+                     // Make sure the assembly type implements the deployment interface.
+                     if (typeInterface != null)
+                     {
+                         var moduleInstance = Activator.CreateInstance(firstType) as IDeployment;
+
+                         if (moduleInstance != null)
+                         {
+                             moduleInstance.InitUI(deploy);
+
+                             taskList.Add(new TaskInfo(() => moduleInstance.DeployToDevice(), moduleInstance.DeploymentName));
+                         }
+
+                         deploy.LogMessage(asm.ManifestModule.ScopeName);
+
+                         modCount++;
+                     }
+                 }
+             });
+
+            var elapTime = (DateTime.Now.Ticks - startTime) / 10000;
+
+            deploy.LogMessage(modCount + " modules loaded in " + elapTime + "ms.");
+
+            return taskList;
+        }
+
+        /// <summary>
+        /// Syncs the local module store with the remote store if possible.
+        /// </summary>
+        private void VerifyModules()
+        {
+            if (!Directory.Exists(Paths.LocalModulesStore))
+            {
+                Directory.CreateDirectory(Paths.LocalModulesStore);
+            }
+
+            // Return silently if remote path cannot be reached.
+            if (!Directory.Exists(Paths.RemoteModulesStore)) return;
+
+            // Get the list of remote module files.
+            var remoteModules = Directory.GetFiles(Paths.RemoteModulesStore, "*.dll");
+
+            // Return silently if no remote modules found.
+            if (remoteModules.Length <= 0) return;
+
+            // Iterate through the module files.
+            foreach (var module in remoteModules)
+            {
+                var remoteFile = new FileInfo(module);
+                var localFilePath = Paths.LocalModulesStore + remoteFile.Name;
+
+                // Compare local and remote stores and copy missing or mismatched files.
+                if (File.Exists(localFilePath))
+                {
+                    // Compare hashes and replace if needed.
+                    var localHash = Security.SecurityTools.GetMD5OfFile(localFilePath);
+                    var remoteHash = Security.SecurityTools.GetMD5OfFile(remoteFile.FullName);
+
+                    if (localHash != remoteHash)
+                    {
+                        File.Delete(localFilePath);
+                        File.Copy(remoteFile.FullName, localFilePath);
+                    }
+                }
+                else
+                {
+                    // Copy from remote to local.
+                    File.Copy(remoteFile.FullName, localFilePath);
+                }
+            }
         }
 
         /// <summary>
         /// Prompt user for items to be deployed to the device.
         /// </summary>
         /// <param name="targetDevice"></param>
-        private void ChooseDeployments(Device targetDevice)
+        private async Task ChooseDeployments(Device targetDevice)
         {
             using (var newDialog = new Dialog(parentForm))
             {
@@ -86,7 +157,8 @@ namespace AssetManager.Tools.Deployment
                 selectListBox.Size = new System.Drawing.Size(300, 200);
                 selectListBox.DisplayMember = nameof(TaskInfo.TaskName);
 
-                var depList = DeploymentTasks(targetDevice);
+                var depList = await GetModules();
+
                 foreach (var d in depList)
                 {
                     selectListBox.Items.Add(d, true);
@@ -126,7 +198,7 @@ namespace AssetManager.Tools.Deployment
                     deploy.LogMessage("Starting software deployment to " + targetDevice.HostName);
                     deploy.LogMessage("-------------------");
 
-                    ChooseDeployments(targetDevice);
+                    await ChooseDeployments(targetDevice);
 
                     // Run through the queue and invoke the items sequentially.
                     while (deployments.Any())
@@ -165,209 +237,6 @@ namespace AssetManager.Tools.Deployment
                 deploy.DoneOrError();
             }
         }
-
-        #region DeploymentMethods
-
-        private async Task<bool> EnableAdmin(Device targetDevice)
-        {
-            deploy.LogMessage("Enabling Local Admin Account...");
-            deploy.LogMessage("Starting remote session...");
-
-            var enableAdminSession = await GetSetLocalAdminSession(targetDevice);
-
-            deploy.LogMessage("Invoking script...");
-            if (await deploy.PowerShellWrap.InvokePowerShellSession(enableAdminSession))
-            {
-                deploy.LogMessage("Local Admin enabled!");
-            }
-            else
-            {
-                deploy.LogMessage("Failed to enable local Admin!");
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-            return true;
-        }
-
-        private async Task<bool> InstallMVPS(Device targetDevice)
-        {
-            try
-            {
-                await deploy.SimplePSExecCommand(deploy.GetString("mvps_install"), "MVPS Hosts File Install");
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private async Task<bool> InstallGatekeeper(Device targetDevice)
-        {
-            try
-            {
-                await deploy.SimplePSExecCommand(deploy.GetString("gk_client"), "Gatekeeper Client Install");
-                await deploy.SimplePSExecCommand(deploy.GetString("gk_update"), "Gatekeeper Update Install");
-
-                deploy.LogMessage("Applying Gatekeeper Registry Fix...");
-                deploy.LogMessage("Starting remote session...");
-
-                var applyGKRegFixSession = await GetGKRegFixSession(targetDevice);
-
-                deploy.LogMessage("Invoking script...");
-                if (await deploy.PowerShellWrap.InvokePowerShellSession(applyGKRegFixSession))
-                {
-                    deploy.LogMessage("GK Registry fix applied!");
-                }
-                else
-                {
-                    deploy.LogMessage("Failed to apply GK Registry fix!");
-                    OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return false;
-                }
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private async Task<bool> InstallIntellivue(Device targetDevice)
-        {
-            try
-            {
-                await deploy.SimplePSExecCommand(deploy.GetString("ivue_install"), "Intellivue Install");
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private async Task<bool> InstallChrome(Device targetDevice)
-        {
-            try
-            {
-                await deploy.SimplePowerShellScript(Properties.Resources.UpdateChrome, "Chrome Install");
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private async Task<bool> InstallCarbonBlack(Device targetDevice)
-        {
-            try
-            {
-                await deploy.SimplePSExecCommand(deploy.GetString("carbonblack_install"), "Carbon Black Install");
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private async Task<bool> InstallOffice(Device targetDevice)
-        {
-            var newOfficeDeploy = new DeployOffice(parentForm, deploy);
-            return await newOfficeDeploy.DeployToDevice(targetDevice);
-        }
-
-        private async Task<bool> InstallTeamViewer(Device targetDevice)
-        {
-            var newTeamViewDeploy = new DeployTeamViewer(parentForm, deploy);
-            return await newTeamViewDeploy.DeployToDevice(targetDevice);
-        }
-
-        private async Task<bool> InstallVPNClient(Device targetDevice)
-        {
-            try
-            {
-                deploy.LogMessage("Installing VPN Client... (Remember to open client and set FCBDD Profile to 'Public')");
-                await deploy.SimplePSExecCommand(deploy.GetString("vpn_install"), "VPN Client Install");
-                return true;
-            }
-            catch (Exception)
-            {
-                deploy.LogMessage("### Errors are expected due to the installation causing the device to momentarily disconnect.");
-                return true;
-            }
-        }
-
-        private async Task<bool> InstallMapWinGIS(Device targetDevice)
-        {
-            try
-            {
-                await deploy.SimplePSExecCommand(deploy.GetString("vcredist_install"), "Visual C++ Redist Install");
-                await deploy.SimplePSExecCommand(deploy.GetString("mapwingis_install"), "MapWinGIS Install");
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private async Task<bool> InstallSpark(Device targetDevice)
-        {
-            try
-            {
-                await deploy.SimplePSExecCommand(deploy.GetString("spark_install"), "Spark Communicator Install");
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private async Task<bool> InstallAdobe(Device targetDevice)
-        {
-            try
-            {
-                await deploy.SimplePSExecCommand(deploy.GetString("adobe_install"), "Adobe Reader Install");
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        #endregion DeploymentMethods
-
-        #region DeploymentSupportMethods
-
-        private async Task<PowerShell> GetSetLocalAdminSession(Device targetDevice)
-        {
-            var session = await deploy.PowerShellWrap.GetNewPSSession(SecurityTools.AdminCreds);
-            var setAdminPassCommand = new Command(deploy.GetString("set_admin_pass"), true);
-            var setAdminActiveCommand = new Command(deploy.GetString("set_admin_active"), true);
-
-            session.Commands.AddCommand(setAdminPassCommand);
-            session.Commands.AddCommand(setAdminActiveCommand);
-
-            return session;
-        }
-
-        private async Task<PowerShell> GetGKRegFixSession(Device targetDevice)
-        {
-            var session = await deploy.PowerShellWrap.GetNewPSSession(SecurityTools.AdminCreds);
-
-            var registryFixCommand = new Command("Remove-ItemProperty");
-            registryFixCommand.Parameters.Add("Path", deploy.GetString("gk_regfix"));
-            registryFixCommand.Parameters.Add("Name", "CommLinks");
-            session.Commands.AddCommand(registryFixCommand);
-
-            return session;
-        }
-
-        #endregion DeploymentSupportMethods
 
         #region IDisposable Support
 

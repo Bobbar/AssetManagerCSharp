@@ -222,18 +222,15 @@
     <Compile Include="Security\SecurityFunctions.cs" />
     <Compile Include="StartProgram.cs" />
     <Compile Include="Tools\ActiveDirectory\ActiveDirectoryWrapper.cs" />
-    <Compile Include="Tools\Deployment\DeployChrome.cs" />
     <Compile Include="Tools\Deployment\SoftwareDeployment.cs" />
     <Compile Include="Tools\FileIcon.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Data\NetworkInfo.cs" />
-    <Compile Include="Tools\Deployment\DeployOffice.cs" />
     <Compile Include="Tools\TaskBarNotify.cs" />
     <Compile Include="Tools\PowerShellWrapper.cs" />
     <Compile Include="Tools\PsExec\PsExecWrapper.cs" />
     <Compile Include="Tools\Deployment\DeploymentUI\DeploymentUI.cs" />
-    <Compile Include="Tools\Deployment\DeployTeamViewer.cs" />
     <Compile Include="UserInterface\CustomControls\CorrectedTreeView.cs">
       <SubType>Component</SubType>
     </Compile>

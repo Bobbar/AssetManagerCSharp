@@ -12,7 +12,7 @@ namespace GatekeeperModule
         {
             get
             {
-                return "Getkeeper Install";
+                return "Getkeeper";
             }
         }
 
@@ -31,13 +31,11 @@ namespace GatekeeperModule
                 await deploy.SimplePSExecCommand(deploy.GetString("gk_update"), "Gatekeeper Update Install");
 
                 deploy.LogMessage("Applying Gatekeeper Registry Fix...");
-                deploy.LogMessage("Starting remote session...");
-
-                deploy.LogMessage("Invoking script...");
+                deploy.LogMessage("Starting remote session and invoking script...");
 
                 var regFixCommand = GetRegFixCommand();
 
-                if (await deploy.SimplePowershellCommand(regFixCommand))
+                if (await deploy.SimplePowerShellCommand(regFixCommand))
                 {
                     deploy.LogMessage("GK Registry fix applied!");
                 }

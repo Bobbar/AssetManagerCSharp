@@ -33,6 +33,14 @@ namespace AssetManager.Tools.Deployment
         private CancellationTokenSource watchdogCancelTokenSource;
         private Device targetDevice;
 
+        public Form ParentForm
+        {
+            get
+            {
+                return parentForm;
+            }
+        }
+
         public string TargetHostname
         {
             get
@@ -133,13 +141,14 @@ namespace AssetManager.Tools.Deployment
             return new CopyFilesForm(parentForm, targetDevice, source, destination);
         }
 
-        public async Task SimplePSExecCommand(string command, string title)
+        public async Task<bool> SimplePSExecCommand(string command, string title)
         {
-            LogMessage("Starting " + title);
+            LogMessage("Starting " + title + "...");
             var exitCode = await PSExecWrap.ExecuteRemoteCommand(command);
             if (exitCode == 0)
             {
                 LogMessage(title + " complete!");
+                return true;
             }
             else
             {
@@ -151,7 +160,7 @@ namespace AssetManager.Tools.Deployment
 
         public async Task SimplePowerShellScript(byte[] script, string title)
         {
-            LogMessage("Starting " + title);
+            LogMessage("Starting " + title + "...");
             var success = await PowerShellWrap.ExecutePowerShellScript(script);
             if (success)
             {
@@ -165,11 +174,15 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
-        public async Task<bool> SimplePowershellCommand(PowerShellCommand command)
+        public async Task<string> AdvancedPowerShellScript(byte[] script)
+        {
+            return await Task.Run(() => { return PowerShellWrap.ExecuteRemotePSScript(script, Security.SecurityTools.AdminCreds); });
+        }
+
+        public async Task<bool> SimplePowerShellCommand(PowerShellCommand command)
         {
             var session = await PowerShellWrap.GetNewPSSession(Security.SecurityTools.AdminCreds);
-
-            var shellCommand = new Command(command.CommandText, command.IsScript);
+            var shellCommand = new Command(command.CommandText, command.IsScript, command.UseLocalScope);
 
             foreach (var param in command.Parameters)
             {
@@ -181,14 +194,14 @@ namespace AssetManager.Tools.Deployment
             return await PowerShellWrap.InvokePowerShellSession(session);
         }
 
-        public async Task<bool> SimplePowershellCommand(PowerShellCommand[] commands)
+        public async Task<bool> SimplePowerShellCommand(PowerShellCommand[] commands)
         {
             var session = await PowerShellWrap.GetNewPSSession(Security.SecurityTools.AdminCreds);
 
             foreach (var cmd in commands)
             {
-                var shellCommand = new Command(cmd.CommandText, cmd.IsScript);
-                               
+                var shellCommand = new Command(cmd.CommandText, cmd.IsScript, cmd.UseLocalScope);
+
                 foreach (var param in cmd.Parameters)
                 {
                     shellCommand.Parameters.Add(param.Name, param.Value);

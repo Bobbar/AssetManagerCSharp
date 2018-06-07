@@ -13,6 +13,9 @@ namespace AssetManager
 
         public static readonly string AppDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\AssetManager\";
         public static readonly string PsExecPath = AppDomain.CurrentDomain.BaseDirectory + @"Tools\PsExec\PsExec.exe";
+        public static readonly string LocalModulesStore = AppDomain.CurrentDomain.BaseDirectory + @"\DeploymentModulesStore\";
+        public static readonly string RemoteModulesStore   = @" \\core.co.fairfield.oh.us\dfs1\fcdd\files\QA\Asset Management\Asset Manager\DeploymentModules\";
+       
         public const string PsExecTempDir = @"C:\Temp\";
         public const string PsExecTempPath = @"C:\Temp\PsExec.exe";
 

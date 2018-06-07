@@ -103,7 +103,7 @@ namespace AssetManager.Tools
             }
         }
 
-        public string InvokeRemotePSCommand( NetworkCredential credentials, Command pScommand)
+        public string InvokeRemotePSCommand(NetworkCredential credentials, Command pScommand)
         {
             try
             {

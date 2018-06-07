@@ -243,68 +243,6 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private async void DeployTeamViewer(Device targetDevice)
-        {
-            CheckRemoteAccess();
-
-            if (OtherFunctions.Message("Deploy TeamViewer to this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
-            {
-                return;
-            }
-            try
-            {
-                if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
-                {
-                    var newTVDeploy = new DeployTeamViewer(hostForm, targetDevice);
-                    OnStatusPrompt("Deploying TeamViewer...", 0);
-                    if (await newTVDeploy.DeployToDevice(targetDevice))
-                    {
-                        OnStatusPrompt("TeamViewer deployment complete!", successColor);
-                    }
-                    else
-                    {
-                        OnStatusPrompt("TeamViewer deployment failed...", failColor);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                OnStatusPrompt("TeamViewer deployment failed...", failColor);
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-            }
-        }
-
-        private async void DeployOffice(Device targetDevice)
-        {
-            CheckRemoteAccess();
-
-            if (OtherFunctions.Message("Deploy Office 365 to this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
-            {
-                return;
-            }
-            try
-            {
-                if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
-                {
-                    var newOfficeDeploy = new DeployOffice(hostForm, targetDevice);
-                    OnStatusPrompt("Deploying Office 365...", 0);
-                    if (await newOfficeDeploy.DeployToDevice(targetDevice))
-                    {
-                        OnStatusPrompt("Office 365 deployment complete!", successColor);
-                    }
-                    else
-                    {
-                        OnStatusPrompt("Office 365 deployment failed...", failColor);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                OnStatusPrompt("Office 365 deployment failed...", failColor);
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-            }
-        }
-
         private async void NewSoftwareDeployment(Device targetDevice)
         {
             CheckRemoteAccess();
@@ -481,73 +419,6 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private async void UpdateChrome(Device targetDevice)
-        {
-            //CheckRemoteAccess();
-
-            //if (OtherFunctions.Message("Update/Install Chrome on this device?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm) != DialogResult.Yes)
-            //{
-            //    return;
-            //}
-            //try
-            //{
-            //    if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
-            //    {
-            //        OnStatusPrompt("Installing Chrome...", 0);
-            //        var newChromeDeploy = new DeployChrome(hostForm, targetDevice);
-            //        if (await newChromeDeploy.DeployToDevice())
-            //        {
-            //            OnStatusPrompt("Chrome install complete!", successColor);
-            //        }
-            //        else
-            //        {
-            //            OnStatusPrompt("Error while installing Chrome!", failColor);
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    OnStatusPrompt("Error while installing Chrome!", failColor);
-            //    ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-            //}
-            if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
-            {
-
-                //var domain = AppDomain.CreateDomain("ChromeDeploy");
-                //var path = domain.BaseDirectory + @"DeployTest.dll";
-                //var runnable = domain.CreateInstanceFromAndUnwrap(path, "DeployTest.DeployChrome") as IDeployment;
-
-                //var asm = Assembly.LoadFile(@"\\core.co.fairfield.oh.us\dfs1\fcdd\files\QA\Asset Management\Asset Manager\DeploymentModules\DeployTest.dll");//@"C:\GitHub\DeployTest\DeployTest\bin\Release\DeployTest.dll");
-                var asm = Assembly.LoadFile(@"C:\GitHub\AssetManagerCSharp\GatekeeperModule\bin\Debug\GatekeeperModule.dll");//@"C:\GitHub\DeployTest\DeployTest\bin\Release\DeployTest.dll");
-
-                var types = asm.DefinedTypes.ToArray();
-
-                var type = asm.GetType(types[0].FullName);
-                var runnable = Activator.CreateInstance(type) as IDeployment;
-
-                if (runnable != null)
-                {
-                    var deploy = new DeploymentUI(hostForm, targetDevice);
-
-                    runnable.InitUI(deploy);
-
-                    if (await runnable.DeployToDevice())
-                    {
-                        OnStatusPrompt("Chrome install complete!", successColor);
-                    }
-                    else
-                    {
-                        OnStatusPrompt("Error while installing Chrome!", failColor);
-                    }
-
-
-                }
-            }
-
-
-
-
-        }
 
         private void CheckRemoteAccess()
         {
@@ -580,11 +451,6 @@ namespace AssetManager.UserInterface.CustomControls
             BrowseFiles();
         }
 
-        private void DeployTVButton_Click(object sender, EventArgs e)
-        {
-            DeployTeamViewer(this.device);
-        }
-
         private void GKUpdateButton_Click(object sender, EventArgs e)
         {
             QueueGKUpdate();
@@ -605,19 +471,9 @@ namespace AssetManager.UserInterface.CustomControls
             LaunchRDP();
         }
 
-        private void UpdateChromeButton_Click(object sender, EventArgs e)
-        {
-            UpdateChrome(this.device);
-        }
-
         private void EventViewerButton_Click(object sender, EventArgs e)
         {
             EventViewer();
-        }
-
-        private void DeployOfficeButton_Click(object sender, EventArgs e)
-        {
-            DeployOffice(this.device);
         }
 
         private void NewDeployButton_Click(object sender, EventArgs e)

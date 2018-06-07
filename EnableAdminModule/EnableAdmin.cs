@@ -16,10 +16,6 @@ namespace EnableAdminModule
             }
         }
 
-        public EnableAdmin()
-        {
-        }
-
         public void InitUI(IDeploymentUI ui)
         {
             deploy = ui;
@@ -30,7 +26,7 @@ namespace EnableAdminModule
             deploy.LogMessage("Enabling Local Admin Account...");
             deploy.LogMessage("Starting remote session and invoking commands...");
 
-            if (await deploy.SimplePowershellCommand(GetSetLocalAdminCommands()))
+            if (await deploy.SimplePowerShellCommand(GetSetLocalAdminCommands()))
             {
                 deploy.LogMessage("Local Admin enabled!");
             }

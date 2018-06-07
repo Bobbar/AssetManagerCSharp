@@ -26,9 +26,6 @@
             this.PowerShellButton = new System.Windows.Forms.Button();
             this.PSExecButton = new System.Windows.Forms.Button();
             this.GKUpdateButton = new System.Windows.Forms.Button();
-            this.DeployTVButton = new System.Windows.Forms.Button();
-            this.UpdateChromeButton = new System.Windows.Forms.Button();
-            this.DeployOfficeButton = new System.Windows.Forms.Button();
             this.NewDeployButton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.ToolsGroupBox.SuspendLayout();
@@ -77,9 +74,6 @@
             this.ToolsLayoutPanel.Controls.Add(this.PowerShellButton);
             this.ToolsLayoutPanel.Controls.Add(this.PSExecButton);
             this.ToolsLayoutPanel.Controls.Add(this.GKUpdateButton);
-            this.ToolsLayoutPanel.Controls.Add(this.DeployTVButton);
-            this.ToolsLayoutPanel.Controls.Add(this.UpdateChromeButton);
-            this.ToolsLayoutPanel.Controls.Add(this.DeployOfficeButton);
             this.ToolsLayoutPanel.Controls.Add(this.NewDeployButton);
             this.ToolsLayoutPanel.Location = new System.Drawing.Point(8, 15);
             this.ToolsLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -184,54 +178,12 @@
             this.GKUpdateButton.UseVisualStyleBackColor = true;
             this.GKUpdateButton.Click += new System.EventHandler(this.GKUpdateButton_Click);
             // 
-            // DeployTVButton
-            // 
-            this.DeployTVButton.BackgroundImage = global::AssetManager.Properties.Resources.TeamViewerIcon;
-            this.DeployTVButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.DeployTVButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.DeployTVButton.Location = new System.Drawing.Point(48, 48);
-            this.DeployTVButton.Margin = new System.Windows.Forms.Padding(1);
-            this.DeployTVButton.Name = "DeployTVButton";
-            this.DeployTVButton.Size = new System.Drawing.Size(45, 45);
-            this.DeployTVButton.TabIndex = 57;
-            this.toolTip.SetToolTip(this.DeployTVButton, "Deploy TeamViewer");
-            this.DeployTVButton.UseVisualStyleBackColor = true;
-            this.DeployTVButton.Click += new System.EventHandler(this.DeployTVButton_Click);
-            // 
-            // UpdateChromeButton
-            // 
-            this.UpdateChromeButton.BackgroundImage = global::AssetManager.Properties.Resources.ChromeIcon;
-            this.UpdateChromeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.UpdateChromeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.UpdateChromeButton.Location = new System.Drawing.Point(95, 48);
-            this.UpdateChromeButton.Margin = new System.Windows.Forms.Padding(1);
-            this.UpdateChromeButton.Name = "UpdateChromeButton";
-            this.UpdateChromeButton.Size = new System.Drawing.Size(45, 45);
-            this.UpdateChromeButton.TabIndex = 58;
-            this.toolTip.SetToolTip(this.UpdateChromeButton, "Update/Install Chrome");
-            this.UpdateChromeButton.UseVisualStyleBackColor = true;
-            this.UpdateChromeButton.Click += new System.EventHandler(this.UpdateChromeButton_Click);
-            // 
-            // DeployOfficeButton
-            // 
-            this.DeployOfficeButton.BackgroundImage = global::AssetManager.Properties.Resources.O365SquareLogo;
-            this.DeployOfficeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.DeployOfficeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.DeployOfficeButton.Location = new System.Drawing.Point(142, 48);
-            this.DeployOfficeButton.Margin = new System.Windows.Forms.Padding(1);
-            this.DeployOfficeButton.Name = "DeployOfficeButton";
-            this.DeployOfficeButton.Size = new System.Drawing.Size(45, 45);
-            this.DeployOfficeButton.TabIndex = 60;
-            this.toolTip.SetToolTip(this.DeployOfficeButton, "Deploy Office 365");
-            this.DeployOfficeButton.UseVisualStyleBackColor = true;
-            this.DeployOfficeButton.Click += new System.EventHandler(this.DeployOfficeButton_Click);
-            // 
             // NewDeployButton
             // 
             this.NewDeployButton.BackgroundImage = global::AssetManager.Properties.Resources.DeployIcon;
             this.NewDeployButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.NewDeployButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.NewDeployButton.Location = new System.Drawing.Point(189, 48);
+            this.NewDeployButton.Location = new System.Drawing.Point(48, 48);
             this.NewDeployButton.Margin = new System.Windows.Forms.Padding(1);
             this.NewDeployButton.Name = "NewDeployButton";
             this.NewDeployButton.Size = new System.Drawing.Size(45, 45);
@@ -266,12 +218,9 @@
         internal System.Windows.Forms.Button BrowseFilesButton;
         internal System.Windows.Forms.PictureBox RestartDeviceButton;
         internal System.Windows.Forms.Button StartRDPButton;
-        internal System.Windows.Forms.Button DeployTVButton;
-        internal System.Windows.Forms.Button UpdateChromeButton;
         internal System.Windows.Forms.Button ShowIPButton;
         internal System.Windows.Forms.Button EventViewerButton;
         private System.Windows.Forms.ToolTip toolTip;
-        internal System.Windows.Forms.Button DeployOfficeButton;
         internal System.Windows.Forms.Button NewDeployButton;
         internal System.Windows.Forms.Button PowerShellButton;
         internal System.Windows.Forms.Button PSExecButton;

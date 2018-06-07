@@ -15,7 +15,5 @@ namespace DeploymentAssemblies
 
         Task<bool> DeployToDevice();
 
-
-
     }
 }

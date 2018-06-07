@@ -9,19 +9,23 @@ namespace DeploymentAssemblies
 {
     public interface IDeploymentUI
     {
+        Form ParentForm { get; }
+
         string TargetHostname { get; }
 
         void UsePowerShell();
 
         void UsePsExec();
 
-        Task SimplePSExecCommand(string command, string title);
+        Task<bool> SimplePSExecCommand(string command, string title);
 
         Task SimplePowerShellScript(byte[] script, string title);
 
-        Task<bool> SimplePowershellCommand(PowerShellCommand command);
+        Task<string> AdvancedPowerShellScript(byte[] script);
 
-        Task<bool> SimplePowershellCommand(PowerShellCommand[] command);
+        Task<bool> SimplePowerShellCommand(PowerShellCommand command);
+
+        Task<bool> SimplePowerShellCommand(PowerShellCommand[] command);
 
         string GetString(string name);
 

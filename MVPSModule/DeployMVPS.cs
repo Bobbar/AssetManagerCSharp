@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using DeploymentAssemblies;
+using System;
 using System.Threading.Tasks;
-using DeploymentAssemblies;
 
 namespace MVPSModule
 {
@@ -15,17 +12,16 @@ namespace MVPSModule
         {
             get
             {
-                return "MVPS Install";
+                return "MVPS Host File";
             }
         }
-
-        public DeployMVPS() { }
 
         public void InitUI(IDeploymentUI ui)
         {
             deploy = ui;
             deploy.UsePsExec();
         }
+
         public async Task<bool> DeployToDevice()
         {
             try
@@ -38,7 +34,5 @@ namespace MVPSModule
                 return false;
             }
         }
-
-      
     }
 }
