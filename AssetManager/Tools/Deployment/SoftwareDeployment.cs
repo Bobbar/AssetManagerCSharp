@@ -193,12 +193,12 @@ namespace AssetManager.Tools.Deployment
                 if (targetDevice != null && !string.IsNullOrEmpty(targetDevice.HostName))
                 {
                     deploy.SetTitle(targetDevice.CurrentUser);
-                    deploy.StartTimer();
-
-                    deploy.LogMessage("Starting software deployment to " + targetDevice.HostName);
-                    deploy.LogMessage("-------------------");
 
                     await ChooseDeployments(targetDevice);
+
+                    deploy.StartTimer();
+                    deploy.LogMessage("-------------------");
+                    deploy.LogMessage("Starting software deployment to " + targetDevice.HostName);
 
                     // Run through the queue and invoke the items sequentially.
                     while (deployments.Any())
@@ -206,19 +206,20 @@ namespace AssetManager.Tools.Deployment
                         // Dequeue returns the next method.
                         var d = deployments.Dequeue();
 
-                        deploy.LogMessage("######    " + d.TaskName + "    ######");
+                        deploy.LogMessage("//////    " + d.TaskName + @"    \\\\\\");
 
                         // Invoke the method and return only on failures.
                         if (!await d.TaskMethod.Invoke())
                         {
                             return false;
                         }
+
+                        deploy.LogMessage(@"\\\\\\    " + d.TaskName + "    //////");
                         if (deployments.Any()) await Task.Delay(4000);
                     }
 
-                    deploy.LogMessage("Done.");
-                    deploy.LogMessage("-------------------");
                     deploy.LogMessage("Software deployment is complete!");
+                    deploy.LogMessage("-------------------");
                     return true;
                 }
                 else

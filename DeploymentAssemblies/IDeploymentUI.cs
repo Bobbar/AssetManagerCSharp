@@ -9,8 +9,14 @@ namespace DeploymentAssemblies
 
         string TargetHostname { get; }
 
+        /// <summary>
+        /// Initiate Powershell provider. Call this method prior to using Powershell methods.
+        /// </summary>
         void UsePowerShell();
 
+        /// <summary>
+        /// Initiate PsExec provider. Call this method prior to using PsExec methods.
+        /// </summary>
         void UsePsExec();
 
         Task<bool> SimplePSExecCommand(string command, string title);

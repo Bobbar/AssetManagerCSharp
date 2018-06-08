@@ -86,19 +86,25 @@ namespace AssetManager.Tools.Deployment
 
         public void UsePowerShell()
         {
-            powerShellWrapper = new PowerShellWrapper(targetDevice.HostName);
-            powerShellWrapper.InvocationStateChanged -= SessionStateChanged;
-            powerShellWrapper.InvocationStateChanged += SessionStateChanged;
+            if (powerShellWrapper == null)
+            {
+                powerShellWrapper = new PowerShellWrapper(targetDevice.HostName);
+                powerShellWrapper.InvocationStateChanged -= SessionStateChanged;
+                powerShellWrapper.InvocationStateChanged += SessionStateChanged;
+            }
         }
 
         public void UsePsExec()
         {
-            pSExecWrapper = new PSExecWrapper(targetDevice.HostName);
-            pSExecWrapper.ErrorReceived -= PsExecErrorReceived;
-            pSExecWrapper.ErrorReceived += PsExecErrorReceived;
+            if (pSExecWrapper == null)
+            {
+                pSExecWrapper = new PSExecWrapper(targetDevice.HostName);
+                pSExecWrapper.ErrorReceived -= PsExecErrorReceived;
+                pSExecWrapper.ErrorReceived += PsExecErrorReceived;
 
-            pSExecWrapper.OutputReceived -= PsExecOutputReceived;
-            pSExecWrapper.OutputReceived += PsExecOutputReceived;
+                pSExecWrapper.OutputReceived -= PsExecOutputReceived;
+                pSExecWrapper.OutputReceived += PsExecOutputReceived;
+            }
         }
 
         public void SetTitle(string value)
@@ -119,16 +125,16 @@ namespace AssetManager.Tools.Deployment
             logView.MinimumSize = new System.Drawing.Size(400, 200);
             logView.Owner = parentForm;
             logView.StartPosition = FormStartPosition.CenterParent;
+
             logTextBox = new RichTextBox();
             logTextBox.Dock = DockStyle.Fill;
             logTextBox.Font = StyleFunctions.DefaultGridFont;
             logTextBox.WordWrap = false;
             logTextBox.ReadOnly = true;
             logTextBox.ScrollBars = RichTextBoxScrollBars.Both;
+            logTextBox.DetectUrls = false;
             logView.Controls.Add(logTextBox);
             logView.Show();
-
-            watchdogTask.Start();
         }
 
         public void UserPrompt(string prompt, string title = "") // HERE: Refactor references for new pattern.
@@ -271,6 +277,8 @@ namespace AssetManager.Tools.Deployment
             if (startTime == 0)
             {
                 startTime = DateTime.Now.Ticks;
+
+                if (watchdogTask.Status != TaskStatus.Running) watchdogTask.Start();
             }
         }
 
