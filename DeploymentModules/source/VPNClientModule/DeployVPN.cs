@@ -16,6 +16,14 @@ namespace VPNClientModule
             }
         }
 
+        public int DeployOrderPriority
+        {
+            get
+            {
+                return 99;
+            }
+        }
+
         public void InitUI(IDeploymentUI ui)
         {
             deploy = ui;

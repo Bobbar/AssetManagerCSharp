@@ -58,6 +58,7 @@ namespace AssetManager.Tools.Deployment
                  VerifyModules();
 
                  var files = Directory.GetFiles(Paths.LocalModulesStore, "*.dll");
+                 var modules = new List<IDeployment>();
 
                  foreach (var file in files)
                  {
@@ -72,11 +73,11 @@ namespace AssetManager.Tools.Deployment
                      {
                          var moduleInstance = Activator.CreateInstance(firstType) as IDeployment;
 
+                         // Init and add module instances to a collection.
                          if (moduleInstance != null)
                          {
                              moduleInstance.InitUI(deploy);
-
-                             taskList.Add(new TaskInfo(() => moduleInstance.DeployToDevice(), moduleInstance.DeploymentName));
+                             modules.Add(moduleInstance);
                          }
 
                          deploy.LogMessage(asm.ManifestModule.ScopeName);
@@ -84,6 +85,12 @@ namespace AssetManager.Tools.Deployment
                          modCount++;
                      }
                  }
+
+                 // Sort the module instances by deployment priority.
+                 modules = modules.OrderBy((m) => m.DeployOrderPriority).ToList();
+
+                 // Create new tasks and add them to the collection.
+                 modules.ForEach((m) => taskList.Add(new TaskInfo(() => m.DeployToDevice(), m.DeploymentName)));
              });
 
             var elapTime = (DateTime.Now.Ticks - startTime) / 10000;

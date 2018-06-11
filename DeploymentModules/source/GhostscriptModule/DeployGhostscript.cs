@@ -15,6 +15,14 @@ namespace GhostscriptModule
             }
         }
 
+        public int DeployOrderPriority
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
         public void InitUI(IDeploymentUI ui)
         {
             deploy = ui;

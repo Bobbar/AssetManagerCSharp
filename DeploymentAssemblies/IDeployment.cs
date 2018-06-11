@@ -8,6 +8,10 @@ namespace DeploymentAssemblies
 {
     public interface IDeployment
     {
+        /// <summary>
+        /// Priority that determines install order. Higher value = lower priority = lower in the order.
+        /// </summary>
+        int DeployOrderPriority { get; }
 
         string DeploymentName { get; }
 

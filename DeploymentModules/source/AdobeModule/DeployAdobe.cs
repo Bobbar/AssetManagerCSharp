@@ -15,6 +15,14 @@ namespace AdobeModule
             }
         }
 
+        public int DeployOrderPriority
+        {
+            get
+            {
+                return 97;
+            }
+        }
+
         public void InitUI(DeploymentAssemblies.IDeploymentUI ui)
         {
             deploy = ui;

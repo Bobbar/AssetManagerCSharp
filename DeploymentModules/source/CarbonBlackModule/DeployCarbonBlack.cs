@@ -19,6 +19,14 @@ namespace CarbonBlackModule
             }
         }
 
+        public int DeployOrderPriority
+        {
+            get
+            {
+                return 98;
+            }
+        }
+
         public void InitUI(IDeploymentUI ui)
         {
             deploy = ui;

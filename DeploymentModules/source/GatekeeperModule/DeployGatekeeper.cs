@@ -16,6 +16,14 @@ namespace GatekeeperModule
             }
         }
 
+        public int DeployOrderPriority
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
         public void InitUI(DeploymentAssemblies.IDeploymentUI ui)
         {
             deploy = ui;
