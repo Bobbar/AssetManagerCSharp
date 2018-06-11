@@ -1338,6 +1338,11 @@
             <param name="parentControl">Target strip for this control. For inheriting font and color.</param>
             <returns></returns>
         </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.FlashStrip">
+            <summary>
+            Flashes the parent toolstrip with lighter alpha blended variation of the message text color.
+            </summary>
+        </member>
         <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.StartNewSlide(AssetManager.UserInterface.CustomControls.MessageParameters)">
             <summary>
             Displays the specified text and starts the animation.

@@ -664,7 +664,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private void InitForm()
         {
             statusSlider = new SliderLabel();
-            statusSlider.NewMessageDisplayed += StatusSlider_NewMessageDisplayed;
+            statusSlider.FlashStripOnNewMessage = true;
             StatusStrip1.Items.Insert(0, statusSlider.ToToolStripControl(StatusStrip1));
 
             InitDBControls();
@@ -681,12 +681,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             StyleFunctions.SetGridStyle(RequestItemsGrid, GridTheme);
             StyleFunctions.SetGridStyle(NotesGrid, GridTheme);
             ToolStrip.BackColor = Colors.SibiToolBarColor;
-        }
-
-        private void StatusSlider_NewMessageDisplayed(object sender, MessageEventArgs e)
-        {
-            var flashColor = StyleFunctions.ColorAlphaBlend(e.Message.TextColor, Color.White);
-            StatusStrip1.FlashStrip(flashColor, 3);
         }
 
         private void InsertPONumber(string po)
@@ -1642,7 +1636,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             ViewRequestTracker();
         }
-             
+
         #endregion ControlEvents
 
         protected override void Dispose(bool disposing)
@@ -1660,7 +1654,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     munisToolBar.Dispose();
                     windowList.Dispose();
                     controlParser.Dispose();
-                    statusSlider.NewMessageDisplayed -= StatusSlider_NewMessageDisplayed;
                 }
             }
             finally

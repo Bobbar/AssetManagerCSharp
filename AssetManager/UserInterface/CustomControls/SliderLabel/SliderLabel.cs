@@ -43,6 +43,11 @@ namespace AssetManager.UserInterface.CustomControls
         private MessageParameters currentMessage = new MessageParameters();
         private CancellationTokenSource pauseCancel;
 
+        private ManualResetEvent flashReset = new ManualResetEvent(false);
+        private bool flashOnNew = false;
+        private ToolStripControlHost stripSlider = null;
+        private Color defaultBackColor;
+
         private System.Timers.Timer slideTimer;
         private RectangleF lastPositionRect;
 
@@ -54,6 +59,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             InitializeComponent();
 
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.UserPaint, true);
@@ -71,13 +77,20 @@ namespace AssetManager.UserInterface.CustomControls
 
         #endregion Constructors
 
-        #region Events
-
-        public event EventHandler<MessageEventArgs> NewMessageDisplayed;
-
-        #endregion Events
-
         #region Properties
+
+        public bool FlashStripOnNewMessage
+        {
+            get
+            {
+                return flashOnNew;
+            }
+
+            set
+            {
+                flashOnNew = value;
+            }
+        }
 
         public int DisplayTime
         {
@@ -106,11 +119,6 @@ namespace AssetManager.UserInterface.CustomControls
         #endregion Properties
 
         #region Methods
-
-        private void OnNewMessageDisplayed(MessageParameters message)
-        {
-            NewMessageDisplayed?.Invoke(this, new MessageEventArgs(message));
-        }
 
         /// <summary>
         /// Primary text renderer.
@@ -234,10 +242,82 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 this.Font = parentControl.Font;
                 this.BackColor = parentControl.BackColor;
+                this.defaultBackColor = this.BackColor;
             }
-            var stripSlider = new ToolStripControlHost(this);
+            stripSlider = new ToolStripControlHost(this);
             stripSlider.AutoSize = false;
             return stripSlider;
+        }
+
+        /// <summary>
+        /// Flashes the parent toolstrip with lighter alpha blended variation of the message text color.
+        /// </summary>
+        private async void FlashStrip()
+        {
+            if (flashOnNew & stripSlider != null)
+            {
+                // Trigger the flash reset event to cancel any current flash operation.
+                flashReset.Set();
+
+                await Task.Run(() =>
+                 {
+                     int flashDelay = 200; // How long to display each color.
+                     int flashes = 3; // Number of flashes.
+                     bool flashToggle = false;
+                     var currentColor = currentMessage.TextColor;
+                     var blendColor = Color.White;
+                     var flashColor = Color.FromArgb(((currentColor.A + blendColor.A) / 2),
+                                           ((currentColor.R + blendColor.R) / 2),
+                                           ((currentColor.G + blendColor.G) / 2),
+                                           ((currentColor.B + blendColor.B) / 2));
+
+                     // Reset the flash reset event.
+                     flashReset.Reset();
+
+                     for (int i = 0; i != flashes * 2; i++)
+                     {
+                         // Flip flop the flash colors.
+                         if (flashToggle)
+                         {
+                             SetParentStripColor(flashColor);
+                         }
+                         else
+                         {
+                             SetParentStripColor(defaultBackColor);
+                         }
+
+                         flashToggle = !flashToggle;
+
+                         // Block until the flash reset event is triggered or times out.
+                         // A timeout is a normal loop.
+                         // A triggered event means this operation is being canceled
+                         // by another call.
+                         if (flashReset.WaitOne(flashDelay) || flashReset.SafeWaitHandle.IsClosed)
+                         {
+                             // Flash operation canceled. Set default color and leave the method.
+                             SetParentStripColor(defaultBackColor);
+                             return;
+                         }
+                     }
+                     // Flash loop complete. Make sure default color is set.
+                     SetParentStripColor(defaultBackColor);
+                 });
+            }
+        }
+
+        private void SetParentStripColor(Color color)
+        {
+            var parentStrip = stripSlider.GetCurrentParent();
+
+            if (parentStrip == null) return;
+
+            var del = new Action(() =>
+            {
+                parentStrip.BackColor = color;
+                parentStrip.Invalidate();
+            });
+
+            parentStrip.BeginInvoke(del);
         }
 
         /// <summary>
@@ -252,8 +332,8 @@ namespace AssetManager.UserInterface.CustomControls
                 currentMessage.TextSize = GetTextSize(message.Text);
                 SetControlSize(currentMessage);
                 StartSlideInAnimation();
-                this.Invalidate();
-                this.Update();
+                TriggerPaint();
+                FlashStrip();
             }
         }
 
@@ -301,7 +381,6 @@ namespace AssetManager.UserInterface.CustomControls
                 if (currentMessage == null || currentMessage.SlideState == SlideState.Done)
                 {
                     StartNewSlide(messageQueue.Dequeue());
-                    OnNewMessageDisplayed(currentMessage);
                 }
                 // If the state is hold, then a permanent message is currently displayed.
                 // Trigger a slide out animation, which will change the state to done once complete.
@@ -317,10 +396,17 @@ namespace AssetManager.UserInterface.CustomControls
         /// </summary>
         private void SetControlSize(MessageParameters message)
         {
-            this.BackColor = this.Parent.BackColor;
-            if (this.AutoSize)
+            if (this.InvokeRequired)
             {
-                this.Size = message.TextSize.ToSize();
+                var del = new Action(() => SetControlSize(message));
+                this.BeginInvoke(del);
+            }
+            else
+            {
+                if (this.AutoSize)
+                {
+                    this.Size = message.TextSize.ToSize();
+                }
             }
         }
 
@@ -411,8 +497,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (!this.Disposing && !this.IsDisposed)
                 {
-                    var del = new Action(() => UpdateTextPosition());
-                    this.BeginInvoke(del);
+                    UpdateTextPosition();
                 }
                 else
                 {
@@ -431,72 +516,92 @@ namespace AssetManager.UserInterface.CustomControls
         /// </summary>
         private void UpdateTextPosition()
         {
-            // Check current direction and change X,Y positions/speeds accordingly using an accumulating acceleration.
-            switch (currentMessage.Direction)
+            if (currentMessage.SlideState == SlideState.SlideIn || currentMessage.SlideState == SlideState.SlideOut)
             {
-                case SlideDirection.DefaultSlide:
-                case SlideDirection.Up:
-                    if (currentMessage.Position.Y + currentMessage.SlideVelocity > currentMessage.EndPosition.Y)
-                    {
-                        currentMessage.SlideVelocity -= slideAcceleration;
-                        currentMessage.Position.Y += currentMessage.SlideVelocity;
-                    }
-                    else
-                    {
-                        currentMessage.Position.Y = currentMessage.EndPosition.Y;
-                        currentMessage.AnimationComplete = true;
-                    }
-                    break;
+                // Check current direction and change X,Y positions/speeds accordingly using an accumulating acceleration.
+                switch (currentMessage.Direction)
+                {
+                    case SlideDirection.DefaultSlide:
+                    case SlideDirection.Up:
+                        if (currentMessage.Position.Y + currentMessage.SlideVelocity > currentMessage.EndPosition.Y)
+                        {
+                            currentMessage.SlideVelocity -= slideAcceleration;
+                            currentMessage.Position.Y += currentMessage.SlideVelocity;
+                        }
+                        else
+                        {
+                            currentMessage.Position.Y = currentMessage.EndPosition.Y;
+                            currentMessage.AnimationComplete = true;
+                        }
+                        break;
 
-                case SlideDirection.Down:
-                    if (currentMessage.Position.Y + currentMessage.SlideVelocity < currentMessage.EndPosition.Y)
-                    {
-                        currentMessage.SlideVelocity += slideAcceleration;
-                        currentMessage.Position.Y += currentMessage.SlideVelocity;
-                    }
-                    else
-                    {
-                        currentMessage.Position.Y = currentMessage.EndPosition.Y;
-                        currentMessage.AnimationComplete = true;
-                    }
-                    break;
+                    case SlideDirection.Down:
+                        if (currentMessage.Position.Y + currentMessage.SlideVelocity < currentMessage.EndPosition.Y)
+                        {
+                            currentMessage.SlideVelocity += slideAcceleration;
+                            currentMessage.Position.Y += currentMessage.SlideVelocity;
+                        }
+                        else
+                        {
+                            currentMessage.Position.Y = currentMessage.EndPosition.Y;
+                            currentMessage.AnimationComplete = true;
+                        }
+                        break;
 
-                case SlideDirection.Left:
-                    if (currentMessage.Position.X + currentMessage.SlideVelocity > currentMessage.EndPosition.X)
-                    {
-                        currentMessage.SlideVelocity -= slideAcceleration;
-                        currentMessage.Position.X += currentMessage.SlideVelocity;
-                    }
-                    else
-                    {
-                        currentMessage.Position.X = currentMessage.EndPosition.X;
-                        currentMessage.AnimationComplete = true;
-                    }
-                    break;
+                    case SlideDirection.Left:
+                        if (currentMessage.Position.X + currentMessage.SlideVelocity > currentMessage.EndPosition.X)
+                        {
+                            currentMessage.SlideVelocity -= slideAcceleration;
+                            currentMessage.Position.X += currentMessage.SlideVelocity;
+                        }
+                        else
+                        {
+                            currentMessage.Position.X = currentMessage.EndPosition.X;
+                            currentMessage.AnimationComplete = true;
+                        }
+                        break;
 
-                case SlideDirection.Right:
-                    if (currentMessage.Position.X + currentMessage.SlideVelocity < currentMessage.EndPosition.X)
-                    {
-                        currentMessage.SlideVelocity += slideAcceleration;
-                        currentMessage.Position.X += currentMessage.SlideVelocity;
-                    }
-                    else
-                    {
-                        currentMessage.Position.X = currentMessage.EndPosition.X;
-                        currentMessage.AnimationComplete = true;
-                    }
-                    break;
+                    case SlideDirection.Right:
+                        if (currentMessage.Position.X + currentMessage.SlideVelocity < currentMessage.EndPosition.X)
+                        {
+                            currentMessage.SlideVelocity += slideAcceleration;
+                            currentMessage.Position.X += currentMessage.SlideVelocity;
+                        }
+                        else
+                        {
+                            currentMessage.Position.X = currentMessage.EndPosition.X;
+                            currentMessage.AnimationComplete = true;
+                        }
+                        break;
+                }
+
+                //Trigger redraw.
+                TriggerPaint();
+
+                if (currentMessage.AnimationComplete)
+                {
+                    slideTimer.Stop();
+                    ProcessNextState();
+                }
             }
+        }
 
-            //Trigger redraw.
-            lastPositionRect.Inflate(10, 5);
-            using (var updateRegion = new Region(lastPositionRect))
+        private void TriggerPaint()
+        {
+            if (this.InvokeRequired)
             {
-                this.Invalidate(updateRegion);
-                this.Update();
+                var del = new Action(TriggerPaint);
+                this.BeginInvoke(del);
             }
-
-            if (currentMessage.AnimationComplete) ProcessNextState();
+            else
+            {
+                lastPositionRect.Inflate(10, 5);
+                using (var updateRegion = new Region(lastPositionRect))
+                {
+                    this.Invalidate(updateRegion);
+                    this.Update();
+                }
+            }
         }
 
         private async void ProcessNextState()
@@ -505,11 +610,11 @@ namespace AssetManager.UserInterface.CustomControls
 
             // Reset speed.
             currentMessage.SlideVelocity = 0;
+
             // If current state is slide-in and display time is not forever.
             if (currentMessage.SlideState == SlideState.SlideIn & currentMessage.DisplayTime > 0)
             {
-                // Stop the animation timer, change state to paused, and pause for the specified display time.
-                slideTimer.Stop();
+                // Change state to paused, and pause for the specified display time.
                 currentMessage.SlideState = SlideState.Paused;
 
                 try
@@ -549,12 +654,6 @@ namespace AssetManager.UserInterface.CustomControls
                     // If the message has a display time, set state to done.
                     currentMessage.SlideState = SlideState.Done;
                 }
-
-                // Stop the animation timer.
-                slideTimer.Stop();
-
-                // Add pause between messages if desired.
-                //Await Pause(1)
             }
 
             // Check the queue for new messages.
@@ -566,12 +665,13 @@ namespace AssetManager.UserInterface.CustomControls
             messageQueue.Clear();
             slideTimer.Stop();
             pauseCancel.Dispose();
+
+            if (!flashReset.SafeWaitHandle.IsClosed)
+            {
+                flashReset.Dispose();
+            }
         }
 
         #endregion Methods
-
-        #region Structs
-
-        #endregion Structs
     }
 }

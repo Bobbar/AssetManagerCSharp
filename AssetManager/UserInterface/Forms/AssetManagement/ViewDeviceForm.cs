@@ -74,7 +74,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             windowList.InsertWindowList(ToolStrip1);
 
             statusSlider = new SliderLabel();
-            statusSlider.NewMessageDisplayed += StatusSlider_NewMessageDisplayed;
+            statusSlider.FlashStripOnNewMessage = true;
             StatusStrip.Items.Add(statusSlider.ToToolStripControl(StatusStrip));
 
             RefreshCombos();
@@ -911,7 +911,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     munisToolBar.Dispose();
                     currentViewDevice?.Dispose();
                     controlParser.Dispose();
-                    statusSlider.NewMessageDisplayed -= StatusSlider_NewMessageDisplayed;
                     statusSlider.Dispose();
                 }
             }
@@ -924,12 +923,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         #endregion Methods
 
         #region Control Events
-
-        private void StatusSlider_NewMessageDisplayed(object sender, MessageEventArgs e)
-        {
-            var flashColor = StyleFunctions.ColorAlphaBlend(e.Message.TextColor, Color.White);
-            StatusStrip.FlashStrip(flashColor, 3);
-        }
 
         void ILiveBox.DynamicSearch()
         {

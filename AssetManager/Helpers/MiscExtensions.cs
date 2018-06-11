@@ -61,25 +61,5 @@ namespace AssetManager.Helpers
             }
         }
 
-        public async static void FlashStrip(this StatusStrip statusStrip, Color flashColor, int flashes)
-        {
-            var originalColor = statusStrip.BackColor;
-            int flashDelay = 200;
-
-            for (int i = 0; i < flashes; i++)
-            {
-                statusStrip.BackColor = flashColor;
-                statusStrip.Refresh();
-
-                await Task.Delay(flashDelay);
-
-                statusStrip.BackColor = originalColor;
-                statusStrip.Refresh();
-
-                await Task.Delay(flashDelay);
-            }
-
-            statusStrip.BackColor = originalColor;
-        }
     }
 }
