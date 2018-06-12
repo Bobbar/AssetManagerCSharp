@@ -12,10 +12,10 @@ using WNetConnection;
 
 namespace RemoteFileTransferTool
 {
-    public class RemoteTransfer
+    public class RemoteTransfer : IRemoteTransfer
     {
         private BackgroundWorker copyWorker;
-        private TranferStatus currentStatus;
+        private TransferStatus currentStatus;
         private List<string> errorList = new List<string>();
         private string sourcePath;
         private string destinationPath;
@@ -28,56 +28,17 @@ namespace RemoteFileTransferTool
         private bool createMissingDirectories = true;
         private bool isPaused = false;
         private string transferDescription;
+        private IRemoteTransferUI transferUI;
 
-        public RemoteTransfer(string hostname, string sourcePath, string destPath, string transferDescription)
+        public RemoteTransfer(string hostname, string sourcePath, string destPath, string transferDescription, IRemoteTransferUI ui)
         {
+            this.transferUI = ui;
             this.sourcePath = sourcePath;
             destinationPath = destPath;
             targetHostname = hostname;
             targetRoot = @"\\" + hostname + @"\c$";
             this.transferDescription = transferDescription;
             InitWorker();
-        }
-
-        public event EventHandler LogEvent;
-
-        public event EventHandler StatusUpdate;
-
-        public event EventHandler TransferCanceled;
-
-        public event EventHandler TransferComplete;
-
-        protected virtual void OnLogEvent(LogEventArgs e)
-        {
-            if (LogEvent != null)
-            {
-                LogEvent(this, e);
-            }
-        }
-
-        protected virtual void OnStatusUpdate(TransferStatusEventArgs e)
-        {
-            if (StatusUpdate != null)
-            {
-                StatusUpdate(this, e);
-            }
-        }
-
-        protected virtual void OnTransferCanceled(EventArgs e)
-        {
-            Logger("Canceled by user!");
-            if (TransferCanceled != null)
-            {
-                TransferCanceled(this, e);
-            }
-        }
-
-        protected virtual void OnTransferComplete(TransferCompleteEventArgs e)
-        {
-            if (TransferComplete != null)
-            {
-                TransferComplete(this, e);
-            }
         }
 
         public bool IsDisposed
@@ -90,15 +51,18 @@ namespace RemoteFileTransferTool
             get { return errorList; }
         }
 
-        public TranferStatus TransferStatus
-        {
-            get { return currentStatus; }
-        }
-
         public bool CreateMissingDirectories
         {
             get { return createMissingDirectories; }
             set { createMissingDirectories = value; }
+        }
+
+        public TransferStatus CurrentStatus
+        {
+            get
+            {
+                return currentStatus;
+            }
         }
 
         public void CancelTransfer()
@@ -110,7 +74,7 @@ namespace RemoteFileTransferTool
             }
             else
             {
-                OnTransferCanceled(new EventArgs());
+                transferUI.TransferCanceled();
             }
             currentFileIndex = 0;
         }
@@ -213,7 +177,7 @@ namespace RemoteFileTransferTool
 
         private void CopyWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            DoUpdateStatusLoop();
+            DoUpdateProgressLoop();
 
             if (!CanPing())
             {
@@ -249,7 +213,7 @@ namespace RemoteFileTransferTool
                     string destPath = file.Replace(sourcePath, targetDir);
 
                     //Record status for UI updates
-                    var status = new TranferStatus(files.Length, fileIndex, destPath, file, currentStatus.CurrentFileProgress, currentStatus.CurrentTransferRate);
+                    var status = new TransferStatus(files.Length, fileIndex, destPath, file, currentStatus.CurrentFileProgress, currentStatus.CurrentTransferRate);
 
                     //Report status
                     copyWorker.ReportProgress(1, status);
@@ -292,8 +256,8 @@ namespace RemoteFileTransferTool
         {
             if (e.ProgressPercentage == 1)
             {
-                currentStatus = (TranferStatus)e.UserState;
-                OnStatusUpdate(new TransferStatusEventArgs(currentStatus));
+                currentStatus = (TransferStatus)e.UserState;
+                transferUI.StatusUpdate(currentStatus);
 
                 Logger(currentStatus.CurrentFileIdx + " of " + currentStatus.TotalFileCount);
                 Logger("Source: " + currentStatus.SourceFileName);
@@ -330,13 +294,13 @@ namespace RemoteFileTransferTool
                     Logger("Elapsed time: " + (elapTime.ElapsedMilliseconds / 1000) + "s");
                     Logger("------------------------------------------------");
 
-                    OnTransferComplete(new TransferCompleteEventArgs(false));
+                    transferUI.TransferComplete(new TransferCompleteResult(false));
                 }
                 else
                 {
                     if (!isPaused)
                     {
-                        OnTransferCanceled(new EventArgs());
+                        transferUI.TransferCanceled();
                     }
                 }
             }
@@ -352,7 +316,7 @@ namespace RemoteFileTransferTool
                     Logger("------------------------------------------------");
                     Logger("Unexpected errors during copy!");
                     Logger(e.Error.Message, true);
-                    OnTransferComplete(new TransferCompleteEventArgs(true, e.Error));
+                    transferUI.TransferComplete(new TransferCompleteResult(true, e.Error));
                 }
             }
         }
@@ -360,7 +324,7 @@ namespace RemoteFileTransferTool
         private void Logger(string message, bool isError = false)
         {
             var log = new LogMessage(message, isError);
-            OnLogEvent(new LogEventArgs(log));
+            transferUI.LogMessage(log);
 
             if (isError)
             {
@@ -369,7 +333,7 @@ namespace RemoteFileTransferTool
             }
         }
 
-        private async Task DoUpdateStatusLoop()
+        private async Task DoUpdateProgressLoop()
         {
             while (!this.IsDisposed & copyWorker.IsBusy)
             {
@@ -395,49 +359,6 @@ namespace RemoteFileTransferTool
             copyWorker.WorkerSupportsCancellation = true;
         }
 
-        private void SpeedTimer_Tick(object sender, EventArgs e)
-        {
-            if (!isPaused) progress.Tick();
-
-            if (progress.BytesMoved > 0)
-            {
-                currentStatus.CurrentTransferRate = progress.Throughput;
-                currentStatus.CurrentFileProgress = progress.Percent;
-            }
-        }
-
-        public struct LogMessage
-        {
-            public string Message { get; set; }
-            public bool IsError { get; set; }
-
-            public LogMessage(string message, bool isError)
-            {
-                Message = message;
-                IsError = isError;
-            }
-        }
-
-        public struct TranferStatus
-        {
-            public int CurrentFileIdx { get; }
-            public string DestinationFileName { get; }
-            public int CurrentFileProgress { get; set; }
-            public double CurrentTransferRate { get; set; }
-            public string SourceFileName { get; }
-            public int TotalFileCount { get; }
-
-            public TranferStatus(int totalFileCount, int currentFileIndex, string destinationFileName, string sourceFileName, int currentProgress, double currentTransferRate)
-            {
-                TotalFileCount = totalFileCount;
-                CurrentFileIdx = currentFileIndex;
-                DestinationFileName = destinationFileName;
-                SourceFileName = sourceFileName;
-                CurrentFileProgress = currentProgress;
-                CurrentTransferRate = currentTransferRate;
-            }
-        }
-
         private struct WorkerArgs
         {
             public int CurrentIndex { get; set; }
@@ -449,66 +370,6 @@ namespace RemoteFileTransferTool
                 CurrentIndex = currentIndex;
                 StartIndex = startIndex;
                 Credentials = credential;
-            }
-        }
-
-        public class TransferCompleteEventArgs : EventArgs
-        {
-            private Exception exception;
-
-            private bool hasErrors;
-
-            public TransferCompleteEventArgs(bool hasErrors, Exception ex = null)
-            {
-                this.hasErrors = hasErrors;
-                this.exception = ex;
-            }
-
-            public Exception Errors
-            {
-                get { return exception; }
-            }
-
-            public bool HasErrors
-            {
-                get { return hasErrors; }
-            }
-        }
-
-        public class TransferStatusEventArgs : EventArgs
-        {
-            private TranferStatus status;
-
-            public TransferStatusEventArgs(TranferStatus status)
-            {
-                this.status = status;
-            }
-
-            public TranferStatus Status
-            {
-                get { return status; }
-            }
-        }
-
-        public class LogEventArgs : EventArgs
-        {
-            private LogMessage message;
-
-            public LogEventArgs(LogMessage message)
-            {
-                this.message = message;
-            }
-
-            public LogMessage Message
-            {
-                get { return message; }
-            }
-        }
-
-        public class MissingDirectoryException : Exception
-        {
-            public MissingDirectoryException() : base("Directory not found on target.")
-            {
             }
         }
 

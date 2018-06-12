@@ -253,7 +253,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                         break;
 
                     case ProgressStatus.Running:
-                        transferRateSum += upd.remoteTransfer.TransferStatus.CurrentTransferRate;
+                        transferRateSum += upd.remoteTransfer.CurrentStatus.CurrentTransferRate;
                         running += 1;
                         break;
 

@@ -5,14 +5,14 @@ using RemoteFileTransferTool;
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.CustomControls
 {
-    public partial class FileTransferUI : UserControl, IDisposable
+    public partial class FileTransferUI : UserControl, IDisposable, IRemoteTransferUI
     {
-        public RemoteTransfer remoteTransfer { get; }
+        public IRemoteTransfer remoteTransfer { get; }
 
         public ProgressStatus ProgStatus { get { return progStatus; } }
 
@@ -23,7 +23,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private ProgressStatus progStatus;
         private bool logVisible = false;
-        private RemoteTransfer.TranferStatus currentStatus;
+        private TransferStatus currentStatus;
         private Device currentDevice;
         private string logBuffer = "";
         private Form parentForm;
@@ -37,18 +37,13 @@ namespace AssetManager.UserInterface.CustomControls
             InitializeComponent();
             currentDevice = targetDevice;
             this.parentForm = parentForm;
-            this.Disposed += GKProgressControl_Disposed;
             this.Size = this.MinimumSize;
             this.DoubleBuffered = true;
             Panel1.DoubleBuffered(true);
             LogTextBox.DoubleBuffered(true);
 
-            remoteTransfer = new RemoteTransfer(currentDevice.HostName, sourcePath, destPath, transferDescription);
+            remoteTransfer = new RemoteTransfer(currentDevice.HostName, sourcePath, destPath, transferDescription, this);
             remoteTransfer.CreateMissingDirectories = createMissingDirs;
-            remoteTransfer.LogEvent += LogEvent;
-            remoteTransfer.StatusUpdate += StatusUpdateEvent;
-            remoteTransfer.TransferComplete += UpdateCompleteEvent;
-            remoteTransfer.TransferCanceled += UpdateCanceledEvent;
 
             DeviceInfoLabel.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
             TransferRateLabel.Text = "0.00MB/s";
@@ -127,84 +122,9 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private void GKProgressControl_Disposed(object sender, EventArgs e)
-        {
-            remoteTransfer.LogEvent -= LogEvent;
-            remoteTransfer.StatusUpdate -= StatusUpdateEvent;
-            remoteTransfer.TransferComplete -= UpdateCompleteEvent;
-            remoteTransfer.TransferCanceled -= UpdateCanceledEvent;
-            remoteTransfer.Dispose();
-            statusLight?.Dispose();
-        }
-
-        /// <summary>
-        /// Log message event from GKUpdater.  This even can fire very rapidly. So the result is stored in a buffer to be added to the rtbLog control in a more controlled manner.
-        /// </summary>
-        private void LogEvent(object sender, EventArgs e)
-        {
-            var LogEvent = (RemoteTransfer.LogEventArgs)e;
-            Log(LogEvent.Message.Message);
-        }
-
         private void Log(string text)
         {
             logBuffer += text + Environment.NewLine;
-        }
-
-        private void StatusUpdateEvent(object sender, EventArgs e)
-        {
-            var UpdateEvent = (RemoteTransfer.TransferStatusEventArgs)e;
-            SetStatus(ProgressStatus.Running);
-            currentStatus = UpdateEvent.Status;
-            TotalProgressBar.Maximum = currentStatus.TotalFileCount;
-            TotalProgressBar.Value = currentStatus.CurrentFileIdx;
-            StatusLabel.Text = currentStatus.DestinationFileName;
-        }
-
-        private void UpdateCanceledEvent(object sender, EventArgs e)
-        {
-            SetStatus(ProgressStatus.Canceled);
-        }
-
-        private void UpdateCompleteEvent(object sender, EventArgs e)
-        {
-            var CompleteEvent = (RemoteTransfer.TransferCompleteEventArgs)e;
-            if (CompleteEvent.HasErrors)
-            {
-                SetStatus(ProgressStatus.Errors);
-                // ErrorHandling.ErrHandle(CompleteEvent.Errors, System.Reflection.MethodInfo.GetCurrentMethod());
-
-                if (CompleteEvent.Errors is Win32Exception)
-                {
-                    var err = (Win32Exception)CompleteEvent.Errors;
-                    //Check for invalid credentials error and fire critical stop event.
-                    //We want to stop all updates if the credentials are wrong as to avoid locking the account.
-
-                    //TODO: Try to let these errors bubble up to ErrHandler.
-                    if (err.NativeErrorCode == 1326 | err.NativeErrorCode == 86)
-                    {
-                        OnCriticalStopError(new EventArgs());
-                    }
-                }
-                else
-                {
-                    if (CompleteEvent.Errors is RemoteTransfer.MissingDirectoryException)
-                    {
-                        Log("Enable 'Create Missing Directories' option and re-enqueue this device to force creation.");
-                    }
-                }
-            }
-            else
-            {
-                if (remoteTransfer.ErrorList.Count == 0)
-                {
-                    SetStatus(ProgressStatus.Complete);
-                }
-                else
-                {
-                    SetStatus(ProgressStatus.CompleteWithErrors);
-                }
-            }
         }
 
         private void HideLog()
@@ -386,36 +306,17 @@ namespace AssetManager.UserInterface.CustomControls
                 }
                 if (progStatus == ProgressStatus.Running)
                 {
+                    var status = remoteTransfer.CurrentStatus;
+
                     // Set the progress bar to a value over the actual, then immediately set to the actual value
                     // This overrides the Windows animation and makes the bar go to the intended value instantly.
-                    if (remoteTransfer.TransferStatus.CurrentFileProgress < 100)
-                        FileProgressBar.Value = remoteTransfer.TransferStatus.CurrentFileProgress + 1;
-                    FileProgressBar.Value = remoteTransfer.TransferStatus.CurrentFileProgress;
-                    TransferRateLabel.Text = remoteTransfer.TransferStatus.CurrentTransferRate.ToString("0.00") + "MB/s";
+                    if (status.CurrentFileProgress < 100)
+                        FileProgressBar.Value = status.CurrentFileProgress + 1;
+                    FileProgressBar.Value = status.CurrentFileProgress;
+                    TransferRateLabel.Text = status.CurrentTransferRate.ToString("0.00") + "MB/s";
                 }
 
-                await Task.Delay(250);
-            }
-
-        }
-
-        /// <summary>
-        /// Timer that updates the rtbLog control with chunks of data from the log buffer.
-        /// </summary>
-        private void UI_Timer_Tick(object sender, EventArgs e)
-        {
-            if (logVisible & !string.IsNullOrEmpty(logBuffer))
-            {
-                UpdateLogBox();
-            }
-            if (progStatus == ProgressStatus.Running)
-            {
-                FileProgressBar.Value = remoteTransfer.TransferStatus.CurrentFileProgress;
-                if (FileProgressBar.Value > 1) FileProgressBar.Value = FileProgressBar.Value - 1;
-                //doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
-                FileProgressBar.Value = remoteTransfer.TransferStatus.CurrentFileProgress;
-                TransferRateLabel.Text = remoteTransfer.TransferStatus.CurrentTransferRate.ToString("0.00") + "MB/s";
-                this.Update();
+                await Task.Delay(150);
             }
         }
 
@@ -426,6 +327,82 @@ namespace AssetManager.UserInterface.CustomControls
                 LogTextBox.AppendText(logBuffer);
                 LogTextBox.Invalidate();
                 logBuffer = "";
+            }
+        }
+
+        public void LogMessage(LogMessage message)
+        {
+            Log(message.Text);
+        }
+
+        public void StatusUpdate(TransferStatus status)
+        {
+            SetStatus(ProgressStatus.Running);
+            currentStatus = status;
+            TotalProgressBar.Maximum = currentStatus.TotalFileCount;
+            TotalProgressBar.Value = currentStatus.CurrentFileIdx;
+            StatusLabel.Text = currentStatus.DestinationFileName;
+        }
+
+        public void TransferComplete(TransferCompleteResult result)
+        {
+            if (result.HasErrors)
+            {
+                SetStatus(ProgressStatus.Errors);
+                // ErrorHandling.ErrHandle(CompleteEvent.Errors, System.Reflection.MethodInfo.GetCurrentMethod());
+
+                if (result.Errors is Win32Exception)
+                {
+                    var err = (Win32Exception)result.Errors;
+                    //Check for invalid credentials error and fire critical stop event.
+                    //We want to stop all updates if the credentials are wrong as to avoid locking the account.
+
+                    //TODO: Try to let these errors bubble up to ErrHandler.
+                    if (err.NativeErrorCode == 1326 | err.NativeErrorCode == 86)
+                    {
+                        OnCriticalStopError(new EventArgs());
+                    }
+                }
+                else
+                {
+                    if (result.Errors is MissingDirectoryException)
+                    {
+                        Log("Enable 'Create Missing Directories' option and re-enqueue this device to force creation.");
+                    }
+                }
+            }
+            else
+            {
+                if (remoteTransfer.ErrorList.Count == 0)
+                {
+                    SetStatus(ProgressStatus.Complete);
+                }
+                else
+                {
+                    SetStatus(ProgressStatus.CompleteWithErrors);
+                }
+            }
+        }
+
+        public void TransferCanceled()
+        {
+            SetStatus(ProgressStatus.Canceled);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing && components != null)
+                {
+                    remoteTransfer.Dispose();
+                    statusLight?.Dispose();
+                    components.Dispose();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
             }
         }
     }

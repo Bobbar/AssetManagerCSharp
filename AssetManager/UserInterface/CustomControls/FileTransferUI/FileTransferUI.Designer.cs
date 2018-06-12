@@ -5,23 +5,8 @@ namespace AssetManager.UserInterface.CustomControls
     partial class FileTransferUI : System.Windows.Forms.UserControl
     {
 
-        //UserControl overrides dispose to clean up the component list.
-        
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing && components != null)
-                {
-                    remoteTransfer.Dispose();
-                    components.Dispose();
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
+            
+       
 
         //Required by the Windows Form Designer
 
@@ -38,7 +23,6 @@ namespace AssetManager.UserInterface.CustomControls
             this.DeviceInfoLabel = new System.Windows.Forms.Label();
             this.LogTextBox = new System.Windows.Forms.RichTextBox();
             this.ShowHideLabel = new System.Windows.Forms.Label();
-            this.UITimer = new System.Windows.Forms.Timer(this.components);
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.RestartPictureBox = new System.Windows.Forms.PictureBox();
             this.CancelClosePictureBox = new System.Windows.Forms.PictureBox();
@@ -124,10 +108,6 @@ namespace AssetManager.UserInterface.CustomControls
             this.ShowHideLabel.Text = "s";
             this.ToolTip.SetToolTip(this.ShowHideLabel, "Show/Hide Log");
             this.ShowHideLabel.Click += new System.EventHandler(this.ShowHideLabel_Click);
-            // 
-            // UITimer
-            // 
-            this.UITimer.Tick += new System.EventHandler(this.UI_Timer_Tick);
             // 
             // RestartPictureBox
             // 
@@ -245,7 +225,6 @@ namespace AssetManager.UserInterface.CustomControls
         internal PictureBox CancelClosePictureBox;
         internal RichTextBox LogTextBox;
         internal Label ShowHideLabel;
-        internal Timer UITimer;
         internal ToolTip ToolTip;
         internal Label SequenceLabel;
         internal PictureBox RestartPictureBox;

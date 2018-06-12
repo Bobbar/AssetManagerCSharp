@@ -171,7 +171,6 @@
     <Compile Include="Data\Functions\DBControls\DBControlInfo.cs" />
     <Compile Include="Data\Functions\DBControls\DBRemappingInfo.cs" />
     <Compile Include="Data\Functions\DBControls\ParseType.cs" />
-    <Compile Include="TestMessageFilter.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedResourceManager.cs" />
     <Compile Include="Data\Databases.cs" />
     <Compile Include="Data\Classes\DataClassMapping\ColumnNameAttribute.cs" />

@@ -13,7 +13,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.ProgressControlsTable = new System.Windows.Forms.FlowLayoutPanel();
             this.GroupBox3 = new System.Windows.Forms.GroupBox();
@@ -25,7 +24,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.CompleteUpdatesLabel = new System.Windows.Forms.Label();
             this.RunningUpdatesLabel = new System.Windows.Forms.Label();
             this.QueuedUpdatesLabel = new System.Windows.Forms.Label();
-            this.QueueChecker = new System.Windows.Forms.Timer(this.components);
             this.TransferRateLabel = new System.Windows.Forms.Label();
             this.SortButton = new System.Windows.Forms.Button();
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
@@ -184,11 +182,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.QueuedUpdatesLabel.TabIndex = 0;
             this.QueuedUpdatesLabel.Text = "[Queued]";
             // 
-            // QueueChecker
-            // 
-            this.QueueChecker.Interval = 250;
-            this.QueueChecker.Tick += new System.EventHandler(this.QueueChecker_Tick);
-            // 
             // TransferRateLabel
             // 
             this.TransferRateLabel.AutoSize = true;
@@ -281,7 +274,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         }
         internal GroupBox GroupBox1;
-        internal Timer QueueChecker;
         internal GroupBox GroupBox3;
         internal Label QueuedUpdatesLabel;
         internal Label RunningUpdatesLabel;

@@ -39,8 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRemoteTransfer.cs" />
+    <Compile Include="IRemoteTransferUI.cs" />
+    <Compile Include="LogMessage.cs" />
+    <Compile Include="MissingDirectoryException.cs" />
     <Compile Include="RemoteTransfer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransferCompleteResult.cs" />
+    <Compile Include="TransferStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimpleProgressCounter\SimpleProgressCounter.csproj">
