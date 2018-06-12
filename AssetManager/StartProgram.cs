@@ -22,8 +22,7 @@ namespace AssetManager
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += MyApplication_UnhandledException;
-            Application.AddMessageFilter(new TestMessageFilter());
-
+          
             bool connectionSuccessful = false;
             bool cacheAvailable = false;
 
