@@ -7,7 +7,7 @@ using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 using WNetConnection;
 
 namespace RemoteFileTransferTool
@@ -15,7 +15,6 @@ namespace RemoteFileTransferTool
     public class RemoteTransfer
     {
         private BackgroundWorker copyWorker;
-        private Timer speedTimer;
         private TranferStatus currentStatus;
         private List<string> errorList = new List<string>();
         private string sourcePath;
@@ -38,7 +37,6 @@ namespace RemoteFileTransferTool
             targetRoot = @"\\" + hostname + @"\c$";
             this.transferDescription = transferDescription;
             InitWorker();
-            InitializeTimer();
         }
 
         public event EventHandler LogEvent;
@@ -215,6 +213,8 @@ namespace RemoteFileTransferTool
 
         private void CopyWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            DoUpdateStatusLoop();
+
             if (!CanPing())
             {
                 throw new Exception("Cannot ping device.");
@@ -369,12 +369,20 @@ namespace RemoteFileTransferTool
             }
         }
 
-        private void InitializeTimer()
+        private async Task DoUpdateStatusLoop()
         {
-            speedTimer = new Timer();
-            speedTimer.Interval = 100;
-            speedTimer.Enabled = true;
-            speedTimer.Tick += SpeedTimer_Tick;
+            while (!this.IsDisposed & copyWorker.IsBusy)
+            {
+                if (!isPaused) progress.Tick();
+
+                if (progress.BytesMoved > 0)
+                {
+                    currentStatus.CurrentTransferRate = progress.Throughput;
+                    currentStatus.CurrentFileProgress = progress.Percent;
+                }
+
+                await Task.Delay(100);
+            }
         }
 
         private void InitWorker()
@@ -518,7 +526,6 @@ namespace RemoteFileTransferTool
                 if (disposing)
                 {
                     copyWorker.Dispose();
-                    speedTimer.Dispose();
                     adminCreds = null;
                     elapTime.Stop();
                 }

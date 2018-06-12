@@ -186,7 +186,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             // 
             // QueueChecker
             // 
-            this.QueueChecker.Enabled = true;
             this.QueueChecker.Interval = 250;
             this.QueueChecker.Tick += new System.EventHandler(this.QueueChecker_Tick);
             // 

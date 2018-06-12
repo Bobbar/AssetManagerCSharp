@@ -23,6 +23,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.DisableDoubleBuffering();
             MaxUpdates.Value = concurrentUpdates;
             ProgressControlsTable.DoubleBuffered(true);
+            DoQueueCheckerLoop();
         }
 
         public void AddMultipleUpdates(List<Device> devices)
@@ -220,6 +221,15 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         private void PruneQueue()
         {
             progressControls = progressControls.FindAll(upd => !upd.IsDisposed);
+        }
+
+        private async Task DoQueueCheckerLoop()
+        {
+            while (!this.IsDisposed)
+            {
+                ProcessUpdates();
+                await Task.Delay(250);
+            }
         }
 
         private void QueueChecker_Tick(object sender, EventArgs e)

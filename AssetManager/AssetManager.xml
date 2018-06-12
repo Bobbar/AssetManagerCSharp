@@ -1402,7 +1402,7 @@
             <param name="target">Form to add to ToolStrip.</param>
             <param name="targetMenuItem">Item to add the Form item to.</param>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.FileTransferUI.GKLogEvent(System.Object,System.EventArgs)">
+        <member name="M:AssetManager.UserInterface.CustomControls.FileTransferUI.LogEvent(System.Object,System.EventArgs)">
             <summary>
             Log message event from GKUpdater.  This even can fire very rapidly. So the result is stored in a buffer to be added to the rtbLog control in a more controlled manner.
             </summary>

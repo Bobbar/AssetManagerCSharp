@@ -127,7 +127,6 @@ namespace AssetManager.UserInterface.CustomControls
             // 
             // UITimer
             // 
-            this.UITimer.Enabled = true;
             this.UITimer.Tick += new System.EventHandler(this.UI_Timer_Tick);
             // 
             // RestartPictureBox
@@ -208,6 +207,7 @@ namespace AssetManager.UserInterface.CustomControls
             this.TotalProgressBar.Location = new System.Drawing.Point(39, 27);
             this.TotalProgressBar.Name = "TotalProgressBar";
             this.TotalProgressBar.Size = new System.Drawing.Size(327, 20);
+            this.TotalProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.TotalProgressBar.TabIndex = 9;
             // 
             // StatusPictureBox
@@ -218,7 +218,7 @@ namespace AssetManager.UserInterface.CustomControls
             this.StatusPictureBox.TabIndex = 8;
             this.StatusPictureBox.TabStop = false;
             // 
-            // GKProgressControl
+            // FileTransferUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -228,7 +228,7 @@ namespace AssetManager.UserInterface.CustomControls
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximumSize = new System.Drawing.Size(400, 300);
             this.MinimumSize = new System.Drawing.Size(400, 87);
-            this.Name = "GKProgressControl";
+            this.Name = "FileTransferUI";
             this.Size = new System.Drawing.Size(400, 300);
             ((System.ComponentModel.ISupportInitialize)(this.RestartPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CancelClosePictureBox)).EndInit();

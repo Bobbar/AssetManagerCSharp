@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -44,10 +45,10 @@ namespace AssetManager.UserInterface.CustomControls
 
             remoteTransfer = new RemoteTransfer(currentDevice.HostName, sourcePath, destPath, transferDescription);
             remoteTransfer.CreateMissingDirectories = createMissingDirs;
-            remoteTransfer.LogEvent += GKLogEvent;
-            remoteTransfer.StatusUpdate += GKStatusUpdateEvent;
-            remoteTransfer.TransferComplete += GKUpdate_Complete;
-            remoteTransfer.TransferCanceled += GKUpdate_Cancelled;
+            remoteTransfer.LogEvent += LogEvent;
+            remoteTransfer.StatusUpdate += StatusUpdateEvent;
+            remoteTransfer.TransferComplete += UpdateCompleteEvent;
+            remoteTransfer.TransferCanceled += UpdateCanceledEvent;
 
             DeviceInfoLabel.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
             TransferRateLabel.Text = "0.00MB/s";
@@ -77,6 +78,7 @@ namespace AssetManager.UserInterface.CustomControls
                 {
                     logBuffer = "";
                     SetStatus(ProgressStatus.Starting);
+                    DoUIUpdateLoop();
                     remoteTransfer.StartTransfer(SecurityTools.AdminCreds);
                 }
             }
@@ -127,10 +129,10 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void GKProgressControl_Disposed(object sender, EventArgs e)
         {
-            remoteTransfer.LogEvent -= GKLogEvent;
-            remoteTransfer.StatusUpdate -= GKStatusUpdateEvent;
-            remoteTransfer.TransferComplete -= GKUpdate_Complete;
-            remoteTransfer.TransferCanceled -= GKUpdate_Cancelled;
+            remoteTransfer.LogEvent -= LogEvent;
+            remoteTransfer.StatusUpdate -= StatusUpdateEvent;
+            remoteTransfer.TransferComplete -= UpdateCompleteEvent;
+            remoteTransfer.TransferCanceled -= UpdateCanceledEvent;
             remoteTransfer.Dispose();
             statusLight?.Dispose();
         }
@@ -138,7 +140,7 @@ namespace AssetManager.UserInterface.CustomControls
         /// <summary>
         /// Log message event from GKUpdater.  This even can fire very rapidly. So the result is stored in a buffer to be added to the rtbLog control in a more controlled manner.
         /// </summary>
-        private void GKLogEvent(object sender, EventArgs e)
+        private void LogEvent(object sender, EventArgs e)
         {
             var LogEvent = (RemoteTransfer.LogEventArgs)e;
             Log(LogEvent.Message.Message);
@@ -149,7 +151,7 @@ namespace AssetManager.UserInterface.CustomControls
             logBuffer += text + Environment.NewLine;
         }
 
-        private void GKStatusUpdateEvent(object sender, EventArgs e)
+        private void StatusUpdateEvent(object sender, EventArgs e)
         {
             var UpdateEvent = (RemoteTransfer.TransferStatusEventArgs)e;
             SetStatus(ProgressStatus.Running);
@@ -159,12 +161,12 @@ namespace AssetManager.UserInterface.CustomControls
             StatusLabel.Text = currentStatus.DestinationFileName;
         }
 
-        private void GKUpdate_Cancelled(object sender, EventArgs e)
+        private void UpdateCanceledEvent(object sender, EventArgs e)
         {
             SetStatus(ProgressStatus.Canceled);
         }
 
-        private void GKUpdate_Complete(object sender, EventArgs e)
+        private void UpdateCompleteEvent(object sender, EventArgs e)
         {
             var CompleteEvent = (RemoteTransfer.TransferCompleteEventArgs)e;
             if (CompleteEvent.HasErrors)
@@ -374,6 +376,29 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
+        private async Task DoUIUpdateLoop()
+        {
+            while (!this.IsDisposed)
+            {
+                if (logVisible)
+                {
+                    UpdateLogBox();
+                }
+                if (progStatus == ProgressStatus.Running)
+                {
+                    // Set the progress bar to a value over the actual, then immediately set to the actual value
+                    // This overrides the Windows animation and makes the bar go to the intended value instantly.
+                    if (remoteTransfer.TransferStatus.CurrentFileProgress < 100)
+                        FileProgressBar.Value = remoteTransfer.TransferStatus.CurrentFileProgress + 1;
+                    FileProgressBar.Value = remoteTransfer.TransferStatus.CurrentFileProgress;
+                    TransferRateLabel.Text = remoteTransfer.TransferStatus.CurrentTransferRate.ToString("0.00") + "MB/s";
+                }
+
+                await Task.Delay(250);
+            }
+
+        }
+
         /// <summary>
         /// Timer that updates the rtbLog control with chunks of data from the log buffer.
         /// </summary>
@@ -396,9 +421,12 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void UpdateLogBox()
         {
-            LogTextBox.AppendText(logBuffer);
-            LogTextBox.Refresh();
-            logBuffer = "";
+            if (!string.IsNullOrEmpty(logBuffer))
+            {
+                LogTextBox.AppendText(logBuffer);
+                LogTextBox.Invalidate();
+                logBuffer = "";
+            }
         }
     }
 }
