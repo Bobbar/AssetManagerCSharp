@@ -223,7 +223,7 @@ namespace AssetManager.Data.Functions
         {
             if (!isValid)
             {
-                if (ReferenceEquals(errorProvider.GetError(control), string.Empty))
+                if (string.IsNullOrEmpty(errorProvider.GetError(control)))
                 {
                     control.BackColor = Colors.MissingField;
                     errorProvider.SetIconAlignment(control, ErrorIconAlignment.MiddleRight);

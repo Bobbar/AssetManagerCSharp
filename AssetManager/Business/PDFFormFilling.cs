@@ -262,7 +262,7 @@ namespace AssetManager.Business
         {
             AcroFields tmpFields = pdfStamper.AcroFields;
             string unitPrice = GetUnitPrice();
-            if (string.IsNullOrEmpty(unitPrice) || ReferenceEquals(unitPrice, null))
+            if (string.IsNullOrEmpty(unitPrice))
             {
                 return null;
             }

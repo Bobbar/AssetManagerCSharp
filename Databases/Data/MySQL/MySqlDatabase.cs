@@ -78,7 +78,7 @@ namespace Database.Data
 
         private bool TryOpenConnection(DbConnection connection)
         {
-            if (ReferenceEquals(connection, null)) //Instantiate new connection.
+            if (connection == null) //Instantiate new connection.
             {
                 connection = (MySqlConnection)NewConnection();
             }
@@ -130,7 +130,7 @@ namespace Database.Data
 
         public DataTable DataTableFromCommand(DbCommand command, DbTransaction transaction = null)
         {
-            if (ReferenceEquals(transaction, null))
+            if (transaction == null)
             {
                 using (DbDataAdapter da = new MySqlDataAdapter())
                 using (DataTable results = new DataTable())

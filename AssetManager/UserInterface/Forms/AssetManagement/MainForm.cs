@@ -269,34 +269,34 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 foreach (var ctl in controlParser.GetDBControls(this))
                 {
                     var ctlValue = controlParser.GetDBControlValue(ctl);
-                    if (!ReferenceEquals(ctlValue, DBNull.Value) && !string.IsNullOrEmpty(ctlValue.ToString()))
+                    if (ctlValue != DBNull.Value && !string.IsNullOrEmpty(ctlValue.ToString()))
                     {
-                        var DBInfo = (DBControlInfo)ctl.Tag;
-                        bool IsExact = false;
-                        switch (DBInfo.ColumnName)
+                        var dbInfo = (DBControlInfo)ctl.Tag;
+                        bool isExact = false;
+                        switch (dbInfo.ColumnName)
                         {
                             //case DevicesCols.OSVersion:
                             //    IsExact = true;
                             //    break;
 
                             case DevicesCols.EQType:
-                                IsExact = true;
+                                isExact = true;
                                 break;
 
                             case DevicesCols.Location:
-                                IsExact = true;
+                                isExact = true;
                                 break;
 
                             case DevicesCols.Status:
-                                IsExact = true;
+                                isExact = true;
                                 break;
 
                             default:
-                                IsExact = false;
+                                isExact = false;
                                 break;
                         }
 
-                        searchParams.Add(DBInfo.ColumnName, ctlValue, IsExact);
+                        searchParams.Add(dbInfo.ColumnName, ctlValue, isExact);
                     }
                 }
                 return searchParams;

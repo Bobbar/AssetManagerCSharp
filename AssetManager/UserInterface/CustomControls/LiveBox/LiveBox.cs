@@ -156,7 +156,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             foreach (var config in liveBoxConfigs)
             {
-                if (ReferenceEquals(config.TargetTextBox, (TextBox)sender))
+                if (config.TargetTextBox == sender)
                 {
                     return config;
                 }

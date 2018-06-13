@@ -93,7 +93,7 @@ namespace AssetManager.UserInterface.Forms
             SetStatusBarText("Idle...");
             attachmentColumns = attachTable;
 
-            if (!ReferenceEquals(attachDataObject, null))
+            if (attachDataObject != null)
             {
                 attachFolderGuid = attachDataObject.Guid;
 
@@ -708,7 +708,7 @@ namespace AssetManager.UserInterface.Forms
             if (dropDataObject.GetDataPresent("RenPrivateItem"))
             {
                 string[] outlookFiles = CopyAttachement(dropDataObject, "RenPrivateItem");
-                if (!ReferenceEquals(outlookFiles, null))
+                if (outlookFiles != null)
                 {
                     UploadAttachments(outlookFiles, folder);
                 }
@@ -717,7 +717,7 @@ namespace AssetManager.UserInterface.Forms
             else if (dropDataObject.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] explorerFiles = (string[])(dropDataObject.GetData(DataFormats.FileDrop));
-                if (!ReferenceEquals(explorerFiles, null))
+                if (explorerFiles != null)
                 {
                     UploadAttachments(explorerFiles, folder);
                 }
@@ -998,7 +998,7 @@ namespace AssetManager.UserInterface.Forms
                 Waiting();
                 using (var saveAttachment = await DownloadAttachment(attachGuid))
                 {
-                    if (ReferenceEquals(saveAttachment, null))
+                    if (saveAttachment == null)
                     {
                         return;
                     }

@@ -55,7 +55,7 @@ namespace Database.Data
         {
             var sqliteConnection = (SQLiteConnection)connection;
 
-            if (ReferenceEquals(sqliteConnection, null))
+            if (sqliteConnection == null)
             {
                 sqliteConnection = (SQLiteConnection)NewConnection();
             }

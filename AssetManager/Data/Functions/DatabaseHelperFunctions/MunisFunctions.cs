@@ -19,7 +19,7 @@ namespace AssetManager.Data.Functions
 
         public static string GetReqNumberFromPO(string po)
         {
-            if (!ReferenceEquals(po, null))
+            if (po != null)
             {
                 if (!string.IsNullOrEmpty(po))
                 {
@@ -650,7 +650,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
                 if (inventoryTable != null || reqLinesTable != null)
                 {
                     GridForm newGridForm = new GridForm(parentForm, "MUNIS Info");
-                    if (ReferenceEquals(inventoryTable, null))
+                    if (inventoryTable == null)
                     {
                         OtherFunctions.Message("Munis Fixed Asset info. not found.", MessageBoxButtons.OK, MessageBoxIcon.Information, "No FA Record");
                     }
@@ -658,7 +658,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
                     {
                         newGridForm.AddGrid("InvGrid", "FA Info:", inventoryTable);
                     }
-                    if (ReferenceEquals(reqLinesTable, null))
+                    if (reqLinesTable == null)
                     {
                         OtherFunctions.Message("Could not resolve PO from Asset Tag or Serial. Please add a valid PO if possible.", MessageBoxButtons.OK, MessageBoxIcon.Information, "No Req. Record");
                     }
@@ -677,7 +677,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
                         newGridForm.Dispose();
                     }
                 }
-                else if (ReferenceEquals(inventoryTable, null) && ReferenceEquals(reqLinesTable, null))
+                else if (inventoryTable == null && reqLinesTable == null)
                 {
                     OtherFunctions.Message("Could not resolve any purchase or Fixed Asset info.", MessageBoxButtons.OK, MessageBoxIcon.Information, "Nothing Found");
                 }

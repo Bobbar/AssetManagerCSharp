@@ -149,7 +149,7 @@ namespace AssetManager.UserInterface.CustomControls
 
             if (osName.Contains("WIN"))
             {
-                if (ReferenceEquals(pingVis, null))
+                if (pingVis == null)
                 {
                     pingVis = new PingVis(ShowIPButton, this.device.HostName + "." + NetworkInfo.CurrentDomain);
                     pingVis.NewPingResult -= PingVis_NewPingResult;
