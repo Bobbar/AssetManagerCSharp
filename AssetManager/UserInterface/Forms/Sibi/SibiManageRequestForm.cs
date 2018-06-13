@@ -10,9 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AssetManager.UserInterface.Forms.Sibi
 {
@@ -32,16 +32,18 @@ namespace AssetManager.UserInterface.Forms.Sibi
         private SliderLabel statusSlider;
         private string titleText = "Manage Request";
         private WindowList windowList;
+
         #endregion Fields
 
         #region Constructors
 
         public SibiManageRequestForm(ExtendedForm parentForm, string requestGuid) : base(parentForm, requestGuid)
         {
+            InitializeComponent();
+
             munisToolBar = new MunisToolBar(this);
             windowList = new WindowList(this);
 
-            InitializeComponent();
             InitForm();
 
             OpenRequest(requestGuid);
@@ -49,11 +51,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         public SibiManageRequestForm(ExtendedForm parentForm) : base(parentForm)
         {
+            InitializeComponent();
+
             munisToolBar = new MunisToolBar(this);
             windowList = new WindowList(this);
 
-            InitializeComponent();
             InitForm();
+
             Text += " - *New Request*";
             NewRequest();
         }
@@ -61,6 +65,44 @@ namespace AssetManager.UserInterface.Forms.Sibi
         #endregion Constructors
 
         #region Methods
+
+        private void InitDBControls()
+        {
+            DescriptionTextBox.SetDBInfo(SibiRequestCols.Description, true);
+            RequestUserTextBox.SetDBInfo(SibiRequestCols.RequestUser, true);
+            TypeComboBox.SetDBInfo(SibiRequestCols.Type, Attributes.SibiAttributes.RequestType, true);
+            NeedByDatePicker.SetDBInfo(SibiRequestCols.NeedBy, true);
+            StatusComboBox.SetDBInfo(SibiRequestCols.Status, Attributes.SibiAttributes.StatusType, true);
+            POTextBox.SetDBInfo(SibiRequestCols.PO, false);
+            ReqNumberTextBox.SetDBInfo(SibiRequestCols.RequisitionNumber, false);
+            RequestNumTextBox.SetDBInfo(SibiRequestCols.RequestNumber, ParseType.DisplayOnly, false);
+            RTNumberTextBox.SetDBInfo(SibiRequestCols.RTNumber, false);
+            CreateDateTextBox.SetDBInfo(SibiRequestCols.CreateDate, ParseType.DisplayOnly, false);
+            ModifyDateTextBox.SetDBInfo(SibiRequestCols.ModifyDate, ParseType.DisplayOnly, false);
+            ModifyByTextBox.SetDBInfo(SibiRequestCols.ModifyUser, ParseType.DisplayOnly, false);
+        }
+
+        private void InitForm()
+        {
+            statusSlider = new SliderLabel();
+            statusSlider.FlashStripOnNewMessage = true;
+            StatusStrip1.Items.Insert(0, statusSlider.ToToolStripControl(StatusStrip1));
+
+            InitDBControls();
+
+            FillCombos();
+
+            controlParser = new DBControlParser(this);
+            controlParser.EnableFieldValidation();
+
+            RequestItemsGrid.DoubleBuffered(true);
+            NotesGrid.DoubleBuffered(true);
+            munisToolBar.InsertMunisDropDown(ToolStrip);
+            windowList.InsertWindowList(ToolStrip);
+            StyleFunctions.SetGridStyle(RequestItemsGrid, GridTheme);
+            StyleFunctions.SetGridStyle(NotesGrid, GridTheme);
+            ToolStrip.BackColor = Colors.SibiToolBarColor;
+        }
 
         public void ClearAttachCount()
         {
@@ -176,6 +218,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 RequestItemsGrid.MultiSelect = true;
             }
         }
+
         private void BeginDragDrop(Point mouseLocation)
         {
             if (RequestItemsGrid.SelectedRows.Count > 0)
@@ -357,7 +400,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             {
                 SecurityTools.CheckForAccess(SecurityGroups.DeleteSibi);
 
-                if (ReferenceEquals(currentRequest.RequestItems, null))
+                if (currentRequest.RequestItems == null)
                 {
                     return;
                 }
@@ -643,44 +686,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
             var newDev = new NewDeviceForm(this);
             newDev.ImportFromSibi(RequestItemsGrid.CurrentRowStringValue(SibiRequestItemsCols.ItemGuid));
-        }
-
-        private void InitDBControls()
-        {
-            DescriptionTextBox.SetDBInfo(SibiRequestCols.Description, true);
-            RequestUserTextBox.SetDBInfo(SibiRequestCols.RequestUser, true);
-            TypeComboBox.SetDBInfo(SibiRequestCols.Type, Attributes.SibiAttributes.RequestType, true);
-            NeedByDatePicker.SetDBInfo(SibiRequestCols.NeedBy, true);
-            StatusComboBox.SetDBInfo(SibiRequestCols.Status, Attributes.SibiAttributes.StatusType, true);
-            POTextBox.SetDBInfo(SibiRequestCols.PO, false);
-            ReqNumberTextBox.SetDBInfo(SibiRequestCols.RequisitionNumber, false);
-            RequestNumTextBox.SetDBInfo(SibiRequestCols.RequestNumber, ParseType.DisplayOnly, false);
-            RTNumberTextBox.SetDBInfo(SibiRequestCols.RTNumber, false);
-            CreateDateTextBox.SetDBInfo(SibiRequestCols.CreateDate, ParseType.DisplayOnly, false);
-            ModifyDateTextBox.SetDBInfo(SibiRequestCols.ModifyDate, ParseType.DisplayOnly, false);
-            ModifyByTextBox.SetDBInfo(SibiRequestCols.ModifyUser, ParseType.DisplayOnly, false);
-        }
-
-        private void InitForm()
-        {
-            statusSlider = new SliderLabel();
-            statusSlider.FlashStripOnNewMessage = true;
-            StatusStrip1.Items.Insert(0, statusSlider.ToToolStripControl(StatusStrip1));
-
-            InitDBControls();
-
-            FillCombos();
-
-            controlParser = new DBControlParser(this);
-            controlParser.EnableFieldValidation();
-
-            RequestItemsGrid.DoubleBuffered(true);
-            NotesGrid.DoubleBuffered(true);
-            munisToolBar.InsertMunisDropDown(ToolStrip);
-            windowList.InsertWindowList(ToolStrip);
-            StyleFunctions.SetGridStyle(RequestItemsGrid, GridTheme);
-            StyleFunctions.SetGridStyle(NotesGrid, GridTheme);
-            ToolStrip.BackColor = Colors.SibiToolBarColor;
         }
 
         private void InsertPONumber(string po)
@@ -1152,7 +1157,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             if (!isGridFilling)
             {
-                if (ReferenceEquals(RequestItemsGrid.Rows[rowIndex].Cells[SibiRequestItemsCols.ItemGuid].Value, null))
+                if (RequestItemsGrid.Rows[rowIndex].Cells[SibiRequestItemsCols.ItemGuid].Value == null)
                 {
                     RequestItemsGrid.Rows[rowIndex].Cells[SibiRequestItemsCols.ItemGuid].Value = Guid.NewGuid().ToString();
                 }
@@ -1257,7 +1262,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
                     currentRequest.RequestItems = GetRequestItems();
 
-                    if (ReferenceEquals(currentRequest.RequestItems, null))
+                    if (currentRequest.RequestItems == null)
                     {
                         return;
                     }
@@ -1291,6 +1296,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 }
             }
         }
+
         private bool ValidateFields()
         {
             bool validFields = controlParser.ValidateFields();
@@ -1305,29 +1311,31 @@ namespace AssetManager.UserInterface.Forms.Sibi
             return validFields;
         }
 
+        // Validates required columns in the items grid.
         private bool ValidateRequestItems()
         {
-            bool RowsValid = true;
+            bool rowsValid = true;
             foreach (DataGridViewRow row in RequestItemsGrid.Rows)
             {
                 if (!row.IsNewRow)
                 {
                     foreach (DataGridViewCell dcell in row.Cells)
                     {
-                        string CellString = "";
+                        string cellString = "";
                         if (dcell.Value != null)
                         {
-                            CellString = dcell.Value.ToString();
+                            cellString = dcell.Value.ToString();
                         }
                         else
                         {
-                            CellString = "";
+                            cellString = "";
                         }
-                        if (ReferenceEquals(dcell.OwningColumn.CellType, typeof(DataGridViewComboBoxCell)))
+
+                        if (dcell.OwningColumn.CellType == typeof(DataGridViewComboBoxCell))
                         {
-                            if (ReferenceEquals(dcell.Value, null) || string.IsNullOrEmpty(CellString))
+                            if ((dcell.Value == null) || string.IsNullOrEmpty(cellString))
                             {
-                                RowsValid = false;
+                                rowsValid = false;
                                 dcell.ErrorText = "Required Field!";
                             }
                             else
@@ -1335,11 +1343,12 @@ namespace AssetManager.UserInterface.Forms.Sibi
                                 dcell.ErrorText = null;
                             }
                         }
+
                         if (dcell.OwningColumn.Name == SibiRequestItemsCols.Qty)
                         {
-                            if (ReferenceEquals(dcell.Value, null) || string.IsNullOrEmpty(CellString))
+                            if ((dcell.Value == null) || string.IsNullOrEmpty(cellString))
                             {
-                                RowsValid = false;
+                                rowsValid = false;
                                 dcell.ErrorText = "Required Field!";
                             }
                             else
@@ -1350,7 +1359,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     }
                 }
             }
-            return RowsValid;
+            return rowsValid;
         }
 
         [SuppressMessage("Microsoft.Design", "CA1806")]
@@ -1387,10 +1396,10 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             try
             {
-                var NoteGuid = NotesGrid.CurrentRowStringValue(SibiNotesCols.NoteGuid);
-                if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(SibiNotesForm), NoteGuid))
+                var noteGuid = NotesGrid.CurrentRowStringValue(SibiNotesCols.NoteGuid);
+                if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(SibiNotesForm), noteGuid))
                 {
-                    new SibiNotesForm(this, NoteGuid);
+                    new SibiNotesForm(this, noteGuid);
                 }
             }
             catch (Exception ex)
@@ -1464,6 +1473,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             AllowDragChanged();
         }
+
         private void AttachmentsMenuButton_Click(object sender, EventArgs e)
         {
             ViewAttachments();
@@ -1483,6 +1493,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             AddNewRequest();
         }
+
         private void DeleteMenuButton_Click(object sender, EventArgs e)
         {
             DeleteCurrentSibiReqest();
@@ -1527,6 +1538,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             NewNote();
         }
+
         private void NotesGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             ViewNote();
@@ -1582,6 +1594,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
         {
             RequestItemsGrid.FastAutoSizeColumns();
         }
+
         private void RequestItemsGrid_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             OtherFunctions.Message("DataGrid Error: " + "\u0022" + e.Exception.Message + "\u0022" + "   Col/Row:" + e.ColumnIndex + "/" + e.RowIndex, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "DataGrid Error", this);
@@ -1632,6 +1645,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     e.RowBounds.Location.Y + 4);
             }
         }
+
         private void RTNumberTextBox_Click(object sender, EventArgs e)
         {
             ViewRequestTracker();
