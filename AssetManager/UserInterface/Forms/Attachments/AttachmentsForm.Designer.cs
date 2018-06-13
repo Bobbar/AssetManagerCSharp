@@ -22,9 +22,9 @@ namespace AssetManager.UserInterface.Forms
             this.RightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.OpenTool = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveToMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CopyTextTool = new System.Windows.Forms.ToolStripMenuItem();
-            this.NewFolderMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RenameStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.NewFolderMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CopyTextTool = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.DeleteAttachmentToolItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DeleteButton = new System.Windows.Forms.Button();
@@ -54,7 +54,6 @@ namespace AssetManager.UserInterface.Forms
             this.ThroughputLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ToolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.CancelToolButton = new System.Windows.Forms.ToolStripDropDownButton();
-            this.ProgressTimer = new System.Windows.Forms.Timer(this.components);
             this.DeviceGroup = new System.Windows.Forms.GroupBox();
             this.Label5 = new System.Windows.Forms.Label();
             this.DeviceDescTextBox = new System.Windows.Forms.TextBox();
@@ -117,13 +116,13 @@ namespace AssetManager.UserInterface.Forms
             this.SaveToMenuItem.Text = "Save To";
             this.SaveToMenuItem.Click += new System.EventHandler(this.SaveToMenuItem_Click);
             // 
-            // CopyTextTool
+            // RenameStripMenuItem
             // 
-            this.CopyTextTool.Image = global::AssetManager.Properties.Resources.CopyIcon;
-            this.CopyTextTool.Name = "CopyTextTool";
-            this.CopyTextTool.Size = new System.Drawing.Size(173, 22);
-            this.CopyTextTool.Text = "Copy Text";
-            this.CopyTextTool.Click += new System.EventHandler(this.CopyTextTool_Click);
+            this.RenameStripMenuItem.Image = global::AssetManager.Properties.Resources.EditIcon;
+            this.RenameStripMenuItem.Name = "RenameStripMenuItem";
+            this.RenameStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.RenameStripMenuItem.Text = "Rename";
+            this.RenameStripMenuItem.Click += new System.EventHandler(this.RenameStripMenuItem_Click);
             // 
             // NewFolderMenuItem
             // 
@@ -133,13 +132,13 @@ namespace AssetManager.UserInterface.Forms
             this.NewFolderMenuItem.Text = "New Folder";
             this.NewFolderMenuItem.Click += new System.EventHandler(this.NewFolderMenuItem_Click);
             // 
-            // RenameStripMenuItem
+            // CopyTextTool
             // 
-            this.RenameStripMenuItem.Image = global::AssetManager.Properties.Resources.EditIcon;
-            this.RenameStripMenuItem.Name = "RenameStripMenuItem";
-            this.RenameStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.RenameStripMenuItem.Text = "Rename";
-            this.RenameStripMenuItem.Click += new System.EventHandler(this.RenameStripMenuItem_Click);
+            this.CopyTextTool.Image = global::AssetManager.Properties.Resources.CopyIcon;
+            this.CopyTextTool.Name = "CopyTextTool";
+            this.CopyTextTool.Size = new System.Drawing.Size(173, 22);
+            this.CopyTextTool.Text = "Copy Text";
+            this.CopyTextTool.Click += new System.EventHandler(this.CopyTextTool_Click);
             // 
             // ToolStripSeparator1
             // 
@@ -494,7 +493,7 @@ namespace AssetManager.UserInterface.Forms
             // ToolStripStatusLabel1
             // 
             this.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1";
-            this.ToolStripStatusLabel1.Size = new System.Drawing.Size(696, 17);
+            this.ToolStripStatusLabel1.Size = new System.Drawing.Size(434, 17);
             this.ToolStripStatusLabel1.Spring = true;
             // 
             // CancelToolButton
@@ -507,10 +506,6 @@ namespace AssetManager.UserInterface.Forms
             this.CancelToolButton.Text = "Cancel";
             this.CancelToolButton.Visible = false;
             this.CancelToolButton.Click += new System.EventHandler(this.CancelToolButton_Click);
-            // 
-            // ProgressTimer
-            // 
-            this.ProgressTimer.Tick += new System.EventHandler(this.ProgressTimer_Tick);
             // 
             // DeviceGroup
             // 
@@ -653,7 +648,6 @@ namespace AssetManager.UserInterface.Forms
         internal ToolStripMenuItem OpenTool;
         internal ToolStripSeparator ToolStripSeparator1;
         internal ToolStripProgressBar ProgressBar1;
-        internal Timer ProgressTimer;
         internal ToolStripStatusLabel ToolStripStatusLabel2;
         internal ToolStripStatusLabel ThroughputLabel;
         internal DataGridView AttachGrid;

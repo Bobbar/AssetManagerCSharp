@@ -1077,7 +1077,7 @@ namespace AssetManager.UserInterface.Forms
                     ProgressBar1.Visible = true;
                     CancelToolButton.Visible = true;
                     Spinner.Visible = true;
-                    ProgressTimer.Enabled = true;
+                    DoProgressLoop();
                 }
                 else
                 {
@@ -1086,7 +1086,6 @@ namespace AssetManager.UserInterface.Forms
                     ProgressBar1.Visible = false;
                     CancelToolButton.Visible = false;
                     Spinner.Visible = false;
-                    ProgressTimer.Enabled = false;
                     ThroughputLabel.Text = null;
                     SetStatusBarText("Idle...");
                     DoneWaiting();
@@ -1277,23 +1276,31 @@ namespace AssetManager.UserInterface.Forms
             DownloadAndOpenAttachment();
         }
 
-        private void ProgressTimer_Tick(object sender, EventArgs e)
+        private async Task DoProgressLoop()
         {
-            progress.Tick();
-            if (progress.BytesMoved > 0)
+            while (transferTaskRunning)
             {
-                ThroughputLabel.Text = progress.Throughput.ToString("0.00") + " MB/s";
-
-                ProgressBar1.Value = progress.Percent;
-                if (progress.Percent > 1)
+                progress.Tick();
+                if (progress.BytesMoved > 0)
                 {
-                    ProgressBar1.Value -= 1; //doing this bypasses the progressbar control animation. This way it doesn't lag behind and fills completely
+                    var throughputText = progress.Throughput.ToString("0.00") + " MB/s";
+
+                    if (ThroughputLabel.Text != throughputText)
+                        ThroughputLabel.Text = throughputText;
+
+                    if (ProgressBar1.Value != progress.Percent)
+                    {
+                        if (progress.Percent < 100)
+                            ProgressBar1.Value = progress.Percent + 1;
+                        ProgressBar1.Value = progress.Percent;
+                    }
                 }
-                ProgressBar1.Value = progress.Percent;
-            }
-            else
-            {
-                ThroughputLabel.Text = string.Empty;
+                else
+                {
+                    ThroughputLabel.Text = string.Empty;
+                }
+
+                await Task.Delay(100);
             }
         }
 
