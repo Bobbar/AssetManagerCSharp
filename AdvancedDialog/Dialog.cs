@@ -40,13 +40,14 @@ namespace AdvancedDialog
 
         #region Methods
 
-        public void AddButton(string name, string text, Action clickAction)
+        public Button AddButton(string name, string text, Action clickAction)
         {
             var button = new Button();
             button.Name = name;
             button.Text = text;
             button.Tag = clickAction;
             AddControl(button);
+            return button;
         }
 
         public void AddCheckBox(string name, string label)

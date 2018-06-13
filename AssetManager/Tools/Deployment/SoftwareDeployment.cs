@@ -156,12 +156,12 @@ namespace AssetManager.Tools.Deployment
             {
                 newDialog.Text = "Select Installs";
                 newDialog.AutoSize = false;
-                newDialog.Height = 400;
-                newDialog.Width = 300;
+                newDialog.Height = 500;
+                newDialog.Width = 260;
 
                 var selectListBox = new CheckedListBox();
                 selectListBox.CheckOnClick = true;
-                selectListBox.Size = new System.Drawing.Size(300, 200);
+                selectListBox.Size = new System.Drawing.Size(300, 250);
                 selectListBox.DisplayMember = nameof(TaskInfo.TaskName);
 
                 var depList = await GetModules();
@@ -174,13 +174,24 @@ namespace AssetManager.Tools.Deployment
                 newDialog.AddCustomControl("TaskList", "Select items to install:", selectListBox);
 
                 // Add a 'Select None' button with lamba action.
-                newDialog.AddButton("selectNoneButton", "Select None", () =>
-                {
-                    for (int i = 0; i < selectListBox.Items.Count; i++)
-                    {
-                        selectListBox.SetItemChecked(i, false);
-                    }
-                });
+                var selectNone = newDialog.AddButton("selectNoneButton", "Select None", () =>
+                 {
+                     for (int i = 0; i < selectListBox.Items.Count; i++)
+                     {
+                         selectListBox.SetItemChecked(i, false);
+                     }
+                 });
+                selectNone.Width = 200;
+
+                // Add a 'Select All' button with lamba action.
+                var selectAll = newDialog.AddButton("selectAllButton", "Select All", () =>
+               {
+                   for (int i = 0; i < selectListBox.Items.Count; i++)
+                   {
+                       selectListBox.SetItemChecked(i, true);
+                   }
+               });
+                selectAll.Width = 200;
 
                 newDialog.ShowDialog();
                 if (newDialog.DialogResult == DialogResult.OK)
