@@ -168,7 +168,7 @@ namespace AssetManager.Tools.Deployment
 
                 foreach (var d in depList)
                 {
-                    selectListBox.Items.Add(d, true);
+                    selectListBox.Items.Add(d, false);
                 }
                 // Add deployment selection list.
                 newDialog.AddCustomControl("TaskList", "Select items to install:", selectListBox);
