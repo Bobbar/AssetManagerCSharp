@@ -25,14 +25,14 @@ namespace AssetManager.Helpers
             stpw.Stop();
             intTimerHits += 1;
             string Results = intTimerHits + "  Stopwatch: MS:" + stpw.ElapsedMilliseconds + " Ticks: " + stpw.ElapsedTicks;
-            Debug.Print(Results);
+            Console.WriteLine(Results);
             return Results;
         }
 
         public static string ElapTime()
         {
             string results = intTimerHits + "  Elapsed: MS:" + stpw.ElapsedMilliseconds + " Ticks: " + stpw.ElapsedTicks;
-            Debug.Print(results);
+            Console.WriteLine(results);
             return results;
         }
 

@@ -128,7 +128,7 @@ namespace AssetManager.Data.Classes
                         else
                         {
                             // Throw an error if type is unexpected.
-                            Debug.Print(prop.PropertyType.ToString());
+                            Console.WriteLine(prop.PropertyType.ToString());
                             throw new Exception("Unexpected property type.");
                         }
                     }
