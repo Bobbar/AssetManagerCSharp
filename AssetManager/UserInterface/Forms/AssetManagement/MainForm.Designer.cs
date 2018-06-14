@@ -89,6 +89,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.StartTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.StartSibiButton = new System.Windows.Forms.ToolStripButton();
+            this.LoadSelectedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.GroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ResultGrid)).BeginInit();
             this.ContextMenuStrip1.SuspendLayout();
@@ -178,12 +179,13 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.ContextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ViewToolStripMenuItem,
+            this.LoadSelectedMenuItem,
             this.AddGKUpdateMenuItem,
             this.SendToGridFormMenuItem,
             this.ToolStripSeparator3,
             this.CopySelectedMenuItem});
             this.ContextMenuStrip1.Name = "ContextMenuStrip1";
-            this.ContextMenuStrip1.Size = new System.Drawing.Size(180, 120);
+            this.ContextMenuStrip1.Size = new System.Drawing.Size(180, 142);
             // 
             // ViewToolStripMenuItem
             // 
@@ -862,6 +864,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.StartSibiButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.StartSibiButton.Click += new System.EventHandler(this.StartSibiButton_Click);
             // 
+            // LoadSelectedMenuItem
+            // 
+            this.LoadSelectedMenuItem.Image = global::AssetManager.Properties.Resources.CascadeIcon;
+            this.LoadSelectedMenuItem.Name = "LoadSelectedMenuItem";
+            this.LoadSelectedMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.LoadSelectedMenuItem.Text = "Load All Selected";
+            this.LoadSelectedMenuItem.Click += new System.EventHandler(this.LoadSelectedMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -965,5 +975,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal System.Windows.Forms.ToolStripMenuItem StartTransactionToolStripMenuItem;
         internal System.Windows.Forms.GroupBox TransactionBox;
         internal System.Windows.Forms.Button UpdateButton;
+        private System.Windows.Forms.ToolStripMenuItem LoadSelectedMenuItem;
     }
 }

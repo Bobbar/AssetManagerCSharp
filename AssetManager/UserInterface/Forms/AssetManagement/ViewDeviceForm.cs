@@ -51,7 +51,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #region Constructors
 
-        public ViewDeviceForm(ExtendedForm parentForm, MappableObject device) : base(parentForm, device)
+        public ViewDeviceForm(ExtendedForm parentForm, MappableObject device, bool startHidden = false) : base(parentForm, device, startHidden)
         {
             currentViewDevice = (Device)device;
 
@@ -85,6 +85,18 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             SetEditMode(false);
 
             LoadCurrentDevice();
+
+            if (!startHidden)
+            {
+                this.Show();
+            }
+            else
+            {
+                // Let the base class know that the hidden form is ready.
+                // Since no load event occurs, we need someway to notify
+                // when all the components are instantiated and populated.
+                base.HiddenFormReady();
+            }
         }
 
         #endregion Constructors
@@ -110,9 +122,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 SetPingHistoryLink();
                 SetTracking(currentViewDevice.IsTrackable, currentViewDevice.Tracking.IsCheckedOut);
                 this.Text = this.defaultFormTitle + FormTitle(currentViewDevice);
-                this.Show();
+
                 DataGridHistory.ClearSelection();
-                gridFilling = false;
             }
             catch (Exception ex)
             {
@@ -929,17 +940,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             DynamicSearch();
         }
 
-        void ILiveBox.ViewDevice(string deviceGuid)
-        {
-            LoadDevice(deviceGuid);
-        }
-
-        protected void DynamicSearch()
+        void ILiveBox.ViewDevice(string deviceGuid, bool startHidden)
         {
             throw new NotImplementedException();
         }
 
-        protected void LoadDevice(string deviceGuid)
+        protected void DynamicSearch()
         {
             throw new NotImplementedException();
         }
@@ -1027,6 +1033,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 DataGridHistory.CurrentCell = DataGridHistory[e.ColumnIndex, e.RowIndex];
             }
         }
+        private void DataGridHistory_VisibleChanged(object sender, EventArgs e)
+        {
+            if (DataGridHistory.Visible)
+                DataGridHistory.ClearSelection();
+        }
 
         private void DeleteDeviceToolButton_Click(object sender, EventArgs e)
         {
@@ -1100,7 +1111,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             OnlineStatusChanged?.Invoke(this, e);
         }
 
-        private void remoteToolsControl_NewStatusPrompt(object sender, UserPromptEventArgs e)
+        private void RemoteToolsControl_NewStatusPrompt(object sender, UserPromptEventArgs e)
         {
             StatusPrompt(e.Text, e.Color, e.DisplayTime);
         }
@@ -1152,6 +1163,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
+        private void ViewDeviceForm_Shown(object sender, EventArgs e)
+        {
+            gridFilling = false;
+        }
+
+
         #endregion Control Events
+
+
     }
 }

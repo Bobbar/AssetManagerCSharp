@@ -60,7 +60,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         void ILiveBox.DynamicSearch()
         {
-            DynamicSearch();
+            throw new NotImplementedException();
+        }
+
+        void ILiveBox.ViewDevice(string deviceGuid, bool startHidden = false)
+        {
+            throw new NotImplementedException();
         }
 
         public void ImportFromSibi(string itemGuid)
@@ -79,11 +84,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             CheckFields();
             PurchaseDatePicker.Value = POPurchaseDate;
             controlParser.EnableFields();
-        }
-
-        void ILiveBox.ViewDevice(string deviceGuid)
-        {
-            LoadDevice(deviceGuid);
         }
 
         public override bool OkToClose()
@@ -117,15 +117,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        protected void DynamicSearch()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected void LoadDevice(string deviceGuid)
-        {
-            throw new NotImplementedException();
-        }
         private void AddButton_Click(object sender, EventArgs e)
         {
             AddDevice();
@@ -423,6 +414,5 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         #endregion Methods
-
     }
 }

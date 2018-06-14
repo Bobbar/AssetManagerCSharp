@@ -22,6 +22,7 @@ namespace AssetManager.UserInterface.CustomControls
         private bool minimizeChildren = false;
         private bool restoreChildren = false;
         private FormWindowState previousWindowState;
+        private bool startedHidden = false;
 
         #endregion Fields
 
@@ -45,6 +46,16 @@ namespace AssetManager.UserInterface.CustomControls
 
         public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject) : this(parentForm, currentObject.Guid)
         {
+        }
+
+        public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject, bool startHidden = false) : this(parentForm, currentObject.Guid)
+        {
+            // If the form is starting without being shown, call for the handle to force its creation.
+            if (startHidden)
+            {
+                var dummy = this.Handle;
+                startedHidden = true;
+            }
         }
 
         #endregion Constructors
@@ -217,6 +228,7 @@ namespace AssetManager.UserInterface.CustomControls
         /// </summary>
         public void RestoreWindow()
         {
+            this.Show();
             this.WindowState = FormWindowState.Normal;
             this.Activate();
         }
@@ -370,7 +382,10 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void ExtendedForm_Load(object sender, EventArgs e)
         {
-            parentForm?.AddChild(this);
+            // If not started hidden, add this instance to the parent form if present.
+            if (!startedHidden)
+                parentForm?.AddChild(this);
+
             CenterToParentForm();
         }
 
@@ -405,11 +420,23 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
+        /// <summary>
+        /// Indicates to the base class that the hidden form is ready and component dependent functions can proceed.
+        /// </summary>
+        public void HiddenFormReady()
+        {
+            if (startedHidden)
+                parentForm?.AddChild(this);
+        }
+
         public void AddChild(ExtendedForm child)
         {
-            childForms.Add(child);
-            child.Disposed += Child_Disposed;
-            OnWindowCountChanged(new EventArgs());
+            if (!childForms.Contains(child))
+            {
+                childForms.Add(child);
+                child.Disposed += Child_Disposed;
+                OnWindowCountChanged(new EventArgs());
+            }
         }
 
         public void RemoveChild(ExtendedForm child)

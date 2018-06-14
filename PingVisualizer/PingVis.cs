@@ -398,7 +398,8 @@ namespace PingVisualizer
                 var options = new PingOptions();
                 options.DontFragment = true;
                 byte[] buff = Encoding.ASCII.GetBytes("pingpingpingping");
-                return await ping.SendPingAsync(hostname, pingTimeOut, buff, options);
+
+                return await Task.Run(() => { return ping.Send(hostname, pingTimeOut, buff, options); });
             }
             finally
             {
@@ -536,6 +537,7 @@ namespace PingVisualizer
             if (targetControl != null & targetControl.FindForm() != null)
             {
                 if (targetControl.FindForm().WindowState == FormWindowState.Minimized) return;
+                if (!targetControl.Visible) return;
             }
 
             // Framerate limiter with override.
@@ -559,7 +561,7 @@ namespace PingVisualizer
         {
             try
             {
-                while (true)
+                while (!this.disposedValue)
                 {
                     // Wait until a render event is triggered.
                     renderEvent.WaitOne(Timeout.Infinite);
@@ -989,24 +991,21 @@ namespace PingVisualizer
             {
                 if (disposing)
                 {
-                    pingTimer.Stop();
-                    pingTimer.Dispose();
-                    pingTimer = null;
-
-                    scaleEaseTimer.Stop();
-                    scaleEaseTimer.Dispose();
-                    scaleEaseTimer = null;
-
-                    disposeEvent.Set();
-                    renderEvent.Set();
-
                     targetControl.MouseWheel -= ControlMouseWheel;
                     targetControl.MouseLeave -= ControlMouseLeave;
                     targetControl.MouseMove -= ControlMouseMove;
 
-                    ping.Dispose();
-                    pingReplies.Clear();
-                    pingReplies = null;
+                    pingTimer.Stop();
+
+                    disposeEvent.Set();
+                    renderEvent.Set();
+
+                    renderTask.Wait();
+                    renderTask.Dispose();
+
+                    scaleEaseTimer.Stop();
+                    scaleEaseTimer.Dispose();
+                    scaleEaseTimer = null;
 
                     upscaledImage.Dispose();
                     upscaledGraphics.Dispose();
@@ -1019,8 +1018,17 @@ namespace PingVisualizer
                         DisposeBarList(currentBarList);
                         currentBarList = null;
                     }
-                    renderTask.Wait();
-                    renderTask.Dispose();
+
+                    pingTimer.Dispose();
+                    pingTimer = null;
+
+                    ping.Dispose();
+                    pingReplies.Clear();
+                    pingReplies = null;
+
+                    disposeEvent.Dispose();
+                    renderEvent.Dispose();
+
                 }
 
                 disposedValue = true;

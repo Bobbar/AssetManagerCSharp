@@ -183,7 +183,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         [SuppressMessage("Microsoft.Design", "CA1806")]
-        public void ViewDevice(string deviceGuid)
+        public void ViewDevice(string deviceGuid, bool startHidden = false)
         {
             if (string.IsNullOrEmpty(deviceGuid)) return;
 
@@ -191,8 +191,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             {
                 if (!ChildFormControl.FormIsOpenByGuid(typeof(ViewDeviceForm), deviceGuid))
                 {
-                    Waiting();
-                    new ViewDeviceForm(this, new Device(deviceGuid));
+                    if (!startHidden) Waiting();
+                    new ViewDeviceForm(this, new Device(deviceGuid), startHidden);
                 }
             }
             catch (Exception ex)
@@ -208,35 +208,45 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
             finally
             {
-                DoneWaiting();
+                if (!startHidden) DoneWaiting();
             }
         }
 
         /// <summary>
         /// Loads and displays devices for all currently selected rows.
         /// </summary>
-        private void ViewSelectedDevices()
+        private async Task ViewSelectedDevices()
         {
-            var uniqueRows = new HashSet<int>();
-            foreach (DataGridViewCell cell in ResultGrid.SelectedCells)
+            try
             {
-                uniqueRows.Add(cell.RowIndex);
-            }
-
-            foreach (var index in uniqueRows)
-            {
-                var row = ResultGrid.Rows[index];
-                var guid = row.Cells[DevicesCols.DeviceGuid].Value.ToString();
-
-                if (!string.IsNullOrEmpty(guid))
+                var uniqueRows = new HashSet<int>();
+                foreach (DataGridViewCell cell in ResultGrid.SelectedCells)
                 {
-                    ViewDevice(guid);
+                    uniqueRows.Add(cell.RowIndex);
                 }
-                // Delay for just a moment to keep the UI somewhat alive.
-                Task.Delay(20).Wait();
+
+                SetStatusBar("Loading " + uniqueRows.Count + " devices...");
+
+                foreach (var index in uniqueRows)
+                {
+                    var row = ResultGrid.Rows[index];
+                    var guid = row.Cells[DevicesCols.DeviceGuid].Value.ToString();
+
+                    if (!string.IsNullOrEmpty(guid))
+                    {
+                        ViewDevice(guid, true);
+                    }
+                    // Delay for just a moment to keep the UI somewhat alive.
+                    await Task.Delay(20);
+                }
+
+                uniqueRows.Clear();
+                uniqueRows = null;
             }
-            uniqueRows.Clear();
-            uniqueRows = null;
+            finally
+            {
+                DoneWaiting();
+            }
         }
 
         public override void RefreshData()
@@ -766,8 +776,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-
-
         #region "Control Event Methods"
 
         private void AdvancedSearchMenuItem_Click(object sender, EventArgs e)
@@ -910,6 +918,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var selectedGuid = ResultGrid.CurrentRowStringValue(DevicesCols.DeviceGuid);
+            ViewDevice(selectedGuid);
+        }
+
+        private void LoadSelectedMenuItem_Click(object sender, EventArgs e)
         {
             ViewSelectedDevices();
         }

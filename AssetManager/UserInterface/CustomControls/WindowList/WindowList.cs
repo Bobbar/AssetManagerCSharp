@@ -166,8 +166,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (!frm.IsDisposed)
                 {
-                    frm.WindowState = FormWindowState.Normal;
-                    frm.Activate();
+                    frm.RestoreWindow();
                 }
                 else
                 {

@@ -1119,6 +1119,11 @@
             This is done because sometimes the cursor gets stuck on waiting, and we need to directly set it back to default.
             </remarks>
         </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.MinimizedFormReady">
+            <summary>
+            Indicates to the base class that the minimized form is ready and component dependent functions can proceed.
+            </summary>
+        </member>
         <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.GetChildFormCount(AssetManager.UserInterface.CustomControls.IWindowList)">
             <summary>
             Recursively counts the number of child forms within the parent/child tree.

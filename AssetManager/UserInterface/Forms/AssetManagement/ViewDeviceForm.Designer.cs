@@ -542,6 +542,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.DataGridHistory.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridHistory_CellEnter);
             this.DataGridHistory.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridHistory_CellLeave);
             this.DataGridHistory.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridHistory_CellMouseDown);
+            this.DataGridHistory.VisibleChanged += new System.EventHandler(this.DataGridHistory_VisibleChanged);
             // 
             // TrackingTab
             // 
@@ -1067,7 +1068,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.RemoteToolsControl.TabIndex = 42;
             this.RemoteToolsControl.Visible = false;
             this.RemoteToolsControl.HostBackOnline += new System.EventHandler(this.RemoteToolsControl_HostBackOnline);
-            this.RemoteToolsControl.NewStatusPrompt += new AssetManager.UserInterface.CustomControls.RemoteToolsControl.UserPromptEventHandler(this.remoteToolsControl_NewStatusPrompt);
+            this.RemoteToolsControl.NewStatusPrompt += new AssetManager.UserInterface.CustomControls.RemoteToolsControl.UserPromptEventHandler(this.RemoteToolsControl_NewStatusPrompt);
             this.RemoteToolsControl.VisibleChanging += new System.EventHandler<bool>(this.RemoteToolsControl_VisibleChanging);
             this.RemoteToolsControl.HostOnlineStatus += new System.EventHandler<bool>(this.RemoteToolsControl_HostOnlineStatus);
             // 
@@ -1284,6 +1285,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Name = "ViewDeviceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View";
+            this.Shown += new System.EventHandler(this.ViewDeviceForm_Shown);
             this.MunisSibiPanel.ResumeLayout(false);
             this.RightClickMenu.ResumeLayout(false);
             this.TabControl1.ResumeLayout(false);
