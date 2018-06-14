@@ -477,6 +477,30 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         /// <summary>
+        /// Returns a list of all child forms including the childs of all children.
+        /// </summary>
+        /// <returns></returns>
+        public List<ExtendedForm> GetChildForms()
+        {
+            return GetChildFormsList(this);
+        }
+
+        private List<ExtendedForm> GetChildFormsList(ExtendedForm parent)
+        {
+            var childList = new List<ExtendedForm>();
+
+            childList.AddRange(parent.ChildForms);
+
+            foreach (var child in parent.childForms)
+            {
+                if (child.ChildForms.Count > 0)
+                    childList.AddRange(GetChildFormsList(child));
+            }
+
+            return childList;
+        }
+        
+        /// <summary>
         /// Recursively counts the number of child forms within the parent/child tree.
         /// </summary>
         /// <param name="parent"></param>

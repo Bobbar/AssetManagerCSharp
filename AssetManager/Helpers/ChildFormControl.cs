@@ -74,7 +74,9 @@ namespace AssetManager.Helpers
 
         public static bool FormIsOpenByGuid(Type formType, string guid)
         {
-            foreach (ExtendedForm frm in Application.OpenForms)
+            var openForms = MainFormInstance().GetChildForms();
+
+            foreach (ExtendedForm frm in openForms)
             {
                 if (frm.GetType() == formType && frm.FormGuid == guid)
                 {
