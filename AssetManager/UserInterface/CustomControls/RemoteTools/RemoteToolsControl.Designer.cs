@@ -17,7 +17,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.ToolsGroupBox = new System.Windows.Forms.GroupBox();
-            this.ShowIPButton = new System.Windows.Forms.Button();
+            this.PingVisButton = new System.Windows.Forms.Button();
             this.ToolsLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.RestartDeviceButton = new System.Windows.Forms.PictureBox();
             this.BrowseFilesButton = new System.Windows.Forms.Button();
@@ -35,7 +35,7 @@
             // 
             // ToolsGroupBox
             // 
-            this.ToolsGroupBox.Controls.Add(this.ShowIPButton);
+            this.ToolsGroupBox.Controls.Add(this.PingVisButton);
             this.ToolsGroupBox.Controls.Add(this.ToolsLayoutPanel);
             this.ToolsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ToolsGroupBox.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -46,21 +46,21 @@
             this.ToolsGroupBox.TabStop = false;
             this.ToolsGroupBox.Text = "Remote Tools";
             // 
-            // ShowIPButton
+            // PingVisButton
             // 
-            this.ShowIPButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ShowIPButton.BackColor = System.Drawing.Color.Black;
-            this.ShowIPButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ShowIPButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.ShowIPButton.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ShowIPButton.ForeColor = System.Drawing.Color.White;
-            this.ShowIPButton.Location = new System.Drawing.Point(313, 9);
-            this.ShowIPButton.Name = "ShowIPButton";
-            this.ShowIPButton.Size = new System.Drawing.Size(105, 105);
-            this.ShowIPButton.TabIndex = 59;
-            this.ShowIPButton.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.ShowIPButton.UseVisualStyleBackColor = false;
-            this.ShowIPButton.Click += new System.EventHandler(this.ShowIPButton_Click);
+            this.PingVisButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PingVisButton.BackColor = System.Drawing.Color.Black;
+            this.PingVisButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.PingVisButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.PingVisButton.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PingVisButton.ForeColor = System.Drawing.Color.White;
+            this.PingVisButton.Location = new System.Drawing.Point(313, 9);
+            this.PingVisButton.Name = "PingVisButton";
+            this.PingVisButton.Size = new System.Drawing.Size(105, 105);
+            this.PingVisButton.TabIndex = 59;
+            this.PingVisButton.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.PingVisButton.UseVisualStyleBackColor = false;
+            this.PingVisButton.Click += new System.EventHandler(this.PingVisButton_Click);
             // 
             // ToolsLayoutPanel
             // 
@@ -217,7 +217,7 @@
         internal System.Windows.Forms.Button BrowseFilesButton;
         internal System.Windows.Forms.PictureBox RestartDeviceButton;
         internal System.Windows.Forms.Button StartRDPButton;
-        internal System.Windows.Forms.Button ShowIPButton;
+        internal System.Windows.Forms.Button PingVisButton;
         internal System.Windows.Forms.Button EventViewerButton;
         private System.Windows.Forms.ToolTip toolTip;
         internal System.Windows.Forms.Button NewDeployButton;

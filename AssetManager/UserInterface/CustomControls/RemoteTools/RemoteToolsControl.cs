@@ -153,7 +153,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (pingVis == null)
                 {
-                    pingVis = new PingVis(ShowIPButton, this.device.HostName + "." + NetworkInfo.CurrentDomain);
+                    pingVis = new PingVis(PingVisButton, this.device.HostName + "." + NetworkInfo.CurrentDomain);
                     pingVis.NewPingResult -= PingVis_NewPingResult;
                     pingVis.NewPingResult += PingVis_NewPingResult;
                 }
@@ -308,8 +308,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (SecurityTools.VerifyAdminCreds())
                 {
-                    string ip = pingVis.CurrentResult.Address.ToString();
-                    var restartOutput = await SendRestart(ip);
+                    var restartOutput = await SendRestart();
                     if ((string)restartOutput == "")
                     {
                         OnStatusPrompt("Restart Command Successful!", successColor);
@@ -322,28 +321,28 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private async Task<string> SendRestart(string ip)
+        private async Task<string> SendRestart()
         {
             var origButtonImage = RestartDeviceButton.Image;
             try
             {
                 RestartDeviceButton.Image = Properties.Resources.LoadingAni;
-                string FullPath = "\\\\" + ip;
+                string devicePath = @"\\" + this.device.HostName;
                 string output = await Task.Run(() =>
                 {
-                    using (var netCon = new NetworkConnection(FullPath, SecurityTools.AdminCreds))
+                    using (var netCon = new NetworkConnection(devicePath, SecurityTools.AdminCreds))
                     using (var p = new Process())
                     {
-                        string results;
                         p.StartInfo.UseShellExecute = false;
                         p.StartInfo.CreateNoWindow = true;
                         p.StartInfo.RedirectStandardOutput = true;
                         p.StartInfo.RedirectStandardError = true;
                         p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                         p.StartInfo.FileName = "shutdown.exe";
-                        p.StartInfo.Arguments = "/m " + FullPath + " /f /r /t 0";
+                        p.StartInfo.Arguments = "/m " + devicePath + " /f /r /t 0";
                         p.Start();
-                        results = p.StandardError.ReadToEnd();
+
+                        var results = p.StandardError.ReadToEnd();
                         p.WaitForExit();
                         return results.Trim();
                     }
@@ -353,12 +352,12 @@ namespace AssetManager.UserInterface.CustomControls
             catch (Exception ex)
             {
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                return ex.ToString();
             }
             finally
             {
                 RestartDeviceButton.Image = origButtonImage;
             }
-            return string.Empty;
         }
 
         private void StartPowerShellSession(Device targetDevice)
@@ -449,7 +448,7 @@ namespace AssetManager.UserInterface.CustomControls
             RestartDevice();
         }
 
-        private void ShowIPButton_Click(object sender, EventArgs e)
+        private void PingVisButton_Click(object sender, EventArgs e)
         {
             ShowIP();
         }
