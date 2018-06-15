@@ -202,7 +202,6 @@
             this.Name = "RemoteToolsControl";
             this.Size = new System.Drawing.Size(421, 117);
             this.Load += new System.EventHandler(this.RemoteToolsControl_Load);
-            this.VisibleChanged += new System.EventHandler(this.RemoteToolsControl_VisibleChanged);
             this.ToolsGroupBox.ResumeLayout(false);
             this.ToolsLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.RestartDeviceButton)).EndInit();

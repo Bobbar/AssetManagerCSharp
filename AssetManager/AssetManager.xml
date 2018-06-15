@@ -1124,6 +1124,12 @@
             Indicates to the base class that the hidden form is ready and component dependent functions can proceed.
             </summary>
         </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.GetChildForms">
+            <summary>
+            Returns a list of all child forms including the childs of all children.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.GetChildFormCount(AssetManager.UserInterface.CustomControls.IWindowList)">
             <summary>
             Recursively counts the number of child forms within the parent/child tree.

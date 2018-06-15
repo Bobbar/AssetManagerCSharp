@@ -13,9 +13,6 @@ using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WNetConnection;
-using DeploymentAssemblies;
-using System.Reflection;
-using System.Linq;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -69,6 +66,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         [Browsable(true)]
         public event UserPromptEventHandler NewStatusPrompt;
+
         public delegate void UserPromptEventHandler(object sender, UserPromptEventArgs e);
 
         [SuppressMessage("Microsoft.Design", "CA1009")]
@@ -78,7 +76,6 @@ namespace AssetManager.UserInterface.CustomControls
         [SuppressMessage("Microsoft.Design", "CA1009")]
         [Browsable(true)]
         public event EventHandler<bool> HostOnlineStatus;
-
 
         #endregion Fields
 
@@ -124,6 +121,11 @@ namespace AssetManager.UserInterface.CustomControls
         #endregion Properties
 
         #region Methods
+
+        public void ClearPingResults()
+        {
+            pingVis?.ClearResults();
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -392,7 +394,6 @@ namespace AssetManager.UserInterface.CustomControls
 
             if (SecurityTools.VerifyAdminCreds())
             {
-
                 var currentInstance = ChildFormControl.FindChildOfType(hostForm, typeof(PSExecCommandForm));
 
                 if (currentInstance == null)
@@ -419,7 +420,6 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-
         private void CheckRemoteAccess()
         {
             SecurityTools.CheckForAccess(SecurityGroups.RemoteAccess);
@@ -428,18 +428,6 @@ namespace AssetManager.UserInterface.CustomControls
         #endregion Methods
 
         #region Control Events
-
-        private void RemoteToolsControl_VisibleChanged(object sender, EventArgs e)
-        {
-            // If control is hidden, clear the pingvis results.
-            if (!this.Visible)
-            {
-                if (pingVis != null)
-                {
-                    pingVis.ClearResults();
-                }
-            }
-        }
 
         private void RemoteToolsControl_Load(object sender, EventArgs e)
         {
@@ -492,7 +480,5 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         #endregion Control Events
-
-
     }
 }

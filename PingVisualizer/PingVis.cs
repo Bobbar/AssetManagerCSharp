@@ -144,6 +144,7 @@ namespace PingVisualizer
         public void ClearResults()
         {
             pingReplies.Clear();
+            currentViewScale = 1;
         }
 
         private void InitGraphics()
@@ -176,15 +177,20 @@ namespace PingVisualizer
         {
             this.targetControl = targetControl;
 
-            targetControl.MouseWheel -= ControlMouseWheel;
-            targetControl.MouseWheel += ControlMouseWheel;
+            targetControl.VisibleChanged -= TargetControl_VisibleChanged;
+            targetControl.VisibleChanged += TargetControl_VisibleChanged;
 
-            targetControl.MouseLeave -= ControlMouseLeave;
-            targetControl.MouseLeave += ControlMouseLeave;
+            targetControl.MouseWheel -= TargetControl_MouseWheel;
+            targetControl.MouseWheel += TargetControl_MouseWheel;
 
-            targetControl.MouseMove -= ControlMouseMove;
-            targetControl.MouseMove += ControlMouseMove;
+            targetControl.MouseLeave -= TargetControl_MouseLeave;
+            targetControl.MouseLeave += TargetControl_MouseLeave;
+
+            targetControl.MouseMove -= TargetControl_MouseMove;
+            targetControl.MouseMove += TargetControl_MouseMove;
         }
+
+
 
         private void InitPing()
         {
@@ -263,20 +269,20 @@ namespace PingVisualizer
 
                 if (newScale > maxViewScale) newScale = maxViewScale;
 
+                // Update the target scale if the new scale is different.
                 if (targetViewScale != newScale)
                 {
                     targetViewScale = newScale;
 
+                    // If we are scrolling, set the current scale immediately.
                     if (mouseIsScrolling)
                     {
                         currentViewScale = targetViewScale;
                     }
-                    else
-                    {
-                        scaleEaseTimer.Interval = scaleEaseTimerInterval;
-                        scaleEaseTimer.Start();
-                    }
                 }
+
+                // Start the scale timer if needed.
+                if (currentViewScale != targetViewScale) scaleEaseTimer.Start();
             }
         }
 
@@ -417,13 +423,19 @@ namespace PingVisualizer
             if (!this.disposedValue) pingTimer.Interval = currentPingInterval;
         }
 
-        private void ControlMouseLeave(object sender, EventArgs e)
+        private void TargetControl_VisibleChanged(object sender, EventArgs e)
+        {
+            if (targetControl.Visible)
+                Render(false, true);
+        }
+
+        private void TargetControl_MouseLeave(object sender, EventArgs e)
         {
             mouseIsScrolling = false;
             Render(true, true);
         }
 
-        private void ControlMouseWheel(object sender, MouseEventArgs e)
+        private void TargetControl_MouseWheel(object sender, MouseEventArgs e)
         {
             if (pingReplies.Count > maxBars)
             {
@@ -462,7 +474,7 @@ namespace PingVisualizer
             }
         }
 
-        private void ControlMouseMove(object sender, MouseEventArgs e)
+        private void TargetControl_MouseMove(object sender, MouseEventArgs e)
         {
             mouseMoves++;
             mouseLocation = e.Location;
@@ -991,9 +1003,10 @@ namespace PingVisualizer
             {
                 if (disposing)
                 {
-                    targetControl.MouseWheel -= ControlMouseWheel;
-                    targetControl.MouseLeave -= ControlMouseLeave;
-                    targetControl.MouseMove -= ControlMouseMove;
+                    targetControl.MouseWheel -= TargetControl_MouseWheel;
+                    targetControl.MouseLeave -= TargetControl_MouseLeave;
+                    targetControl.MouseMove -= TargetControl_MouseMove;
+                    targetControl.VisibleChanged -= TargetControl_VisibleChanged;
 
                     pingTimer.Stop();
 
@@ -1028,7 +1041,6 @@ namespace PingVisualizer
 
                     disposeEvent.Dispose();
                     renderEvent.Dispose();
-
                 }
 
                 disposedValue = true;
