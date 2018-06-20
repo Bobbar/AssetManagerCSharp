@@ -227,7 +227,7 @@ namespace AssetManager.UserInterface.Forms
             // 
             this.AttachContainer.Panel2.Controls.Add(this.AttachGrid);
             this.AttachContainer.Size = new System.Drawing.Size(629, 386);
-            this.AttachContainer.SplitterDistance = 122;
+            this.AttachContainer.SplitterDistance = 148;
             this.AttachContainer.TabIndex = 23;
             // 
             // FolderListView
@@ -243,7 +243,7 @@ namespace AssetManager.UserInterface.Forms
             this.FolderListView.Location = new System.Drawing.Point(0, 0);
             this.FolderListView.MultiSelect = false;
             this.FolderListView.Name = "FolderListView";
-            this.FolderListView.Size = new System.Drawing.Size(122, 386);
+            this.FolderListView.Size = new System.Drawing.Size(148, 386);
             this.FolderListView.StateImageList = this.FolderImageList;
             this.FolderListView.TabIndex = 0;
             this.FolderListView.UseCompatibleStateImageBehavior = false;
@@ -257,7 +257,7 @@ namespace AssetManager.UserInterface.Forms
             // ColumnHeader1
             // 
             this.ColumnHeader1.Text = "Folder";
-            this.ColumnHeader1.Width = 115;
+            this.ColumnHeader1.Width = 148;
             // 
             // FolderImageList
             // 
@@ -308,7 +308,7 @@ namespace AssetManager.UserInterface.Forms
             this.AttachGrid.ShowCellErrors = false;
             this.AttachGrid.ShowCellToolTips = false;
             this.AttachGrid.ShowEditingIcon = false;
-            this.AttachGrid.Size = new System.Drawing.Size(503, 386);
+            this.AttachGrid.Size = new System.Drawing.Size(477, 386);
             this.AttachGrid.TabIndex = 18;
             this.AttachGrid.VirtualMode = true;
             this.AttachGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.AttachGrid_CellDoubleClick);
