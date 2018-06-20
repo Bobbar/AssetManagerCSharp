@@ -170,7 +170,7 @@ namespace AssetManager.UserInterface.Forms
             this.OpenButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OpenButton.Location = new System.Drawing.Point(29, 98);
             this.OpenButton.Name = "OpenButton";
-            this.OpenButton.Size = new System.Drawing.Size(92, 23);
+            this.OpenButton.Size = new System.Drawing.Size(92, 27);
             this.OpenButton.TabIndex = 5;
             this.OpenButton.Text = "Open";
             this.OpenButton.UseVisualStyleBackColor = true;
@@ -493,7 +493,7 @@ namespace AssetManager.UserInterface.Forms
             // ToolStripStatusLabel1
             // 
             this.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1";
-            this.ToolStripStatusLabel1.Size = new System.Drawing.Size(434, 17);
+            this.ToolStripStatusLabel1.Size = new System.Drawing.Size(696, 17);
             this.ToolStripStatusLabel1.Spring = true;
             // 
             // CancelToolButton
