@@ -14,10 +14,9 @@ namespace AdvancedDialog
         private bool isMessageBox = false;
         private bool startFullSize = false;
         private Form parentForm = null;
+        private RichTextBox messageBox;
 
         #endregion Fields
-
-        #region Constructors
 
         public Dialog(Form parentForm, bool maximized = false)
         {
@@ -36,7 +35,7 @@ namespace AdvancedDialog
             }
         }
 
-        #endregion Constructors
+
 
         #region Methods
 
@@ -82,6 +81,12 @@ namespace AdvancedDialog
             rtb.Name = name;
             rtb.Tag = label;
             if (!string.IsNullOrEmpty(text)) rtb.Text = text;
+
+            // Try to get a rough idea of how large the text box will need
+            // to be to fit the contents without a scroll bar.
+            var prefSize = TextRenderer.MeasureText(text, rtb.Font, rtb.Size, TextFormatFlags.WordBreak);
+            rtb.Size = prefSize;
+
             AddControl(rtb);
         }
 
@@ -222,70 +227,48 @@ namespace AdvancedDialog
             // Set the window size to max size if specified.
             if (startFullSize) MaximizeForm();
 
+            // Hide the icon panel and column if this is not a message box.
+            if (!isMessageBox)
+            {
+                IconPanel.Visible = false;
+                MainLayoutTable.ColumnStyles[1].SizeType = SizeType.Absolute;
+                MainLayoutTable.ColumnStyles[1].Width = 0;
+            }
+
             // Resume layout.
             SetLayout(this, false);
 
-            // Disable autosize on the controls panel.
-            ControlsMainPanel.AutoSize = false;
-
-            if (!isMessageBox)
-            {
-                // Hide the icon on non-message box dialogs.
-                IconPanel.Visible = false;
-
-                if (this.AutoSize)
-                {
-                    // Perform autosize, then disable autosizing.
-                    SetSize();
-                }
-                else
-                {
-                    // Just disable autosize and use specified sizes.
-                    MasterPanel.AutoSize = false;
-                    this.AutoSize = false;
-                }
-
-                // Set the controls panel width to match its parent.
-                ControlsMainPanel.Width = MasterPanel.Width;
-            }
-            else
-            {
-                // Perform autosize, then disable autosizing.
-                SetSize();
-
-                // Set the controls panel width to fit next to the icon panel.
-                ControlsMainPanel.Width = MasterPanel.Width - IconPanel.Width;
-            }
-
-            // Set the controls panel height to fit above the buttons panel.
-            ControlsMainPanel.Height = MasterPanel.Height - ButtonsPanel.Height - 10;
+            // Disable autosize after the final layout, otherwise the controls wont have actually been resized yet.
+            DisableAutoSize();
 
             // Center to parent form.
             CenterToParentForm();
         }
 
         /// <summary>
-        /// Refreshes layout and records the resulting size from autosize. Then disables autosize and sets the size back to the previous size.
+        /// Refreshes layout and records the resulting size from autosize. Then disables autosize and sets the size back to the previous size. Size...
         /// </summary>
-        private void SetSize()
+        private void DisableAutoSize()
         {
-            // Since disabling autosize will cause the controls
-            // to revert to a different size, we need to record
-            // the size before disabling and re-set it afterwards.
+            var storeSize = this.Size;
 
-            // Refresh and force a layout event.
-            this.Refresh();
-            this.PerformLayout();
-
-            // Record the resulting size.
-            var size = this.Size;
-
-            // Disable autosize.
-            MasterPanel.AutoSize = false;
             this.AutoSize = false;
+            MainLayoutTable.AutoSize = false;
 
-            // Re-set the size.
-            this.Size = size;
+            MainLayoutTable.RowStyles[0].SizeType = SizeType.Percent;
+            MainLayoutTable.RowStyles[0].Height = 100;
+
+            MainLayoutTable.ColumnStyles[0].SizeType = SizeType.Percent;
+            MainLayoutTable.ColumnStyles[0].Width = 100;
+
+            ControlsMainPanel.Dock = DockStyle.Fill;
+
+            this.PerformLayout();
+            this.Size = storeSize;
+
+            // Set the message box to fill its panel after autosize has been performed.
+            if (isMessageBox && messageBox != null)
+                messageBox.Dock = DockStyle.Fill;
         }
 
         private void SetLayout(Control control, bool suspend)
@@ -388,7 +371,6 @@ namespace AdvancedDialog
                 else if (control is RichTextBox)
                 {
                     var rtb = (RichTextBox)control;
-                    var panel = ControlPanel();
 
                     if (isMessageBox)
                     {
@@ -396,13 +378,16 @@ namespace AdvancedDialog
                         rtb.ReadOnly = true;
                         rtb.Margin = new Padding(5, 10, 5, 0);
                         rtb.BackColor = ControlsMainPanel.BackColor;
-                        rtb.Dock = DockStyle.Fill;
                         rtb.TabStop = false;
                         rtb.LinkClicked += ClickedLink;
                         ControlsMainPanel.Controls.Add(rtb);
+                        // Set the local field for later loading/resizing changes.
+                        messageBox = rtb;
                     }
                     else
                     {
+                        var panel = ControlPanel();
+
                         rtb.Width = 150;
                         rtb.Height = 80;
                         if (rtb.Tag != null) panel.Controls.Add(NewControlLabel(rtb.Tag.ToString()));
@@ -426,13 +411,12 @@ namespace AdvancedDialog
                 }
             }
             ControlsPanel.ResumeLayout();
+            ControlsMainPanel.PerformLayout();
         }
 
         private void MaximizeForm()
         {
-            ControlsMainPanel.AutoSize = false;
-            MasterPanel.AutoSize = false;
-            this.AutoSize = false;
+            DisableAutoSize();
             this.Size = this.MaximumSize;
         }
 
@@ -474,16 +458,16 @@ namespace AdvancedDialog
             switch (buttons)
             {
                 case MessageBoxButtons.OK:
-                    OkCancelPanel.Visible = true;
+                    OKCancelPanel.Visible = true;
                     CancelButtonUI.Visible = false;
                     break;
 
                 case MessageBoxButtons.OKCancel:
-                    OkCancelPanel.Visible = true;
+                    OKCancelPanel.Visible = true;
                     break;
 
                 case MessageBoxButtons.YesNo:
-                    OkCancelPanel.Visible = false;
+                    OKCancelPanel.Visible = false;
                     YesNoPanel.Visible = true;
                     break;
 
