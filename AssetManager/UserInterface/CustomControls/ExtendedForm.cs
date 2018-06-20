@@ -294,7 +294,7 @@ namespace AssetManager.UserInterface.CustomControls
                 var newY = parentForm.Location.Y + ((parentForm.Height / 2) - this.Height / 2);
                 var newRect = new Rectangle(newX, newY, this.Width, this.Height);
                 // The work area containing the parent form.
-                var workArea = Screen.GetWorkingArea(parentForm);//.Location);
+                var workArea = Screen.GetWorkingArea(parentForm);
 
                 // Make sure the new location is not off screen.
                 if (workArea.Contains(newRect))
@@ -307,6 +307,10 @@ namespace AssetManager.UserInterface.CustomControls
                     // Center to screen.
                     this.CenterToScreen();
                 }
+            }
+            else if (this.StartPosition == FormStartPosition.CenterScreen)
+            {
+                this.CenterToScreen();
             }
         }
 
@@ -499,7 +503,7 @@ namespace AssetManager.UserInterface.CustomControls
 
             return childList;
         }
-        
+
         /// <summary>
         /// Recursively counts the number of child forms within the parent/child tree.
         /// </summary>
