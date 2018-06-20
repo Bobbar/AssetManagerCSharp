@@ -1,6 +1,7 @@
 using AssetManager.UserInterface.Forms.Sibi;
 using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -54,6 +55,9 @@ namespace AssetManager.UserInterface.CustomControls
         /// <param name="targetMenuItem">Item to add the Form item to.</param>
         private void BuildWindowList(IWindowList target, ToolStripItemCollection targetMenuItem)
         {
+            // This list stores the menu items for the root list.
+            var itemList = new List<OnlineStatusMenuItem>();
+
             foreach (var frm in target.ChildForms)
             {
                 if (frm.ChildForms.Count > 0)
@@ -77,10 +81,18 @@ namespace AssetManager.UserInterface.CustomControls
                     }
                     else
                     {
-                        targetMenuItem.Add(NewMenuItem(frm));
+                        // Add item to the root list.
+                        itemList.Add(NewMenuItem(frm));
                     }
                 }
             }
+
+            // Add all the root items to the menu at once to reduce layout overhead.
+            if (itemList.Count > 0)
+                targetMenuItem.AddRange(itemList.ToArray());
+
+            itemList.Clear();
+            itemList = null;
         }
 
         private string CountText(int count)
