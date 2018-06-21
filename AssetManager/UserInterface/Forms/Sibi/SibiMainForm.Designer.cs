@@ -102,6 +102,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
             // 
             this.searchSlider.BackColor = System.Drawing.SystemColors.Control;
             this.searchSlider.DisplayTime = 4;
+            this.searchSlider.FlashStripOnNewMessage = false;
             this.searchSlider.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.searchSlider.Location = new System.Drawing.Point(6, 43);
             this.searchSlider.Name = "searchSlider";
@@ -284,7 +285,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.SibiResultGrid.Size = new System.Drawing.Size(1158, 462);
             this.SibiResultGrid.TabIndex = 18;
             this.SibiResultGrid.TabStop = false;
-            this.SibiResultGrid.VirtualMode = true;
             this.SibiResultGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SibiResultGrid_CellDoubleClick);
             this.SibiResultGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.SibiResultGrid_CellEnter);
             this.SibiResultGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.SibiResultGrid_CellLeave);
@@ -296,14 +296,14 @@ namespace AssetManager.UserInterface.Forms.Sibi
             this.RightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ViewRequestMenuItem});
             this.RightClickMenu.Name = "RightClickMenu";
-            this.RightClickMenu.Size = new System.Drawing.Size(153, 48);
+            this.RightClickMenu.Size = new System.Drawing.Size(152, 26);
             // 
             // ViewRequestMenuItem
             // 
             this.ViewRequestMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ViewRequestMenuItem.Image = global::AssetManager.Properties.Resources.ViewIcon3;
             this.ViewRequestMenuItem.Name = "ViewRequestMenuItem";
-            this.ViewRequestMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.ViewRequestMenuItem.Size = new System.Drawing.Size(151, 22);
             this.ViewRequestMenuItem.Text = "View Request";
             this.ViewRequestMenuItem.Click += new System.EventHandler(this.ViewRequestMenuItem_Click);
             // 

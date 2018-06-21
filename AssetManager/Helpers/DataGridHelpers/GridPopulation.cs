@@ -47,7 +47,8 @@ namespace AssetManager.Helpers
                     }
                     else
                     {
-                        newTable.Columns.Add(col.ColumnName, data.Columns[col.ColumnName].DataType);
+                        if (data.Columns.Contains(col.ColumnName))
+                            newTable.Columns.Add(col.ColumnName, data.Columns[col.ColumnName].DataType);
                     }
                 }
 
@@ -57,6 +58,9 @@ namespace AssetManager.Helpers
 
                     foreach (GridColumnAttrib col in columns)
                     {
+                        if (!data.Columns.Contains(col.ColumnName))
+                            continue;
+
                         switch (col.ColumnFormatType)
                         {
                             case ColumnFormatType.DefaultFormat:

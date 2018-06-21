@@ -19,10 +19,13 @@ namespace AssetManager.UserInterface.Forms.Sibi
     {
         #region Fields
 
+        private Dictionary<string, Color> statusColumnColors;
+        private Dictionary<int, string> poStatuses = new Dictionary<int, string>();
+        private Dictionary<string, string> reqStatuses = new Dictionary<string, string>();
+        private bool rebuildingCombo = false;
+        private bool munisStatusRefreshing = false;
         private bool gridFilling = false;
         private DbCommand lastCmd;
-        private bool rebuildingCombo = false;
-        private Dictionary<string, Color> statusColumnColors;
         private WindowList windowList;
 
         #endregion Fields
@@ -43,6 +46,132 @@ namespace AssetManager.UserInterface.Forms.Sibi
         public override void RefreshData()
         {
             ExecuteCmd(ref lastCmd);
+        }
+
+        /// <summary>
+        /// Populates the PO and Reqisition status dictionaries which are used in the <see cref="SetMunisStatuses"/> method.
+        /// </summary>
+        /// <remarks>
+        /// This is done to avoid querying the database too frequently. We only update the values from the database at more critical moments.
+        /// </remarks>
+        private async void GetMunisStatuses()
+        {
+            try
+            {
+                // Only allow one instance to run at a time.
+                if (munisStatusRefreshing)
+                    return;
+
+                munisStatusRefreshing = true;
+
+                poStatuses.Clear();
+                reqStatuses.Clear();
+
+                var dataSource = (DataTable)SibiResultGrid.DataSource;
+
+                if (dataSource == null)
+                    return;
+
+                foreach (DataRow row in dataSource.Rows)
+                {
+                    if (row[SibiRequestCols.PO] != null)
+                    {
+                        var poVal = row[SibiRequestCols.PO].ToString();
+                        int poInt = 0;
+
+                        if (int.TryParse(poVal, out poInt))
+                        {
+                            var poStatus = await MunisFunctions.GetPOStatusFromPO(poInt);
+                            if (!poStatuses.ContainsKey(poInt))
+                                poStatuses.Add(poInt, poStatus);
+                        }
+                    }
+
+                    if (row[SibiRequestCols.RequisitionNumber] != null)
+                    {
+                        var reqVal = row[SibiRequestCols.RequisitionNumber].ToString();
+                        var fiscalYear = ((DateTime)row[SibiRequestCols.NeedBy]).Year;
+                        int reqInt = 0;
+
+                        if (int.TryParse(reqVal, out reqInt))
+                        {
+                            var reqStatus = await MunisFunctions.GetReqStatusFromReqNum(reqVal, fiscalYear);
+                            var reqKey = reqInt.ToString() + fiscalYear.ToString();
+                            if (!reqStatuses.ContainsKey(reqKey))
+                                reqStatuses.Add(reqKey, reqStatus);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+            }
+            finally
+            {
+                munisStatusRefreshing = false;
+            }
+        }
+
+        /// <summary>
+        /// Populates the data grid PO and Requisition status from the dictionary caches.
+        /// </summary>
+        private async void SetMunisStatuses()
+        {
+            // Delay to wait for data binding to finish.
+            // Normally we would use the DataBindingComplete event,
+            // but that event is firing multiple times and the
+            // grid still never seems to be ready afterwards.
+            // Waiting works better.
+            await Task.Delay(200);
+
+            // If the refresh method is still running, wait until it finishes or this form is closed.
+            if (munisStatusRefreshing)
+            {
+                while (munisStatusRefreshing && !this.IsDisposed)
+                {
+                    await Task.Delay(200);
+                }
+
+                if (this.IsDisposed) return;
+            }
+
+            try
+            {
+                foreach (DataGridViewRow row in SibiResultGrid.Rows)
+                {
+                    if (row.Cells[SibiRequestCols.PO].Value != null)
+                    {
+                        var poVal = row.Cells[SibiRequestCols.PO].Value.ToString();
+                        int poInt = 0;
+                        if (int.TryParse(poVal, out poInt))
+                        {
+                            if (poStatuses.ContainsKey(poInt))
+                                row.Cells["postatus"].Value = poStatuses[poInt];
+                        }
+                    }
+
+                    if (row.Cells[SibiRequestCols.RequisitionNumber].Value != null)
+                    {
+                        var reqVal = row.Cells[SibiRequestCols.RequisitionNumber].Value.ToString();
+                        var fiscalYear = ((DateTime)row.Cells[SibiRequestCols.NeedBy].Value).Year;
+                        int reqInt = 0;
+
+                        if (int.TryParse(reqVal, out reqInt))
+                        {
+                            var reqKey = reqInt.ToString() + fiscalYear.ToString();
+                            if (reqStatuses.ContainsKey(reqKey))
+                                row.Cells["reqstatus"].Value = reqStatuses[reqKey];
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Since this is a quiet background process, we want to fail silently.
+                // But log any errors for posterity.
+                Logging.Logger("ERROR: SetMunisStatus: " + ex.ToString());
+            }
         }
 
         private QueryParamCollection BuildSearchListNew()
@@ -76,8 +205,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 }
                 else if (ctl is ComboBox)
                 {
-                    ComboBox cmb = (ComboBox)ctl;
-                    cmb.SelectedIndex = 0;
+                    //ComboBox cmb = (ComboBox)ctl;
+                    //cmb.SelectedIndex = 0;
                 }
                 else if (ctl.Controls.Count > 0)
                 {
@@ -132,6 +261,8 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 lastCmd = cmd;
                 SendToGrid(DBFactory.GetDatabase().DataTableFromCommand(cmd));
                 cmd.Dispose();
+
+                //  SetMunisStatuses();
             }
             catch (Exception ex)
             {
@@ -139,6 +270,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 // Make a fresh call to create a new command instance.
                 if (ex is InvalidCastException)
                 {
+                    //GetMunisStatuses();
                     ShowAll();
                 }
                 else
@@ -195,6 +327,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 windowList.InsertWindowList(ToolStrip1);
                 SetDisplayYears();
                 ShowAll("All");
+                GetMunisStatuses();
                 this.Show();
                 this.Activate();
             }
@@ -284,6 +417,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 ClearAll(this);
                 SetDisplayYears();
                 ShowAll();
+                GetMunisStatuses();
             }
             catch (Exception ex)
             {
@@ -312,6 +446,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     SibiResultGrid.ClearSelection();
                     SibiResultGrid.ResumeLayout();
                     if (this.Visible) gridFilling = false;
+                    SetMunisStatuses();
                 }
             }
             catch (Exception ex)
@@ -396,7 +531,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             columnList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", Attributes.SibiAttributes.RequestType, ColumnFormatType.AttributeDisplayMemberOnly));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.NeedBy, "Need By"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.PO, "PO Number"));
+            columnList.Add(new GridColumnAttrib("postatus", "PO Status")); // Unbound status column.
             columnList.Add(new GridColumnAttrib(SibiRequestCols.RequisitionNumber, "Req. Number"));
+            columnList.Add(new GridColumnAttrib("reqstatus", "Req. Status")); // Unbound status column.
             columnList.Add(new GridColumnAttrib(SibiRequestCols.RTNumber, "RT Number"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.CreateDate, "Create Date"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.ModifyDate, "Modified"));

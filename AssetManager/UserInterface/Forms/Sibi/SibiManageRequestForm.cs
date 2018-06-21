@@ -1137,19 +1137,26 @@ namespace AssetManager.UserInterface.Forms.Sibi
 
         private void SetMunisStatus()
         {
-            if (!GlobalSwitches.CachedMode)
+            try
             {
-                if (currentRequest != null)
+                if (!GlobalSwitches.CachedMode)
                 {
-                    SetReqStatus(currentRequest.RequisitionNumber, currentRequest.NeedByDate.Year);
-                    CheckForPO();
-                    SetPOStatus(currentRequest.PO);
+                    if (currentRequest != null)
+                    {
+                        SetReqStatus(currentRequest.RequisitionNumber, currentRequest.NeedByDate.Year);
+                        CheckForPO();
+                        SetPOStatus(currentRequest.PO);
+                    }
+                    else
+                    {
+                        SetReqStatus(string.Empty, -1);
+                        SetPOStatus(string.Empty);
+                    }
                 }
-                else
-                {
-                    SetReqStatus(string.Empty, -1);
-                    SetPOStatus(string.Empty);
-                }
+            }
+            catch (Exception ex)
+            {
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 

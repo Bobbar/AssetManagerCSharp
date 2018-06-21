@@ -107,40 +107,33 @@ namespace AssetManager.Data.Communications
 
         public async Task<string> ReturnSqlValueAsync(string table, object fieldIn, object valueIn, string fieldOut, object fieldIn2 = null, object valueIn2 = null)
         {
-            try
+            string query = "";
+
+            QueryParamCollection queryParams = new QueryParamCollection();
+
+            if (fieldIn2 != null && valueIn2 != null)
             {
-                string query = "";
+                query = "SELECT TOP 1 " + fieldOut + " FROM " + table;
 
-                QueryParamCollection queryParams = new QueryParamCollection();
-
-                if (fieldIn2 != null && valueIn2 != null)
-                {
-                    query = "SELECT TOP 1 " + fieldOut + " FROM " + table;
-
-                    queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
-                    queryParams.Add(fieldIn2.ToString(), valueIn2.ToString(), true);
-                }
-                else
-                {
-                    query = "SELECT TOP 1 " + fieldOut + " FROM " + table;
-
-                    queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
-                }
-
-                using (var cmd = GetSqlCommandFromParams(query, queryParams.Parameters))
-                using (var conn = cmd.Connection)
-                {
-                    await cmd.Connection.OpenAsync();
-                    var Value = await cmd.ExecuteScalarAsync();
-                    if (Value != null)
-                    {
-                        return Value.ToString();
-                    }
-                }
+                queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
+                queryParams.Add(fieldIn2.ToString(), valueIn2.ToString(), true);
             }
-            catch (Exception ex)
+            else
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                query = "SELECT TOP 1 " + fieldOut + " FROM " + table;
+
+                queryParams.Add(fieldIn.ToString(), valueIn.ToString(), true);
+            }
+
+            using (var cmd = GetSqlCommandFromParams(query, queryParams.Parameters))
+            using (var conn = cmd.Connection)
+            {
+                await cmd.Connection.OpenAsync();
+                var Value = await cmd.ExecuteScalarAsync();
+                if (Value != null)
+                {
+                    return Value.ToString();
+                }
             }
             return string.Empty;
         }

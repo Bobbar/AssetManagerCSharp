@@ -1503,7 +1503,7 @@
         </member>
         <member name="F:AssetManager.UserInterface.Forms.AttachmentsForm.ftpUri">
             <summary>
-            "ftp://  strServerIP  /attachments/  CurrentDB  /"
+            "ftp://ServerIP/attachments/CurrentDB/"
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.Forms.AttachmentsForm.RefreshAttachments">
@@ -1653,6 +1653,19 @@
         <member name="M:AssetManager.UserInterface.Forms.GridForm.ReLabelGridForm">
             <summary>
             Prompts user for a new form label/title text, sets the form text, and refreshes window lists.
+            </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiMainForm.GetMunisStatuses">
+            <summary>
+            Populates the PO and Reqisition status dictionaries which are used in the <see cref="M:AssetManager.UserInterface.Forms.Sibi.SibiMainForm.SetMunisStatuses"/> method.
+            </summary>
+            <remarks>
+            This is done to avoid querying the database too frequently. We only update the values from the database at more critical moments.
+            </remarks>
+        </member>
+        <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiMainForm.SetMunisStatuses">
+            <summary>
+            Populates the data grid PO and Requisition status from the dictionary caches.
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.Forms.Sibi.SibiMainForm.GetRowColor(System.String)">

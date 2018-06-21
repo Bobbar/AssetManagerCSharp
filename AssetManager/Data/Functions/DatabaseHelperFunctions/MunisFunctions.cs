@@ -144,7 +144,6 @@ namespace AssetManager.Data.Functions
 
         public static async Task<string> GetPOStatusFromPO(int po)
         {
-            string statusString = "";
             string statusCode = await munisComms.ReturnSqlValueAsync("poheader", "pohd_pur_no", po, "pohd_sta_cd");
             if (!string.IsNullOrEmpty(statusCode))
             {
@@ -153,15 +152,13 @@ namespace AssetManager.Data.Functions
                 {
                     return string.Empty;
                 }
-                statusString = statusCode.ToString() + " - " + POStatusTextFromCode(parseCode);
-                return statusString;
+                return POStatusTextFromCode(parseCode);
             }
             return string.Empty;
         }
 
         public static async Task<string> GetReqStatusFromReqNum(string reqNum, int fy)
         {
-            string statusString = "";
             string statusCode = await munisComms.ReturnSqlValueAsync("rqheader", "rqhd_req_no", reqNum, "rqhd_sta_cd", "rqhd_fsc_yr", fy);
             if (!string.IsNullOrEmpty(statusCode))
             {
@@ -170,8 +167,7 @@ namespace AssetManager.Data.Functions
                 {
                     return string.Empty;
                 }
-                statusString = statusCode.ToString() + " - " + ReqStatusTextFromCode(parseCode);
-                return statusString;
+                return ReqStatusTextFromCode(parseCode);
             }
             return string.Empty;
         }
