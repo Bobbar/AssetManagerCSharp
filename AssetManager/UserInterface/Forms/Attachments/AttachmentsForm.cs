@@ -26,26 +26,27 @@ namespace AssetManager.UserInterface.Forms
     {
         #region Fields
 
+        /// <summary>
+        /// "ftp://ServerIP/attachments/CurrentDB/"
+        /// </summary>
+        private string ftpUri = "ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/";
+
         private string attachFolderGuid;
         private const short fileSizeMBLimit = 150;
         private AttachmentsBaseCols attachmentColumns;
         private bool allowDrag = true;
         private bool isDragging = false;
-        private bool gridFilling;
+        private bool gridFilling = true;
         private CancellationTokenSource taskCancelTokenSource;
         private bool transferTaskRunning = false;
         private DataObject dragDropDataObj = new DataObject();
-        public EventHandler AttachCountChanged;
-
-        /// <summary>
-        /// "ftp://  strServerIP  /attachments/  CurrentDB  /"
-        /// </summary>
-        private string ftpUri;
-
         private Point mouseStartPos;
         private ProgressCounter progress = new ProgressCounter();
         private Folder previousFolder = new Folder();
         private Folder currentFolder = new Folder();
+        private Font filenameFont = new Font("Consolas", 9.75F, FontStyle.Bold);
+
+        public EventHandler AttachCountChanged;
 
         private Folder CurrentSelectedFolder
         {
@@ -187,7 +188,10 @@ namespace AssetManager.UserInterface.Forms
             }
         }
 
-        private void ListAttachments()
+        /// <summary>
+        /// Populates the list of attachements.
+        /// </summary>
+        private void RefreshAttachments()
         {
             Waiting();
             try
@@ -200,7 +204,7 @@ namespace AssetManager.UserInterface.Forms
                     AttachGrid.Populate(results, AttachGridColumns(attachmentColumns));
                 }
 
-                AttachGrid.Columns[attachmentColumns.FileName].DefaultCellStyle.Font = new Font("Consolas", 9.75F, FontStyle.Bold);
+                AttachGrid.Columns[attachmentColumns.FileName].DefaultCellStyle.Font = filenameFont;
                 OnAttachCountChanged(new EventArgs());
                 AttachGrid.ClearSelection();
 
@@ -587,7 +591,7 @@ namespace AssetManager.UserInterface.Forms
                     CurrentSelectedFolder = previousFolder;
                 }
 
-                ListAttachments();
+                RefreshAttachments();
             }
             catch (Exception ex)
             {
@@ -611,6 +615,9 @@ namespace AssetManager.UserInterface.Forms
 
         private async void DownloadAndOpenAttachment()
         {
+            if (transferTaskRunning)
+                return;
+
             string attachGuid = string.Empty;
             try
             {
@@ -815,7 +822,7 @@ namespace AssetManager.UserInterface.Forms
                         Waiting();
                         if (AssetManagerFunctions.DeleteSqlAttachment(attachment) > 0)
                         {
-                            ListAttachments();
+                            RefreshAttachments();
                         }
                         else
                         {
@@ -913,7 +920,6 @@ namespace AssetManager.UserInterface.Forms
                             }
                             else
                             {
-
                                 var insertedRows = InsertSQLAttachment(uploadAttachment, trans);
                                 if (insertedRows > 0)
                                 {
@@ -923,7 +929,6 @@ namespace AssetManager.UserInterface.Forms
                                 {
                                     trans.Rollback();
                                 }
-
                             }
                             uploadAttachment.Dispose();
                         }
@@ -932,7 +937,10 @@ namespace AssetManager.UserInterface.Forms
                             trans.Rollback();
                         }
                     }
-                    ListAttachments();
+
+                    RefreshAttachments();
+
+                    if (cancelToken.IsCancellationRequested) break;
                 }
             }
             catch (Exception ex)
@@ -948,7 +956,6 @@ namespace AssetManager.UserInterface.Forms
                     uploadAttachment?.Dispose();
                     SetStatusBarText("Idle...");
                     TransferFeedback(false);
-                    ListAttachments();
                 }
             }
         }
@@ -963,6 +970,9 @@ namespace AssetManager.UserInterface.Forms
 
         private async void DownloadAndSaveAttachment()
         {
+            if (transferTaskRunning)
+                return;
+
             try
             {
                 string attachGuid = SelectedAttachmentGuid();
@@ -1144,7 +1154,7 @@ namespace AssetManager.UserInterface.Forms
 
         private void AttachmentsForm_Load(object sender, EventArgs e)
         {
-            ListAttachments();
+            RefreshAttachments();
         }
 
         private void AttachGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -1329,7 +1339,7 @@ namespace AssetManager.UserInterface.Forms
             {
                 previousFolder = CurrentSelectedFolder;
             }
-            ListAttachments();
+            RefreshAttachments();
         }
 
         private void FolderListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)

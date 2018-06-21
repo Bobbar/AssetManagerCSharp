@@ -1506,6 +1506,11 @@
             "ftp://  strServerIP  /attachments/  CurrentDB  /"
             </summary>
         </member>
+        <member name="M:AssetManager.UserInterface.Forms.AttachmentsForm.RefreshAttachments">
+            <summary>
+            Populates the list of attachements.
+            </summary>
+        </member>
         <member name="M:AssetManager.UserInterface.Forms.AttachmentsForm.CopyAttachement(System.Windows.Forms.IDataObject,System.String)">
             <summary>
             Copies drag-drop file object to a temp path and returns the full path.
