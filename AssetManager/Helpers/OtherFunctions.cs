@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using AssetManager.Helpers.Watchdog;
 
 namespace AssetManager.Helpers
 {
@@ -40,6 +41,7 @@ namespace AssetManager.Helpers
         {
             GlobalSwitches.ProgramEnding = true;
             Logging.Logger("Ending Program...");
+            WatchdogInstance.Watchdog.Dispose();
             PurgeTempDir();
 
             // Forcefully kill the process. Used when unhandled or critical exceptions occur.

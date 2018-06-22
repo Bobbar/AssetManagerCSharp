@@ -4,6 +4,7 @@ using AssetManager.Data.Classes;
 using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
+using AssetManager.Helpers.Watchdog;
 using AssetManager.Security;
 using AssetManager.Tools;
 using AssetManager.UserInterface.CustomControls;
@@ -86,6 +87,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
             LoadCurrentDevice();
 
+            WatchdogInstance.Watchdog.StatusChanged += Watchdog_StatusChanged;
+
             if (!startHidden)
             {
                 this.Show();
@@ -152,7 +155,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 ActiveDirectoryBox.Visible = false;
                 RemoteToolsControl.Visible = false;
                 RemoteToolsControl.ClearPingResults();
-                currentViewDevice = new Device(currentViewDevice.Guid);
                 LoadCurrentDevice();
             }
             base.RefreshData();
@@ -924,6 +926,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     currentViewDevice?.Dispose();
                     controlParser.Dispose();
                     statusSlider.Dispose();
+                    WatchdogInstance.Watchdog.StatusChanged -= Watchdog_StatusChanged;
                 }
             }
             finally
@@ -935,6 +938,12 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         #endregion Methods
 
         #region Control Events
+
+        private void Watchdog_StatusChanged(object sender, EventArgs e)
+        {
+            var del = new Action(() => this.RefreshData());
+            this.BeginInvoke(del);
+        }
 
         void ILiveBox.DynamicSearch()
         {
@@ -1034,6 +1043,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 DataGridHistory.CurrentCell = DataGridHistory[e.ColumnIndex, e.RowIndex];
             }
         }
+
         private void DataGridHistory_VisibleChanged(object sender, EventArgs e)
         {
             if (DataGridHistory.Visible)
@@ -1169,9 +1179,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             gridFilling = false;
         }
 
-
         #endregion Control Events
-
-
     }
 }

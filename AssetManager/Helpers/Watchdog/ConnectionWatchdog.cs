@@ -1,15 +1,23 @@
-﻿using System;
+﻿using AssetManager.Data;
+using AssetManager.Data.Functions;
+using System;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
-namespace AssetManager.Data.Functions
+namespace AssetManager.Helpers.Watchdog
 {
     public class ConnectionWatchdog : IDisposable
     {
-        public ConnectionWatchdog(bool cachedMode)
-        {
-            inCachedMode = cachedMode;
-        }
+        private int failedPings = 0;
+        private bool serverIsOnline;
+        private bool cacheIsAvailable;
+        private bool inCachedMode;
+        private WatchdogConnectionStatus currentWatchdogStatus = WatchdogConnectionStatus.Online;
+        private WatchdogConnectionStatus previousWatchdogStatus;
+        private const int maxFailedPings = 2;
+        private const int watcherInterval = 5000;
+        private Task watcherTask;
+        private Ping pinger = new Ping();
 
         public event EventHandler StatusChanged;
 
@@ -17,47 +25,45 @@ namespace AssetManager.Data.Functions
 
         public event EventHandler WatcherTick;
 
-        protected virtual void OnStatusChanged(WatchdogStatusEventArgs e)
+        public ConnectionWatchdog(bool cachedMode)
         {
-            if (StatusChanged != null)
-            {
-                StatusChanged(this, e);
-            }
+            inCachedMode = cachedMode;
         }
 
-        protected virtual void OnRebuildCache(EventArgs e)
+        public ConnectionWatchdog()
         {
-            if (RebuildCache != null)
-            {
-                RebuildCache(this, e);
-            }
         }
 
-        protected virtual void OnWatcherTick(EventArgs e)
+        private void OnStatusChanged(WatchdogStatusEventArgs e)
         {
-            if (WatcherTick != null)
-            {
-                WatcherTick(this, e);
-            }
+            StatusChanged?.Invoke(null, e);
         }
 
-        private int failedPings = 0;
+        private void OnRebuildCache(EventArgs e)
+        {
+            RebuildCache?.Invoke(null, e);
+        }
 
-        private bool serverIsOnline;
-        private bool cacheIsAvailable;
-
-        private bool inCachedMode;
-        private WatchdogConnectionStatus currentWatchdogStatus = WatchdogConnectionStatus.Online;
-
-        private WatchdogConnectionStatus previousWatchdogStatus;
-        private const int maxFailedPings = 2;
-        private const int watcherInterval = 5000;
-
-        private Task watcherTask;
+        private void OnWatcherTick(EventArgs e)
+        {
+            WatcherTick?.Invoke(null, e);
+        }
 
         public void StartWatcher()
         {
-            watcherTask = new Task(() => Watcher());
+            watcherTask = new Task(() => Watcher(), TaskCreationOptions.LongRunning);
+            watcherTask.Start();
+            if (inCachedMode)
+            {
+                currentWatchdogStatus = WatchdogConnectionStatus.CachedMode;
+                OnStatusChanged(new WatchdogStatusEventArgs(WatchdogConnectionStatus.CachedMode));
+            }
+        }
+
+        public void StartWatcher(bool cachedMode)
+        {
+            inCachedMode = cachedMode;
+            watcherTask = new Task(() => Watcher(), TaskCreationOptions.LongRunning);
             watcherTask.Start();
             if (inCachedMode)
             {
@@ -150,35 +156,35 @@ namespace AssetManager.Data.Functions
         {
             try
             {
-                using (Ping pinger = new Ping())
+                //using (Ping pinger = new Ping())
+                //{
+                bool canPing = false;
+                var reply = pinger.Send(ServerInfo.MySQLServerIP);
+                if (reply.Status == IPStatus.Success)
                 {
-                    bool canPing = false;
-                    var reply = pinger.Send(ServerInfo.MySQLServerIP);
-                    if (reply.Status == IPStatus.Success)
-                    {
-                        canPing = true;
-                    }
-                    else
-                    {
-                        canPing = false;
-                    }
+                    canPing = true;
+                }
+                else
+                {
+                    canPing = false;
+                }
 
-                    reply = null;
+                reply = null;
 
-                    //If server pinging, try to open a connection.
-                    if (canPing)
+                //If server pinging, try to open a connection.
+                if (canPing)
+                {
+                    using (var conn = DBFactory.GetMySqlDatabase().NewConnection())
                     {
-                        using (var conn = DBFactory.GetMySqlDatabase().NewConnection())
-                        {
-                            return DBFactory.GetMySqlDatabase().OpenConnection(conn, true);
-                        }
-                    }
-                    else
-                    {
-                        //Not pinging. Return false.
-                        return false;
+                        return DBFactory.GetMySqlDatabase().OpenConnection(conn, true);
                     }
                 }
+                else
+                {
+                    //Not pinging. Return false.
+                    return false;
+                }
+                //}
             }
             catch
             {
@@ -220,6 +226,7 @@ namespace AssetManager.Data.Functions
                 if (disposing)
                 {
                     watcherTask.Dispose();
+                    pinger?.Dispose();
                 }
             }
             disposedValue = true;
@@ -233,30 +240,30 @@ namespace AssetManager.Data.Functions
         #endregion "IDisposable Support"
     }
 
-    public class WatchdogTickEventArgs : EventArgs
-    {
-        public string ServerTime { get; }
+    //public class WatchdogTickEventArgs : EventArgs
+    //{
+    //    public string ServerTime { get; }
 
-        public WatchdogTickEventArgs(string serverTime)
-        {
-            this.ServerTime = serverTime;
-        }
-    }
+    //    public WatchdogTickEventArgs(string serverTime)
+    //    {
+    //        this.ServerTime = serverTime;
+    //    }
+    //}
 
-    public class WatchdogStatusEventArgs : EventArgs
-    {
-        public WatchdogConnectionStatus ConnectionStatus { get; set; }
+    //public class WatchdogStatusEventArgs : EventArgs
+    //{
+    //    public WatchdogConnectionStatus ConnectionStatus { get; set; }
 
-        public WatchdogStatusEventArgs(WatchdogConnectionStatus connectionStatus)
-        {
-            this.ConnectionStatus = connectionStatus;
-        }
-    }
+    //    public WatchdogStatusEventArgs(WatchdogConnectionStatus connectionStatus)
+    //    {
+    //        this.ConnectionStatus = connectionStatus;
+    //    }
+    //}
 
-    public enum WatchdogConnectionStatus
-    {
-        Online,
-        Offline,
-        CachedMode
-    }
+    //public enum WatchdogConnectionStatus
+    //{
+    //    Online,
+    //    Offline,
+    //    CachedMode
+    //}
 }

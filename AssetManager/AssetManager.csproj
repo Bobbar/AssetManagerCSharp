@@ -171,6 +171,10 @@
     <Compile Include="Data\Functions\DBControls\DBControlInfo.cs" />
     <Compile Include="Data\Functions\DBControls\DBRemappingInfo.cs" />
     <Compile Include="Data\Functions\DBControls\ParseType.cs" />
+    <Compile Include="Helpers\Watchdog\WatchdogInstance.cs" />
+    <Compile Include="Helpers\Watchdog\WatchdogConnectionStatus.cs" />
+    <Compile Include="Helpers\Watchdog\WatchdogStatusEventArgs.cs" />
+    <Compile Include="Helpers\Watchdog\WatchdogTickEventArgs.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedResourceManager.cs" />
     <Compile Include="Data\Databases.cs" />
     <Compile Include="Data\Classes\DataClassMapping\ColumnNameAttribute.cs" />
@@ -188,7 +192,7 @@
     <Compile Include="Data\DataComms\Munis\MunisComms.cs" />
     <Compile Include="Data\Functions\ClientSideFunctions\AttribIndexFunctions.cs" />
     <Compile Include="Data\DataConsistency.cs" />
-    <Compile Include="Data\Functions\ConnectionWatchdog.cs" />
+    <Compile Include="Helpers\Watchdog\ConnectionWatchdog.cs" />
     <Compile Include="Data\Functions\DatabaseHelperFunctions\AdvancedSearch.cs" />
     <Compile Include="Data\Functions\DatabaseHelperFunctions\AssetManagerFunctions.cs" />
     <Compile Include="Data\Functions\DatabaseHelperFunctions\FTPFunctions.cs" />

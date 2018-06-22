@@ -551,35 +551,6 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="T:AssetManager.CachedResourceManager">
-            <summary>
-            An extended Resource Manager that provides cached instances of objects.
-            This differs from the stock ResourceManager class which always
-            deserializes and creates new instances of every object.
-            After the first time an object is requested, it will be cached
-            for all future requests.
-            </summary>
-        </member>
-        <member name="F:AssetManager.CachedResourceManager.objectCache">
-            <summary>
-            A hashtable is used to store the objects.
-            </summary>
-        </member>
-        <member name="M:AssetManager.CachedResourceManager.GetObject(System.String)">
-            <summary>
-            Returns a cached instance of the specified resource.
-            </summary>
-            <param name="name"></param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.CachedResourceManager.GetObject(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Returns a cached instance of the specified resource.
-            </summary>
-            <param name="name"></param>
-            <param name="culture"></param>
-            <returns></returns>
-        </member>
         <member name="M:AssetManager.Helpers.ChildFormControl.FindFormByType(System.Type)">
             <summary>
             Find a form by its type and returns it if found.
@@ -696,6 +667,35 @@
             </summary>
             <param name="color"></param>
             <param name="blendColor"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AssetManager.CachedResourceManager">
+            <summary>
+            An extended Resource Manager that provides cached instances of objects.
+            This differs from the stock ResourceManager class which always
+            deserializes and creates new instances of every object.
+            After the first time an object is requested, it will be cached
+            for all future requests.
+            </summary>
+        </member>
+        <member name="F:AssetManager.CachedResourceManager.objectCache">
+            <summary>
+            A hashtable is used to store the objects.
+            </summary>
+        </member>
+        <member name="M:AssetManager.CachedResourceManager.GetObject(System.String)">
+            <summary>
+            Returns a cached instance of the specified resource.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.CachedResourceManager.GetObject(System.String,System.Globalization.CultureInfo)">
+            <summary>
+            Returns a cached instance of the specified resource.
+            </summary>
+            <param name="name"></param>
+            <param name="culture"></param>
             <returns></returns>
         </member>
         <member name="T:AssetManager.Properties.Resources">

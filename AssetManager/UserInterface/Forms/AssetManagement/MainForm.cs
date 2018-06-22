@@ -3,6 +3,7 @@ using AssetManager.Data.Classes;
 using AssetManager.Data.Communications;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
+using AssetManager.Helpers.Watchdog;
 using AssetManager.Security;
 using AssetManager.UserInterface.CustomControls;
 using AssetManager.UserInterface.Forms.AdminTools;
@@ -29,7 +30,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private LiveBox liveBox;
         private MunisToolBar munisToolBar;
         private WindowList windowList;
-        private ConnectionWatchdog watchdog;
         private DbTransaction currentTransaction = null;
 
         public MunisEmployee MunisUser
@@ -64,11 +64,10 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             CheckForAdmin();
             GetGridStyles();
 
-            watchdog = new ConnectionWatchdog(GlobalSwitches.CachedMode);
-            watchdog.StatusChanged += WatchdogStatusChanged;
-            watchdog.RebuildCache += WatchdogRebuildCache;
-            watchdog.WatcherTick += WatchdogTick;
-            watchdog.StartWatcher();
+            WatchdogInstance.Watchdog.StatusChanged += WatchdogStatusChanged;
+            WatchdogInstance.Watchdog.RebuildCache += WatchdogRebuildCache;
+            WatchdogInstance.Watchdog.WatcherTick += WatchdogTick;
+            WatchdogInstance.Watchdog.StartWatcher(GlobalSwitches.CachedMode);
 
             munisToolBar.InsertMunisDropDown(ToolStrip1, 2);
             windowList.InsertWindowList(ToolStrip1);
@@ -998,7 +997,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                     liveBox.Dispose();
                     munisToolBar.Dispose();
                     windowList.Dispose();
-                    watchdog.Dispose();
                     OtherFunctions.EndProgram();
                 }
             }
