@@ -12,6 +12,7 @@ namespace AssetManager.UserInterface.CustomControls
         private bool dropDownOpen = false;
         private ExtendedForm parentForm;
         private IWindowList windowListForm;
+        private bool hasParentMenu = false;
 
         #endregion "Fields"
 
@@ -39,11 +40,12 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (parentForm.ParentForm != null)
             {
-                ToolStripMenuItem ParentDropDown = NewMenuItem(parentForm.ParentForm);
-                ParentDropDown.Text = "[Parent] " + ParentDropDown.Text;
-                ParentDropDown.ToolTipText = "Parent Form";
-                dropDownControl.DropDownItems.Insert(0, ParentDropDown);
+                var parentDropDown = NewMenuItem(parentForm.ParentForm);
+                parentDropDown.Text = "[Parent] " + parentDropDown.Text;
+                parentDropDown.ToolTipText = "Parent Form";
+                dropDownControl.DropDownItems.Insert(0, parentDropDown);
                 dropDownControl.DropDownItems.Add(new ToolStripSeparator());
+                hasParentMenu = true;
             }
         }
 
@@ -137,6 +139,56 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void DisposeDropDownItem(ToolStripItem item)
         {
+            // PROBLEM:
+            // Because we are using the MouseUp event from the menu items,
+            // and also removing/disposing those items as a result of that event,
+            // the top level drop down button UI tends to hang and cause strange 
+            // behaviour. The problem is particularly apparent after the last 
+            // menu item has been removed. Small rectangles left in the cornor 
+            // of the screen, and forms spontaneously popping infront of the 
+            // active form are two of the most annoying problems.
+            // 
+            // REASON (maybe):
+            // After much digging and testing, I've managed to narrow it down
+            // to stuck/corrupt mouse event messages. These screwed up messages
+            // tend to fire on other controls and cause unintended UI changes.
+            // My best guess is that the item is disposed before the WM_LBUTTONUP
+            // is actually received and processed by the menu control.
+            //
+            // I tried to find a decent logical way around it, found the following
+            // to work the best.
+            //
+            // WORKAROUND:
+            // We selectively call the PerfomClick method on menu items just
+            // before they are removed and disposed. This seems to clear out
+            // any remaining mouse button messages and allows the items to go
+            // away cleanly and quietly. The only reason we don't call it on
+            // every disposal is because it causes the top level menu to close,
+            // and this is not desirable if users want to manage multiple items
+            // without having to reopen the menu after every click.
+
+            // If the item is not visible, always perform a click.
+            if (!item.Visible)
+            {
+                item.PerformClick();
+            }
+            else
+            {
+                // If the item is the last item in a menu containing a fixed parent item, perform a click.
+                // (Parent item + Separator + last item = 3)
+                if (dropDownControl.DropDownItems.Count == 3 && hasParentMenu)
+                {
+                    item.PerformClick();
+                }
+                // If the item is the last item, regardless of a fixed parent item, perform a click.
+                else if (dropDownControl.DropDownItems.Count <= 1)
+                {
+                    item.PerformClick();
+                }
+            }
+
+
+            // Do the usual clean up and disposal stuff.
             if (dropDownControl.DropDownItems.Count < 1)
             {
                 dropDownControl.DropDownItems.Clear();
