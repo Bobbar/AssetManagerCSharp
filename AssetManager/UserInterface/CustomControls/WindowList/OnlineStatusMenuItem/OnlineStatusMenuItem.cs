@@ -5,7 +5,31 @@ namespace AssetManager.UserInterface.CustomControls
 {
     partial class OnlineStatusMenuItem : ToolStripMenuItem
     {
-        public ExtendedForm TargetForm { get; set; }
+        private ExtendedForm targetForm;
+
+        public ExtendedForm TargetForm
+        {
+            get
+            {
+                return targetForm;
+            }
+
+            set
+            {
+                targetForm = value;
+
+                if (targetForm != null)
+                {
+                    targetForm.TextChanged -= TargetForm_TextChanged;
+                    targetForm.TextChanged += TargetForm_TextChanged;
+                }
+            }
+        }
+
+        private void TargetForm_TextChanged(object sender, System.EventArgs e)
+        {
+            this.Text = ((ExtendedForm)sender).Text;
+        }
 
         private bool onlineStatus = false;
 
@@ -44,6 +68,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         protected override void Dispose(bool disposing)
         {
+            targetForm.TextChanged -= TargetForm_TextChanged;
             TargetForm = null;
             onlineStatusInterface = null;
             base.Dispose(disposing);

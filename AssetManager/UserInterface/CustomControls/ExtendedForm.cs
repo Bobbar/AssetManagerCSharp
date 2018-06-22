@@ -196,7 +196,6 @@ namespace AssetManager.UserInterface.CustomControls
         public virtual void RefreshData()
         {
             this.Refresh();
-            this.ForceWindowListRefresh();
         }
 
         /// <summary>
