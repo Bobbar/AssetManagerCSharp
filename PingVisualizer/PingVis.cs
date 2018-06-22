@@ -236,17 +236,25 @@ namespace PingVisualizer
 
         private void RaiseEventOnUIThread(Delegate theEvent, object[] args)
         {
-            foreach (Delegate d in theEvent.GetInvocationList())
+            try
             {
-                ISynchronizeInvoke syncer = d.Target as ISynchronizeInvoke;
-                if (syncer == null)
+                foreach (Delegate d in theEvent.GetInvocationList())
                 {
-                    d.DynamicInvoke(args);
+                    ISynchronizeInvoke syncer = d.Target as ISynchronizeInvoke;
+                    if (syncer == null)
+                    {
+                        d.DynamicInvoke(args);
+                    }
+                    else
+                    {
+                        syncer.BeginInvoke(d, args);
+                    }
                 }
-                else
-                {
-                    syncer.BeginInvoke(d, args);
-                }
+            }
+            catch (Exception ex)
+            {
+                // InvalidOperationExceptions can occur here occasionally . Silently print them to the console.
+                Console.WriteLine(ex.ToString());
             }
         }
 
