@@ -1224,16 +1224,6 @@
             Current position.
             </summary>
         </member>
-        <member name="E:AssetManager.UserInterface.CustomControls.IWindowList.ChildCountChanged">
-            <summary>
-            Occurs when the number of child forms has changed.
-            </summary>
-        </member>
-        <member name="E:AssetManager.UserInterface.CustomControls.IWindowList.RefreshWindowList">
-            <summary>
-            Occurs when a refresh is called from implementer.
-            </summary>
-        </member>
         <member name="P:AssetManager.UserInterface.CustomControls.IWindowList.ChildForms">
             <summary>
             List of child forms bound to the current form. This list ultimately comprises a tree of parent and child forms.
@@ -1406,12 +1396,20 @@
             Primary animation routine. Messages are animated per their current state and specified directions.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.WindowList.BuildWindowList(AssetManager.UserInterface.CustomControls.IWindowList,System.Windows.Forms.ToolStripItemCollection)">
+        <member name="M:AssetManager.UserInterface.CustomControls.WindowList.AddChildMenu(AssetManager.UserInterface.CustomControls.ExtendedForm,AssetManager.UserInterface.CustomControls.ExtendedForm,System.Windows.Forms.ToolStripItemCollection)">
             <summary>
-            Recursively build ToolStripItemCollections of Forms and their Children and add them to the ToolStrip. Making sure to add SibiMain to the top of the list.
+            Adds a menu item for the specified child to the specified parent menu item.
             </summary>
-            <param name="target">Form to add to ToolStrip.</param>
-            <param name="targetMenuItem">Item to add the Form item to.</param>
+            <param name="parent"></param>
+            <param name="child"></param>
+            <param name="targetMenu"></param>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.WindowList.RemoveChildMenu(AssetManager.UserInterface.CustomControls.ExtendedForm,System.Windows.Forms.ToolStripItemCollection)">
+            <summary>
+            Removes the menu item for the specified child form.
+            </summary>
+            <param name="child"></param>
+            <param name="targetMenu"></param>
         </member>
         <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.ShowAllDevices">
             <summary>

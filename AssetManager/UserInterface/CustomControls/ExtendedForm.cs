@@ -62,20 +62,19 @@ namespace AssetManager.UserInterface.CustomControls
 
         #region Events
 
-        public event EventHandler<EventArgs> ChildCountChanged;
+        public event EventHandler<ExtendedForm> ChildAdded;
+        public event EventHandler<ExtendedForm> ChildRemoved;
 
-        public event EventHandler<EventArgs> RefreshWindowList;
-
-        private void OnWindowCountChanged(EventArgs e)
+        private void OnChildAdded(ExtendedForm parent, ExtendedForm child)
         {
-            ChildCountChanged?.Invoke(this, e);
-            parentForm?.OnWindowCountChanged(e);
+            ChildAdded?.Invoke(parent, child);
+            parentForm?.OnChildAdded(parent, child);
         }
 
-        private void OnRefreshWindowList(EventArgs e)
+        private void OnChildRemoved(ExtendedForm parent, ExtendedForm child)
         {
-            RefreshWindowList?.Invoke(this, e);
-            parentForm?.OnRefreshWindowList(e);
+            ChildRemoved?.Invoke(parent, child);
+            parentForm?.OnChildRemoved(parent, child);
         }
 
         #endregion Events
@@ -277,10 +276,6 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private void ForceWindowListRefresh()
-        {
-            OnRefreshWindowList(new EventArgs());
-        }
 
         /// <summary>
         /// Centers this instance to its parent form if that location is does not clip the active screen. Otherwise, will center to screen.
@@ -438,7 +433,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 childForms.Add(child);
                 child.Disposed += Child_Disposed;
-                OnWindowCountChanged(new EventArgs());
+                OnChildAdded(this, child);
             }
         }
 
@@ -446,7 +441,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             childForms.Remove(child);
             child.Disposed -= Child_Disposed;
-            OnWindowCountChanged(new EventArgs());
+            OnChildRemoved(this, child);
         }
 
         public int ChildFormCount()

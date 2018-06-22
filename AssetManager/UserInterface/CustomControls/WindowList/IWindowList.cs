@@ -9,21 +9,15 @@ namespace AssetManager.UserInterface.CustomControls
     public interface IWindowList
     {
 
-        /// <summary>
-        /// Occurs when the number of child forms has changed.
-        /// </summary>
-        event EventHandler<EventArgs> ChildCountChanged;
+        event EventHandler<ExtendedForm> ChildAdded;
 
-        /// <summary>
-        /// Occurs when a refresh is called from implementer.
-        /// </summary>
-        event EventHandler<EventArgs> RefreshWindowList;
+        event EventHandler<ExtendedForm> ChildRemoved;
 
         /// <summary>
         /// List of child forms bound to the current form. This list ultimately comprises a tree of parent and child forms.
         /// </summary>
         List<ExtendedForm> ChildForms { get; }
-        
+
         /// <summary>
         /// The total number of child forms within the tree.
         /// </summary>

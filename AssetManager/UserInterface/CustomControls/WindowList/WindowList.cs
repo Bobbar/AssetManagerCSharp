@@ -1,7 +1,6 @@
 using AssetManager.UserInterface.Forms.Sibi;
 using System;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace AssetManager.UserInterface.CustomControls
 {
@@ -21,8 +20,8 @@ namespace AssetManager.UserInterface.CustomControls
         public WindowList(ExtendedForm parentForm)
         {
             windowListForm = parentForm;
-            windowListForm.ChildCountChanged += WindowListForm_WindowCountChanged;
-            windowListForm.RefreshWindowList += WindowListForm_RefreshWindowList;
+            windowListForm.ChildAdded += WindowListForm_ChildAdded;
+            windowListForm.ChildRemoved += WindowListForm_ChildRemoved;
             this.parentForm = parentForm;
         }
 
@@ -33,7 +32,7 @@ namespace AssetManager.UserInterface.CustomControls
         public void InsertWindowList(OneClickToolStrip targetToolStrip)
         {
             InitializeDropDownButton(targetToolStrip);
-            RefreshWindowList();
+            SetVisibility();
         }
 
         private void AddParentMenu()
@@ -49,50 +48,78 @@ namespace AssetManager.UserInterface.CustomControls
         }
 
         /// <summary>
-        /// Recursively build ToolStripItemCollections of Forms and their Children and add them to the ToolStrip. Making sure to add SibiMain to the top of the list.
+        /// Adds a menu item for the specified child to the specified parent menu item.
         /// </summary>
-        /// <param name="target">Form to add to ToolStrip.</param>
-        /// <param name="targetMenuItem">Item to add the Form item to.</param>
-        private void BuildWindowList(IWindowList target, ToolStripItemCollection targetMenuItem)
+        /// <param name="parent"></param>
+        /// <param name="child"></param>
+        /// <param name="targetMenu"></param>
+        private void AddChildMenu(ExtendedForm parent, ExtendedForm child, ToolStripItemCollection targetMenu)
         {
-            // This list stores the menu items for the root list.
-            var itemList = new List<OnlineStatusMenuItem>();
-
-            foreach (var frm in target.ChildForms)
+            // If this window list parent is the direct parent of the child,
+            // add the child menu item to the top/root menu.
+            if (parent == this.parentForm)
             {
-                if (frm.ChildForms.Count > 0)
+                // Always add the Sibi form to the top of the menu,
+                // all others can go below.
+                if (child is SibiMainForm)
                 {
-                    var newDropDown = NewMenuItem(frm);
-                    if (frm is SibiMainForm)
-                    {
-                        targetMenuItem.Insert(0, newDropDown);
-                    }
-                    else
-                    {
-                        targetMenuItem.Add(newDropDown);
-                    }
-                    BuildWindowList(frm, newDropDown.DropDownItems);
+                    targetMenu.Insert(0, NewMenuItem(child));
                 }
                 else
                 {
-                    if (frm is SibiMainForm)
+                    targetMenu.Add(NewMenuItem(child));
+                }
+            }
+            else
+            {
+                // If this window list parent is not the direct parent of the child,
+                // iterate and recurse through all the menu items until we find the
+                // item which targets the parent, and add to or start a new sub menu.
+                foreach (var item in targetMenu)
+                {
+                    // Ignore seperators.
+                    if (item is OnlineStatusMenuItem)
                     {
-                        targetMenuItem.Insert(0, NewMenuItem(frm));
-                    }
-                    else
-                    {
-                        // Add item to the root list.
-                        itemList.Add(NewMenuItem(frm));
+                        var statusItem = (OnlineStatusMenuItem)item;
+
+                        // Add the child menu item to the sub menu of the matching parent item.
+                        if (statusItem.TargetForm == parent)
+                        {
+                            statusItem.DropDownItems.Add(NewMenuItem(child));
+                        }
+
+                        // Recurse with sub menu items.
+                        if (statusItem.HasDropDownItems)
+                            AddChildMenu(parent, child, statusItem.DropDownItems);
                     }
                 }
             }
+        }
 
-            // Add all the root items to the menu at once to reduce layout overhead.
-            if (itemList.Count > 0)
-                targetMenuItem.AddRange(itemList.ToArray());
+        /// <summary>
+        /// Removes the menu item for the specified child form.
+        /// </summary>
+        /// <param name="child"></param>
+        /// <param name="targetMenu"></param>
+        private void RemoveChildMenu(ExtendedForm child, ToolStripItemCollection targetMenu)
+        {
+            // Must use a regular 'for' block because we are going to modify the collection.
+            // Iterate and recurse all menu items and remove any items that match the specified child form.
+            for (int i = 0; i < targetMenu.Count; i++)
+            {
+                // Ignore seperators.
+                if (targetMenu[i] is OnlineStatusMenuItem)
+                {
+                    OnlineStatusMenuItem item = (OnlineStatusMenuItem)targetMenu[i];
+                    if (item.TargetForm == child)
+                    {
+                        DisposeDropDownItem(item);
+                    }
 
-            itemList.Clear();
-            itemList = null;
+                    if (item.HasDropDownItems)
+                        RemoveChildMenu(child, item.DropDownItems);
+                }
+            }
         }
 
         private string CountText(int count)
@@ -122,8 +149,6 @@ namespace AssetManager.UserInterface.CustomControls
 
             item.MouseUp -= ItemClicked;
             item.Dispose();
-
-            SetVisibility();
         }
 
         private void DisposeAllDropDownItems()
@@ -168,10 +193,6 @@ namespace AssetManager.UserInterface.CustomControls
                 if ((frm != parentForm.ParentForm))
                 {
                     frm.Close();
-                    if (frm.Disposing | frm.IsDisposed)
-                    {
-                        DisposeDropDownItem(item);
-                    }
                 }
             }
             else if (e.Button == MouseButtons.Left)
@@ -197,6 +218,7 @@ namespace AssetManager.UserInterface.CustomControls
                     DisposeDropDownItem(item);
                 }
             }
+            SetVisibility();
         }
 
         private OnlineStatusMenuItem NewMenuItem(ExtendedForm frm)
@@ -217,20 +239,6 @@ namespace AssetManager.UserInterface.CustomControls
             return newitem;
         }
 
-        private void RefreshWindowList()
-        {
-            dropDownControl.Text = CountText(windowListForm.ChildFormCount());
-
-            if (!dropDownOpen)
-            {
-                DisposeAllDropDownItems();
-                AddParentMenu();
-                BuildWindowList(parentForm, dropDownControl.DropDownItems);
-            }
-
-            SetVisibility();
-        }
-
         private void SetVisibility()
         {
             if (dropDownControl.DropDownItems.Count > 0)
@@ -243,14 +251,18 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private void WindowListForm_WindowCountChanged(object sender, EventArgs e)
+        private void WindowListForm_ChildAdded(object sender, ExtendedForm e)
         {
-            RefreshWindowList();
+            AddChildMenu((ExtendedForm)sender, e, dropDownControl.DropDownItems);
+            dropDownControl.Text = CountText(windowListForm.ChildFormCount());
+            SetVisibility();
         }
 
-        private void WindowListForm_RefreshWindowList(object sender, EventArgs e)
+        private void WindowListForm_ChildRemoved(object sender, ExtendedForm e)
         {
-            RefreshWindowList();
+            RemoveChildMenu(e, dropDownControl.DropDownItems);
+            dropDownControl.Text = CountText(windowListForm.ChildFormCount());
+            SetVisibility();
         }
 
         #endregion "Methods"
@@ -272,8 +284,8 @@ namespace AssetManager.UserInterface.CustomControls
                 {
                     DisposeAllDropDownItems();
                     dropDownControl.Dispose();
-                    windowListForm.ChildCountChanged -= WindowListForm_WindowCountChanged;
-                    windowListForm.RefreshWindowList -= WindowListForm_RefreshWindowList;
+                    windowListForm.ChildAdded -= WindowListForm_ChildAdded;
+                    windowListForm.ChildRemoved -= WindowListForm_ChildRemoved;
                     dropDownControl.DropDownClosed -= DropDownControl_DropDownClosed;
                     dropDownControl.DropDownOpened -= DropDownControl_DropDownOpened;
                 }

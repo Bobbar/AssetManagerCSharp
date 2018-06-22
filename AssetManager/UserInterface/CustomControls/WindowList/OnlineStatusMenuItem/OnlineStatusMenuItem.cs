@@ -68,8 +68,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         protected override void Dispose(bool disposing)
         {
-            targetForm.TextChanged -= TargetForm_TextChanged;
-            TargetForm = null;
+            targetForm = null;
             onlineStatusInterface = null;
             base.Dispose(disposing);
         }
