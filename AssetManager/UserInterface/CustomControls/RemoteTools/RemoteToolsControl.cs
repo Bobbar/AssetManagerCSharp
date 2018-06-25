@@ -408,7 +408,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void ShowIP()
         {
-            if (pingVis.CurrentResult != null)
+            if (pingVis.CurrentResult != null && pingVis.CurrentResult.Address != null)
             {
                 string address = pingVis.CurrentResult.Address.ToString();
                 var blah = OtherFunctions.Message(address + " - " + NetworkInfo.LocationOfIP(address) + "\r\n" + "\r\n" + "Press 'Yes' to copy to clipboard.", MessageBoxButtons.YesNo, MessageBoxIcon.Information, "IP Address", hostForm);

@@ -261,8 +261,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 lastCmd = cmd;
                 SendToGrid(DBFactory.GetDatabase().DataTableFromCommand(cmd));
                 cmd.Dispose();
-
-                //  SetMunisStatuses();
             }
             catch (Exception ex)
             {
@@ -270,7 +268,6 @@ namespace AssetManager.UserInterface.Forms.Sibi
                 // Make a fresh call to create a new command instance.
                 if (ex is InvalidCastException)
                 {
-                    //GetMunisStatuses();
                     ShowAll();
                 }
                 else
