@@ -181,12 +181,11 @@ namespace AssetManager.UserInterface.CustomControls
                     item.PerformClick();
                 }
                 // If the item is the last item, regardless of a fixed parent item, perform a click.
-                else if (dropDownControl.DropDownItems.Count <= 1)
+                else if (dropDownControl.DropDownItems.Count == 1)
                 {
                     item.PerformClick();
                 }
             }
-
 
             // Do the usual clean up and disposal stuff.
             if (dropDownControl.DropDownItems.Count < 1)
@@ -251,6 +250,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 if (!frm.IsDisposed)
                 {
+                    item.PerformClick();
                     frm.RestoreWindow();
                 }
                 else

@@ -25,6 +25,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ResultGrid = new System.Windows.Forms.DataGridView();
             this.ContextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LoadSelectedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AddGKUpdateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SendToGridFormMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -89,7 +90,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.StartTransactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.StartSibiButton = new System.Windows.Forms.ToolStripButton();
-            this.LoadSelectedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.GroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ResultGrid)).BeginInit();
             this.ContextMenuStrip1.SuspendLayout();
@@ -185,7 +185,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolStripSeparator3,
             this.CopySelectedMenuItem});
             this.ContextMenuStrip1.Name = "ContextMenuStrip1";
-            this.ContextMenuStrip1.Size = new System.Drawing.Size(180, 142);
+            this.ContextMenuStrip1.Size = new System.Drawing.Size(180, 120);
             // 
             // ViewToolStripMenuItem
             // 
@@ -195,6 +195,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ViewToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.ViewToolStripMenuItem.Text = "View Device";
             this.ViewToolStripMenuItem.Click += new System.EventHandler(this.ViewToolStripMenuItem_Click);
+            // 
+            // LoadSelectedMenuItem
+            // 
+            this.LoadSelectedMenuItem.Image = global::AssetManager.Properties.Resources.CascadeIcon;
+            this.LoadSelectedMenuItem.Name = "LoadSelectedMenuItem";
+            this.LoadSelectedMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.LoadSelectedMenuItem.Text = "Load All Selected";
+            this.LoadSelectedMenuItem.Click += new System.EventHandler(this.LoadSelectedMenuItem_Click);
             // 
             // AddGKUpdateMenuItem
             // 
@@ -735,7 +743,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.StartSibiButton});
             this.ToolStrip1.Location = new System.Drawing.Point(0, 0);
             this.ToolStrip1.Name = "ToolStrip1";
-            this.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.ToolStrip1.Size = new System.Drawing.Size(1381, 37);
             this.ToolStrip1.Stretch = true;
             this.ToolStrip1.TabIndex = 6;
@@ -863,14 +870,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.StartSibiButton.Text = "Sibi Acquisition Manager";
             this.StartSibiButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.StartSibiButton.Click += new System.EventHandler(this.StartSibiButton_Click);
-            // 
-            // LoadSelectedMenuItem
-            // 
-            this.LoadSelectedMenuItem.Image = global::AssetManager.Properties.Resources.CascadeIcon;
-            this.LoadSelectedMenuItem.Name = "LoadSelectedMenuItem";
-            this.LoadSelectedMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.LoadSelectedMenuItem.Text = "Load All Selected";
-            this.LoadSelectedMenuItem.Click += new System.EventHandler(this.LoadSelectedMenuItem_Click);
             // 
             // MainForm
             // 

@@ -1166,7 +1166,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolStripSeparator9});
             this.ToolStrip1.Location = new System.Drawing.Point(3, 74);
             this.ToolStrip1.Name = "ToolStrip1";
-            this.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.ToolStrip1.Size = new System.Drawing.Size(404, 37);
             this.ToolStrip1.TabIndex = 45;
             this.ToolStrip1.Text = "MyToolStrip1";
