@@ -155,6 +155,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
                 ActiveDirectoryBox.Visible = false;
                 RemoteToolsControl.Visible = false;
                 RemoteToolsControl.ClearPingResults();
+                currentViewDevice = new Device(currentViewDevice.Guid);
                 LoadCurrentDevice();
             }
             base.RefreshData();
