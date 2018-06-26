@@ -528,9 +528,9 @@ namespace AssetManager.UserInterface.Forms.Sibi
             columnList.Add(new GridColumnAttrib(SibiRequestCols.Type, "Request Type", Attributes.SibiAttributes.RequestType, ColumnFormatType.AttributeDisplayMemberOnly));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.NeedBy, "Need By"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.PO, "PO Number"));
-            columnList.Add(new GridColumnAttrib("postatus", "PO Status")); // Unbound status column.
+            columnList.Add(new GridColumnAttrib("postatus", "PO Status", ColumnFormatType.DefaultFormat)); // Unbound status column.
             columnList.Add(new GridColumnAttrib(SibiRequestCols.RequisitionNumber, "Req. Number"));
-            columnList.Add(new GridColumnAttrib("reqstatus", "Req. Status")); // Unbound status column.
+            columnList.Add(new GridColumnAttrib("reqstatus", "Req. Status", ColumnFormatType.DefaultFormat)); // Unbound status column.
             columnList.Add(new GridColumnAttrib(SibiRequestCols.RTNumber, "RT Number"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.CreateDate, "Create Date"));
             columnList.Add(new GridColumnAttrib(SibiRequestCols.ModifyDate, "Modified"));
