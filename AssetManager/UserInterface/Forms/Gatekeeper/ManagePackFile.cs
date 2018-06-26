@@ -13,11 +13,16 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         public ProgressCounter Progress;
 
-        public string Status = "";
+        public event EventHandler<string> StatusMessage;
 
         public ManagePackFile()
         {
             Progress = new ProgressCounter();
+        }
+
+        private void OnStatusMessage(string message)
+        {
+            StatusMessage?.Invoke(this, message);
         }
 
         /// <summary>
@@ -26,22 +31,30 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         /// <returns></returns>
         public async Task<bool> DownloadPack()
         {
-            if (!Directory.Exists(Paths.GKPackFileFDir))
+            try
             {
-                Directory.CreateDirectory(Paths.GKPackFileFDir);
-            }
+                if (!Directory.Exists(Paths.GKPackFileFDir))
+                {
+                    Directory.CreateDirectory(Paths.GKPackFileFDir);
+                }
 
-            if (Directory.Exists(Paths.GKExtractDir))
-            {
-                Directory.Delete(Paths.GKExtractDir, true);
-            }
+                if (Directory.Exists(Paths.GKExtractDir))
+                {
+                    Directory.Delete(Paths.GKExtractDir, true);
+                }
 
-            if (File.Exists(Paths.GKPackFileFullPath))
-            {
-                File.Delete(Paths.GKPackFileFullPath);
+                if (File.Exists(Paths.GKPackFileFullPath))
+                {
+                    File.Delete(Paths.GKPackFileFullPath);
+                }
+                Progress = new ProgressCounter();
+                return await CopyPackFile(Paths.GKRemotePackFilePath, Paths.GKPackFileFullPath);
             }
-            Progress = new ProgressCounter();
-            return await CopyPackFile(Paths.GKRemotePackFilePath, Paths.GKPackFileFullPath);
+            catch (Exception ex)
+            {
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                return false;
+            }
         }
 
         /// <summary>
@@ -68,11 +81,11 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 }
                 else
                 {
-                    string LocalHash = await Task.Run(() => { return SecurityTools.GetMD5OfFile(Paths.GKPackFileFullPath); });
+                    string localHash = await Task.Run(() => { return SecurityTools.GetMD5OfFile(Paths.GKPackFileFullPath); });
 
-                    string RemoteHash = await Task.Run(() => { return GetRemoteHash(); });
+                    string remoteHash = await Task.Run(() => { return GetRemoteHash(); });
 
-                    if (LocalHash == RemoteHash)
+                    if (localHash == remoteHash)
                     {
                         return true;
                     }
@@ -81,6 +94,16 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                         return false;
                     }
                 }
+            }
+            catch (DirectoryNotFoundException dnfe)
+            {
+                Logging.Exception(dnfe);
+                return false;
+            }
+            catch (FileNotFoundException fnfe)
+            {
+                Logging.Exception(fnfe);
+                return false;
             }
             catch (Exception ex)
             {
@@ -122,8 +145,9 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                     CopyFile(source, dest);
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Logging.Exception(ex);
                     return false;
                 }
             });
@@ -141,24 +165,25 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         /// <param name="Dest"></param>
         private void CopyFile(string Source, string Dest)
         {
-            int BufferSize = 256000;
-            byte[] buffer = new byte[BufferSize];
+            int bufferSize = 256000;
+            byte[] buffer = new byte[bufferSize];
             int bytesIn = 1;
-            FileInfo CurrentFile = new FileInfo(Source);
+            var currentFile = new FileInfo(Source);
             Progress.ResetProgress();
-            using (System.IO.FileStream fStream = CurrentFile.OpenRead())
-            using (FileStream destFile = new FileStream(Dest, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, BufferSize, FileOptions.None))
+            using (FileStream source = currentFile.OpenRead())
+            using (var dest = new FileStream(Dest, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, bufferSize, FileOptions.None))
             {
-                Progress.BytesToTransfer = (int)fStream.Length;
+                Progress.BytesToTransfer = (int)source.Length;
                 while (!(bytesIn < 1) && !cancelCopy)
                 {
-                    bytesIn = fStream.Read(buffer, 0, BufferSize);
+                    bytesIn = source.Read(buffer, 0, bufferSize);
                     if (bytesIn > 0)
                     {
-                        destFile.Write(buffer, 0, bytesIn);
+                        dest.Write(buffer, 0, bytesIn);
                         Progress.BytesMoved = bytesIn;
                     }
                 }
+                buffer = null;
             }
         }
 
@@ -171,7 +196,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             try
             {
                 Progress = new ProgressCounter();
-                GZipCompress CompDir = new GZipCompress(Progress);
+                var gzip = new GZipCompress(Progress);
                 if (!Directory.Exists(Paths.GKPackFileFDir))
                 {
                     Directory.CreateDirectory(Paths.GKPackFileFDir);
@@ -181,7 +206,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 {
                     File.Delete(Paths.GKPackFileFullPath);
                 }
-                await Task.Run(() => { CompDir.CompressDirectory(Paths.GKLocalInstallDir, Paths.GKPackFileFullPath); });
+                await Task.Run(() => { gzip.CompressDirectory(Paths.GKLocalInstallDir, Paths.GKPackFileFullPath); });
                 return true;
             }
             catch (Exception ex)
@@ -199,10 +224,10 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         {
             try
             {
-                Status = "Unpacking....";
+                OnStatusMessage("Unpacking....");
                 Progress = new ProgressCounter();
-                GZipCompress CompDir = new GZipCompress(Progress);
-                await Task.Run(() => { CompDir.DecompressToDirectory(Paths.GKPackFileFullPath, Paths.GKExtractDir); });
+                var gzip = new GZipCompress(Progress);
+                await Task.Run(() => { gzip.DecompressToDirectory(Paths.GKPackFileFullPath, Paths.GKExtractDir); });
                 return true;
             }
             catch (Exception ex)
@@ -218,15 +243,15 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         /// <returns></returns>
         private async Task<bool> UploadPackFiles()
         {
-            bool Done = false;
-            Status = "Uploading Pack File...";
+            bool done = false;
+            OnStatusMessage("Uploading Pack File...");
             Progress = new ProgressCounter();
-            Done = await CopyPackFile(Paths.GKPackFileFullPath, Paths.GKRemotePackFilePath);
+            done = await CopyPackFile(Paths.GKPackFileFullPath, Paths.GKRemotePackFilePath);
 
-            Status = "Uploading Hash File...";
+            OnStatusMessage("Uploading Hash File...");
             Progress = new ProgressCounter();
-            Done = await CopyPackFile(Paths.GKPackFileFDir + Paths.GKPackHashName, Paths.GKRemotePackFileDir + Paths.GKPackHashName);
-            return Done;
+            done = await CopyPackFile(Paths.GKPackFileFDir + Paths.GKPackHashName, Paths.GKRemotePackFileDir + Paths.GKPackHashName);
+            return done;
         }
 
         /// <summary>
@@ -235,23 +260,24 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         /// <returns></returns>
         public async Task<bool> ProcessPackFile()
         {
-            bool PackFileOK = false;
-            Status = "Verifying Pack File...";
+            bool packFileOK = false;
+            OnStatusMessage("Verifying Pack File...");
             if (await VerifyPackFile() && !cancelCopy)
             {
-                PackFileOK = await UnPackGKDir();
+                packFileOK = await UnPackGKDir();
             }
             else
             {
-                Status = "Downloading Pack File...";
+                OnStatusMessage("Downloading Pack File...");
                 if (await DownloadPack() && !cancelCopy)
                 {
-                    PackFileOK = await UnPackGKDir();
+                    packFileOK = await UnPackGKDir();
                 }
             }
-            if (PackFileOK)
+
+            if (packFileOK)
             {
-                Status = "Done.";
+                OnStatusMessage("Done.");
                 await Task.Delay(1000);
                 return true;
             }
@@ -259,10 +285,10 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             {
                 if (cancelCopy)
                 {
-                    Status = "Canceled.";
+                    OnStatusMessage("Canceled.");
                     return false;
                 }
-                Status = "ERROR!";
+                OnStatusMessage("ERROR!");
                 return false;
             }
         }
@@ -275,29 +301,29 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         {
             try
             {
-                bool OK = false;
-                Status = "Creating Pack File...";
+                bool success = false;
+                OnStatusMessage("Creating Pack File...");
                 Progress = new ProgressCounter();
-                OK = await PackGKDir();
+                success = await PackGKDir();
 
-                Status = "Generating Hash...";
-                OK = await CreateHashFile();
+                OnStatusMessage("Generating Hash...");
+                success = await CreateHashFile();
 
-                OK = await UploadPackFiles();
+                success = await UploadPackFiles();
 
-                if (OK)
+                if (success)
                 {
-                    Status = "Done.";
+                    OnStatusMessage("Done.");
                 }
                 else
                 {
-                    Status = "Something went wrong...";
+                    OnStatusMessage("Something went wrong...");
                 }
-                return OK;
+                return success;
             }
             catch (Exception ex)
             {
-                Status = "ERROR!";
+                OnStatusMessage("ERROR!");
                 ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
                 return false;
             }

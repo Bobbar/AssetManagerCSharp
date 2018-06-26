@@ -314,7 +314,9 @@ namespace AssetManager.Helpers
             switch (ex.HResult)
             {
                 case -2147024864:
-                    //PromptUser("ERROR:  MethodName=" & Method.Name & "  Type: " & TypeName(ex) & "  #:" & ex.HResult & "  Message:" & ex.Message, vbOKOnly + vbExclamation, "IO Error")
+                    return true;
+
+                case -2147024843: // Network path not found.
                     return true;
 
                 case -2146232800:

@@ -7,7 +7,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 {
     public partial class PackFileForm : ExtendedForm
     {
-        public bool PackVerified { get; set; }
+        public bool PackVerified { get; private set; }
         private bool working = false;
 
         private ManagePackFile packManager = new ManagePackFile();
@@ -15,6 +15,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         public PackFileForm(bool showFunctions) : base()
         {
             InitializeComponent();
+            packManager.StatusMessage += PackManager_StatusMessage;
             this.Icon = Properties.Resources.asset_icon;
             FunctionPanel.Visible = showFunctions;
             if (!showFunctions)
@@ -23,102 +24,78 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
         }
 
+        private void PackManager_StatusMessage(object sender, string e)
+        {
+            StatusLabel.Text = e;
+        }
+
         private async void CheckPackFile()
         {
-            try
-            {
-                working = true;
-                PackVerified = await packManager.ProcessPackFile();
-                working = false;
-                if (this.Modal)
-                    this.Close();
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-            }
+            working = true;
+            ProgressTimer.Start();
+
+            PackVerified = await packManager.ProcessPackFile();
+
+            working = false;
+            ProgressTimer.Stop();
+            SpeedLabel.Visible = false;
+
+            if (this.Modal && PackVerified)
+                this.Close();
         }
 
         private void ProgressTimer_Tick(object sender, EventArgs e)
         {
-            try
+            if (packManager.Progress.Percent > 0 && working)
             {
-                if (packManager.Progress.Percent > 0 && working)
+                ProgressBar.Value = packManager.Progress.Percent;
+                packManager.Progress.Tick();
+                if (packManager.Progress.Throughput > 0 & packManager.Progress.Percent < 100)
                 {
-                    ProgressBar.Value = packManager.Progress.Percent;
-                    packManager.Progress.Tick();
-                    if (packManager.Progress.Throughput > 0 & packManager.Progress.Percent < 100)
-                    {
-                        if (!SpeedLabel.Visible)
-                            SpeedLabel.Visible = true;
-                        SpeedLabel.Text = packManager.Progress.Throughput.ToString() + " MB/s";
-                    }
-                    else
-                    {
-                        SpeedLabel.Visible = false;
-                    }
+                    if (!SpeedLabel.Visible)
+                        SpeedLabel.Visible = true;
+                    SpeedLabel.Text = packManager.Progress.Throughput.ToString() + " MB/s";
                 }
-                StatusLabel.Text = packManager.Status;
-            }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                else
+                {
+                    SpeedLabel.Visible = false;
+                }
             }
         }
 
         private void VerifyPackButton_Click(object sender, EventArgs e)
         {
             if (working) return;
-            try
+
+            var GKFormInstance = Helpers.ChildFormControl.GKUpdaterInstance();
+            if (!GKFormInstance.ActiveUpdates())
             {
-                var GKFormInstance = Helpers.ChildFormControl.GKUpdaterInstance();
-                if (!GKFormInstance.ActiveUpdates())
-                {
-                    CheckPackFile();
-                }
-                else
-                {
-                    OtherFunctions.Message("This process will interfere with the active running updates. Please stop all updates and try again.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Continue", this);
-                }
+                CheckPackFile();
             }
-            catch (Exception ex)
+            else
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                OtherFunctions.Message("This process will interfere with the active running updates. Please stop all updates and try again.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Cannot Continue", this);
             }
         }
 
         private async void NewPackFile()
         {
-            try
+            working = true;
+            if (!await packManager.CreateNewPackFile())
             {
-                working = true;
-                if (!await packManager.CreateNewPackFile())
-                {
-                    OtherFunctions.Message("Error while creating a new pack file.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
-                }
-                working = false;
+                OtherFunctions.Message("Error while creating a new pack file.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error", this);
             }
-            catch (Exception ex)
-            {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
-            }
+            working = false;
         }
 
         private void NewPackButton_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (working) return;
+            if (working) return;
 
-                var prompt = OtherFunctions.Message("Are you sure? This will replace the packfile on the server with a new one created from the local GK Directory.", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "Warning", this);
-                if (prompt == DialogResult.OK)
-                {
-                    NewPackFile();
-                }
-            }
-            catch (Exception ex)
+            var prompt = OtherFunctions.Message("Are you sure? This will replace the packfile on the server with a new one created from the local GK Directory.", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "Warning", this);
+            if (prompt == DialogResult.OK)
             {
-                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                NewPackFile();
             }
         }
 

@@ -1,11 +1,10 @@
 using System;
 using System.IO;
+
 namespace AssetManager.Helpers
 {
-
-    static class Logging
+    public static class Logging
     {
-
         public static void Logger(string Message)
         {
             try
@@ -50,6 +49,12 @@ namespace AssetManager.Helpers
             }
         }
 
+        public static void Exception(Exception ex)
+        {
+            Logger("ERROR: Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message);
+            Logger("STACK TRACE: " + ex.StackTrace);
+        }
+
         private static bool RotateLogs()
         {
             try
@@ -63,6 +68,5 @@ namespace AssetManager.Helpers
                 return false;
             }
         }
-
     }
 }

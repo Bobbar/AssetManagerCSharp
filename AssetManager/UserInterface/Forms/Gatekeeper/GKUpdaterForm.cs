@@ -336,10 +336,10 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             createMissingDirs = CreateDirsToolItem.Checked;
         }
 
-        private async void GKUpdaterForm_Shown(object sender, EventArgs e)
+        private void GKUpdaterForm_Shown(object sender, EventArgs e)
         {
             SetQueueButton();
-            await CheckPackFile();
+            CheckPackFile();
         }
 
         private void ProcessPackFile()
@@ -352,7 +352,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
         }
 
-        private async Task<bool> CheckPackFile()
+        private async Task CheckPackFile()
         {
             var packFileManager = new ManagePackFile();
             packFileReady = await packFileManager.VerifyPackFile();
@@ -365,7 +365,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 OtherFunctions.Message("The local pack file does not match the server. All running updates will be stopped and a new copy will now be downloaded and unpacked.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Pack file out of date", this);
                 ProcessPackFile();
             }
-            return true;
         }
 
         private void VerifyPackFileToolItem_Click(object sender, EventArgs e)
