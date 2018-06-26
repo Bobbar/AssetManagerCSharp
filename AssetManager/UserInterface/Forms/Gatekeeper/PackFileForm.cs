@@ -15,6 +15,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         public PackFileForm(bool showFunctions) : base()
         {
             InitializeComponent();
+            StatusLabel.Text = string.Empty;
             packManager.StatusMessage += PackManager_StatusMessage;
             this.Icon = Properties.Resources.asset_icon;
             FunctionPanel.Visible = showFunctions;
