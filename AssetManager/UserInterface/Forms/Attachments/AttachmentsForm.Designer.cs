@@ -314,6 +314,7 @@ namespace AssetManager.UserInterface.Forms
             this.AttachGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.AttachGrid_CellDoubleClick);
             this.AttachGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.AttachGrid_CellEndEdit);
             this.AttachGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.AttachGrid_CellEnter);
+            this.AttachGrid.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.AttachGrid_CellFormatting);
             this.AttachGrid.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.AttachGrid_CellLeave);
             this.AttachGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AttachGrid_CellMouseDown);
             this.AttachGrid.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AttachGrid_CellMouseUp);

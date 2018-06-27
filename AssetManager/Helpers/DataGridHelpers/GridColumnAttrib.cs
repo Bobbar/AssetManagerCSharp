@@ -1,7 +1,7 @@
-using System;
-using System.Drawing;
-using System.Collections.Generic;
 using AssetManager.Data.Classes;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace AssetManager.Helpers
 {
@@ -26,25 +26,31 @@ namespace AssetManager.Helpers
             ColumnFormatType = ColumnFormatType.DefaultFormat;
         }
 
-        public GridColumnAttrib(string colName, string caption, ColumnFormatType displayMode)
+        public GridColumnAttrib(string colName, string caption, ColumnFormatType format)
         {
             ColumnName = colName;
             ColumnCaption = caption;
-            if (displayMode == ColumnFormatType.Image)
+
+            if (format == ColumnFormatType.Image)
             {
                 ColumnType = typeof(Image);
+            }
+            else if (format == ColumnFormatType.FileSize)
+            {
+                ColumnType = typeof(double);
             }
             else
             {
                 ColumnType = typeof(string);
             }
+
             ColumnReadOnly = false;
             ColumnVisible = true;
             Attributes = null;
-            ColumnFormatType = displayMode;
+            ColumnFormatType = format;
         }
 
-        public GridColumnAttrib(string colName, string caption, DbAttributes attribs, ColumnFormatType displayMode)
+        public GridColumnAttrib(string colName, string caption, DbAttributes attribs, ColumnFormatType format)
         {
             ColumnName = colName;
             ColumnCaption = caption;
@@ -52,7 +58,7 @@ namespace AssetManager.Helpers
             ColumnReadOnly = false;
             ColumnVisible = true;
             this.Attributes = attribs;
-            ColumnFormatType = displayMode;
+            ColumnFormatType = format;
         }
 
         public GridColumnAttrib(string colName, string caption, bool isReadOnly, bool visible)
@@ -66,46 +72,13 @@ namespace AssetManager.Helpers
             ColumnFormatType = ColumnFormatType.DefaultFormat;
         }
     }
-}
 
-namespace AssetManager.Helpers
-{
-    public enum ColumnFormatType
-    {
-        DefaultFormat,
-        AttributeCombo,
-        AttributeDisplayMemberOnly,
-        NotePreview,
-        Image,
-        FileSize
-    }
-}
-
-namespace AssetManager.Helpers
-{
-    public struct StatusColumnColor
-    {
-        public string StatusID;
-
-        public Color StatusColor;
-
-        public StatusColumnColor(string id, Color color)
-        {
-            StatusID = id;
-            StatusColor = color;
-        }
-    }
-}
-
-namespace AssetManager.Helpers
-{
     public static class GridColumnFunctions
     {
         /// <summary>
-        /// Returns a comma separated string containing the DB columns within a List(Of ColumnStruct). For use in queries.
+        /// Returns a comma separated string containing the DB columns within a List of <see cref="GridColumnAttrib"/>. For use in queries.
         /// </summary>
         /// <param name="columns"></param>
-        /// <returns></returns>
         public static string ColumnsString(List<GridColumnAttrib> columns)
         {
             string colString = "";
@@ -113,10 +86,8 @@ namespace AssetManager.Helpers
             {
                 colString += column.ColumnName;
                 if (columns.IndexOf(column) != columns.Count - 1) colString += ",";
-
             }
             return colString;
         }
-
     }
 }

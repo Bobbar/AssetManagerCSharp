@@ -1144,6 +1144,34 @@ namespace AssetManager.UserInterface.Forms
             return false;
         }
 
+        private async Task DoProgressLoop()
+        {
+            while (transferTaskRunning)
+            {
+                progress.Tick();
+                if (progress.BytesMoved > 0)
+                {
+                    var throughputText = progress.Throughput.ToString("0.00") + " MB/s";
+
+                    if (ThroughputLabel.Text != throughputText)
+                        ThroughputLabel.Text = throughputText;
+
+                    if (ProgressBar1.Value != progress.Percent)
+                    {
+                        if (progress.Percent < 100)
+                            ProgressBar1.Value = progress.Percent + 1;
+                        ProgressBar1.Value = progress.Percent;
+                    }
+                }
+                else
+                {
+                    ThroughputLabel.Text = string.Empty;
+                }
+
+                await Task.Delay(100);
+            }
+        }
+
         #region Control Event Methods
 
         private void AttachmentsForm_Shown(object sender, EventArgs e)
@@ -1236,7 +1264,6 @@ namespace AssetManager.UserInterface.Forms
             if (allowDrag)
             {
                 mouseStartPos = e.Location;
-                //MouseIsDragging(e.Location);
             }
         }
 
@@ -1253,6 +1280,46 @@ namespace AssetManager.UserInterface.Forms
                         StartDragDropAttachment();
                     }
                 }
+            }
+        }
+
+        private void AttachGrid_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Menu)
+            {
+                ToggleDragMode();
+            }
+        }
+
+        private void AttachGrid_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
+        {
+            var grid = (DataGridView)sender;
+            if (grid != null)
+            {
+                var form = grid.FindForm();
+                if (((MousePosition.X) < form.DesktopBounds.Left) ||
+                   ((MousePosition.X) > form.DesktopBounds.Right) ||
+                   ((MousePosition.Y) < form.DesktopBounds.Top) ||
+                   ((MousePosition.Y) > form.DesktopBounds.Bottom))
+                {
+                    AddAttachmentFileToDragDropObject(SelectedAttachmentGuid());
+                }
+                else
+                {
+                    if (isDragging && transferTaskRunning)
+                    {
+                        CancelTransfers();
+                    }
+                }
+            }
+        }
+
+        private void AttachGrid_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            // Add abbreviation to file size column.
+            if (e.ColumnIndex == AttachGrid.ColumnIndex(attachmentColumns.FileSize))
+            {
+                e.Value = e.Value + " KB";
             }
         }
 
@@ -1284,34 +1351,6 @@ namespace AssetManager.UserInterface.Forms
         private void OpenTool_Click(object sender, EventArgs e)
         {
             DownloadAndOpenAttachment();
-        }
-
-        private async Task DoProgressLoop()
-        {
-            while (transferTaskRunning)
-            {
-                progress.Tick();
-                if (progress.BytesMoved > 0)
-                {
-                    var throughputText = progress.Throughput.ToString("0.00") + " MB/s";
-
-                    if (ThroughputLabel.Text != throughputText)
-                        ThroughputLabel.Text = throughputText;
-
-                    if (ProgressBar1.Value != progress.Percent)
-                    {
-                        if (progress.Percent < 100)
-                            ProgressBar1.Value = progress.Percent + 1;
-                        ProgressBar1.Value = progress.Percent;
-                    }
-                }
-                else
-                {
-                    ThroughputLabel.Text = string.Empty;
-                }
-
-                await Task.Delay(100);
-            }
         }
 
         private void RenameStripMenuItem_Click(object sender, EventArgs e)
@@ -1408,14 +1447,6 @@ namespace AssetManager.UserInterface.Forms
             isDragging = false;
         }
 
-        private void AttachGrid_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Menu)
-            {
-                ToggleDragMode();
-            }
-        }
-
         private void AllowDragCheckBox_Click(object sender, EventArgs e)
         {
             ToggleDragMode();
@@ -1453,29 +1484,6 @@ namespace AssetManager.UserInterface.Forms
         private void FolderListView_DragLeave(object sender, EventArgs e)
         {
             CurrentSelectedFolder = previousFolder;
-        }
-
-        private void AttachGrid_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
-        {
-            var grid = (DataGridView)sender;
-            if (grid != null)
-            {
-                var form = grid.FindForm();
-                if (((MousePosition.X) < form.DesktopBounds.Left) ||
-                   ((MousePosition.X) > form.DesktopBounds.Right) ||
-                   ((MousePosition.Y) < form.DesktopBounds.Top) ||
-                   ((MousePosition.Y) > form.DesktopBounds.Bottom))
-                {
-                    AddAttachmentFileToDragDropObject(SelectedAttachmentGuid());
-                }
-                else
-                {
-                    if (isDragging && transferTaskRunning)
-                    {
-                        CancelTransfers();
-                    }
-                }
-            }
         }
 
         #endregion Control Event Methods

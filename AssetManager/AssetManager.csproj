@@ -171,6 +171,7 @@
     <Compile Include="Data\Functions\DBControls\DBControlInfo.cs" />
     <Compile Include="Data\Functions\DBControls\DBRemappingInfo.cs" />
     <Compile Include="Data\Functions\DBControls\ParseType.cs" />
+    <Compile Include="Helpers\DataGridHelpers\ColumnFormatType.cs" />
     <Compile Include="Helpers\Watchdog\WatchdogInstance.cs" />
     <Compile Include="Helpers\Watchdog\WatchdogConnectionStatus.cs" />
     <Compile Include="Helpers\Watchdog\WatchdogStatusEventArgs.cs" />

@@ -1,5 +1,4 @@
 using AssetManager.Data.Classes;
-using AssetManager.Data.Functions;
 using AssetManager.Tools;
 using System;
 using System.Collections.Generic;
@@ -81,8 +80,7 @@ namespace AssetManager.Helpers
                                 break;
 
                             case ColumnFormatType.FileSize:
-                                string humanFileSize = Math.Round((Convert.ToInt32(row[col.ColumnName]) / 1024d), 1) + " KB";
-                                newRow[col.ColumnName] = humanFileSize;
+                                newRow[col.ColumnName] = Math.Round((Convert.ToInt32(row[col.ColumnName]) / 1024d), 1);
 
                                 break;
 
@@ -182,8 +180,5 @@ namespace AssetManager.Helpers
             newCombo.DataSource = attributes.GetArray();
             return newCombo;
         }
-
-
-
     }
 }

@@ -566,10 +566,9 @@
         </member>
         <member name="M:AssetManager.Helpers.GridColumnFunctions.ColumnsString(System.Collections.Generic.List{AssetManager.Helpers.GridColumnAttrib})">
             <summary>
-            Returns a comma separated string containing the DB columns within a List(Of ColumnStruct). For use in queries.
+            Returns a comma separated string containing the DB columns within a List of <see cref="T:AssetManager.Helpers.GridColumnAttrib"/>. For use in queries.
             </summary>
             <param name="columns"></param>
-            <returns></returns>
         </member>
         <member name="M:AssetManager.Helpers.MiscExtensions.DoubleBuffered(System.Windows.Forms.Control,System.Boolean)">
             <summary>
