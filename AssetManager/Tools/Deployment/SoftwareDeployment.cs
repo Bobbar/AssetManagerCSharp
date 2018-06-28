@@ -111,10 +111,10 @@ namespace AssetManager.Tools.Deployment
             }
 
             // Return silently if remote path cannot be reached.
-            if (!Directory.Exists(Paths.RemoteModulesStore)) return;
+            if (!Directory.Exists(Paths.RemoteModuleSource())) return;
 
             // Get the list of remote module files.
-            var remoteModules = Directory.GetFiles(Paths.RemoteModulesStore, "*.dll");
+            var remoteModules = Directory.GetFiles(Paths.RemoteModuleSource(), "*.dll");
 
             // Return silently if no remote modules found.
             if (remoteModules.Length <= 0) return;

@@ -6,12 +6,27 @@ namespace AssetManager
 {
     internal static class Paths
     {
+        public static bool UseDebugModules = false;
+
         //Application paths
         public static readonly string AppDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\AssetManager\";
 
         public static readonly string PsExecPath = AppDomain.CurrentDomain.BaseDirectory + @"Tools\PsExec\PsExec.exe";
         public static readonly string LocalModulesStore = AppDir + @"\DeploymentModulesStore\";
-        public static readonly string RemoteModulesStore = @" \\core.co.fairfield.oh.us\dfs1\fcdd\files\QA\Asset Management\Asset Manager\DeploymentModules\";
+        public static readonly string RemoteSource = @"\\core.co.fairfield.oh.us\dfs1\fcdd\files\QA\Asset Management\Asset Manager\DeploymentModules\";
+        public static readonly string DebugSource = @"C:\GitHub\AssetManagerCSharp\DeploymentModules\bin\";
+
+        public static string RemoteModuleSource()
+        {
+            if (UseDebugModules)
+            {
+                return DebugSource;
+            }
+            else
+            {
+                return RemoteSource;
+            }
+        }
 
         public const string PsExecTempDir = @"C:\Temp\";
         public const string PsExecTempPath = @"C:\Temp\PsExec.exe";
