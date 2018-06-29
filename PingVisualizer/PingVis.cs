@@ -50,7 +50,8 @@ namespace PingVisualizer
         private Brush mouseOverBarBrush = new SolidBrush(Color.FromArgb(128, Color.Navy));
         private Color mouseScrollingBackColor = Color.FromArgb(48, 53, 61);
         private MouseOverInfo mouseOverInfo = null;
-        private Point mouseLocation;
+        private bool mouseIsOverBars = false;
+        private PointF mouseLocationScaled;
         private bool mouseIsScrolling = false;
         private int mouseMoves = 0;
 
@@ -64,16 +65,16 @@ namespace PingVisualizer
         private const int noPingInterval = 3000;
         private int currentPingInterval = goodPingInterval;
 
-        private const int maxViewScale = 15;
-        private const float barGap = 0;
-        private const int maxBars = 15;
-        private const int minBarLength = 1;
-        private const float barTopPadding = 0;
-        private const float barBottomPadding = 6;
+        private const int maxViewScale = 15; // Max "zoom" level for very low latency ping bars.
+        private const float barGap = 0; // Y coord gap between bars.
+        private const int maxBars = 15; // Number of bars to display.
+        private const int minBarLength = 1; // Min X coord length.
+        private const float barTopPadding = 0; // Padding added to top of bar list.
+        private const float barBottomPadding = 6; // Padding added to bottom of bar list.
 
-        private const int maxStoredResults = 1000000;
-        private int maxDrawRateFPS = 100;
-        private long lastDrawTime = 0;
+        private const int maxStoredResults = 1000000; // Number of results to store before culling occurs.
+        private const int maxDrawRateFPS = 100; // Max FPS allowed.
+        private long lastDrawTime = 0; // Tick count of last render. Used for FPS limiting.
 
         public event EventHandler<PingEventArgs> NewPingResult;
 
@@ -189,8 +190,6 @@ namespace PingVisualizer
             targetControl.MouseMove -= TargetControl_MouseMove;
             targetControl.MouseMove += TargetControl_MouseMove;
         }
-
-
 
         private void InitPing()
         {
@@ -485,7 +484,8 @@ namespace PingVisualizer
         private void TargetControl_MouseMove(object sender, MouseEventArgs e)
         {
             mouseMoves++;
-            mouseLocation = e.Location;
+            mouseLocationScaled = new PointF(e.Location.X * imageUpscaleMulti, e.Location.Y * imageUpscaleMulti);
+
             if (mouseIsScrolling)
             {
                 // Limit the rate of Render calls.
@@ -498,26 +498,20 @@ namespace PingVisualizer
                     // We don't want to render after every single mouse movement, so we make
                     // sure we only render if the mouse is actually over a bar. Then when
                     // the mouse leaves a bar, we render once to reset any highlighted bars.
+                    // Future movements will not cause a render unless the mouse is back over a bar.
 
-                    // GetMouseOverInfo returns null when the mouse is not over a bar.
-                    // Get the mouse over info.
-                    var newMouseOverInfo = GetMouseOverInfo();
-
-                    // If the mouse is over a bar, set the class member and render.
-                    if (newMouseOverInfo != null)
+                    if (MouseIsOverBars())
                     {
-                        mouseOverInfo = newMouseOverInfo;
+                        mouseIsOverBars = true;
                         Render();
                     }
                     else
                     {
-                        // If the mouse is not over a bar, and the class member is not null,
-                        // null the member and render once. Future calls will not render unless
-                        // the mouse is again over a bar.
-
-                        if (mouseOverInfo != null)
+                        // Only render if previous movement was over a bar.
+                        // Unset the bool so that this render only occurs once.
+                        if (mouseIsOverBars)
                         {
-                            mouseOverInfo = null;
+                            mouseIsOverBars = false;
                             Render();
                         }
                     }
@@ -525,24 +519,19 @@ namespace PingVisualizer
             }
         }
 
-        private MouseOverInfo GetMouseOverInfo()
+        private bool MouseIsOverBars()
         {
-            var mScalePoint = new PointF(mouseLocation.X * imageUpscaleMulti, mouseLocation.Y * imageUpscaleMulti);
-
-            foreach (PingBar bar in currentBarList)
+            for (int i = 0; i < currentBarList.Count; i++)
             {
-                if (bar.Rectangle.Contains(mScalePoint))
-                {
-                    return new MouseOverInfo(mScalePoint, bar.PingInfo);
-                }
+                if (currentBarList[i].Rectangle.Contains(mouseLocationScaled))
+                    return true;
             }
-            return null;
+            return false;
         }
 
         private bool MouseIsOverBar(PingBar bar)
         {
-            var mScalePoint = new PointF(mouseLocation.X * imageUpscaleMulti, mouseLocation.Y * imageUpscaleMulti);
-            if (bar.Rectangle.Contains(mScalePoint))
+            if (bar.Rectangle.Contains(mouseLocationScaled))
             {
                 return true;
             }
@@ -648,10 +637,16 @@ namespace PingVisualizer
 
         private void DrawPingBars()
         {
+            // Is set to true if mouse is over any bars.
+            bool isMouseOverBars = false;
+
             foreach (var bar in currentBarList)
             {
                 if (mouseIsScrolling && MouseIsOverBar(bar))
                 {
+                    // If mouse is over a bar, set the mouseOverInfo to be drawn in the DrawPingText method.
+                    isMouseOverBars = true;
+                    mouseOverInfo = new MouseOverInfo(mouseLocationScaled, bar.PingInfo);
                     upscaledGraphics.FillRectangle(mouseOverBarBrush, new RectangleF(bar.Rectangle.Location, new SizeF(bar.Length * currentViewScale, bar.Rectangle.Height)));
                 }
                 else
@@ -659,12 +654,17 @@ namespace PingVisualizer
                     upscaledGraphics.FillRectangle(bar.Brush, new RectangleF(bar.Rectangle.Location, new SizeF(bar.Length * currentViewScale, bar.Rectangle.Height)));
                 }
             }
+
+            // If mouse is not over any bars, null the mouseOverInfo.
+            if (!isMouseOverBars)
+                mouseOverInfo = null;
         }
 
         private void DrawPingText()
         {
             if (mouseIsScrolling)
             {
+                // Draw ping info for the highlighted bar.
                 if (mouseOverInfo != null)
                 {
                     string overInfoText = GetReplyStatusText(mouseOverInfo.PingReply);
@@ -693,11 +693,7 @@ namespace PingVisualizer
         private void DownsampleImage()
         {
             var destRect = new Rectangle(0, 0, downsampleImageSize.Width, downsampleImageSize.Height);
-            using (var wrapMode = new ImageAttributes())
-            {
-                wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                downsampleGraphics.DrawImage(upscaledImage, destRect, 0, 0, upscaledImage.Width, upscaledImage.Height, GraphicsUnit.Pixel, wrapMode);
-            }
+            downsampleGraphics.DrawImage(upscaledImage, destRect);
         }
 
         private Brush GetVariableBrush(Color startColor, Color endColor, int maxValue, long currentValue, bool translucent = false)
