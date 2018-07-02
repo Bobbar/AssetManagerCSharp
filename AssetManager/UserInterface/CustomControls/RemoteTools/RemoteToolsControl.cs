@@ -139,8 +139,14 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void PingVis_NewPingResult(object sender, PingVis.PingEventArgs e)
         {
-            //InitPingVis();
-            SetupNetTools(e.PingReply);
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(() => SetupNetTools(e.PingReply)));
+            }
+            else
+            {
+                SetupNetTools(e.PingReply);
+            }
         }
 
         private void InitPingVis()
