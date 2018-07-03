@@ -22,12 +22,12 @@ namespace PingVisualizer
 
         private Graphics upscaledGraphics;
         private Bitmap upscaledImage;
-        private int imageUpscaleMulti = 5;
         private Size upscaledImageSize;
 
-        private Graphics downsampleGraphics;
-        private Bitmap downsampledImage;
-        private Size downsampleImageSize;
+        private int imageSuperSampleMulti = 5;
+        private Graphics supersampleGraphics;
+        private Bitmap supersampledImage;
+        private Size supersampleImageSize;
 
         private Ping ping = new Ping();
         private List<PingInfo> pingReplies = new List<PingInfo>();
@@ -153,8 +153,8 @@ namespace PingVisualizer
         {
             minFrameTime = 1000 / maxDrawRateFPS;
 
-            upscaledImageSize = new Size(targetControl.ClientSize.Width * imageUpscaleMulti, targetControl.ClientSize.Height * imageUpscaleMulti);
-            downsampleImageSize = targetControl.ClientSize;
+            upscaledImageSize = new Size(targetControl.ClientSize.Width * imageSuperSampleMulti, targetControl.ClientSize.Height * imageSuperSampleMulti);
+            supersampleImageSize = targetControl.ClientSize;
 
             calcBarHeight = (upscaledImageSize.Height - barBottomPadding - barTopPadding - (barGap * maxBars)) / maxBars;
 
@@ -164,17 +164,13 @@ namespace PingVisualizer
             upscaledGraphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             upscaledGraphics.TextContrast = 0;
 
-            downsampledImage = new Bitmap(downsampleImageSize.Width, downsampleImageSize.Height, PixelFormat.Format32bppPArgb);
-            downsampledImage.SetResolution(upscaledImage.HorizontalResolution, upscaledImage.VerticalResolution);
-            downsampleGraphics = Graphics.FromImage(downsampledImage);
-            downsampleGraphics.CompositingMode = CompositingMode.SourceCopy;
-            downsampleGraphics.CompositingQuality = CompositingQuality.HighSpeed;
-            downsampleGraphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
-            downsampleGraphics.SmoothingMode = SmoothingMode.None;
-            downsampleGraphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
+            supersampledImage = new Bitmap(supersampleImageSize.Width, supersampleImageSize.Height, PixelFormat.Format32bppPArgb);
+            supersampledImage.SetResolution(upscaledImage.HorizontalResolution, upscaledImage.VerticalResolution);
+            supersampleGraphics = Graphics.FromImage(supersampledImage);
+            supersampleGraphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
 
-            overInfoFontSize = 7 * imageUpscaleMulti;
-            infoFontSize = 8 * imageUpscaleMulti;
+            overInfoFontSize = 7 * imageSuperSampleMulti;
+            infoFontSize = 8 * imageSuperSampleMulti;
             mousePingInfoFont = new Font("Tahoma", overInfoFontSize, FontStyle.Regular);
             pingInfoFont = new Font("Tahoma", infoFontSize, FontStyle.Bold);
         }
@@ -446,7 +442,7 @@ namespace PingVisualizer
 
         private void TargetControl_MouseMove(object sender, MouseEventArgs e)
         {
-            mouseLocationScaled = new PointF(e.Location.X * imageUpscaleMulti, e.Location.Y * imageUpscaleMulti);
+            mouseLocationScaled = new PointF(e.Location.X * imageSuperSampleMulti, e.Location.Y * imageSuperSampleMulti);
 
             if (mouseIsScrolling)
             {
@@ -650,14 +646,14 @@ namespace PingVisualizer
             {
                 var scrollYPos = upscaledImageSize.Height / (pingReplies.Count / ((float)TopIndex + (maxBars / 2)));
 
-                upscaledGraphics.FillRectangle(Brushes.White, new RectangleF(upscaledImageSize.Width - (20 + imageUpscaleMulti), scrollYPos, 10 + imageUpscaleMulti, 5 + imageUpscaleMulti));
+                upscaledGraphics.FillRectangle(Brushes.White, new RectangleF(upscaledImageSize.Width - (20 + imageSuperSampleMulti), scrollYPos, 10 + imageSuperSampleMulti, 5 + imageSuperSampleMulti));
             }
         }
 
         private void DownsampleImage()
         {
-            var destRect = new Rectangle(0, 0, downsampleImageSize.Width, downsampleImageSize.Height);
-            downsampleGraphics.DrawImage(upscaledImage, destRect);
+            var destRect = new Rectangle(0, 0, supersampleImageSize.Width, supersampleImageSize.Height);
+            supersampleGraphics.DrawImage(upscaledImage, destRect);
         }
 
         private Color GetVariableColor(Color startColor, Color endColor, int maxValue, long currentValue, bool translucent = false)
@@ -804,19 +800,19 @@ namespace PingVisualizer
                     if (targetControl is Button)
                     {
                         var but = (Button)targetControl;
-                        but.Image = downsampledImage;
+                        but.Image = supersampledImage;
                         but.Invalidate();
                     }
                     else if (targetControl is PictureBox)
                     {
                         var pic = (PictureBox)targetControl;
-                        pic.Image = downsampledImage;
+                        pic.Image = supersampledImage;
                         pic.Invalidate();
                     }
                 }
                 else
                 {
-                    targetControl.BackgroundImage = downsampledImage;
+                    targetControl.BackgroundImage = supersampledImage;
                     targetControl.Invalidate();
                 }
             }
@@ -978,8 +974,8 @@ namespace PingVisualizer
                     upscaledImage.Dispose();
                     upscaledGraphics.Dispose();
 
-                    downsampledImage.Dispose();
-                    downsampleGraphics.Dispose();
+                    supersampledImage.Dispose();
+                    supersampleGraphics.Dispose();
 
                     if (currentBarList != null)
                     {
