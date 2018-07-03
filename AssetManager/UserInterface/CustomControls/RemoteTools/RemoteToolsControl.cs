@@ -131,7 +131,11 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (disposing && (components != null))
             {
-                if (pingVis != null) pingVis.Dispose();
+                if (pingVis != null)
+                {
+                    pingVis.NewPingResult -= PingVis_NewPingResult;
+                    pingVis.Dispose();
+                }
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -141,7 +145,7 @@ namespace AssetManager.UserInterface.CustomControls
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new Action(() => SetupNetTools(e.PingReply)));
+                this.BeginInvoke(new Action(() => SetupNetTools(e.PingReply)));
             }
             else
             {

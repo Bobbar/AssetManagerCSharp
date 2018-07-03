@@ -36,6 +36,7 @@ namespace PingVisualizer
 
         private string hostname;
         private Control targetControl;
+        private Form targetControlForm;
 
         private float targetViewScale;
         private float currentViewScale;
@@ -53,7 +54,6 @@ namespace PingVisualizer
         private bool mouseIsOverBars = false;
         private PointF mouseLocationScaled;
         private bool mouseIsScrolling = false;
-        private int mouseMoves = 0;
 
         private int topIndex = 0;
         private List<PingBar> currentBarList = new List<PingBar>();
@@ -61,7 +61,7 @@ namespace PingVisualizer
         private const int pingTimeOut = 1000;
         private const int maxBadPing = 300; // Ping time at which the bar color will be fully red.
         private const int maxViewScaleLines = 30; // Scale lines will fade out and stop being drawn after this is reached.
-        private const int goodPingInterval = 1000;
+        private const int goodPingInterval = 500;
         private const int noPingInterval = 3000;
         private int currentPingInterval = goodPingInterval;
 
@@ -71,10 +71,11 @@ namespace PingVisualizer
         private const int minBarLength = 1; // Min X coord length.
         private const float barTopPadding = 0; // Padding added to top of bar list.
         private const float barBottomPadding = 6; // Padding added to bottom of bar list.
+        private float calcBarHeight;
 
         private const int maxStoredResults = 1000000; // Number of results to store before culling occurs.
-        private const int maxDrawRateFPS = 100; // Max FPS allowed.
-        private long lastDrawTime = 0; // Tick count of last render. Used for FPS limiting.
+        private const int maxDrawRateFPS = 60; // Max FPS allowed.
+        private System.Diagnostics.Stopwatch fpsTimer = new System.Diagnostics.Stopwatch();
 
         public event EventHandler<PingEventArgs> NewPingResult;
 
@@ -155,6 +156,8 @@ namespace PingVisualizer
             upscaledImageSize = new Size(targetControl.ClientSize.Width * imageUpscaleMulti, targetControl.ClientSize.Height * imageUpscaleMulti);
             downsampleImageSize = targetControl.ClientSize;
 
+            calcBarHeight = (upscaledImageSize.Height - barBottomPadding - barTopPadding - (barGap * maxBars)) / maxBars;
+
             upscaledImage = new Bitmap(upscaledImageSize.Width, upscaledImageSize.Height, PixelFormat.Format32bppPArgb);
             upscaledGraphics = Graphics.FromImage(upscaledImage);
             upscaledGraphics.SmoothingMode = SmoothingMode.None;
@@ -179,6 +182,7 @@ namespace PingVisualizer
         private void InitControl(Control targetControl)
         {
             this.targetControl = targetControl;
+            this.targetControlForm = targetControl.FindForm();
 
             targetControl.VisibleChanged -= TargetControl_VisibleChanged;
             targetControl.VisibleChanged += TargetControl_VisibleChanged;
@@ -203,9 +207,8 @@ namespace PingVisualizer
         private void InitPingTimer()
         {
             if (pingTimer == null)
-            {
                 pingTimer = new System.Timers.Timer();
-            }
+
             pingTimer.Elapsed += PingTimer_Elapsed;
             pingTimer.Interval = currentPingInterval;
             pingTimer.Start();
@@ -213,10 +216,8 @@ namespace PingVisualizer
 
         private void PingTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (!this.disposedValue)
-            {
+            if (!this.isDisposing)
                 PerformPing();
-            }
         }
 
         private void InitScaleTimer()
@@ -228,10 +229,8 @@ namespace PingVisualizer
 
         private void ScaleEaseTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (!this.disposedValue)
-            {
+            if (!this.isDisposing)
                 EaseScaleChange();
-            }
         }
 
         private void SetScale()
@@ -255,18 +254,11 @@ namespace PingVisualizer
 
                 // Update the target scale if the new scale is different.
                 if (targetViewScale != newScale)
-                {
                     targetViewScale = newScale;
 
-                    // If we are scrolling, set the current scale immediately.
-                    if (mouseIsScrolling)
-                    {
-                        currentViewScale = targetViewScale;
-                    }
-                }
-
                 // Start the scale timer if needed.
-                if (currentViewScale != targetViewScale) scaleEaseTimer.Start();
+                if (currentViewScale != targetViewScale)
+                    scaleEaseTimer.Start();
             }
         }
 
@@ -277,38 +269,30 @@ namespace PingVisualizer
         {
             if (currentViewScale != targetViewScale)
             {
-                if (!mouseIsScrolling)
-                {
-                    // Get the diffence between the current and target.
-                    float diff = currentViewScale - targetViewScale;
-                    float diffAbs = Math.Abs(diff);
+                // Get the diffence between the current and target.
+                float diff = currentViewScale - targetViewScale;
+                float diffAbs = Math.Abs(diff);
 
-                    // If the absolute difference is above a certain amount begin/continue easing.
-                    if (diffAbs > 0.02f)
+                // If the absolute difference is above a certain amount begin/continue easing.
+                if (diffAbs > 0.02f)
+                {
+                    // Simple easing calulation.
+                    if (currentViewScale > targetViewScale)
                     {
-                        // Simple easing calulation.
-                        if (currentViewScale > targetViewScale)
-                        {
-                            currentViewScale -= (diffAbs / 7f);
-                        }
-                        else if (currentViewScale < targetViewScale)
-                        {
-                            currentViewScale += (diffAbs / 7f);
-                        }
+                        currentViewScale -= (diffAbs / 7f);
                     }
-                    else
+                    else if (currentViewScale < targetViewScale)
                     {
-                        // Set to final scale and stop timer.
-                        currentViewScale = targetViewScale;
-                        scaleEaseTimer.Stop();
+                        currentViewScale += (diffAbs / 7f);
                     }
-                    Render();
                 }
                 else
                 {
+                    // Set to final scale and stop timer.
                     currentViewScale = targetViewScale;
                     scaleEaseTimer.Stop();
                 }
+                Render();
             }
         }
 
@@ -320,7 +304,8 @@ namespace PingVisualizer
                 {
                     var reply = await GetPingReply(hostname);
 
-                    if (this.disposedValue) return;
+                    if (this.isDisposing)
+                        return;
 
                     if (reply.Status == IPStatus.Success)
                     {
@@ -330,6 +315,7 @@ namespace PingVisualizer
                     {
                         SetPingInterval(noPingInterval);
                     }
+
                     var pingInfo = new PingInfo(reply);
                     AddPingReply(pingInfo);
                     OnNewPingResult(pingInfo);
@@ -337,7 +323,7 @@ namespace PingVisualizer
             }
             catch (Exception)
             {
-                if (!this.disposedValue)
+                if (!this.isDisposing)
                 {
                     AddPingReply(new PingInfo());
                     OnNewPingResult(new PingInfo());
@@ -346,15 +332,15 @@ namespace PingVisualizer
             }
             finally
             {
-                if (!this.disposedValue)
+                if (!this.isDisposing)
                 {
                     if (!mouseIsScrolling)
                     {
-                        Render(true, true);
+                        Render(true);
                     }
                     else
                     {
-                        Render(true, false);
+                        Render(false);
                     }
                 }
             }
@@ -387,7 +373,7 @@ namespace PingVisualizer
                 pingRunning = true;
                 var options = new PingOptions();
                 options.DontFragment = true;
-                byte[] buff = Encoding.ASCII.GetBytes("pingpingpingping");
+                byte[] buff = Encoding.ASCII.GetBytes("ping");
 
                 return await Task.Run(() => { return ping.Send(hostname, pingTimeOut, buff, options); });
             }
@@ -404,19 +390,19 @@ namespace PingVisualizer
                 currentPingInterval = interval;
             }
 
-            if (!this.disposedValue) pingTimer.Interval = currentPingInterval;
+            if (!this.isDisposing) pingTimer.Interval = currentPingInterval;
         }
 
         private void TargetControl_VisibleChanged(object sender, EventArgs e)
         {
             if (targetControl.Visible)
-                Render(false, true);
+                Render(true);
         }
 
         private void TargetControl_MouseLeave(object sender, EventArgs e)
         {
             mouseIsScrolling = false;
-            Render(true, true);
+            Render(true);
         }
 
         private void TargetControl_MouseWheel(object sender, MouseEventArgs e)
@@ -437,7 +423,7 @@ namespace PingVisualizer
                         if (mouseIsScrolling)
                         {
                             mouseIsScrolling = false;
-                            Render(true, true);
+                            Render(true);
                         }
                     }
                 }
@@ -453,44 +439,35 @@ namespace PingVisualizer
                 {
                     mouseIsScrolling = true;
                     TopIndex = newIdx;
-                    Render(true, true);
+                    Render(true);
                 }
             }
         }
 
         private void TargetControl_MouseMove(object sender, MouseEventArgs e)
         {
-            mouseMoves++;
             mouseLocationScaled = new PointF(e.Location.X * imageUpscaleMulti, e.Location.Y * imageUpscaleMulti);
 
             if (mouseIsScrolling)
             {
-                // Limit the rate of Render calls.
-                // This event can fire very rapidly which can flood the Renderer
-                // preventing other calls from getting past the frame rate limiter.
-                if ((mouseMoves >= 2))
+                // We don't want to render after every single mouse movement, so we make
+                // sure we only render if the mouse is actually over a bar. Then when
+                // the mouse leaves a bar, we render once to reset any highlighted bars.
+                // Future movements will not cause a render unless the mouse is back over a bar.
+
+                if (MouseIsOverBars())
                 {
-                    mouseMoves = 0;
-
-                    // We don't want to render after every single mouse movement, so we make
-                    // sure we only render if the mouse is actually over a bar. Then when
-                    // the mouse leaves a bar, we render once to reset any highlighted bars.
-                    // Future movements will not cause a render unless the mouse is back over a bar.
-
-                    if (MouseIsOverBars())
+                    mouseIsOverBars = true;
+                    Render();
+                }
+                else
+                {
+                    // Only render if previous movement was over a bar.
+                    // Unset the bool so that this render only occurs once.
+                    if (mouseIsOverBars)
                     {
-                        mouseIsOverBars = true;
+                        mouseIsOverBars = false;
                         Render();
-                    }
-                    else
-                    {
-                        // Only render if previous movement was over a bar.
-                        // Unset the bool so that this render only occurs once.
-                        if (mouseIsOverBars)
-                        {
-                            mouseIsOverBars = false;
-                            Render();
-                        }
                     }
                 }
             }
@@ -506,31 +483,17 @@ namespace PingVisualizer
             return false;
         }
 
-        private bool MouseIsOverBar(PingBar bar)
-        {
-            if (bar.Rectangle.Contains(mouseLocationScaled))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private void Render(bool forceDraw = false, bool refreshPingBars = false)
+        private void Render(bool refreshPingBars = false)
         {
             if (pingReplies.Count < 1)
                 return;
 
-            // Do not render if the parent form is minimized, just to reduce wasted cycles.
-            if (targetControl != null & targetControl.FindForm() != null)
+            // Only render if the target control is visible.
+            if (targetControl != null & targetControlForm != null)
             {
-                if (targetControl.FindForm().WindowState == FormWindowState.Minimized) return;
+                if (targetControlForm.WindowState == FormWindowState.Minimized) return;
                 if (!targetControl.Visible) return;
             }
-
-            // Framerate limiter with override.
-            if (!forceDraw && !CanDraw(DateTime.Now.Ticks))
-                return;
-
 
             // If a refresh bars is requested, set the event.
             if (refreshPingBars)
@@ -544,7 +507,7 @@ namespace PingVisualizer
         {
             try
             {
-                while (!this.disposedValue)
+                while (!this.isDisposing)
                 {
                     // Wait until a render event is triggered.
                     renderEvent.WaitOne(Timeout.Infinite);
@@ -555,6 +518,9 @@ namespace PingVisualizer
 
                     // Reset the render event only if we made it past the disposal check.
                     renderEvent.Reset();
+
+                    // Delay this rendering as needed to stay within the maximum FPS limit.
+                    WaitDraw();
 
                     // Check the refresh bars event and perform if needed.
                     if (refreshBarsEvent.WaitOne(0))
@@ -608,7 +574,18 @@ namespace PingVisualizer
             if (numOfLines < maxViewScaleLines)
             {
                 float scaleXPos = stepSize;
-                using (var pen = new Pen(GetVariableColor(Color.White, Color.Black, maxViewScaleLines, numOfLines), 2))
+                Color backColor;
+
+                if (mouseIsScrolling)
+                {
+                    backColor = mouseScrollingBackColor;
+                }
+                else
+                {
+                    backColor = Color.Black;
+                }
+
+                using (var pen = new Pen(GetVariableColor(Color.White, backColor, maxViewScaleLines, numOfLines), 2))
                 {
                     for (int a = 0; a < numOfLines; a++)
                     {
@@ -626,7 +603,7 @@ namespace PingVisualizer
 
             foreach (var bar in currentBarList)
             {
-                if (mouseIsScrolling && MouseIsOverBar(bar))
+                if (mouseIsScrolling && bar.Rectangle.Contains(mouseLocationScaled))
                 {
                     // If mouse is over a bar, set the mouseOverInfo to be drawn in the DrawPingText method.
                     isMouseOverBars = true;
@@ -722,15 +699,29 @@ namespace PingVisualizer
             }
         }
 
-        private bool CanDraw(long timeTick)
+        private void WaitDraw()
         {
-            long elapTime = (timeTick - lastDrawTime) / 10000;
-            if (elapTime > minFrameTime)
+            if (fpsTimer.IsRunning)
             {
-                lastDrawTime = timeTick;
-                return true;
+                long elapTime = fpsTimer.ElapsedMilliseconds;
+                fpsTimer.Reset();
+
+                if (elapTime >= minFrameTime)
+                {
+                    return;
+                }
+                else
+                {
+                    var waitTime = (int)(minFrameTime - elapTime);
+                    Thread.Sleep(waitTime);
+                    return;
+                }
             }
-            return false;
+            else
+            {
+                fpsTimer.Start();
+                return;
+            }
         }
 
         private string GetReplyStatusText(PingInfo reply)
@@ -755,12 +746,12 @@ namespace PingVisualizer
             SetScale();
 
             float currentYPos = barTopPadding;
-            float barHeight = (upscaledImageSize.Height - barBottomPadding - barTopPadding - (barGap * maxBars)) / maxBars;
 
             foreach (PingInfo result in CurrentDisplayResults())
             {
                 float barLen;
                 Color barColor;
+
                 if (result.Status == IPStatus.Success)
                 {
                     barColor = GetVariableColor(Color.Green, Color.Red, maxBadPing, result.RoundTripTime, true);
@@ -772,8 +763,9 @@ namespace PingVisualizer
                     barColor = Color.FromArgb(200, Color.Red);
                     barLen = pingTimeOut * maxViewScale;
                 }
-                currentBarList.Add(new PingBar(barLen, barColor, new RectangleF(1, currentYPos, barLen * currentViewScale, barHeight), currentYPos, result));
-                currentYPos += barHeight + barGap;
+
+                currentBarList.Add(new PingBar(barLen, barColor, new RectangleF(1, currentYPos, barLen * currentViewScale, calcBarHeight), result));
+                currentYPos += calcBarHeight + barGap;
             }
         }
 
@@ -880,7 +872,6 @@ namespace PingVisualizer
             private float length;
             private Color color;
             private RectangleF rectangle;
-            private float positionY;
             private PingInfo pingInfo;
 
             public float Length
@@ -911,14 +902,6 @@ namespace PingVisualizer
                 }
             }
 
-            public float PositionY
-            {
-                get
-                {
-                    return positionY;
-                }
-            }
-
             public PingInfo PingInfo
             {
                 get
@@ -931,12 +914,11 @@ namespace PingVisualizer
             {
             }
 
-            public PingBar(float length, Color color, RectangleF rectangle, float positionY, PingInfo pingInfo)
+            public PingBar(float length, Color color, RectangleF rectangle, PingInfo pingInfo)
             {
                 this.length = length;
                 this.color = color;
                 this.rectangle = rectangle;
-                this.positionY = positionY;
                 this.pingInfo = pingInfo;
             }
         }
@@ -966,6 +948,7 @@ namespace PingVisualizer
         #region IDisposable Support
 
         private bool disposedValue = false;
+        private bool isDisposing = false;
 
         protected virtual void Dispose(bool disposing)
         {
@@ -973,6 +956,8 @@ namespace PingVisualizer
             {
                 if (disposing)
                 {
+                    isDisposing = true;
+
                     targetControl.MouseWheel -= TargetControl_MouseWheel;
                     targetControl.MouseLeave -= TargetControl_MouseLeave;
                     targetControl.MouseMove -= TargetControl_MouseMove;
