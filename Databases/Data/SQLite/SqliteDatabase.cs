@@ -238,37 +238,10 @@ namespace Database.Data
             return new SQLiteCommand(qryString);
         }
 
-        public DbCommand GetCommandFromParams(string query, List<DBQueryParameter> @params)
+        public DbCommand GetCommandFromParams(string query, List<DBQueryParameter> parameters)
         {
             var cmd = new SQLiteCommand();
-            string ParamQuery = "";
-            foreach (var param in @params)
-            {
-                if (param.Value is bool)
-                {
-                    ParamQuery += " " + param.FieldName + "=@" + param.FieldName;
-                    cmd.Parameters.AddWithValue("@" + param.FieldName, Convert.ToInt32(param.Value));
-                }
-                else
-                {
-                    if (param.IsExact)
-                    {
-                        ParamQuery += " " + param.FieldName + "=@" + param.FieldName;
-                        cmd.Parameters.AddWithValue("@" + param.FieldName, param.Value);
-                    }
-                    else
-                    {
-                        ParamQuery += " " + param.FieldName + " LIKE @" + param.FieldName;
-                        cmd.Parameters.AddWithValue("@" + param.FieldName, "%" + param.Value.ToString() + "%");
-                    }
-                }
-                //Add operator if we are not on the last entry
-                if (@params.IndexOf(param) < @params.Count - 1)
-                {
-                    ParamQuery += " " + param.OperatorString;
-                }
-            }
-            cmd.CommandText = query + ParamQuery;
+            DBQueryParameter.AddParamsToCommand(cmd, query, parameters);
             return cmd;
         }
 
