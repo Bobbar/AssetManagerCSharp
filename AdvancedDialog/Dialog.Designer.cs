@@ -85,7 +85,7 @@
             this.YesButton.Location = new System.Drawing.Point(3, 3);
             this.YesButton.Name = "YesButton";
             this.YesButton.Size = new System.Drawing.Size(75, 23);
-            this.YesButton.TabIndex = 0;
+            this.YesButton.TabIndex = 50;
             this.YesButton.Text = "&Yes";
             this.YesButton.UseVisualStyleBackColor = true;
             this.YesButton.Click += new System.EventHandler(this.YesButton_Click);
@@ -98,7 +98,7 @@
             this.NoButton.Name = "NoButton";
             this.NoButton.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.NoButton.Size = new System.Drawing.Size(75, 23);
-            this.NoButton.TabIndex = 1;
+            this.NoButton.TabIndex = 51;
             this.NoButton.Text = "&No";
             this.NoButton.UseVisualStyleBackColor = true;
             this.NoButton.Click += new System.EventHandler(this.NoButton_Click);
@@ -126,7 +126,7 @@
             this.CancelButtonUI.Location = new System.Drawing.Point(84, 3);
             this.CancelButtonUI.Name = "CancelButtonUI";
             this.CancelButtonUI.Size = new System.Drawing.Size(75, 23);
-            this.CancelButtonUI.TabIndex = 2;
+            this.CancelButtonUI.TabIndex = 53;
             this.CancelButtonUI.Text = "&Cancel";
             this.CancelButtonUI.UseVisualStyleBackColor = true;
             this.CancelButtonUI.Click += new System.EventHandler(this.CancelButtonUI_Click);
@@ -138,7 +138,7 @@
             this.OKButton.Location = new System.Drawing.Point(3, 3);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(75, 23);
-            this.OKButton.TabIndex = 1;
+            this.OKButton.TabIndex = 52;
             this.OKButton.Text = "&OK";
             this.OKButton.UseVisualStyleBackColor = true;
             this.OKButton.Click += new System.EventHandler(this.OKButton_Click);
@@ -230,6 +230,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Dialog";
             this.Load += new System.EventHandler(this.Dialog_Load);
+            this.Shown += new System.EventHandler(this.Dialog_Shown);
             this.ButtonAreaPanel.ResumeLayout(false);
             this.ButtonAreaPanel.PerformLayout();
             this.ButtonsPanel.ResumeLayout(false);

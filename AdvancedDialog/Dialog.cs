@@ -35,8 +35,6 @@ namespace AdvancedDialog
             }
         }
 
-
-
         #region Methods
 
         public Button AddButton(string name, string text, Action clickAction)
@@ -245,6 +243,11 @@ namespace AdvancedDialog
             CenterToParentForm();
         }
 
+        private void Dialog_Shown(object sender, EventArgs e)
+        {
+            SetFocus();
+        }
+
         /// <summary>
         /// Refreshes layout and records the resulting size from autosize. Then disables autosize and sets the size back to the previous size. Size...
         /// </summary>
@@ -351,6 +354,7 @@ namespace AdvancedDialog
 
                     panel.Controls.Add(NewControlLabel(textBox.Tag.ToString()));
                     textBox.Width = 150;
+                    textBox.KeyDown += TextBox_KeyDown;
                     panel.Controls.Add(textBox);
                     ControlsPanel.Controls.Add(panel);
                 }
@@ -412,6 +416,30 @@ namespace AdvancedDialog
             }
             ControlsPanel.ResumeLayout();
             ControlsMainPanel.PerformLayout();
+        }
+
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+        }
+
+        /// <summary>
+        /// Sets the focus to the first custom control that is of an input type.
+        /// </summary>
+        private void SetFocus()
+        {
+            foreach (Control control in customControls)
+            {
+                if (control is TextBox || control is ComboBox || control is RichTextBox)
+                {
+                    control.Focus();
+                    return;
+                }
+            }
         }
 
         private void MaximizeForm()
