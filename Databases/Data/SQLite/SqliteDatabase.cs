@@ -148,7 +148,7 @@ namespace Database.Data
             }
         }
 
-        public dynamic ExecuteScalarFromCommand(DbCommand command)
+        public object ExecuteScalarFromCommand(DbCommand command)
         {
             try
             {
@@ -165,7 +165,7 @@ namespace Database.Data
             }
         }
 
-        public dynamic ExecuteScalarFromQueryString(string query)
+        public object ExecuteScalarFromQueryString(string query)
         {
             using (var conn = (SQLiteConnection)NewConnection())
             using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
@@ -245,7 +245,7 @@ namespace Database.Data
             return cmd;
         }
 
-        public System.Data.Common.DbDataAdapter GetDataAdapter(string query, bool acceptChanges = true)
+        public DbDataAdapter GetDataAdapter(string query, bool acceptChanges = true)
         {
             throw (new NotImplementedException());
         }
