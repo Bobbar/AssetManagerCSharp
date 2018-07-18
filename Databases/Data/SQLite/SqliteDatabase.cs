@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
+using System.Threading.Tasks;
 
 namespace Database.Data
 {
@@ -109,6 +110,21 @@ namespace Database.Data
             }
         }
 
+        public async Task<DataTable> DataTableFromQueryStringAsync(string query)
+        {
+            using (DataTable results = new DataTable())
+            using (var conn = (SQLiteConnection)NewConnection())
+            using (var cmd = new SQLiteCommand(query, conn))
+            using (DbDataAdapter da = new SQLiteDataAdapter())
+            {
+                cmd.Connection = conn;
+                da.SelectCommand = cmd;
+                await Task.Run(() => da.Fill(results));
+                da.SelectCommand.Connection.Dispose();
+                return results;
+            }
+        }
+
         public DataTable DataTableFromCommand(DbCommand command, DbTransaction transaction = null)
         {
             if (transaction != null)
@@ -210,20 +226,44 @@ namespace Database.Data
             {
                 var conn = (SQLiteConnection)transaction.Connection;
                 using (var cmd = new SQLiteCommand(selectQuery, conn, (SQLiteTransaction)transaction))
-                using (var Adapter = new SQLiteDataAdapter(cmd))
-                using (var Builder = new SQLiteCommandBuilder(Adapter))
+                using (var adapter = new SQLiteDataAdapter(cmd))
+                using (var builder = new SQLiteCommandBuilder(adapter))
                 {
-                    return Adapter.Update(table);
+                    return adapter.Update(table);
                 }
             }
             else
             {
                 using (var conn = (SQLiteConnection)NewConnection())
-                using (var Adapter = new SQLiteDataAdapter(selectQuery, conn))
-                using (var Builder = new SQLiteCommandBuilder(Adapter))
+                using (var adapter = new SQLiteDataAdapter(selectQuery, conn))
+                using (var builder = new SQLiteCommandBuilder(adapter))
                 {
                     OpenConnection(conn);
-                    return Adapter.Update(table);
+                    return adapter.Update(table);
+                }
+            }
+        }
+
+        public async Task<int> UpdateTableAsync(string selectQuery, DataTable table, DbTransaction transaction = null)
+        {
+            if (transaction != null)
+            {
+                var conn = (SQLiteConnection)transaction.Connection;
+                using (var cmd = new SQLiteCommand(selectQuery, conn, (SQLiteTransaction)transaction))
+                using (var adapter = new SQLiteDataAdapter(cmd))
+                using (var builder = new SQLiteCommandBuilder(adapter))
+                {
+                    return await Task.Run(() => { return adapter.Update(table); });
+                }
+            }
+            else
+            {
+                using (var conn = (SQLiteConnection)NewConnection())
+                using (var adapter = new SQLiteDataAdapter(selectQuery, conn))
+                using (var builder = new SQLiteCommandBuilder(adapter))
+                {
+                    await conn.OpenAsync();
+                    return await Task.Run(() => { return adapter.Update(table); });
                 }
             }
         }

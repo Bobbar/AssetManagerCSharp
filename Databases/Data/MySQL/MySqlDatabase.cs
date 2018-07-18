@@ -1,11 +1,17 @@
 ﻿using MySql.Data.MySqlClient;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace Database.Data
 {
+    // About the async methods:
+    // Since MySQL's async methods aren't really async, I ended up just wrapping the syncrounous methods in a task...
+    // See:
+    // https://bugs.mysql.com/bug.php?id=70111
+    // https://stackoverflow.com/a/34032153
+
     public class MySqlDatabase : IDatabase
     {
         #region Fields
@@ -128,6 +134,26 @@ namespace Database.Data
             }
         }
 
+        public async Task<DataTable> DataTableFromQueryStringAsync(string query)
+        {
+            using (DataTable results = new DataTable())
+            using (var da = new MySqlDataAdapter())
+            using (var cmd = new MySqlCommand(query))
+            using (var conn = (MySqlConnection)NewConnection())
+            {
+                // See async note.
+                await Task.Run(() =>
+                {
+                    conn.Open();
+                    cmd.Connection = conn;
+                    da.SelectCommand = cmd;
+                    da.Fill(results);
+                });
+
+                return results;
+            }
+        }
+
         public DataTable DataTableFromCommand(DbCommand command, DbTransaction transaction = null)
         {
             if (transaction == null)
@@ -223,8 +249,8 @@ namespace Database.Data
             {
                 var conn = (MySqlConnection)transaction.Connection;
                 using (var cmd = new MySqlCommand(SelectQuery, conn, (MySqlTransaction)transaction))
-                using (var Adapter = new MySqlDataAdapter(cmd))
-                using (var Builder = new MySqlCommandBuilder(Adapter))
+                using (var adapter = new MySqlDataAdapter(cmd))
+                using (var builder = new MySqlCommandBuilder(adapter))
                 {
                     var table = DataTableFromQueryString(SelectQuery);
                     table.Rows.Add();
@@ -232,14 +258,14 @@ namespace Database.Data
                     {
                         table.Rows[0][param.FieldName] = param.Value;
                     }
-                    return Adapter.Update(table);
+                    return adapter.Update(table);
                 }
             }
             else
             {
                 using (var conn = (MySqlConnection)NewConnection())
-                using (var Adapter = new MySqlDataAdapter(SelectQuery, conn))
-                using (var Builder = new MySqlCommandBuilder(Adapter))
+                using (var adapter = new MySqlDataAdapter(SelectQuery, conn))
+                using (var auilder = new MySqlCommandBuilder(adapter))
                 {
                     OpenConnection(conn);
                     var table = DataTableFromQueryString(SelectQuery);
@@ -248,7 +274,7 @@ namespace Database.Data
                     {
                         table.Rows[0][param.FieldName] = param.Value;
                     }
-                    return Adapter.Update(table);
+                    return adapter.Update(table);
                 }
             }
         }
@@ -259,20 +285,56 @@ namespace Database.Data
             {
                 var conn = (MySqlConnection)transaction.Connection;
                 using (var cmd = new MySqlCommand(selectQuery, conn, (MySqlTransaction)transaction))
-                using (var Adapter = new MySqlDataAdapter(cmd))
-                using (var Builder = new MySqlCommandBuilder(Adapter))
+                using (var adapter = new MySqlDataAdapter(cmd))
+                using (var builder = new MySqlCommandBuilder(adapter))
                 {
-                    return Adapter.Update(table);
+                    return adapter.Update(table);
                 }
             }
             else
             {
                 using (var conn = (MySqlConnection)NewConnection())
-                using (var Adapter = new MySqlDataAdapter(selectQuery, conn))
-                using (var Builder = new MySqlCommandBuilder(Adapter))
+                using (var adapter = new MySqlDataAdapter(selectQuery, conn))
+                using (var builder = new MySqlCommandBuilder(adapter))
                 {
                     OpenConnection(conn);
-                    return Adapter.Update(table);
+                    return adapter.Update(table);
+                }
+            }
+        }
+
+        public async Task<int> UpdateTableAsync(string selectQuery, DataTable table, DbTransaction transaction = null)
+        {
+            if (transaction != null)
+            {
+                var conn = (MySqlConnection)transaction.Connection;
+                using (var cmd = new MySqlCommand(selectQuery, conn, (MySqlTransaction)transaction))
+                using (var adapter = new MySqlDataAdapter(cmd))
+                using (var builder = new MySqlCommandBuilder(adapter))
+                {
+                    // See async note.
+                    var updateTask = Task.Run(() =>
+                    {
+                        return adapter.Update(table);
+                    });
+
+                    return await updateTask;
+                }
+            }
+            else
+            {
+                using (var conn = (MySqlConnection)NewConnection())
+                using (var adapter = new MySqlDataAdapter(selectQuery, conn))
+                using (var builder = new MySqlCommandBuilder(adapter))
+                {
+                    // See async note.
+                    var updateTask = Task.Run(() =>
+                    {
+                        conn.Open();
+                        return adapter.Update(table);
+                    });
+
+                    return await updateTask;
                 }
             }
         }

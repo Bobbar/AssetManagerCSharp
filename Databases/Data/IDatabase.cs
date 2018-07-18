@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Threading.Tasks;
+
 namespace Database.Data
 {
 
@@ -36,6 +38,13 @@ namespace Database.Data
         /// <param name="query"></param>
         /// <returns></returns>
         DataTable DataTableFromQueryString(string query);
+
+        /// <summary>
+        /// Asynchronously returns a DataTable from a SQL query string.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        Task<DataTable> DataTableFromQueryStringAsync(string query);
 
         /// <summary>
         /// Returns a DataTable from a <see cref="DbCommand"/>.
@@ -91,6 +100,15 @@ namespace Database.Data
         /// <param name="transaction"></param>
         /// <returns></returns>
         int UpdateTable(string selectQuery, DataTable table, DbTransaction transaction = null);
+
+        /// <summary>
+        /// Updates the table returned by the <paramref name="selectQuery"/> with the specified DataTable asynchronously. Returns rows affected.
+        /// </summary>
+        /// <param name="selectQuery"></param>
+        /// <param name="table"></param>
+        /// <param name="transaction"></param>
+        /// <returns></returns>
+        Task<int> UpdateTableAsync(string selectQuery, DataTable table, DbTransaction transaction = null);
 
         /// <summary>
         /// Updates a single value in the database. Values are parameterized before execution. 
