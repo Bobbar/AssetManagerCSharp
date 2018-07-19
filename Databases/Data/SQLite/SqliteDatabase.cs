@@ -164,6 +164,17 @@ namespace Database.Data
             }
         }
 
+        public DataTable DataTableFromParameters(string query, DBQueryParameter parameters)
+        {
+            var parms = new List<DBQueryParameter>() { parameters };
+
+            using (var cmd = GetCommandFromParams(query, parms))
+            using (var results = DataTableFromCommand(cmd))
+            {
+                return results;
+            }
+        }
+
         public object ExecuteScalarFromCommand(DbCommand command)
         {
             try
@@ -211,6 +222,32 @@ namespace Database.Data
                 using (var cmd = new SQLiteCommand(query, conn))
                 {
                     return cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public async Task<int> ExecuteNonQueryAsync(string query, DbTransaction transaction = null)
+        {
+            if (transaction == null)
+            {
+                using (var conn = (SQLiteConnection)NewConnection())
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    // See async note.
+                    return await Task.Run(() =>
+                    {
+                        OpenConnection(conn);
+                        return cmd.ExecuteNonQuery();
+                    });
+                }
+            }
+            else
+            {
+                var conn = (SQLiteConnection)transaction.Connection;
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    // See async note.
+                    return await Task.Run(() => cmd.ExecuteNonQuery());
                 }
             }
         }

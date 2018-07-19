@@ -144,7 +144,7 @@ namespace Database.Data
                 // See async note.
                 await Task.Run(() =>
                 {
-                    conn.Open();
+                    OpenConnection(conn);
                     cmd.Connection = conn;
                     da.SelectCommand = cmd;
                     da.Fill(results);
@@ -185,9 +185,20 @@ namespace Database.Data
             }
         }
 
-        public DataTable DataTableFromParameters(string query, List<DBQueryParameter> @params)
+        public DataTable DataTableFromParameters(string query, List<DBQueryParameter> parameters)
         {
-            using (var cmd = GetCommandFromParams(query, @params))
+            using (var cmd = GetCommandFromParams(query, parameters))
+            using (var results = DataTableFromCommand(cmd))
+            {
+                return results;
+            }
+        }
+
+        public DataTable DataTableFromParameters(string query, DBQueryParameter parameters)
+        {
+            var parms = new List<DBQueryParameter>() { parameters };
+
+            using (var cmd = GetCommandFromParams(query, parms))
             using (var results = DataTableFromCommand(cmd))
             {
                 return results;
@@ -238,6 +249,32 @@ namespace Database.Data
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     return cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public async Task<int> ExecuteNonQueryAsync(string query, DbTransaction transaction = null)
+        {
+            if (transaction == null)
+            {
+                using (var conn = (MySqlConnection)NewConnection())
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    // See async note.
+                    return await Task.Run(() =>
+                    {
+                        OpenConnection(conn);
+                        return cmd.ExecuteNonQuery();
+                    });
+                }
+            }
+            else
+            {
+                MySqlConnection conn = (MySqlConnection)transaction.Connection;
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    // See async note.
+                    return await Task.Run(() => cmd.ExecuteNonQuery());
                 }
             }
         }
@@ -330,7 +367,7 @@ namespace Database.Data
                     // See async note.
                     var updateTask = Task.Run(() =>
                     {
-                        conn.Open();
+                        OpenConnection(conn);
                         return adapter.Update(table);
                     });
 

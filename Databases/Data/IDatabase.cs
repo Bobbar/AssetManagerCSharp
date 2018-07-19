@@ -57,10 +57,18 @@ namespace Database.Data
         /// <summary>
         /// Returns a DataTable from a partial SQL query string and a <see cref="List{T}"/> of <see cref="DBQueryParameter"/>.
         /// </summary>
-        /// <param name="query"></param>
-        /// <param name="params"></param>
+        /// <param name="query">Partial select query. Example: "SELECT * FROM table WHERE"</param>
+        /// <param name="parameters"></param>
         /// <returns></returns>
-        DataTable DataTableFromParameters(string query, List<DBQueryParameter> @params);
+        DataTable DataTableFromParameters(string query, List<DBQueryParameter> parameters);
+
+        /// <summary>
+        /// Returns a DataTable from a partial SQL query string and a <see cref="DBQueryParameter"/>.
+        /// </summary>
+        /// <param name="query">Partial select query. Example: "SELECT * FROM table WHERE"</param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        DataTable DataTableFromParameters(string query, DBQueryParameter parameter);
 
         /// <summary>
         /// Returns an object value from a <see cref="DbCommand"/>.
@@ -82,6 +90,13 @@ namespace Database.Data
         /// <param name="query"></param>
         /// <returns></returns>
         int ExecuteNonQuery(string query, DbTransaction transaction = null);
+
+        /// <summary>
+        /// Executes a non query and returns the number of rows affected.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        Task<int> ExecuteNonQueryAsync(string query, DbTransaction transaction = null);
 
         /// <summary>
         /// Inserts a list of <see cref="DBParameter"/> into the specified table. Returns the number of rows affected.
