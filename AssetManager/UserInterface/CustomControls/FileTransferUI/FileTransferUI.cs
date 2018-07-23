@@ -163,7 +163,7 @@ namespace AssetManager.UserInterface.CustomControls
 
         private void pbCancelClose_Click(object sender, EventArgs e)
         {
-            if (progStatus == ProgressStatus.Running | progStatus == ProgressStatus.Paused)
+            if (progStatus == ProgressStatus.Running | progStatus == ProgressStatus.Paused | progStatus == ProgressStatus.Starting)
             {
                 if (!remoteTransfer.IsDisposed)
                 {

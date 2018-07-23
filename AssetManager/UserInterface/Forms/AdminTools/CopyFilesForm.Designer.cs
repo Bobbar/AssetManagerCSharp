@@ -24,6 +24,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             this.Name = "CopyFilesForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Push Files";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CopyFilesForm_FormClosing);
             this.ResumeLayout(false);
 
         }

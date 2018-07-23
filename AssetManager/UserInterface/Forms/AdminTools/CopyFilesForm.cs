@@ -14,6 +14,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
     {
         private FileTransferUI pushFilesControl;
         private bool cancel = false;
+
         public CopyFilesForm(ExtendedForm parentForm, Device targetDevice, string sourceDirectory, string targetDirectory) : base(parentForm)
         {
             InitializeComponent();
@@ -21,6 +22,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             pushFilesControl = new FileTransferUI(this, targetDevice, true, sourceDirectory, targetDirectory, "Push Files");
             this.Controls.Add(pushFilesControl);
             pushFilesControl.CriticalStopError += new System.EventHandler(CopyCritcalError);
+            pushFilesControl.Disposed += PushFilesControl_Disposed;
             this.Show();
         }
 
@@ -30,7 +32,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             {
                 pushFilesControl.StartUpdate();
 
-                var Done = await Task.Run(() =>
+                var success = await Task.Run(() =>
                 {
                     while (!(pushFilesControl.ProgStatus != ProgressStatus.Running && pushFilesControl.ProgStatus != ProgressStatus.Starting))
                     {
@@ -50,7 +52,8 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                         return true;
                     }
                 });
-                return Done;
+
+                return success;
             }
             catch (Exception ex)
             {
@@ -65,6 +68,19 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             SecurityTools.ClearAdminCreds();
         }
 
+        private void CopyFilesForm_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            if (pushFilesControl.ProgStatus != ProgressStatus.Running && pushFilesControl.ProgStatus != ProgressStatus.Starting)
+            {
+                this.Dispose();
+            }
+        }
+
+        private void PushFilesControl_Disposed(object sender, EventArgs e)
+        {
+            this.Dispose();
+        }
+
         protected override void Dispose(bool disposing)
         {
             try
@@ -76,7 +92,13 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                         components.Dispose();
                     }
 
-                    pushFilesControl?.Dispose();
+                    if (pushFilesControl != null)
+                    {
+                        pushFilesControl.CriticalStopError -= new System.EventHandler(CopyCritcalError);
+                        pushFilesControl.Disposed -= PushFilesControl_Disposed;
+                        pushFilesControl?.Dispose();
+                    }
+
                     cancel = true;
                 }
             }
@@ -85,5 +107,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
                 base.Dispose(disposing);
             }
         }
+
+
     }
 }
