@@ -35,16 +35,6 @@ namespace ClickOnceModule
 
         public async Task<bool> DeployToDevice()
         {
-            if (await deploy.SimplePSExecCommand(deploy.GetString("clickonce_netruntimeinstall"), ".NET 4.7.1 Runtime Install"))
-            {
-                deploy.LogMessage("Runtime install successfull!");
-            }
-            else
-            {
-                deploy.LogMessage("Runtime install failed!");
-                return false;
-            }
-
             var filePush = deploy.NewFilePush(deploy.GetString("clickonce_cert"), @"\Temp\Deploy\ClickOnce\");
 
             deploy.LogMessage("Pushing files...");
@@ -70,6 +60,16 @@ namespace ClickOnceModule
             else
             {
                 deploy.LogMessage("Certificate install failed!");
+                return false;
+            }
+
+            if (await deploy.SimplePSExecCommand(deploy.GetString("clickonce_netruntimeinstall"), ".NET 4.7.1 Runtime Install"))
+            {
+                deploy.LogMessage("Runtime install successfull!");
+            }
+            else
+            {
+                deploy.LogMessage("Runtime install failed!");
                 return false;
             }
 
