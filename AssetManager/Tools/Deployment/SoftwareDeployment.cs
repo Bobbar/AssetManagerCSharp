@@ -113,7 +113,7 @@ namespace AssetManager.Tools.Deployment
             // Return silently if remote path cannot be reached.
             if (!Directory.Exists(Paths.RemoteModuleSource())) return;
 
-            // Get the list of remote module files.
+            // Get the collection of remote module files.
             var remoteModules = Directory.GetFiles(Paths.RemoteModuleSource(), "*.dll");
 
             // Return silently if no remote modules found.
@@ -142,6 +142,23 @@ namespace AssetManager.Tools.Deployment
                 {
                     // Copy from remote to local.
                     File.Copy(remoteFile.FullName, localFilePath);
+                }
+            }
+
+            // Get collection of local module files.
+            var localModules = Directory.GetFiles(Paths.LocalModulesStore);
+
+            // Convert remote module collection to a list for easy searching functions.
+            var remoteModuleList = remoteModules.ToList();
+
+            // Iterate the local modules and delete those that are not found in the remote list.
+            foreach (var module in localModules)
+            {
+                var localFile = new FileInfo(module);
+
+                if (!remoteModuleList.Exists(r => new FileInfo(r).Name == localFile.Name))
+                {
+                    File.Delete(module);
                 }
             }
         }
