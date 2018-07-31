@@ -125,6 +125,7 @@ namespace AssetManager.Tools.Deployment
             logView.MinimumSize = new System.Drawing.Size(400, 200);
             logView.Owner = parentForm;
             logView.StartPosition = FormStartPosition.CenterParent;
+            logView.DisableDoubleBuffering();
 
             logTextBox = new RichTextBox();
             logTextBox.Dock = DockStyle.Fill;
