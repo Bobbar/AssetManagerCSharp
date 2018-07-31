@@ -6,6 +6,7 @@ namespace AssetManager
 {
     internal static class Paths
     {
+        // Set to true to use deployment modules from the local repo for debugging/testing purposes.
         public static bool UseDebugModules = false;
 
         //Application paths

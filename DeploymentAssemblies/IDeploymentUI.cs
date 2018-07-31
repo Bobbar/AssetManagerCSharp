@@ -19,7 +19,23 @@ namespace DeploymentAssemblies
         /// </summary>
         void UsePsExec();
 
+
+        /// <summary>
+        /// Executes PSExec command and returns true if the exit code is 0.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
         Task<bool> SimplePSExecCommand(string command, string title);
+
+
+        /// <summary>
+        /// Executes PSExec command and returns the exit code.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        Task<int> AdvancedPSExecCommand(string command, string title);
 
         Task SimplePowerShellScript(byte[] script, string title);
 

@@ -164,6 +164,12 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
+        public async Task<int> AdvancedPSExecCommand(string command, string title)
+        {
+            LogMessage("Starting " + title + "...");
+            return await PSExecWrap.ExecuteRemoteCommand(command);
+        }
+
         public async Task SimplePowerShellScript(byte[] script, string title)
         {
             LogMessage("Starting " + title + "...");

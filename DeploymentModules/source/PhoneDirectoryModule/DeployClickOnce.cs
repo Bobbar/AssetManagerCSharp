@@ -63,13 +63,19 @@ namespace ClickOnceModule
                 return false;
             }
 
-            if (await deploy.SimplePSExecCommand(deploy.GetString("clickonce_netruntimeinstall"), ".NET 4.7.1 Runtime Install"))
+            var exitCode = await deploy.AdvancedPSExecCommand(deploy.GetString("clickonce_netruntimeinstall"), ".NET 4.7.1 Runtime Install");
+
+            if (exitCode == 3010)
             {
-                deploy.LogMessage("Runtime install successfull!");
+                deploy.LogMessage("Install successful. **REBOOT REQUIRED!**");
+            }
+            else if (exitCode == 0)
+            {
+                deploy.LogMessage("Install successful!");
             }
             else
             {
-                deploy.LogMessage("Runtime install failed!");
+                deploy.LogMessage(string.Format("Install failed! (Exit code: {0})", exitCode));
                 return false;
             }
 
