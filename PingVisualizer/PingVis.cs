@@ -40,8 +40,12 @@ namespace PingVisualizer
 
         private float targetViewScale;
         private float currentViewScale;
+        private float scaleEaseStartValue;
+        private float prevTargetScaleValue;
+
         private System.Timers.Timer scaleEaseTimer;
-        private int minFrameTime;
+        private System.Diagnostics.Stopwatch scaleEaseStopwatch = new System.Diagnostics.Stopwatch();
+       
 
         private float infoFontSize;
         private float overInfoFontSize;
@@ -74,7 +78,8 @@ namespace PingVisualizer
         private float calcBarHeight;
 
         private const int maxStoredResults = 1000000; // Number of results to store before culling occurs.
-        private const int maxDrawRateFPS = 60; // Max FPS allowed.
+        private const int maxDrawRateFPS = 100; // Max FPS allowed.
+        private int minFrameTime;
         private System.Diagnostics.Stopwatch fpsTimer = new System.Diagnostics.Stopwatch();
 
         public event EventHandler<PingEventArgs> NewPingResult;
@@ -263,34 +268,80 @@ namespace PingVisualizer
         /// </summary>
         private void EaseScaleChange()
         {
+            float duration = 1000f;
+
             if (currentViewScale != targetViewScale)
             {
-                // Get the diffence between the current and target.
-                float diff = currentViewScale - targetViewScale;
-                float diffAbs = Math.Abs(diff);
-
-                // If the absolute difference is above a certain amount begin/continue easing.
-                if (diffAbs > 0.02f)
+                // If no ease operation in progress, set the scale parameters and start the stopwatch.
+                // If the target scale is changed during an easing operation, reset the parameters and stopwatch.
+                if (!scaleEaseStopwatch.IsRunning || targetViewScale != prevTargetScaleValue)
                 {
-                    // Simple easing calulation.
-                    if (currentViewScale > targetViewScale)
-                    {
-                        currentViewScale -= (diffAbs / 7f);
-                    }
-                    else if (currentViewScale < targetViewScale)
-                    {
-                        currentViewScale += (diffAbs / 7f);
-                    }
+                    scaleEaseStartValue = currentViewScale;
+                    prevTargetScaleValue = targetViewScale;
+
+                    scaleEaseStopwatch.Reset();
+                    scaleEaseStopwatch.Start();
+                }
+
+                // Calculate the absolute diffence between the current and target scale.
+                float diffAbs = Math.Abs(currentViewScale - targetViewScale);
+
+                // Calculate the current progress or position of the ease operation.
+                float position = scaleEaseStopwatch.ElapsedMilliseconds / duration;
+
+                // Apply an easing function to the position to get the factor.
+                double factor = EaseQuinticOut(position);
+
+                // Apply the factor to the starting and target values to get the next scale value.
+                float newScale = (float)(scaleEaseStartValue + (targetViewScale - scaleEaseStartValue) * factor);
+
+                // If we are not within a certain amount of the target scale, apply the new scale value.
+                if (diffAbs > 0.001f && !isDisposing)
+                {
+                    currentViewScale = newScale;
                 }
                 else
                 {
-                    // Set to final scale and stop timer.
+                    // Once we are sufficiently close, set to final scale and stop the ease operation.
                     currentViewScale = targetViewScale;
+                    scaleEaseStopwatch.Stop();
+                    scaleEaseStopwatch.Reset();
                     scaleEaseTimer.Stop();
                 }
+
                 Render();
             }
         }
+
+        #region "Easing Functions"
+        private double EaseCircleIn(float k)
+        {
+            return 1f - Math.Sqrt(1f - (k * k));
+        }
+
+        private double EaseCircleOut(float k)
+        {
+            return Math.Sqrt(1f - ((k -= 1f) * k));
+        }
+
+        private double EaseCircleInOut(float k)
+        {
+            if ((k *= 2f) < 1f) return -0.5f * (Math.Sqrt(1f - k * k) - 1);
+            return 0.5f * (Math.Sqrt(1f - (k -= 2f) * k) + 1f);
+        }
+
+        private double EaseQuinticOut(float k)
+        {
+            return 1f + ((k -= 1f) * Math.Pow(k, 4));
+        }
+
+        private double EaseElasticOut(float time)
+        {
+            if (time == 0) return 0;
+            if (time == 1) return 1;
+            return Math.Pow(2f, -10f * time) * Math.Sin((time - 0.1f) * (2f * Math.PI) / 0.4f) + 1f;
+        }
+        #endregion "Easing Functions"
 
         private async void PerformPing()
         {
@@ -815,7 +866,7 @@ namespace PingVisualizer
             public IPStatus Status { get; }
             public long RoundTripTime { get; }
             public IPAddress Address { get; }
-            
+
             public PingInfo()
             {
                 Status = IPStatus.Unknown;
