@@ -50,7 +50,7 @@ namespace PingVisualizer
         private Brush mouseOverTextBrush = new SolidBrush(Color.FromArgb(240, Color.White));
         private Brush mouseOverBarBrush = new SolidBrush(Color.FromArgb(128, Color.Navy));
         private Color mouseScrollingBackColor = Color.FromArgb(48, 53, 61);
-        private MouseOverInfo mouseOverInfo = null;
+        private MouseOverInfo mouseOverInfo;
         private bool mouseIsOverBars = false;
         private PointF mouseLocationScaled;
         private bool mouseIsScrolling = false;
@@ -594,15 +594,11 @@ namespace PingVisualizer
 
         private void DrawPingBars()
         {
-            // Is set to true if mouse is over any bars.
-            bool isMouseOverBars = false;
-
             foreach (var bar in currentBarList)
             {
                 if (mouseIsScrolling && bar.Rectangle.Contains(mouseLocationScaled))
                 {
                     // If mouse is over a bar, set the mouseOverInfo to be drawn in the DrawPingText method.
-                    isMouseOverBars = true;
                     mouseOverInfo = new MouseOverInfo(mouseLocationScaled, bar.PingInfo);
                     upscaledGraphics.FillRectangle(mouseOverBarBrush, new RectangleF(bar.Rectangle.Location, new SizeF(bar.Length * currentViewScale, bar.Rectangle.Height)));
                 }
@@ -614,10 +610,6 @@ namespace PingVisualizer
                     }
                 }
             }
-
-            // If mouse is not over any bars, null the mouseOverInfo.
-            if (!isMouseOverBars)
-                mouseOverInfo = null;
         }
 
         private void DrawPingText()
@@ -625,7 +617,7 @@ namespace PingVisualizer
             if (mouseIsScrolling)
             {
                 // Draw ping info for the highlighted bar.
-                if (mouseOverInfo != null)
+                if (mouseIsOverBars)
                 {
                     string overInfoText = GetReplyStatusText(mouseOverInfo.PingReply);
                     SizeF textSize = upscaledGraphics.MeasureString(overInfoText, mousePingInfoFont);
@@ -820,106 +812,42 @@ namespace PingVisualizer
 
         public class PingInfo
         {
-            private IPStatus status;
-            private long roundTripTime;
-            private IPAddress address;
-
-            public IPStatus Status
-            {
-                get
-                {
-                    return status;
-                }
-            }
-
-            public long RoundTripTime
-            {
-                get
-                {
-                    return roundTripTime;
-                }
-            }
-
-            public IPAddress Address
-            {
-                get
-                {
-                    return address;
-                }
-            }
-
+            public IPStatus Status { get; }
+            public long RoundTripTime { get; }
+            public IPAddress Address { get; }
+            
             public PingInfo()
             {
-                status = IPStatus.Unknown;
-                roundTripTime = 0;
-                address = null;
+                Status = IPStatus.Unknown;
+                RoundTripTime = 0;
+                Address = null;
             }
 
             public PingInfo(PingReply reply)
             {
-                status = reply.Status;
-                roundTripTime = reply.RoundtripTime;
-                address = reply.Address;
+                Status = reply.Status;
+                RoundTripTime = reply.RoundtripTime;
+                Address = reply.Address;
             }
         }
 
-        private class PingBar
+        private struct PingBar
         {
-            private float length;
-            private Color color;
-            private RectangleF rectangle;
-            private PingInfo pingInfo;
-
-            public float Length
-            {
-                get
-                {
-                    return length;
-                }
-            }
-
-            public Color Color
-            {
-                get
-                {
-                    return color;
-                }
-                set
-                {
-                    color = value;
-                }
-            }
-
-            public RectangleF Rectangle
-            {
-                get
-                {
-                    return rectangle;
-                }
-            }
-
-            public PingInfo PingInfo
-            {
-                get
-                {
-                    return pingInfo;
-                }
-            }
-
-            public PingBar()
-            {
-            }
+            public float Length { get; set; }
+            public Color Color { get; set; }
+            public RectangleF Rectangle { get; set; }
+            public PingInfo PingInfo { get; set; }
 
             public PingBar(float length, Color color, RectangleF rectangle, PingInfo pingInfo)
             {
-                this.length = length;
-                this.color = color;
-                this.rectangle = rectangle;
-                this.pingInfo = pingInfo;
+                this.Length = length;
+                this.Color = color;
+                this.Rectangle = rectangle;
+                this.PingInfo = pingInfo;
             }
         }
 
-        private class MouseOverInfo
+        private struct MouseOverInfo
         {
             public PointF MouseLoc { get; set; }
             public PingInfo PingReply { get; set; }
