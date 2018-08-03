@@ -81,6 +81,7 @@
             // YesButton
             // 
             this.YesButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.YesButton.DialogResult = System.Windows.Forms.DialogResult.Yes;
             this.YesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.YesButton.Location = new System.Drawing.Point(3, 3);
             this.YesButton.Name = "YesButton";
@@ -88,11 +89,11 @@
             this.YesButton.TabIndex = 50;
             this.YesButton.Text = "&Yes";
             this.YesButton.UseVisualStyleBackColor = true;
-            this.YesButton.Click += new System.EventHandler(this.YesButton_Click);
             // 
             // NoButton
             // 
             this.NoButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.NoButton.DialogResult = System.Windows.Forms.DialogResult.No;
             this.NoButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NoButton.Location = new System.Drawing.Point(84, 3);
             this.NoButton.Name = "NoButton";
@@ -101,7 +102,6 @@
             this.NoButton.TabIndex = 51;
             this.NoButton.Text = "&No";
             this.NoButton.UseVisualStyleBackColor = true;
-            this.NoButton.Click += new System.EventHandler(this.NoButton_Click);
             // 
             // OKCancelPanel
             // 
@@ -122,6 +122,7 @@
             // CancelButtonUI
             // 
             this.CancelButtonUI.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.CancelButtonUI.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.CancelButtonUI.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CancelButtonUI.Location = new System.Drawing.Point(84, 3);
             this.CancelButtonUI.Name = "CancelButtonUI";
@@ -129,11 +130,11 @@
             this.CancelButtonUI.TabIndex = 53;
             this.CancelButtonUI.Text = "&Cancel";
             this.CancelButtonUI.UseVisualStyleBackColor = true;
-            this.CancelButtonUI.Click += new System.EventHandler(this.CancelButtonUI_Click);
             // 
             // OKButton
             // 
             this.OKButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.OKButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.OKButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OKButton.Location = new System.Drawing.Point(3, 3);
             this.OKButton.Name = "OKButton";
@@ -141,7 +142,6 @@
             this.OKButton.TabIndex = 52;
             this.OKButton.Text = "&OK";
             this.OKButton.UseVisualStyleBackColor = true;
-            this.OKButton.Click += new System.EventHandler(this.OKButton_Click);
             // 
             // IconPanel
             // 

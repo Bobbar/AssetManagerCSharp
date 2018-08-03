@@ -432,12 +432,28 @@ namespace AdvancedDialog
         /// </summary>
         private void SetFocus()
         {
-            foreach (Control control in customControls)
+            if (isMessageBox)
             {
-                if (control is TextBox || control is ComboBox || control is RichTextBox)
+                // If this is just a message box, set the focus to the visible "accept" button.
+                if (YesButton.Visible)
                 {
-                    control.Focus();
-                    return;
+                    YesButton.Focus();
+                }
+                else
+                {
+                    OKButton.Focus();
+                }
+            }
+            else
+            {
+                // Otherwise set the focus to the first input control.
+                foreach (Control control in customControls)
+                {
+                    if (control is TextBox || control is ComboBox || control is RichTextBox)
+                    {
+                        control.Focus();
+                        return;
+                    }
                 }
             }
         }
@@ -455,30 +471,6 @@ namespace AdvancedDialog
             label.Padding = new Padding(0, 10, 5, 0);
             label.Text = text;
             return label;
-        }
-
-        private void CancelButtonUI_Click(object sender, System.EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
-        }
-
-        private void YesButton_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Yes;
-            this.Close();
-        }
-
-        private void NoButton_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.No;
-            this.Close();
-        }
-
-        private void OKButton_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.OK;
-            this.Close();
         }
 
         private void SetButtonsAndIcons(MessageBoxButtons buttons, MessageBoxIcon icon)
