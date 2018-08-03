@@ -17,7 +17,6 @@ namespace AssetManager.UserInterface.CustomControls
         public SlideDirection SlideOutDirection { get; set; }
         public SlideDirection Direction { get; set; }
         public SlideState SlideState { get; set; }
-        public float SlideVelocity { get; set; }
         /// <summary>
         /// Current position.
         /// </summary>
@@ -38,8 +37,7 @@ namespace AssetManager.UserInterface.CustomControls
             this.SlideOutDirection = slideOutDirection;
 
             Direction = SlideDirection.DefaultSlide;
-            SlideState = SlideState.Done;
-            SlideVelocity = 0;
+            SlideState = SlideState.Queued;
             Position = new PointF();
             StartPosition = new PointF();
             EndPosition = new PointF();
@@ -50,8 +48,7 @@ namespace AssetManager.UserInterface.CustomControls
         public MessageParameters()
         {
             Direction = SlideDirection.DefaultSlide;
-            SlideState = SlideState.Done;
-            SlideVelocity = 0;
+            SlideState = SlideState.Queued;
             Position = new PointF();
             StartPosition = new PointF();
             EndPosition = new PointF();

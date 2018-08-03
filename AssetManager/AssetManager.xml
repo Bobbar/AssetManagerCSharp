@@ -1273,12 +1273,6 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.DrawText(System.Drawing.Graphics)">
-            <summary>
-            Primary text renderer.
-            </summary>
-            <param name="canvas"></param>
-        </member>
         <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.QueueMessage(System.String,System.Drawing.Color,AssetManager.UserInterface.CustomControls.SlideDirection,AssetManager.UserInterface.CustomControls.SlideDirection,System.Int32)">
             <summary>
             Adds new message to queue.
@@ -1382,6 +1376,12 @@
             <summary>
             Sets states, current positions and ending positions for a slide-out animation.
             </summary>
+        </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.DrawText(System.Drawing.Graphics)">
+            <summary>
+            Primary text renderer.
+            </summary>
+            <param name="canvas"></param>
         </member>
         <member name="M:AssetManager.UserInterface.CustomControls.SliderLabel.Tick(System.Object,System.EventArgs)">
             <summary>
