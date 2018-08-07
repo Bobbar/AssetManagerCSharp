@@ -192,6 +192,10 @@ namespace AssetManager.UserInterface.CustomControls
         public void Clear()
         {
             messageQueue.Clear();
+
+            if (currentMessage == null)
+                return;
+
             if (currentMessage.SlideState == SlideState.Paused)
             {
                 pauseCancel.Cancel();
