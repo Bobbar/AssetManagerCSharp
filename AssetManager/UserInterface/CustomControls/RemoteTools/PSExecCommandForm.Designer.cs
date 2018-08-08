@@ -94,7 +94,7 @@
             "",
             "tasklist",
             "taskkill /f /im",
-            "query user",
+            "%windir%\\sysnative\\quser",
             "ipconfig /all",
             "tracert"});
             this.QuickCommandComboBox.Location = new System.Drawing.Point(12, 433);

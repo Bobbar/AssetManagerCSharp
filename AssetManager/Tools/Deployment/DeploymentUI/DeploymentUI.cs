@@ -374,18 +374,14 @@ namespace AssetManager.Tools.Deployment
             LogMessage("Session state: " + args.InvocationStateInfo.State.ToString());
         }
 
-        private void PsExecOutputReceived(object sender, EventArgs e)
+        private void PsExecOutputReceived(object sender, string data)
         {
-            var args = (DataReceivedEventArgs)e;
-            var dataString = DataConsistency.CleanDBValue(args.Data).ToString();
-            LogMessage("PsExec Output: " + dataString);
+            LogMessage("Output: " + data);
         }
 
-        private void PsExecErrorReceived(object sender, EventArgs e)
+        private void PsExecErrorReceived(object sender, string data)
         {
-            var args = (DataReceivedEventArgs)e;
-            var dataString = DataConsistency.CleanDBValue(args.Data).ToString();
-            LogMessage("PsExec Output: " + dataString);
+            LogMessage("PsExec Output: " + data);
         }
 
         private void ActivityTick()

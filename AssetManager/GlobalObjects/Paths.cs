@@ -12,7 +12,9 @@ namespace AssetManager
         //Application paths
         public static readonly string AppDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\AssetManager\";
 
-        public static readonly string PsExecPath = AppDomain.CurrentDomain.BaseDirectory + @"Tools\PsExec\PsExec.exe";
+        public const string PsExecTempDir = @"C:\Temp\";
+        public const string PsExecTempPath = @"C:\Temp\paexec.exe";
+        public static readonly string PsExecPath = AppDomain.CurrentDomain.BaseDirectory + @"Tools\PsExec\paexec.exe";
         public static readonly string LocalModulesStore = AppDir + @"\DeploymentModulesStore\";
         public static readonly string RemoteSource = @"\\core.co.fairfield.oh.us\dfs1\fcdd\files\QA\Tools\Asset Management\Asset Manager\DeploymentModules\";
         public static readonly string DebugSource = @"C:\GitHub\AssetManagerCSharp\DeploymentModules\bin\";
@@ -29,8 +31,8 @@ namespace AssetManager
             }
         }
 
-        public const string PsExecTempDir = @"C:\Temp\";
-        public const string PsExecTempPath = @"C:\Temp\PsExec.exe";
+        
+
 
         public const string LogName = "log.log";
         public static readonly string LogPath = AppDir + LogName;

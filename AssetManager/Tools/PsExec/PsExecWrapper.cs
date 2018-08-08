@@ -1,5 +1,4 @@
-﻿using AssetManager.Data.Classes;
-using AssetManager.Security;
+﻿using AssetManager.Security;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -12,6 +11,7 @@ namespace AssetManager.Tools
     {
         private Process currentProcess;
         private string targetHostname;
+        private CancellationTokenSource cancelSource;
 
         public Process CurrentProcess
         {
@@ -21,9 +21,9 @@ namespace AssetManager.Tools
             }
         }
 
-        public event EventHandler ErrorReceived;
+        public event EventHandler<string> ErrorReceived;
 
-        public event EventHandler OutputReceived;
+        public event EventHandler<string> OutputReceived;
 
         public PSExecWrapper(string targetHostname)
         {
@@ -31,20 +31,14 @@ namespace AssetManager.Tools
             StageExecutable();
         }
 
-        protected virtual void OnErrorReceived(DataReceivedEventArgs e)
+        protected virtual void OnErrorReceived(string data)
         {
-            if (ErrorReceived != null)
-            {
-                ErrorReceived(this, e);
-            }
+            ErrorReceived?.Invoke(this, data);
         }
 
-        protected virtual void OnOutputReceived(DataReceivedEventArgs e)
+        protected virtual void OnOutputReceived(string data)
         {
-            if (OutputReceived != null)
-            {
-                OutputReceived(this, e);
-            }
+            OutputReceived?.Invoke(this, data);
         }
 
         private void StageExecutable()
@@ -93,19 +87,15 @@ namespace AssetManager.Tools
                         p.StartInfo.RedirectStandardOutput = true;
                         p.StartInfo.RedirectStandardError = true;
                         p.StartInfo.CreateNoWindow = true;
-                        p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                         p.StartInfo.WorkingDirectory = Paths.PsExecTempDir;
                         p.StartInfo.FileName = Paths.PsExecTempPath;
-
-                        p.StartInfo.Arguments = "\\\\" + targetHostname + " -accepteula -nobanner -h -u " + SecurityTools.AdminCreds.Domain + "\\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " " + command;
-
-                        p.OutputDataReceived += P_OutputDataReceived;
-                        p.ErrorDataReceived += P_ErrorDataReceived;
-
+                        p.StartInfo.Arguments = @"\\" + targetHostname + " -h -u " + SecurityTools.AdminCreds.Domain + @"\" + SecurityTools.AdminCreds.UserName + " -p " + SecurityTools.AdminCreds.Password + " cmd /c " + command;
                         p.Start();
 
-                        p.BeginOutputReadLine();
-                        p.BeginErrorReadLine();
+                        cancelSource = new CancellationTokenSource();
+                        ReadError(p.StandardError, cancelSource.Token);
+                        ReadOutput(p.StandardOutput, cancelSource.Token);
 
                         p.WaitForExit();
 
@@ -121,8 +111,68 @@ namespace AssetManager.Tools
             }
         }
 
+        private async void ReadError(StreamReader stream, CancellationToken cancelToken)
+        {
+            string outputBuffer = string.Empty;
+
+            using (stream)
+            {
+                while (!cancelToken.IsCancellationRequested)
+                {
+                    // Read the stream one character at a time.
+                    // The process seems to deadlock if you try to read more than 1 at a time...
+                    int bytesToRead = 1;
+                    var buffer = new char[bytesToRead];
+                    await stream.ReadAsync(buffer, 0, bytesToRead);
+                    var output = new string(buffer);
+                    outputBuffer += output;
+
+                    // Once we find a NewLine in the buffer, we know we have a complete line.
+                    // Remove the NewLine chars, fire the event, then clear the buffer.
+                    if (outputBuffer.Contains(Environment.NewLine))
+                    {
+                        outputBuffer = outputBuffer.Replace(Environment.NewLine, "");
+                        outputBuffer = outputBuffer.Replace("\r", "");
+                        OnErrorReceived(outputBuffer);
+                        outputBuffer = string.Empty;
+                    }
+                }
+            }
+        }
+
+        private async void ReadOutput(StreamReader stream, CancellationToken cancelToken)
+        {
+            string outputString = string.Empty;
+
+            using (stream)
+            {
+                while (!cancelToken.IsCancellationRequested)
+                {
+                    // Read the stream one character at a time.
+                    // The process seems to deadlock if you try to read more than 1 at a time...
+                    int bytesToRead = 1;
+                    var buffer = new char[bytesToRead];
+                    await stream.ReadAsync(buffer, 0, bytesToRead);
+                    var output = new string(buffer);
+                    outputString += output;
+
+                    // Once we find a NewLine in the buffer, we know we have a complete line.
+                    // Remove the NewLine chars, fire the event, then clear the buffer.
+                    if (outputString.Contains(Environment.NewLine))
+                    {
+                        outputString = outputString.Replace(Environment.NewLine, "");
+                        outputString = outputString.Replace("\r", "");
+                        OnOutputReceived(outputString);
+                        outputString = string.Empty;
+                    }
+                }
+            }
+        }
+
         public void StopProcess()
         {
+            cancelSource.Cancel();
+
             if (currentProcess != null)
             {
                 try
@@ -159,16 +209,6 @@ namespace AssetManager.Tools
                     throw ex;
                 }
             }
-        }
-
-        private void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            OnErrorReceived(e);
-        }
-
-        private void P_OutputDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            OnOutputReceived(e);
         }
     }
 }

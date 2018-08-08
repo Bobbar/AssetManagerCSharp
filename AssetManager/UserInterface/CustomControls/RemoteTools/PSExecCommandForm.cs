@@ -47,6 +47,7 @@ namespace AssetManager.UserInterface.CustomControls
                 // Execute the command and catch exceptions.
                 StatusMessage("Executing command...");
                 var exitCode = await pSExecWrapper.ExecuteRemoteCommand(command, runAsAdmin);
+                LogMessage("Exit code = " + exitCode);
             }
             catch (InvalidOperationException ioe)
             {
@@ -229,24 +230,19 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private void PSExecWrapper_OutputReceived(object sender, EventArgs e)
+        private void PSExecWrapper_OutputReceived(object sender, string data)
         {
-            var args = (DataReceivedEventArgs)e;
-            var dataString = DataConsistency.CleanDBValue(args.Data).ToString();
-            LogMessage(dataString);
+            LogMessage(data);
         }
 
-        private void PSExecWrapper_ErrorReceived(object sender, EventArgs e)
+        private void PSExecWrapper_ErrorReceived(object sender, string data)
         {
-            var args = (DataReceivedEventArgs)e;
-            var dataString = DataConsistency.CleanDBValue(args.Data).ToString();
-
             // Filter out some of the PSExec messages.
-            if (!string.IsNullOrEmpty(dataString))
+            if (!string.IsNullOrEmpty(data))
             {
-                if (!dataString.ToUpper().Contains("CONNECTING") && !dataString.ToUpper().Contains("STARTING"))
+                if (!data.ToUpper().Contains("CONNECTING") && !data.ToUpper().Contains("STARTING"))
                 {
-                    LogMessage(dataString, Color.Red);
+                    LogMessage(data, Color.Red);
                 }
             }
         }
