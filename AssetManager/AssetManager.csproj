@@ -136,6 +136,10 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Databases, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DatabaseAssistant\Databases\bin\Release\Databases.dll</HintPath>
+    </Reference>
     <Reference Include="Fastenshtein, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fastenshtein.1.0.0.4\lib\net40-client\Fastenshtein.dll</HintPath>
       <Private>True</Private>
@@ -178,8 +182,6 @@
     <Compile Include="Helpers\Watchdog\WatchdogTickEventArgs.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedResourceManager.cs" />
     <Compile Include="Data\Databases.cs" />
-    <Compile Include="Data\Classes\DataClassMapping\ColumnNameAttribute.cs" />
-    <Compile Include="Data\Classes\DataClassMapping\DataMapObject.cs" />
     <Compile Include="Data\Classes\DataStructures.cs" />
     <Compile Include="Data\Classes\MappableObjects\AccessGroup.cs" />
     <Compile Include="Data\Classes\MappableObjects\Device.cs" />
@@ -590,10 +592,6 @@
     <ProjectReference Include="..\AdvancedDialog\AdvancedDialog.csproj">
       <Project>{0a2876ae-8a3f-478a-be33-a9a0f1ca44c9}</Project>
       <Name>AdvancedDialog</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Databases\Databases.csproj">
-      <Project>{32bcf1fc-0f86-4fac-8d01-05f84fa0d736}</Project>
-      <Name>Databases</Name>
     </ProjectReference>
     <ProjectReference Include="..\DeploymentAssemblies\DeploymentAssemblies.csproj">
       <Project>{77c1bdf2-c436-4e8a-9379-4a4df5d2ed89}</Project>

@@ -15,6 +15,7 @@ using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
+using Databases.Data.Mapping;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
 {
@@ -52,7 +53,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         #region Constructors
 
-        public ViewDeviceForm(ExtendedForm parentForm, MappableObject device, bool startHidden = false) : base(parentForm, device, startHidden)
+        public ViewDeviceForm(ExtendedForm parentForm, MappedObject device, bool startHidden = false) : base(parentForm, device, startHidden)
         {
             currentViewDevice = (Device)device;
 

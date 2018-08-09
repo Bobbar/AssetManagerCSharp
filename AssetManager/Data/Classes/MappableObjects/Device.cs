@@ -1,9 +1,11 @@
 ﻿using AssetManager.Data.Communications;
 using System.Data;
+using Databases.Data.Mapping;
+using Databases.Data;
 
 namespace AssetManager.Data.Classes
 {
-    public class Device : MappableObject
+    public class Device : MappedObject
     {
         #region Constructors
 
@@ -82,6 +84,14 @@ namespace AssetManager.Data.Classes
         public override string TableName { get; set; } = DevicesCols.TableName;
 
         public TrackingEntry Tracking { get; set; } = new TrackingEntry();
+
+        public override IDatabase Database
+        {
+            get
+            {
+                return DBFactory.GetDatabase();
+            }
+        }
 
         #endregion Properties
 

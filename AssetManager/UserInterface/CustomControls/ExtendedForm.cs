@@ -1,4 +1,4 @@
-using AssetManager.Data.Classes;
+using Databases.Data.Mapping;
 using AssetManager.Helpers;
 using System;
 using System.Collections.Generic;
@@ -44,11 +44,11 @@ namespace AssetManager.UserInterface.CustomControls
         {
         }
 
-        public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject) : this(parentForm, currentObject.Guid)
+        public ExtendedForm(ExtendedForm parentForm, MappedObject currentObject) : this(parentForm, currentObject.Guid)
         {
         }
 
-        public ExtendedForm(ExtendedForm parentForm, MappableObject currentObject, bool startHidden = false) : this(parentForm, currentObject.Guid)
+        public ExtendedForm(ExtendedForm parentForm, MappedObject currentObject, bool startHidden = false) : this(parentForm, currentObject.Guid)
         {
             // If the form is starting without being shown, call for the handle to force its creation.
             if (startHidden)

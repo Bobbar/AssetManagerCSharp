@@ -9,28 +9,6 @@
             Attachment folder object.
             </summary>
         </member>
-        <member name="T:AssetManager.Data.Classes.MappableObject">
-            <summary>
-            Data mapper for classes tagged with <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/>
-            </summary>
-        </member>
-        <member name="P:AssetManager.Data.Classes.MappableObject.PopulatingTable">
-            <summary>
-            DataTable that was used to populate this object.
-            </summary>
-        </member>
-        <member name="P:AssetManager.Data.Classes.MappableObject.TableName">
-            <summary>
-            Database Tablename for implementing object.
-            </summary>
-        </member>
-        <member name="M:AssetManager.Data.Classes.MappableObject.MapProperty(System.Object,System.Data.DataRow)">
-            <summary>
-            Uses reflection to recursively populate/map class properties that are marked with a <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/>.
-            </summary>
-            <param name="obj">Object to be populated.</param>
-            <param name="row">DataRow with columns matching the <see cref="T:AssetManager.Data.Classes.DataColumnNameAttribute"/> in the objects properties.</param>
-        </member>
         <member name="T:AssetManager.Data.Classes.DbAttributes">
             <summary>
             Wrapper for storing and accessing a collection of <see cref="T:AssetManager.Data.Classes.DbAttribute"/>.
@@ -529,9 +507,9 @@
             SELECT apitoken FROM teamviewer_info
             </summary>
         </member>
-        <member name="M:AssetManager.Data.Communications.MunisComms.GetSqlCommandFromParams(System.String,System.Collections.Generic.List{Database.Data.DBQueryParameter})">
+        <member name="M:AssetManager.Data.Communications.MunisComms.GetSqlCommandFromParams(System.String,System.Collections.Generic.List{Databases.Data.DBQueryParameter})">
             <summary>
-            Takes a partial query string without the WHERE operator, and a list of <see cref="T:Database.Data.DBQueryParameter"/> and returns a parameterized <see cref="T:System.Data.SqlClient.SqlCommand"/>.
+            Takes a partial query string without the WHERE operator, and a list of <see cref="T:Databases.Data.DBQueryParameter"/> and returns a parameterized <see cref="T:System.Data.SqlClient.SqlCommand"/>.
             </summary>
             <param name="partialQuery"></param>
             <param name="parameters"></param>

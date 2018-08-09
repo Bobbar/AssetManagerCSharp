@@ -1,7 +1,9 @@
-﻿
+﻿using Databases.Data.Mapping;
+using Databases.Data;
+
 namespace AssetManager.Data.Classes
 {
-    public class TrackingEntry : MappableObject
+    public class TrackingEntry : MappedObject
     {
         #region Constructors
 
@@ -43,6 +45,14 @@ namespace AssetManager.Data.Classes
 
         [DataColumnName(TrackablesCols.Notes)]
         public string UseReason { get; set; }
+
+        public override IDatabase Database
+        {
+            get
+            {
+                return DBFactory.GetDatabase();
+            }
+        }
 
         #endregion Properties
     }

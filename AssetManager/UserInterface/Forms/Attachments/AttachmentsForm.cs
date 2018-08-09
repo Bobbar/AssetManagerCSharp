@@ -19,6 +19,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Databases.Data.Mapping;
 
 namespace AssetManager.UserInterface.Forms
 {
@@ -82,7 +83,7 @@ namespace AssetManager.UserInterface.Forms
 
         #region Constructors
 
-        public AttachmentsForm(ExtendedForm parentForm, AttachmentsBaseCols attachTable, MappableObject attachDataObject, EventHandler attachCountChangeHandler = null) : base(parentForm, attachDataObject)
+        public AttachmentsForm(ExtendedForm parentForm, AttachmentsBaseCols attachTable, MappedObject attachDataObject, EventHandler attachCountChangeHandler = null) : base(parentForm, attachDataObject)
         {
             ftpUri = "ftp://" + ServerInfo.MySQLServerIP + "/attachments/" + ServerInfo.CurrentDataBase.ToString() + "/";
 

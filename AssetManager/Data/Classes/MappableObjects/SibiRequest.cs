@@ -1,8 +1,10 @@
 ﻿using System.Data;
+using Databases.Data.Mapping;
+using Databases.Data;
 
 namespace AssetManager.Data.Classes
 {
-    public class SibiRequest : MappableObject
+    public class SibiRequest : MappedObject
     {
         #region Fields
 
@@ -65,6 +67,14 @@ namespace AssetManager.Data.Classes
         public string Status { get; set; }
 
         public override string TableName { get; set; } = SibiRequestCols.TableName;
+
+        public override IDatabase Database
+        {
+            get
+            {
+                return DBFactory.GetDatabase();
+            }
+        }
 
         #endregion Properties
     }
