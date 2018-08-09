@@ -88,6 +88,7 @@
             // QuickCommandComboBox
             // 
             this.QuickCommandComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.QuickCommandComboBox.DropDownWidth = 200;
             this.QuickCommandComboBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.QuickCommandComboBox.FormattingEnabled = true;
             this.QuickCommandComboBox.Items.AddRange(new object[] {
