@@ -660,6 +660,9 @@
     <None Include="Resources\DownloadIcon.png" />
     <None Include="Resources\SaveIcon.png" />
     <None Include="Resources\NewFolderIcon.png" />
+    <Content Include="Tools\PsExec\paexec.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Tools\PsExec\PsExec.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
