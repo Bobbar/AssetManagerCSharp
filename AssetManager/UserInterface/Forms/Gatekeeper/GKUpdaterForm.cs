@@ -11,11 +11,9 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 {
     public partial class GKUpdaterForm : ExtendedForm
     {
-        private bool queueIsRunning = false;
-        private int concurrentUpdates = 4;
-        private List<FileTransferUI> progressControls = new List<FileTransferUI>();
-        private bool createMissingDirs = false;
-        private bool packFileReady = false;
+        private bool queueIsRunning = true;
+        private int concurrentUpdates = 10;
+        private List<UpdaterControl> progressControls = new List<UpdaterControl>();
 
         public GKUpdaterForm(ExtendedForm parentForm) : base(parentForm)
         {
@@ -33,9 +31,9 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 Waiting();
                 foreach (var device in devices)
                 {
-                    if (!Exists(device))
+                    if (!Exists(device) && !string.IsNullOrEmpty(device.HostName))
                     {
-                        var newProgCtl = new FileTransferUI(this, device, createMissingDirs, Paths.GKExtractDir, Paths.GKRemoteDir, "Gatekeeper Update", progressControls.Count + 1);
+                        var newProgCtl = new UpdaterControl(this, device, progressControls.Count + 1);
                         progressControls.Add(newProgCtl);
                         newProgCtl.CriticalStopError += CriticalStop;
                     }
@@ -64,9 +62,9 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         {
             try
             {
-                if (!Exists(device))
+                if (!Exists(device) && !string.IsNullOrEmpty(device.HostName))
                 {
-                    var newProgCtl = new FileTransferUI(this, device, createMissingDirs, Paths.GKExtractDir, Paths.GKRemoteDir, "Gatekeeper Update", progressControls.Count + 1);
+                    var newProgCtl = new UpdaterControl(this, device, progressControls.Count + 1);
                     ProgressControlsTable.Controls.Add(newProgCtl);
                     progressControls.Add(newProgCtl);
                     newProgCtl.CriticalStopError += CriticalStop;
@@ -101,14 +99,14 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         public bool ActiveUpdates()
         {
-            return progressControls.Exists(upd => upd.ProgStatus == ProgressStatus.Running | upd.ProgStatus == ProgressStatus.Paused);
+            return progressControls.Exists(upd => upd.Status == UpdateStatus.Running | upd.Status == UpdateStatus.Starting);
         }
 
         private void CancelAll()
         {
-            foreach (FileTransferUI upd in progressControls)
+            foreach (UpdaterControl upd in progressControls)
             {
-                if (upd.ProgStatus == ProgressStatus.Running)
+                if (upd.Status == UpdateStatus.Running)
                 {
                     upd.CancelUpdate();
                 }
@@ -117,7 +115,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         private void DisposeUpdates()
         {
-            foreach (FileTransferUI upd in progressControls)
+            foreach (UpdaterControl upd in progressControls)
             {
                 if (!upd.IsDisposed)
                 {
@@ -135,13 +133,12 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             if (queueIsRunning)
             {
                 int runningUpdates = 0;
-                foreach (FileTransferUI upd in progressControls)
+                foreach (UpdaterControl upd in progressControls)
                 {
-                    switch (upd.ProgStatus)
+                    switch (upd.Status)
                     {
-                        case ProgressStatus.Running:
-                        case ProgressStatus.Starting:
-                        case ProgressStatus.Paused:
+                        case UpdateStatus.Running:
+                        case UpdateStatus.Starting:
                             if (!upd.IsDisposed)
                                 runningUpdates += 1;
                             break;
@@ -242,22 +239,20 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             int queued = 0;
             int running = 0;
             int complete = 0;
-            double transferRateSum = 0;
 
-            foreach (FileTransferUI upd in progressControls)
+            foreach (UpdaterControl upd in progressControls)
             {
-                switch (upd.ProgStatus)
+                switch (upd.Status)
                 {
-                    case ProgressStatus.Queued:
+                    case UpdateStatus.Queued:
                         queued += 1;
                         break;
 
-                    case ProgressStatus.Running:
-                        transferRateSum += upd.remoteTransfer.CurrentStatus.CurrentTransferRate;
+                    case UpdateStatus.Running:
                         running += 1;
                         break;
 
-                    case ProgressStatus.Complete:
+                    case UpdateStatus.Done:
                         complete += 1;
                         break;
                 }
@@ -267,19 +262,18 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             RunningUpdatesLabel.Text = "Running: " + running;
             CompleteUpdatesLabel.Text = "Complete: " + complete;
             TotalUpdatesLabel.Text = "Tot Updates: " + progressControls.Count;
-            TransferRateLabel.Text = "Total Transfer Rate: " + transferRateSum.ToString("0.00") + " MB/s";
         }
 
         /// <summary>
-        /// Sorts all the GKProgressControls in order of the <see cref="ProgressStatus"/> enum.
+        /// Sorts all the update controls in order of the <see cref="UpdateStatus"/> enum.
         /// </summary>
         private void SortUpdates()
         {
-            var sortUpdates = new List<FileTransferUI>();
+            var sortUpdates = new List<UpdaterControl>();
 
-            foreach (ProgressStatus status in Enum.GetValues(typeof(ProgressStatus)))
+            foreach (UpdateStatus status in Enum.GetValues(typeof(UpdateStatus)))
             {
-                sortUpdates.AddRange(progressControls.FindAll(upd => upd.ProgStatus == status));
+                sortUpdates.AddRange(progressControls.FindAll(upd => upd.Status == status));
             }
 
             ProgressControlsTable.Controls.Clear();
@@ -291,7 +285,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         /// </summary>
         private void StartNextUpdate()
         {
-            var nextUpdate = progressControls.Find(upd => upd.ProgStatus == ProgressStatus.Queued);
+            var nextUpdate = progressControls.Find(upd => upd.Status == UpdateStatus.Queued);
             if (nextUpdate != null) nextUpdate.StartUpdate();
         }
 
@@ -331,49 +325,9 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
         }
 
-        private void CreateDirsToolItem_Click(object sender, EventArgs e)
-        {
-            createMissingDirs = CreateDirsToolItem.Checked;
-        }
-
         private void GKUpdaterForm_Shown(object sender, EventArgs e)
         {
             SetQueueButton();
-            CheckPackFile();
-        }
-
-        private void ProcessPackFile()
-        {
-            using (var packFileForm = new PackFileForm(false))
-            {
-                packFileForm.ShowDialog(this);
-                packFileReady = packFileForm.PackVerified;
-                RunQueue(packFileReady);
-            }
-        }
-
-        private async Task CheckPackFile()
-        {
-            var packFileManager = new ManagePackFile();
-            packFileReady = await packFileManager.VerifyPackFile();
-
-            RunQueue(packFileReady);
-
-            if (!packFileReady)
-            {
-                CancelAll();
-                OtherFunctions.Message("The local pack file does not match the server. All running updates will be stopped and a new copy will now be downloaded and unpacked.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Pack file out of date", this);
-                ProcessPackFile();
-            }
-        }
-
-        private void VerifyPackFileToolItem_Click(object sender, EventArgs e)
-        {
-            if (!Helpers.ChildFormControl.FormTypeIsOpen(typeof(PackFileForm)))
-            {
-                var newPackFileForm = new PackFileForm(true);
-                newPackFileForm.Show();
-            }
         }
 
         protected override void Dispose(bool disposing)

@@ -24,17 +24,10 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.CompleteUpdatesLabel = new System.Windows.Forms.Label();
             this.RunningUpdatesLabel = new System.Windows.Forms.Label();
             this.QueuedUpdatesLabel = new System.Windows.Forms.Label();
-            this.TransferRateLabel = new System.Windows.Forms.Label();
             this.SortButton = new System.Windows.Forms.Button();
-            this.MenuStrip = new System.Windows.Forms.MenuStrip();
-            this.OptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CreateDirsToolItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.FunctionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.VerifyPackFileToolItem = new System.Windows.Forms.ToolStripMenuItem();
             this.GroupBox1.SuspendLayout();
             this.GroupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MaxUpdates)).BeginInit();
-            this.MenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // GroupBox1
@@ -44,9 +37,9 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GroupBox1.BackColor = System.Drawing.SystemColors.Control;
             this.GroupBox1.Controls.Add(this.ProgressControlsTable);
-            this.GroupBox1.Location = new System.Drawing.Point(12, 114);
+            this.GroupBox1.Location = new System.Drawing.Point(12, 97);
             this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(1070, 504);
+            this.GroupBox1.Size = new System.Drawing.Size(1070, 521);
             this.GroupBox1.TabIndex = 2;
             this.GroupBox1.TabStop = false;
             // 
@@ -61,7 +54,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.ProgressControlsTable.Location = new System.Drawing.Point(9, 21);
             this.ProgressControlsTable.Margin = new System.Windows.Forms.Padding(10);
             this.ProgressControlsTable.Name = "ProgressControlsTable";
-            this.ProgressControlsTable.Size = new System.Drawing.Size(1053, 473);
+            this.ProgressControlsTable.Size = new System.Drawing.Size(1053, 490);
             this.ProgressControlsTable.TabIndex = 2;
             // 
             // GroupBox3
@@ -74,7 +67,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.GroupBox3.Controls.Add(this.CompleteUpdatesLabel);
             this.GroupBox3.Controls.Add(this.RunningUpdatesLabel);
             this.GroupBox3.Controls.Add(this.QueuedUpdatesLabel);
-            this.GroupBox3.Location = new System.Drawing.Point(12, 36);
+            this.GroupBox3.Location = new System.Drawing.Point(12, 12);
             this.GroupBox3.Name = "GroupBox3";
             this.GroupBox3.Size = new System.Drawing.Size(577, 79);
             this.GroupBox3.TabIndex = 0;
@@ -86,7 +79,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.MaxUpdates.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaxUpdates.Location = new System.Drawing.Point(302, 40);
             this.MaxUpdates.Maximum = new decimal(new int[] {
-            10,
+            20,
             0,
             0,
             0});
@@ -182,19 +175,10 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.QueuedUpdatesLabel.TabIndex = 0;
             this.QueuedUpdatesLabel.Text = "[Queued]";
             // 
-            // TransferRateLabel
-            // 
-            this.TransferRateLabel.AutoSize = true;
-            this.TransferRateLabel.Location = new System.Drawing.Point(695, 68);
-            this.TransferRateLabel.Name = "TransferRateLabel";
-            this.TransferRateLabel.Size = new System.Drawing.Size(112, 14);
-            this.TransferRateLabel.TabIndex = 3;
-            this.TransferRateLabel.Text = "[Transfer Rate]";
-            // 
             // SortButton
             // 
             this.SortButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.SortButton.Location = new System.Drawing.Point(996, 91);
+            this.SortButton.Location = new System.Drawing.Point(996, 67);
             this.SortButton.Name = "SortButton";
             this.SortButton.Size = new System.Drawing.Size(86, 24);
             this.SortButton.TabIndex = 4;
@@ -202,61 +186,16 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.SortButton.UseVisualStyleBackColor = true;
             this.SortButton.Click += new System.EventHandler(this.SortButton_Click);
             // 
-            // MenuStrip
-            // 
-            this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.OptionsToolStripMenuItem,
-            this.FunctionsToolStripMenuItem});
-            this.MenuStrip.Location = new System.Drawing.Point(0, 0);
-            this.MenuStrip.Name = "MenuStrip";
-            this.MenuStrip.Size = new System.Drawing.Size(1094, 24);
-            this.MenuStrip.TabIndex = 5;
-            this.MenuStrip.Text = "MenuStrip1";
-            // 
-            // OptionsToolStripMenuItem
-            // 
-            this.OptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CreateDirsToolItem});
-            this.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem";
-            this.OptionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.OptionsToolStripMenuItem.Text = "Options";
-            // 
-            // CreateDirsToolItem
-            // 
-            this.CreateDirsToolItem.CheckOnClick = true;
-            this.CreateDirsToolItem.Name = "CreateDirsToolItem";
-            this.CreateDirsToolItem.Size = new System.Drawing.Size(211, 22);
-            this.CreateDirsToolItem.Text = "Create Missing Directories";
-            this.CreateDirsToolItem.Click += new System.EventHandler(this.CreateDirsToolItem_Click);
-            // 
-            // FunctionsToolStripMenuItem
-            // 
-            this.FunctionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.VerifyPackFileToolItem});
-            this.FunctionsToolStripMenuItem.Name = "FunctionsToolStripMenuItem";
-            this.FunctionsToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
-            this.FunctionsToolStripMenuItem.Text = "Functions";
-            // 
-            // VerifyPackFileToolItem
-            // 
-            this.VerifyPackFileToolItem.Name = "VerifyPackFileToolItem";
-            this.VerifyPackFileToolItem.Size = new System.Drawing.Size(182, 22);
-            this.VerifyPackFileToolItem.Text = "Manage GK Package";
-            this.VerifyPackFileToolItem.Click += new System.EventHandler(this.VerifyPackFileToolItem_Click);
-            // 
             // GKUpdaterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1094, 638);
             this.Controls.Add(this.SortButton);
-            this.Controls.Add(this.TransferRateLabel);
             this.Controls.Add(this.GroupBox3);
             this.Controls.Add(this.GroupBox1);
-            this.Controls.Add(this.MenuStrip);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MainMenuStrip = this.MenuStrip;
             this.MinimumSize = new System.Drawing.Size(1010, 428);
             this.Name = "GKUpdaterForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
@@ -267,10 +206,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.GroupBox3.ResumeLayout(false);
             this.GroupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MaxUpdates)).EndInit();
-            this.MenuStrip.ResumeLayout(false);
-            this.MenuStrip.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
         internal GroupBox GroupBox1;
@@ -284,12 +220,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         internal NumericUpDown MaxUpdates;
         internal Button CancelAllButton;
         internal FlowLayoutPanel ProgressControlsTable;
-        internal Label TransferRateLabel;
         internal Button SortButton;
-        internal MenuStrip MenuStrip;
-        internal ToolStripMenuItem OptionsToolStripMenuItem;
-        internal ToolStripMenuItem CreateDirsToolItem;
-        internal ToolStripMenuItem FunctionsToolStripMenuItem;
-        internal ToolStripMenuItem VerifyPackFileToolItem;
     }
 }

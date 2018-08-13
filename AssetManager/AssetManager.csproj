@@ -371,6 +371,13 @@
       <DependentUpon>AttachmentsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\Classes\MemoryTributary.cs" />
+    <Compile Include="UserInterface\Forms\Gatekeeper\UpdaterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserInterface\Forms\Gatekeeper\UpdaterControl.Designer.cs">
+      <DependentUpon>UpdaterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\Forms\Gatekeeper\UpdateStatus.cs" />
     <Compile Include="UserInterface\Forms\GetCredentialsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -383,19 +390,11 @@
     <Compile Include="UserInterface\CustomControls\FileTransferUI\FileTransferUI.Designer.cs">
       <DependentUpon>FileTransferUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\Gatekeeper\GZipCompress.cs" />
-    <Compile Include="UserInterface\Forms\Gatekeeper\ManagePackFile.cs" />
     <Compile Include="UserInterface\Forms\Gatekeeper\GKUpdaterForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Gatekeeper\GKUpdaterForm.Designer.cs">
       <DependentUpon>GKUpdaterForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Gatekeeper\PackFileForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\Forms\Gatekeeper\PackFileForm.Designer.cs">
-      <DependentUpon>PackFileForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\CustomControls\FileTransferUI\ProgressStatus.cs" />
     <Compile Include="UserInterface\Forms\GridForm\GridForm.cs">
@@ -507,11 +506,11 @@
     <EmbeddedResource Include="UserInterface\CustomControls\FileTransferUI\FileTransferUI.resx">
       <DependentUpon>FileTransferUI.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\Forms\Gatekeeper\UpdaterControl.resx">
+      <DependentUpon>UpdaterControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Gatekeeper\GKUpdaterForm.resx">
       <DependentUpon>GKUpdaterForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\Gatekeeper\PackFileForm.resx">
-      <DependentUpon>PackFileForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\GetCredentialsForm.resx">
       <DependentUpon>GetCredentialsForm.cs</DependentUpon>

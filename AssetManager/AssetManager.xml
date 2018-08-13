@@ -1515,95 +1515,6 @@
             <param name="row">Row of the attachment to be renamed.</param>
             <param name="newFilename">New filename for the attachment.</param>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GZipCompress.GetGZOriginalFileSize(System.String)">
-            <summary>
-            Extracts the original filesize of the compressed file.
-            </summary>
-            <param name="fi">GZip file to handle</param>
-            <returns>Size of the compressed file, when its decompressed.</returns>
-            <remarks>More information at <a href="http://tools.ietf.org/html/rfc1952">http://tools.ietf.org/html/rfc1952</a> section 2.3</remarks>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GZipCompress.GetGZOriginalFileSize(System.IO.FileInfo)">
-            <summary>
-            Extracts the original filesize of the compressed file.
-            </summary>
-            <param name="fi">GZip file to handle</param>
-            <returns>Size of the compressed file, when its decompressed.</returns>
-            <remarks>More information at <a href="http://tools.ietf.org/html/rfc1952">http://tools.ietf.org/html/rfc1952</a> section 2.3</remarks>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.DownloadPack">
-            <summary>
-            Creates and cleans the pack file directories then downloads a new pack file from the server location.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.VerifyPackFile">
-             <summary>
-             Verifies directory structure, checks if pack file is present, then compares local and remote hashes of the pack file.
-            
-             Returns False if directory or file is missing, or if the hashes mismatch.
-             </summary>
-             <returns></returns>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.GetRemoteHash">
-            <summary>
-            Returns the contents of the hash text file located in <see cref="F:AssetManager.Paths.GKRemotePackFileDir"/>
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.CopyPackFile(System.String,System.String)">
-            <summary>
-            Copies a single file to the <paramref name="dest"/> path.
-            </summary>
-            <param name="source"></param>
-            Path of source file.
-            <param name="dest"></param>
-            Path of destination.
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.CopyFile(System.String,System.String)">
-            <summary>
-            Performs a buffered file stream transfer.
-            </summary>
-            <param name="Source"></param>
-            <param name="Dest"></param>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.PackGKDir">
-            <summary>
-            Compresses the local Gatekeeper directory into a new pack file.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.UnPackGKDir">
-            <summary>
-            Decompresses the pack file into a local working directory.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.UploadPackFiles">
-            <summary>
-            Copies the pack file and hash file to the server directory.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.ProcessPackFile">
-            <summary>
-            Verifies the local pack file and downloads a new one if needed.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.CreateNewPackFile">
-            <summary>
-            Creates a new pack file and hash file and copies them to the server location.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.ManagePackFile.CreateHashFile">
-            <summary>
-            Creates a text file containing the hash string of the pack file.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm.CanRunMoreUpdates">
             <summary>
             Returns True if number of running updates is less than the maximum simultaneous allowed updates and RunQueue is True.
@@ -1617,7 +1528,7 @@
         </member>
         <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm.SortUpdates">
             <summary>
-            Sorts all the GKProgressControls in order of the <see cref="T:AssetManager.UserInterface.CustomControls.ProgressStatus"/> enum.
+            Sorts all the update controls in order of the <see cref="T:AssetManager.UserInterface.Forms.Gatekeeper.UpdateStatus"/> enum.
             </summary>
         </member>
         <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm.StartNextUpdate">
