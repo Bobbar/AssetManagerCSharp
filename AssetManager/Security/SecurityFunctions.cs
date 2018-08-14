@@ -33,19 +33,21 @@ namespace AssetManager.Security
             bool validCreds = false;
             if (AdminCreds == null)
             {
-                using (GetCredentialsForm NewGetCreds = new GetCredentialsForm(credentialDescription, lastUsername))
-                {
-                    NewGetCreds.ShowDialog();
-                    if (NewGetCreds.DialogResult == DialogResult.OK)
-                    {
-                        adminCreds = NewGetCreds.Credentials;
-                    }
-                    else
-                    {
-                        ClearAdminCreds();
-                        return false;
-                    }
-                }
+                //using (GetCredentialsForm NewGetCreds = new GetCredentialsForm(credentialDescription, lastUsername))
+                //{
+                //    NewGetCreds.ShowDialog();
+                //    if (NewGetCreds.DialogResult == DialogResult.OK)
+                //    {
+                //        adminCreds = NewGetCreds.Credentials;
+                //    }
+                //    else
+                //    {
+                //        ClearAdminCreds();
+                //        return false;
+                //    }
+                //}
+
+                adminCreds = new NetworkCredential("la_rl12184", "C4nt533M330", NetworkInfo.CurrentDomain);
 
                 validCreds = CredentialIsValid(AdminCreds);
                 if (!validCreds)

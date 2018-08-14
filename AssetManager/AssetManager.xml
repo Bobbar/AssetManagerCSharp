@@ -1521,16 +1521,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm.PruneQueue">
-            <summary>
-            Removes disposed update fragments from list.
-            </summary>
-        </member>
-        <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm.SortUpdates">
-            <summary>
-            Sorts all the update controls in order of the <see cref="T:AssetManager.UserInterface.Forms.Gatekeeper.UpdateStatus"/> enum.
-            </summary>
-        </member>
         <member name="M:AssetManager.UserInterface.Forms.Gatekeeper.GKUpdaterForm.StartNextUpdate">
             <summary>
             Starts the next update that has a queued status.

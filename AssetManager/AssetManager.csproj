@@ -176,6 +176,7 @@
     <Compile Include="Data\Functions\DBControls\DBRemappingInfo.cs" />
     <Compile Include="Data\Functions\DBControls\ParseType.cs" />
     <Compile Include="Helpers\DataGridHelpers\ColumnFormatType.cs" />
+    <Compile Include="Helpers\DataGridHelpers\GridState.cs" />
     <Compile Include="Helpers\Watchdog\WatchdogInstance.cs" />
     <Compile Include="Helpers\Watchdog\WatchdogConnectionStatus.cs" />
     <Compile Include="Helpers\Watchdog\WatchdogStatusEventArgs.cs" />
@@ -371,6 +372,7 @@
       <DependentUpon>AttachmentsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\Classes\MemoryTributary.cs" />
+    <Compile Include="UserInterface\Forms\Gatekeeper\GKUpdate.cs" />
     <Compile Include="UserInterface\Forms\Gatekeeper\UpdaterControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

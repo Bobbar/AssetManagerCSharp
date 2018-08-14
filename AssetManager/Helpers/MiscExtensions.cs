@@ -4,6 +4,11 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace AssetManager.Helpers
 {
@@ -60,6 +65,35 @@ namespace AssetManager.Helpers
                 richTextBox.Text = text;
             }
         }
+
+        public static T Find<T>(this BindingList<T> list, Predicate<T> match)
+        {
+            foreach (var item in list)
+            {
+                if (match(item))
+                    return item;
+            }
+            return default(T);
+        }
+
+        public static bool Exists<T>(this BindingList<T> list, Predicate<T> match)
+        {
+            foreach (var item in list)
+            {
+                if (match(item))
+                    return true;
+            }
+            return false;
+        }
+
+        public static void ForEach<T>(this BindingList<T> list, Action<T> action)
+        {
+            foreach (var item in list)
+            {
+                action(item);
+            }
+        }
+
 
     }
 }
