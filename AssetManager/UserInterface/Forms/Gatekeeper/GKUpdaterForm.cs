@@ -4,6 +4,7 @@ using AssetManager.Security;
 using AssetManager.UserInterface.CustomControls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -13,14 +14,29 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
     {
         private bool queueIsRunning = true;
         private int concurrentUpdates = 10;
-        private List<UpdaterControl> progressControls = new List<UpdaterControl>();
+        private BindingList<GKUpdate> updates = new BindingList<GKUpdate>();
+        private GridState previousGridState = null;
 
         public GKUpdaterForm(ExtendedForm parentForm) : base(parentForm)
         {
             InitializeComponent();
-            this.DisableDoubleBuffering();
+            StatusGrid.DoubleBuffered(true);
+            LogTextBox.DoubleBuffered(true);
+            UpdateLogSplitter.DoubleBuffered(true);
+
             MaxUpdates.Value = concurrentUpdates;
-            ProgressControlsTable.DoubleBuffered(true);
+
+            updates.ListChanged += Updates_ListChanged;
+
+            StatusGrid.AutoGenerateColumns = false;
+            StatusLightCol.DataPropertyName = nameof(GKUpdate.StatusLight);
+            TargetNameCol.DataPropertyName = nameof(GKUpdate.TargetText);
+            StatusTextCol.DataPropertyName = nameof(GKUpdate.StatusText);
+            CancelRemoveCol.DataPropertyName = nameof(GKUpdate.CancelRemoveButtonText);
+            StartRestartCol.DataPropertyName = nameof(GKUpdate.StartRestartButtonText);
+
+            StatusGrid.DataSource = updates;
+
             DoQueueCheckerLoop();
         }
 
@@ -33,19 +49,11 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 {
                     if (!Exists(device) && !string.IsNullOrEmpty(device.HostName))
                     {
-                        var newProgCtl = new UpdaterControl(this, device, progressControls.Count + 1);
-                        progressControls.Add(newProgCtl);
-                        newProgCtl.CriticalStopError += CriticalStop;
+                        var newUpdate = new GKUpdate(this, device, updates.Count + 1);
+                        updates.Add(newUpdate);
+                        newUpdate.CriticalStopError += CriticalStop;
                     }
                 }
-
-                ProgressControlsTable.SuspendLayout();
-                this.SuspendLayout();
-
-                ProgressControlsTable.Controls.AddRange(progressControls.ToArray());
-
-                ProgressControlsTable.ResumeLayout();
-                this.ResumeLayout();
 
                 ProcessUpdates();
                 this.Show();
@@ -64,10 +72,9 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             {
                 if (!Exists(device) && !string.IsNullOrEmpty(device.HostName))
                 {
-                    var newProgCtl = new UpdaterControl(this, device, progressControls.Count + 1);
-                    ProgressControlsTable.Controls.Add(newProgCtl);
-                    progressControls.Add(newProgCtl);
-                    newProgCtl.CriticalStopError += CriticalStop;
+                    var newUpdate = new GKUpdate(this, device, updates.Count + 1);
+                    updates.Add(newUpdate);
+                    newUpdate.CriticalStopError += CriticalStop;
                     ProcessUpdates();
                 }
                 else
@@ -89,39 +96,27 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         private void StartUpdateByDevice(Device device)
         {
-            progressControls.Find(upd => upd.Device.Guid == device.Guid).StartUpdate();
+            updates.Find(upd => upd.Device.Guid == device.Guid).StartUpdate();
         }
 
         private bool Exists(Device device)
         {
-            return progressControls.Exists(upd => upd.Device.Guid == device.Guid);
+            return updates.Exists(upd => upd.Device.Guid == device.Guid);
         }
 
         public bool ActiveUpdates()
         {
-            return progressControls.Exists(upd => upd.Status == UpdateStatus.Running | upd.Status == UpdateStatus.Starting);
+            return updates.Exists(upd => upd.Status == UpdateStatus.Running | upd.Status == UpdateStatus.Starting);
         }
 
         private void CancelAll()
         {
-            foreach (UpdaterControl upd in progressControls)
-            {
-                if (upd.Status == UpdateStatus.Running)
-                {
-                    upd.CancelUpdate();
-                }
-            }
+            updates.ForEach(upd => { if (upd.Status == UpdateStatus.Running) upd.CancelUpdate(); });
         }
 
         private void DisposeUpdates()
         {
-            foreach (UpdaterControl upd in progressControls)
-            {
-                if (!upd.IsDisposed)
-                {
-                    upd.Dispose();
-                }
-            }
+            updates.Clear();
         }
 
         /// <summary>
@@ -133,14 +128,13 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             if (queueIsRunning)
             {
                 int runningUpdates = 0;
-                foreach (UpdaterControl upd in progressControls)
+                foreach (var upd in updates)
                 {
                     switch (upd.Status)
                     {
                         case UpdateStatus.Running:
                         case UpdateStatus.Starting:
-                            if (!upd.IsDisposed)
-                                runningUpdates += 1;
+                            runningUpdates += 1;
                             break;
                     }
                 }
@@ -166,11 +160,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             {
                 StartQueue();
             }
-        }
-
-        private void SortButton_Click(object sender, EventArgs e)
-        {
-            SortUpdates();
         }
 
         private void CriticalStop(object sender, EventArgs e)
@@ -208,16 +197,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             {
                 StartNextUpdate();
             }
-            PruneQueue();
             SetStats();
-        }
-
-        /// <summary>
-        /// Removes disposed update fragments from list.
-        /// </summary>
-        private void PruneQueue()
-        {
-            progressControls = progressControls.FindAll(upd => !upd.IsDisposed);
         }
 
         private async Task DoQueueCheckerLoop()
@@ -240,7 +220,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             int running = 0;
             int complete = 0;
 
-            foreach (UpdaterControl upd in progressControls)
+            foreach (var upd in updates)
             {
                 switch (upd.Status)
                 {
@@ -261,23 +241,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             QueuedUpdatesLabel.Text = "Queued: " + queued;
             RunningUpdatesLabel.Text = "Running: " + running;
             CompleteUpdatesLabel.Text = "Complete: " + complete;
-            TotalUpdatesLabel.Text = "Tot Updates: " + progressControls.Count;
-        }
-
-        /// <summary>
-        /// Sorts all the update controls in order of the <see cref="UpdateStatus"/> enum.
-        /// </summary>
-        private void SortUpdates()
-        {
-            var sortUpdates = new List<UpdaterControl>();
-
-            foreach (UpdateStatus status in Enum.GetValues(typeof(UpdateStatus)))
-            {
-                sortUpdates.AddRange(progressControls.FindAll(upd => upd.Status == status));
-            }
-
-            ProgressControlsTable.Controls.Clear();
-            ProgressControlsTable.Controls.AddRange(sortUpdates.ToArray());
+            TotalUpdatesLabel.Text = "Tot Updates: " + updates.Count;
         }
 
         /// <summary>
@@ -285,20 +249,8 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         /// </summary>
         private void StartNextUpdate()
         {
-            var nextUpdate = progressControls.Find(upd => upd.Status == UpdateStatus.Queued);
+            var nextUpdate = updates.Find(upd => upd.Status == UpdateStatus.Queued);
             if (nextUpdate != null) nextUpdate.StartUpdate();
-        }
-
-        private void RunQueue(bool canRunQueue)
-        {
-            if (canRunQueue)
-            {
-                StartQueue();
-            }
-            else
-            {
-                StopQueue();
-            }
         }
 
         private void StartQueue()
@@ -325,9 +277,124 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
         }
 
+        private void SetCurrentLog()
+        {
+            if (StatusGrid.CurrentRow != null)
+            {
+                var selectedUpdate = (GKUpdate)StatusGrid.CurrentRow.DataBoundItem;
+                LogTextBox.DataBindings.Clear();
+                LogTextBox.DataBindings.Add("Text", selectedUpdate, nameof(GKUpdate.LogMessages));
+            }
+        }
+
         private void GKUpdaterForm_Shown(object sender, EventArgs e)
         {
             SetQueueButton();
+        }
+
+        private void StatusGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Handle item button clicks.
+            var senderGrid = (DataGridView)sender;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+            {
+                var selectedUpdate = (GKUpdate)senderGrid.CurrentCell.OwningRow.DataBoundItem;
+
+                if (senderGrid.CurrentCell.OwningColumn == StartRestartCol)
+                {
+                    if (selectedUpdate.Status != UpdateStatus.Running && selectedUpdate.Status != UpdateStatus.Starting)
+                        selectedUpdate.StartRestart();
+                }
+                else if (senderGrid.CurrentCell.OwningColumn == CancelRemoveCol)
+                {
+                    if (selectedUpdate.Status != UpdateStatus.Running && selectedUpdate.Status != UpdateStatus.Starting)
+                    {
+                        updates.Remove(selectedUpdate);
+                        LogTextBox.DataBindings.Clear();
+                        LogTextBox.Clear();
+                    }
+                    else if (selectedUpdate.Status == UpdateStatus.Running || selectedUpdate.Status == UpdateStatus.Starting)
+                    {
+                        selectedUpdate.CancelUpdate();
+                    }
+                }
+            }
+        }
+
+        private void StatusGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            SetCurrentLog();
+        }
+
+        private void LogTextBox_TextChanged(object sender, EventArgs e)
+        {
+            LogTextBox.SelectionStart = LogTextBox.Text.Length;
+            LogTextBox.ScrollToCaret();
+        }
+
+        private void ViewDeviceMenuItem_Click(object sender, EventArgs e)
+        {
+            if (StatusGrid.CurrentRow != null)
+            {
+                var selectedUpdate = (GKUpdate)StatusGrid.CurrentRow.DataBoundItem;
+                ChildFormControl.LookupDevice(Helpers.ChildFormControl.MainFormInstance(), selectedUpdate.Device);
+            }
+        }
+
+        private void StatusGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (e.RowIndex >= 0)
+                {
+                    StatusGrid.Rows[e.RowIndex].Selected = true;
+                    StatusGrid.CurrentCell = StatusGrid[e.ColumnIndex, e.RowIndex];
+                }
+            }
+        }
+
+        private void Updates_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            // Save the state of the grid when the bound list is changing.
+            previousGridState = new GridState(StatusGrid);
+        }
+
+        private void StatusGrid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            // Restore the grid state after binding has updated.
+            // This keeps the selected item, and current scroll location from changing everytime an item is updated.
+            previousGridState?.RestoreState();
+            previousGridState = null;
+        }
+
+        private void StatusGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            // Handle sorting.
+            var column = StatusGrid.Columns[e.ColumnIndex];
+
+            if (column.SortMode != DataGridViewColumnSortMode.Programmatic)
+                return;
+
+            var sortGlyph = column.HeaderCell.SortGlyphDirection;
+
+            switch (sortGlyph)
+            {
+                case SortOrder.None:
+                case SortOrder.Ascending:
+                    updates = updates.Sort(SortOrder.Descending, column.DataPropertyName);
+                    updates.ResetBindings();
+                    StatusGrid.DataSource = updates;
+                    column.HeaderCell.SortGlyphDirection = SortOrder.Descending;
+                    break;
+
+                case SortOrder.Descending:
+                    updates = updates.Sort(SortOrder.Ascending, column.DataPropertyName);
+                    updates.ResetBindings();
+                    StatusGrid.DataSource = updates;
+                    column.HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+                    break;
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -342,6 +409,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                     }
 
                     DisposeUpdates();
+                    updates.ListChanged -= Updates_ListChanged;
                 }
             }
             finally
