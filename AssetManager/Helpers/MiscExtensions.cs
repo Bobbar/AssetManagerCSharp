@@ -1,14 +1,9 @@
 using System;
+using System.ComponentModel;
 using System.Data.Common;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Drawing;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.ComponentModel;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace AssetManager.Helpers
 {
@@ -94,6 +89,39 @@ namespace AssetManager.Helpers
             }
         }
 
+        public static BindingList<T> Sort<T>(this BindingList<T> list, SortOrder direction, string propertyName = null)
+        {
+            T[] arr = new T[list.Count];
+            list.CopyTo(arr, 0);
 
+            if (propertyName != null)
+            {
+                if (direction == SortOrder.Ascending)
+                {
+                    var sorted = arr.OrderBy(item => item.GetType().GetProperty(propertyName).GetValue(item, null));
+                    list = new BindingList<T>(sorted.ToList());
+                }
+                else
+                {
+                    var sorted = arr.OrderByDescending(item => item.GetType().GetProperty(propertyName).GetValue(item, null));
+                    list = new BindingList<T>(sorted.ToList());
+                }
+            }
+            else
+            {
+                if (direction == SortOrder.Ascending)
+                {
+                    var sorted = arr.OrderBy(item => item);
+                    list = new BindingList<T>(sorted.ToList());
+                }
+                else
+                {
+                    var sorted = arr.OrderByDescending(item => item);
+                    list = new BindingList<T>(sorted.ToList());
+                }
+            }
+
+            return list;
+        }
     }
 }

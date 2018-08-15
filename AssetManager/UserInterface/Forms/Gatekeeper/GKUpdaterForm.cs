@@ -21,7 +21,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         {
             InitializeComponent();
             StatusGrid.DoubleBuffered(true);
-          //  this.DisableDoubleBuffering();
             LogTextBox.DoubleBuffered(true);
             UpdateLogSplitter.DoubleBuffered(true);
 
@@ -295,6 +294,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         private void StatusGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            // Handle item button clicks.
             var senderGrid = (DataGridView)sender;
 
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
@@ -319,27 +319,12 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                         selectedUpdate.CancelUpdate();
                     }
                 }
-                //TODO - Button Clicked - Execute Code Here
             }
         }
 
         private void StatusGrid_SelectionChanged(object sender, EventArgs e)
         {
-            // StatusGrid.ClearSelection();
-        }
-
-        private void StatusGrid_RowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-        }
-
-        private void StatusGrid_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            var senderGrid = (DataGridView)sender;
-
-            if (e.RowIndex >= 0)
-            {
-                SetCurrentLog();
-            }
+            SetCurrentLog();
         }
 
         private void LogTextBox_TextChanged(object sender, EventArgs e)
@@ -365,8 +350,50 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 {
                     StatusGrid.Rows[e.RowIndex].Selected = true;
                     StatusGrid.CurrentCell = StatusGrid[e.ColumnIndex, e.RowIndex];
-                    SetCurrentLog();
                 }
+            }
+        }
+
+        private void Updates_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            // Save the state of the grid when the bound list is changing.
+            previousGridState = new GridState(StatusGrid);
+        }
+
+        private void StatusGrid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            // Restore the grid state after binding has updated.
+            // This keeps the selected item, and current scroll location from changing everytime an item is updated.
+            previousGridState?.RestoreState();
+            previousGridState = null;
+        }
+
+        private void StatusGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            // Handle sorting.
+            var column = StatusGrid.Columns[e.ColumnIndex];
+
+            if (column.SortMode != DataGridViewColumnSortMode.Programmatic)
+                return;
+
+            var sortGlyph = column.HeaderCell.SortGlyphDirection;
+
+            switch (sortGlyph)
+            {
+                case SortOrder.None:
+                case SortOrder.Ascending:
+                    updates = updates.Sort(SortOrder.Descending, column.DataPropertyName);
+                    updates.ResetBindings();
+                    StatusGrid.DataSource = updates;
+                    column.HeaderCell.SortGlyphDirection = SortOrder.Descending;
+                    break;
+
+                case SortOrder.Descending:
+                    updates = updates.Sort(SortOrder.Ascending, column.DataPropertyName);
+                    updates.ResetBindings();
+                    StatusGrid.DataSource = updates;
+                    column.HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+                    break;
             }
         }
 
@@ -382,24 +409,13 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                     }
 
                     DisposeUpdates();
+                    updates.ListChanged -= Updates_ListChanged;
                 }
             }
             finally
             {
                 base.Dispose(disposing);
             }
-        }
-
-        private void Updates_ListChanged(object sender, ListChangedEventArgs e)
-        {
-            Console.WriteLine(e.ListChangedType.ToString());
-            previousGridState = new GridState(StatusGrid);
-        }
-
-        private void StatusGrid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            previousGridState?.RestoreState();
-            previousGridState = null;
         }
     }
 }

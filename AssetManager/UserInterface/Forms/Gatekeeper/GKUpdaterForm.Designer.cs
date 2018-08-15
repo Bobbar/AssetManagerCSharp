@@ -21,11 +21,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.UpdateLogSplitter = new AssetManager.UserInterface.CustomControls.HotTrackSplitContainer();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.StatusGrid = new System.Windows.Forms.DataGridView();
-            this.StatusLightCol = new System.Windows.Forms.DataGridViewImageColumn();
-            this.TargetNameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StatusTextCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StartRestartCol = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.CancelRemoveCol = new System.Windows.Forms.DataGridViewButtonColumn();
             this.PopupMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ViewDeviceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -39,6 +34,11 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.CompleteUpdatesLabel = new System.Windows.Forms.Label();
             this.RunningUpdatesLabel = new System.Windows.Forms.Label();
             this.QueuedUpdatesLabel = new System.Windows.Forms.Label();
+            this.StatusLightCol = new System.Windows.Forms.DataGridViewImageColumn();
+            this.TargetNameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StatusTextCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StartRestartCol = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.CancelRemoveCol = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.UpdateLogSplitter)).BeginInit();
             this.UpdateLogSplitter.Panel1.SuspendLayout();
             this.UpdateLogSplitter.Panel2.SuspendLayout();
@@ -78,9 +78,9 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.StatusGrid);
             this.groupBox4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox4.Location = new System.Drawing.Point(3, 3);
+            this.groupBox4.Location = new System.Drawing.Point(0, 3);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(717, 517);
+            this.groupBox4.Size = new System.Drawing.Size(720, 517);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Updates";
@@ -124,53 +124,13 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.StatusGrid.ReadOnly = true;
             this.StatusGrid.RowHeadersVisible = false;
             this.StatusGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.StatusGrid.Size = new System.Drawing.Size(711, 496);
+            this.StatusGrid.Size = new System.Drawing.Size(714, 496);
             this.StatusGrid.TabIndex = 3;
-            this.StatusGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.StatusGrid_CellClick);
             this.StatusGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.StatusGrid_CellContentClick);
             this.StatusGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.StatusGrid_CellMouseDown);
+            this.StatusGrid.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.StatusGrid_ColumnHeaderMouseClick);
             this.StatusGrid.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.StatusGrid_DataBindingComplete);
-            this.StatusGrid.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.StatusGrid_RowEnter);
             this.StatusGrid.SelectionChanged += new System.EventHandler(this.StatusGrid_SelectionChanged);
-            // 
-            // StatusLightCol
-            // 
-            this.StatusLightCol.HeaderText = "";
-            this.StatusLightCol.Name = "StatusLightCol";
-            this.StatusLightCol.ReadOnly = true;
-            this.StatusLightCol.Width = 25;
-            // 
-            // TargetNameCol
-            // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.TargetNameCol.DefaultCellStyle = dataGridViewCellStyle2;
-            this.TargetNameCol.HeaderText = "Target";
-            this.TargetNameCol.Name = "TargetNameCol";
-            this.TargetNameCol.ReadOnly = true;
-            this.TargetNameCol.Width = 200;
-            // 
-            // StatusTextCol
-            // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.StatusTextCol.DefaultCellStyle = dataGridViewCellStyle3;
-            this.StatusTextCol.HeaderText = "Status";
-            this.StatusTextCol.Name = "StatusTextCol";
-            this.StatusTextCol.ReadOnly = true;
-            this.StatusTextCol.Width = 310;
-            // 
-            // StartRestartCol
-            // 
-            this.StartRestartCol.HeaderText = "";
-            this.StartRestartCol.Name = "StartRestartCol";
-            this.StartRestartCol.ReadOnly = true;
-            this.StartRestartCol.Width = 70;
-            // 
-            // CancelRemoveCol
-            // 
-            this.CancelRemoveCol.HeaderText = "";
-            this.CancelRemoveCol.Name = "CancelRemoveCol";
-            this.CancelRemoveCol.ReadOnly = true;
-            this.CancelRemoveCol.Width = 70;
             // 
             // PopupMenu
             // 
@@ -336,6 +296,47 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.QueuedUpdatesLabel.TabIndex = 0;
             this.QueuedUpdatesLabel.Text = "[Queued]";
             // 
+            // StatusLightCol
+            // 
+            this.StatusLightCol.HeaderText = "";
+            this.StatusLightCol.Name = "StatusLightCol";
+            this.StatusLightCol.ReadOnly = true;
+            this.StatusLightCol.Width = 25;
+            // 
+            // TargetNameCol
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.TargetNameCol.DefaultCellStyle = dataGridViewCellStyle2;
+            this.TargetNameCol.HeaderText = "Target";
+            this.TargetNameCol.Name = "TargetNameCol";
+            this.TargetNameCol.ReadOnly = true;
+            this.TargetNameCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.TargetNameCol.Width = 200;
+            // 
+            // StatusTextCol
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.StatusTextCol.DefaultCellStyle = dataGridViewCellStyle3;
+            this.StatusTextCol.HeaderText = "Status";
+            this.StatusTextCol.Name = "StatusTextCol";
+            this.StatusTextCol.ReadOnly = true;
+            this.StatusTextCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.StatusTextCol.Width = 310;
+            // 
+            // StartRestartCol
+            // 
+            this.StartRestartCol.HeaderText = "";
+            this.StartRestartCol.Name = "StartRestartCol";
+            this.StartRestartCol.ReadOnly = true;
+            this.StartRestartCol.Width = 70;
+            // 
+            // CancelRemoveCol
+            // 
+            this.CancelRemoveCol.HeaderText = "";
+            this.CancelRemoveCol.Name = "CancelRemoveCol";
+            this.CancelRemoveCol.ReadOnly = true;
+            this.CancelRemoveCol.Width = 70;
+            // 
             // GKUpdaterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -379,12 +380,12 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         private GroupBox groupBox2;
         private RichTextBox LogTextBox;
         private GroupBox groupBox4;
+        private ContextMenuStrip PopupMenu;
+        private ToolStripMenuItem ViewDeviceMenuItem;
         private DataGridViewImageColumn StatusLightCol;
         private DataGridViewTextBoxColumn TargetNameCol;
         private DataGridViewTextBoxColumn StatusTextCol;
         private DataGridViewButtonColumn StartRestartCol;
         private DataGridViewButtonColumn CancelRemoveCol;
-        private ContextMenuStrip PopupMenu;
-        private ToolStripMenuItem ViewDeviceMenuItem;
     }
 }
