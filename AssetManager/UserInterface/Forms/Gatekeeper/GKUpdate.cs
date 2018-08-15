@@ -1,4 +1,4 @@
-using AssetManager.Data.Classes;
+﻿using AssetManager.Data.Classes;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.Tools;
@@ -11,58 +11,83 @@ using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.Gatekeeper
 {
-    public partial class UpdaterControl : UserControl, IDisposable
+    public sealed class GKUpdate : INotifyPropertyChanged
     {
         public UpdateStatus Status { get { return currentStatus; } }
 
+        public Bitmap StatusLight { get; set; }
+
+        public string TargetText { get; set; }
+
+        public string StatusText { get; set; }
+
+        public int Sequence { get; set; }
+
+        public string CancelRemoveButtonText { get; set; }
+
+        public string StartRestartButtonText { get; set; }
+
+        public string LogMessages { get { return log; } }
+
         public Device Device
         {
-            get { return currentDevice; }
+            get { return targetDevice; }
         }
 
-        private UpdateStatus currentStatus;
-        private bool logVisible = false;
-        private Device currentDevice;
+        private string hostname;
+        private Device targetDevice;
         private Form parentForm;
-        private Color prevStatusColor;
-        private Bitmap statusLight;
+        private string log;
+        private UpdateStatus currentStatus;
         private PSExecWrapper psExec;
 
         public event EventHandler CriticalStopError;
 
-        protected virtual void OnCriticalStopError(EventArgs e)
+        private void OnCriticalStopError(EventArgs e)
         {
-            if (CriticalStopError != null)
-            {
-                CriticalStopError(this, e);
-            }
+            CriticalStopError?.Invoke(this, e);
         }
 
-        public UpdaterControl(Form parentForm, Device targetDevice, int seq = 0)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public GKUpdate(Form parentForm, Device targetDevice, int seq = 0)
         {
-            InitializeComponent();
-            currentDevice = targetDevice;
             this.parentForm = parentForm;
-            this.Size = this.MinimumSize;
-            this.DoubleBuffered = true;
-            Panel1.DoubleBuffered(true);
-            LogTextBox.DoubleBuffered(true);
+            this.targetDevice = targetDevice;
+            hostname = targetDevice.HostName;
+            Sequence = seq;
+            TargetText = targetDevice.HostName + " - " + targetDevice.CurrentUser;
 
             psExec = new PSExecWrapper(targetDevice.HostName);
             psExec.ErrorReceived += PsExec_ErrorReceived;
             psExec.OutputReceived += PsExec_OutputReceived;
 
-            DeviceInfoLabel.Text = currentDevice.Serial + " - " + currentDevice.CurrentUser;
+            DrawLight(Color.Yellow);
+            StatusText = "Queued";
+            CancelRemoveButtonText = "Remove";
+            StartRestartButtonText = "Start";
+            OnPropertyChanged("");
+        }
 
-            SetStatus(UpdateStatus.Queued);
+        private void PsExec_OutputReceived(object sender, string e)
+        {
+            Log("Output: " + e);
+        }
 
-            if (seq > 0)
+        private void PsExec_ErrorReceived(object sender, string e)
+        {
+            Log("Error: " + e);
+        }
+
+        private void OnPropertyChanged(string name)
+        {
+            if (parentForm.InvokeRequired)
             {
-                SequenceLabel.Text = "#" + seq;
+                parentForm.Invoke(new Action(() => OnPropertyChanged(name)));
             }
             else
             {
-                SequenceLabel.Text = "";
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             }
         }
 
@@ -70,6 +95,33 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         {
             psExec.StopProcess();
             SetStatus(UpdateStatus.Canceled);
+        }
+
+        public void StartRestart()
+        {
+            switch (currentStatus)
+            {
+                case UpdateStatus.Done:
+                case UpdateStatus.Error:
+                    StartUpdate();
+                    break;
+
+                case UpdateStatus.Running:
+                    OtherFunctions.Message("Cannot restart an update that is currently running.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Already running!", parentForm);
+                    break;
+
+                case UpdateStatus.Queued:
+                    var blah = OtherFunctions.Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Warning", parentForm);
+                    if (blah == DialogResult.Yes)
+                    {
+                        StartUpdate();
+                    }
+                    break;
+
+                default:
+                    StartUpdate();
+                    break;
+            }
         }
 
         public void StartUpdate()
@@ -91,6 +143,8 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         public async void BeginUpdate()
         {
+            Log("-----START-----");
+
             try
             {
                 int exitCode;
@@ -100,13 +154,12 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 SetStatus(UpdateStatus.Starting);
 
                 // Check for ping.
-                if (!await CanPing(currentDevice.HostName))
+                if (!await CanPing(targetDevice.HostName))
                 {
                     SetStatus(UpdateStatus.Error, "Cannot ping");
                     Log("Cannot ping target device.");
                     return;
                 }
-
                 Log("Executing Update...");
 
                 // Collect command strings.
@@ -186,6 +239,10 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 SetStatus(UpdateStatus.Error);
                 Log("Error: " + ex.ToString());
             }
+            finally
+            {
+                Log("-----END-----");
+            }
         }
 
         private async Task<bool> CanPing(string hostname)
@@ -202,68 +259,31 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
         private void DrawLight(Color color)
         {
-            if (color != prevStatusColor)
+            if (StatusLight == null)
             {
-                prevStatusColor = color;
-
-                if (statusLight == null)
-                {
-                    statusLight = new Bitmap(StatusPictureBox.Width, StatusPictureBox.Height);
-                }
-
-                using (SolidBrush brush = new SolidBrush(color))
-                using (Pen strokePen = new Pen(Color.Black, 1.5f))
-                using (Graphics gr = Graphics.FromImage(statusLight))
-                {
-                    gr.Clear(StatusPictureBox.BackColor);
-                    gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-                    float size = 20F;
-                    float xLoc = Convert.ToSingle(StatusPictureBox.Width / 2 - size / 2); ;
-                    float yLoc = Convert.ToSingle(StatusPictureBox.Height / 2 - size / 2);
-
-                    gr.FillEllipse(brush, xLoc, yLoc, size, size);
-                    gr.DrawEllipse(strokePen, xLoc, yLoc, size, size);
-
-                    StatusPictureBox.Image = statusLight;
-                }
+                StatusLight = new Bitmap(20, 20);
             }
-        }
 
-        private void Log(string text)
-        {
-            if (LogTextBox.InvokeRequired)
+            using (SolidBrush brush = new SolidBrush(color))
+            using (Pen strokePen = new Pen(Color.Black, 1.5f))
+            using (Graphics gr = Graphics.FromImage(StatusLight))
             {
-                LogTextBox.BeginInvoke(new Action(() => Log(text)));
-            }
-            else
-            {
-                LogTextBox.AppendText(text + Environment.NewLine);
-                LogTextBox.Invalidate();
-            }
-        }
+                gr.Clear(Color.Transparent);
+                gr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-        private void HideLog()
-        {
-            this.Size = this.MinimumSize;
-            logVisible = false;
-            ShowHideLabel.Text = "s";
-            //"+"
-        }
+                float size = 18F;
 
-        private void ShowLog()
-        {
-            this.Size = this.MaximumSize;
-            logVisible = true;
-            ShowHideLabel.Text = "r";
-            //"-"
+                gr.FillEllipse(brush, 0, 0, size, size);
+                gr.DrawEllipse(strokePen, 0, 0, size, size);
+            }
         }
 
         private void SetStatus(UpdateStatus Status, string message = null)
         {
             currentStatus = Status;
             SetStatusLight(Status);
-            SetStatusLabel(Status, message);
+            SetStatusText(Status, message);
+            OnPropertyChanged(null);
         }
 
         private void SetStatusLight(UpdateStatus Status)
@@ -285,128 +305,59 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
         }
 
-        private void SetStatusLabel(UpdateStatus Status, string message = null)
+        private void SetStatusText(UpdateStatus Status, string message = null)
         {
             switch (Status)
             {
                 case UpdateStatus.Queued:
-                    StatusLabel.Text = "Queued...";
+                    StatusText = "Queued";
+                    StartRestartButtonText = "Start";
+                    CancelRemoveButtonText = "Remove";
                     break;
 
                 case UpdateStatus.Starting:
-                    StatusLabel.Text = "Starting...";
+                    StatusText = "Starting";
+                    StartRestartButtonText = "Restart";
+                    CancelRemoveButtonText = "Cancel";
                     break;
 
                 case UpdateStatus.Running:
-                    StatusLabel.Text = "Running.";
+                    StatusText = "Running";
+                    StartRestartButtonText = "Restart";
+                    CancelRemoveButtonText = "Cancel";
                     break;
 
                 case UpdateStatus.Canceled:
-                    StatusLabel.Text = "Canceled.";
+                    StatusText = "Canceled";
+                    StartRestartButtonText = "Restart";
+                    CancelRemoveButtonText = "Remove";
                     break;
 
                 case UpdateStatus.Done:
-                    StatusLabel.Text = "Done.";
+                    StatusText = "Done";
+                    StartRestartButtonText = "Restart";
+                    CancelRemoveButtonText = "Remove";
                     break;
 
                 case UpdateStatus.Error:
-                    StatusLabel.Text = "ERROR!";
+                    StatusText = "ERROR!";
+                    StartRestartButtonText = "Restart";
+                    CancelRemoveButtonText = "Remove";
                     break;
             }
 
             if (message != null)
             {
-                StatusLabel.Text += " - " + message;
+                StatusText += " - " + message;
             }
+
+            OnPropertyChanged(null);
         }
 
-        private void PsExec_OutputReceived(object sender, string e)
+        private void Log(string message)
         {
-            Log("Output: " + e);
-        }
-
-        private void PsExec_ErrorReceived(object sender, string e)
-        {
-            Log("Error: " + e);
-        }
-
-        private void InfoLabel_Click(object sender, EventArgs e)
-        {
-            ChildFormControl.LookupDevice(Helpers.ChildFormControl.MainFormInstance(), currentDevice);
-        }
-
-        private void ShowHideLabel_Click(object sender, EventArgs e)
-        {
-            if (!logVisible)
-            {
-                ShowLog();
-            }
-            else
-            {
-                HideLog();
-            }
-        }
-
-        private void pbCancelClose_Click(object sender, EventArgs e)
-        {
-            if (currentStatus == UpdateStatus.Running | currentStatus == UpdateStatus.Starting)
-            {
-                if (psExec.CurrentProcess != null)
-                {
-                    psExec.StopProcess();
-                    SetStatus(UpdateStatus.Canceled);
-                }
-            }
-            else
-            {
-                this.Dispose();
-            }
-        }
-
-        private void pbRestart_Click(object sender, EventArgs e)
-        {
-            switch (currentStatus)
-            {
-                case UpdateStatus.Done:
-                case UpdateStatus.Error:
-                    StartUpdate();
-                    break;
-
-                case UpdateStatus.Running:
-                    OtherFunctions.Message("Cannot restart an update that is currently running.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Already running!", parentForm);
-                    break;
-
-                case UpdateStatus.Queued:
-                    var blah = OtherFunctions.Message("This update is queued. Starting it may exceed the maximum concurrent updates. Are you sure you want to start it?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Warning", parentForm);
-                    if (blah == DialogResult.Yes)
-                    {
-                        StartUpdate();
-                    }
-                    break;
-
-                default:
-                    StartUpdate();
-                    break;
-            }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing && components != null)
-                {
-                    //  remoteTransfer.Dispose();
-                    statusLight?.Dispose();
-                    components.Dispose();
-                    psExec.ErrorReceived -= PsExec_ErrorReceived;
-                    psExec.OutputReceived -= PsExec_OutputReceived;
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
+            log += message + Environment.NewLine;
+            OnPropertyChanged(null);
         }
     }
 }
