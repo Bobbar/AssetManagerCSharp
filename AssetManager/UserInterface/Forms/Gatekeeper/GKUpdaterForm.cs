@@ -20,6 +20,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         public GKUpdaterForm(ExtendedForm parentForm) : base(parentForm)
         {
             InitializeComponent();
+            this.DisableDoubleBuffering();
             StatusGrid.DoubleBuffered(true);
             LogTextBox.DoubleBuffered(true);
             UpdateLogSplitter.DoubleBuffered(true);
@@ -281,15 +282,84 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         {
             if (StatusGrid.CurrentRow != null)
             {
+                // Set the binding for the log textbox to the current selected update.
                 var selectedUpdate = (GKUpdate)StatusGrid.CurrentRow.DataBoundItem;
                 LogTextBox.DataBindings.Clear();
                 LogTextBox.DataBindings.Add("Text", selectedUpdate, nameof(GKUpdate.LogMessages));
+
+                // Set the log checkbox column to reflect the currently displayed log.
+                foreach (DataGridViewRow row in StatusGrid.Rows)
+                {
+                    row.Cells[nameof(LogViewCol)].Value = false;
+                }
+
+                StatusGrid.CurrentRow.Cells[nameof(LogViewCol)].Value = true;
             }
         }
 
         private void GKUpdaterForm_Shown(object sender, EventArgs e)
         {
             SetQueueButton();
+        }
+
+        private void LogTextBox_TextChanged(object sender, EventArgs e)
+        {
+            // Scroll to the bottom then resume drawing.
+            LogTextBox.SelectionStart = LogTextBox.Text.Length;
+            LogTextBox.ScrollToCaret();
+            LogTextBox.Resume();
+            LogTextBox.ResumeLayout();
+        }
+
+        private void ViewDeviceMenuItem_Click(object sender, EventArgs e)
+        {
+            if (StatusGrid.CurrentRow != null)
+            {
+                var selectedUpdate = (GKUpdate)StatusGrid.CurrentRow.DataBoundItem;
+                ChildFormControl.LookupDevice(Helpers.ChildFormControl.MainFormInstance(), selectedUpdate.Device);
+            }
+        }
+
+        private void Updates_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            // Save the state of the grid when the bound list is changing.
+            previousGridState = new GridState(StatusGrid);
+
+            // Only suspend the log textbox if it's bound proptery is changing.
+            if (e.PropertyDescriptor != null && LogTextBox.DataBindings.Count > 0)
+            {
+                if (e.PropertyDescriptor.Name == LogTextBox.DataBindings[0].BindingMemberInfo.BindingMember)
+                {
+                    // Suspend drawing and layout to reduce flicker.
+                    LogTextBox.Suspend();
+                    LogTextBox.SuspendLayout();
+                }
+            }
+        }
+
+        private void StatusGrid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            // Restore the grid state after binding has updated.
+            // This keeps the selected item, and current scroll location from changing everytime an item is updated.
+            previousGridState?.RestoreState();
+            previousGridState = null;
+        }
+
+        private void StatusGrid_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            SetCurrentLog();
+        }
+
+        private void StatusGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (e.RowIndex >= 0)
+                {
+                    StatusGrid.Rows[e.RowIndex].Selected = true;
+                    StatusGrid.CurrentCell = StatusGrid[e.ColumnIndex, e.RowIndex];
+                }
+            }
         }
 
         private void StatusGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -320,52 +390,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                     }
                 }
             }
-        }
-
-        private void StatusGrid_SelectionChanged(object sender, EventArgs e)
-        {
-            SetCurrentLog();
-        }
-
-        private void LogTextBox_TextChanged(object sender, EventArgs e)
-        {
-            LogTextBox.SelectionStart = LogTextBox.Text.Length;
-            LogTextBox.ScrollToCaret();
-        }
-
-        private void ViewDeviceMenuItem_Click(object sender, EventArgs e)
-        {
-            if (StatusGrid.CurrentRow != null)
-            {
-                var selectedUpdate = (GKUpdate)StatusGrid.CurrentRow.DataBoundItem;
-                ChildFormControl.LookupDevice(Helpers.ChildFormControl.MainFormInstance(), selectedUpdate.Device);
-            }
-        }
-
-        private void StatusGrid_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                if (e.RowIndex >= 0)
-                {
-                    StatusGrid.Rows[e.RowIndex].Selected = true;
-                    StatusGrid.CurrentCell = StatusGrid[e.ColumnIndex, e.RowIndex];
-                }
-            }
-        }
-
-        private void Updates_ListChanged(object sender, ListChangedEventArgs e)
-        {
-            // Save the state of the grid when the bound list is changing.
-            previousGridState = new GridState(StatusGrid);
-        }
-
-        private void StatusGrid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            // Restore the grid state after binding has updated.
-            // This keeps the selected item, and current scroll location from changing everytime an item is updated.
-            previousGridState?.RestoreState();
-            previousGridState = null;
         }
 
         private void StatusGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)

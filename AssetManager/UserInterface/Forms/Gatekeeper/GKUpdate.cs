@@ -15,40 +15,127 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
     {
         public UpdateStatus Status { get { return currentStatus; } }
 
-        public Bitmap StatusLight { get; set; }
+        public Bitmap StatusLight
+        {
+            get { return statusLight; }
 
-        public string TargetText { get; set; }
+            set
+            {
+                statusLight = value;
+                OnPropertyChanged(nameof(StatusLight));
+            }
+        }
 
-        public string StatusText { get; set; }
+        public string TargetText
+        {
+            get { return targetText; }
+
+            set
+            {
+                if (targetText != value)
+                {
+                    targetText = value;
+                    OnPropertyChanged(nameof(TargetText));
+                }
+            }
+        }
+
+        public string StatusText
+        {
+            get { return statusText; }
+
+            set
+            {
+                if (statusText != value)
+                {
+                    statusText = value;
+                    OnPropertyChanged(nameof(StatusText));
+                }
+            }
+        }
 
         public int Sequence { get; set; }
 
-        public string CancelRemoveButtonText { get; set; }
+        public string CancelRemoveButtonText
+        {
+            get { return cancelRemoveButtonText; }
 
-        public string StartRestartButtonText { get; set; }
+            set
+            {
+                if (cancelRemoveButtonText != value)
+                {
+                    cancelRemoveButtonText = value;
+                    OnPropertyChanged(nameof(CancelRemoveButtonText));
+                }
+            }
+        }
 
-        public string LogMessages { get { return log; } }
+        public string StartRestartButtonText
+        {
+            get { return startRestartButtonText; }
+
+            set
+            {
+                if (startRestartButtonText != value)
+                {
+                    startRestartButtonText = value;
+                    OnPropertyChanged(nameof(StartRestartButtonText));
+                }
+            }
+        }
+
+        public string LogMessages
+        {
+            get { return logMessages; }
+
+            set
+            {
+                if (logMessages != value)
+                {
+                    logMessages = value;
+                    OnPropertyChanged(nameof(LogMessages));
+                }
+            }
+        }
 
         public Device Device
         {
             get { return targetDevice; }
         }
 
+        private Bitmap statusLight;
+        private string targetText;
+        private string statusText;
+        private string cancelRemoveButtonText;
+        private string startRestartButtonText;
+        private string logMessages;
+
         private string hostname;
         private Device targetDevice;
         private Form parentForm;
-        private string log;
         private UpdateStatus currentStatus;
         private PSExecWrapper psExec;
 
         public event EventHandler CriticalStopError;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnCriticalStopError(EventArgs e)
         {
             CriticalStopError?.Invoke(this, e);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string name)
+        {
+            if (parentForm.InvokeRequired)
+            {
+                parentForm.Invoke(new Action(() => OnPropertyChanged(name)));
+            }
+            else
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
+        }
 
         public GKUpdate(Form parentForm, Device targetDevice, int seq = 0)
         {
@@ -66,7 +153,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             StatusText = "Queued";
             CancelRemoveButtonText = "Remove";
             StartRestartButtonText = "Start";
-            OnPropertyChanged("");
+            OnPropertyChanged(null);
         }
 
         private void PsExec_OutputReceived(object sender, string e)
@@ -77,18 +164,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         private void PsExec_ErrorReceived(object sender, string e)
         {
             Log("Error: " + e);
-        }
-
-        private void OnPropertyChanged(string name)
-        {
-            if (parentForm.InvokeRequired)
-            {
-                parentForm.Invoke(new Action(() => OnPropertyChanged(name)));
-            }
-            else
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-            }
         }
 
         public void CancelUpdate()
@@ -283,7 +358,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             currentStatus = Status;
             SetStatusLight(Status);
             SetStatusText(Status, message);
-            OnPropertyChanged(null);
         }
 
         private void SetStatusLight(UpdateStatus Status)
@@ -350,14 +424,11 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             {
                 StatusText += " - " + message;
             }
-
-            OnPropertyChanged(null);
         }
 
         private void Log(string message)
         {
-            log += message + Environment.NewLine;
-            OnPropertyChanged(null);
+            LogMessages += message + Environment.NewLine;
         }
     }
 }

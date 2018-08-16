@@ -61,6 +61,20 @@ namespace AssetManager.Helpers
             }
         }
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool LockWindowUpdate(IntPtr hWndLock);
+
+        public static void Suspend(this Control control)
+        {
+            LockWindowUpdate(control.Handle);
+        }
+
+        public static void Resume(this Control control)
+        {
+            LockWindowUpdate(IntPtr.Zero);
+        }
+
+
         public static T Find<T>(this BindingList<T> list, Predicate<T> match)
         {
             foreach (var item in list)
