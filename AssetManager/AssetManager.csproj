@@ -33,12 +33,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>false</MapFileExtensions>
-    <InstallUrl>http://svr-www18/rblovell/assetmanagerc/tree/master/clickonce/</InstallUrl>
+    <InstallUrl>http://svr-www18/rblovell/assetmanagerc/tree/gitlab_publish/clickonce/</InstallUrl>
+    <UpdateUrl>http://svr-www18/rblovell/assetmanagerc/tree/gitlab_publish/clickonce/</UpdateUrl>
     <MinimumRequiredVersion>4.7.0.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>51</ApplicationRevision>
+    <ApplicationRevision>52</ApplicationRevision>
     <ApplicationVersion>4.7.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
