@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -529,7 +529,7 @@ namespace PingVisualizer
             }
             return false;
         }
-
+        
         private void Render(bool refreshPingBars = false)
         {
             if (pingReplies.Count < 1)
@@ -576,7 +576,8 @@ namespace PingVisualizer
                         refreshBarsEvent.Reset();
                     }
 
-                    // Perform the drawing methods.
+                    // Perform the drawing methods:
+
                     // Change the background to indicate scrolling is active.
                     if (!mouseIsScrolling)
                     {
@@ -616,13 +617,23 @@ namespace PingVisualizer
 
         private void DrawScaleLines()
         {
-            float stepSize = currentViewScale * 15;
+            // How many milliseconds a scale line will denote.
+            int msPerStep = 15;
+
+            // Calculate the drawing distance between each scale line.
+            float stepSize = currentViewScale * msPerStep;
+
+            // Calculate the number of scale lines that will fit within the current viewport.
             int numOfLines = (int)(upscaledImageSize.Width / stepSize);
+
+            // Only draw the scale lines if we are below the max number allowed.
             if (numOfLines < maxViewScaleLines)
             {
+                // Set the initial X position.
                 float scaleXPos = stepSize;
                 Color backColor;
 
+                // Change the back color depending on the scrolling status.
                 if (mouseIsScrolling)
                 {
                     backColor = mouseScrollingBackColor;
@@ -632,11 +643,17 @@ namespace PingVisualizer
                     backColor = Color.Black;
                 }
 
+                // Create a new pen with a variable color:
+                // The pen color is gradually blended with the back color as the number of scale lines approaches the max allowed.
+                // This gives the effect of the the scale lines fading out as the scale increases. 
                 using (var pen = new Pen(GetVariableColor(Color.White, backColor, maxViewScaleLines, numOfLines), 2))
                 {
                     for (int a = 0; a < numOfLines; a++)
                     {
+                        // Draw a vertical scale line.
                         upscaledGraphics.DrawLine(pen, new PointF(scaleXPos, 0), new PointF(scaleXPos, upscaledImageSize.Height));
+
+                        // Increment the X position by the step size.
                         scaleXPos += stepSize;
                     }
                 }
