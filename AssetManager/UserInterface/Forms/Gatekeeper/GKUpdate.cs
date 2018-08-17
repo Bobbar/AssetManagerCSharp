@@ -377,6 +377,8 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                     DrawLight(Color.Red);
                     break;
             }
+
+            OnPropertyChanged(nameof(StatusLight));
         }
 
         private void SetStatusText(UpdateStatus Status, string message = null)
