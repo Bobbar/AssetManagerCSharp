@@ -1,1 +1,3 @@
 * -text
+*.application binary
+*.exe binary
