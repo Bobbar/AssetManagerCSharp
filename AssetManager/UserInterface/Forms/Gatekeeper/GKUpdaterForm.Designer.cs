@@ -223,7 +223,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.LogTextBox.Location = new System.Drawing.Point(3, 18);
             this.LogTextBox.Name = "LogTextBox";
             this.LogTextBox.ReadOnly = true;
-            this.LogTextBox.ShortcutsEnabled = false;
             this.LogTextBox.Size = new System.Drawing.Size(427, 496);
             this.LogTextBox.TabIndex = 0;
             this.LogTextBox.Text = "";
