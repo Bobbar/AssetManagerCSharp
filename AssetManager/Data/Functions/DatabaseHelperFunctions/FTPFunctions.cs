@@ -32,7 +32,8 @@ namespace AssetManager.Data.Functions
             }
             catch (Exception ex)
             {
-                return ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                ErrorHandling.ErrHandle(ex, System.Reflection.MethodBase.GetCurrentMethod());
+                return false;
             }
         }
 
