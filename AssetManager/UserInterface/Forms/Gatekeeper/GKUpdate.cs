@@ -263,7 +263,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
                 Log("Exit Code: " + exitCode);
 
-                if (exitCode != 0)
+                if (exitCode != 0 && exitCode != 1)
                 {
                     Log("Error while copying files!");
                     SetStatus(UpdateStatus.Error, "Could Not Copy Files");
