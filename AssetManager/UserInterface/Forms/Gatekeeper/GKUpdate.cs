@@ -316,7 +316,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             finally
             {
                 elapTimer.Stop();
-                Log(string.Format("Elapsed time: {0} s", elapTimer.Elapsed.Seconds));
+                Log(string.Format("Elapsed time: {0} s", Math.Round(elapTimer.Elapsed.TotalSeconds,2)));
                 Log("-----END-----");
             }
         }

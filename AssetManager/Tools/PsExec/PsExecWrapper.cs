@@ -1,4 +1,5 @@
 ﻿using AssetManager.Security;
+using AssetManager.Data;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -76,7 +77,8 @@ namespace AssetManager.Tools
                     {
                         currentProcess = p;
 
-                        if (runAsAdmin)
+                        // Don't run as Admin if we're working on Vinton.
+                        if (runAsAdmin && ServerInfo.CurrentDataBase != DatabaseName.vintondd)
                         {
                             p.StartInfo.Domain = SecurityTools.AdminCreds.Domain;
                             p.StartInfo.UserName = SecurityTools.AdminCreds.UserName;
