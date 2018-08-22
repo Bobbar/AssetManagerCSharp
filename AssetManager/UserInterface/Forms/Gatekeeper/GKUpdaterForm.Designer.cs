@@ -57,6 +57,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             this.UpdateLogSplitter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.UpdateLogSplitter.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.UpdateLogSplitter.HotTracking = true;
             this.UpdateLogSplitter.Location = new System.Drawing.Point(12, 97);
             this.UpdateLogSplitter.Name = "UpdateLogSplitter";

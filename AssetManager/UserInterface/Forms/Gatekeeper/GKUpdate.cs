@@ -219,12 +219,12 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
         public async void BeginUpdate()
         {
             Log("-----START-----");
+            var elapTimer = new System.Diagnostics.Stopwatch();
+            elapTimer.Start();
 
             try
             {
                 int exitCode;
-                var elapTimer = new System.Diagnostics.Stopwatch();
-                elapTimer.Start();
 
                 SetStatus(UpdateStatus.Starting);
 
@@ -301,9 +301,8 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 }
 
                 SetStatus(UpdateStatus.Done, "No Errors");
-                elapTimer.Stop();
+               
                 Log("Update completed successfully.");
-                Log(string.Format("Elapsed time: {0} s", elapTimer.Elapsed.Seconds));
             }
             catch (Win32Exception)
             {
@@ -316,6 +315,8 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
             finally
             {
+                elapTimer.Stop();
+                Log(string.Format("Elapsed time: {0} s", elapTimer.Elapsed.Seconds));
                 Log("-----END-----");
             }
         }
@@ -371,6 +372,10 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
 
                 case UpdateStatus.Queued:
                     DrawLight(Color.Yellow);
+                    break;
+
+                case UpdateStatus.Done:
+                    DrawLight(Color.DeepSkyBlue);
                     break;
 
                 default:
