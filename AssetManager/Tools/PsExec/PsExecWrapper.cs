@@ -173,7 +173,7 @@ namespace AssetManager.Tools
 
         public void StopProcess()
         {
-            cancelSource.Cancel();
+            cancelSource?.Cancel();
 
             if (currentProcess != null)
             {

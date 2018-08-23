@@ -210,11 +210,6 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
         }
 
-        private void QueueChecker_Tick(object sender, EventArgs e)
-        {
-            ProcessUpdates();
-        }
-
         private void SetStats()
         {
             int queued = 0;
