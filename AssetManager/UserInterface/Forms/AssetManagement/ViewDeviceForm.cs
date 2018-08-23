@@ -56,7 +56,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         public ViewDeviceForm(ExtendedForm parentForm, MappedObject device, bool startHidden = false) : base(parentForm, device, startHidden)
         {
             currentViewDevice = (Device)device;
-
+           
             InitializeComponent();
             InitDBControls();
 
@@ -1179,6 +1179,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         private void ViewDeviceForm_Shown(object sender, EventArgs e)
         {
             gridFilling = false;
+
+            // Set the minimum size when shown to keep this window from taking focus from the main form when started hidden.
+            this.MinimumSize = new System.Drawing.Size(1161, 559);
         }
 
         #endregion Control Events

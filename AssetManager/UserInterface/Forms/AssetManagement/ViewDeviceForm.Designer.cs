@@ -1280,7 +1280,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Controls.Add(this.StatusStrip);
             this.DoubleBuffered = true;
             this.MinimizeChildren = true;
-            this.MinimumSize = new System.Drawing.Size(1161, 559);
+            //this.MinimumSize = new System.Drawing.Size(1161, 559);
             this.Name = "ViewDeviceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View";
