@@ -18,6 +18,8 @@ namespace PingVisualizer
         private ManualResetEvent renderEvent = new ManualResetEvent(false);
         private ManualResetEvent disposeEvent = new ManualResetEvent(false);
         private ManualResetEvent refreshBarsEvent = new ManualResetEvent(false);
+        private ManualResetEvent pingResetEvent = new ManualResetEvent(false);
+
         private Task renderTask;
 
         private Graphics upscaledGraphics;
@@ -31,8 +33,7 @@ namespace PingVisualizer
 
         private Ping ping = new Ping();
         private List<PingInfo> pingReplies = new List<PingInfo>();
-        private bool pingRunning = false;
-        private System.Timers.Timer pingTimer;
+        private System.Diagnostics.Stopwatch pingLoopTimer = new System.Diagnostics.Stopwatch();
 
         private string hostname;
         private Control targetControl;
@@ -45,7 +46,6 @@ namespace PingVisualizer
 
         private System.Timers.Timer scaleEaseTimer;
         private System.Diagnostics.Stopwatch scaleEaseStopwatch = new System.Diagnostics.Stopwatch();
-       
 
         private float infoFontSize;
         private float overInfoFontSize;
@@ -198,29 +198,6 @@ namespace PingVisualizer
             targetControl.MouseMove += TargetControl_MouseMove;
         }
 
-        private void InitPing()
-        {
-            ServicePointManager.DnsRefreshTimeout = 0;
-            InitPingTimer();
-            PerformPing();
-        }
-
-        private void InitPingTimer()
-        {
-            if (pingTimer == null)
-                pingTimer = new System.Timers.Timer();
-
-            pingTimer.Elapsed += PingTimer_Elapsed;
-            pingTimer.Interval = currentPingInterval;
-            pingTimer.Start();
-        }
-
-        private void PingTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            if (!this.isDisposing)
-                PerformPing();
-        }
-
         private void InitScaleTimer()
         {
             scaleEaseTimer = new System.Timers.Timer();
@@ -232,6 +209,127 @@ namespace PingVisualizer
         {
             if (!this.isDisposing)
                 EaseScaleChange();
+        }
+
+        private void InitPing()
+        {
+            ServicePointManager.DnsRefreshTimeout = 0;
+            DoPingLoop();
+        }
+
+        /// <summary>
+        /// Starts the adaptive wait ping loop.
+        /// </summary>
+        /// <returns></returns>
+        private async Task DoPingLoop()
+        {
+            // Start a loop within an async task.
+            await Task.Run(() =>
+             {
+                 do
+                 {
+                     // Start/Reset the loop timer.
+                     pingLoopTimer.Restart();
+
+                     // Perform the blocking ping method.
+                     PerformPing();
+
+                     // Determine how we need to wait to try to meet the current ping interval.
+                     // A longer ping time = shorter wait period.
+                     var waitTime = currentPingInterval - (int)pingLoopTimer.ElapsedMilliseconds;
+
+                     // If we have a positive wait time, pause the thread.
+                     if (waitTime > 0)
+                         Thread.Sleep(waitTime);
+                 }
+                 while (!this.isDisposing);
+             });
+        }
+
+        private void SetPingInterval(int interval)
+        {
+            if (this.isDisposing) return;
+
+            if (currentPingInterval != interval)
+            {
+                currentPingInterval = interval;
+            }
+        }
+
+        private void PerformPing()
+        {
+            try
+            {
+                var reply = GetPingReply(hostname);
+
+                if (this.isDisposing)
+                    return;
+
+                if (reply.Status == IPStatus.Success)
+                {
+                    SetPingInterval(goodPingInterval);
+                }
+                else
+                {
+                    SetPingInterval(noPingInterval);
+                }
+
+                var pingInfo = new PingInfo(reply);
+                AddPingReply(pingInfo);
+                OnNewPingResult(pingInfo);
+            }
+            catch (Exception)
+            {
+                if (!this.isDisposing)
+                {
+                    AddPingReply(new PingInfo());
+                    OnNewPingResult(new PingInfo());
+                    SetPingInterval(noPingInterval);
+                }
+            }
+            finally
+            {
+                if (!this.isDisposing)
+                {
+                    if (!mouseIsScrolling)
+                    {
+                        Render(true);
+                    }
+                    else
+                    {
+                        Render(false);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds ping reply to the reply collection if it's a success or there were previous successes.
+        /// </summary>
+        /// <param name="reply"></param>
+        private void AddPingReply(PingInfo reply)
+        {
+            // No sense in accumulating when we start with the device offline.
+            if (pingReplies != null)
+            {
+                if (pingReplies.Count == 0 && reply.Status == IPStatus.Success)
+                {
+                    pingReplies.Add(reply);
+                }
+                else if (pingReplies.Count > 0)
+                {
+                    pingReplies.Add(reply);
+                }
+            }
+        }
+
+        private PingReply GetPingReply(string hostname)
+        {
+            var options = new PingOptions();
+            options.DontFragment = true;
+            byte[] buff = Encoding.ASCII.GetBytes("ping");
+
+            return ping.Send(hostname, pingTimeOut, buff, options);
         }
 
         private void SetScale()
@@ -314,6 +412,7 @@ namespace PingVisualizer
         }
 
         #region "Easing Functions"
+
         private double EaseCircleIn(float k)
         {
             return 1f - Math.Sqrt(1f - (k * k));
@@ -341,104 +440,8 @@ namespace PingVisualizer
             if (time == 1) return 1;
             return Math.Pow(2f, -10f * time) * Math.Sin((time - 0.1f) * (2f * Math.PI) / 0.4f) + 1f;
         }
+
         #endregion "Easing Functions"
-
-        private async void PerformPing()
-        {
-            try
-            {
-                if (!pingRunning)
-                {
-                    var reply = await GetPingReply(hostname);
-
-                    if (this.isDisposing)
-                        return;
-
-                    if (reply.Status == IPStatus.Success)
-                    {
-                        SetPingInterval(goodPingInterval);
-                    }
-                    else
-                    {
-                        SetPingInterval(noPingInterval);
-                    }
-
-                    var pingInfo = new PingInfo(reply);
-                    AddPingReply(pingInfo);
-                    OnNewPingResult(pingInfo);
-                }
-            }
-            catch (Exception)
-            {
-                if (!this.isDisposing)
-                {
-                    AddPingReply(new PingInfo());
-                    OnNewPingResult(new PingInfo());
-                    SetPingInterval(noPingInterval);
-                }
-            }
-            finally
-            {
-                if (!this.isDisposing)
-                {
-                    if (!mouseIsScrolling)
-                    {
-                        Render(true);
-                    }
-                    else
-                    {
-                        Render(false);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Adds ping reply to the reply collection if it's a success or there were previous successes.
-        /// </summary>
-        /// <param name="reply"></param>
-        private void AddPingReply(PingInfo reply)
-        {
-            // No sense in accumulating when we start with the device offline.
-            if (pingReplies != null)
-            {
-                if (pingReplies.Count == 0 && reply.Status == IPStatus.Success)
-                {
-                    pingReplies.Add(reply);
-                }
-                else if (pingReplies.Count > 0)
-                {
-                    pingReplies.Add(reply);
-                }
-            }
-        }
-
-        private async Task<PingReply> GetPingReply(string hostname)
-        {
-            try
-            {
-                pingRunning = true;
-                var options = new PingOptions();
-                options.DontFragment = true;
-                byte[] buff = Encoding.ASCII.GetBytes("ping");
-
-                return await Task.Run(() => { return ping.Send(hostname, pingTimeOut, buff, options); });
-            }
-            finally
-            {
-                pingRunning = false;
-            }
-        }
-
-        private void SetPingInterval(int interval)
-        {
-            if (currentPingInterval != interval)
-            {
-                currentPingInterval = interval;
-            }
-
-            if (!this.isDisposing) pingTimer.Interval = currentPingInterval;
-        }
 
         private void TargetControl_VisibleChanged(object sender, EventArgs e)
         {
@@ -529,7 +532,7 @@ namespace PingVisualizer
             }
             return false;
         }
-        
+
         private void Render(bool refreshPingBars = false)
         {
             if (pingReplies.Count < 1)
@@ -645,7 +648,7 @@ namespace PingVisualizer
 
                 // Create a new pen with a variable color:
                 // The pen color is gradually blended with the back color as the number of scale lines approaches the max allowed.
-                // This gives the effect of the the scale lines fading out as the scale increases. 
+                // This gives the effect of the the scale lines fading out as the scale increases.
                 using (var pen = new Pen(GetVariableColor(Color.White, backColor, maxViewScaleLines, numOfLines), 2))
                 {
                     for (int a = 0; a < numOfLines; a++)
@@ -955,8 +958,6 @@ namespace PingVisualizer
                     targetControl.MouseMove -= TargetControl_MouseMove;
                     targetControl.VisibleChanged -= TargetControl_VisibleChanged;
 
-                    pingTimer.Stop();
-
                     disposeEvent.Set();
                     renderEvent.Set();
 
@@ -978,9 +979,6 @@ namespace PingVisualizer
                         currentBarList.Clear();
                         currentBarList = null;
                     }
-
-                    pingTimer.Dispose();
-                    pingTimer = null;
 
                     ping.Dispose();
                     pingReplies.Clear();
