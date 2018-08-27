@@ -18,7 +18,6 @@ namespace PingVisualizer
         private ManualResetEvent renderEvent = new ManualResetEvent(false);
         private ManualResetEvent disposeEvent = new ManualResetEvent(false);
         private ManualResetEvent refreshBarsEvent = new ManualResetEvent(false);
-        private ManualResetEvent pingResetEvent = new ManualResetEvent(false);
 
         private Task renderTask;
 
@@ -228,19 +227,53 @@ namespace PingVisualizer
              {
                  do
                  {
-                     // Start/Reset the loop timer.
-                     pingLoopTimer.Restart();
+                     try
+                     {
+                         // Start/Reset the loop timer.
+                         pingLoopTimer.Restart();
 
-                     // Perform the blocking ping method.
-                     PerformPing();
+                         // Get a new ping reply.
+                         var reply = GetPingReply(hostname);
 
-                     // Determine how we need to wait to try to meet the current ping interval.
-                     // A longer ping time = shorter wait period.
-                     var waitTime = currentPingInterval - (int)pingLoopTimer.ElapsedMilliseconds;
+                         // Determine how we need to wait to try to meet the current ping interval.
+                         // A longer ping time = shorter wait period.
+                         var waitTime = currentPingInterval - (int)pingLoopTimer.ElapsedMilliseconds;
 
-                     // If we have a positive wait time, pause the thread.
-                     if (waitTime > 0)
-                         Thread.Sleep(waitTime);
+                         if (this.isDisposing)
+                             return;
+
+                         // If we have a positive wait time, pause the thread.
+                         if (waitTime > 0)
+                             Thread.Sleep(waitTime);
+
+                         // Add the new reply.
+                         var pingInfo = new PingInfo(reply);
+                         AddPingReply(pingInfo);
+                     }
+                     catch (Exception)
+                     {
+                         // If theres and exception during the ping, add an empty reply.
+                         // Empty replies display with an "ERR" message.
+                         if (!this.isDisposing)
+                         {
+                             AddPingReply(new PingInfo());
+                         }
+                     }
+                     finally
+                     {
+                         // Fire off a new render event.
+                         if (!this.isDisposing)
+                         {
+                             if (!mouseIsScrolling)
+                             {
+                                 Render(true);
+                             }
+                             else
+                             {
+                                 Render(false);
+                             }
+                         }
+                     }
                  }
                  while (!this.isDisposing);
              });
@@ -256,53 +289,6 @@ namespace PingVisualizer
             }
         }
 
-        private void PerformPing()
-        {
-            try
-            {
-                var reply = GetPingReply(hostname);
-
-                if (this.isDisposing)
-                    return;
-
-                if (reply.Status == IPStatus.Success)
-                {
-                    SetPingInterval(goodPingInterval);
-                }
-                else
-                {
-                    SetPingInterval(noPingInterval);
-                }
-
-                var pingInfo = new PingInfo(reply);
-                AddPingReply(pingInfo);
-                OnNewPingResult(pingInfo);
-            }
-            catch (Exception)
-            {
-                if (!this.isDisposing)
-                {
-                    AddPingReply(new PingInfo());
-                    OnNewPingResult(new PingInfo());
-                    SetPingInterval(noPingInterval);
-                }
-            }
-            finally
-            {
-                if (!this.isDisposing)
-                {
-                    if (!mouseIsScrolling)
-                    {
-                        Render(true);
-                    }
-                    else
-                    {
-                        Render(false);
-                    }
-                }
-            }
-        }
-
         /// <summary>
         /// Adds ping reply to the reply collection if it's a success or there were previous successes.
         /// </summary>
@@ -312,14 +298,29 @@ namespace PingVisualizer
             // No sense in accumulating when we start with the device offline.
             if (pingReplies != null)
             {
+                // If we have no replies yet, only add a new one if it was a success.
                 if (pingReplies.Count == 0 && reply.Status == IPStatus.Success)
                 {
                     pingReplies.Add(reply);
+                    OnNewPingResult(reply);
                 }
+                // Otherwise, always add.
                 else if (pingReplies.Count > 0)
                 {
                     pingReplies.Add(reply);
+                    OnNewPingResult(reply);
                 }
+            }
+
+            // Set the ping interval according to the reply status.
+            // Failed replies will increase the interval.
+            if (reply.Status == IPStatus.Success)
+            {
+                SetPingInterval(goodPingInterval);
+            }
+            else
+            {
+                SetPingInterval(noPingInterval);
             }
         }
 
