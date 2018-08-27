@@ -8,7 +8,6 @@ namespace TeamViewerModule
     {
         private DeploymentAssemblies.IDeploymentUI deploy;
 
-        private string filesDirectory;
         private string tempDirectory;
         private string fullTempDirectory;
 
@@ -45,19 +44,15 @@ namespace TeamViewerModule
                 deploy.LogMessage("Starting new TeamViewer deployment to " + deploy.TargetHostname);
                 deploy.LogMessage("-------------------");
 
-                var filePush = deploy.NewFilePush(filesDirectory, tempDirectory);
+                var copyExitCode = await deploy.AdvancedPSExecCommand(deploy.GetString("teamviewer_copy"), "Copy Deployement Files");
 
-                deploy.LogMessage("Pushing files to target computer...");
-
-                if (await filePush.StartCopy())
+                if (copyExitCode == 0 || copyExitCode == 1)
                 {
-                    deploy.LogMessage("Push successful!");
-                    filePush.Dispose();
+                    deploy.LogMessage("Copy successful!");
                 }
                 else
                 {
-                    deploy.LogMessage("Push failed!");
-                    deploy.UserPrompt("Error occurred while pushing deployment files to device!");
+                    deploy.LogMessage("Copy failed!");
                     return false;
                 }
 
@@ -180,7 +175,6 @@ namespace TeamViewerModule
 
         private void GetDirectories()
         {
-            filesDirectory = deploy.GetString("teamviewer_deploy_dir");
             tempDirectory = deploy.GetString("teamviewer_temp_dir");
             fullTempDirectory = "C:" + tempDirectory;
         }
