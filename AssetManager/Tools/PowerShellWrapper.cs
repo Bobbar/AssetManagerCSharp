@@ -54,7 +54,7 @@ namespace AssetManager.Tools
         {
             try
             {
-                var psCreds = new PSCredential(credentials.UserName, credentials.SecurePassword);
+                var psCreds = new PSCredential(NetworkInfo.CurrentDomain + @"\" + credentials.UserName, credentials.SecurePassword);
                 string scriptText = LoadScript(scriptValue);
                 string shellUri = "http://schemas.microsoft.com/powershell/Microsoft.PowerShell";
                 WSManConnectionInfo connInfo = new WSManConnectionInfo(false, targetHostname, 5985, "/wsman", shellUri, psCreds);
@@ -107,7 +107,7 @@ namespace AssetManager.Tools
         {
             try
             {
-                var psCreds = new PSCredential(credentials.UserName, credentials.SecurePassword);
+                var psCreds = new PSCredential(NetworkInfo.CurrentDomain + @"\" + credentials.UserName, credentials.SecurePassword);
 
                 string shellUri = "http://schemas.microsoft.com/powershell/Microsoft.PowerShell";
                 WSManConnectionInfo connInfo = new WSManConnectionInfo(false, targetHostname, 5985, "/wsman", shellUri, psCreds);
@@ -212,14 +212,13 @@ namespace AssetManager.Tools
         {
             var newPsSession = await Task.Run(() =>
             {
-                var psCreds = new PSCredential(credentials.UserName, credentials.SecurePassword);
+                var psCreds = new PSCredential(NetworkInfo.CurrentDomain + @"\" + credentials.UserName, credentials.SecurePassword);
                 string shellUri = "http://schemas.microsoft.com/powershell/Microsoft.PowerShell";
 
                 WSManConnectionInfo connInfo = new WSManConnectionInfo(false, targetHostname, 5985, "/wsman", shellUri, psCreds);
 
                 Runspace remoteRunSpace = RunspaceFactory.CreateRunspace(connInfo);
                 remoteRunSpace.Open();
-                //remoteRunSpace.SessionStateProxy.SetVariable("cred", psCreds);
 
                 var powerSh = PowerShell.Create();
                 powerSh.Runspace = remoteRunSpace;
