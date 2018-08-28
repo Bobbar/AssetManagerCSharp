@@ -367,6 +367,7 @@ namespace PingVisualizer
         /// </summary>
         private void EaseScaleChange()
         {
+            // How long we want the ease operation to take.
             float duration = 1000f;
 
             if (currentViewScale != targetViewScale)
@@ -378,8 +379,7 @@ namespace PingVisualizer
                     scaleEaseStartValue = currentViewScale;
                     prevTargetScaleValue = targetViewScale;
 
-                    scaleEaseStopwatch.Reset();
-                    scaleEaseStopwatch.Start();
+                    scaleEaseStopwatch.Restart();
                 }
 
                 // Calculate the absolute diffence between the current and target scale.
@@ -394,20 +394,21 @@ namespace PingVisualizer
                 // Apply the factor to the starting and target values to get the next scale value.
                 float newScale = (float)(scaleEaseStartValue + (targetViewScale - scaleEaseStartValue) * factor);
 
-                // If we are not within a certain amount of the target scale, apply the new scale value.
-                if (diffAbs > 0.001f && !isDisposing)
+                // If the elapsed time of this current ease operation is less than the desired duration, apply the new scale value.
+                if (scaleEaseStopwatch.ElapsedMilliseconds < duration && !isDisposing)
                 {
                     currentViewScale = newScale;
                 }
                 else
                 {
-                    // Once we are sufficiently close, set to final scale and stop the ease operation.
+                    // Ease operation complete, set to final scale and stop the operation.
                     currentViewScale = targetViewScale;
                     scaleEaseStopwatch.Stop();
                     scaleEaseStopwatch.Reset();
                     scaleEaseTimer.Stop();
                 }
 
+                // Fire a new render event.
                 Render();
             }
         }
@@ -534,6 +535,11 @@ namespace PingVisualizer
             return false;
         }
 
+        
+        /// <summary>
+        /// Triggers a new rendering event. This method sets the events which control the <see cref="RenderLoop"/>.
+        /// </summary>
+        /// <param name="refreshPingBars">When true this call will trigger a refresh of the ping bars, which will display the most current results.</param>
         private void Render(bool refreshPingBars = false)
         {
             if (pingReplies.Count < 1)
@@ -554,6 +560,9 @@ namespace PingVisualizer
             renderEvent.Set();
         }
 
+        /// <summary>
+        /// The main rendering loop. Performs the rendering methods in a tight loop using <see cref="ManualResetEvent"/> to control the cycles.
+        /// </summary>
         private void RenderLoop()
         {
             try
@@ -714,6 +723,12 @@ namespace PingVisualizer
             }
         }
 
+        /// <summary>
+        /// Resamples the upscaled image down to the final size using high quality interpolation.
+        /// </summary>
+        /// <remarks>
+        ///  This effectively "supersamples" the image to produce smooth, legible graphics at a very small size.
+        /// </remarks>
         private void DownsampleImage()
         {
             var destRect = new Rectangle(0, 0, supersampleImageSize.Width, supersampleImageSize.Height);
