@@ -74,7 +74,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             InitLiveBox();
 
             InitDBControls();
-            Clear_All();
+            ClearAll();
             ShowTestDBWarning();
             InitDBCombo();
         }
@@ -312,7 +312,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
-        private void Clear_All()
+        private void ClearAll()
         {
             AssetTagTextBox.Clear();
             AssetTagSearchTextBox.Clear();
@@ -321,6 +321,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             CurrrentUserTextBox.Clear();
             DescriptionTextBox.Clear();
             ReplaceYearTextBox.Clear();
+            PurchaseDateTextBox.Clear();
+
             TrackablesCheckBox.Checked = false;
             HistoricalCheckBox.Checked = false;
             RefreshCombos();
@@ -470,6 +472,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             CurrrentUserTextBox.SetDBInfo(DevicesCols.CurrentUser);
             StatusComboBox.SetDBInfo(DevicesCols.Status, Attributes.DeviceAttributes.StatusType);
             TrackablesCheckBox.SetDBInfo(DevicesCols.Trackable);
+            PurchaseDateTextBox.SetDBInfo(DevicesCols.PurchaseDate);
         }
 
         private void InitLiveBox()
@@ -789,7 +792,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void ClearButton_Click(object sender, EventArgs e)
         {
-            Clear_All();
+            ClearAll();
         }
 
         private void SearchButton_Click(object sender, EventArgs e)

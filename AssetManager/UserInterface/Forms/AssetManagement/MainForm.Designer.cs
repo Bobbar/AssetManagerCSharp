@@ -39,6 +39,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.SerialTextBox = new System.Windows.Forms.TextBox();
             this.SearchGroupBox = new System.Windows.Forms.GroupBox();
             this.SearchPanel = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.PurchaseDateTextBox = new System.Windows.Forms.TextBox();
             this.HistoricalCheckBox = new System.Windows.Forms.CheckBox();
             this.DevBySupButton = new System.Windows.Forms.Button();
             this.Label6 = new System.Windows.Forms.Label();
@@ -338,6 +340,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.SearchPanel.AutoScrollMargin = new System.Drawing.Size(10, 20);
             this.SearchPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(232)))), ((int)(((byte)(232)))));
             this.SearchPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.SearchPanel.Controls.Add(this.label7);
+            this.SearchPanel.Controls.Add(this.PurchaseDateTextBox);
             this.SearchPanel.Controls.Add(this.HistoricalCheckBox);
             this.SearchPanel.Controls.Add(this.DevBySupButton);
             this.SearchPanel.Controls.Add(this.Label6);
@@ -365,11 +369,31 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.SearchPanel.TabIndex = 52;
             this.SearchPanel.Scroll += new System.Windows.Forms.ScrollEventHandler(this.PanelNoScrollOnFocus1_Scroll);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(291, 109);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(100, 16);
+            this.label7.TabIndex = 58;
+            this.label7.Text = "Purchase Date:";
+            // 
+            // PurchaseDateTextBox
+            // 
+            this.PurchaseDateTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PurchaseDateTextBox.Location = new System.Drawing.Point(294, 128);
+            this.PurchaseDateTextBox.MaxLength = 200;
+            this.PurchaseDateTextBox.Name = "PurchaseDateTextBox";
+            this.PurchaseDateTextBox.Size = new System.Drawing.Size(108, 23);
+            this.PurchaseDateTextBox.TabIndex = 57;
+            this.PurchaseDateTextBox.TabStop = false;
+            // 
             // HistoricalCheckBox
             // 
             this.HistoricalCheckBox.AutoSize = true;
             this.HistoricalCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HistoricalCheckBox.Location = new System.Drawing.Point(418, 127);
+            this.HistoricalCheckBox.Location = new System.Drawing.Point(418, 113);
             this.HistoricalCheckBox.Name = "HistoricalCheckBox";
             this.HistoricalCheckBox.Size = new System.Drawing.Size(89, 22);
             this.HistoricalCheckBox.TabIndex = 56;
@@ -491,7 +515,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // 
             this.TrackablesCheckBox.AutoSize = true;
             this.TrackablesCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TrackablesCheckBox.Location = new System.Drawing.Point(312, 127);
+            this.TrackablesCheckBox.Location = new System.Drawing.Point(418, 135);
             this.TrackablesCheckBox.Name = "TrackablesCheckBox";
             this.TrackablesCheckBox.Size = new System.Drawing.Size(100, 22);
             this.TrackablesCheckBox.TabIndex = 50;
@@ -975,5 +999,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal System.Windows.Forms.GroupBox TransactionBox;
         internal System.Windows.Forms.Button UpdateButton;
         private System.Windows.Forms.ToolStripMenuItem LoadSelectedMenuItem;
+        internal System.Windows.Forms.Label label7;
+        internal System.Windows.Forms.TextBox PurchaseDateTextBox;
     }
 }
