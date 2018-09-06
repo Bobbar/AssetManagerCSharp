@@ -14,6 +14,7 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace AssetManager.Security
 {
@@ -28,7 +29,7 @@ namespace AssetManager.Security
 
         private const string cryptKey = "r7L$aNjE6eiVj&zhap_@|Gz_";
 
-        public static bool VerifyAdminCreds(string credentialDescription = "", string lastUsername = "")
+        public async static Task<bool> VerifyAdminCreds(string credentialDescription = "", string lastUsername = "")
         {
             bool validCreds = false;
             if (AdminCreds == null)
@@ -47,14 +48,14 @@ namespace AssetManager.Security
                     }
                 }
 
-                validCreds = CredentialIsValid(AdminCreds);
+                validCreds = await CredentialIsValid(AdminCreds);
                 if (!validCreds)
                 {
                     string currentUsername = AdminCreds.UserName;
                     ClearAdminCreds();
                     if (OtherFunctions.Message("Could not authenticate with provided credentials.  Do you wish to re-enter?", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, "Auth Error") == DialogResult.OK)
                     {
-                        return VerifyAdminCreds(credentialDescription, currentUsername);
+                        return await VerifyAdminCreds(credentialDescription, currentUsername);
                     }
                     else
                     {
@@ -69,16 +70,19 @@ namespace AssetManager.Security
             return true;
         }
 
-        private static bool CredentialIsValid(NetworkCredential creds)
+        private async static Task<bool> CredentialIsValid(NetworkCredential creds)
         {
             bool valid = false;
             try
             {
-                using (PrincipalContext context = new PrincipalContext(ContextType.Domain, NetworkInfo.CurrentDomain))
+                return await Task.Run(() => 
                 {
-                    valid = context.ValidateCredentials(creds.UserName, creds.Password);
-                }
-                return valid;
+                    using (PrincipalContext context = new PrincipalContext(ContextType.Domain, NetworkInfo.CurrentDomain))
+                    {
+                        valid = context.ValidateCredentials(creds.UserName, creds.Password);
+                    }
+                    return valid;
+                });
             }
             catch (PrincipalServerDownException)
             {

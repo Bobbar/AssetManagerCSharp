@@ -202,11 +202,11 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private void EventViewer()
+        private async void EventViewer()
         {
             CheckRemoteAccess();
 
-            if (SecurityTools.VerifyAdminCreds())
+            if (await SecurityTools.VerifyAdminCreds())
             {
                 using (var p = new Process())
                 {
@@ -230,7 +230,7 @@ namespace AssetManager.UserInterface.CustomControls
             {
                 CheckRemoteAccess();
 
-                if (SecurityTools.VerifyAdminCreds())
+                if (await SecurityTools.VerifyAdminCreds())
                 {
                     string fullPath = "\\\\" + this.device.HostName + "\\c$";
                     await Task.Run(() =>
@@ -265,7 +265,7 @@ namespace AssetManager.UserInterface.CustomControls
             }
             try
             {
-                if (SecurityTools.VerifyAdminCreds("For remote runspace access."))
+                if (await SecurityTools.VerifyAdminCreds("For remote runspace access."))
                 {
                     var newDeviceDeploy = new SoftwareDeployment(hostForm, targetDevice);
                     OnStatusPrompt("Deploying Software...", 0);
@@ -294,11 +294,11 @@ namespace AssetManager.UserInterface.CustomControls
             Process.Start(startInfo);
         }
 
-        private void QueueGKUpdate()
+        private async void QueueGKUpdate()
         {
             CheckRemoteAccess();
 
-            if (SecurityTools.VerifyAdminCreds())
+            if (await SecurityTools.VerifyAdminCreds())
             {
                 var gkInstance = Helpers.ChildFormControl.GKUpdaterInstance();
                 gkInstance.AddUpdate(this.device);
@@ -316,7 +316,7 @@ namespace AssetManager.UserInterface.CustomControls
             var blah = OtherFunctions.Message("Click 'Yes' to reboot this Device.", MessageBoxButtons.YesNo, MessageBoxIcon.Question, "Are you sure?", hostForm);
             if (blah == DialogResult.Yes)
             {
-                if (SecurityTools.VerifyAdminCreds())
+                if (await SecurityTools.VerifyAdminCreds())
                 {
                     var restartOutput = await SendRestart();
                     if ((string)restartOutput == "")
@@ -370,11 +370,11 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private void StartPowerShellSession(Device targetDevice)
+        private async void StartPowerShellSession(Device targetDevice)
         {
             CheckRemoteAccess();
 
-            if (SecurityTools.VerifyAdminCreds())
+            if (await SecurityTools.VerifyAdminCreds())
             {
                 using (var p = new Process())
                 {
@@ -397,11 +397,11 @@ namespace AssetManager.UserInterface.CustomControls
             }
         }
 
-        private void StartPsExecWindow(Device targetDevice)
+        private async void StartPsExecWindow(Device targetDevice)
         {
             CheckRemoteAccess();
 
-            if (SecurityTools.VerifyAdminCreds())
+            if (await SecurityTools.VerifyAdminCreds())
             {
                 var currentInstance = ChildFormControl.FindChildOfType(hostForm, typeof(PSExecCommandForm));
 

@@ -427,9 +427,9 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             SetStatusBar("Idle...");
         }
 
-        private void EnqueueGKUpdate()
+        private async void EnqueueGKUpdate()
         {
-            if (SecurityTools.VerifyAdminCreds())
+            if (await SecurityTools.VerifyAdminCreds())
             {
                 var selectedDevices = new List<Device>();
                 var rows = new HashSet<int>();

@@ -59,15 +59,14 @@ namespace AssetManager.Data
             }
         }
 
-        public static string SetCurrentDomain(DatabaseName database)
+        public async static void SetCurrentDomain(DatabaseName database)
         {
             _currentDomain = DomainNames[database];
             SecurityTools.ClearAdminCreds();
             if (database == DatabaseName.vintondd)
             {
-                SecurityTools.VerifyAdminCreds("Credentials for Vinton AD");
+                await SecurityTools.VerifyAdminCreds("Credentials for Vinton AD");
             }
-            return DomainNames[database];
         }
     }
 }

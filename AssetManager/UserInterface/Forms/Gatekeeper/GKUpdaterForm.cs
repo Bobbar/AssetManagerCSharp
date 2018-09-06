@@ -163,13 +163,13 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
         }
 
-        private void CriticalStop(object sender, EventArgs e)
+        private async void CriticalStop(object sender, EventArgs e)
         {
             StopQueue();
             OtherFunctions.Message("The queue was stopped because of an access error. Please re-enter your credentials.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Queue Stopped", this);
             SecurityTools.ClearAdminCreds();
 
-            if (SecurityTools.VerifyAdminCreds())
+            if (await SecurityTools.VerifyAdminCreds())
             {
                 StartQueue();
             }
