@@ -235,20 +235,8 @@ namespace PingVisualizer
                          // Get a new ping reply.
                          var reply = GetPingReply(hostname);
 
-                         // Determine how we need to wait to try to meet the current ping interval.
-                         // A longer ping time = shorter wait period.
-                         var waitTime = currentPingInterval - (int)pingLoopTimer.ElapsedMilliseconds;
-
-                         if (this.isDisposing)
-                             return;
-
-                         // If we have a positive wait time, pause the thread.
-                         if (waitTime > 0)
-                             Thread.Sleep(waitTime);
-
                          // Add the new reply.
-                         var pingInfo = new PingInfo(reply);
-                         AddPingReply(pingInfo);
+                         AddPingReply(new PingInfo(reply));
                      }
                      catch (Exception)
                      {
@@ -259,19 +247,28 @@ namespace PingVisualizer
                              AddPingReply(new PingInfo());
                          }
                      }
-                     finally
+
+                     // Determine how long we need to wait to meet the current ping interval.
+                     // A longer ping time = shorter wait period.
+                     var waitTime = currentPingInterval - (int)pingLoopTimer.ElapsedMilliseconds;
+
+                     if (this.isDisposing)
+                         return;
+
+                     // If we have a positive wait time, pause the thread.
+                     if (waitTime > 0)
+                         Thread.Sleep(waitTime);
+
+                     //Fire off a new render event.
+                     if (!this.isDisposing)
                      {
-                         // Fire off a new render event.
-                         if (!this.isDisposing)
+                         if (!mouseIsScrolling)
                          {
-                             if (!mouseIsScrolling)
-                             {
-                                 Render(true);
-                             }
-                             else
-                             {
-                                 Render(false);
-                             }
+                             Render(true);
+                         }
+                         else
+                         {
+                             Render(false);
                          }
                      }
                  }
@@ -535,7 +532,6 @@ namespace PingVisualizer
             return false;
         }
 
-        
         /// <summary>
         /// Triggers a new rendering event. This method sets the events which control the <see cref="RenderLoop"/>.
         /// </summary>
