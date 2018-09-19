@@ -288,79 +288,90 @@ namespace AssetManager.Business
 
         private AcroFields TransferFormFields(Device device, PdfStamper pdfStamper)
         {
-            AcroFields tmpFields = pdfStamper.AcroFields;
-            using (var newDialog = new Dialog(parentForm))
+            try
             {
-                newDialog.Text = "Additional Input Required";
-
-                ComboBox cmbFrom = new ComboBox();
-                cmbFrom.FillComboBox(Attributes.DeviceAttributes.Locations);
-                newDialog.AddCustomControl("cmbFromLoc", "Transfer FROM:", (Control)cmbFrom);
-
-                ComboBox cmbTo = new ComboBox();
-                cmbTo.FillComboBox(Attributes.DeviceAttributes.Locations);
-                newDialog.AddCustomControl("cmbToLoc", "Transfer TO:", (Control)cmbTo);
-
-                newDialog.AddLabel("Reason For Transfer-Check One:", true);
-                newDialog.AddCheckBox("chkBetterU", "Better Use of asset:");
-                newDialog.AddCheckBox("chkTradeIn", "Trade-in or exchange:");
-                newDialog.AddCheckBox("chkExcess", "Excess assets:");
-                newDialog.AddCheckBox("chkOther", "Other:");
-                newDialog.AddRichTextBox("rtbOther", "If Other, Please explain:");
-                newDialog.ShowDialog();
-                if (newDialog.DialogResult != DialogResult.OK)
+                AcroFields tmpFields = pdfStamper.AcroFields;
+                using (var newDialog = new Dialog(parentForm))
                 {
-                    return null;
+                    newDialog.Text = "Additional Input Required";
+
+                    ComboBox cmbFrom = new ComboBox();
+                    cmbFrom.FillComboBox(Attributes.DeviceAttributes.Locations);
+                    newDialog.AddCustomControl("cmbFromLoc", "Transfer FROM:", (Control)cmbFrom);
+
+                    ComboBox cmbTo = new ComboBox();
+                    cmbTo.FillComboBox(Attributes.DeviceAttributes.Locations);
+                    newDialog.AddCustomControl("cmbToLoc", "Transfer TO:", (Control)cmbTo);
+
+                    newDialog.AddLabel("Reason For Transfer-Check One:", true);
+                    newDialog.AddCheckBox("chkBetterU", "Better Use of asset:");
+                    newDialog.AddCheckBox("chkTradeIn", "Trade-in or exchange:");
+                    newDialog.AddCheckBox("chkExcess", "Excess assets:");
+                    newDialog.AddCheckBox("chkOther", "Other:");
+                    newDialog.AddRichTextBox("rtbOther", "If Other, Please explain:");
+                    newDialog.ShowDialog();
+
+                    if (newDialog.DialogResult != DialogResult.OK)
+                    {
+                        return null;
+                    }
+
+                    string fromLocationCode = cmbFrom.SelectedValue.ToString();
+                    string fromLocDescription = cmbFrom.Text;
+                    string toLocationCode = cmbTo.SelectedValue.ToString();
+                    string toLocDescription = cmbTo.Text;
+
+                    tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", device.AssetTag);
+                    tmpFields.SetField("topmostSubform[0].Page1[0].Serial_number[0]", device.Serial);
+                    tmpFields.SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", device.Description);
+                    tmpFields.SetField("topmostSubform[0].Page1[0].Department[0]", AttributeFunctions.DepartmentOf(fromLocationCode));
+                    tmpFields.SetField("topmostSubform[0].Page1[0].Location[0]", fromLocDescription);
+                    tmpFields.SetField("topmostSubform[0].Page1[0].Department_2[0]", AttributeFunctions.DepartmentOf(toLocationCode));
+                    tmpFields.SetField("topmostSubform[0].Page1[0].Location_2[0]", toLocDescription);
+                    tmpFields.SetField("topmostSubform[0].Page1[0].Better_utilization_of_assets[0]", CheckValueToString(System.Convert.ToBoolean(newDialog.GetControlValue("chkBetterU"))));
+                    tmpFields.SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]", CheckValueToString(System.Convert.ToBoolean(newDialog.GetControlValue("chkTradeIn"))));
+                    tmpFields.SetField("topmostSubform[0].Page1[0].Excess_assets[0]", CheckValueToString(System.Convert.ToBoolean(newDialog.GetControlValue("chkExcess"))));
+                    tmpFields.SetField("topmostSubform[0].Page1[0].undefined[0]", CheckValueToString(System.Convert.ToBoolean(newDialog.GetControlValue("chkOther"))));
+                    tmpFields.SetField("topmostSubform[0].Page1[0].Other__Please_explain_1[0]", newDialog.GetControlValue("rtbOther").ToString());
+                    //key
+                    //topmostSubform[0].Page1[0].AssetTag_number[0]
+                    //topmostSubform[0].Page1[0].Serial_number[0]
+                    //topmostSubform[0].Page1[0].Description_of_asset[0]
+                    //topmostSubform[0].Page1[0].Department[0]
+                    //topmostSubform[0].Page1[0].Location[0]
+                    //topmostSubform[0].Page1[0].Department_2[0]
+                    //topmostSubform[0].Page1[0].Location_2[0]
+                    //topmostSubform[0].Page1[0].Better_utilization_of_assets[0]
+                    //topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]
+                    //topmostSubform[0].Page1[0].Excess_assets[0]
+                    //topmostSubform[0].Page1[0].undefined[0]
+                    //topmostSubform[0].Page1[0].Other__Please_explain_1[0]
+                    //topmostSubform[0].Page1[0].Other__Please_explain_2[0]
+                    //topmostSubform[0].Page1[0].Method_of_Delivery_or_Shipping_Please_Check_One[0]
+                    //topmostSubform[0].Page1[0].Hand-carried_by[0]
+                    //topmostSubform[0].Page1[0].undefined_2[0]
+                    //topmostSubform[0].Page1[0].Carrier_company[0]
+                    //topmostSubform[0].Page1[0].US_Mail[0]
+                    //topmostSubform[0].Page1[0].Shipping_receipt_number[0]
+                    //topmostSubform[0].Page1[0].Date_of_shipment_or_transfer[0]
+                    //topmostSubform[0].Page1[0].Signature_of_SENDING_official[0]
+                    //topmostSubform[0].Page1[0].Department_3[0]
+                    //topmostSubform[0].Page1[0].Date[0]
+                    //topmostSubform[0].Page1[0].Signature_of_RECEIVING_official[0]
+                    //topmostSubform[0].Page1[0].Department_4[0]
+                    //topmostSubform[0].Page1[0].Date_2[0]
+                    //topmostSubform[0].Page1[0].PrintButton1[0]
                 }
 
-                string fromLocationCode = cmbFrom.SelectedValue.ToString();
-                string fromLocDescription = cmbFrom.Text;
-                string toLocationCode = cmbTo.SelectedValue.ToString();
-                string toLocDescription = cmbTo.Text;
-
-                tmpFields.SetField("topmostSubform[0].Page1[0].AssetTag_number[0]", device.AssetTag);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Serial_number[0]", device.Serial);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Description_of_asset[0]", device.Description);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Department[0]", AttributeFunctions.DepartmentOf(fromLocationCode));
-                tmpFields.SetField("topmostSubform[0].Page1[0].Location[0]", fromLocDescription);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Department_2[0]", AttributeFunctions.DepartmentOf(toLocationCode));
-                tmpFields.SetField("topmostSubform[0].Page1[0].Location_2[0]", toLocDescription);
-                tmpFields.SetField("topmostSubform[0].Page1[0].Better_utilization_of_assets[0]", CheckValueToString(System.Convert.ToBoolean(newDialog.GetControlValue("chkBetterU"))));
-                tmpFields.SetField("topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]", CheckValueToString(System.Convert.ToBoolean(newDialog.GetControlValue("chkTradeIn"))));
-                tmpFields.SetField("topmostSubform[0].Page1[0].Excess_assets[0]", CheckValueToString(System.Convert.ToBoolean(newDialog.GetControlValue("chkExcess"))));
-                tmpFields.SetField("topmostSubform[0].Page1[0].undefined[0]", CheckValueToString(System.Convert.ToBoolean(newDialog.GetControlValue("chkOther"))));
-                tmpFields.SetField("topmostSubform[0].Page1[0].Other__Please_explain_1[0]", newDialog.GetControlValue("rtbOther").ToString());
-                //key
-                //topmostSubform[0].Page1[0].AssetTag_number[0]
-                //topmostSubform[0].Page1[0].Serial_number[0]
-                //topmostSubform[0].Page1[0].Description_of_asset[0]
-                //topmostSubform[0].Page1[0].Department[0]
-                //topmostSubform[0].Page1[0].Location[0]
-                //topmostSubform[0].Page1[0].Department_2[0]
-                //topmostSubform[0].Page1[0].Location_2[0]
-                //topmostSubform[0].Page1[0].Better_utilization_of_assets[0]
-                //topmostSubform[0].Page1[0].Trade-in_or_exchange_with_Other_Departments[0]
-                //topmostSubform[0].Page1[0].Excess_assets[0]
-                //topmostSubform[0].Page1[0].undefined[0]
-                //topmostSubform[0].Page1[0].Other__Please_explain_1[0]
-                //topmostSubform[0].Page1[0].Other__Please_explain_2[0]
-                //topmostSubform[0].Page1[0].Method_of_Delivery_or_Shipping_Please_Check_One[0]
-                //topmostSubform[0].Page1[0].Hand-carried_by[0]
-                //topmostSubform[0].Page1[0].undefined_2[0]
-                //topmostSubform[0].Page1[0].Carrier_company[0]
-                //topmostSubform[0].Page1[0].US_Mail[0]
-                //topmostSubform[0].Page1[0].Shipping_receipt_number[0]
-                //topmostSubform[0].Page1[0].Date_of_shipment_or_transfer[0]
-                //topmostSubform[0].Page1[0].Signature_of_SENDING_official[0]
-                //topmostSubform[0].Page1[0].Department_3[0]
-                //topmostSubform[0].Page1[0].Date[0]
-                //topmostSubform[0].Page1[0].Signature_of_RECEIVING_official[0]
-                //topmostSubform[0].Page1[0].Department_4[0]
-                //topmostSubform[0].Page1[0].Date_2[0]
-                //topmostSubform[0].Page1[0].PrintButton1[0]
+                return tmpFields;
+            }
+            catch (Exception ex)
+            {
+                // Log exception and fail silently.
+                Logging.Exception(ex);
             }
 
-            return tmpFields;
+            return null;
         }
 
         private string CheckValueToString(bool checkedValue)

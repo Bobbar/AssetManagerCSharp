@@ -52,7 +52,7 @@ namespace AssetManager.Helpers
         public static void Exception(Exception ex)
         {
             Logger("ERROR: Type: " + ex.GetType().Name + "  #:" + ex.HResult + "  Message:" + ex.Message);
-            Logger("STACK TRACE: " + ex.StackTrace);
+            Logger("STACK TRACE: " + ex.ToString());
         }
 
         private static bool RotateLogs()
