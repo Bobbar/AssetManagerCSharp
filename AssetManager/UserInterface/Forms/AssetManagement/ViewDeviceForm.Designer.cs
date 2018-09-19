@@ -51,6 +51,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ReplaceYearTextBox = new System.Windows.Forms.TextBox();
             this.RightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.DeleteEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TabControl1 = new System.Windows.Forms.TabControl();
             this.HistoryTab = new System.Windows.Forms.TabPage();
             this.DataGridHistory = new System.Windows.Forms.DataGridView();
@@ -115,6 +116,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.AssetTransferFormToolItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AssetDisposalFormToolItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.MunisSibiPanel.SuspendLayout();
             this.RightClickMenu.SuspendLayout();
             this.TabControl1.SuspendLayout();
@@ -467,17 +469,27 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // RightClickMenu
             // 
             this.RightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewEntryToolStripMenuItem,
+            this.toolStripSeparator5,
             this.DeleteEntryToolStripMenuItem});
             this.RightClickMenu.Name = "RightClickMenu";
-            this.RightClickMenu.Size = new System.Drawing.Size(138, 26);
+            this.RightClickMenu.Size = new System.Drawing.Size(153, 76);
             // 
             // DeleteEntryToolStripMenuItem
             // 
             this.DeleteEntryToolStripMenuItem.Image = global::AssetManager.Properties.Resources.DeleteIcon;
             this.DeleteEntryToolStripMenuItem.Name = "DeleteEntryToolStripMenuItem";
-            this.DeleteEntryToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.DeleteEntryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.DeleteEntryToolStripMenuItem.Text = "Delete Entry";
             this.DeleteEntryToolStripMenuItem.Click += new System.EventHandler(this.DeleteEntryToolStripMenuItem_Click);
+            // 
+            // viewEntryToolStripMenuItem
+            // 
+            this.viewEntryToolStripMenuItem.Image = global::AssetManager.Properties.Resources.ViewIcon3;
+            this.viewEntryToolStripMenuItem.Name = "viewEntryToolStripMenuItem";
+            this.viewEntryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.viewEntryToolStripMenuItem.Text = "View Entry";
+            this.viewEntryToolStripMenuItem.Click += new System.EventHandler(this.viewEntryToolStripMenuItem_Click);
             // 
             // TabControl1
             // 
@@ -1270,6 +1282,11 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.ToolStripSeparator9.Name = "ToolStripSeparator9";
             this.ToolStripSeparator9.Size = new System.Drawing.Size(6, 37);
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
+            // 
             // ViewDeviceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1280,7 +1297,6 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             this.Controls.Add(this.StatusStrip);
             this.DoubleBuffered = true;
             this.MinimizeChildren = true;
-            //this.MinimumSize = new System.Drawing.Size(1161, 559);
             this.Name = "ViewDeviceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View";
@@ -1421,5 +1437,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         internal Panel Panel3;
         private RemoteToolsControl RemoteToolsControl;
         private Label PingHistLabel;
+        private ToolStripMenuItem viewEntryToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator5;
     }
 }

@@ -657,7 +657,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         [SuppressMessage("Microsoft.Design", "CA1806")]
-        private void NewEntryView()
+        private void ViewSelectedHistoryEntry()
         {
             string entryGuid = DataGridHistory.CurrentRowStringValue(HistoricalDevicesCols.HistoryEntryGuid);
             if (!Helpers.ChildFormControl.FormIsOpenByGuid(typeof(ViewHistoryForm), entryGuid))
@@ -1020,9 +1020,14 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             }
         }
 
+        private void viewEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ViewSelectedHistoryEntry();
+        }
+
         private void DataGridHistory_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            NewEntryView();
+            ViewSelectedHistoryEntry();
         }
 
         private void DataGridHistory_CellEnter(object sender, DataGridViewCellEventArgs e)
