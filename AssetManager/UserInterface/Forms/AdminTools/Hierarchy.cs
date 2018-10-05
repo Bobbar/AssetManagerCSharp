@@ -30,7 +30,7 @@ namespace AssetManager.UserInterface.Forms.AdminTools
             try
             {
                 // Prompt user for supervisor.
-                var supervisorMunis = MunisFunctions.MunisUserSearch(this);
+                var supervisorMunis = MunisFunctions.MunisUserSearch(this.ParentForm);
 
                 // Make sure we have an employee number to work with.
                 if (string.IsNullOrEmpty(supervisorMunis.Number)) return;
@@ -81,6 +81,8 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         /// </summary>
         private async void ShowAllDevices()
         {
+            if (currentTree == null) return;
+
             Waiting();
 
             var deviceTable = await Task.Run(() => { return GetDevicesTable(currentTree); });
