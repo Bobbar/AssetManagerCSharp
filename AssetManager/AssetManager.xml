@@ -1077,6 +1077,12 @@
             Sets window state to normal and activates the form.
             </summary>
         </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.FlashWindow(System.Int32)">
+            <summary>
+            Flashes the window and tray the specified number of times.
+            </summary>
+            <param name="flashCount">Number of times to flash the window. Default = 5</param>
+        </member>
         <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.SetDoubleBuffering">
             <summary>
             Disables double buffering if the current environment is in the designer or a terminal session.

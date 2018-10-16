@@ -1,5 +1,6 @@
-using Databases.Data.Mapping;
 using AssetManager.Helpers;
+using AssetManager.Tools;
+using Databases.Data.Mapping;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -229,6 +230,18 @@ namespace AssetManager.UserInterface.CustomControls
             this.Show();
             this.WindowState = FormWindowState.Normal;
             this.Activate();
+        }
+
+        /// <summary>
+        /// Flashes the window and tray the specified number of times.
+        /// </summary>
+        /// <param name="flashCount">Number of times to flash the window. Default = 5</param>
+        public void FlashWindow(int flashCount = 5)
+        {
+            // Clamp the flash count.
+            if (flashCount < 1 || flashCount > 20) flashCount = 5;
+
+            TaskBarNotify.FlashWindow(this.Handle, true, true, flashCount);
         }
 
         /// <summary>

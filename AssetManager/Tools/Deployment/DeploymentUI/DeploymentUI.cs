@@ -160,7 +160,9 @@ namespace AssetManager.Tools.Deployment
             else
             {
                 LogMessage(title + " failed! Exit code: " + exitCode.ToString());
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                parentForm.RestoreWindow();
+                parentForm.FlashWindow(5);
+                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Deployment Error", logView);
                 throw new Exception("Error occurred while executing command");
             }
         }
@@ -182,7 +184,9 @@ namespace AssetManager.Tools.Deployment
             else
             {
                 LogMessage(title + " failed!");
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                parentForm.RestoreWindow();
+                parentForm.FlashWindow(5);
+                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Deployment Error", logView);
                 throw new Exception("Error occurred while executing command");
             }
         }

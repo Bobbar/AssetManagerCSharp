@@ -1120,7 +1120,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void RemoteToolsControl_HostBackOnline(object sender, EventArgs e)
         {
-            TaskBarNotify.FlashWindow(this.Handle, true, true, 10);
+            this.FlashWindow(5);
         }
 
         private void RemoteToolsControl_HostOnlineStatus(object sender, bool e)
