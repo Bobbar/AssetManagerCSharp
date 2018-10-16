@@ -227,6 +227,17 @@ namespace PingVisualizer
              {
                  do
                  {
+                     // Determine how long we need to wait to meet the current ping interval.
+                     // A longer ping time = shorter wait period.
+                     var waitTime = currentPingInterval - (int)pingLoopTimer.ElapsedMilliseconds;
+
+                     if (this.isDisposing)
+                         return;
+
+                     // If we have a positive wait time, pause the thread.
+                     if (waitTime > 0)
+                         Thread.Sleep(waitTime);
+
                      try
                      {
                          // Start/Reset the loop timer.
@@ -247,17 +258,6 @@ namespace PingVisualizer
                              AddPingReply(new PingInfo());
                          }
                      }
-
-                     // Determine how long we need to wait to meet the current ping interval.
-                     // A longer ping time = shorter wait period.
-                     var waitTime = currentPingInterval - (int)pingLoopTimer.ElapsedMilliseconds;
-
-                     if (this.isDisposing)
-                         return;
-
-                     // If we have a positive wait time, pause the thread.
-                     if (waitTime > 0)
-                         Thread.Sleep(waitTime);
 
                      //Fire off a new render event.
                      if (!this.isDisposing)
@@ -671,10 +671,14 @@ namespace PingVisualizer
 
         private void DrawPingBars()
         {
+            mouseIsOverBars = false;
+
             foreach (var bar in currentBarList)
             {
                 if (mouseIsScrolling && bar.Rectangle.Contains(mouseLocationScaled))
                 {
+                    mouseIsOverBars = true;
+
                     // If mouse is over a bar, set the mouseOverInfo to be drawn in the DrawPingText method.
                     mouseOverInfo = new MouseOverInfo(mouseLocationScaled, bar.PingInfo);
                     upscaledGraphics.FillRectangle(mouseOverBarBrush, new RectangleF(bar.Rectangle.Location, new SizeF(bar.Length * currentViewScale, bar.Rectangle.Height)));
