@@ -55,11 +55,11 @@ namespace ClickOnceModule
             deploy.LogMessage("Command: " + certCommand);
             if (await deploy.SimplePSExecCommand(certCommand, "Certificate Install"))
             {
-                deploy.LogMessage("Certificate installed!");
+                deploy.LogMessage("Certificate installed!", MessageType.Success);
             }
             else
             {
-                deploy.LogMessage("Certificate install failed!");
+                deploy.LogMessage("Certificate install failed!", MessageType.Error);
                 return false;
             }
 
@@ -67,15 +67,15 @@ namespace ClickOnceModule
 
             if (exitCode == 3010)
             {
-                deploy.LogMessage("Install successful. **REBOOT REQUIRED!**");
+                deploy.LogMessage("Install successful. **REBOOT REQUIRED!**", MessageType.Notice);
             }
             else if (exitCode == 0)
             {
-                deploy.LogMessage("Install successful!");
+                deploy.LogMessage("Install successful!", MessageType.Success);
             }
             else
             {
-                deploy.LogMessage(string.Format("Install failed! (Exit code: {0})", exitCode));
+                deploy.LogMessage(string.Format("Install failed! (Exit code: {0})", exitCode), MessageType.Error);
                 return false;
             }
 

@@ -33,28 +33,28 @@ namespace ProviderAssistantModule
         {
             var filePush = deploy.NewFilePush(DeployDirectory(), InstallDirectory());
 
-            deploy.LogMessage("Pushing files to target computer...");
+            deploy.LogMessage("Pushing files to target computer...", MessageType.Notice);
 
             if (await filePush.StartCopy())
             {
-                deploy.LogMessage("Push successful!");
+                deploy.LogMessage("Push successful!", MessageType.Success);
                 filePush.Dispose();
             }
             else
             {
-                deploy.LogMessage("Push failed!");
+                deploy.LogMessage("Push failed!", MessageType.Error);
                 return false;
             }
 
-            deploy.LogMessage("Copying shortcut...");
+            deploy.LogMessage("Copying shortcut...", MessageType.Notice);
 
             if (await deploy.SimplePSExecCommand(CopyShortcutCommand(), "Copy Shortcut"))
             {
-                deploy.LogMessage("Copy shortcut successful!");
+                deploy.LogMessage("Copy shortcut successful!", MessageType.Success);
             }
             else
             {
-                deploy.LogMessage("Copy shortcut failed!");
+                deploy.LogMessage("Copy shortcut failed!", MessageType.Error);
                 return false;
             }
 

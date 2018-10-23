@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace GhostscriptModule
 {
-    public class DeployGhostscript : DeploymentAssemblies.IDeployment
+    public class DeployGhostscript : IDeployment
     {
-        private DeploymentAssemblies.IDeploymentUI deploy;
+        private IDeploymentUI deploy;
 
         public string DeploymentName
         {
@@ -33,21 +33,21 @@ namespace GhostscriptModule
         {
             if (await deploy.SimplePSExecCommand(deploy.GetString("ghostscript_driver"), "Ghostscript PDF Driver Install"))
             {
-                deploy.LogMessage("Ghostscript Driver Installed.");
+                deploy.LogMessage("Ghostscript Driver Installed.", MessageType.Success);
             }
             else
             {
-                deploy.LogMessage("Ghostscript Driver Install Failed!");
+                deploy.LogMessage("Ghostscript Driver Install Failed!", MessageType.Error);
                 return false;
             }
 
             if (await deploy.SimplePSExecCommand(deploy.GetString("ghostscript_install"), "Ghostscript PDF Printer Install"))
             {
-                deploy.LogMessage("Ghostscript PDF Printer Installed.");
+                deploy.LogMessage("Ghostscript PDF Printer Installed.", MessageType.Success);
             }
             else
             {
-                deploy.LogMessage("Ghostscript PDF Printer Install Failed!");
+                deploy.LogMessage("Ghostscript PDF Printer Install Failed!", MessageType.Error);
                 return false;
             }
 

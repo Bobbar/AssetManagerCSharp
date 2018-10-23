@@ -21,13 +21,16 @@ namespace AssetManager.Tools
         private string targetHostname;
 
         public event EventHandler InvocationStateChanged;
+        public event EventHandler<string> PowershellOutput;
 
         protected virtual void OnInvocationStateChanged(PSInvocationStateChangedEventArgs e)
         {
-            if (InvocationStateChanged != null)
-            {
-                InvocationStateChanged(this, e);
-            }
+            InvocationStateChanged?.Invoke(this, e);
+        }
+
+        protected virtual void OnPowershellOutput(string message)
+        {
+            PowershellOutput?.Invoke(this, message);
         }
 
         private PowerShell CurrentPowerShellObject;
@@ -160,8 +163,21 @@ namespace AssetManager.Tools
         public async Task<bool> InvokePowerShellSession(PowerShell session)
         {
             CurrentPowerShellObject = session;
+
             session.InvocationStateChanged -= Powershell_InvocationStateChanged;
             session.InvocationStateChanged += Powershell_InvocationStateChanged;
+
+            session.Streams.Information.DataAdded -= Information_DataAdded;
+            session.Streams.Information.DataAdded += Information_DataAdded;
+
+            session.Streams.Debug.DataAdded -= Debug_DataAdded;
+            session.Streams.Debug.DataAdded += Debug_DataAdded;
+
+            session.Streams.Verbose.DataAdded -= Verbose_DataAdded;
+            session.Streams.Verbose.DataAdded += Verbose_DataAdded;
+
+            session.Streams.Error.DataAdded -= Error_DataAdded;
+            session.Streams.Error.DataAdded += Error_DataAdded;
 
             try
             {
@@ -202,10 +218,40 @@ namespace AssetManager.Tools
             }
             finally
             {
+                session.InvocationStateChanged -= Powershell_InvocationStateChanged;
+                session.Streams.Information.DataAdded -= Information_DataAdded;
+                session.Streams.Debug.DataAdded -= Debug_DataAdded;
+                session.Streams.Verbose.DataAdded -= Verbose_DataAdded;
+                session.Streams.Error.DataAdded -= Error_DataAdded;
+
                 session.Runspace.Close();
                 session.Runspace.Dispose();
                 session.Dispose();
             }
+        }
+
+        private void Error_DataAdded(object sender, DataAddedEventArgs e)
+        {
+            var message = CurrentPowerShellObject.Streams.Error[e.Index].Exception.Message;
+            OnPowershellOutput($@"Error: {message}");
+        }
+
+        private void Verbose_DataAdded(object sender, DataAddedEventArgs e)
+        {
+            var message = CurrentPowerShellObject.Streams.Verbose[e.Index].Message;
+            OnPowershellOutput(message);
+        }
+
+        private void Debug_DataAdded(object sender, DataAddedEventArgs e)
+        {
+            var message = CurrentPowerShellObject.Streams.Debug[e.Index].Message;
+            OnPowershellOutput(message);
+        }
+
+        private void Information_DataAdded(object sender, DataAddedEventArgs e)
+        {
+            var message = CurrentPowerShellObject.Streams.Information[e.Index].MessageData.ToString();
+            OnPowershellOutput(message);
         }
 
         public async Task<PowerShell> GetNewPSSession(NetworkCredential credentials)

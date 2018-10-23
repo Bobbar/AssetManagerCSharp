@@ -36,12 +36,11 @@ namespace EnableAdminModule
 
             if (await deploy.SimplePowerShellCommand(GetSetLocalAdminCommands()))
             {
-                deploy.LogMessage("Local Admin enabled!");
+                deploy.LogMessage("Local Admin enabled!", MessageType.Success);
             }
             else
             {
-                deploy.LogMessage("Failed to enable local Admin!");
-                deploy.UserPrompt("Error occurred while executing command!");
+                deploy.LogMessage("Failed to enable local Admin!", MessageType.Error);
                 return false;
             }
             return true;

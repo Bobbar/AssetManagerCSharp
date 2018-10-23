@@ -44,6 +44,10 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
+        /// <summary>
+        /// Loads and verifies <see cref="IDeployment"/> modules from the <see cref="Paths.LocalModulesStore"/> path, calls <see cref="IDeployment.InitUI(IDeploymentUI)"/> and prepares them for use.
+        /// </summary>
+        /// <returns>Returns a task collection of <see cref="TaskInfo"/> ready to be initiated against a host device.</returns>
         private async Task<List<TaskInfo>> GetModules()
         {
             int modCount = 0;
@@ -105,6 +109,7 @@ namespace AssetManager.Tools.Deployment
         /// </summary>
         private void VerifyModules()
         {
+            // Create the local module directory if it doesn't exist.
             if (!Directory.Exists(Paths.LocalModulesStore))
             {
                 Directory.CreateDirectory(Paths.LocalModulesStore);
@@ -267,7 +272,7 @@ namespace AssetManager.Tools.Deployment
             catch (Exception ex)
             {
                 Logging.Logger(ex.ToString());
-                deploy.LogMessage("Error: " + ex.Message);
+                deploy.LogMessage("Error: " + ex.Message, MessageType.Error);
                 return false;
             }
             finally

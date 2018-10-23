@@ -218,7 +218,7 @@ namespace AssetManager.UserInterface.CustomControls
                 }
                 else
                 {
-                    // Apply color and apped text.
+                    // Apply color and append text.
                     LogTextBox.SelectionStart = LogTextBox.TextLength;
                     LogTextBox.SelectionLength = 0;
                     LogTextBox.SelectionColor = color;

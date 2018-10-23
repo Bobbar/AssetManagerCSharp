@@ -13,6 +13,7 @@ using System.Management.Automation.Runspaces;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace AssetManager.Tools.Deployment
 {
@@ -91,6 +92,9 @@ namespace AssetManager.Tools.Deployment
                 powerShellWrapper = new PowerShellWrapper(targetDevice.HostName);
                 powerShellWrapper.InvocationStateChanged -= SessionStateChanged;
                 powerShellWrapper.InvocationStateChanged += SessionStateChanged;
+
+                powerShellWrapper.PowershellOutput -= PowerShellWrapper_PowershellOutput;
+                powerShellWrapper.PowershellOutput += PowerShellWrapper_PowershellOutput;
             }
         }
 
@@ -150,16 +154,16 @@ namespace AssetManager.Tools.Deployment
 
         public async Task<bool> SimplePSExecCommand(string command, string title)
         {
-            LogMessage("Starting " + title + "...");
+            LogMessage("Starting " + title + "...", MessageType.Notice);
             var exitCode = await PSExecWrap.ExecuteRemoteCommand(command);
             if (exitCode == 0)
             {
-                LogMessage(title + " complete!");
+                LogMessage(title + " complete!", MessageType.Success);
                 return true;
             }
             else
             {
-                LogMessage(title + " failed! Exit code: " + exitCode.ToString());
+                LogMessage(title + " failed! Exit code: " + exitCode.ToString(), MessageType.Error);
                 parentForm.RestoreWindow();
                 parentForm.FlashWindow(5);
                 OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Deployment Error", logView);
@@ -169,21 +173,21 @@ namespace AssetManager.Tools.Deployment
 
         public async Task<int> AdvancedPSExecCommand(string command, string title)
         {
-            LogMessage("Starting " + title + "...");
+            LogMessage("Starting " + title + "...", MessageType.Notice);
             return await PSExecWrap.ExecuteRemoteCommand(command);
         }
 
         public async Task SimplePowerShellScript(byte[] script, string title)
         {
-            LogMessage("Starting " + title + "...");
+            LogMessage("Starting " + title + "...", MessageType.Notice);
             var success = await PowerShellWrap.ExecutePowerShellScript(script);
             if (success)
             {
-                LogMessage(title + " complete!");
+                LogMessage(title + " complete!", MessageType.Success);
             }
             else
             {
-                LogMessage(title + " failed!");
+                LogMessage(title + " failed!", MessageType.Error);
                 parentForm.RestoreWindow();
                 parentForm.FlashWindow(5);
                 OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Deployment Error", logView);
@@ -230,7 +234,7 @@ namespace AssetManager.Tools.Deployment
             return await PowerShellWrap.InvokePowerShellSession(session);
         }
 
-        public void LogMessage(string message)
+        public void LogMessage(string message, MessageType type)
         {
             if (!cancelOperation) ActivityTick();
             if (logTextBox.InvokeRequired)
@@ -240,9 +244,42 @@ namespace AssetManager.Tools.Deployment
             }
             else
             {
+                logTextBox.SelectionStart = logTextBox.TextLength;
+                logTextBox.SelectionLength = 0;
+                logTextBox.SelectionColor = ColorOfType(type);
                 logTextBox.AppendText(DateTime.Now.ToString() + ": " + message + "\r\n");
+                logTextBox.SelectionColor = logTextBox.ForeColor;
                 logTextBox.SelectionStart = logTextBox.Text.Length;
                 logTextBox.ScrollToCaret();
+            }
+        }
+
+        public void LogMessage(string message)
+        {
+            LogMessage(message, MessageType.Default);
+        }
+
+        private Color ColorOfType(MessageType type)
+        {
+            switch (type)
+            {
+                case MessageType.Default:
+                    return Color.Black;
+
+                case MessageType.Success:
+                    return Color.Green;
+
+                case MessageType.Error:
+                    return Color.Red;
+
+                case MessageType.Notice:
+                    return Color.Blue;
+
+                case MessageType.Warning:
+                    return Color.Goldenrod;
+
+                default:
+                    return Color.Black;
             }
         }
 
@@ -346,7 +383,7 @@ namespace AssetManager.Tools.Deployment
                     {
                         if (!TimeoutMessageSent)
                         {
-                            LogMessage("Still running...");
+                            LogMessage("Still running...", MessageType.Notice);
                             TimeoutMessageSent = true;
                         }
                     }
@@ -356,7 +393,7 @@ namespace AssetManager.Tools.Deployment
                     }
                     if (cancelOperation && !CancelMessageSent)
                     {
-                        LogMessage("Cancelling the operation...");
+                        LogMessage("Cancelling the operation...", MessageType.Warning);
                         CancelMessageSent = true;
                     }
                     Task.Delay(1000).Wait(cancelToken);
@@ -375,7 +412,12 @@ namespace AssetManager.Tools.Deployment
         private void SessionStateChanged(object sender, EventArgs e)
         {
             var args = (PSInvocationStateChangedEventArgs)e;
-            LogMessage("Session state: " + args.InvocationStateInfo.State.ToString());
+            LogMessage("Session state: " + args.InvocationStateInfo.State.ToString(), MessageType.Notice);
+        }
+
+        private void PowerShellWrapper_PowershellOutput(object sender, string e)
+        {
+            LogMessage($@"Output: {e}");
         }
 
         private void PsExecOutputReceived(object sender, string data)
@@ -385,7 +427,7 @@ namespace AssetManager.Tools.Deployment
 
         private void PsExecErrorReceived(object sender, string data)
         {
-            LogMessage("PsExec Output: " + data);
+            LogMessage("Output(err): " + data);
         }
 
         private void ActivityTick()
@@ -393,7 +435,7 @@ namespace AssetManager.Tools.Deployment
             lastActivity = DateTime.Now.Ticks;
             if (cancelOperation)
             {
-                LogMessage("The deployment has been canceled!");
+                LogMessage("The deployment has been canceled!", MessageType.Error);
                 throw (new DeploymentCanceledException());
             }
         }

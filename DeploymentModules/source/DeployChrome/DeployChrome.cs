@@ -1,13 +1,12 @@
-﻿using System;
+﻿using DeploymentAssemblies;
+using System;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ChromeModule
 {
-    [Serializable]
-    public class DeployChrome : DeploymentAssemblies.IDeployment
+    public class DeployChrome : IDeployment
     {
-        private DeploymentAssemblies.IDeploymentUI deploy;
+        private IDeploymentUI deploy;
 
         public string DeploymentName
         {
@@ -25,7 +24,7 @@ namespace ChromeModule
             }
         }
 
-        public void InitUI(DeploymentAssemblies.IDeploymentUI ui)
+        public void InitUI(IDeploymentUI ui)
         {
             deploy = ui;
             deploy.UsePowerShell();
@@ -35,13 +34,6 @@ namespace ChromeModule
         {
             try
             {
-
-                if (string.IsNullOrEmpty(deploy.TargetHostname))
-                {
-                    deploy.UserPrompt("The target device is null or does not have a hostname.", "Missing Info");
-                    return false;
-                }
-
                 await deploy.SimplePowerShellScript(Resources.UpdateChrome, "Chrome Install");
 
                 deploy.LogMessage("Chrome Deployment Complete.");
@@ -51,7 +43,7 @@ namespace ChromeModule
             }
             catch (Exception)
             {
-                deploy.LogMessage("Deployment failed!");
+                deploy.LogMessage("Deployment failed!", MessageType.Error);
                 return false;
             }
 

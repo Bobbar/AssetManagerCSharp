@@ -53,66 +53,64 @@ namespace OfficeModule
                 deploy.LogMessage("Config = '" + deployFilesDirectory + "\\" + configFile + "'");
                 deploy.LogMessage("-------------------");
 
-                var filePush = deploy.NewFilePush(deployFilesDirectory, deployTempDirectory);
+                deploy.LogMessage("Copying files to target computer...", MessageType.Notice);
 
-                deploy.LogMessage("Pushing files to target computer...");
+                var copyExitCode = await deploy.AdvancedPSExecCommand(deploy.GetString("office_copy_files"), "Copy Deployement Files");
 
-                if (await filePush.StartCopy())
+                if (copyExitCode == 0 || copyExitCode == 1)
                 {
-                    deploy.LogMessage("Push successful!");
-                    filePush.Dispose();
+                    deploy.LogMessage("Copy successful!", MessageType.Success);
                 }
                 else
                 {
-                    deploy.LogMessage("Push failed!");
-                    deploy.UserPrompt("Error occurred while pushing deployment files to device!");
+                    deploy.LogMessage("Copy failed!", MessageType.Error);
                     return false;
                 }
 
-                deploy.LogMessage("Removing previous Office installations...");
+                deploy.LogMessage("Removing previous Office installations...", MessageType.Notice);
 
-                deploy.LogMessage("Starting remote session and invoking scripts...");
+                deploy.LogMessage("Starting remote session and invoking scripts...", MessageType.Notice);
 
                 if (await deploy.SimplePowerShellCommand(GetRemovalCommands()))
                 {
-                    deploy.LogMessage("Previous Office installations removed.");
+                    deploy.LogMessage("Previous Office installations removed.", MessageType.Success);
                 }
                 else
                 {
-                    deploy.LogMessage("Failed to remove previous installations!");
+                    deploy.LogMessage("Failed to remove previous installations!", MessageType.Error);
                     deploy.UserPrompt("Error occurred while executing deployment command!");
                     return false;
                 }
-
+             
                 var installCommand = GetO365InstallString(configFile);
 
                 if (await deploy.SimplePSExecCommand(installCommand, "Office 365 Install"))
                 {
-                    deploy.LogMessage("Deployment complete!");
+                    deploy.LogMessage("Deployment complete!", MessageType.Success);
                 }
                 else
                 {
-                    deploy.LogMessage("Deployment failed!");
+                    deploy.LogMessage("Deployment failed!", MessageType.Error);
                     deploy.UserPrompt("Error occurred while executing deployment command!");
                     return false;
                 }
 
-                deploy.LogMessage("Deleting temp files...");
+                deploy.LogMessage("Deleting temp files...", MessageType.Notice);
 
                 if (!await deploy.SimplePowerShellCommand(GetDeleteDirectoryCommand()))
                 {
-                    deploy.LogMessage("Delete failed!");
+                    deploy.LogMessage("Delete failed!", MessageType.Error);
                     return false;
                 }
 
                 deploy.LogMessage("Done.");
                 deploy.LogMessage("-------------------");
-                deploy.LogMessage("Office 365 deployment is complete!");
+                deploy.LogMessage("Office 365 deployment is complete!", MessageType.Success);
                 return true;
             }
             catch (Exception ex)
             {
-                deploy.LogMessage("Error: " + ex.Message);
+                deploy.LogMessage("Error: " + ex.Message, MessageType.Error);
                 return false;
             }
         }
@@ -136,12 +134,17 @@ namespace OfficeModule
         {
             var commmands = new List<PowerShellCommand>();
 
-            var removeHubCmd = new PowerShellCommand(deploy.GetString("remove_office_hub"), true, true);
+            var removeHubCmd = new PowerShellCommand(removeOfficeScriptPath + deploy.GetString("remove_office_hub"), true, true);
             removeHubCmd.Parameters.Add("Wait");
             removeHubCmd.Parameters.Add("NoNewWindow");
             commmands.Add(removeHubCmd);
 
-            var removeDesktopAppsCmd = new PowerShellCommand(deploy.GetString("remove_office_desktop"), true, true);
+            var removeOneNoteCmd = new PowerShellCommand(removeOfficeScriptPath + deploy.GetString("remove_office_onenote"), true, true);
+            removeOneNoteCmd.Parameters.Add("Wait");
+            removeOneNoteCmd.Parameters.Add("NoNewWindow");
+            commmands.Add(removeOneNoteCmd);
+
+            var removeDesktopAppsCmd = new PowerShellCommand(removeOfficeScriptPath + deploy.GetString("remove_office_desktop"), true, true);
             removeDesktopAppsCmd.Parameters.Add("Wait");
             removeDesktopAppsCmd.Parameters.Add("NoNewWindow");
             commmands.Add(removeDesktopAppsCmd);

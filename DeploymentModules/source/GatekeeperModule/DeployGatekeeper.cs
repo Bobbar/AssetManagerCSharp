@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace GatekeeperModule
 {
-    public class DeployGatekeeper : DeploymentAssemblies.IDeployment
+    public class DeployGatekeeper : IDeployment
     {
-        private DeploymentAssemblies.IDeploymentUI deploy;
+        private IDeploymentUI deploy;
 
         public string DeploymentName
         {
@@ -38,18 +38,18 @@ namespace GatekeeperModule
                 await deploy.SimplePSExecCommand(deploy.GetString("gk_client"), "Gatekeeper Client Install");
                 await deploy.SimplePSExecCommand(deploy.GetString("gk_update"), "Gatekeeper Update Install");
 
-                deploy.LogMessage("Applying Gatekeeper Registry Fix...");
-                deploy.LogMessage("Starting remote session and invoking script...");
+                deploy.LogMessage("Applying Gatekeeper Registry Fix...", MessageType.Notice);
+                deploy.LogMessage("Starting remote session and invoking script...", MessageType.Notice);
 
                 var regFixCommand = GetRegFixCommand();
 
                 if (await deploy.SimplePowerShellCommand(regFixCommand))
                 {
-                    deploy.LogMessage("GK Registry fix applied!");
+                    deploy.LogMessage("GK Registry fix applied!", MessageType.Success);
                 }
                 else
                 {
-                    deploy.LogMessage("Failed to apply GK Registry fix!");
+                    deploy.LogMessage("Failed to apply GK Registry fix!", MessageType.Error);
                     deploy.UserPrompt("Error occurred while executing command!", "Gatekeeper Deployment Error");
                     return false;
                 }

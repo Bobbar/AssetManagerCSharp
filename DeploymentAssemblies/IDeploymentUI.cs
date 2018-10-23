@@ -45,6 +45,11 @@ namespace DeploymentAssemblies
 
         Task<bool> SimplePowerShellCommand(PowerShellCommand[] command);
 
+        /// <summary>
+        /// Gets the specified deployment command string from the SQL database. (deployment_strings table)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         string GetString(string name);
 
         void DoneOrError();
@@ -52,6 +57,8 @@ namespace DeploymentAssemblies
         void StartTimer();
 
         void LogMessage(string message);
+
+        void LogMessage(string message, MessageType type);
 
         void UserPrompt(string prompt, string title = "");
 

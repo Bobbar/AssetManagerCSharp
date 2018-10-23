@@ -999,6 +999,12 @@
             Container for holding deployment methods and a descriptive name.
             </summary>
         </member>
+        <member name="M:AssetManager.Tools.Deployment.SoftwareDeployment.GetModules">
+            <summary>
+            Loads and verifies <see cref="T:DeploymentAssemblies.IDeployment"/> modules from the <see cref="F:AssetManager.Paths.LocalModulesStore"/> path, calls <see cref="M:DeploymentAssemblies.IDeployment.InitUI(DeploymentAssemblies.IDeploymentUI)"/> and prepares them for use.
+            </summary>
+            <returns>Returns a task collection of <see cref="T:AssetManager.Tools.Deployment.SoftwareDeployment.TaskInfo"/> ready to be initiated against a host device.</returns>
+        </member>
         <member name="M:AssetManager.Tools.Deployment.SoftwareDeployment.VerifyModules">
             <summary>
             Syncs the local module store with the remote store if possible.

@@ -34,13 +34,14 @@ namespace VPNClientModule
         {
             try
             {
-                deploy.LogMessage("Installing VPN Client... (Remember to open client and set FCBDD Profile to 'Public')");
+                deploy.LogMessage("Installing VPN Client...");
+                deploy.LogMessage("#### Remember to open client and set FCBDD Profile to 'Public' ####", MessageType.Notice);
                 await deploy.SimplePSExecCommand(deploy.GetString("vpn_install"), "VPN Client Install");
                 return true;
             }
             catch (Exception)
             {
-                deploy.LogMessage("##### NOTE:  Errors are expected due to the installation causing the device to momentarily disconnect.");
+                deploy.LogMessage("##### NOTE:  Errors are expected due to the installation causing the device to momentarily disconnect.", MessageType.Notice);
                 // Return true because errors are expected and we don't want to stop any proceeding deployments.
                 return true;
             }
