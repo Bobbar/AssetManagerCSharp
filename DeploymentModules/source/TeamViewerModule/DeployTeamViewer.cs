@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace TeamViewerModule
 {
-    public class DeployTeamViewer : DeploymentAssemblies.IDeployment
+    public class DeployTeamViewer : IDeployment
     {
-        private DeploymentAssemblies.IDeploymentUI deploy;
+        private IDeploymentUI deploy;
 
         private string tempDirectory;
         private string fullTempDirectory;
@@ -48,84 +48,79 @@ namespace TeamViewerModule
 
                 if (copyExitCode == 0 || copyExitCode == 1)
                 {
-                    deploy.LogMessage("Copy successful!");
+                    deploy.LogMessage("Copy successful!", MessageType.Success);
                 }
                 else
                 {
-                    deploy.LogMessage("Copy failed!");
+                    deploy.LogMessage("Copy failed!", MessageType.Error);
                     return false;
                 }
 
-                deploy.LogMessage("Checking for previous installation...");
+                deploy.LogMessage("Checking for previous installation...", MessageType.Notice);
 
                 tvExists = await TeamViewerInstalled();
 
                 if (tvExists)
                 {
-                    deploy.LogMessage("TeamViewer already installed.");
-                    deploy.LogMessage("Uninstalling TeamViewer...");
+                    deploy.LogMessage("TeamViewer already installed.", MessageType.Warning);
+                    deploy.LogMessage("Uninstalling TeamViewer...", MessageType.Notice);
 
                     if (await deploy.SimplePSExecCommand(GetTVUninstallString(), "Uninstall TeamViewer"))
                     {
-                        deploy.LogMessage("Uninstall complete!");
+                        deploy.LogMessage("Uninstall complete!", MessageType.Success);
                     }
                     else
                     {
-                        deploy.LogMessage("Uninstall failed!");
+                        deploy.LogMessage("Uninstall failed!", MessageType.Error);
                         deploy.UserPrompt("Error occurred while executing deployment command!");
                         return false;
                     }
                 }
                 else
                 {
-                    deploy.LogMessage("TeamViewer not installed.");
+                    deploy.LogMessage("TeamViewer not installed.", MessageType.Notice);
                 }
-
-                deploy.LogMessage("Starting TeamViewer install...");
 
                 if (await deploy.SimplePSExecCommand(GetTVInstallString(), "Install TeamViewer"))
                 {
-                    deploy.LogMessage("Install complete!");
+                    deploy.LogMessage("Install complete!", MessageType.Success);
                 }
                 else
                 {
-                    deploy.LogMessage("Install failed!");
+                    deploy.LogMessage("Install failed!", MessageType.Error);
                     deploy.UserPrompt("Error occurred while executing deployment command!");
                     return false;
                 }
 
-                deploy.LogMessage("Waiting 10 seconds.");
+                deploy.LogMessage("Waiting 10 seconds.", MessageType.Notice);
                 for (var i = 10; i >= 1; i--)
                 {
                     await Task.Delay(1000);
-                    deploy.LogMessage(i + "...");
+                    deploy.LogMessage(i + "...", MessageType.Notice);
                 }
-
-                deploy.LogMessage("Starting TeamViewer assignment...");
 
                 if (await deploy.SimplePSExecCommand(GetTVAssignString(), "TeamView Assignment"))
                 {
-                    deploy.LogMessage("Assignment complete!");
+                    deploy.LogMessage("Assignment complete!", MessageType.Success);
                 }
                 else
                 {
-                    deploy.LogMessage("Assignment failed!");
+                    deploy.LogMessage("Assignment failed!", MessageType.Error);
                     deploy.UserPrompt("Error occurred while executing assignment command!");
                     return false;
                 }
 
-                deploy.LogMessage("Deleting temp files...");
+                deploy.LogMessage("Deleting temp files...", MessageType.Notice);
 
                 if (!await deploy.SimplePowerShellCommand(GetDeleteDirectoryCommand()))
                 {
-                    deploy.LogMessage("Delete failed!");
+                    deploy.LogMessage("Delete failed!", MessageType.Error);
                     return false;
                 }
 
-                deploy.LogMessage("Done.");
-                deploy.LogMessage("-------------------");
+                deploy.LogMessage("Done.", MessageType.Success);
                 deploy.LogMessage("TeamView deployment is complete!");
-                deploy.LogMessage("NOTE: The target computer may need rebooted or the user may need to open the application before TeamViewer will connect.");
+                deploy.LogMessage("NOTE: The target computer may need rebooted or the user may need to open the application before TeamViewer will connect.", MessageType.Notice);
                 return true;
             }
             catch (Exception)

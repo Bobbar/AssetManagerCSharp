@@ -142,7 +142,7 @@ namespace AssetManager.Tools.Deployment
             logView.Show();
         }
 
-        public void UserPrompt(string prompt, string title = "") // HERE: Refactor references for new pattern.
+        public void UserPrompt(string prompt, string title = "")
         {
             OtherFunctions.Message(prompt, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, title, parentForm);
         }

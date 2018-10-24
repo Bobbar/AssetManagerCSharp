@@ -71,6 +71,8 @@ namespace AssetManager.Tools
 
             try
             {
+                OnOutputReceived("Command: " + command);
+
                 exitCode = await Task.Run(() =>
                 {
                     using (Process p = new Process())

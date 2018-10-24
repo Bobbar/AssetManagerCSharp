@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace VPNClientModule
 {
-    public class DeployVPN : DeploymentAssemblies.IDeployment
+    public class DeployVPN : IDeployment
     {
-        private DeploymentAssemblies.IDeploymentUI deploy;
+        private IDeploymentUI deploy;
 
         public string DeploymentName
         {
@@ -20,7 +20,9 @@ namespace VPNClientModule
         {
             get
             {
-                return 99;
+                // Make sure this deployment always occurs last, as it causes
+                // network disconnects that could interfere with other deployments.
+                return 999;
             }
         }
 
@@ -34,16 +36,48 @@ namespace VPNClientModule
         {
             try
             {
-                deploy.LogMessage("Installing VPN Client...");
-                deploy.LogMessage("#### Remember to open client and set FCBDD Profile to 'Public' ####", MessageType.Notice);
-                await deploy.SimplePSExecCommand(deploy.GetString("vpn_install"), "VPN Client Install");
+                deploy.LogMessage("Installing VPN Client...", MessageType.Notice);
+
+                var exitCode = await deploy.AdvancedPSExecCommand(deploy.GetString("vpn_install"), "VPN Client Install");
+
+                deploy.LogMessage("Exit code: " + exitCode.ToString());
+
+                // Exit code -9 is a connection failure.
+                // But this is OK because the VPN install caused a brief network disconnect.
+                // So we are assuming that install is successful if this occurs.
+                if (exitCode == 0 || exitCode == -9)
+                {
+                    deploy.LogMessage("VPN Client installed. Exit code -9 is OK.", MessageType.Success);
+                }
+                else
+                {
+                    deploy.LogMessage("VPN Install failed!  Unexpected exit code: " + exitCode, MessageType.Error);
+                    return false;
+                }
+
+                // Pause for a few moments to make sure the network connection is back and the install is finished.
+                deploy.LogMessage("Waiting 10 seconds for install to finish...", MessageType.Notice);
+                await Task.Delay(10000);
+
+                deploy.LogMessage("Making VPN sites public for all users...", MessageType.Notice);
+
+                var success = await deploy.SimplePSExecCommand(deploy.GetString("vpn_make_public"), "Copy VPN Sites to Public Profile");
+                if (success)
+                {
+                    deploy.LogMessage("Successfully made VPN sites public.", MessageType.Success);
+                }
+                else
+                {
+                    deploy.LogMessage("Failed to copy VPN sites to public profile!", MessageType.Error);
+                    return false;
+                }
+
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                deploy.LogMessage("##### NOTE:  Errors are expected due to the installation causing the device to momentarily disconnect.", MessageType.Notice);
-                // Return true because errors are expected and we don't want to stop any proceeding deployments.
-                return true;
+                deploy.LogMessage("UNEXPECTED ERROR: " + ex.ToString(), MessageType.Error);
+                return false;
             }
         }
     }
