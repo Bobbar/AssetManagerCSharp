@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace ProviderAssistantModule
 {
-    public class DeployProviderAssistant : DeploymentAssemblies.IDeployment
+    public class DeployProviderAssistant : IDeployment
     {
-        private DeploymentAssemblies.IDeploymentUI deploy;
+        private IDeploymentUI deploy;
 
         public string DeploymentName
         {
@@ -31,18 +31,17 @@ namespace ProviderAssistantModule
 
         public async Task<bool> DeployToDevice()
         {
-            var filePush = deploy.NewFilePush(DeployDirectory(), InstallDirectory());
+            deploy.LogMessage("Copying files to target computer...", MessageType.Notice);
 
-            deploy.LogMessage("Pushing files to target computer...", MessageType.Notice);
+            var copyExitCode = await deploy.AdvancedPSExecCommand(deploy.GetString("providerassist_copy"), "Copy Files");
 
-            if (await filePush.StartCopy())
+            if (copyExitCode == 0 || copyExitCode == 1)
             {
-                deploy.LogMessage("Push successful!", MessageType.Success);
-                filePush.Dispose();
+                deploy.LogMessage("Copy successful!", MessageType.Success);
             }
             else
             {
-                deploy.LogMessage("Push failed!", MessageType.Error);
+                deploy.LogMessage("Copy failed!", MessageType.Error);
                 return false;
             }
 
@@ -72,11 +71,6 @@ namespace ProviderAssistantModule
         private string InstallDirectory()
         {
             return deploy.GetString("providerassist_app_dir");
-        }
-
-        private string DeployDirectory()
-        {
-            return deploy.GetString("providerassist_deploy_dir");
         }
 
         private string ShortcutDirectory()
