@@ -167,8 +167,8 @@ namespace AssetManager.Tools
             session.InvocationStateChanged -= Powershell_InvocationStateChanged;
             session.InvocationStateChanged += Powershell_InvocationStateChanged;
 
-            session.Streams.Information.DataAdded -= Information_DataAdded;
-            session.Streams.Information.DataAdded += Information_DataAdded;
+            //session.Streams.Information.DataAdded -= Information_DataAdded;
+            //session.Streams.Information.DataAdded += Information_DataAdded;
 
             session.Streams.Debug.DataAdded -= Debug_DataAdded;
             session.Streams.Debug.DataAdded += Debug_DataAdded;
@@ -219,7 +219,7 @@ namespace AssetManager.Tools
             finally
             {
                 session.InvocationStateChanged -= Powershell_InvocationStateChanged;
-                session.Streams.Information.DataAdded -= Information_DataAdded;
+               // session.Streams.Information.DataAdded -= Information_DataAdded;
                 session.Streams.Debug.DataAdded -= Debug_DataAdded;
                 session.Streams.Verbose.DataAdded -= Verbose_DataAdded;
                 session.Streams.Error.DataAdded -= Error_DataAdded;
@@ -248,11 +248,11 @@ namespace AssetManager.Tools
             OnPowershellOutput(message);
         }
 
-        private void Information_DataAdded(object sender, DataAddedEventArgs e)
-        {
-            var message = CurrentPowerShellObject.Streams.Information[e.Index].MessageData.ToString();
-            OnPowershellOutput(message);
-        }
+        //private void Information_DataAdded(object sender, DataAddedEventArgs e)
+        //{
+        //    var message = CurrentPowerShellObject.Streams.Information[e.Index].MessageData.ToString();
+        //    OnPowershellOutput(message);
+        //}
 
         public async Task<PowerShell> GetNewPSSession(NetworkCredential credentials)
         {
