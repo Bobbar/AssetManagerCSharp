@@ -167,6 +167,8 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\PDFFormFilling.cs" />
@@ -181,6 +183,7 @@
     <Compile Include="Helpers\Watchdog\WatchdogConnectionStatus.cs" />
     <Compile Include="Helpers\Watchdog\WatchdogStatusEventArgs.cs" />
     <Compile Include="Helpers\Watchdog\WatchdogTickEventArgs.cs" />
+    <Compile Include="Tools\Deployment\DeploymentUI\XmlSettings.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedResourceManager.cs" />
     <Compile Include="Data\Databases.cs" />
     <Compile Include="Data\Classes\DataStructures.cs" />
@@ -609,32 +612,32 @@
   <ItemGroup>
     <PublishFile Include="Microsoft.Management.Infrastructure">
       <Visible>False</Visible>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.Management.Infrastructure.Native">
       <Visible>False</Visible>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="System.Management.Automation">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>
