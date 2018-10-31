@@ -648,8 +648,15 @@
         </member>
         <member name="T:AssetManager.Tools.Deployment.XmlSettings">
             <summary>
-            
+            Provides simple XML parsing for deployment command string and settings.
             </summary>
+            <example>
+            
+             var test = new XmlSettings(@"..\DeploymentSettings.xml");
+             var result = test.GetDeploymentString("mvps_install");
+             Console.WriteLine(result);
+             
+            </example>
         </member>
         <member name="T:AssetManager.Tools.Deployment.SoftwareDeployment.TaskInfo">
             <summary>
