@@ -658,6 +658,21 @@
              
             </example>
         </member>
+        <member name="M:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.GetPrompts(System.Xml.Linq.XElement)">
+            <summary>
+            Parse out UI prompt declarations from within the specified parent element.
+            </summary>
+            <param name="parentElement">Element containing UI prompt declarations.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.GetAttribute(System.Xml.Linq.XElement,System.String)">
+            <summary>
+            Gets the attribute value with the specifed name from the specified element.
+            </summary>
+            <param name="element">Target element.</param>
+            <param name="name">The name of the attribute to return the value from.</param>
+            <returns></returns>
+        </member>
         <member name="T:AssetManager.Tools.Deployment.SoftwareDeployment.TaskInfo">
             <summary>
             Container for holding deployment methods and a descriptive name.

@@ -2,41 +2,36 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System;
 
 namespace AssetManager.Tools.Deployment.XmlParsing.Commands
 {
     public sealed class SimplePowerShellScript : DeployCommand
     {
-        public List<UIPrompt> OnCompletePrompts = new List<UIPrompt>();
-
         private byte[] _commandBytes;
 
-        public SimplePowerShellScript(IDeploymentUI ui, string commandText, string title) : base(ui, commandText, title)
+        public SimplePowerShellScript(IDeploymentUI ui, string command, string title) : base(ui, command, title)
         {
-            _commandBytes = Encoding.ASCII.GetBytes(commandText);
+            _commandBytes = Encoding.ASCII.GetBytes(command);
         }
 
-        public SimplePowerShellScript(IDeploymentUI ui, string commandText, string title, UIPrompt onCompletePrompt) : base(ui, commandText, title)
+        public SimplePowerShellScript(IDeploymentUI ui, byte[] command, string title) : base(ui, command, title)
         {
-            OnCompletePrompts.Add(onCompletePrompt);
-            _commandBytes = Encoding.ASCII.GetBytes(commandText);
+            _commandBytes = command;
         }
 
-        public SimplePowerShellScript(IDeploymentUI ui, string commandText, string title, List<UIPrompt> onCompletePrompts) : base(ui, commandText, title)
-        {
-            OnCompletePrompts = onCompletePrompts;
-            _commandBytes = Encoding.ASCII.GetBytes(commandText);
-        }
-
-        public async override Task<bool> Execute()
+        public async override Task<bool> ExecuteReturnSuccess()
         {
             _deploy.UsePowerShell();
 
             await _deploy.SimplePowerShellScript(_commandBytes, Title);
 
-            OnCompletePrompts.ForEach(p => p.Display());
-
             return true;
+        }
+
+        public override Task<int> ExecuteReturnExitCode()
+        {
+            throw new NotImplementedException();
         }
     }
 }

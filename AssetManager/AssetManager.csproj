@@ -190,8 +190,6 @@
     <Compile Include="Tools\Deployment\XmlParsing\Commands\SimplePowerShellScript.cs" />
     <Compile Include="Tools\Deployment\XmlParsing\DeploymentReader.cs" />
     <Compile Include="Tools\Deployment\XmlParsing\Prompts\DialogPrompt.cs" />
-    <Compile Include="Tools\Deployment\XmlParsing\Prompts\ExitCodeResponse.cs" />
-    <Compile Include="Tools\Deployment\XmlParsing\Prompts\ExitCodeResponseType.cs" />
     <Compile Include="Tools\Deployment\XmlParsing\Prompts\LogMessage.cs" />
     <Compile Include="Tools\Deployment\XmlParsing\Commands\AdvancedPsExecCommand.cs" />
     <Compile Include="Tools\Deployment\XmlParsing\Commands\SimplePsExecCommand.cs" />

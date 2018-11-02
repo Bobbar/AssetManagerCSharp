@@ -12,13 +12,23 @@ namespace AssetManager.Tools.Deployment.XmlParsing
         protected Type _returnType;
         protected IDeploymentUI _deploy;
 
-        public DeployCommand(IDeploymentUI ui, string commandText, string title)
+        public DeployCommand(IDeploymentUI ui, string command, string title)
         {
-            CommandText = commandText;
+            CommandText = command;
             Title = title;
             _deploy = ui;
         }
 
-        public abstract Task<bool> Execute();
+        public DeployCommand(IDeploymentUI ui, byte[] command, string title)
+        {
+            CommandText = System.Text.Encoding.Default.GetString(command);
+            Title = title;
+            _deploy = ui;
+        }
+
+        public abstract Task<bool> ExecuteReturnSuccess();
+
+        public abstract Task<int> ExecuteReturnExitCode();
+
     }
 }

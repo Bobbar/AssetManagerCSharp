@@ -4,13 +4,35 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace AssetManager.Tools.Deployment.XmlParsing
 {
     public class DeploymentReader
     {
+        private string _deploymentName;
+        private int _orderPriority = 0;
         private XElement _deploymentElem;
+        private IDeploymentUI _deploy;
+        private bool _deploySuccessful = true;
+
+        private bool DeploySuccessful
+        {
+            get
+            {
+                return _deploySuccessful;
+            }
+
+            set
+            {
+                // Only allow to be set to false.
+                if (value == false)
+                {
+                    _deploySuccessful = value;
+                }
+            }
+        }
 
         public DeploymentReader(string settingsFileUri)
         {
@@ -22,143 +44,228 @@ namespace AssetManager.Tools.Deployment.XmlParsing
             _deploymentElem = XElement.Load(settingsFileStream, LoadOptions.None);
         }
 
-        public List<DeployCommand> ExecuteDeployment(IDeploymentUI deploy)
+        public async Task<bool> StartDeployment(IDeploymentUI deploy)
         {
-            var depCmds = new List<DeployCommand>();
-            var depName = GetAttribute(_deploymentElem, "Name");
+            _deploy = deploy;
 
-            // Get the command elements within the deployment parent.
-            var cmdElems = _deploymentElem.Elements("Command");
+            _deploymentName = GetAttribute(_deploymentElem, "Name");
+            var orderVal = GetAttribute(_deploymentElem, "OrderPriority");
 
-            // Iterate the command elements and parse out deployment objects.
-            foreach (var cmd in cmdElems)
+            if (!string.IsNullOrEmpty(orderVal))
             {
-                DeployCommand command = null;
-                string cmdTitle = string.Empty;
-                string cmdText = string.Empty;
-                CommandType cmdType;
-
-                // Get the command type attribute.
-                var cmdTypeString = GetAttribute(cmd, "Type");
-
-                // Parse the type and make sure it's recognized.
-                var success = Enum.TryParse(cmdTypeString, true, out cmdType);
-
-                if (!success)
-                {
-                    deploy.LogMessage($@"Deployment Parse Error: '{ cmdTypeString }'  is not a recognized command type!");
-                    deploy.DoneOrError();
-                    throw new Exception($@"Deployment Parse Error: '{ cmdTypeString }'  is not a recognized command type!");
-                }
-
-                // Parse and build the deployment objects depending on type.
-                switch (cmdType)
-                {
-                    // UI prompt/message to user.
-                    case CommandType.Prompt:
-
-                        var promptcmd = new PromptCommand(deploy, GetPrompts(deploy, cmd));
-
-                        command = promptcmd;
-                        break;
-                    
-                    // Simple PsExec command; success if error code is 0, failure for anything else.
-                    case CommandType.SimplePsExec:
-
-                        cmdTitle = GetAttribute(cmd, "Title");
-                        cmdText = GetCommandText(cmd);
-
-                        var spsexec = new SimplePsExecCommand(deploy, cmdText, cmdTitle);
-
-                        // Get the success and failure blocks.
-                        var successElem = cmd.Element("OnSuccess");
-                        spsexec.SuccessPrompts = GetPrompts(deploy, successElem);
-
-                        var failElem = cmd.Element("OnFailure");
-                        spsexec.FailPrompts = GetPrompts(deploy, failElem);
-
-                        command = spsexec;
-                        break;
-                    
-                    
-                    case CommandType.SimplePowerShell:
-
-                        cmdTitle = GetAttribute(cmd, "Title");
-                        cmdText = GetCommandText(cmd);
-
-                        var spshell = new SimplePowerShellScript(deploy, cmdText, cmdTitle);
-
-                        var completeElem = cmd.Element("OnComplete");
-                        spshell.OnCompletePrompts = GetPrompts(deploy, completeElem);
-
-                        command = spshell;
-                        break;
-                    case CommandType.AdvancedPsExec:
-
-                        cmdTitle = GetAttribute(cmd, "Title");
-                        cmdText = GetCommandText(cmd);
-
-                        var exitResonses = GetExitReponses(deploy, cmd);
-                        var apshell = new AdvancedPsExecCommand(deploy, cmdText, cmdTitle, exitResonses);
-
-                        command = apshell;
-                        break;
-
-                }
-
-                if (command != null)
-                    depCmds.Add(command);
-
+                _orderPriority = Convert.ToInt32(orderVal);
             }
 
-            return depCmds;
+            return await RunDeployment(_deploymentElem.Elements());
         }
 
-        private List<ExitCodeResponse> GetExitReponses(IDeploymentUI deploy, XElement element)
+        private async Task<bool> RunDeployment(IEnumerable<XElement> cmdElements)
         {
-            var responses = new List<ExitCodeResponse>();
+            bool success = false;
 
-            // Enter the ExitCodeResponse element and return the ExitCode elements.
-            var reponseElems = element.Descendants("ExitCodeResponse").Elements("ExitCode");
-
-            foreach (var response in reponseElems)
+            foreach (var cmd in cmdElements)
             {
-                if (response.Name.LocalName != "ExitCode")
-                    throw new Exception($@"Unexpected exit code reponse node '{response.Name.LocalName}'");
-
-                var codeVals = GetAttribute(response, "Value").Split(',');
-                bool isSuccess = Convert.ToBoolean(GetAttribute(response, "IsSuccess"));
-
-                foreach (var code in codeVals)
-                {
-                    int exitCode = int.Parse(code);
-                    var goodExit = new ExitCodeResponse(exitCode, isSuccess);
-                    goodExit.Prompts = GetPrompts(deploy, response);
-
-                    responses.Add(goodExit);
-                }
+                success = await ExecuteCommandElement(cmd);
             }
 
-            return responses;
+            return success;
         }
 
+        private async Task<bool> ExecuteCommandElement(XElement cmdElement)
+        {
+            CommandType cmdType;
 
-        private List<UIPrompt> GetPrompts(IDeploymentUI deploy, XElement onElement)
+            // Get the command attributes.
+            string cmdTitle = GetAttribute(cmdElement, "Title");
+            string cmdText = GetCommandText(cmdElement);
+            string cmdTypeString = GetAttribute(cmdElement, "Type");
+
+            // Parse the type and make sure it's an expected value.
+            var valid = Enum.TryParse(cmdTypeString, true, out cmdType);
+
+            // If the type is not expected, stop deployment and throw errors.
+            if (!valid)
+            {
+                _deploy.LogMessage($@"Deployment Parse Error: '{ cmdTypeString }'  is not a recognized command type!");
+                _deploy.DoneOrError();
+                throw new Exception($@"Deployment Parse Error: '{ cmdTypeString }'  is not a recognized command type!");
+            }
+
+            // Parse and execute the deployment elements.
+            switch (cmdType)
+            {
+
+                case CommandType.Prompt: // UI prompt/message to user.
+
+                    var promptcmd = new PromptCommand(_deploy, GetPrompts(cmdElement));
+                    DeploySuccessful = await promptcmd.ExecuteReturnSuccess();
+
+                    break;
+
+                case CommandType.SimplePsExec:  // Simple PsExec command; success if error code is 0, failure for anything else.
+
+                    var spsexec = new SimplePsExecCommand(_deploy, cmdText, cmdTitle);
+
+                    var success = await spsexec.ExecuteReturnSuccess();
+
+                    // Look for OnSuccess and/or OnFailure declarations and recurse with their commands if present.
+                    if (success)
+                    {
+                        var successElem = cmdElement.Element("OnSuccess");
+
+                        if (successElem != null)
+                        {
+                            foreach (var cmd in successElem.Elements())
+                            {
+                                DeploySuccessful = await ExecuteCommandElement(cmd);
+                            }
+                        }
+                        else
+                        {
+                            DeploySuccessful = success;
+                        }
+                    }
+                    else
+                    {
+                        DeploySuccessful = false;
+
+                        var failElem = cmdElement.Element("OnFailure");
+
+                        if (failElem != null)
+                        {
+                            foreach (var cmd in failElem.Elements())
+                            {
+                                DeploySuccessful = await ExecuteCommandElement(cmd);
+                            }
+                        }
+                        else
+                        {
+                            DeploySuccessful = success;
+                        }
+                    }
+
+                    break;
+
+                case CommandType.SimplePowerShell: // Simple PowerShell command: Just excutes and returns when finished. No result supported.
+
+                    var spshell = new SimplePowerShellScript(_deploy, cmdText, cmdTitle);
+
+                    await spshell.ExecuteReturnSuccess();
+
+                    // Look for OnComplete declaration and recurse on commands if present.
+                    var completeElem = cmdElement.Element("OnComplete");
+
+                    if (completeElem != null)
+                    {
+                        foreach (var cmd in completeElem.Elements())
+                        {
+                            DeploySuccessful = await ExecuteCommandElement(cmd);
+                        }
+                    }
+                    else
+                    {
+                        DeploySuccessful = true;
+                    }
+
+                    break;
+
+                case CommandType.AdvancedPsExec: // Advanced PsExec command: Returns the exit code upon completion.
+
+                    var apshell = new AdvancedPsExecCommand(_deploy, cmdText, cmdTitle);
+
+                    var exitCodeResult = await apshell.ExecuteReturnExitCode();
+
+                    // Look for an ExitCodeResponse declaration and parse if present. 
+                    var exitCodeElem = cmdElement.Element("ExitCodeResponse");
+
+                    if (exitCodeElem != null)
+                    {
+                        // Iterate the exit code elements then parse and test them against the exit code result.
+                        foreach (var codeElem in exitCodeElem.Elements("ExitCode"))
+                        {
+                            // Is this exit code block defining successful codes?
+                            // We check for the IsSuccess attribute and parse accordingly.
+                            // If no attribute is present, we default to IsSuccess = True.
+                            bool isSuccess = true;
+
+                            // Get the attribute.
+                            var isSuccessAttrib = GetAttribute(codeElem, "IsSuccess");
+
+                            // If the attribute is present, convert the string to bool.
+                            if (!string.IsNullOrEmpty(isSuccessAttrib))
+                            {
+                                isSuccess = Convert.ToBoolean(isSuccessAttrib);
+                            }
+
+                            // Get the defined exit codes and test for each one.
+                            if (isSuccess)
+                            {
+                                // Split the code values to an array.
+                                // 
+                                // TODO: Maybe remove the split and check the entire string.
+                                // This might allow the use of any delimiter. (Spaces, commas, bars, etc)
+                                var goodCodeVals = GetAttribute(codeElem, "Value").Split(',');
+
+                                // Check if the defined exit codes contain the exit code result.
+                                if (goodCodeVals.Contains(exitCodeResult.ToString()))
+                                {
+                                    // Iterate and recurse with the commands.
+                                    foreach (var codeCmd in codeElem.Elements())
+                                    {
+                                        DeploySuccessful = await ExecuteCommandElement(codeCmd);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // Same as above, but we set the successful bool to false to ensure that the
+                                // deployment is actually marked as failed once it completes.
+                                DeploySuccessful = false;
+
+                                var badCodeVals = GetAttribute(codeElem, "Value").Split(',');
+
+                                if (badCodeVals.Contains(exitCodeResult.ToString()))
+                                {
+                                    foreach (var codeCmd in codeElem.Elements())
+                                    {
+                                        DeploySuccessful = await ExecuteCommandElement(codeCmd);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        DeploySuccessful = true;
+                    }
+
+                    break;
+            }
+
+            return DeploySuccessful;
+        }
+
+        /// <summary>
+        /// Parse out UI prompt declarations from within the specified parent element.
+        /// </summary>
+        /// <param name="parentElement">Element containing UI prompt declarations.</param>
+        /// <returns></returns>
+        private List<UIPrompt> GetPrompts(XElement parentElement)
         {
             var prompts = new List<UIPrompt>();
 
-            foreach (var prompt in onElement.Elements())
+            foreach (var prompt in parentElement.Elements())
             {
                 var promptType = (PromptType)Enum.Parse(typeof(PromptType), prompt.Name.LocalName, true);
 
                 switch (promptType)
                 {
                     case PromptType.LogMessage:
-                        prompts.Add(new LogMessage(deploy, prompt.Value.Trim(), GetAttribute(prompt, "Type")));
+                        prompts.Add(new LogMessage(_deploy, prompt.Value.Trim(), GetAttribute(prompt, "Type")));
                         break;
 
                     case PromptType.DialogPrompt:
-                        prompts.Add(new DialogPrompt(deploy, prompt.Value.Trim(), GetAttribute(prompt, "Title")));
+                        prompts.Add(new DialogPrompt(_deploy, prompt.Value.Trim(), GetAttribute(prompt, "Title")));
                         break;
                 }
             }
@@ -166,6 +273,12 @@ namespace AssetManager.Tools.Deployment.XmlParsing
             return prompts;
         }
 
+        /// <summary>
+        /// Gets the attribute value with the specifed name from the specified element.
+        /// </summary>
+        /// <param name="element">Target element.</param>
+        /// <param name="name">The name of the attribute to return the value from.</param>
+        /// <returns></returns>
         private string GetAttribute(XElement element, string name)
         {
             try
@@ -180,7 +293,14 @@ namespace AssetManager.Tools.Deployment.XmlParsing
 
         private string GetCommandText(XElement cmd)
         {
-            return cmd.Element("String").Value.Trim();
+            var stringElement = cmd.Element("String");
+
+            if (stringElement != null)
+            {
+                return stringElement.Value.Trim();
+            }
+
+            return string.Empty;
         }
     }
 }

@@ -1,44 +1,26 @@
 ﻿using DeploymentAssemblies;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace AssetManager.Tools.Deployment.XmlParsing
 {
     public sealed class AdvancedPsExecCommand : DeployCommand
     {
-        private Dictionary<int, ExitCodeResponse> _resultReponses = new Dictionary<int, ExitCodeResponse>();
-
         public AdvancedPsExecCommand(IDeploymentUI ui, string commandText, string title) : base(ui, commandText, title)
         {
         }
-
-        public AdvancedPsExecCommand(IDeploymentUI ui, string commandText, string title, ExitCodeResponse resultResponse) : base(ui, commandText, title)
+      
+        public override Task<bool> ExecuteReturnSuccess()
         {
-            _resultReponses.Add(resultResponse.ExitCode, resultResponse);
+            throw new NotImplementedException();
         }
 
-        public AdvancedPsExecCommand(IDeploymentUI ui, string commandText, string title, List<ExitCodeResponse> resultResponses) : base(ui, commandText, title)
-        {
-            resultResponses.ForEach(r => _resultReponses.Add(r.ExitCode, r));
-        }
-
-        public async override Task<bool> Execute()
+        public async override Task<int> ExecuteReturnExitCode()
         {
             _deploy.UsePsExec();
 
-            var exitCode = await _deploy.AdvancedPSExecCommand(CommandText, Title);
-
-            if (_resultReponses.ContainsKey(exitCode))
-            {
-                _resultReponses[exitCode].Prompts.ForEach(p => p.Display());
-
-                return _resultReponses[exitCode].IsSuccess;
-            }
-            else
-            {
-                _deploy.LogMessage($@"Failed! Unexpected exit code: { exitCode }", MessageType.Error);
-                return false;
-            }
+            return await _deploy.AdvancedPSExecCommand(CommandText, Title);
         }
     }
 }
