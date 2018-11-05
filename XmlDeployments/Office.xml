@@ -1,0 +1,116 @@
+<Deployment Name="Office 365">
+
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="Copying files to target computer..."/>
+	</Command>
+
+	<Command Type="AdvancedPsExec" Title="Copy Deployement Files">
+		<String>
+		robocopy "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Deployments\Office" "C:\Temp\OfficeDeploy" *.* /E /R:1
+		</String>
+		
+		<ExitCodeResponse>
+			<ExitCode Value="0,1" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Success" Value="Copy successful!"/>
+				</Command>
+			</ExitCode>
+			
+			<ExitCode Value="" IsSuccess="False">
+				<Command Type="Prompt">
+					<LogMessage Type="Error" Value="Copy failed!"/>
+				</Command>
+			</ExitCode>
+		</ExitCodeResponse>
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="Removing previous Office installations..."/>
+		<LogMessage Type="Notice" Value="Starting remote session and invoking scripts..."/>
+	</Command>
+	
+	<Command Type="SimplePowerShellCommand" Title="Remove Previous Office Versions">
+		
+		<PSCommands>
+			<PSCommand IsScript="True" UseLocalScope="True" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls\RemoveAppXAllUsers.ps1 '*OfficeHub*'">
+				<PSParameter Name="Wait"/>
+				<PSParameter Name="NoNewWindow"/>
+			</PSCommand>
+			
+			<PSCommand IsScript="True" UseLocalScope="True" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls\RemoveAppXAllUsers.ps1 '*OneNote*'">
+				<PSParameter Name="Wait"/>
+				<PSParameter Name="NoNewWindow"/>
+			</PSCommand>
+			
+			<PSCommand IsScript="True" UseLocalScope="True" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls\RemoveAppXAllUsers.ps1 '*Microsoft.Office.Desktop*'">
+				<PSParameter Name="Wait"/>
+				<PSParameter Name="NoNewWindow"/>
+			</PSCommand>
+			
+			<PSCommand IsScript="True" UseLocalScope="True" Value="Set-Location">
+				<PSParameter Name="Path" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls"/>
+			</PSCommand>
+			
+			<PSCommand IsScript="True" UseLocalScope="True" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls\Remove-PreviousOfficeInstalls.ps1">
+				<PSParameter Name="Wait"/>
+				<PSParameter Name="NoNewWindow"/>
+			</PSCommand>
+		</PSCommands>
+		
+		<OnSuccess>
+			<Command Type="Prompt">
+				<LogMessage Type="Success" Value="Previous Office installations removed."/>
+			</Command>
+		</OnSuccess>
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Failed to remove previous installations!"/>
+				<DialogPrompt Value="Error occurred while executing deployment command!"/>
+			</Command>
+		</OnFailure>
+			
+	</Command>
+	
+	<Command Type="SimplePsExec" Title="Office 365 Install">
+		<String>
+		C:\Temp\OfficeDeploy\setup.exe /configure C:\Temp\OfficeDeploy\configuration_lan.xml
+		</String>
+	
+		<OnSuccess>
+			<Command Type="Prompt">
+				<LogMessage Type="Success" Value="Office Deployment complete!"/>
+			</Command>
+		</OnSuccess>
+		
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Office Deployment failed!"/>
+				<DialogPrompt Value="Error occurred while deploying Office!"/>
+			</Command>
+		</OnFailure>
+	
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="Deleting temp files..."/>
+	</Command>
+	
+	<Command Type="SimplePowerShellCommand" Title="Remove Previous Office Versions">
+	
+		<PSCommands>
+			<PSCommand IsScript="False" UseLocalScope="True" Value="Remove-Item">
+				<PSParameter Name="Recurse"/>
+				<PSParameter Name="Force"/>
+				<PSParameter Name="Path" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls"/>
+			</PSCommand>
+		</PSCommands>
+		
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Delete failed!"/>
+			</Command>
+		</OnFailure>
+			
+	</Command>
+
+</Deployment>

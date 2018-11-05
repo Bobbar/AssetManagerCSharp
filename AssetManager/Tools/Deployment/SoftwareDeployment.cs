@@ -10,6 +10,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AssetManager.Tools.Deployment.XmlParsing;
+using System.Diagnostics;
 
 namespace AssetManager.Tools.Deployment
 {
@@ -104,6 +106,47 @@ namespace AssetManager.Tools.Deployment
             return taskList;
         }
 
+        private async Task<List<TaskInfo>> GetScripts()
+        {
+            int modCount = 0;
+            var loadTimer = new Stopwatch();
+            var taskList = new List<TaskInfo>();
+
+            deploy.LogMessage("Loading deployment scripts...");
+
+            loadTimer.Restart();
+
+            await Task.Run(() =>
+            {
+               // VerifyModules();
+
+                var files = Directory.GetFiles(@"C:\Temp\Commands\Deployments\", "*.xml");
+                var readers = new List<DeploymentReader>();
+
+                foreach (var file in files)
+                {
+                    var fileInfo = new FileInfo(file);
+
+                    readers.Add(new DeploymentReader(fileInfo.OpenRead(), deploy));
+
+                    modCount++;
+                }
+
+                // Sort the module instances by deployment priority.
+                readers = readers.OrderBy((r) => r.OrderPriority).ToList();
+
+                // Create new tasks and add them to the collection.
+                readers.ForEach((r) => taskList.Add(new TaskInfo(() => r.StartDeployment(), r.DeploymentName)));
+            });
+
+            var elapTime = loadTimer.ElapsedMilliseconds;
+
+            deploy.LogMessage(modCount + " scripts loaded in " + elapTime + "ms.");
+
+            return taskList;
+        }
+
+
         /// <summary>
         /// Syncs the local module store with the remote store if possible.
         /// </summary>
@@ -186,7 +229,10 @@ namespace AssetManager.Tools.Deployment
                 selectListBox.Size = new System.Drawing.Size(300, 250);
                 selectListBox.DisplayMember = nameof(TaskInfo.TaskName);
 
-                var depList = await GetModules();
+                //var depList = await GetModules();
+
+                var depList = await GetScripts();
+
 
                 foreach (var d in depList)
                 {

@@ -1,0 +1,15 @@
+<Deployment Name="MapWinGIS">
+	
+	<Command Type="SimplePSExec" Title="Visual C++ Redist Install">
+		<String>
+		"\\core.co.fairfield.oh.us\dfs1\fcdd\files\ocshare\Common Information\Applications\vcredist_x86-2013.exe" /install /quiet /norestart
+		</String>
+	</Command>
+	
+	<Command Type="SimplePSExec" Title="MapWinGIS Install">
+		<String>
+		"\\core.co.fairfield.oh.us\dfs1\fcdd\files\ocshare\Common Information\Applications\MWGISv4.9.4.0-Win32.exe" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- /TYPE=custom
+		</String>
+	</Command>
+	
+</Deployment>

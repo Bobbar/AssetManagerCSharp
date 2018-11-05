@@ -1,0 +1,113 @@
+<Deployment Name="Testing" OrderPriority="99">
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice">
+		IPCONFIG....
+		</LogMessage>
+		<LogMessage Type="Notice">
+		Starting Ipconfig!?
+		</LogMessage>
+	</Command>
+	
+	<Command Type="AdvancedPsExec" Title="Testing...">
+		<String>
+		ipconfig
+		</String>
+		
+		<ExitCodeResponse>
+			<ExitCode Value="0,1" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Success">
+					Successful!
+					</LogMessage>
+				</Command>
+			</ExitCode>				
+		</ExitCodeResponse>
+	</Command>
+	
+	<Command Type="SimplePSExec" Title="Certificate Install">
+		<String>
+		ping google.com
+		</String>
+		<OnSuccess>
+			<Command Type="Prompt">
+				<LogMessage Type="Success">
+				It worked!
+				</LogMessage>
+			</Command>
+			<Command Type="Prompt">
+				<LogMessage Type="Success">
+				Test message 1
+				</LogMessage>
+			</Command>
+			<Command Type="Prompt">
+				<LogMessage Type="Notice">
+				Test message 2 in blue!
+				</LogMessage>
+			</Command>
+		</OnSuccess>
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error">
+				It Failed!
+				</LogMessage>
+			</Command>
+		</OnFailure>
+	</Command>
+	
+	<Command Type="AdvancedPsExec" Title=".NET 4.7.1 Runtime Install">
+		<String>
+		dir blah
+		</String>
+		
+		<ExitCodeResponse>
+			<ExitCode Value="3010" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Notice">
+					Successful. **HOWEVER**
+					</LogMessage>
+				</Command>
+			</ExitCode>	
+			
+			<ExitCode Value="0" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Success">
+					Successful!
+					</LogMessage>
+				</Command>
+			</ExitCode>	
+			
+			<ExitCode Value="1" IsSuccess="False">
+				<Command Type="Prompt">
+					<LogMessage Type="Error">
+					FAILED!
+					</LogMessage>
+				</Command>
+				
+				<Command Type="SimplePSExec" Title="Certificate Install">
+					<String>
+					ping google.com
+					</String>
+					<OnSuccess>
+						<Command Type="Prompt">
+							<LogMessage Type="Success">
+							It worked!
+							</LogMessage>
+						</Command>
+					</OnSuccess>
+					<OnFailure>
+						<Command Type="Prompt">
+							<LogMessage Type="Error">
+							It Failed!
+							</LogMessage>
+						</Command>
+					</OnFailure>
+				</Command>
+			</ExitCode>	
+			
+		</ExitCodeResponse>
+	</Command>
+	
+	
+	
+</Deployment>

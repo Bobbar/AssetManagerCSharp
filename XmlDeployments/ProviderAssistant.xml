@@ -1,0 +1,45 @@
+<Deployment Name="Provider Assistant">
+
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="Copying files to target computer..."/>
+	</Command>
+	
+	<Command Type="AdvancedPsExec" Title="Copy Files">
+		<String>
+		robocopy "\\core.co.fairfield.oh.us\dfs1\fcdd\ocshare\Common Information\Applications\Provider Assistant\Deploymentt" "C:\apps\ProviderAssistant" *.* /E /R:1
+		</String>
+		
+		<ExitCodeResponse>
+			<ExitCode Value="0,1" IsSuccessful="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Success" Value="Copy successful!"/>
+				</Command>
+			</ExitCode>
+			
+			<ExitCode Value="" IsSuccessful="False">
+				<Command Type="Prompt">
+					<LogMessage Type="Error" Value="Copy failed!"/>
+				</Command>
+			</ExitCode>
+		</ExitCodeResponse>
+		
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="Copying shortcut..."/>
+	</Command>
+	
+	<Command Type="SimplePsExec" Title="Copy Shortcut">
+		<String>
+		xcopy "C:\apps\ProviderAssistant\Provider Assistant.lnk" "C:\Users\Public\Desktop" /y
+		</String>
+				
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Copy shortcut failed!"/>
+			</Command>
+		</OnFailure>
+		
+	</Command>
+		
+</Deployment>

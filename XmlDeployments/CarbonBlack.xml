@@ -1,0 +1,9 @@
+<Deployment Name="Carbon Black" OrderPriority="98">
+	
+	<Command Type="SimplePSExec" Title="Carbon Black Install">
+		<String>
+		msiexec.exe /i "\\core.co.fairfield.oh.us\dfs1\pub\misc\CbDefense\installer_vista_win7_win8-64-3.3.0.953.msi" ALLUSERS=1 /qn /norestart /log output.log COMPANY_CODE=T4QP8G2OW301Q!BX3O9 GROUP_NAME=default BYPASS=0
+		</String>
+	</Command>
+	
+</Deployment>

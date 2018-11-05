@@ -1,10 +1,11 @@
-﻿namespace AssetManager.Tools.Deployment.XmlParsing.Commands
+﻿namespace AssetManager.Tools.Deployment.XmlParsing
 {
     public enum CommandType
     {
         SimplePsExec,
         AdvancedPsExec,
         SimplePowerShell,
+        SimplePowerShellCommand,
         Prompt
     }
 }

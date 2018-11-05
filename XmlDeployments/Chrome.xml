@@ -1,0 +1,26 @@
+<Deployment Name="Chrome Install">
+	
+	<Command Type="SimplePowerShell" Title="Chrome Install">
+		<String>
+$LocalTempDir = $env:TEMP;
+$ChromeInstaller = "ChromeInstaller.exe";
+(new-object System.Net.WebClient).DownloadFile('http://dl.google.com/chrome/install/375.126/chrome_installer.exe', "$LocalTempDir\$ChromeInstaller"); 
+&amp; "$LocalTempDir\$ChromeInstaller" /silent /install;
+$Process2Monitor =  "ChromeInstaller";
+Do 
+{ $ProcessesFound = Get-Process | ?{$Process2Monitor -contains $_.Name} | Select-Object -ExpandProperty Name;
+ If ($ProcessesFound) {} else { rm "$LocalTempDir\$ChromeInstaller" -ErrorAction SilentlyContinue -Verbose } 
+} Until (!$ProcessesFound)
+		</String>
+		
+		<OnComplete>
+			<Command Type="Prompt">
+				<LogMessage Type="Success">
+				Chrome Deployment Complete!
+				</LogMessage>
+			</Command>
+		</OnComplete>
+		
+	</Command>
+		
+</Deployment>

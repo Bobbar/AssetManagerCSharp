@@ -1,0 +1,9 @@
+<Deployment Name="Spark Communicator">
+
+	<Command Type="SimplePsExec" Title="Spark Communicator Install">
+		<String>
+		"\\core.co.fairfield.oh.us\dfs1\pub\misc\xmpp\spark_2_6_3.exe" -q
+		</String>
+	</Command>
+	
+</Deployment>

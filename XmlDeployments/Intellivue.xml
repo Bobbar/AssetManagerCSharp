@@ -1,0 +1,9 @@
+<Deployment Name="Intellivue">
+	
+	<Command Type="SimplePSExec" Title="Intellivue Install">
+		<String>
+		\\ddad-svr-fs02\Intellivue\GXInstaller\IVueInstaller.exe
+		</String>
+	</Command>
+	
+</Deployment>

@@ -658,6 +658,11 @@
              
             </example>
         </member>
+        <member name="P:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.DeploySuccessful">
+            <summary>
+            A one way bool. If this is set to false, it will stay false for the remainder of the deployment.
+            </summary>
+        </member>
         <member name="M:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.GetPrompts(System.Xml.Linq.XElement)">
             <summary>
             Parse out UI prompt declarations from within the specified parent element.
@@ -667,7 +672,7 @@
         </member>
         <member name="M:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.GetAttribute(System.Xml.Linq.XElement,System.String)">
             <summary>
-            Gets the attribute value with the specifed name from the specified element.
+            Gets the attribute value with the specifed name from the specified element. Not case sensitive.
             </summary>
             <param name="element">Target element.</param>
             <param name="name">The name of the attribute to return the value from.</param>

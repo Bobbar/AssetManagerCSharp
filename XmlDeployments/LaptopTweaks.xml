@@ -1,0 +1,122 @@
+<Deployment Name="Laptop/Windows Tablet Tweaks" OrderPriority="0">
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice">
+			Applying tweaks for laptop/tablet devices...
+		</LogMessage>
+		<LogMessage Type="Notice">
+			*** DISABLE IntelPROSet SERVICE ***
+		</LogMessage>
+	</Command>
+	
+	<Command Type="AdvancedPsExec" Title="Disable IntelPROSet Service">
+		<String>
+		"\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Tools\Registry Tweaks\Disable_IntelPROSet.bat"
+		</String>
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Success">
+			Done. Disregard any exit codes.
+		</LogMessage>
+		<LogMessage>
+			
+		</LogMessage>
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice">
+			*** ADD FCDD-PRIVATE PUBLIC WIFI PROFILE ***
+		</LogMessage>
+	</Command>
+		
+	<Command Type="AdvancedPsExec" Title="Copy FCDD-PRIVATE Profile">
+		<String>
+		robocopy "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Tools\Registry Tweaks" "C:\Temp\RegTweaks" Wi-Fi-FCDD-PRIVATE.xml
+		</String>
+		<ExitCodeResponse>
+			<ExitCode Value="0,1" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Success">
+					Profile copied.
+					</LogMessage>
+				</Command>
+			</ExitCode>		
+			<ExitCode Value="" IsSuccess="False">
+				<Command Type="Prompt">
+					<LogMessage Type="Error">
+					Failed to copy profile to device!
+					</LogMessage>
+				</Command>
+			</ExitCode>		
+		</ExitCodeResponse>
+	</Command>	
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice">
+			Deleting any existing profiles...
+		</LogMessage>
+	</Command>
+		
+	<Command Type="SimplePSExec" Title="Delete Existing Wifi Profile">
+		<String>
+		netsh wlan delete profile name="FCDD-PRIVATE"
+		</String>
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice">
+			Importing FCDD-PRIVATE WiFi profile....
+		</LogMessage>
+	</Command>
+	
+	<Command Type="SimplePSExec" Title="Import Wifi Profile">
+		<String>
+		netsh wlan add profile filename=C:\Temp\RegTweaks\Wi-Fi-FCDD-PRIVATE.xml
+		</String>
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Failed to import the Wifi profile!"/>
+			</Command>
+		</OnFailure>
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice">
+			Deleting temp directory...
+		</LogMessage>
+	</Command>
+	
+	<Command Type="SimplePSExec" Title="Delete Temp Directory">
+		<String>
+		rmdir /S /Q "C:\Temp\RegTweaks"
+		</String>
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Failed to delete temp directory!"/>
+			</Command>
+		</OnFailure>
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage>
+			
+		</LogMessage>
+		<LogMessage Type="Notice">
+			*** DISABLE SLEEP ON CLOSE ***
+		</LogMessage>
+	</Command>
+		
+	<Command Type="AdvancedPsExec" Title="Disable Sleep On Close">
+		<String>
+		"\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Tools\Registry Tweaks\DisableSleepOnClose.exe"
+		</String>
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Success">
+			Done. Disregard any exit codes.
+		</LogMessage>
+	</Command>
+			
+</Deployment>

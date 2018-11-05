@@ -1,0 +1,38 @@
+<Deployment Name="Ghostscript PDF" OrderPriority="0">
+	
+	<Command Type="SimplePSExec" Title="Ghostscript PDF Driver Install">
+		<String>
+		rundll32 printui.dll, PrintUIEntry /ia /m "Ghostscript PDF" /K /h x64 /v 3 /f "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Deployments\GhostscriptPDF\lib\ghostpdf.inf" /F "C:\Windows\INF\ntprint.inf" /q
+		</String>
+		<OnSuccess>
+			<Command Type="Prompt">
+				<LogMessage Type="Success" Value="Ghostscript Driver Installed."/>
+			</Command>
+		</OnSuccess>
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Ghostscript Driver Install Failed!"/>
+			</Command>
+		</OnFailure>
+		
+	</Command>
+	
+	<Command Type="SimplePSExec" Title="Ghostscript PDF Printer Install">
+		<String>
+		rundll32 printui.dll PrintUIEntry /if /b "Sybase DataWindow PS" /f "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Deployments\GhostscriptPDF\lib\ghostpdf.inf" /r "FILE:" /m "Ghostscript PDF" /q
+		</String>
+		
+		<OnSuccess>
+			<Command Type="Prompt">
+				<LogMessage Type="Success" Value="Ghostscript PDF Printer Installed."/>
+			</Command>
+		</OnSuccess>
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Ghostscript PDF Printer Install Failed!"/>
+			</Command>
+		</OnFailure>
+		
+	</Command>
+		
+</Deployment>

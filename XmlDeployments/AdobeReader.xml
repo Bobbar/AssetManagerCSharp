@@ -1,0 +1,23 @@
+<Deployment Name="Adobe Reader" OrderPriority="97">
+	
+	<Command Type="SimplePSExec" Title="Adobe Reader Install">
+		<String>
+		"\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Deployments\AdobeReader\AcroRdrDC1801120035_en_US.exe" /sPB
+		</String>
+		<OnSuccess>
+			<Command Type="Prompt">
+				<LogMessage Type="Success">
+				MVPS Installed Successfully!
+				</LogMessage>
+			</Command>
+		</OnSuccess>
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error">
+				Error installing MVPS!
+				</LogMessage>
+			</Command>
+		</OnFailure>
+	</Command>
+	
+</Deployment>

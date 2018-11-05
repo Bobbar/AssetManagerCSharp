@@ -1,0 +1,72 @@
+<Deployment Name="ClickOnce Install" OrderPriority="0">
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice">
+		Copying certificate...
+		</LogMessage>
+	</Command>
+	
+	<Command Type="AdvancedPsExec" Title="Copy Certificate">
+		<String>
+		robocopy "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Deployments\ClickOnce\Cert" "C:\Temp\Deploy\ClickOnce" *.* /E /R:1
+		</String>
+		
+		<ExitCodeResponse>
+			<ExitCode Value="0,1" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Success">
+					Copy Successful!
+					</LogMessage>
+				</Command>
+			</ExitCode>				
+		</ExitCodeResponse>
+	</Command>
+	
+	<Command Type="SimplePSExec" Title="Certificate Install">
+		<String>
+		certutil.exe -addstore root C:\Temp\Deploy\ClickOnce\trust.cer
+		</String>
+		<OnSuccess>
+			<Command Type="Prompt">
+				<LogMessage Type="Success">
+				Certificate installed!
+				</LogMessage>
+			</Command>
+		</OnSuccess>
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error">
+				Certificate install failed!
+				</LogMessage>
+			</Command>
+		</OnFailure>
+	</Command>
+	
+	<Command Type="AdvancedPsExec" Title=".NET 4.7.1 Runtime Install">
+		<String>
+		"\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Deployments\ClickOnce\NETRuntime\471\NDP471-KB4033342-x86-x64-AllOS-ENU.exe" /q /norestart
+		</String>
+		
+		<ExitCodeResponse>
+			<ExitCode Value="3010" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Notice">
+					Install successful. **REBOOT REQUIRED!**
+					</LogMessage>
+				</Command>
+			</ExitCode>	
+			
+			<ExitCode Value="0" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Success">
+					Install successful!
+					</LogMessage>
+				</Command>
+			</ExitCode>	
+			
+		</ExitCodeResponse>
+	</Command>
+	
+	
+	
+</Deployment>

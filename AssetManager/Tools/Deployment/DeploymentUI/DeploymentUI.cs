@@ -158,7 +158,7 @@ namespace AssetManager.Tools.Deployment
             var exitCode = await PSExecWrap.ExecuteRemoteCommand(command);
             if (exitCode == 0)
             {
-                LogMessage(title + " complete!", MessageType.Success);
+                LogMessage(title + " Complete!", MessageType.Success);
                 return true;
             }
             else
@@ -183,7 +183,7 @@ namespace AssetManager.Tools.Deployment
             var success = await PowerShellWrap.ExecutePowerShellScript(script);
             if (success)
             {
-                LogMessage(title + " complete!", MessageType.Success);
+                LogMessage(title + " Complete!", MessageType.Success);
             }
             else
             {

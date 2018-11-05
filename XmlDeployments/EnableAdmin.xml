@@ -1,0 +1,37 @@
+<Deployment Name="Enable Local Admin" OrderPriority="0">
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice">
+		Enabling Local Admin Account...
+		</LogMessage>
+		<LogMessage Type="Notice">
+		Starting remote session and invoking commands...
+		</LogMessage>
+	</Command>
+	
+	<Command Type="SimplePowerShellCommand" Title="Enable Local Admin">
+		<PSCommands>
+			<PSCommand IsScript="True">
+			net user Administrator "057|750"
+			</PSCommand>
+			<PSCommand IsScript="True">
+			net user Administrator /active:yes
+			</PSCommand>
+		</PSCommands>
+		<OnSuccess>
+			<Command Type="Prompt">
+				<LogMessage Type="Success">
+				Local Admin enabled!
+				</LogMessage>
+			</Command>
+		</OnSuccess>
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error">
+				Failed to enable local Admin!
+				</LogMessage>
+			</Command>
+		</OnFailure>
+	</Command>
+	
+</Deployment>
