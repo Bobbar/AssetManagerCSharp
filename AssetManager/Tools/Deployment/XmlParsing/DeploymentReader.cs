@@ -135,6 +135,12 @@ namespace AssetManager.Tools.Deployment.XmlParsing
 
                     break;
 
+                case CommandType.Sleep: // Sleep for # seconds.
+
+                    DeploySuccessful = await ExecuteSleepCommand(cmdElement);
+
+                    break;
+
                 case CommandType.SimplePsExec:  // Simple PsExec command; success if error code is 0, failure for anything else.
 
                     DeploySuccessful = await ExecuteSimplePsExec(cmdElement);
@@ -172,6 +178,21 @@ namespace AssetManager.Tools.Deployment.XmlParsing
             return true;
         }
 
+        private async Task<bool> ExecuteSleepCommand(XElement cmdElement)
+        {
+            var sleepTimeVal = GetElementValueOrValueAttrib(cmdElement);
+
+            int sleepTime = Convert.ToInt32(sleepTimeVal);
+
+            for (var i = sleepTime; i >= 1; i--)
+            {
+                await Task.Delay(1000);
+                _deploy.LogMessage(i + "...", MessageType.Notice);
+            }
+
+            return true;
+        }
+
         private async Task<bool> ExecuteSimplePsExec(XElement cmdElement)
         {
             var title = GetAttribute(cmdElement, "Title");
@@ -190,24 +211,32 @@ namespace AssetManager.Tools.Deployment.XmlParsing
                 {
                     foreach (var cmd in successElem.Elements())
                     {
-                        await ExecuteCommandElement(cmd);
+                        if (!await ExecuteCommandElement(cmd))
+                            success = false;
                     }
-
-                    return true;
                 }
             }
             else
             {
+                success = false;
+
                 var failElem = cmdElement.Element("OnFailure");
 
                 if (failElem != null)
                 {
+                    // A True 'Continue' attribute means that failures here are OK and we should coninute with the next commands.
+                    var continueVal = GetAttribute(failElem, "Continue");
+                    bool canContinue = Convert.ToBoolean(continueVal);
+
+                    // Set success back to true since failures are allowed.
+                    if (canContinue)
+                        success = true;
+
                     foreach (var cmd in failElem.Elements())
                     {
-                        await ExecuteCommandElement(cmd);
+                        if (!await ExecuteCommandElement(cmd))
+                            success = false;
                     }
-
-                    return false;
                 }
             }
 
@@ -227,15 +256,18 @@ namespace AssetManager.Tools.Deployment.XmlParsing
             // Look for OnComplete declaration and recurse on commands if present.
             var completeElem = cmdElement.Element("OnComplete");
 
+            bool success = true;
+
             if (completeElem != null)
             {
                 foreach (var cmd in completeElem.Elements())
                 {
-                    await ExecuteCommandElement(cmd);
+                    if (!await ExecuteCommandElement(cmd))
+                        success = false;
                 }
             }
 
-            return true;
+            return success;
         }
 
         private async Task<bool> ExecuteSimplePowerShellCommand(XElement cmdElement)
@@ -255,19 +287,31 @@ namespace AssetManager.Tools.Deployment.XmlParsing
                 {
                     foreach (var cmd in successElem.Elements())
                     {
-                        await ExecuteCommandElement(cmd);
+                        if (!await ExecuteCommandElement(cmd))
+                            success = false;
                     }
                 }
             }
             else
             {
+                success = false;
+
                 var failElem = cmdElement.Element("OnFailure");
 
                 if (failElem != null)
                 {
+                    // A True 'Continue' attribute means that failures here are OK and we should coninute with the next commands.
+                    var continueVal = GetAttribute(failElem, "Continue");
+                    bool canContinue = Convert.ToBoolean(continueVal);
+
+                    // Set success back to true since failures are allowed.
+                    if (canContinue)
+                        success = true;
+
                     foreach (var cmd in failElem.Elements())
                     {
-                        await ExecuteCommandElement(cmd);
+                        if (!await ExecuteCommandElement(cmd))
+                            success = false;
                     }
                 }
             }
@@ -285,6 +329,8 @@ namespace AssetManager.Tools.Deployment.XmlParsing
             var exitCode = await _deploy.AdvancedPSExecCommand(command, title);
 
             var exitCodeElem = cmdElement.Element("ExitCodeResponse");
+
+            bool success = true;
 
             if (exitCodeElem != null)
             {
@@ -320,10 +366,11 @@ namespace AssetManager.Tools.Deployment.XmlParsing
                             // Iterate and recurse with the commands.
                             foreach (var codeCmd in codeElem.Elements())
                             {
-                                await ExecuteCommandElement(codeCmd);
+                                if (!await ExecuteCommandElement(codeCmd))
+                                    success = false;
                             }
 
-                            return true;
+                            return success;
                         }
                     }
                     else
@@ -336,10 +383,11 @@ namespace AssetManager.Tools.Deployment.XmlParsing
                         {
                             foreach (var codeCmd in codeElem.Elements())
                             {
-                                await ExecuteCommandElement(codeCmd);
+                                if (!await ExecuteCommandElement(codeCmd))
+                                    success = false;
                             }
 
-                            return false;
+                            return success;
                         }
                     }
                 }
@@ -369,11 +417,11 @@ namespace AssetManager.Tools.Deployment.XmlParsing
                 switch (promptType)
                 {
                     case PromptType.LogMessage:
-                        prompts.Add(new LogMessage(_deploy, GetPromptValue(prompt), GetAttribute(prompt, "Type")));
+                        prompts.Add(new LogMessage(_deploy, GetElementValueOrValueAttrib(prompt), GetAttribute(prompt, "Type")));
                         break;
 
                     case PromptType.DialogPrompt:
-                        prompts.Add(new DialogPrompt(_deploy, GetPromptValue(prompt), GetAttribute(prompt, "Title")));
+                        prompts.Add(new DialogPrompt(_deploy, GetElementValueOrValueAttrib(prompt), GetAttribute(prompt, "Title")));
                         break;
                 }
             }
@@ -381,17 +429,33 @@ namespace AssetManager.Tools.Deployment.XmlParsing
             return prompts;
         }
 
-        private string GetPromptValue(XElement promptElement)
+        /// <summary>
+        /// Returns the elements internal value or the elements "Value" attribute depending on which one is present.
+        /// </summary>
+        /// <param name="promptElement"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">
+        /// If neither or both internal value and "Value" attributes are present. 
+        /// </exception>
+        private string GetElementValueOrValueAttrib(XElement promptElement)
         {
-            var elementValue = promptElement.Value.Trim();
+            var elementValue = promptElement.Value;
+            var attributeValue = GetAttribute(promptElement, "Value");
+
+            if (!string.IsNullOrEmpty(elementValue) && !string.IsNullOrEmpty(attributeValue))
+                throw new InvalidOperationException("Both internal value and 'Value' attributes are present. Make sure the element is populated with only one.");
+
+            if (string.IsNullOrEmpty(elementValue) && string.IsNullOrEmpty(attributeValue))
+                throw new InvalidOperationException("Neither internal value or 'Value' attributes are present. Make sure the element is populated with atleast one.");
+
 
             if (!string.IsNullOrEmpty(elementValue))
             {
-                return elementValue;
+                return elementValue.Trim();
             }
             else
             {
-                return GetAttribute(promptElement, "Value").Trim();
+                return attributeValue.Trim();
             }
         }
 
@@ -413,7 +477,7 @@ namespace AssetManager.Tools.Deployment.XmlParsing
                 if (!string.IsNullOrEmpty(useLocalScopeAttrib))
                     useLocalScope = Convert.ToBoolean(useLocalScopeAttrib);
 
-                var psCmd = new PowerShellCommand(cmd.Value.Trim(), isScript, useLocalScope);
+                var psCmd = new PowerShellCommand(GetElementValueOrValueAttrib(cmd), isScript, useLocalScope);
 
                 var paramElements = cmd.Elements("PSParameter");
 
@@ -448,7 +512,7 @@ namespace AssetManager.Tools.Deployment.XmlParsing
             }
             catch
             {
-                return string.Empty;
+                return null;
             }
         }
 

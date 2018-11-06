@@ -120,7 +120,7 @@ namespace AssetManager.Tools.Deployment
             {
                // VerifyModules();
 
-                var files = Directory.GetFiles(@"C:\Temp\Commands\Deployments\", "*.xml");
+                var files = Directory.GetFiles(@"C:\GitHub\AssetManagerCSharp\XmlDeployments\", "*.xml");
                 var readers = new List<DeploymentReader>();
 
                 foreach (var file in files)

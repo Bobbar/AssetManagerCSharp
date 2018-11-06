@@ -166,15 +166,18 @@ namespace AssetManager.Tools.Deployment
                 LogMessage(title + " failed! Exit code: " + exitCode.ToString(), MessageType.Error);
                 parentForm.RestoreWindow();
                 parentForm.FlashWindow(5);
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Deployment Error", logView);
-                throw new Exception("Error occurred while executing command");
+                return false;
+                //OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Deployment Error", logView);
+                //throw new Exception("Error occurred while executing command");
             }
         }
 
         public async Task<int> AdvancedPSExecCommand(string command, string title)
         {
             LogMessage("Starting " + title + "...", MessageType.Notice);
-            return await PSExecWrap.ExecuteRemoteCommand(command);
+            var exitCode = await PSExecWrap.ExecuteRemoteCommand(command);
+            LogMessage($@"{ title } Complete! Exit Code: { exitCode }");
+            return exitCode;
         }
 
         public async Task SimplePowerShellScript(byte[] script, string title)
@@ -190,8 +193,9 @@ namespace AssetManager.Tools.Deployment
                 LogMessage(title + " failed!", MessageType.Error);
                 parentForm.RestoreWindow();
                 parentForm.FlashWindow(5);
-                OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Deployment Error", logView);
-                throw new Exception("Error occurred while executing command");
+                
+                //OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Deployment Error", logView);
+                //throw new Exception("Error occurred while executing command");
             }
         }
 

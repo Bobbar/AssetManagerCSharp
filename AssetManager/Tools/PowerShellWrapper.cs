@@ -3,6 +3,7 @@ using AssetManager.Helpers;
 using AssetManager.Security;
 using AssetManager.Data.Classes;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -33,9 +34,8 @@ namespace AssetManager.Tools
             PowershellOutput?.Invoke(this, message);
         }
 
-        private PowerShell CurrentPowerShellObject;
-
-        private Pipeline CurrentPipelineObject;
+        private PowerShell _currentPowerShellObject;
+        private Pipeline _currentPipelineObject;
 
         public PowerShellWrapper()
         {
@@ -70,7 +70,7 @@ namespace AssetManager.Tools
                         pline.Commands.AddScript(scriptText);
                         pline.Commands.Add("Out-String");
 
-                        CurrentPipelineObject = pline;
+                        _currentPipelineObject = pline;
 
                         Collection<PSObject> results = pline.Invoke();
                         StringBuilder stringBuilder = new StringBuilder();
@@ -126,7 +126,7 @@ namespace AssetManager.Tools
                         powerSh.InvocationStateChanged -= Powershell_InvocationStateChanged;
                         powerSh.InvocationStateChanged += Powershell_InvocationStateChanged;
                         powerSh.Commands.AddCommand(pScommand);
-                        CurrentPowerShellObject = powerSh;
+                        _currentPowerShellObject = powerSh;
                         Collection<PSObject> results = powerSh.Invoke();
 
                         StringBuilder stringBuilder = new StringBuilder();
@@ -162,7 +162,7 @@ namespace AssetManager.Tools
 
         public async Task<bool> InvokePowerShellSession(PowerShell session)
         {
-            CurrentPowerShellObject = session;
+            _currentPowerShellObject = session;
 
             session.InvocationStateChanged -= Powershell_InvocationStateChanged;
             session.InvocationStateChanged += Powershell_InvocationStateChanged;
@@ -183,27 +183,26 @@ namespace AssetManager.Tools
             {
                 var psResults = await Task.Run(() =>
                 {
-                    Collection<PSObject> results = session.Invoke();
-                    StringBuilder stringBuilder = new StringBuilder();
+                        Collection<PSObject> results = session.Invoke();
+                        StringBuilder stringBuilder = new StringBuilder();
 
 
-                    foreach (var obj in results)
-                    {
-                        stringBuilder.AppendLine(obj.ToString());
-                    }
-                    return DataConsistency.CleanDBValue((stringBuilder.ToString())).ToString();
+                        foreach (var obj in results)
+                        {
+                            stringBuilder.AppendLine(obj.ToString());
+                        }
+                        return DataConsistency.CleanDBValue((stringBuilder.ToString())).ToString();
                 });
 
                 if (!string.IsNullOrEmpty(psResults))
                 {
 
-                    if (psResults.Contains("success"))
+                    if (psResults.ToLower().Contains("success") || psResults.ToLower().Contains("true"))
                     {
                         return true;
                     }
                     else
                     {
-                        OtherFunctions.Message(psResults, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Error Running Script");
                         return false;
                     }
                 }
@@ -219,7 +218,7 @@ namespace AssetManager.Tools
             finally
             {
                 session.InvocationStateChanged -= Powershell_InvocationStateChanged;
-               // session.Streams.Information.DataAdded -= Information_DataAdded;
+                //session.Streams.Information.DataAdded -= Information_DataAdded;
                 session.Streams.Debug.DataAdded -= Debug_DataAdded;
                 session.Streams.Verbose.DataAdded -= Verbose_DataAdded;
                 session.Streams.Error.DataAdded -= Error_DataAdded;
@@ -232,25 +231,25 @@ namespace AssetManager.Tools
 
         private void Error_DataAdded(object sender, DataAddedEventArgs e)
         {
-            var message = CurrentPowerShellObject.Streams.Error[e.Index].Exception.Message;
+            var message = _currentPowerShellObject.Streams.Error[e.Index].Exception.Message;
             OnPowershellOutput($@"Error: {message}");
         }
 
         private void Verbose_DataAdded(object sender, DataAddedEventArgs e)
         {
-            var message = CurrentPowerShellObject.Streams.Verbose[e.Index].Message;
+            var message = _currentPowerShellObject.Streams.Verbose[e.Index].Message;
             OnPowershellOutput(message);
         }
 
         private void Debug_DataAdded(object sender, DataAddedEventArgs e)
         {
-            var message = CurrentPowerShellObject.Streams.Debug[e.Index].Message;
+            var message = _currentPowerShellObject.Streams.Debug[e.Index].Message;
             OnPowershellOutput(message);
         }
 
         //private void Information_DataAdded(object sender, DataAddedEventArgs e)
         //{
-        //    var message = CurrentPowerShellObject.Streams.Information[e.Index].MessageData.ToString();
+        //    var message = _currentPowerShellObject.Streams.Information[e.Index].MessageData.ToString();
         //    OnPowershellOutput(message);
         //}
 
@@ -313,9 +312,9 @@ namespace AssetManager.Tools
         {
             try
             {
-                if (CurrentPowerShellObject != null)
+                if (_currentPowerShellObject != null)
                 {
-                    CurrentPowerShellObject.Stop();
+                    _currentPowerShellObject.Stop();
                 }
             }
             catch
@@ -328,9 +327,9 @@ namespace AssetManager.Tools
         {
             try
             {
-                if (CurrentPipelineObject != null)
+                if (_currentPipelineObject != null)
                 {
-                    CurrentPipelineObject.Stop();
+                    _currentPipelineObject.Stop();
                 }
             }
             catch

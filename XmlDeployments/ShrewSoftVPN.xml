@@ -1,0 +1,45 @@
+<Deployment Name="ShrewSoft VPN Client" OrderPriority="999">
+	
+	<Command Type="AdvancedPsExec" Title="VPN Client Install">
+		<String>
+			"\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Deployments\VPN\vpn-client-2.2.2-release.exe" /S /STANDARD
+		</String>
+		
+		<ExitCodeResponse>
+			<ExitCode Value="0,-9" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Success" Value="VPN Client installed. Exit code -9 is OK."/>
+				</Command>
+			</ExitCode>
+			
+			<ExitCode Value="">
+				<Command Type="Prompt">
+					<LogMessage Type="Error" Value="VPN Install failed!  Unexpected exit code!"/>
+				</Command>
+			</ExitCode>
+		</ExitCodeResponse>
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="Waiting 10 seconds for install to finish..."/>
+	</Command>
+
+	<Command Type="Sleep" Value="10"/>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="Making VPN sites public for all users..."/>
+	</Command>
+	
+	<Command Type="SimplePsExec" Title="Copy VPN Sites to Public Profile">
+		<String>
+		move /Y "%LOCALAPPDATA%\Shrew Soft VPN\sites\*.*" "%ALLUSERSPROFILE%\Shrew Soft VPN\sites"
+		</String>
+		
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Failed to copy VPN sites to public profile!"/>
+			</Command>
+		</OnFailure>
+	</Command>
+
+</Deployment>

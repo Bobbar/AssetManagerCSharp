@@ -19,9 +19,9 @@
 		<LogMessage Type="Success">
 			Done. Disregard any exit codes.
 		</LogMessage>
-		<LogMessage>
+	
+		<LogMessage Value=" "/>
 			
-		</LogMessage>
 	</Command>
 	
 	<Command Type="Prompt">
@@ -99,9 +99,9 @@
 	</Command>
 	
 	<Command Type="Prompt">
-		<LogMessage>
-			
-		</LogMessage>
+	
+		<LogMessage Value=" "/>
+		
 		<LogMessage Type="Notice">
 			*** DISABLE SLEEP ON CLOSE ***
 		</LogMessage>

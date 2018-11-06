@@ -1,0 +1,145 @@
+<Deployment Name="TeamViewer" OrderPriority="0">
+
+	<Command Type="AdvancedPsExec" Title="Copy Deployement Files">
+		<String>
+			robocopy "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Deployments\TeamViewer" "C:\Temp\TVDeploy" *.* /E /R:1
+		</String>
+		
+		<ExitCodeResponse>
+			<ExitCode Value="0,1" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Success" Value="Copy successful!"/>
+				</Command>
+			</ExitCode>
+			
+			<ExitCode Value="" IsSuccess="False">
+				<Command Type="Prompt">
+					<LogMessage Type="Error" Value="Copy failed!"/>
+				</Command>
+			</ExitCode>
+		</ExitCodeResponse>
+		
+	</Command>
+
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="Checking for previous installation..."/>
+	</Command>
+	
+	<Command Type="SimplePowerShellCommand">
+		<PSCommands>
+			<PSCommand IsScript="True" UseLocalScope="False">
+				Set-Location "HKLM:"
+				Test-Path "\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\TeamViewer"
+			</PSCommand>
+			
+			<!-- <PSCommand IsScript="False" UseLocalScope="False" Value="Set-Location">
+				<PSParameter Name="Path" Value="HKLM:"/>
+			</PSCommand>
+			<PSCommand IsScript="False" UseLocalScope="False" Value="Test-Path">
+				<PSParameter Name="Path" Value="\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\TeamViewer"/>
+			</PSCommand> -->
+		</PSCommands>
+		
+		<OnSuccess>
+			<Command Type="Prompt">
+				<LogMessage Type="Warning" Value="TeamViewer already installed."/>
+				<LogMessage Type="Notice" Value="Uninstalling TeamViewer..."/>
+			</Command>
+			
+			<Command Type="SimplePsExec" Title="Uninstall TeamViewer">
+				<String>
+				msiexec.exe /x C:\Temp\TVDeploy\TeamViewer_Host-idcjnfzfgb.msi /qn
+				</String>
+				
+				<OnFailure>
+					<Command Type="Prompt">
+						<LogMessage Type="Error" Value="Uninstall failed!"/>
+						<DialogPrompt Value="Error occurred while executing deployment command!"/>
+					</Command>
+				</OnFailure>
+			</Command>
+			
+		</OnSuccess>
+				
+		<OnFailure Continue="True">
+			<Command Type="Prompt">
+				<LogMessage Type="Notice" Value="TeamViewer not installed."/>
+			</Command>
+		</OnFailure>
+		
+	</Command>
+	
+	<Command Type="SimplePsExec" Title="Install TeamViewer">
+		<String>
+		msiexec.exe /i C:\Temp\TVDeploy\TeamViewer_Host-idcjnfzfgb.msi /qn
+		</String>
+		
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Install failed!"/>
+				<DialogPrompt Value="Error occurred while executing installing TeamViewer!"/>
+			</Command>
+		</OnFailure>
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="Waiting 10 seconds."/>
+	</Command>
+	
+	<Command Type="Sleep" Value="10"/>
+	
+	<Command Type="SimplePsExec" Title="TeamViewer Assignment">
+		<String>
+			C:\Temp\TVDeploy\Assignment\TeamViewer_Assignment.exe -apitoken 2911911-qU2vZYvmJ6o0jWewDqTQ -datafile ${ProgramFiles}\TeamViewer\AssignmentData.json
+		</String>
+		
+		<OnSuccess>
+			<Command Type="Prompt">
+				<LogMessage Type="Success" Value="Assignment complete!"/>
+			</Command>
+		</OnSuccess>
+		
+		<OnFailure Continue="True">
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Assignment failed!"/>
+				<DialogPrompt Value="Error occurred while executing assignment command!"/>
+			</Command>
+		</OnFailure>
+		
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="Deleting temp files..."/>
+	</Command>
+	
+	<Command Type="SimplePowerShellCommand" Title="Delete Temp Files">
+		<PSCommands>
+			<PSCommand IsScript="False" UseLocalScope="True" Value="Remove-Item">
+				<PSParameter Name="Recurse"/>
+				<PSParameter Name="Force"/>
+				<PSParameter Name="Path" Value="C:\Temp\TVDeploy"/>
+			</PSCommand>
+		</PSCommands>
+		
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Delete failed!"/>
+			</Command>
+		</OnFailure>
+	</Command>
+
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="TeamViewer deployment is complete!"/>
+		<LogMessage Type="Notice" Value="NOTE: The target computer may need rebooted or the user may need to open the application before TeamViewer will connect."/>
+	</Command>
+
+
+
+
+
+
+
+
+
+</Deployment>

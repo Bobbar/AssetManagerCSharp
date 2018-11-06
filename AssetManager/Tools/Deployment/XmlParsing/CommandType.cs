@@ -6,6 +6,8 @@
         AdvancedPsExec,
         SimplePowerShell,
         SimplePowerShellCommand,
+        AdvancedPowerShellScript,
+        Sleep,
         Prompt
     }
 }

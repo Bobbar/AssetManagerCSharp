@@ -1,3 +1,169 @@
+<!-- 
+Deployment: 
+	The root element for all deployment scripts.
+	
+	Attributes:
+	
+		Name: ** Required **
+			Specifies the name of the deployment as it will appear during selection.
+		
+		OrderPriority: ** Optional. Default = 0 **
+			Specifies the deployment priority. A higher value means the deployment will be displayed/performed later in the process.
+			
+
+Command:
+	Specifies a deployment command to be performed. Commands are performed in order from top to bottom.
+	
+	Attributes:
+	
+		Type: ** Required **
+			Specifies the type of command to perform.
+			
+			Available Types:
+			
+				SimplePsExec:
+					Specifies a command to be executed using the PSExec service. An exit code of 0 is considered successful. Use AdvancedPsExec if more control over exit codes is required.
+					
+					Format:
+					
+						<Command Type="SimplePsExec" Title="Install Something">
+							
+							<String> **Required **
+								
+								Command string to be executed on target device. 
+								
+								Ex: msiexec.exe /x app_install.msi /QN
+								
+							</String>
+							
+							<OnSuccess> ** Optional **
+								<Command>
+									Execute this command after success.
+								</Command>
+							</OnSuccess>
+							
+							<OnFailure> ** Optional **
+								<Command>
+									Execute this command after failure.
+								</Command>
+							</OnFailure>
+						
+						</Command>
+
+					
+					Result Handling:
+					
+						<OnSuccess>
+							Specifies additional Commands to perform if an exit code of 0 was returned.
+							
+						<OnFailure Continue="True">
+							Specifies additional Commands to perform if the exit code was NOT 0.
+							
+							Attributes:
+								
+								Continue (True/False): ** Optional. Default = False **
+									Indicates that the deployment will continue after this failure.
+																									
+				
+				AdvancedPsExec:
+					Specifies a command to be executed using the PSExec service. The exit code is returned and processed according to an <ExitCodeResponse> element.
+					
+					Format:
+					
+						<Command Type="AdvancedPsExec" Title="Install Something">
+							
+							<String> ** Required **
+								Command string to be executed on target device. 
+								
+								Ex: msiexec.exe /x app_install.msi /QN
+								
+							</String>
+							
+							<ExitCodeResponse> ** Optional **
+							
+								<ExitCode Value="0,1,2" IsSuccess="True">
+									<Command> 
+										Specify additional commands to execute for this result.
+									</Command>
+								</ExitCode>
+								
+								<ExitCode Value="">
+									<Command> 
+										Specify additional commands to execute for this result.
+									</Command>
+								</ExitCode>
+								
+							</ExitCodeResponse>
+						
+						</Command>
+					
+					
+					
+					Result Handling:
+						The exit code from the command is processed according to the following examples.
+					
+						<ExitCodeResponse> 
+							Exit code response element. This contains the <ExitCode> elements specifying the expected results.
+							
+							<ExitCode Value="0,1,2" IsSuccess="True">
+								
+								Exit codes 0, 1 and 2 will be considered successful results, and Commands within will be executed.
+								
+								<Command> 
+									Specify additional commands to execute for this result.
+								</Command>
+							</ExitCode>
+							
+							<ExitCode Value="3,4" IsSuccess="False">
+								
+								Exit codes 3 and 4 will be considered failures, and Commands within will be executed.
+								
+								<Command> 
+									Specify additional commands to execute for this result.
+								</Command>
+							</ExitCode>
+							
+							<ExitCode Value="">   
+							
+								Specify an empty Value and no IsSuccess attributes to handle all other exit codes not previously specified in other <ExitCode> elements.
+								
+								<Command> 
+									Specify additional commands to execute for this result.
+								</Command>
+							</ExitCode>
+							
+						</ExitCodeResponse>
+						
+				SimplePowerShell:
+					Specifies a PowerShell script string to be executed using the PowerShell service. No results are returned. Only an <OnComplete> result is provided.
+					
+					Format:
+					
+						<Command Type="SimplePowerShell" Title="Install Something">
+							
+							<String> ** Required **
+								PowerShell script string to be executed on target device. 
+							</String>
+							
+							<OnComplete> ** Optional **
+								<Command>
+									Specify additional commands to execute on completion.
+								</Command>
+							</OnComplete>
+						
+						</Command>
+						
+					Result Handling:
+					
+						<OnComplete>
+							Specifies commands to execute upon completion of this command.
+				
+				SimplePowerShellCommand:
+					
+				
+	
+
+ -->
 <Deployment Name="Testing" OrderPriority="99">
 	
 	<Command Type="Prompt">

@@ -670,6 +670,16 @@
             <param name="parentElement">Element containing UI prompt declarations.</param>
             <returns></returns>
         </member>
+        <member name="M:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.GetElementValueOrValueAttrib(System.Xml.Linq.XElement)">
+            <summary>
+            Returns the elements internal value or the elements "Value" attribute depending on which one is present.
+            </summary>
+            <param name="promptElement"></param>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException">
+            If neither or both internal value and "Value" attributes are present. 
+            </exception>
+        </member>
         <member name="M:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.GetAttribute(System.Xml.Linq.XElement,System.String)">
             <summary>
             Gets the attribute value with the specifed name from the specified element. Not case sensitive.
