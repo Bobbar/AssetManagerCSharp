@@ -15,9 +15,9 @@ namespace PingVisualizer
 {
     public class PingVis : IDisposable
     {
-        private ManualResetEvent renderEvent = new ManualResetEvent(false);
-        private ManualResetEvent disposeEvent = new ManualResetEvent(false);
-        private ManualResetEvent refreshBarsEvent = new ManualResetEvent(false);
+        private ManualResetEventSlim renderEvent = new ManualResetEventSlim(false);
+        private ManualResetEventSlim disposeEvent = new ManualResetEventSlim(false);
+        private ManualResetEventSlim refreshBarsEvent = new ManualResetEventSlim(false);
 
         private Task renderTask;
 
@@ -560,10 +560,10 @@ namespace PingVisualizer
                 while (!this.isDisposing)
                 {
                     // Wait until a render event is triggered.
-                    renderEvent.WaitOne(Timeout.Infinite);
+                    renderEvent.Wait(Timeout.Infinite);
 
                     // Check for diposal event and break from loop if needed.
-                    if (disposeEvent.WaitOne(0))
+                    if (disposeEvent.Wait(0))
                         break;
 
                     // Reset the render event only if we made it past the disposal check.
@@ -573,7 +573,7 @@ namespace PingVisualizer
                     WaitDraw();
 
                     // Check the refresh bars event and perform if needed.
-                    if (refreshBarsEvent.WaitOne(0))
+                    if (refreshBarsEvent.Wait(0))
                     {
                         RefreshPingBars();
                         refreshBarsEvent.Reset();
@@ -607,7 +607,7 @@ namespace PingVisualizer
                     SetControlImage();
 
                     // One last disposal check.
-                    if (disposeEvent.WaitOne(0))
+                    if (disposeEvent.Wait(0))
                         break;
                 }
             }
