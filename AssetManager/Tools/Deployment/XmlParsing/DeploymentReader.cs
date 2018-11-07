@@ -30,9 +30,8 @@ namespace AssetManager.Tools.Deployment.XmlParsing
         private int _orderPriority = 0;
         private XElement _deploymentElem;
         private IDeploymentUI _deploy;
-        private bool _deploySuccessful = true;
 
-        
+
         public DeploymentReader(string scriptFile)
         {
             _deploymentElem = XElement.Load(scriptFile, LoadOptions.None);
@@ -89,48 +88,7 @@ namespace AssetManager.Tools.Deployment.XmlParsing
 
         private async Task<bool> ExecuteCommandElement(XElement cmdElement)
         {
-            CommandType cmdType;
-            DeploymentCommand command = null;
-            string cmdTypeString = XmlHelper.GetAttribute(cmdElement, "Type");
-
-            // Parse the type and make sure it's an expected value.
-            var valid = Enum.TryParse(cmdTypeString, true, out cmdType);
-
-            // If the type is not expected, stop deployment and throw errors.
-            if (!valid)
-            {
-                _deploy.LogMessage($@"Deployment Parse Error: '{ cmdTypeString }'  is not a recognized command type!");
-                _deploy.DoneOrError();
-                throw new Exception($@"Deployment Parse Error: '{ cmdTypeString }'  is not a recognized command type!");
-            }
-
-            // Parse and execute the deployment elements.
-            switch (cmdType)
-            {
-                case CommandType.Prompt: // UI prompt/message to user.
-                    command = new PromptCommand(cmdElement, _deploy);
-                    break;
-
-                case CommandType.Sleep: // Sleep for # seconds.
-                    command = new SleepCommand(cmdElement, _deploy);
-                    break;
-
-                case CommandType.SimplePsExec:  // Simple PsExec command; success if error code is 0, failure for anything else.
-                    command = new SimplePsExecCommand(cmdElement, _deploy);
-                    break;
-
-                case CommandType.SimplePowerShell: // Simple PowerShell command: Just excutes and returns when finished. No result supported.
-                    command = new SimplePowerShellScriptCommand(cmdElement, _deploy);
-                    break;
-
-                case CommandType.SimplePowerShellCommand:
-                    command = new SimplePowerShellCommand(cmdElement, _deploy);
-                    break;
-
-                case CommandType.AdvancedPsExec: // Advanced PsExec command: Returns the exit code upon completion.
-                    command = new AdvancedPsExecCommand(cmdElement, _deploy);
-                    break;
-            }
+            var command = GetCommandFromElement(cmdElement);
 
             if (command != null)
             {
@@ -170,6 +128,53 @@ namespace AssetManager.Tools.Deployment.XmlParsing
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Parses the specified XML element and returns a <see cref="DeploymentCommand"/> instance.
+        /// </summary>
+        /// <param name="cmdElement">XML element containing a deployment command declaration.</param>
+        /// <returns></returns>
+        private DeploymentCommand GetCommandFromElement(XElement cmdElement)
+        {
+            CommandType cmdType;
+            string cmdTypeString = XmlHelper.GetAttribute(cmdElement, "Type");
+
+            // Parse the type and make sure it's an expected value.
+            var valid = Enum.TryParse(cmdTypeString, true, out cmdType);
+
+            // If the type is not expected, stop deployment and throw errors.
+            if (!valid)
+            {
+                _deploy.LogMessage($@"Deployment Parse Error: '{ cmdTypeString }'  is not a recognized command type!");
+                _deploy.DoneOrError();
+                throw new Exception($@"Deployment Parse Error: '{ cmdTypeString }'  is not a recognized command type!");
+            }
+
+            // Parse and execute the deployment elements.
+            switch (cmdType)
+            {
+                case CommandType.Prompt: // UI prompt/message to user.
+                    return new PromptCommand(cmdElement, _deploy);
+
+                case CommandType.Sleep: // Sleep for # seconds.
+                    return new SleepCommand(cmdElement, _deploy);
+
+                case CommandType.SimplePsExec:  // Simple PsExec command; success if error code is 0, failure for anything else.
+                    return new SimplePsExecCommand(cmdElement, _deploy);
+
+                case CommandType.SimplePowerShell: // Simple PowerShell command: Just excutes and returns when finished. No result supported.
+                    return new SimplePowerShellScriptCommand(cmdElement, _deploy);
+
+                case CommandType.SimplePowerShellCommand:
+                    return new SimplePowerShellCommand(cmdElement, _deploy);
+
+                case CommandType.AdvancedPsExec: // Advanced PsExec command: Returns the exit code upon completion.
+                    return new AdvancedPsExecCommand(cmdElement, _deploy);
+
+            }
+
+            return null;
         }
     }
 }

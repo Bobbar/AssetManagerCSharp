@@ -46,90 +46,41 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
-        /// <summary>
-        /// Loads and verifies <see cref="IDeployment"/> modules from the <see cref="Paths.LocalModulesStore"/> path, calls <see cref="IDeployment.InitUI(IDeploymentUI)"/> and prepares them for use.
-        /// </summary>
-        /// <returns>Returns a task collection of <see cref="TaskInfo"/> ready to be initiated against a host device.</returns>
-        private async Task<List<TaskInfo>> GetModules()
-        {
-            int modCount = 0;
-            long startTime = DateTime.Now.Ticks;
-            var taskList = new List<TaskInfo>();
-            var interfaceName = nameof(IDeployment);
-
-            deploy.LogMessage("Loading deployment modules...");
-
-            await Task.Run(() =>
-             {
-                 VerifyModules();
-
-                 var files = Directory.GetFiles(Paths.LocalModulesStore, "*.dll");
-                 var modules = new List<IDeployment>();
-
-                 foreach (var file in files)
-                 {
-                     var fileInfo = new FileInfo(file);
-                     var asm = Assembly.Load(File.ReadAllBytes(fileInfo.FullName));
-                     var types = asm.DefinedTypes.ToArray();
-                     var firstType = asm.GetType(types[0].FullName);
-                     var typeInterface = firstType.GetInterface(interfaceName);
-
-                     // Make sure the assembly type implements the deployment interface.
-                     if (typeInterface != null)
-                     {
-                         var moduleInstance = Activator.CreateInstance(firstType) as IDeployment;
-
-                         // Init and add module instances to a collection.
-                         if (moduleInstance != null)
-                         {
-                             moduleInstance.InitUI(deploy);
-                             modules.Add(moduleInstance);
-                         }
-
-                         deploy.LogMessage(asm.ManifestModule.ScopeName);
-
-                         modCount++;
-                     }
-                 }
-
-                 // Sort the module instances by deployment priority.
-                 modules = modules.OrderBy((m) => m.DeployOrderPriority).ToList();
-
-                 // Create new tasks and add them to the collection.
-                 modules.ForEach((m) => taskList.Add(new TaskInfo(() => m.DeployToDevice(), m.DeploymentName)));
-             });
-
-            var elapTime = (DateTime.Now.Ticks - startTime) / 10000;
-
-            deploy.LogMessage(modCount + " modules loaded in " + elapTime + "ms.");
-
-            return taskList;
-        }
-
         private async Task<List<TaskInfo>> GetScripts()
         {
-            int modCount = 0;
+            int depCount = 0;
             var loadTimer = new Stopwatch();
             var taskList = new List<TaskInfo>();
 
             deploy.LogMessage("Loading deployment scripts...");
+            deploy.LogMessage("Path: " + Paths.DeploymentScripts);
 
             loadTimer.Restart();
 
             await Task.Run(() =>
             {
-               // VerifyModules();
-
-                var files = Directory.GetFiles(@"C:\GitHub\AssetManagerCSharp\XmlDeployments\", "*.xml");
+                var files = Directory.GetFiles(Paths.DeploymentScripts, "*.xml");
                 var readers = new List<DeploymentReader>();
 
                 foreach (var file in files)
                 {
                     var fileInfo = new FileInfo(file);
 
-                    readers.Add(new DeploymentReader(fileInfo.OpenRead(), deploy));
+                    try
+                    {
+                        var reader = new DeploymentReader(fileInfo.OpenRead(), deploy);
+                        readers.Add(reader);
 
-                    modCount++;
+                        deploy.LogMessage(fileInfo.Name + " - OK", MessageType.Success);
+
+                        depCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        deploy.LogMessage(fileInfo.Name + " - ERROR", MessageType.Error);
+                        deploy.LogMessage(ex.ToString(), MessageType.Error);
+                    }
+                   
                 }
 
                 // Sort the module instances by deployment priority.
@@ -141,74 +92,9 @@ namespace AssetManager.Tools.Deployment
 
             var elapTime = loadTimer.ElapsedMilliseconds;
 
-            deploy.LogMessage(modCount + " scripts loaded in " + elapTime + "ms.");
+            deploy.LogMessage(depCount + " scripts loaded in " + elapTime + "ms.");
 
             return taskList;
-        }
-
-
-        /// <summary>
-        /// Syncs the local module store with the remote store if possible.
-        /// </summary>
-        private void VerifyModules()
-        {
-            // Create the local module directory if it doesn't exist.
-            if (!Directory.Exists(Paths.LocalModulesStore))
-            {
-                Directory.CreateDirectory(Paths.LocalModulesStore);
-            }
-
-            // Return silently if remote path cannot be reached.
-            if (!Directory.Exists(Paths.RemoteModuleSource())) return;
-
-            // Get the collection of remote module files.
-            var remoteModules = Directory.GetFiles(Paths.RemoteModuleSource(), "*.dll");
-
-            // Return silently if no remote modules found.
-            if (remoteModules.Length <= 0) return;
-
-            // Iterate through the module files.
-            foreach (var module in remoteModules)
-            {
-                var remoteFile = new FileInfo(module);
-                var localFilePath = Paths.LocalModulesStore + remoteFile.Name;
-
-                // Compare local and remote stores and copy missing or mismatched files.
-                if (File.Exists(localFilePath))
-                {
-                    // Compare hashes and replace if needed.
-                    var localHash = Security.SecurityTools.GetMD5OfFile(localFilePath);
-                    var remoteHash = Security.SecurityTools.GetMD5OfFile(remoteFile.FullName);
-
-                    if (localHash != remoteHash)
-                    {
-                        File.Delete(localFilePath);
-                        File.Copy(remoteFile.FullName, localFilePath);
-                    }
-                }
-                else
-                {
-                    // Copy from remote to local.
-                    File.Copy(remoteFile.FullName, localFilePath);
-                }
-            }
-
-            // Get collection of local module files.
-            var localModules = Directory.GetFiles(Paths.LocalModulesStore);
-
-            // Convert remote module collection to a list for easy searching functions.
-            var remoteModuleList = remoteModules.ToList();
-
-            // Iterate the local modules and delete those that are not found in the remote list.
-            foreach (var module in localModules)
-            {
-                var localFile = new FileInfo(module);
-
-                if (!remoteModuleList.Exists(r => new FileInfo(r).Name == localFile.Name))
-                {
-                    File.Delete(module);
-                }
-            }
         }
 
         /// <summary>
@@ -229,10 +115,7 @@ namespace AssetManager.Tools.Deployment
                 selectListBox.Size = new System.Drawing.Size(300, 250);
                 selectListBox.DisplayMember = nameof(TaskInfo.TaskName);
 
-                //var depList = await GetModules();
-
                 var depList = await GetScripts();
-
 
                 foreach (var d in depList)
                 {

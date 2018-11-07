@@ -243,7 +243,7 @@ namespace AssetManager.Tools.Deployment
             if (!cancelOperation) ActivityTick();
             if (logTextBox.InvokeRequired)
             {
-                var del = new Action(() => LogMessage(message));
+                var del = new Action(() => LogMessage(message, type));
                 logTextBox.BeginInvoke(del);
             }
             else

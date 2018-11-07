@@ -133,7 +133,6 @@ namespace AssetManager
                         {
                             case CommandArgs.TESTDB:
                                 ServerInfo.CurrentDataBase = DatabaseName.test_db;
-                                Paths.UseDebugModules = true;
                                 break;
 
                             case CommandArgs.VINTONDD:
