@@ -658,19 +658,19 @@
              
             </example>
         </member>
-        <member name="P:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.DeploySuccessful">
+        <member name="M:AssetManager.Tools.Deployment.XmlParsing.Commands.DeploymentCommand.Execute">
             <summary>
-            A one way bool. If this is set to false, it will stay false for the remainder of the deployment.
+            Executes the implemented command logic and returns a <see cref="T:AssetManager.Tools.Deployment.XmlParsing.Commands.CommandCompletedResult"/>
             </summary>
         </member>
-        <member name="M:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.GetPrompts(System.Xml.Linq.XElement)">
+        <member name="M:AssetManager.Tools.Deployment.XmlParsing.Commands.PromptCommand.GetPrompts(System.Xml.Linq.XElement)">
             <summary>
             Parse out UI prompt declarations from within the specified parent element.
             </summary>
-            <param name="parentElement">Element containing UI prompt declarations.</param>
+            <param name="promptElement">Element containing UI prompt declarations.</param>
             <returns></returns>
         </member>
-        <member name="M:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.GetElementValueOrValueAttrib(System.Xml.Linq.XElement)">
+        <member name="M:AssetManager.Tools.Deployment.XmlParsing.Commands.XmlHelper.GetElementValueOrValueAttrib(System.Xml.Linq.XElement)">
             <summary>
             Returns the elements internal value or the elements "Value" attribute depending on which one is present.
             </summary>
@@ -680,7 +680,7 @@
             If neither or both internal value and "Value" attributes are present. 
             </exception>
         </member>
-        <member name="M:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.GetAttribute(System.Xml.Linq.XElement,System.String)">
+        <member name="M:AssetManager.Tools.Deployment.XmlParsing.Commands.XmlHelper.GetAttribute(System.Xml.Linq.XElement,System.String)">
             <summary>
             Gets the attribute value with the specifed name from the specified element. Not case sensitive.
             </summary>
