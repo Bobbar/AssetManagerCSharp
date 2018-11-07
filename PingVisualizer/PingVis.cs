@@ -238,6 +238,9 @@ namespace PingVisualizer
                      if (waitTime > 0)
                          Thread.Sleep(waitTime);
 
+                     if (this.isDisposing)
+                         return;
+
                      try
                      {
                          // Start/Reset the loop timer.
@@ -251,25 +254,16 @@ namespace PingVisualizer
                      }
                      catch (Exception)
                      {
-                         // If theres and exception during the ping, add an empty reply.
-                         // Empty replies display with an "ERR" message.
-                         if (!this.isDisposing)
-                         {
-                             AddPingReply(new PingInfo());
-                         }
+                         AddPingReply(new PingInfo());
                      }
 
-                     //Fire off a new render event.
-                     if (!this.isDisposing)
+                     if (!mouseIsScrolling)
                      {
-                         if (!mouseIsScrolling)
-                         {
-                             Render(true);
-                         }
-                         else
-                         {
-                             Render(false);
-                         }
+                         Render(true);
+                     }
+                     else
+                     {
+                         Render(false);
                      }
                  }
                  while (!this.isDisposing);
@@ -538,7 +532,7 @@ namespace PingVisualizer
         /// <param name="refreshPingBars">When true this call will trigger a refresh of the ping bars, which will display the most current results.</param>
         private void Render(bool refreshPingBars = false)
         {
-            if (pingReplies.Count < 1)
+            if (pingReplies.Count < 1 || this.isDisposing)
                 return;
 
             // Only render if the target control is visible.
