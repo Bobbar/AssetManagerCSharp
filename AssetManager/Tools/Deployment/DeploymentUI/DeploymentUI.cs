@@ -124,7 +124,7 @@ namespace AssetManager.Tools.Deployment
             logView = new ExtendedForm(parentForm);
             logView.FormClosing += new FormClosingEventHandler(LogClosed);
             logView.Text = targetDevice.CurrentUser + " - " + defaultTitle;
-            logView.Width = 600;
+            logView.Width = 1000;
             logView.Height = 700;
             logView.MinimumSize = new System.Drawing.Size(400, 200);
             logView.Owner = parentForm;
