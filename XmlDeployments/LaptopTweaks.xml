@@ -81,6 +81,34 @@
 		</OnFailure>
 	</Command>
 	
+	<Command Type="AdvancedPsExec" Title="Copy Connect WLAN At Login REG File">
+		<String>
+		robocopy "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Tools\Registry Tweaks" "C:\Temp\RegTweaks" AutoConnect_WLAN_prelogon.reg
+		</String>
+		<ExitCodeResponse>
+			<ExitCode Value="0,1" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Success">
+					REG file copied.
+					</LogMessage>
+				</Command>
+			</ExitCode>		
+			<ExitCode Value="" IsSuccess="False">
+				<Command Type="Prompt">
+					<LogMessage Type="Error">
+					Failed to copy REG file to device!
+					</LogMessage>
+				</Command>
+			</ExitCode>		
+		</ExitCodeResponse>
+	</Command>	
+		
+	<Command Type="SimplePSExec" Title="Import Connect WLAN At Login REG File">
+		<String>
+		reg import C:\Temp\RegTweaks\AutoConnect_WLAN_prelogon.reg /reg:64
+		</String>
+	</Command>
+	
 	<Command Type="Prompt">
 		<LogMessage Type="Notice">
 			Deleting temp directory...

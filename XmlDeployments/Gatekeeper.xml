@@ -23,7 +23,7 @@
 		
 	<Command Type="SimplePowerShellCommand" Title="Gatekeeper Registry Fix">
 		<PSCommands>
-			<PSCommand IsScript="True" Value="Remove-ItemProperty">
+			<PSCommand Value="Remove-ItemProperty">
 				<PSParameter Name="Path" Value="HKLM:\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\Gatekeeper"/>
 				<PSParameter Name="Name" Value="CommLinks"/>
 			</PSCommand>
