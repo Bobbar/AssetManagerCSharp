@@ -669,7 +669,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // ToolStripStatusLabel1
             // 
             this.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1";
-            this.ToolStripStatusLabel1.Size = new System.Drawing.Size(1104, 17);
+            this.ToolStripStatusLabel1.Size = new System.Drawing.Size(1057, 17);
             this.ToolStripStatusLabel1.Spring = true;
             // 
             // ConnStatusLabel

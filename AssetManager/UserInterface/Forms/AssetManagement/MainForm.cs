@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Threading.Tasks;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace AssetManager.UserInterface.Forms.AssetManagement
@@ -212,31 +213,48 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
         }
 
         /// <summary>
-        /// Loads and displays devices for all currently selected rows.
+        /// Loads the selected devices to the window list.
         /// </summary>
-        private async Task ViewSelectedDevices()
+        private async Task LoadSelectedDevices()
         {
+            // Max number of devices to load at a time.
+            int maxAllowed = 50;
+
             try
             {
+                // Since SelectedRows is only populated on when SelectionMode = FullRowSelect,
+                // we must use SelectedCells.  And since SelectedCells can contain cells from
+                // the same row, we must collect only the unique rows.
+                // We use a HashSet, which only allows unique values, to collect row indices.
                 var uniqueRows = new HashSet<int>();
+
+                // Try to add all the row indices from the selected cells. Only unique values will be added.
                 foreach (DataGridViewCell cell in ResultGrid.SelectedCells)
                 {
                     uniqueRows.Add(cell.RowIndex);
                 }
 
-                SetStatusBar("Loading " + uniqueRows.Count + " devices...");
+                // Trim the collection to the maximum allowed, and reverse it so that the top-most items are ordered first.
+                var indicesToLoad = uniqueRows.ToList().Take(maxAllowed).Reverse();
 
-                foreach (var index in uniqueRows)
+                SetStatusBar("Loading " + indicesToLoad.Count() + " devices...");
+
+                // Iterate the indexes and load a hidden ViewDeviceForm for each.
+                foreach (int index in indicesToLoad)
                 {
-                    var row = ResultGrid.Rows[index];
-                    var guid = row.Cells[DevicesCols.DeviceGuid].Value.ToString();
-
-                    if (!string.IsNullOrEmpty(guid))
+                    if (index < ResultGrid.Rows.Count)
                     {
-                        ViewDevice(guid, true);
+                        var row = ResultGrid.Rows[index];
+                        var guid = row.Cells[DevicesCols.DeviceGuid].Value.ToString();
+
+                        if (!string.IsNullOrEmpty(guid))
+                        {
+                            ViewDevice(guid, true);
+                        }
+
+                        // Call DoEvents to update the UI. It's expensive, but achieves the desired result.
+                        Application.DoEvents();
                     }
-                    // Delay for just a moment to keep the UI somewhat alive.
-                    await Task.Delay(20);
                 }
 
                 uniqueRows.Clear();
@@ -927,7 +945,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
         private void LoadSelectedMenuItem_Click(object sender, EventArgs e)
         {
-            ViewSelectedDevices();
+            LoadSelectedDevices();
         }
 
         private void ReEnterLACredentialsMenuItem_Click(object sender, EventArgs e)

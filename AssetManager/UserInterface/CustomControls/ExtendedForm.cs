@@ -49,6 +49,12 @@ namespace AssetManager.UserInterface.CustomControls
         {
         }
 
+        /// <summary>
+        /// Creates a new instance of an <see cref="ExtendedForm"/>.
+        /// </summary>
+        /// <param name="parentForm">The parent form for this instance.</param>
+        /// <param name="currentObject">A <see cref="MappedObject"/> that will be associated with this instance. Example: <see cref="Data.Classes.Device"/> or <see cref="Data.Classes.SibiRequest"/></param>
+        /// <param name="startHidden">True if this instance is to be loaded as hidden, and the Show() or Activate() methods are not going to be called. The <see cref="HiddenFormReady()"/> method must be called in the constructor after InitializeComponent(). </param>
         public ExtendedForm(ExtendedForm parentForm, MappedObject currentObject, bool startHidden = false) : this(parentForm, currentObject.Guid)
         {
             // If the form is starting without being shown, call for the handle to force its creation.

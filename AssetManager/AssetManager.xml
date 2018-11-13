@@ -1072,6 +1072,14 @@
             Custom form with project specific properties, methods and child form handling.
             </summary>
         </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.ExtendedForm.#ctor(AssetManager.UserInterface.CustomControls.ExtendedForm,Databases.Data.Mapping.MappedObject,System.Boolean)">
+            <summary>
+            Creates a new instance of an <see cref="T:AssetManager.UserInterface.CustomControls.ExtendedForm"/>.
+            </summary>
+            <param name="parentForm">The parent form for this instance.</param>
+            <param name="currentObject">A <see cref="T:Databases.Data.Mapping.MappedObject"/> that will be associated with this instance. Example: <see cref="T:AssetManager.Data.Classes.Device"/> or <see cref="T:AssetManager.Data.Classes.SibiRequest"/></param>
+            <param name="startHidden">True if this instance is to be loaded as hidden, and the Show() or Activate() methods are not going to be called. The <see cref="M:AssetManager.UserInterface.CustomControls.ExtendedForm.HiddenFormReady"/> method must be called in the constructor after InitializeComponent(). </param>
+        </member>
         <member name="P:AssetManager.UserInterface.CustomControls.ExtendedForm.MinimizeChildren">
             <summary>
             Gets or sets the value indicating whether child forms will be minimized with parent.
@@ -1509,9 +1517,9 @@
             Builds a query from the populated search controls.
             </summary>
         </member>
-        <member name="M:AssetManager.UserInterface.Forms.AssetManagement.MainForm.ViewSelectedDevices">
+        <member name="M:AssetManager.UserInterface.Forms.AssetManagement.MainForm.LoadSelectedDevices">
             <summary>
-            Loads and displays devices for all currently selected rows.
+            Loads the selected devices to the window list.
             </summary>
         </member>
         <member name="F:AssetManager.UserInterface.Forms.AssetManagement.MainForm.components">

@@ -349,7 +349,11 @@ namespace PingVisualizer
 
                 // Start the scale timer if needed.
                 if (currentViewScale != targetViewScale)
-                    scaleEaseTimer.Start();
+                {
+                    if (!scaleEaseTimer.Enabled)
+                        scaleEaseTimer.Start();
+                    EaseScaleChange();
+                }
             }
         }
 
@@ -532,7 +536,7 @@ namespace PingVisualizer
         /// <param name="refreshPingBars">When true this call will trigger a refresh of the ping bars, which will display the most current results.</param>
         private void Render(bool refreshPingBars = false)
         {
-            if (pingReplies.Count < 1 || this.isDisposing)
+            if (this.isDisposing || pingReplies == null || pingReplies.Count < 1)
                 return;
 
             // Only render if the target control is visible.
