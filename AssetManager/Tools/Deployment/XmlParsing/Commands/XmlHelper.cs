@@ -26,7 +26,7 @@ namespace AssetManager.Tools.Deployment.XmlParsing.Commands
                 throw new InvalidOperationException("Both internal value and 'Value' attributes are present. Make sure the element is populated with only one.");
 
             if (string.IsNullOrEmpty(elementValue) && string.IsNullOrEmpty(attributeValue))
-                throw new InvalidOperationException("Neither internal value or 'Value' attributes are present. Make sure the element is populated with atleast one.");
+                throw new InvalidOperationException("Neither internal value or 'Value' attributes are present. Make sure the element is populated with at least one.");
 
 
             if (!string.IsNullOrEmpty(elementValue))

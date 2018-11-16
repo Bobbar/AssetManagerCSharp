@@ -42,8 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICopyFiles.cs" />
-    <Compile Include="IDeployment.cs" />
     <Compile Include="IDeploymentUI.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="PowerShellCommand.cs" />

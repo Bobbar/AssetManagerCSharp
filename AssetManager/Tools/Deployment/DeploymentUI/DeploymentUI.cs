@@ -147,11 +147,6 @@ namespace AssetManager.Tools.Deployment
             OtherFunctions.Message(prompt, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, title, parentForm);
         }
 
-        public ICopyFiles NewFilePush(string source, string destination)
-        {
-            return new CopyFilesForm(parentForm, targetDevice, source, destination);
-        }
-
         public async Task<bool> SimplePSExecCommand(string command, string title)
         {
             LogMessage("Starting " + title + "...", MessageType.Notice);

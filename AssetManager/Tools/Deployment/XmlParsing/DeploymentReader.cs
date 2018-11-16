@@ -151,7 +151,7 @@ namespace AssetManager.Tools.Deployment.XmlParsing
                 throw new Exception($@"Deployment Parse Error: '{ cmdTypeString }'  is not a recognized command type!");
             }
 
-            // Parse and execute the deployment elements.
+            // Switch on the command type and return the appropriate command instance.
             switch (cmdType)
             {
                 case CommandType.Prompt: // UI prompt/message to user.

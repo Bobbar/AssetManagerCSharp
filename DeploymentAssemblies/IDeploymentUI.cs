@@ -62,8 +62,6 @@ namespace DeploymentAssemblies
 
         void UserPrompt(string prompt, string title = "");
 
-        ICopyFiles NewFilePush(string source, string destination);
-
         void Dispose();
     }
 }

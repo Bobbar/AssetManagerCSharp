@@ -309,12 +309,6 @@
     <Compile Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.Designer.cs">
       <DependentUpon>AdvancedSearchForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\Forms\AdminTools\CopyFilesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserInterface\Forms\AdminTools\CopyFilesForm.Designer.cs">
-      <DependentUpon>CopyFilesForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserInterface\Forms\AdminTools\CrypterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -398,19 +392,12 @@
     <Compile Include="UserInterface\Forms\GetCredentialsForm.Designer.cs">
       <DependentUpon>GetCredentialsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\CustomControls\FileTransferUI\FileTransferUI.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserInterface\CustomControls\FileTransferUI\FileTransferUI.Designer.cs">
-      <DependentUpon>FileTransferUI.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserInterface\Forms\Gatekeeper\GKUpdaterForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\Forms\Gatekeeper\GKUpdaterForm.Designer.cs">
       <DependentUpon>GKUpdaterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface\CustomControls\FileTransferUI\ProgressStatus.cs" />
     <Compile Include="UserInterface\Forms\GridForm\GridForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -476,9 +463,6 @@
     <EmbeddedResource Include="UserInterface\Forms\AdminTools\AdvancedSearchForm.resx">
       <DependentUpon>AdvancedSearchForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\Forms\AdminTools\CopyFilesForm.resx">
-      <DependentUpon>CopyFilesForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\AdminTools\CrypterForm.resx">
       <DependentUpon>CrypterForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -516,9 +500,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Attachments\AttachmentsForm.resx">
       <DependentUpon>AttachmentsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserInterface\CustomControls\FileTransferUI\FileTransferUI.resx">
-      <DependentUpon>FileTransferUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\Forms\Gatekeeper\GKUpdaterForm.resx">
       <DependentUpon>GKUpdaterForm.cs</DependentUpon>
@@ -606,10 +587,6 @@
     <ProjectReference Include="..\DeploymentAssemblies\DeploymentAssemblies.csproj">
       <Project>{77c1bdf2-c436-4e8a-9379-4a4df5d2ed89}</Project>
       <Name>DeploymentAssemblies</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RemoteFileTransferTool\RemoteFileTransferTool.csproj">
-      <Project>{7dfb8c7f-38ba-49fd-be57-9f96e786d35b}</Project>
-      <Name>RemoteFileTransferTool</Name>
     </ProjectReference>
     <ProjectReference Include="..\PingVisualizer\PingVisualizer.csproj">
       <Project>{d6059de1-47c1-471b-bb28-88b9b655ceb0}</Project>
