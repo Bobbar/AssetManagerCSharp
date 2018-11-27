@@ -1,13 +1,15 @@
-﻿using AssetManager.Tools.Deployment.XmlParsing.Commands;
-using DeploymentAssemblies;
+﻿using DeploymentAssemblies.XmlParsing.Commands;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace AssetManager.Tools.Deployment.XmlParsing
+namespace DeploymentAssemblies.XmlParsing
 {
+    /// <summary>
+    /// XML deployment reader for parsing and executing <see cref="DeploymentCommand"/> created from XML deployment markup files.
+    /// </summary>
     public class DeploymentReader
     {
         public string DeploymentName
@@ -31,21 +33,11 @@ namespace AssetManager.Tools.Deployment.XmlParsing
         private XElement _deploymentElem;
         private IDeploymentUI _deploy;
 
-
-        public DeploymentReader(string scriptFile)
-        {
-            _deploymentElem = XElement.Load(scriptFile, LoadOptions.None);
-
-            ParseDeploymentInfo();
-        }
-
-        public DeploymentReader(Stream scriptFileStream)
-        {
-            _deploymentElem = XElement.Load(scriptFileStream, LoadOptions.None);
-
-            ParseDeploymentInfo();
-        }
-
+        /// <summary>
+        /// Creates a new instance of a <see cref="DeploymentReader"/>. Initial XML format parsing will occur at construction.
+        /// </summary>
+        /// <param name="scriptFileStream">Stream containing XML deployment markup.</param>
+        /// <param name="deployment">The instance of a <see cref="IDeploymentUI"/> to be used with this deployment.</param>
         public DeploymentReader(Stream scriptFileStream, IDeploymentUI deployment)
         {
             _deploymentElem = XElement.Load(scriptFileStream, LoadOptions.None);
@@ -54,11 +46,18 @@ namespace AssetManager.Tools.Deployment.XmlParsing
             ParseDeploymentInfo();
         }
 
+        /// <summary>
+        /// Begins parsing the XML deployment markup and starts executing the commands.
+        /// </summary>
+        /// <returns></returns>
         public async Task<bool> StartDeployment()
         {
             return await RunDeployment(_deploymentElem.Elements());
         }
 
+        /// <summary>
+        /// Parse additional attributes from the XML file.
+        /// </summary>
         private void ParseDeploymentInfo()
         {
             _deploymentName = XmlHelper.GetAttribute(_deploymentElem, "Name");
@@ -86,6 +85,11 @@ namespace AssetManager.Tools.Deployment.XmlParsing
             return success;
         }
 
+        /// <summary>
+        /// Recursively parses and executes the commands within the XML file.
+        /// </summary>
+        /// <param name="cmdElement">The root element containing command blocks.</param>
+        /// <returns>Returns true if no errors occured and all the commands executed without unexpected results.</returns>
         private async Task<bool> ExecuteCommandElement(XElement cmdElement)
         {
             var command = GetCommandFromElement(cmdElement);
@@ -134,7 +138,6 @@ namespace AssetManager.Tools.Deployment.XmlParsing
         /// Parses the specified XML element and returns a <see cref="DeploymentCommand"/> instance.
         /// </summary>
         /// <param name="cmdElement">XML element containing a deployment command declaration.</param>
-        /// <returns></returns>
         private DeploymentCommand GetCommandFromElement(XElement cmdElement)
         {
             CommandType cmdType;
@@ -171,7 +174,6 @@ namespace AssetManager.Tools.Deployment.XmlParsing
 
                 case CommandType.AdvancedPsExec: // Advanced PsExec command: Returns the exit code upon completion.
                     return new AdvancedPsExecCommand(cmdElement, _deploy);
-
             }
 
             return null;

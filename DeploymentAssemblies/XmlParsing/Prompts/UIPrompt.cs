@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DeploymentAssemblies;
-
-namespace AssetManager.Tools.Deployment.XmlParsing
+﻿namespace DeploymentAssemblies.XmlParsing.Prompts
 {
+    /// <summary>
+    /// Base class for UI prompts.
+    /// </summary>
     public abstract class UIPrompt
     {
         protected string _message;
@@ -19,6 +15,5 @@ namespace AssetManager.Tools.Deployment.XmlParsing
         }
 
         public abstract void Display();
-         
     }
 }

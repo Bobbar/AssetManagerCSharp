@@ -1,4 +1,4 @@
-﻿namespace AssetManager.Tools.Deployment.XmlParsing
+﻿namespace DeploymentAssemblies.XmlParsing
 {
     public enum CommandType
     {

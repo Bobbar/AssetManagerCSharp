@@ -1,19 +1,16 @@
-﻿using AssetManager.Data;
-using AssetManager.Data.Classes;
+﻿using AssetManager.Data.Classes;
 using AssetManager.Data.Functions;
 using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
-using AssetManager.UserInterface.Forms.AdminTools;
 using DeploymentAssemblies;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Drawing;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace AssetManager.Tools.Deployment
 {
@@ -188,7 +185,7 @@ namespace AssetManager.Tools.Deployment
                 LogMessage(title + " failed!", MessageType.Error);
                 parentForm.RestoreWindow();
                 parentForm.FlashWindow(5);
-                
+
                 //OtherFunctions.Message("Error occurred while executing command!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, "Deployment Error", logView);
                 //throw new Exception("Error occurred while executing command");
             }

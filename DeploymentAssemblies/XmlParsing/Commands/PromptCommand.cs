@@ -1,12 +1,10 @@
-﻿using System;
+﻿using DeploymentAssemblies.XmlParsing.Prompts;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using DeploymentAssemblies;
 
-namespace AssetManager.Tools.Deployment.XmlParsing.Commands
+namespace DeploymentAssemblies.XmlParsing.Commands
 {
     public class PromptCommand : DeploymentCommand
     {
@@ -23,7 +21,6 @@ namespace AssetManager.Tools.Deployment.XmlParsing.Commands
 
             return new CommandCompletedResult();
         }
-
 
         /// <summary>
         /// Parse out UI prompt declarations from within the specified parent element.

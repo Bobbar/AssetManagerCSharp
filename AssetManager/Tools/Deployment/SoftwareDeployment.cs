@@ -3,14 +3,13 @@ using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
 using DeploymentAssemblies;
+using DeploymentAssemblies.XmlParsing;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AssetManager.Tools.Deployment.XmlParsing;
 using System.Diagnostics;
 
 namespace AssetManager.Tools.Deployment

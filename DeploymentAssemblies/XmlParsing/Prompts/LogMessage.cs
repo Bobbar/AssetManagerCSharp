@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DeploymentAssemblies;
 
-namespace AssetManager.Tools.Deployment.XmlParsing
+namespace DeploymentAssemblies.XmlParsing.Prompts
 {
     public sealed class LogMessage : UIPrompt
     {

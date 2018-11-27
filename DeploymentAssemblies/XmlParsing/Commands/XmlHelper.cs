@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace AssetManager.Tools.Deployment.XmlParsing.Commands
+namespace DeploymentAssemblies.XmlParsing.Commands
 {
     public static class XmlHelper
     {
@@ -15,7 +12,7 @@ namespace AssetManager.Tools.Deployment.XmlParsing.Commands
         /// <param name="promptElement"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">
-        /// If neither or both internal value and "Value" attributes are present. 
+        /// If neither or both internal value and "Value" attributes are present.
         /// </exception>
         public static string GetElementValueOrValueAttrib(XElement promptElement)
         {
@@ -27,7 +24,6 @@ namespace AssetManager.Tools.Deployment.XmlParsing.Commands
 
             if (string.IsNullOrEmpty(elementValue) && string.IsNullOrEmpty(attributeValue))
                 throw new InvalidOperationException("Neither internal value or 'Value' attributes are present. Make sure the element is populated with at least one.");
-
 
             if (!string.IsNullOrEmpty(elementValue))
             {

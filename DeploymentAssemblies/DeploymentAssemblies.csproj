@@ -46,6 +46,24 @@
     <Compile Include="MessageType.cs" />
     <Compile Include="PowerShellCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlParsing\Commands\AdvancedPsExecCommand.cs" />
+    <Compile Include="XmlParsing\Commands\CommandCompletedResult.cs" />
+    <Compile Include="XmlParsing\Commands\DeploymentCommand.cs" />
+    <Compile Include="XmlParsing\Commands\PromptCommand.cs" />
+    <Compile Include="XmlParsing\Commands\SimplePowerShellCommand.cs" />
+    <Compile Include="XmlParsing\Commands\SimplePowerShellScriptCommand.cs" />
+    <Compile Include="XmlParsing\Commands\SimplePsExecCommand.cs" />
+    <Compile Include="XmlParsing\Commands\SleepCommand.cs" />
+    <Compile Include="XmlParsing\Commands\XmlHelper.cs" />
+    <Compile Include="XmlParsing\CommandType.cs" />
+    <Compile Include="XmlParsing\DeploymentReader.cs" />
+    <Compile Include="XmlParsing\Prompts\DialogPrompt.cs" />
+    <Compile Include="XmlParsing\Prompts\LogMessage.cs" />
+    <Compile Include="XmlParsing\Prompts\PromptType.cs" />
+    <Compile Include="XmlParsing\Prompts\UIPrompt.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="XmlParsing\Xml Deployments Examples &amp; Documentation.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

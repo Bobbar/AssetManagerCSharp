@@ -1,10 +1,9 @@
-﻿using DeploymentAssemblies;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace AssetManager.Tools.Deployment.XmlParsing.Commands
+namespace DeploymentAssemblies.XmlParsing.Commands
 {
     public class AdvancedPsExecCommand : DeploymentCommand
     {

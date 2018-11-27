@@ -1,10 +1,12 @@
-﻿using DeploymentAssemblies;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace AssetManager.Tools.Deployment.XmlParsing.Commands
+namespace DeploymentAssemblies.XmlParsing.Commands
 {
+    /// <summary>
+    /// Base class for XML deployment commands.
+    /// </summary>
     public abstract class DeploymentCommand
     {
         protected string _title;

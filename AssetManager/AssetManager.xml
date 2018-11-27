@@ -646,110 +646,6 @@
             <param name="blendColor"></param>
             <returns></returns>
         </member>
-        <member name="T:AssetManager.Tools.Deployment.XmlSettings">
-            <summary>
-            Provides simple XML parsing for deployment command string and settings.
-            </summary>
-            <example>
-            
-             var test = new XmlSettings(@"..\DeploymentSettings.xml");
-             var result = test.GetDeploymentString("mvps_install");
-             Console.WriteLine(result);
-             
-            </example>
-        </member>
-        <member name="M:AssetManager.Tools.Deployment.XmlParsing.Commands.DeploymentCommand.Execute">
-            <summary>
-            Executes the implemented command logic and returns a <see cref="T:AssetManager.Tools.Deployment.XmlParsing.Commands.CommandCompletedResult"/>
-            </summary>
-        </member>
-        <member name="M:AssetManager.Tools.Deployment.XmlParsing.Commands.PromptCommand.GetPrompts(System.Xml.Linq.XElement)">
-            <summary>
-            Parse out UI prompt declarations from within the specified parent element.
-            </summary>
-            <param name="promptElement">Element containing UI prompt declarations.</param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Tools.Deployment.XmlParsing.Commands.XmlHelper.GetElementValueOrValueAttrib(System.Xml.Linq.XElement)">
-            <summary>
-            Returns the elements internal value or the elements "Value" attribute depending on which one is present.
-            </summary>
-            <param name="promptElement"></param>
-            <returns></returns>
-            <exception cref="T:System.InvalidOperationException">
-            If neither or both internal value and "Value" attributes are present. 
-            </exception>
-        </member>
-        <member name="M:AssetManager.Tools.Deployment.XmlParsing.Commands.XmlHelper.GetAttribute(System.Xml.Linq.XElement,System.String)">
-            <summary>
-            Gets the attribute value with the specifed name from the specified element. Not case sensitive.
-            </summary>
-            <param name="element">Target element.</param>
-            <param name="name">The name of the attribute to return the value from.</param>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Tools.Deployment.XmlParsing.DeploymentReader.GetCommandFromElement(System.Xml.Linq.XElement)">
-            <summary>
-            Parses the specified XML element and returns a <see cref="T:AssetManager.Tools.Deployment.XmlParsing.Commands.DeploymentCommand"/> instance.
-            </summary>
-            <param name="cmdElement">XML element containing a deployment command declaration.</param>
-            <returns></returns>
-        </member>
-        <member name="T:AssetManager.Tools.Deployment.SoftwareDeployment.TaskInfo">
-            <summary>
-            Container for holding deployment methods and a descriptive name.
-            </summary>
-        </member>
-        <member name="M:AssetManager.Tools.Deployment.SoftwareDeployment.ChooseDeployments(AssetManager.Data.Classes.Device)">
-            <summary>
-            Prompt user for items to be deployed to the device.
-            </summary>
-            <param name="targetDevice"></param>
-        </member>
-        <member name="M:AssetManager.Tools.ActiveDirectoryWrapper.LoadResults">
-            <summary>
-            Executes the Active Directory search and populates search results. Returns true if results were found.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Tools.ActiveDirectoryWrapper.LoadResultsAsync">
-            <summary>
-            Asynchronously executes the Active Directory search and populates search results. Returns true if results were found.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Tools.ActiveDirectoryWrapper.GetDeviceOU">
-            <summary>
-            Get the OU path of a domain computer.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Tools.ActiveDirectoryWrapper.GetDistinguishedName">
-            <summary>
-            Queries Active Directory for a hostname and returns the Distinguished Name.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:AssetManager.Tools.ActiveDirectoryWrapper.ParsePath(System.String)">
-            <summary>
-            Parses a Distinguished Name string into a shorter more readable string.
-            </summary>
-            <param name="distName"></param>
-            <returns></returns>
-        </member>
-        <member name="T:AssetManager.Tools.TaskBarNotify">
-            <summary>
-            Provides flashing window and taskbar support.
-            </summary>
-        </member>
-        <member name="M:AssetManager.Tools.PowerShellWrapper.ExecuteRemotePSScript(System.Byte[],System.Net.NetworkCredential)">
-            <summary>
-            Execute the specified PowerShell script on the specified host.
-            </summary>
-            <param name="scriptValue">PowerShell script as a byte array.</param>
-            <param name="credentials">Credentials used when creating the remote runspace.</param>
-            <returns>Returns any error messages.</returns>
-        </member>
         <member name="T:AssetManager.CachedResourceManager">
             <summary>
             An extended Resource Manager that provides cached instances of objects.
@@ -1066,6 +962,61 @@
             <summary>
             The main entry point for the application.
             </summary>
+        </member>
+        <member name="M:AssetManager.Tools.ActiveDirectoryWrapper.LoadResults">
+            <summary>
+            Executes the Active Directory search and populates search results. Returns true if results were found.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Tools.ActiveDirectoryWrapper.LoadResultsAsync">
+            <summary>
+            Asynchronously executes the Active Directory search and populates search results. Returns true if results were found.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Tools.ActiveDirectoryWrapper.GetDeviceOU">
+            <summary>
+            Get the OU path of a domain computer.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Tools.ActiveDirectoryWrapper.GetDistinguishedName">
+            <summary>
+            Queries Active Directory for a hostname and returns the Distinguished Name.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AssetManager.Tools.ActiveDirectoryWrapper.ParsePath(System.String)">
+            <summary>
+            Parses a Distinguished Name string into a shorter more readable string.
+            </summary>
+            <param name="distName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AssetManager.Tools.Deployment.SoftwareDeployment.TaskInfo">
+            <summary>
+            Container for holding deployment methods and a descriptive name.
+            </summary>
+        </member>
+        <member name="M:AssetManager.Tools.Deployment.SoftwareDeployment.ChooseDeployments(AssetManager.Data.Classes.Device)">
+            <summary>
+            Prompt user for items to be deployed to the device.
+            </summary>
+            <param name="targetDevice"></param>
+        </member>
+        <member name="T:AssetManager.Tools.TaskBarNotify">
+            <summary>
+            Provides flashing window and taskbar support.
+            </summary>
+        </member>
+        <member name="M:AssetManager.Tools.PowerShellWrapper.ExecuteRemotePSScript(System.Byte[],System.Net.NetworkCredential)">
+            <summary>
+            Execute the specified PowerShell script on the specified host.
+            </summary>
+            <param name="scriptValue">PowerShell script as a byte array.</param>
+            <param name="credentials">Credentials used when creating the remote runspace.</param>
+            <returns>Returns any error messages.</returns>
         </member>
         <member name="T:AssetManager.UserInterface.CustomControls.ExtendedForm">
             <summary>
