@@ -1,4 +1,8 @@
 <!-- 
+
+This document contains examples and documentation for creating and maintaining XML deployment markup scripts.
+
+
 Deployment: 
 	The root element for all deployment scripts.
 	
@@ -12,7 +16,9 @@ Deployment:
 			
 
 Command:
-	Specifies a deployment command to be performed. Commands are performed in order from top to bottom.
+	Specifies a deployment command to be performed. Commands are performed in order from top to bottom, and can be nested within any result block.
+	
+	All command except for Prompt and Sleep provide a result block (OnSuccess, OnFailure, OnComplete, ExitCode, etc). The result blocks will execute any contained commands. Commands can be nested to any depth.
 	
 	Attributes:
 	
@@ -153,17 +159,116 @@ Command:
 						
 						</Command>
 						
+							
+				SimplePowerShellCommand:
+					Specifies PowerShell command or commands to execute using the PowerShell service. Returns <OnSuccess> or <OnFailure>. A success is determined by the contents of the result string.
+					If the result string contains the text 'success' or 'true' or is empty, a successful result is assumed.
+					
+					Format:
+					
+						<Command Type="SimplePowerShellCommand">
+							
+							<PSCommands> ** Required **
+								
+								***
+								The PSCommand and PSParameter mirror the functionality of .NETs System.Management.Automation.Runspaces.  See: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.runspaces.command?view=powershellsdk-1.1.0
+								***
+								
+								<PSCommand IsScript="True" UseLocalScope="False">
+									Set-Location "HKLM:"
+									Test-Path "\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\TeamViewer"
+								</PSCommand>
+								
+								<PSCommand IsScript="False" UseLocalScope="True" Value="Remove-Item">
+									<PSParameter Name="Recurse"/>
+									<PSParameter Name="Force"/>
+									<PSParameter Name="Path" Value="C:\Temp\TVDeploy"/>
+								</PSCommand>
+			
+							</PSCommands>
+		
+							<OnSuccess>
+								<Command>
+									Specify additional commands to execute on completion.
+								</Command>
+							</OnSuccess>
+				
+							<OnFailure Continue="True">
+								<Command>
+									Specify additional commands to execute on completion.
+								</Command>
+							</OnFailure>
+		
+						</Command>
+						
 					Result Handling:
 					
-						<OnComplete>
-							Specifies commands to execute upon completion of this command.
-				
-				SimplePowerShellCommand:
+						<OnSuccess>
+							Specifies additional Commands to perform if the command result string is blank or contains 'success' or 'true'.
+							
+						<OnFailure Continue="True">
+							Specifies additional Commands to perform if the result does not meet the success requirements.
+							
+							Attributes:
+								
+								Continue (True/False): ** Optional. Default = False **
+									Indicates that the deployment will continue after this failure.
 					
-				
+					
+				Sleep:
+					Specifies a sleep command. The deployment will pause for the specified number of seconds.
+					
+					Format:
+						<Command Type="Sleep" Value="10"/>
+						
+							Attributes:
+							
+								Value:  The number of seconds to wait before continuing.
+								
+				Prompt:
+					Specifies a user prompt command. Provides a dialog or a log window message to be displayed to the user.
+					
+					Format:
+						<Command Type="Prompt">
+							
+							<LogMessage Type="Notice" Value="Deleting temp files..."/>
+							
+								Specifies a message to be displayed to the deployment log window.
+														
+								LogMessage Attributes:
+								
+										Type: Specifies the styling of the log message.
+											Values:
+												Success: Green text.
+												Error: Red text.
+												Warning: Yellow text.
+												Notice: Blue text.
+												Default: *If no Type attribute is specified*  Black text.
+												
+							
+							
+							<DialogPrompt Value="Error occurred while executing command!" Title="Error"/>
+							
+								Specifies a message to be displayed in a 'popup' dialog window.
+								
+								DialogPrompt Attributes:
+								
+										Value: The message text to be displayed.
+										
+										Title: Title of the dialog window.
+						
+						</Command>
 	
 
+Notes:
+
+	Commands can be nested or stacked as needed. So you can specify any type of additional commands within an OnSuccess, OnFailure, OnComplete or ExitCode block. See examples.
+	
+	
  -->
+ 
+ <!-- EXAMPLES -->
+ 
 <Deployment Name="Testing" OrderPriority="99">
 	
 	<Command Type="Prompt">
@@ -191,7 +296,7 @@ Command:
 		</ExitCodeResponse>
 	</Command>
 	
-	<Command Type="SimplePSExec" Title="Certificate Install">
+	<Command Type="SimplePSExec" Title="Ping test">
 		<String>
 		ping google.com
 		</String>
@@ -221,7 +326,7 @@ Command:
 		</OnFailure>
 	</Command>
 	
-	<Command Type="AdvancedPsExec" Title=".NET 4.7.1 Runtime Install">
+	<Command Type="AdvancedPsExec" Title="Testing">
 		<String>
 		dir blah
 		</String>
@@ -254,6 +359,7 @@ Command:
 					<String>
 					ping google.com
 					</String>
+					
 					<OnSuccess>
 						<Command Type="Prompt">
 							<LogMessage Type="Success">
@@ -261,13 +367,39 @@ Command:
 							</LogMessage>
 						</Command>
 					</OnSuccess>
+					
 					<OnFailure>
+					
 						<Command Type="Prompt">
 							<LogMessage Type="Error">
 							It Failed!
 							</LogMessage>
 						</Command>
+						
+						<!-- Nested additional command -->
+						
+						<Command Type="SimplePSExec" Title="Certificate Install">
+							<String>
+							ping microsoft.com
+							</String>
+							<OnSuccess>
+								<Command Type="Prompt">
+									<LogMessage Type="Success">
+									It worked!
+									</LogMessage>
+								</Command>
+							</OnSuccess>
+							<OnFailure>
+								<Command Type="Prompt">
+									<LogMessage Type="Error">
+									It Failed!
+									</LogMessage>
+								</Command>
+							</OnFailure>
+						</Command>
+						
 					</OnFailure>
+					
 				</Command>
 			</ExitCode>	
 			
@@ -277,3 +409,5 @@ Command:
 	
 	
 </Deployment>
+
+<!-- Bobby Lovell - FCBDD - 2018 -->

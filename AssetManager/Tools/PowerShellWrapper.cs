@@ -186,7 +186,6 @@ namespace AssetManager.Tools
                         Collection<PSObject> results = session.Invoke();
                         StringBuilder stringBuilder = new StringBuilder();
 
-
                         foreach (var obj in results)
                         {
                             stringBuilder.AppendLine(obj.ToString());
