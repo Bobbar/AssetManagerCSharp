@@ -514,6 +514,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // TrackablesCheckBox
             // 
             this.TrackablesCheckBox.AutoSize = true;
+            this.TrackablesCheckBox.Checked = true;
+            this.TrackablesCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.TrackablesCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TrackablesCheckBox.Location = new System.Drawing.Point(418, 135);
             this.TrackablesCheckBox.Name = "TrackablesCheckBox";
@@ -669,7 +671,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             // ToolStripStatusLabel1
             // 
             this.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1";
-            this.ToolStripStatusLabel1.Size = new System.Drawing.Size(1057, 17);
+            this.ToolStripStatusLabel1.Size = new System.Drawing.Size(1104, 17);
             this.ToolStripStatusLabel1.Spring = true;
             // 
             // ConnStatusLabel
