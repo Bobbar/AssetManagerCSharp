@@ -341,7 +341,7 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
             ReplaceYearTextBox.Clear();
             PurchaseDateTextBox.Clear();
 
-            TrackablesCheckBox.Checked = true;
+            TrackablesCheckBox.Checked = false;
             HistoricalCheckBox.Checked = false;
             RefreshCombos();
         }
