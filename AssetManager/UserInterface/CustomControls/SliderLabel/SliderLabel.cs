@@ -645,7 +645,7 @@ namespace AssetManager.UserInterface.CustomControls
                 // If the display time is forever
                 if (currentMessage.DisplayTime == 0)
                 {
-                    // If the forever displayed message state is slide-out, then the forever message is being replaced with a new message, so change the state to done.
+                    // If the forever displayed (sticky) message state is slide-out, then the sticky message is being replaced with a new message, so change the state to done.
                     if (currentMessage.SlideState == SlideState.SlideOut)
                     {
                         currentMessage.SlideState = SlideState.Done;
@@ -655,8 +655,15 @@ namespace AssetManager.UserInterface.CustomControls
                     }
                     else
                     {
-                        // Otherwise, change the forever displayed message state to hold to keep it visible.
+                        // Otherwise, change the sticky message state to hold to keep it visible.
                         currentMessage.SlideState = SlideState.Hold;
+                        
+                        // Immediately process the queue whenever a sticky message is NOT the last one in the queue.
+                        // This ensures that sticky messages will not stay if they were queued before a temp message prior to being displayed.
+                        if (messageQueue.Count > 0)
+                        {
+                            ProcessQueue();
+                        }
                     }
                 }
                 else
