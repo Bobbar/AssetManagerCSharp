@@ -9,7 +9,6 @@ namespace AssetManager.UserInterface.CustomControls
         #region "Fields"
 
         private ToolStripDropDownButton dropDownControl = new ToolStripDropDownButton();
-        private bool dropDownOpen = false;
         private ExtendedForm parentForm;
         private IWindowList windowListForm;
         private bool hasParentMenu = false;
@@ -126,14 +125,14 @@ namespace AssetManager.UserInterface.CustomControls
 
         private string CountText(int count)
         {
-            string MainText = "Select Window";
+            string defaultText = "Select Window";
             if (count > 0)
             {
-                return MainText + " (" + count + ")";
+                return defaultText + " (" + count + ")";
             }
             else
             {
-                return MainText;
+                return defaultText;
             }
         }
 
@@ -142,12 +141,12 @@ namespace AssetManager.UserInterface.CustomControls
             // PROBLEM:
             // Because we are using the MouseUp event from the menu items,
             // and also removing/disposing those items as a result of that event,
-            // the top level drop down button UI tends to hang and cause strange 
-            // behaviour. The problem is particularly apparent after the last 
-            // menu item has been removed. Small rectangles left in the cornor 
-            // of the screen, and forms spontaneously popping infront of the 
+            // the top level drop down button UI tends to hang and cause strange
+            // behaviour. The problem is particularly apparent after the last
+            // menu item has been removed. Small rectangles left in the cornor
+            // of the screen, and forms spontaneously popping infront of the
             // active form are two of the most annoying problems.
-            // 
+            //
             // REASON (maybe):
             // After much digging and testing, I've managed to narrow it down
             // to stuck/corrupt mouse event messages. These screwed up messages
@@ -212,14 +211,60 @@ namespace AssetManager.UserInterface.CustomControls
             dropDownControl.DropDownItems.Clear();
         }
 
-        private void DropDownControl_DropDownClosed(object sender, EventArgs e)
+        /// <summary>
+        /// Close all child windows.
+        /// </summary>
+        private void CloseAllWindows()
         {
-            dropDownOpen = false;
+            int i = 0;
+
+            // Use a while loop so that we can skip around the collection as it is modified.
+            while (i < dropDownControl.DropDownItems.Count)
+            {
+                // Make sure we are on a target type.
+                if (dropDownControl.DropDownItems[i] is OnlineStatusMenuItem)
+                {
+                    // Cast out the menu and target form.
+                    var item = (OnlineStatusMenuItem)dropDownControl.DropDownItems[i];
+                    var frm = item.TargetForm;
+
+                    // Make sure we don't try to close our parent form.
+                    if ((frm != parentForm.ParentForm))
+                    {
+                        // Make sure child is ready, otherwise stop.
+                        if (frm.OkToClose() && frm.OkToCloseChildren())
+                        {
+                            frm.Close();
+                            DisposeDropDownItem(item);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        // If current item is for parent, skip to the next one.
+                        i++;
+                    }
+                }
+                else
+                {
+                    // If current item isn't a target type, skip to the next one.
+                    i++;
+                }
+            }
+
+            dropDownControl.Text = CountText(windowListForm.ChildFormCount());
+            SetVisibility();
         }
 
-        private void DropDownControl_DropDownOpened(object sender, EventArgs e)
+        private void DropDownControl_MouseUp(object sender, MouseEventArgs e)
         {
-            dropDownOpen = true;
+            if (e.Button == MouseButtons.Right)
+            {
+                CloseAllWindows();
+            }
         }
 
         private void InitializeDropDownButton(OneClickToolStrip targetToolStrip)
@@ -229,8 +274,7 @@ namespace AssetManager.UserInterface.CustomControls
             dropDownControl.Text = "Select Window";
             dropDownControl.Name = "WindowList";
             dropDownControl.Image = Properties.Resources.CascadeIcon;
-            dropDownControl.DropDownClosed += DropDownControl_DropDownClosed;
-            dropDownControl.DropDownOpened += DropDownControl_DropDownOpened;
+            dropDownControl.MouseUp += DropDownControl_MouseUp; ;
             AddParentMenu();
             targetToolStrip.Items.Insert(targetToolStrip.Items.Count, dropDownControl);
         }
@@ -338,8 +382,6 @@ namespace AssetManager.UserInterface.CustomControls
                     dropDownControl.Dispose();
                     windowListForm.ChildAdded -= WindowListForm_ChildAdded;
                     windowListForm.ChildRemoved -= WindowListForm_ChildRemoved;
-                    dropDownControl.DropDownClosed -= DropDownControl_DropDownClosed;
-                    dropDownControl.DropDownOpened -= DropDownControl_DropDownOpened;
                 }
             }
             disposedValue = true;

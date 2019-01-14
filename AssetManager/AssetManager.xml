@@ -1397,6 +1397,11 @@
             <param name="child"></param>
             <param name="targetMenu"></param>
         </member>
+        <member name="M:AssetManager.UserInterface.CustomControls.WindowList.CloseAllWindows">
+            <summary>
+            Close all child windows.
+            </summary>
+        </member>
         <member name="M:AssetManager.UserInterface.Forms.AdminTools.Hierarchy.ShowAllDevices">
             <summary>
             Collect and display a table containing all the devices associated with the current employee tree.
