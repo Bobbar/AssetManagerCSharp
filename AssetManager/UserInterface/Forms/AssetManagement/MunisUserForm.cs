@@ -44,9 +44,8 @@ namespace AssetManager.UserInterface.Forms.AssetManagement
 
                 SetWorking(true);
 
-                var comms = new MunisComms();
-                using (var cmd = comms.GetSqlCommandFromParams(query, searchParams.Parameters))
-                using (var results = await comms.ReturnSqlTableFromCmdAsync(cmd))
+                using (var cmd = MunisComms.GetSqlCommandFromParams(query, searchParams.Parameters))
+                using (var results = await MunisComms.ReturnSqlTableFromCmdAsync(cmd))
                 {
                     if (results.Rows.Count > 0)
                     {

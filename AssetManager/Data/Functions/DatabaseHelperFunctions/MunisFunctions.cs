@@ -14,8 +14,7 @@ namespace AssetManager.Data.Functions
 {
     public static class MunisFunctions //Be warned. This whole class is a horrible bastard...
     {
-        private const int intMaxResults = 100;
-        private static MunisComms munisComms = new MunisComms();
+        private const int maxResults = 100;
 
         public static string GetReqNumberFromPO(string po)
         {
@@ -23,7 +22,7 @@ namespace AssetManager.Data.Functions
             {
                 if (!string.IsNullOrEmpty(po))
                 {
-                    return munisComms.ReturnSqlValue("Requisitions", "PurchaseOrderNumber", po, "RequisitionNumber").ToString();
+                    return MunisComms.ReturnSqlValue("Requisitions", "PurchaseOrderNumber", po, "RequisitionNumber").ToString();
                 }
             }
             return null;
@@ -33,7 +32,7 @@ namespace AssetManager.Data.Functions
         {
             if (!string.IsNullOrEmpty(po))
             {
-                return await munisComms.ReturnSqlValueAsync("Requisitions", "PurchaseOrderNumber", po, "RequisitionNumber");
+                return await MunisComms.ReturnSqlValueAsync("Requisitions", "PurchaseOrderNumber", po, "RequisitionNumber");
             }
             return string.Empty;
         }
@@ -42,7 +41,7 @@ namespace AssetManager.Data.Functions
         {
             if (!string.IsNullOrEmpty(reqNum))
             {
-                return await munisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_pur_no", "rqdt_fsc_yr", fy);
+                return await MunisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_pur_no", "rqdt_fsc_yr", fy);
             }
             return string.Empty;
         }
@@ -55,13 +54,13 @@ namespace AssetManager.Data.Functions
 
             if (!string.IsNullOrEmpty(device.AssetTag))
             {
-                POFromAsset = await munisComms.ReturnSqlValueAsync("famaster", "fama_tag", device.AssetTag, "fama_purch_memo");
-                POFromAssetFromPurchaseHist = await munisComms.ReturnSqlValueAsync("fapurchh", "faph_asset", device.AssetTag, "faph_po_num");
+                POFromAsset = await MunisComms.ReturnSqlValueAsync("famaster", "fama_tag", device.AssetTag, "fama_purch_memo");
+                POFromAssetFromPurchaseHist = await MunisComms.ReturnSqlValueAsync("fapurchh", "faph_asset", device.AssetTag, "faph_po_num");
             }
 
             if (!string.IsNullOrEmpty(device.Serial))
             {
-                POFromSerial = await munisComms.ReturnSqlValueAsync("famaster", "fama_serial", device.Serial, "fama_purch_memo");
+                POFromSerial = await MunisComms.ReturnSqlValueAsync("famaster", "fama_serial", device.Serial, "fama_purch_memo");
             }
 
             POFromAsset = POFromAsset.Trim();
@@ -85,7 +84,7 @@ namespace AssetManager.Data.Functions
 
         public static async Task<string> GetSerialFromAsset(string assetTag)
         {
-            var value = await munisComms.ReturnSqlValueAsync("famaster", "fama_tag", assetTag, "fama_serial");
+            var value = await MunisComms.ReturnSqlValueAsync("famaster", "fama_tag", assetTag, "fama_serial");
             if (value != null)
             {
                 return value.ToString().Trim();
@@ -95,7 +94,7 @@ namespace AssetManager.Data.Functions
 
         public static async Task<string> GetAssetFromSerial(string serial)
         {
-            var value = await munisComms.ReturnSqlValueAsync("famaster", "fama_serial", serial, "fama_tag");
+            var value = await MunisComms.ReturnSqlValueAsync("famaster", "fama_serial", serial, "fama_tag");
             if (value != null)
             {
                 return value.ToString().Trim();
@@ -105,14 +104,14 @@ namespace AssetManager.Data.Functions
 
         public static string GetFYFromAsset(string assetTag)
         {
-            return munisComms.ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_fisc_yr").ToString().Trim();
+            return MunisComms.ReturnSqlValue("famaster", "fama_tag", assetTag, "fama_fisc_yr").ToString().Trim();
         }
 
         public static DateTime GetPODate(string po)
         {
             try
             {
-                return DateTime.Parse(munisComms.ReturnSqlValue("RequisitionItems", "PurchaseOrderNumber", po, "PurchaseOrderDate").ToString().Trim());
+                return DateTime.Parse(MunisComms.ReturnSqlValue("RequisitionItems", "PurchaseOrderNumber", po, "PurchaseOrderDate").ToString().Trim());
             }
             catch (Exception)
             {
@@ -122,13 +121,13 @@ namespace AssetManager.Data.Functions
 
         public static string GetVendorNameFromPO(string po)
         {
-            var vendorNumber = munisComms.ReturnSqlValue("rqdetail", "rqdt_req_no", GetReqNumberFromPO(po), "rqdt_sug_vn", "rqdt_fsc_yr", GetFYFromPO(po));
-            return munisComms.ReturnSqlValue("ap_vendor", "a_vendor_number", vendorNumber, "a_vendor_name").ToString();
+            var vendorNumber = MunisComms.ReturnSqlValue("rqdetail", "rqdt_req_no", GetReqNumberFromPO(po), "rqdt_sug_vn", "rqdt_fsc_yr", GetFYFromPO(po));
+            return MunisComms.ReturnSqlValue("ap_vendor", "a_vendor_number", vendorNumber, "a_vendor_name").ToString();
         }
 
         public static async Task<string> GetVendorNumberFromReqNumber(string reqNum, string fy)
         {
-            var vendorNumber = await munisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_sug_vn", "rqdt_fsc_yr", fy);
+            var vendorNumber = await MunisComms.ReturnSqlValueAsync("rqdetail", "rqdt_req_no", reqNum, "rqdt_sug_vn", "rqdt_fsc_yr", fy);
             if (vendorNumber != null)
             {
                 return vendorNumber.ToString();
@@ -144,7 +143,7 @@ namespace AssetManager.Data.Functions
 
         public static async Task<string> GetPOStatusFromPO(int po)
         {
-            string statusCode = await munisComms.ReturnSqlValueAsync("poheader", "pohd_pur_no", po, "pohd_sta_cd");
+            string statusCode = await MunisComms.ReturnSqlValueAsync("poheader", "pohd_pur_no", po, "pohd_sta_cd");
             if (!string.IsNullOrEmpty(statusCode))
             {
                 int parseCode = -1;
@@ -159,7 +158,7 @@ namespace AssetManager.Data.Functions
 
         public static async Task<string> GetReqStatusFromReqNum(string reqNum, int fy)
         {
-            string statusCode = await munisComms.ReturnSqlValueAsync("rqheader", "rqhd_req_no", reqNum, "rqhd_sta_cd", "rqhd_fsc_yr", fy);
+            string statusCode = await MunisComms.ReturnSqlValueAsync("rqheader", "rqhd_req_no", reqNum, "rqhd_sta_cd", "rqhd_fsc_yr", fy);
             if (!string.IsNullOrEmpty(statusCode))
             {
                 int parseCode = -1;
@@ -381,7 +380,7 @@ namespace AssetManager.Data.Functions
         public static DataTable ListOfEmpsBySup(string supEmpNum)
         {
             string query = "SELECT TOP 100 a_employee_number FROM pr_employee_master WHERE e_supervisor='" + supEmpNum + "'";
-            return munisComms.ReturnSqlTable(query);
+            return MunisComms.ReturnSqlTable(query);
         }
 
         public static async void NewOrgObjView(string org, string obj, string fy, ExtendedForm parentForm)
@@ -391,7 +390,7 @@ namespace AssetManager.Data.Functions
                 parentForm.Waiting();
                 GridForm newGridForm = new GridForm(parentForm, "Org/Obj Info");
                 string glColumns = " glma_org, glma_obj, glma_desc, glma_seg5, glma_bud_yr, glma_orig_bud_cy, glma_rev_bud_cy, glma_encumb_cy, glma_memo_bal_cy, glma_rev_bud_cy-glma_encumb_cy-glma_memo_bal_cy AS 'Funds Available' ";
-                string glMasterQry = "Select TOP " + intMaxResults + " " + glColumns + "FROM glmaster";
+                string glMasterQry = "Select TOP " + maxResults + " " + glColumns + "FROM glmaster";
 
                 QueryParamCollection glParams = new QueryParamCollection();
                 glParams.Add("glma_org", org, true);
@@ -400,28 +399,28 @@ namespace AssetManager.Data.Functions
                 {
                     glParams.Add("glma_obj", obj, true);
 
-                    string rollUpCode = await munisComms.ReturnSqlValueAsync("gl_budget_rollup", "a_org", org, "a_rollup_code");
-                    string rollUpByCodeQry = "SELECT TOP " + intMaxResults + " * FROM gl_budget_rollup WHERE a_rollup_code = '" + rollUpCode + "'";
-                    string budgetQry = "SELECT TOP " + intMaxResults + " a_projection_no,a_org,a_object,db_line,db_bud_desc_line1,db_bud_reason_desc,db_bud_req_qty5,db_bud_unit_cost,db_bud_req_amt5,a_account_id FROM gl_budget_detail_2"; // WHERE a_projection_no='" & FY & "' AND a_org='" & Org & "' AND a_object='" & Obj & "'"
+                    string rollUpCode = await MunisComms.ReturnSqlValueAsync("gl_budget_rollup", "a_org", org, "a_rollup_code");
+                    string rollUpByCodeQry = "SELECT TOP " + maxResults + " * FROM gl_budget_rollup WHERE a_rollup_code = '" + rollUpCode + "'";
+                    string budgetQry = "SELECT TOP " + maxResults + " a_projection_no,a_org,a_object,db_line,db_bud_desc_line1,db_bud_reason_desc,db_bud_req_qty5,db_bud_unit_cost,db_bud_req_amt5,a_account_id FROM gl_budget_detail_2"; // WHERE a_projection_no='" & FY & "' AND a_org='" & Org & "' AND a_object='" & Obj & "'"
 
                     QueryParamCollection budgetParams = new QueryParamCollection();
                     budgetParams.Add("a_projection_no", fy, true);
                     budgetParams.Add("a_org", org, true);
                     budgetParams.Add("a_object", obj, true);
 
-                    newGridForm.AddGrid("OrgGrid", "GL Info:", await munisComms.ReturnSqlTableFromCmdAsync(munisComms.GetSqlCommandFromParams(glMasterQry, glParams.Parameters)));
-                    newGridForm.AddGrid("RollupGrid", "Rollup Info:", await munisComms.ReturnSqlTableAsync(rollUpByCodeQry));
-                    newGridForm.AddGrid("BudgetGrid", "Budget Info:", await munisComms.ReturnSqlTableFromCmdAsync(munisComms.GetSqlCommandFromParams(budgetQry, budgetParams.Parameters)));
+                    newGridForm.AddGrid("OrgGrid", "GL Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(glMasterQry, glParams.Parameters)));
+                    newGridForm.AddGrid("RollupGrid", "Rollup Info:", await MunisComms.ReturnSqlTableAsync(rollUpByCodeQry));
+                    newGridForm.AddGrid("BudgetGrid", "Budget Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(budgetQry, budgetParams.Parameters)));
                 }
                 else // Show Rollup info for all Objects in Org
                 {
-                    string rollUpAllQry = "SELECT TOP " + intMaxResults + " * FROM gl_budget_rollup";
+                    string rollUpAllQry = "SELECT TOP " + maxResults + " * FROM gl_budget_rollup";
 
                     QueryParamCollection rollUpParams = new QueryParamCollection();
                     rollUpParams.Add("a_org", org, true);
 
-                    newGridForm.AddGrid("OrgGrid", "GL Info:", await munisComms.ReturnSqlTableFromCmdAsync(munisComms.GetSqlCommandFromParams(glMasterQry, glParams.Parameters))); //MunisComms.Return_MSSQLTableAsync(Qry))
-                    newGridForm.AddGrid("RollupGrid", "Rollup Info:", await munisComms.ReturnSqlTableFromCmdAsync(munisComms.GetSqlCommandFromParams(rollUpAllQry, rollUpParams.Parameters))); //MunisComms.Return_MSSQLTableAsync("SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
+                    newGridForm.AddGrid("OrgGrid", "GL Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(glMasterQry, glParams.Parameters))); //MunisComms.Return_MSSQLTableAsync(Qry))
+                    newGridForm.AddGrid("RollupGrid", "Rollup Info:", await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(rollUpAllQry, rollUpParams.Parameters))); //MunisComms.Return_MSSQLTableAsync("SELECT TOP " & intMaxResults & " * FROM gl_budget_rollup WHERE a_org = '" & Org & "'"))
                 }
                 newGridForm.Show();
             }
@@ -442,7 +441,7 @@ namespace AssetManager.Data.Functions
                 parentForm.Waiting();
 
                 string columns = "e.a_employee_number,e.a_name_last,e.a_name_first,e.a_org_primary,e.a_object_primary,e.a_location_primary,e.a_location_p_desc,e.a_location_p_short,e.e_work_location,m.a_employee_number as sup_employee_number,m.a_name_first as sup_name_first,m.a_name_last as sup_name_last";
-                string query = "SELECT TOP " + intMaxResults + " " + columns + @"
+                string query = "SELECT TOP " + maxResults + " " + columns + @"
 FROM pr_employee_master e
 INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
 
@@ -450,8 +449,8 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
                 searchParams.Add("e.a_name_last", name.ToUpper(), "OR");
                 searchParams.Add("e.a_name_first", name.ToUpper(), "OR");
 
-                using (var cmd = munisComms.GetSqlCommandFromParams(query, searchParams.Parameters))
-                using (var results = await munisComms.ReturnSqlTableFromCmdAsync(cmd))
+                using (var cmd = MunisComms.GetSqlCommandFromParams(query, searchParams.Parameters))
+                using (var results = await MunisComms.ReturnSqlTableFromCmdAsync(cmd))
                 {
                     if (HasResults(results, parentForm))
                     {
@@ -484,16 +483,16 @@ INNER JOIN pr_employee_master m on e.e_supervisor = m.a_employee_number";
                 {
                     return;
                 }
-                string query = "SELECT TOP " + intMaxResults + @" pohd_pur_no, pohd_fsc_yr, pohd_req_no, pohd_gen_cm, pohd_buy_id, pohd_pre_dt, pohd_exp_dt, pohd_sta_cd, pohd_vnd_cd, pohd_dep_cd, pohd_shp_cd, pohd_tot_amt, pohd_serial
+                string query = "SELECT TOP " + maxResults + @" pohd_pur_no, pohd_fsc_yr, pohd_req_no, pohd_gen_cm, pohd_buy_id, pohd_pre_dt, pohd_exp_dt, pohd_sta_cd, pohd_vnd_cd, pohd_dep_cd, pohd_shp_cd, pohd_tot_amt, pohd_serial
 FROM poheader";
 
                 QueryParamCollection searchParams = new QueryParamCollection();
                 searchParams.Add("pohd_pur_no", po, true);
 
                 GridForm newGridForm = new GridForm(parentForm, "MUNIS PO Info");
-                using (var cmd = munisComms.GetSqlCommandFromParams(query, searchParams.Parameters))
+                using (var cmd = MunisComms.GetSqlCommandFromParams(query, searchParams.Parameters))
                 {
-                    using (var results = await munisComms.ReturnSqlTableFromCmdAsync(cmd))
+                    using (var results = await MunisComms.ReturnSqlTableFromCmdAsync(cmd))
                     {
                         if (HasResults(results, parentForm))
                         {
@@ -569,13 +568,13 @@ FROM poheader";
             {
                 return null;
             }
-            string query = "SELECT TOP " + intMaxResults + " * FROM rqheader";
+            string query = "SELECT TOP " + maxResults + " * FROM rqheader";
 
             QueryParamCollection searchParams = new QueryParamCollection();
             searchParams.Add("rqhd_req_no", reqNumber, true);
             searchParams.Add("rqhd_fsc_yr", fiscalYr, true);
 
-            DataTable results = await munisComms.ReturnSqlTableFromCmdAsync(munisComms.GetSqlCommandFromParams(query, searchParams.Parameters));
+            DataTable results = await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(query, searchParams.Parameters));
 
             if (results.Rows.Count > 0)
             {
@@ -595,8 +594,8 @@ FROM poheader";
             {
                 return null;
             }
-            string nendorName = await munisComms.ReturnSqlValueAsync("ap_vendor", "a_vendor_number", vendorNum, "a_vendor_name");
-            string query = "SELECT TOP " + intMaxResults + @" dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc,
+            string nendorName = await MunisComms.ReturnSqlValueAsync("ap_vendor", "a_vendor_number", vendorNum, "a_vendor_name");
+            string query = "SELECT TOP " + maxResults + @" dbo.rq_gl_info.rg_fiscal_year, dbo.rq_gl_info.a_requisition_no, dbo.rq_gl_info.rg_org, dbo.rq_gl_info.rg_object, dbo.rq_gl_info.a_org_description, dbo.rq_gl_info.a_object_desc,
 '" + nendorName + "' AS a_vendor_name, '" + vendorNum + @"' AS a_vendor_number, dbo.rqdetail.rqdt_pur_no, dbo.rqdetail.rqdt_pur_dt, dbo.rqdetail.rqdt_lin_no, dbo.rqdetail.rqdt_uni_pr, dbo.rqdetail.rqdt_net_pr, dbo.rqdetail.rqdt_qty_no, dbo.rqdetail.rqdt_des_ln, dbo.rqdetail.rqdt_vdr_part_no
 FROM dbo.rq_gl_info INNER JOIN
 dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo.rq_gl_info.a_requisition_no = dbo.rqdetail.rqdt_req_no AND dbo.rq_gl_info.rg_fiscal_year = dbo.rqdetail.rqdt_fsc_yr";
@@ -605,7 +604,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
             searchParams.Add("dbo.rq_gl_info.a_requisition_no", reqNumber, true);
             searchParams.Add("dbo.rq_gl_info.rg_fiscal_year", fiscalYr, true);
 
-            var reqTable = await munisComms.ReturnSqlTableFromCmdAsync(munisComms.GetSqlCommandFromParams(query, searchParams.Parameters));
+            var reqTable = await MunisComms.ReturnSqlTableFromCmdAsync(MunisComms.GetSqlCommandFromParams(query, searchParams.Parameters));
             if (reqTable.Rows.Count > 0)
             {
                 return reqTable;
@@ -692,7 +691,7 @@ dbo.rqdetail ON dbo.rq_gl_info.rg_line_number = dbo.rqdetail.rqdt_lin_no AND dbo
         {
             string columns = "fama_asset,fama_status,fama_class,fama_subcl,fama_tag,fama_serial,fama_desc,fama_dept,fama_loc,FixedAssetLocations.LongDescription,fama_acq_dt,fama_fisc_yr,fama_pur_cost,fama_manuf,fama_model,fama_est_life,fama_repl_dt,fama_purch_memo";
             string query = "SELECT TOP 1 " + columns + " FROM famaster INNER JOIN FixedAssetLocations ON FixedAssetLocations.Code = famaster.fama_loc WHERE fama_tag='" + device.AssetTag + "' AND fama_tag <> '' OR fama_serial='" + device.Serial + "' AND fama_serial <> ''";
-            DataTable results = await munisComms.ReturnSqlTableAsync(query);
+            DataTable results = await MunisComms.ReturnSqlTableAsync(query);
 
             if (results.Rows.Count > 0)
             {

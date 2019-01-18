@@ -1,26 +1,16 @@
-﻿using System;
+﻿using Databases.Data;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
 using System.Data;
-using AssetManager.Helpers;
-using Databases.Data;
+using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace AssetManager.Data.Communications
 {
-
-    public class MunisComms
+    public static class MunisComms
     {
-
-        #region Fields
-
         private const string msSqlConnectString = "server=svr-munis5.core.co.fairfield.oh.us; database=mu_live; trusted_connection=True; Connection Timeout=5";
 
-        #endregion
-
-        #region Methods
-
-        public SqlCommand ReturnSqlCommand(string query)
+        public static SqlCommand ReturnSqlCommand(string query)
         {
             SqlConnection conn = new SqlConnection(msSqlConnectString);
             SqlCommand cmd = new SqlCommand();
@@ -29,7 +19,7 @@ namespace AssetManager.Data.Communications
             return cmd;
         }
 
-        public DataTable ReturnSqlTable(string query)
+        public static DataTable ReturnSqlTable(string query)
         {
             using (SqlConnection conn = new SqlConnection(msSqlConnectString))
             using (DataTable newTable = new DataTable())
@@ -42,7 +32,7 @@ namespace AssetManager.Data.Communications
             }
         }
 
-        public async Task<DataTable> ReturnSqlTableAsync(string query)
+        public static async Task<DataTable> ReturnSqlTableAsync(string query)
         {
             using (SqlConnection conn = new SqlConnection(msSqlConnectString))
             using (DataTable newTable = new DataTable())
@@ -55,7 +45,7 @@ namespace AssetManager.Data.Communications
             }
         }
 
-        public DataTable ReturnSqlTableFromCmd(SqlCommand cmd)
+        public static DataTable ReturnSqlTableFromCmd(SqlCommand cmd)
         {
             using (DataTable newTable = new DataTable())
             using (SqlDataAdapter da = new SqlDataAdapter(cmd))
@@ -66,7 +56,7 @@ namespace AssetManager.Data.Communications
             }
         }
 
-        public async Task<DataTable> ReturnSqlTableFromCmdAsync(SqlCommand cmd)
+        public static async Task<DataTable> ReturnSqlTableFromCmdAsync(SqlCommand cmd)
         {
             using (var conn = cmd.Connection)
             using (DataTable newTable = new DataTable())
@@ -79,7 +69,7 @@ namespace AssetManager.Data.Communications
             }
         }
 
-        public object ReturnSqlValue(string table, object fieldIn, object valueIn, string fieldOut, object fieldIn2 = null, object valueIn2 = null)
+        public static object ReturnSqlValue(string table, object fieldIn, object valueIn, string fieldOut, object fieldIn2 = null, object valueIn2 = null)
         {
             string query = "";
             QueryParamCollection queryParams = new QueryParamCollection();
@@ -105,7 +95,7 @@ namespace AssetManager.Data.Communications
             }
         }
 
-        public async Task<string> ReturnSqlValueAsync(string table, object fieldIn, object valueIn, string fieldOut, object fieldIn2 = null, object valueIn2 = null)
+        public static async Task<string> ReturnSqlValueAsync(string table, object fieldIn, object valueIn, string fieldOut, object fieldIn2 = null, object valueIn2 = null)
         {
             string query = "";
 
@@ -144,7 +134,7 @@ namespace AssetManager.Data.Communications
         /// <param name="partialQuery"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public SqlCommand GetSqlCommandFromParams(string partialQuery, List<DBQueryParameter> parameters)
+        public static SqlCommand GetSqlCommandFromParams(string partialQuery, List<DBQueryParameter> parameters)
         {
             var cmd = ReturnSqlCommand(partialQuery);
             cmd.CommandText += " WHERE";
@@ -175,8 +165,5 @@ namespace AssetManager.Data.Communications
             cmd.CommandText += paramString;
             return cmd;
         }
-
-        #endregion
-
     }
 }

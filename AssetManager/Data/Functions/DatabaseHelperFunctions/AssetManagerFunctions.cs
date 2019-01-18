@@ -249,15 +249,6 @@ namespace AssetManager.Data.Functions
             }
         }
 
-        public static string GetTVApiToken()
-        {
-            using (DataTable results = DBFactory.GetDatabase().DataTableFromQueryString(Queries.SelectTVApiToken))
-            {
-                var token = results.Rows[0]["apitoken"].ToString();
-                return token;
-            }
-        }
-
         public static string GetMunisCodeFromAssetCode(string assetCode)
         {
             return GetSqlValue("munis_codes", "asset_man_code", assetCode, "munis_code");

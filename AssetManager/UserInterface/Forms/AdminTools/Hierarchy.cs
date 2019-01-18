@@ -158,12 +158,11 @@ namespace AssetManager.UserInterface.Forms.AdminTools
         /// <returns></returns>
         private async Task<List<Employee>> GetEmployeeList()
         {
-            MunisComms comms = new MunisComms();
             string query = "SELECT a_employee_number,a_name_last,a_name_first,e_supervisor FROM pr_employee_master";
 
             var tmpList = new List<Employee>();
 
-            using (var results = await comms.ReturnSqlTableAsync(query))
+            using (var results = await MunisComms.ReturnSqlTableAsync(query))
             {
                 foreach (DataRow row in results.Rows)
                 {
