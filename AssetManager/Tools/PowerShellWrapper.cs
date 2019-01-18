@@ -1,9 +1,7 @@
 ﻿using AssetManager.Data;
 using AssetManager.Helpers;
 using AssetManager.Security;
-using AssetManager.Data.Classes;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -22,6 +20,7 @@ namespace AssetManager.Tools
         private string targetHostname;
 
         public event EventHandler InvocationStateChanged;
+
         public event EventHandler<string> PowershellOutput;
 
         protected virtual void OnInvocationStateChanged(PSInvocationStateChangedEventArgs e)
@@ -39,7 +38,6 @@ namespace AssetManager.Tools
 
         public PowerShellWrapper()
         {
-
         }
 
         public PowerShellWrapper(string targetHostname)
@@ -83,11 +81,8 @@ namespace AssetManager.Tools
                         remoteRunSpace.Close();
                         pline.Stop();
 
-
                         return DataConsistency.CleanDBValue((stringBuilder.ToString())).ToString();
-
                     }
-
                 }
             }
             catch (Exception ex)
@@ -139,9 +134,7 @@ namespace AssetManager.Tools
                         remoteRunSpace.Close();
                         powerSh.Stop();
                         return DataConsistency.CleanDBValue((stringBuilder.ToString())).ToString();
-
                     }
-
                 }
             }
             catch (Exception ex)
@@ -183,26 +176,31 @@ namespace AssetManager.Tools
             {
                 var psResults = await Task.Run(() =>
                 {
-                        Collection<PSObject> results = session.Invoke();
-                        StringBuilder stringBuilder = new StringBuilder();
+                    Collection<PSObject> results = session.Invoke();
+                    StringBuilder stringBuilder = new StringBuilder();
 
-                        foreach (var obj in results)
-                        {
-                            stringBuilder.AppendLine(obj.ToString());
-                        }
-                        return DataConsistency.CleanDBValue((stringBuilder.ToString())).ToString();
+                    foreach (var obj in results)
+                    {
+                        stringBuilder.AppendLine(obj.ToString());
+                    }
+                    return DataConsistency.CleanDBValue((stringBuilder.ToString())).ToString();
                 });
 
                 if (!string.IsNullOrEmpty(psResults))
                 {
+                    string results = psResults.ToLower();
 
-                    if (psResults.ToLower().Contains("success") || psResults.ToLower().Contains("true"))
+                    if (results.Contains("success") || results.Contains("true"))
                     {
                         return true;
                     }
-                    else
+                    else if (results.Contains("error") || results.Contains("fail"))
                     {
                         return false;
+                    }
+                    else
+                    {
+                        return true;
                     }
                 }
                 else
@@ -337,7 +335,6 @@ namespace AssetManager.Tools
             }
         }
 
-
         private void PSEventHandler(object sender, DataAddedEventArgs e)
         {
             //TODO: Fix or remove this.
@@ -386,9 +383,6 @@ namespace AssetManager.Tools
                 errorText += e.Message + "\\n";
                 return errorText;
             }
-
         }
-
     }
-
 }
