@@ -1,4 +1,7 @@
 <Deployment Name="Enable Local Admin" OrderPriority="0">
+	<Description>
+	Enables the local Administrator account and sets the password.
+	</Description>
 	
 	<Command Type="Prompt">
 		<LogMessage Type="Notice">

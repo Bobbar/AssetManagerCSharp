@@ -1,16 +1,15 @@
-﻿using AdvancedDialog;
-using AssetManager.Data.Classes;
+﻿using AssetManager.Data.Classes;
 using AssetManager.Helpers;
 using AssetManager.UserInterface.CustomControls;
 using DeploymentAssemblies;
 using DeploymentAssemblies.XmlParsing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
 
 namespace AssetManager.Tools.Deployment
 {
@@ -28,21 +27,6 @@ namespace AssetManager.Tools.Deployment
             deploy = new DeploymentUI(parentForm, targetDevice);
             deploy.UsePowerShell();
             deploy.UsePsExec();
-        }
-
-        /// <summary>
-        /// Container for holding deployment methods and a descriptive name.
-        /// </summary>
-        private struct TaskInfo
-        {
-            public Func<Task<bool>> TaskMethod { get; set; }
-            public string TaskName { get; set; }
-
-            public TaskInfo(Func<Task<bool>> taskMethod, string taskName)
-            {
-                TaskMethod = taskMethod;
-                TaskName = taskName;
-            }
         }
 
         private async Task<List<TaskInfo>> GetScripts()
@@ -79,14 +63,13 @@ namespace AssetManager.Tools.Deployment
                         deploy.LogMessage(fileInfo.Name + " - ERROR", MessageType.Error);
                         deploy.LogMessage(ex.ToString(), MessageType.Error);
                     }
-                   
                 }
 
                 // Sort the module instances by deployment priority.
                 readers = readers.OrderBy((r) => r.OrderPriority).ToList();
 
                 // Create new tasks and add them to the collection.
-                readers.ForEach((r) => taskList.Add(new TaskInfo(() => r.StartDeployment(), r.DeploymentName)));
+                readers.ForEach((r) => taskList.Add(new TaskInfo(() => r.StartDeployment(), r.DeploymentName, r.DeploymentDescription)));
             });
 
             var elapTime = loadTimer.ElapsedMilliseconds;
@@ -102,51 +85,15 @@ namespace AssetManager.Tools.Deployment
         /// <param name="targetDevice"></param>
         private async Task ChooseDeployments(Device targetDevice)
         {
-            using (var newDialog = new Dialog(parentForm))
+            var depList = await GetScripts();
+
+            using (var selectDepsForm = new SelectDeploymentsForm(parentForm, depList))
             {
-                newDialog.Text = "Select Installs";
-                newDialog.AutoSize = false;
-                newDialog.Height = 500;
-                newDialog.Width = 260;
+                selectDepsForm.ShowDialog();
 
-                var selectListBox = new CheckedListBox();
-                selectListBox.CheckOnClick = true;
-                selectListBox.Size = new System.Drawing.Size(300, 250);
-                selectListBox.DisplayMember = nameof(TaskInfo.TaskName);
-
-                var depList = await GetScripts();
-
-                foreach (var d in depList)
+                if (selectDepsForm.DialogResult == DialogResult.OK)
                 {
-                    selectListBox.Items.Add(d, false);
-                }
-                // Add deployment selection list.
-                newDialog.AddCustomControl("TaskList", "Select items to install:", selectListBox);
-
-                // Add a 'Select None' button with lamba action.
-                var selectNone = newDialog.AddButton("selectNoneButton", "Select None", () =>
-                 {
-                     for (int i = 0; i < selectListBox.Items.Count; i++)
-                     {
-                         selectListBox.SetItemChecked(i, false);
-                     }
-                 });
-                selectNone.Width = 200;
-
-                // Add a 'Select All' button with lamba action.
-                var selectAll = newDialog.AddButton("selectAllButton", "Select All", () =>
-               {
-                   for (int i = 0; i < selectListBox.Items.Count; i++)
-                   {
-                       selectListBox.SetItemChecked(i, true);
-                   }
-               });
-                selectAll.Width = 200;
-
-                newDialog.ShowDialog();
-                if (newDialog.DialogResult == DialogResult.OK)
-                {
-                    foreach (TaskInfo task in selectListBox.CheckedItems)
+                    foreach (TaskInfo task in selectDepsForm.SelectedDeployments)
                     {
                         deployments.Enqueue(task);
                     }

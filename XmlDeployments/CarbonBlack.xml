@@ -1,4 +1,7 @@
 <Deployment Name="Carbon Black" OrderPriority="98">
+	<Description>
+	Installs Carbon Black protection/anti-virus client.
+	</Description>
 	
 	<Command Type="SimplePSExec" Title="Carbon Black Install">
 		<String>

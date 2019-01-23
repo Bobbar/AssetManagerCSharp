@@ -1,4 +1,9 @@
 <Deployment Name="Adobe Reader" OrderPriority="97">
+	<Description>
+	Installs Adobe Reader DC.
+	
+	Note: This installer sometimes hangs or takes a very long time to exit.
+	</Description>
 	
 	<Command Type="SimplePSExec" Title="Adobe Reader Install">
 		<String>
@@ -7,14 +12,14 @@
 		<OnSuccess>
 			<Command Type="Prompt">
 				<LogMessage Type="Success">
-				MVPS Installed Successfully!
+				Adobe Reader Installed Successfully!
 				</LogMessage>
 			</Command>
 		</OnSuccess>
 		<OnFailure>
 			<Command Type="Prompt">
 				<LogMessage Type="Error">
-				Error installing MVPS!
+				Error installing Adobe Reader!
 				</LogMessage>
 			</Command>
 		</OnFailure>

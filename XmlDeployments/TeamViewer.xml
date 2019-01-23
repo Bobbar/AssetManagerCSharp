@@ -1,4 +1,7 @@
 <Deployment Name="TeamViewer" OrderPriority="0">
+	<Description>
+	Installs TeamViewer and assigns the client to company access and security policies.
+	</Description>
 
 	<Command Type="AdvancedPsExec" Title="Copy Deployement Files">
 		<String>

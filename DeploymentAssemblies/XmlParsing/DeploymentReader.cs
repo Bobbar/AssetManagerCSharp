@@ -20,6 +20,14 @@ namespace DeploymentAssemblies.XmlParsing
             }
         }
 
+        public string DeploymentDescription
+        {
+            get
+            {
+                return _deploymenDescription;
+            }
+        }
+
         public int OrderPriority
         {
             get
@@ -28,6 +36,7 @@ namespace DeploymentAssemblies.XmlParsing
             }
         }
 
+        private string _deploymenDescription;
         private string _deploymentName;
         private int _orderPriority = 0;
         private XElement _deploymentElem;
@@ -62,6 +71,12 @@ namespace DeploymentAssemblies.XmlParsing
         {
             _deploymentName = XmlHelper.GetAttribute(_deploymentElem, "Name");
             var orderVal = XmlHelper.GetAttribute(_deploymentElem, "OrderPriority");
+            var descElem = _deploymentElem.Element("Description");
+
+            if (descElem != null)
+            {
+                _deploymenDescription = descElem.Value.Trim().Replace("\t","");
+            }
 
             if (!string.IsNullOrEmpty(orderVal))
             {
@@ -76,6 +91,10 @@ namespace DeploymentAssemblies.XmlParsing
             // Parse and execute all the command elements and return if any are unsuccessful.
             foreach (var cmd in cmdElements)
             {
+                // Skip deployment description element if present.
+                if (cmd.Name == "Description")
+                    continue;
+
                 success = await ExecuteCommandElement(cmd);
 
                 if (!success)

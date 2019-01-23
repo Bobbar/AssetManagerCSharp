@@ -1,4 +1,7 @@
 <Deployment Name="MapWinGIS">
+	<Description>
+	Installs MapWinGIS libraries used by several of Ray Schmidt's Access applications.
+	</Description>
 	
 	<Command Type="SimplePSExec" Title="Visual C++ Redist Install">
 		<String>

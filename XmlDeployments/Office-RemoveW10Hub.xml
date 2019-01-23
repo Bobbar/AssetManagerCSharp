@@ -1,61 +1,41 @@
-<Deployment Name="Remove Win 10 OEM Office">
-
-	<Command Type="Prompt">
-		<LogMessage Type="Notice" Value="Copying files to target computer..."/>
-	</Command>
-
+<Deployment Name="Remove Win 10 OEM Office Packages">
+	<Description>
+	Removes Office apps built into Windows 10. 
 	
+	These apps often conflict with company deployed Office versions and should be removed.
 	
-	<Command Type="AdvancedPsExec" Title="Copy Deployement Files">
-		<String>
-		robocopy "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Deployments\Office" "C:\Temp\OfficeDeploy" *.* /E /R:1
-		</String>
-		
-		<ExitCodeResponse>
-			<ExitCode Value="0,1" IsSuccess="True">
-				<Command Type="Prompt">
-					<LogMessage Type="Success" Value="Copy successful!"/>
-				</Command>
-			</ExitCode>
-			
-			<ExitCode Value="" IsSuccess="False">
-				<Command Type="Prompt">
-					<LogMessage Type="Error" Value="Copy failed!"/>
-				</Command>
-			</ExitCode>
-		</ExitCodeResponse>
-	</Command>
+	Attempts to resolve the following issues:
+	- Excel opening blank 
+	- Outlook crashing at signature window 
+	- Duplicate Office icons, 
+	
+	This script is already included within the Office deployment script.
+	</Description>
 	
 	<Command Type="Prompt">
-		<LogMessage Type="Notice" Value="*** This will only remove the OEM Office apps for the existing/previously logged-in user(s) ***"/>
-		<LogMessage Type="Notice" Value="*** The OEM Office Apps will reinstall at login for any user that hasn't previously logged into this device... ***"/>
-		<LogMessage Type="Notice" Value="(ノಠ益ಠ)ノ彡┻━┻"/>
+		<LogMessage Type="Notice" Value="Removing provisioned Office Packages..."/>
 	</Command>
-
 	
-	<Command Type="SimplePowerShellCommand" Title="Remove Windows 10 OEM Office Duplicates">
-		
+	<Command Type="SimplePowerShellCommand" Title="Remove Windows 10 OEM Office Packages">
+	
 		<PSCommands>
-			<PSCommand IsScript="True" UseLocalScope="True" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls\RemoveAppXAllUsers.ps1 '*OfficeHub*'">
-				<PSParameter Name="Wait"/>
-				<PSParameter Name="NoNewWindow"/>
+			<PSCommand IsScript="True">
+				Get-AppxProvisionedPackage -Online | %{if ($_.packagename -match "Microsoft.Office.Desktop") {$_ | Remove-AppxProvisionedPackage -AllUsers}}
 			</PSCommand>
 			
-			<PSCommand IsScript="True" UseLocalScope="True" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls\RemoveAppXAllUsers.ps1 '*OneNote*'">
-				<PSParameter Name="Wait"/>
-				<PSParameter Name="NoNewWindow"/>
+			<PSCommand IsScript="True">
+				Get-AppxProvisionedPackage -Online | %{if ($_.packagename -match "Microsoft.Office.OneNote") {$_ | Remove-AppxProvisionedPackage -AllUsers}}
 			</PSCommand>
 			
-			<PSCommand IsScript="True" UseLocalScope="True" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls\RemoveAppXAllUsers.ps1 '*Microsoft.Office.Desktop*'">
-				<PSParameter Name="Wait"/>
-				<PSParameter Name="NoNewWindow"/>
+			<PSCommand IsScript="True">
+				Get-AppxProvisionedPackage -Online | %{if ($_.packagename -match "Microsoft.MicrosoftOfficeHub") {$_ | Remove-AppxProvisionedPackage -AllUsers}}
 			</PSCommand>
-						
+			
 		</PSCommands>
 		
 		<OnSuccess>
 			<Command Type="Prompt">
-				<LogMessage Type="Success" Value="Windows 10 OEM Office duplicates removed."/>
+				<LogMessage Type="Success" Value="Windows 10 OEM Office packages removed."/>
 			</Command>
 		</OnSuccess>
 		<OnFailure>
@@ -66,27 +46,5 @@
 		</OnFailure>
 			
 	</Command>
-
-	<Command Type="Prompt">
-		<LogMessage Type="Notice" Value="Deleting temp files..."/>
-	</Command>
 	
-	<Command Type="SimplePowerShellCommand" Title="Remove Previous Office Versions">
-	
-		<PSCommands>
-			<PSCommand IsScript="False" UseLocalScope="True" Value="Remove-Item">
-				<PSParameter Name="Recurse"/>
-				<PSParameter Name="Force"/>
-				<PSParameter Name="Path" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls"/>
-			</PSCommand>
-		</PSCommands>
-		
-		<OnFailure>
-			<Command Type="Prompt">
-				<LogMessage Type="Error" Value="Delete failed!"/>
-			</Command>
-		</OnFailure>
-			
-	</Command>
-
 </Deployment>

@@ -1,12 +1,15 @@
 <Deployment Name="Provider Assistant">
-
+	<Description>
+	Deploys the Provider Assistant application and Desktop shortcut.
+	</Description>
+	
 	<Command Type="Prompt">
 		<LogMessage Type="Notice" Value="Copying files to target computer..."/>
 	</Command>
 	
 	<Command Type="AdvancedPsExec" Title="Copy Files">
 		<String>
-		robocopy "\\core.co.fairfield.oh.us\dfs1\fcdd\ocshare\Common Information\Applications\Provider Assistant\Deploymentt" "C:\apps\ProviderAssistant" *.* /E /R:1
+		robocopy "\\core.co.fairfield.oh.us\dfs1\fcdd\ocshare\Common Information\Applications\Provider Assistant\Deployment" "C:\apps\ProviderAssistant" *.* /E /R:1
 		</String>
 		
 		<ExitCodeResponse>

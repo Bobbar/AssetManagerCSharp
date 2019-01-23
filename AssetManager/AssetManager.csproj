@@ -183,6 +183,13 @@
     <Compile Include="Helpers\Watchdog\WatchdogConnectionStatus.cs" />
     <Compile Include="Helpers\Watchdog\WatchdogStatusEventArgs.cs" />
     <Compile Include="Helpers\Watchdog\WatchdogTickEventArgs.cs" />
+    <Compile Include="Tools\Deployment\DeploymentUI\SelectDeploymentsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tools\Deployment\DeploymentUI\SelectDeploymentsForm.Designer.cs">
+      <DependentUpon>SelectDeploymentsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\Deployment\TaskInfo.cs" />
     <Compile Include="Tools\PerformanceTweaks\CachedResourceManager.cs" />
     <Compile Include="Data\Databases.cs" />
     <Compile Include="Data\Classes\DataStructures.cs" />
@@ -435,6 +442,9 @@
     <EmbeddedResource Include="Resources\Exh_K-01_Asset_Input_Formnew.pdf" />
     <EmbeddedResource Include="Resources\Exh_K-02_Asset_Disposal_Form.pdf" />
     <EmbeddedResource Include="Resources\Exh_K-03_Asset_Transfer_Form.pdf" />
+    <EmbeddedResource Include="Tools\Deployment\DeploymentUI\SelectDeploymentsForm.resx">
+      <DependentUpon>SelectDeploymentsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\CustomControls\RemoteTools\PSExecCommandForm.resx">
       <DependentUpon>PSExecCommandForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -1,4 +1,12 @@
 <Deployment Name="Laptop/Windows Tablet Tweaks" OrderPriority="0">
+	<Description>
+	Applies several registry and service tweaks intended to improve user experience with mobile Windows devices.
+	
+	1) Disables IntelPROSet service and enables Windows native Wifi management.
+	2) Adds the FCDD-PRIVATE Wifi profile.
+	3) Applies a registry entry to force the device automatically connect to the FCDD-PRIVATE Wifi at login.
+	4) Disables the 'Sleep-on-close' power management option.
+	</Description>
 	
 	<Command Type="Prompt">
 		<LogMessage Type="Notice">

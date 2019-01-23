@@ -1,21 +1,9 @@
-<Deployment Name="Gatekeeper" OrderPriority="0">
+<Deployment Name="Gatekeeper - RegFix Only" OrderPriority="0">
 	<Description>
-	Installs Gatekeeper client and registry fix.
+	Applies the Gatekeeper ODBC registry fix only.
 	
-	Note: Does not apply the most current update. Execute a Gatekeeper update following this deployment.
+	Execute this item if a user is getting a prompt for database/server info when trying to launch Gatekeeper.
 	</Description>
-	
-	<Command Type="SimplePSExec" Title="Gatekeeper Client Install">
-		<String>
-		msiexec.exe /i \\svr-ddas1.core.co.fairfield.oh.us\PSiServ\Gatekeeper\Install\Full\ClientFull.msi /qn /norestart
-		</String>
-	</Command>
-	
-	<Command Type="SimplePSExec" Title="Gatekeeper Update Install">
-		<String>
-		msiexec.exe /i \\svr-ddas1.core.co.fairfield.oh.us\PSiServ\Gatekeeper\Install\Upgrade\Setup.msi /qn /norestart
-		</String>
-	</Command>
 	
 	<Command Type="Prompt">
 		<LogMessage Type="Notice">

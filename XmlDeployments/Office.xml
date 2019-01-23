@@ -1,5 +1,8 @@
 <Deployment Name="Office 365">
-
+	<Description>
+	Removes previous versions of Office and then deploys Office 365 from a shared directory located at the Courthouse.
+	</Description>
+		
 	<Command Type="Prompt">
 		<LogMessage Type="Notice" Value="Copying files to target computer..."/>
 	</Command>
@@ -32,19 +35,16 @@
 	<Command Type="SimplePowerShellCommand" Title="Remove Previous Office Versions">
 		
 		<PSCommands>
-			<PSCommand IsScript="True" UseLocalScope="True" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls\RemoveAppXAllUsers.ps1 '*OfficeHub*'">
-				<PSParameter Name="Wait"/>
-				<PSParameter Name="NoNewWindow"/>
+			<PSCommand IsScript="True">
+				Get-AppxProvisionedPackage -Online | %{if ($_.packagename -match "Microsoft.Office.Desktop") {$_ | Remove-AppxProvisionedPackage -AllUsers}}
 			</PSCommand>
 			
-			<PSCommand IsScript="True" UseLocalScope="True" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls\RemoveAppXAllUsers.ps1 '*OneNote*'">
-				<PSParameter Name="Wait"/>
-				<PSParameter Name="NoNewWindow"/>
+			<PSCommand IsScript="True">
+				Get-AppxProvisionedPackage -Online | %{if ($_.packagename -match "Microsoft.Office.OneNote") {$_ | Remove-AppxProvisionedPackage -AllUsers}}
 			</PSCommand>
 			
-			<PSCommand IsScript="True" UseLocalScope="True" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls\RemoveAppXAllUsers.ps1 '*Microsoft.Office.Desktop*'">
-				<PSParameter Name="Wait"/>
-				<PSParameter Name="NoNewWindow"/>
+			<PSCommand IsScript="True">
+				Get-AppxProvisionedPackage -Online | %{if ($_.packagename -match "Microsoft.MicrosoftOfficeHub") {$_ | Remove-AppxProvisionedPackage -AllUsers}}
 			</PSCommand>
 			
 			<PSCommand IsScript="True" UseLocalScope="True" Value="Set-Location">

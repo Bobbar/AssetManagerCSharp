@@ -13,7 +13,9 @@ Deployment:
 		
 		OrderPriority: ** Optional. Default = 0 **
 			Specifies the deployment priority. A higher value means the deployment will be displayed/performed later in the process.
-			
+
+Description:
+  Specifies a detailed description to be displayed in the selection UI.
 
 Command:
 	Specifies a deployment command to be performed. Commands are performed in order from top to bottom, and can be nested within any result block.
@@ -270,7 +272,10 @@ Notes:
  <!-- EXAMPLES -->
  
 <Deployment Name="Testing" OrderPriority="99">
-	
+  <Description>
+    This is an example deployment.
+  </Description>
+  
 	<Command Type="Prompt">
 		<LogMessage Type="Notice">
 		IPCONFIG....

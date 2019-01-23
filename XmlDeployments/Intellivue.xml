@@ -1,4 +1,7 @@
 <Deployment Name="Intellivue">
+	<Description>
+	Installs Intellivue.
+	</Description>
 	
 	<Command Type="SimplePSExec" Title="Intellivue Install">
 		<String>

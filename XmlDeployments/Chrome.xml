@@ -1,4 +1,7 @@
 <Deployment Name="Chrome Install">
+	<Description>
+	Installs latest Chrome version via web installer.
+	</Description>
 	
 	<Command Type="SimplePowerShell" Title="Chrome Install">
 		<String>

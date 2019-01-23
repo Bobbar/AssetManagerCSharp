@@ -1,5 +1,8 @@
 <Deployment Name="Spark Communicator">
-
+	<Description>
+	Installs Spark Communicator.
+	</Description>
+	
 	<Command Type="SimplePsExec" Title="Spark Communicator Install">
 		<String>
 		"\\core.co.fairfield.oh.us\dfs1\pub\misc\xmpp\spark_2_6_3.exe" -q

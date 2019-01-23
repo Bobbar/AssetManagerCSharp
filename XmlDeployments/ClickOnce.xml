@@ -1,4 +1,9 @@
 <Deployment Name="ClickOnce Install" OrderPriority="0">
+	<Description>
+	Installs .NET 4.7.1 runtime and imports the certificate for ClickOnce applications signed from Bobby Lovell's profile. 
+	
+	These prerequisites are required prior to installing the Phone Directory or Asset Manager applications.
+	</Description>
 	
 	<Command Type="Prompt">
 		<LogMessage Type="Notice">

@@ -1,4 +1,7 @@
 <Deployment Name="Ghostscript PDF" OrderPriority="0">
+	<Description>
+	Installs the Ghostscript PDF driver and printer used by Gatekeeper for generating reports.
+	</Description>	
 	
 	<Command Type="SimplePSExec" Title="Ghostscript PDF Driver Install">
 		<String>

@@ -1,4 +1,9 @@
 <Deployment Name="ShrewSoft VPN Client" OrderPriority="999">
+	<Description>
+	Installs the ShewSoft VPN Client and FCBDD-REMOTE profile.
+	
+	Note: This install causes a brief interruption of the network connection.
+	</Description>
 	
 	<Command Type="AdvancedPsExec" Title="VPN Client Install">
 		<String>

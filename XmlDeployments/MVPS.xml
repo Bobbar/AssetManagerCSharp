@@ -1,4 +1,11 @@
 <Deployment Name="MVPS Install">
+	<Description>
+	Installs the current MVPS Hosts File from the web.
+	
+	MVPS hosts file is a powerful low-level AD blocker.
+	
+	Note: This replaces the default hosts file, and can also cause some Ad heavy websites to become unusable.
+	</Description>
 	
 	<Command Type="SimplePSExec" Title="MVPS Host File Install">
 		<String>
