@@ -101,7 +101,7 @@
 			<PSCommand IsScript="False" UseLocalScope="True" Value="Remove-Item">
 				<PSParameter Name="Recurse"/>
 				<PSParameter Name="Force"/>
-				<PSParameter Name="Path" Value="C:\Temp\OfficeDeploy\Remove-PreviousOfficeInstalls"/>
+				<PSParameter Name="Path" Value="C:\Temp\OfficeDeploy"/>
 			</PSCommand>
 		</PSCommands>
 		

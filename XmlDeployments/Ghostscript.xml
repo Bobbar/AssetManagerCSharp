@@ -3,6 +3,42 @@
 	Installs the Ghostscript PDF driver and printer used by Gatekeeper for generating reports.
 	</Description>	
 	
+	<Command Type="AdvancedPsExec" Title="Copy Certificate">
+		<String>
+		robocopy "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Deployments\GhostscriptPDF\cert" "C:\Temp\Deploy\Ghostscript" *.* /E /R:1
+		</String>
+		
+		<ExitCodeResponse>
+			<ExitCode Value="0,1" IsSuccess="True">
+				<Command Type="Prompt">
+					<LogMessage Type="Success">
+					Copy Successful!
+					</LogMessage>
+				</Command>
+			</ExitCode>				
+		</ExitCodeResponse>
+	</Command>
+	
+	<Command Type="SimplePSExec" Title="Certificate Install">
+		<String>
+		certutil.exe -addstore trustedpublisher C:\Temp\Deploy\Ghostscript\ArtifexCert.cer
+		</String>
+		<OnSuccess>
+			<Command Type="Prompt">
+				<LogMessage Type="Success">
+				Certificate installed!
+				</LogMessage>
+			</Command>
+		</OnSuccess>
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error">
+				Certificate install failed!
+				</LogMessage>
+			</Command>
+		</OnFailure>
+	</Command>
+		
 	<Command Type="SimplePSExec" Title="Ghostscript PDF Driver Install">
 		<String>
 		rundll32 printui.dll, PrintUIEntry /ia /m "Ghostscript PDF" /K /h x64 /v 3 /f "\\core.co.fairfield.oh.us\dfs1\fcdd\files\Information Technology\Software\Deployments\GhostscriptPDF\lib\ghostpdf.inf" /F "C:\Windows\INF\ntprint.inf" /q
@@ -36,6 +72,28 @@
 			</Command>
 		</OnFailure>
 		
+	</Command>
+	
+	<Command Type="Prompt">
+		<LogMessage Type="Notice" Value="Deleting temp files..."/>
+	</Command>
+	
+	<Command Type="SimplePowerShellCommand" Title="Remove Previous Office Versions">
+	
+		<PSCommands>
+			<PSCommand IsScript="False" UseLocalScope="True" Value="Remove-Item">
+				<PSParameter Name="Recurse"/>
+				<PSParameter Name="Force"/>
+				<PSParameter Name="Path" Value="C:\Temp\Deploy"/>
+			</PSCommand>
+		</PSCommands>
+		
+		<OnFailure>
+			<Command Type="Prompt">
+				<LogMessage Type="Error" Value="Delete failed!"/>
+			</Command>
+		</OnFailure>
+			
 	</Command>
 		
 </Deployment>
