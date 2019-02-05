@@ -10,8 +10,8 @@ namespace AssetManager.Data.Communications
 
         #region "Fields"
 
-        private static readonly string ftpPass = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ=";
-        private static readonly string ftpUser = "asset_manager";
+        private const string ftpPass = "BzPOHPXLdGu9CxaHTAEUCXY4Oa5EVM2B/G7O9En28LQ=";
+        private const string ftpUser = "asset_manager";
         private static NetworkCredential ftpCreds = new NetworkCredential(ftpUser, SecurityTools.DecodePassword(ftpPass));
 
         private static int intSocketTimeout = 5000;

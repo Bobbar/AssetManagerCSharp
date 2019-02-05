@@ -1501,6 +1501,7 @@ namespace AssetManager.UserInterface.Forms
                     }
 
                     taskCancelTokenSource?.Dispose();
+                    filenameFont?.Dispose();
                     AttachCountChanged = null;
                 }
             }

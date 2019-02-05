@@ -229,7 +229,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
                 SetStatus(UpdateStatus.Starting);
 
                 // Check for ping.
-                if (!await CanPing(targetDevice.HostName))
+                if (!await CanPing())
                 {
                     SetStatus(UpdateStatus.Error, "Cannot ping");
                     Log("Cannot ping target device.");
@@ -321,7 +321,7 @@ namespace AssetManager.UserInterface.Forms.Gatekeeper
             }
         }
 
-        private async Task<bool> CanPing(string hostname)
+        private async Task<bool> CanPing()
         {
             var ping = new Ping();
             var reply = await Task.Run(() => { return ping.Send(hostname); });

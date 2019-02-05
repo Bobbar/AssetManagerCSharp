@@ -1675,6 +1675,7 @@ namespace AssetManager.UserInterface.Forms.Sibi
                     munisToolBar.Dispose();
                     windowList.Dispose();
                     controlParser.Dispose();
+                    currentRequest?.Dispose();
                 }
             }
             finally

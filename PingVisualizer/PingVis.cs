@@ -1000,6 +1000,13 @@ namespace PingVisualizer
 
                     disposeEvent.Dispose();
                     renderEvent.Dispose();
+                    refreshBarsEvent.Dispose();
+
+                    mouseOverTextBrush.Dispose();
+                    mouseOverBarBrush.Dispose();
+
+                    mousePingInfoFont?.Dispose();
+                    pingInfoFont?.Dispose();
                 }
 
                 disposedValue = true;

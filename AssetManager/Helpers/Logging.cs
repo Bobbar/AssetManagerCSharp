@@ -5,12 +5,12 @@ namespace AssetManager.Helpers
 {
     public static class Logging
     {
-        public static void Logger(string Message)
+        public static void Logger(string message)
         {
             try
             {
-                short MaxLogSizeKiloBytes = 500;
-                string DateStamp = DateTime.Now.ToString();
+                short maxLogSizeKiloBytes = 500;
+                string dateStamp = DateTime.Now.ToString();
                 FileInfo infoReader = null;
                 infoReader = new FileInfo(Paths.LogPath);
                 if (!File.Exists(Paths.LogPath))
@@ -18,17 +18,17 @@ namespace AssetManager.Helpers
                     Directory.CreateDirectory(Paths.AppDir);
                     using (StreamWriter sw = File.CreateText(Paths.LogPath))
                     {
-                        sw.WriteLine(DateStamp + ": Log Created...");
-                        sw.WriteLine(DateStamp + ": " + Message);
+                        sw.WriteLine(dateStamp + ": Log Created...");
+                        sw.WriteLine(dateStamp + ": " + message);
                     }
                 }
                 else
                 {
-                    if ((infoReader.Length / 1000) < MaxLogSizeKiloBytes)
+                    if ((infoReader.Length / 1000) < maxLogSizeKiloBytes)
                     {
                         using (StreamWriter sw = File.AppendText(Paths.LogPath))
                         {
-                            sw.WriteLine(DateStamp + ": " + Message);
+                            sw.WriteLine(dateStamp + ": " + message);
                         }
                     }
                     else
@@ -37,7 +37,7 @@ namespace AssetManager.Helpers
                         {
                             using (StreamWriter sw = File.AppendText(Paths.LogPath))
                             {
-                                sw.WriteLine(DateStamp + ": " + Message);
+                                sw.WriteLine(dateStamp + ": " + message);
                             }
                         }
                     }

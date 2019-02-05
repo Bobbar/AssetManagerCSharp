@@ -682,7 +682,7 @@ namespace AssetManager.UserInterface.CustomControls
             messageQueue.Clear();
             slideTimer.Stop();
             pauseCancel.Dispose();
-
+        
             if (!flashReset.SafeWaitHandle.IsClosed)
             {
                 flashReset.Dispose();

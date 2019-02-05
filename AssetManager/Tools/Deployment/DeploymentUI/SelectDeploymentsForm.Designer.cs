@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.StartButton = new System.Windows.Forms.Button();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.CancelDeploymentButton = new System.Windows.Forms.Button();
             this.hotTrackSplitContainer1 = new AssetManager.UserInterface.CustomControls.HotTrackSplitContainer();
             this.ChooseGroupBox = new System.Windows.Forms.GroupBox();
             this.SelectListBox = new System.Windows.Forms.ListView();
@@ -61,14 +61,14 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CancelButton.Location = new System.Drawing.Point(646, 502);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(135, 42);
-            this.CancelButton.TabIndex = 2;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.CancelDeploymentButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.CancelDeploymentButton.Location = new System.Drawing.Point(646, 502);
+            this.CancelDeploymentButton.Name = "CancelButton";
+            this.CancelDeploymentButton.Size = new System.Drawing.Size(135, 42);
+            this.CancelDeploymentButton.TabIndex = 2;
+            this.CancelDeploymentButton.Text = "Cancel";
+            this.CancelDeploymentButton.UseVisualStyleBackColor = true;
+            this.CancelDeploymentButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // hotTrackSplitContainer1
             // 
@@ -200,7 +200,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(793, 556);
             this.Controls.Add(this.hotTrackSplitContainer1);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.CancelDeploymentButton);
             this.Controls.Add(this.StartButton);
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "SelectDeploymentsForm";
@@ -219,7 +219,7 @@
 
         #endregion
         private System.Windows.Forms.Button StartButton;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button CancelDeploymentButton;
         private UserInterface.CustomControls.HotTrackSplitContainer hotTrackSplitContainer1;
         private System.Windows.Forms.GroupBox ChooseGroupBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;

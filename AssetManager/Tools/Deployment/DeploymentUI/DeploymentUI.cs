@@ -436,12 +436,6 @@ namespace AssetManager.Tools.Deployment
             }
         }
 
-        // Wrapper to shorten calls.
-        public string GetString(string name)
-        {
-            return AssetManagerFunctions.GetDeployString(name);
-        }
-
         private class DeploymentCanceledException : Exception
         {
             public DeploymentCanceledException()

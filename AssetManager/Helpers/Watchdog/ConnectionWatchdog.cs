@@ -49,22 +49,12 @@ namespace AssetManager.Helpers.Watchdog
             WatcherTick?.Invoke(null, e);
         }
 
-        public void StartWatcher()
-        {
-            watcherTask = new Task(() => Watcher(), TaskCreationOptions.LongRunning);
-            watcherTask.Start();
-            if (inCachedMode)
-            {
-                currentWatchdogStatus = WatchdogConnectionStatus.CachedMode;
-                OnStatusChanged(new WatchdogStatusEventArgs(WatchdogConnectionStatus.CachedMode));
-            }
-        }
-
         public void StartWatcher(bool cachedMode)
         {
             inCachedMode = cachedMode;
             watcherTask = new Task(() => Watcher(), TaskCreationOptions.LongRunning);
             watcherTask.Start();
+
             if (inCachedMode)
             {
                 currentWatchdogStatus = WatchdogConnectionStatus.CachedMode;

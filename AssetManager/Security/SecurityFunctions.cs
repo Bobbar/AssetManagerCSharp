@@ -126,17 +126,6 @@ namespace AssetManager.Security
             }
         }
 
-        public static string GetMD5OfFile(string filePath)
-        {
-            using (FileStream fStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 16 * 1024 * 1024))
-            {
-                using (MD5 hash = MD5.Create())
-                {
-                    return GetMD5OfStream(fStream);
-                }
-            }
-        }
-
         public static string GetMD5OfStream(Stream stream)
         {
             using (MD5 md5Hash = MD5.Create())
@@ -179,10 +168,10 @@ namespace AssetManager.Security
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 localUser = new LocalUser();
-                throw ex;
+                throw;
             }
         }
 

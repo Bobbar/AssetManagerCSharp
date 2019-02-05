@@ -19,7 +19,6 @@ namespace DeploymentAssemblies
         /// </summary>
         void UsePsExec();
 
-
         /// <summary>
         /// Executes PSExec command and returns true if the exit code is 0.
         /// </summary>
@@ -27,7 +26,6 @@ namespace DeploymentAssemblies
         /// <param name="title"></param>
         /// <returns></returns>
         Task<bool> SimplePSExecCommand(string command, string title);
-
 
         /// <summary>
         /// Executes PSExec command and returns the exit code.
@@ -43,14 +41,7 @@ namespace DeploymentAssemblies
 
         Task<bool> SimplePowerShellCommand(PowerShellCommand command);
 
-        Task<bool> SimplePowerShellCommand(PowerShellCommand[] command);
-
-        /// <summary>
-        /// Gets the specified deployment command string from the SQL database. (deployment_strings table)
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        string GetString(string name);
+        Task<bool> SimplePowerShellCommand(PowerShellCommand[] commands);
 
         void DoneOrError();
 

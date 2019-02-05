@@ -204,13 +204,13 @@ namespace AssetManager.Tools
                     }
                     else
                     {
-                        throw ioe;
+                        throw;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     currentProcess = null;
-                    throw ex;
+                    throw;
                 }
             }
         }
