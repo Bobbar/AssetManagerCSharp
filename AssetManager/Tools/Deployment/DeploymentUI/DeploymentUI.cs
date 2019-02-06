@@ -30,6 +30,7 @@ namespace AssetManager.Tools.Deployment
         private Task watchdogTask;
         private CancellationTokenSource watchdogCancelTokenSource;
         private Device targetDevice;
+        private DateTime timeStamp;
 
         public Form ParentForm
         {
@@ -75,6 +76,7 @@ namespace AssetManager.Tools.Deployment
         {
             this.targetDevice = targetDevice;
             this.parentForm = parentForm;
+            this.timeStamp = DateTime.Now;
 
             watchdogCancelTokenSource = new CancellationTokenSource();
             watchdogTask = new Task(() => Watchdog(watchdogCancelTokenSource.Token), watchdogCancelTokenSource.Token);
@@ -233,6 +235,7 @@ namespace AssetManager.Tools.Deployment
         public void LogMessage(string message, MessageType type)
         {
             if (!cancelOperation) ActivityTick();
+
             if (logTextBox.InvokeRequired)
             {
                 var del = new Action(() => LogMessage(message, type));
@@ -247,6 +250,9 @@ namespace AssetManager.Tools.Deployment
                 logTextBox.SelectionColor = logTextBox.ForeColor;
                 logTextBox.SelectionStart = logTextBox.Text.Length;
                 logTextBox.ScrollToCaret();
+
+                string logName = $@"deploy_{ targetDevice.HostName }_{ timeStamp.ToString("hhmmss")}.log";
+                Logging.Logger(message, logName);
             }
         }
 

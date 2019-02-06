@@ -194,7 +194,7 @@ namespace AssetManager.Tools
                     {
                         return true;
                     }
-                    else if (results.Contains("error") || results.Contains("fail"))
+                    else if (results.Contains("error") || results.Contains("fail") || results.Contains("false"))
                     {
                         return false;
                     }

@@ -5,18 +5,21 @@ namespace AssetManager.Helpers
 {
     public static class Logging
     {
-        public static void Logger(string message)
+        private const int _maxLogSize = 1000; // Kbytes
+
+        public static void Logger(string message, string logName)
         {
+            string fullPath = Paths.AppDir + logName;
+
             try
             {
-                short maxLogSizeKiloBytes = 500;
                 string dateStamp = DateTime.Now.ToString();
                 FileInfo infoReader = null;
-                infoReader = new FileInfo(Paths.LogPath);
-                if (!File.Exists(Paths.LogPath))
+                infoReader = new FileInfo(fullPath);
+                if (!File.Exists(fullPath))
                 {
                     Directory.CreateDirectory(Paths.AppDir);
-                    using (StreamWriter sw = File.CreateText(Paths.LogPath))
+                    using (StreamWriter sw = File.CreateText(fullPath))
                     {
                         sw.WriteLine(dateStamp + ": Log Created...");
                         sw.WriteLine(dateStamp + ": " + message);
@@ -24,9 +27,9 @@ namespace AssetManager.Helpers
                 }
                 else
                 {
-                    if ((infoReader.Length / 1000) < maxLogSizeKiloBytes)
+                    if ((infoReader.Length / 1024) < _maxLogSize)
                     {
-                        using (StreamWriter sw = File.AppendText(Paths.LogPath))
+                        using (StreamWriter sw = File.AppendText(fullPath))
                         {
                             sw.WriteLine(dateStamp + ": " + message);
                         }
@@ -35,7 +38,7 @@ namespace AssetManager.Helpers
                     {
                         if (RotateLogs())
                         {
-                            using (StreamWriter sw = File.AppendText(Paths.LogPath))
+                            using (StreamWriter sw = File.AppendText(fullPath))
                             {
                                 sw.WriteLine(dateStamp + ": " + message);
                             }
@@ -47,6 +50,11 @@ namespace AssetManager.Helpers
             {
                 //Shhhh.
             }
+        }
+
+        public static void Logger(string message)
+        {
+            Logger(message, Paths.LogName);
         }
 
         public static void Exception(Exception ex)
