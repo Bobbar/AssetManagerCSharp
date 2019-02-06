@@ -251,7 +251,7 @@ namespace AssetManager.Tools.Deployment
                 logTextBox.SelectionStart = logTextBox.Text.Length;
                 logTextBox.ScrollToCaret();
 
-                string logName = $@"deploy_{ targetDevice.HostName }_{ timeStamp.ToString("hhmmss")}.log";
+                string logName = $@"DeploymentLogs\deploy_{ targetDevice.HostName }_{ timeStamp.ToString("hhmmss")}.log";
                 Logging.Logger(message, logName);
             }
         }

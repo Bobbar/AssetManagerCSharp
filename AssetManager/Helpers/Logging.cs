@@ -14,11 +14,11 @@ namespace AssetManager.Helpers
             try
             {
                 string dateStamp = DateTime.Now.ToString();
-                FileInfo infoReader = null;
-                infoReader = new FileInfo(fullPath);
-                if (!File.Exists(fullPath))
+                var fileInfo = new FileInfo(fullPath);
+               
+                if (!fileInfo.Directory.Exists)
                 {
-                    Directory.CreateDirectory(Paths.AppDir);
+                    fileInfo.Directory.Create();
                     using (StreamWriter sw = File.CreateText(fullPath))
                     {
                         sw.WriteLine(dateStamp + ": Log Created...");
@@ -27,7 +27,7 @@ namespace AssetManager.Helpers
                 }
                 else
                 {
-                    if ((infoReader.Length / 1024) < _maxLogSize)
+                    if ((fileInfo.Length / 1024) < _maxLogSize)
                     {
                         using (StreamWriter sw = File.AppendText(fullPath))
                         {
